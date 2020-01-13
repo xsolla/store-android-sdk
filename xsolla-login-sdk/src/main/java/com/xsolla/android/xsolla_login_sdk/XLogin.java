@@ -46,6 +46,7 @@ public class XLogin {
         loginApi = retrofit.create(LoginApi.class);
     }
 
+    // TODO Check if projectId is null
     public void registerUser(NewUser newUser, final RegisterListener listener) {
         loginApi.registerUser(projectId, newUser).enqueue(new Callback<Void>() {
             @Override
