@@ -11,7 +11,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.xsolla.android.xsolla_login_sdk.XLogin;
 import com.xsolla.android.xsolla_login_sdk.entity.request.NewUser;
 
-public class MainActivity extends AppCompatActivity implements XLogin.RegisterListener {
+public class RegisterActivity extends AppCompatActivity implements XLogin.RegisterListener {
 
     TextView usernameInput;
     TextView emailInput;
@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements XLogin.RegisterLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_register);
 
         XLogin.getInstance().init("753ec123-3245-11ea-b687-42010aa80004");
         initUI();

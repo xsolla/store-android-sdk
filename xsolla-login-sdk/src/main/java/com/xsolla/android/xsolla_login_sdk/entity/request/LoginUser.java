@@ -5,6 +5,10 @@ public class LoginUser {
     private String password;
     private boolean remember_me;
 
+    public LoginUser(String username, String password) {
+        this(username, password, false);
+    }
+
     public LoginUser(String username, String password, boolean remember_me) {
         this.username = username;
         this.password = password;
