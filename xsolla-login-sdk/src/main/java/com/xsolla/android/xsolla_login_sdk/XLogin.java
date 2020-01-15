@@ -1,7 +1,9 @@
 package com.xsolla.android.xsolla_login_sdk;
 
 import com.xsolla.android.xsolla_login_sdk.api.LoginApi;
+import com.xsolla.android.xsolla_login_sdk.entity.request.LoginUser;
 import com.xsolla.android.xsolla_login_sdk.entity.request.NewUser;
+import com.xsolla.android.xsolla_login_sdk.entity.response.LoginResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,6 +68,24 @@ public class XLogin {
         });
     }
 
+    public void login(LoginUser loginUser, final LoginListener listener) {
+        loginApi.login(projectId, loginUser).enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                if (response.isSuccessful()) {
+                    listener.onLoginSuccess(response.body().getToken());
+                } else {
+                    listener.onLoginFailed(getErrorMessage(response.errorBody()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                listener.onLoginFailed(SERVER_IS_NOT_RESPONDING);
+            }
+        });
+    }
+
     private String getErrorMessage(ResponseBody errorBody) {
         try {
             JSONObject errorObject = new JSONObject(errorBody.string());
@@ -82,6 +102,12 @@ public class XLogin {
         void onRegisterSuccess();
 
         void onRegisterFailed(String errorMessage);
+    }
+
+    public interface LoginListener {
+        void onLoginSuccess(String token);
+
+        void onLoginFailed(String errorMessage);
     }
 
 }
