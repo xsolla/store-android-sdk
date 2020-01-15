@@ -86,6 +86,24 @@ public class XLogin {
         });
     }
 
+    public void resetPassword(String username, final ResetPasswordListener listener) {
+        loginApi.resetPassword(projectId, username).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() == 204) {
+                    listener.onResetPasswordSuccess();
+                } else {
+                    listener.onResetPasswordError(getErrorMessage(response.errorBody()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                listener.onResetPasswordError(SERVER_IS_NOT_RESPONDING);
+            }
+        });
+    }
+
     private String getErrorMessage(ResponseBody errorBody) {
         try {
             JSONObject errorObject = new JSONObject(errorBody.string());
@@ -108,6 +126,12 @@ public class XLogin {
         void onLoginSuccess(String token);
 
         void onLoginFailed(String errorMessage);
+    }
+
+    public interface ResetPasswordListener {
+        void onResetPasswordSuccess();
+
+        void onResetPasswordError(String errorMessage);
     }
 
 }

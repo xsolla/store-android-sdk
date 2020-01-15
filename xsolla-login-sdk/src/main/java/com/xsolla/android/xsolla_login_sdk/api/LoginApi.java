@@ -16,4 +16,7 @@ public interface LoginApi {
 
     @POST("/api/login")
     Call<LoginResponse> login(@Query("projectId") String projectId, @Body LoginUser loginUser);
+
+    @POST("/password/reset/request")
+    Call<Void> resetPassword(@Query("projectId") String projectId, String username);
 }
