@@ -3,6 +3,7 @@ package com.xsolla.android.xsolla_login_sdk;
 import com.xsolla.android.xsolla_login_sdk.api.LoginApi;
 import com.xsolla.android.xsolla_login_sdk.entity.request.LoginUser;
 import com.xsolla.android.xsolla_login_sdk.entity.request.NewUser;
+import com.xsolla.android.xsolla_login_sdk.entity.request.ResetPassword;
 import com.xsolla.android.xsolla_login_sdk.entity.response.LoginResponse;
 
 import org.json.JSONException;
@@ -87,7 +88,7 @@ public class XLogin {
     }
 
     public void resetPassword(String username, final ResetPasswordListener listener) {
-        loginApi.resetPassword(projectId, username).enqueue(new Callback<Void>() {
+        loginApi.resetPassword(projectId, new ResetPassword(username)).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == 204) {

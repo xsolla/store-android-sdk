@@ -2,6 +2,7 @@ package com.xsolla.android.xsolla_login_sdk.api;
 
 import com.xsolla.android.xsolla_login_sdk.entity.request.LoginUser;
 import com.xsolla.android.xsolla_login_sdk.entity.request.NewUser;
+import com.xsolla.android.xsolla_login_sdk.entity.request.ResetPassword;
 import com.xsolla.android.xsolla_login_sdk.entity.response.LoginResponse;
 
 import retrofit2.Call;
@@ -17,6 +18,6 @@ public interface LoginApi {
     @POST("/api/login")
     Call<LoginResponse> login(@Query("projectId") String projectId, @Body LoginUser loginUser);
 
-    @POST("/password/reset/request")
-    Call<Void> resetPassword(@Query("projectId") String projectId, String username);
+    @POST("api/password/reset/request")
+    Call<Void> resetPassword(@Query("projectId") String projectId, @Body ResetPassword resetPassword);
 }
