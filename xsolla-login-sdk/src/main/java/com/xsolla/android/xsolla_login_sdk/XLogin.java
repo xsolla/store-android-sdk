@@ -1,10 +1,17 @@
 package com.xsolla.android.xsolla_login_sdk;
 
+import android.app.Activity;
+import android.util.Log;
+
 import com.xsolla.android.xsolla_login_sdk.api.LoginApi;
 import com.xsolla.android.xsolla_login_sdk.entity.request.LoginUser;
 import com.xsolla.android.xsolla_login_sdk.entity.request.NewUser;
 import com.xsolla.android.xsolla_login_sdk.entity.request.ResetPassword;
+import com.xsolla.android.xsolla_login_sdk.entity.request.Social;
 import com.xsolla.android.xsolla_login_sdk.entity.response.LoginResponse;
+import com.xsolla.android.xsolla_login_sdk.entity.response.SocialAuthResponse;
+import com.xsolla.android.xsolla_login_sdk.token.TokenUtils;
+import com.xsolla.android.xsolla_login_sdk.webview.XWebView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +43,10 @@ public class XLogin {
         }
 
         return instance;
+    }
+
+    public String getProjectId() {
+        return projectId;
     }
 
     public void init(String projectId) {
@@ -74,7 +85,8 @@ public class XLogin {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful()) {
-                    listener.onLoginSuccess(response.body().getToken());
+                    String token = TokenUtils.getTokenFromUrl(response.body().getLoginUrl());
+                    listener.onLoginSuccess(token);
                 } else {
                     listener.onLoginFailed(getErrorMessage(response.errorBody()));
                 }
@@ -101,6 +113,24 @@ public class XLogin {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 listener.onResetPasswordError(SERVER_IS_NOT_RESPONDING);
+            }
+        });
+    }
+
+    public void loginSocial(Social social, final Activity context) {
+        loginApi.getLinkForSocialAuth(social.providerName, projectId).enqueue(new Callback<SocialAuthResponse>() {
+            @Override
+            public void onResponse(Call<SocialAuthResponse> call, Response<SocialAuthResponse> response) {
+                if (response.isSuccessful()) {
+                    XWebView.loadAuthPage(response.body().getUrl(), context);
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SocialAuthResponse> call, Throwable t) {
+                Log.d("TAG", call.request().toString());
             }
         });
     }
