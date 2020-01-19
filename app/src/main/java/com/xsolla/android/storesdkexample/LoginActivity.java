@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity implements XLogin.LoginList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        XLogin.getInstance().init("753ec123-3245-11ea-b687-42010aa80004");
+        XLogin.getInstance().init("753ec123-3245-11ea-b687-42010aa80004", this);
         initUI();
     }
 

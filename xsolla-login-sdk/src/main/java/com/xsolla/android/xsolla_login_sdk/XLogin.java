@@ -32,6 +32,7 @@ public class XLogin {
     private String SERVER_IS_NOT_RESPONDING = "Server is not responding. Please try later.";
     private String projectId;
 
+    private Activity appActivity;
     private LoginApi loginApi;
 
     private XLogin() {
@@ -49,8 +50,9 @@ public class XLogin {
         return projectId;
     }
 
-    public void init(String projectId) {
+    public void init(String projectId, Activity activity) {
         this.projectId = projectId;
+        this.appActivity = activity;
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://login.xsolla.com")
@@ -117,12 +119,12 @@ public class XLogin {
         });
     }
 
-    public void loginSocial(Social social, final Activity context) {
+    public void loginSocial(Social social) {
         loginApi.getLinkForSocialAuth(social.providerName, projectId).enqueue(new Callback<SocialAuthResponse>() {
             @Override
             public void onResponse(Call<SocialAuthResponse> call, Response<SocialAuthResponse> response) {
                 if (response.isSuccessful()) {
-                    XWebView.loadAuthPage(response.body().getUrl(), context);
+                    XWebView.loadAuthPage(response.body().getUrl(), appActivity);
                 } else {
 
                 }

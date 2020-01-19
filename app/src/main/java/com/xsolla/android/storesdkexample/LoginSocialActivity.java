@@ -18,7 +18,7 @@ public class LoginSocialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_social);
 
-        XLogin.getInstance().init("753ec123-3245-11ea-b687-42010aa80004");
+        XLogin.getInstance().init("753ec123-3245-11ea-b687-42010aa80004", this);
         initUI();
     }
 
@@ -27,7 +27,7 @@ public class LoginSocialActivity extends AppCompatActivity {
         facebookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                XLogin.getInstance().loginSocial(Social.FACEBOOK, LoginSocialActivity.this);
+                XLogin.getInstance().loginSocial(Social.FACEBOOK);
             }
         });
     }
