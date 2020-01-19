@@ -10,8 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.xsolla.android.xsolla_login_sdk.XLogin;
 import com.xsolla.android.xsolla_login_sdk.entity.request.NewUser;
+import com.xsolla.android.xsolla_login_sdk.listener.XRegisterListener;
 
-public class RegisterActivity extends AppCompatActivity implements XLogin.RegisterListener {
+public class RegisterActivity extends AppCompatActivity implements XRegisterListener {
 
     TextView usernameInput;
     TextView emailInput;

@@ -10,8 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.xsolla.android.xsolla_login_sdk.XLogin;
 import com.xsolla.android.xsolla_login_sdk.entity.request.LoginUser;
+import com.xsolla.android.xsolla_login_sdk.listener.XAuthListener;
 
-public class LoginActivity extends AppCompatActivity implements XLogin.LoginListener {
+public class LoginActivity extends AppCompatActivity implements XAuthListener {
 
     TextView usernameInput;
     TextView passwordInput;
