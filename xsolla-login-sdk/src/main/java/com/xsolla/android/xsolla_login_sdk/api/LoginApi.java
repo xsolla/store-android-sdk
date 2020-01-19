@@ -21,9 +21,9 @@ public interface LoginApi {
     @POST("/api/login")
     Call<LoginResponse> login(@Query("projectId") String projectId, @Body LoginUser loginUser);
 
-    @POST("api/password/reset/request")
+    @POST("/api/password/reset/request")
     Call<Void> resetPassword(@Query("projectId") String projectId, @Body ResetPassword resetPassword);
 
-    @GET("https://login.xsolla.com/api/social/{providerName}/login_url")
+    @GET("/api/social/{providerName}/login_url")
     Call<SocialAuthResponse> getLinkForSocialAuth(@Path("providerName") String providerName, @Query("projectId") String projectId);
 }
