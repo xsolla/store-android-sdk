@@ -9,8 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.xsolla.android.xsolla_login_sdk.XLogin;
+import com.xsolla.android.xsolla_login_sdk.listener.XResetPasswordListener;
 
-public class ResetPasswordActivity extends AppCompatActivity implements XLogin.ResetPasswordListener {
+public class ResetPasswordActivity extends AppCompatActivity implements XResetPasswordListener {
 
     TextView usernameInput;
     Button resetPasswordButton;
@@ -20,7 +21,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements XLogin.R
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
 
-        XLogin.getInstance().init("753ec123-3245-11ea-b687-42010aa80004", this);
+        XLogin.getInstance().init("753ec123-3245-11ea-b687-42010aa80004");
         initUI();
     }
 
