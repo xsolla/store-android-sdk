@@ -83,7 +83,8 @@ public class RequestExecutor {
             @Override
             public void onResponse(Call<SocialAuthResponse> call, Response<SocialAuthResponse> response) {
                 if (response.isSuccessful()) {
-                    XWebView.loadAuthPage(response.body().getUrl(), listener);
+                    XWebView xWebView = new XWebView();
+                    xWebView.loadAuthPage(response.body().getUrl(), listener);
                 } else {
                     listener.onSocialLoginFailed(getErrorMessage(response.errorBody()));
                 }

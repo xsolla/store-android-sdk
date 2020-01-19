@@ -6,6 +6,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.xsolla.android.xsolla_login_sdk.XLogin;
 import com.xsolla.android.xsolla_login_sdk.entity.request.Social;
 import com.xsolla.android.xsolla_login_sdk.listener.XSocialAuthListener;
@@ -35,11 +36,16 @@ public class LoginSocialActivity extends AppCompatActivity implements XSocialAut
 
     @Override
     public void onSocialLoginSuccess(String token) {
-
+        showSnack(token);
     }
 
     @Override
     public void onSocialLoginFailed(String errorMessage) {
+        showSnack(errorMessage);
+    }
 
+    private void showSnack(String message) {
+        View rootView = findViewById(android.R.id.content);
+        Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show();
     }
 }
