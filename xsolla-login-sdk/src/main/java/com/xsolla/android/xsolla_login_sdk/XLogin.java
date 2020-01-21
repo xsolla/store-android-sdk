@@ -3,6 +3,7 @@ package com.xsolla.android.xsolla_login_sdk;
 import android.app.Activity;
 import android.app.Fragment;
 
+import com.auth0.android.jwt.JWT;
 import com.xsolla.android.xsolla_login_sdk.api.LoginApi;
 import com.xsolla.android.xsolla_login_sdk.api.RequestExecutor;
 import com.xsolla.android.xsolla_login_sdk.entity.request.LoginUser;
@@ -23,6 +24,7 @@ public class XLogin {
     private String token;
 
     private RequestExecutor requestExecutor;
+    JWT jwt;
 
     private XLogin() {
     }
@@ -41,6 +43,7 @@ public class XLogin {
 
     public void setToken(String token) {
         this.token = token;
+        jwt = new JWT(token);
     }
 
     public void init(String projectId) {
@@ -72,6 +75,10 @@ public class XLogin {
         } else {
             throw new IllegalArgumentException("XSocialAuthListener must be implemented by Activity or Fragment.");
         }
+    }
+
+    public boolean isTokenValid() {
+        return !jwt.isExpired(0);
     }
 
 }
