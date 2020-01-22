@@ -118,4 +118,17 @@
         app:layout_constraintEnd_toEndOf="@+id/auth_button"
         app:layout_constraintStart_toStartOf="@+id/auth_button"
         app:layout_constraintTop_toBottomOf="@+id/auth_button" />
+
+    <TextView
+        android:id="@+id/forgot_password_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Forgot password"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/auth_button"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="@+id/auth_button"
+        app:layout_constraintTop_toBottomOf="@+id/register_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

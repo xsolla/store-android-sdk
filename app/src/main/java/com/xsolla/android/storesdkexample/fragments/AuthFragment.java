@@ -39,6 +39,17 @@ public class AuthFragment extends Fragment implements XAuthListener, XSocialAuth
             }
         });
 
+        rootView.findViewById(R.id.forgot_password_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.fragment_container, new ResetPasswordFragment())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
         rootView.findViewById(R.id.auth_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
