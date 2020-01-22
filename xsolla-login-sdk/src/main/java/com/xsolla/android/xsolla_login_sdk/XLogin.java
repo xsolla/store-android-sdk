@@ -47,8 +47,17 @@ public class XLogin {
         tokenUtils.saveToken(token);
     }
 
+    public XWebView getWebView() {
+        return xWebView;
+    }
+
+    public String getValue(String key) {
+        return tokenUtils.getJwt().getClaim(key).asString();
+    }
+
     public void init(String projectId, Activity activity) {
         tokenUtils = new TokenUtils(activity);
+        xWebView = new XWebView(activity);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://login.xsolla.com")
@@ -73,11 +82,12 @@ public class XLogin {
     }
 
     public void loginSocial(Social social, XSocialAuthListener listener) {
-        if (listener instanceof Activity || listener instanceof Fragment) {
-            requestExecutor.loginSocial(social, listener);
-        } else {
-            throw new IllegalArgumentException("XSocialAuthListener must be implemented by Activity or Fragment.");
-        }
+        requestExecutor.loginSocial(social, listener);
+    }
+
+    public void logout() {
+        saveToken(null);
+        tokenUtils.clearToken();
     }
 
     public boolean isTokenValid() {

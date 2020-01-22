@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
+    android:background="@android:color/white"
     tools:context=".RegisterActivity">
 
     <EditText
@@ -72,7 +73,7 @@
         android:layout_height="55dp"
         android:text="T"
         app:layout_constraintBaseline_toBaselineOf="@+id/facebook_button"
-        app:layout_constraintEnd_toStartOf="@+id/naver_button2"
+        app:layout_constraintEnd_toStartOf="@+id/naver_button"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/facebook_button" />
 
@@ -81,13 +82,13 @@
         android:layout_width="50dp"
         android:layout_height="55dp"
         android:text="B"
-        app:layout_constraintBaseline_toBaselineOf="@+id/naver_button2"
+        app:layout_constraintBaseline_toBaselineOf="@+id/naver_button"
         app:layout_constraintEnd_toStartOf="@+id/linkedin_button"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/naver_button2" />
+        app:layout_constraintStart_toEndOf="@+id/naver_button" />
 
     <Button
-        android:id="@+id/naver_button2"
+        android:id="@+id/naver_button"
         android:layout_width="50dp"
         android:layout_height="55dp"
         android:text="N"

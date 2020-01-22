@@ -20,17 +20,15 @@ public class XWebView {
 
     private final static String XSOLLA_CALLBACK_URL = "https://login.xsolla.com/api/blank";
     private static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19";
+    private Activity context;
     private FrameLayout rootView;
     private RelativeLayout containerLayout;
 
-    public void loadAuthPage(String loginUrl, XSocialAuthListener listener) {
-        Activity context = null;
+    public XWebView(Activity activity) {
+        this.context = activity;
+    }
 
-        if (listener instanceof Activity) {
-            context = (Activity) listener;
-        } else if (listener instanceof Fragment) {
-            context = ((Fragment) listener).getActivity();
-        }
+    public void loadAuthPage(String loginUrl, XSocialAuthListener listener) {
 
         WebView webView = createWebView(context, listener);
         webView.loadUrl(loginUrl);

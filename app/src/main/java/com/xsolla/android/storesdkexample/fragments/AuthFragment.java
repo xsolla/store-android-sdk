@@ -9,12 +9,15 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.xsolla_login_sdk.XLogin;
 import com.xsolla.android.xsolla_login_sdk.entity.request.LoginUser;
+import com.xsolla.android.xsolla_login_sdk.entity.request.Social;
 import com.xsolla.android.xsolla_login_sdk.listener.XAuthListener;
+import com.xsolla.android.xsolla_login_sdk.listener.XSocialAuthListener;
 
-public class AuthFragment extends Fragment implements XAuthListener {
+public class AuthFragment extends Fragment implements XAuthListener, XSocialAuthListener {
 
 
     @Override
@@ -46,16 +49,46 @@ public class AuthFragment extends Fragment implements XAuthListener {
                 XLogin.getInstance().login(user, AuthFragment.this);
             }
         });
+
+        rootView.findViewById(R.id.facebook_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                XLogin.getInstance().loginSocial(Social.FACEBOOK, AuthFragment.this);
+            }
+        });
     }
 
 
     @Override
     public void onLoginSuccess(String token) {
-        Toast.makeText(getContext(), token, Toast.LENGTH_SHORT).show();
+        getFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment_container, new ProfileFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
     public void onLoginFailed(String errorMessage) {
+        showSnack(errorMessage);
+    }
 
+    @Override
+    public void onSocialLoginSuccess(String token) {
+        getFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment_container, new ProfileFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onSocialLoginFailed(String errorMessage) {
+        showSnack(errorMessage);
+    }
+
+    private void showSnack(String message) {
+        View rootView = getActivity().findViewById(android.R.id.content);
+        Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show();
     }
 }

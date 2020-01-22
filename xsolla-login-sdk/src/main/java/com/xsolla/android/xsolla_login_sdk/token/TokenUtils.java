@@ -30,6 +30,13 @@ public class TokenUtils {
         return preferences.getString("jwtToken", null);
     }
 
+    public void clearToken() {
+        preferences
+                .edit()
+                .remove("jwtToken")
+                .apply();
+    }
+
     public static String getTokenFromUrl(String url) {
         UrlQuerySanitizer sanitizer = new UrlQuerySanitizer();
         sanitizer.setAllowUnregisteredParamaters(true);
