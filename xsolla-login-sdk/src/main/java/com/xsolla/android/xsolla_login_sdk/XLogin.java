@@ -13,6 +13,8 @@ import com.xsolla.android.xsolla_login_sdk.listener.XAuthListener;
 import com.xsolla.android.xsolla_login_sdk.listener.XRegisterListener;
 import com.xsolla.android.xsolla_login_sdk.listener.XResetPasswordListener;
 import com.xsolla.android.xsolla_login_sdk.listener.XSocialAuthListener;
+import com.xsolla.android.xsolla_login_sdk.token.TokenUtils;
+import com.xsolla.android.xsolla_login_sdk.webview.XWebView;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -21,10 +23,10 @@ public class XLogin {
 
     private static XLogin instance;
 
-    private String token;
-
     private RequestExecutor requestExecutor;
-    JWT jwt;
+    private TokenUtils tokenUtils;
+    private XWebView xWebView;
+
 
     private XLogin() {
     }
@@ -38,15 +40,16 @@ public class XLogin {
     }
 
     public String getToken() {
-        return token;
+        return tokenUtils.getToken();
     }
 
-    public void setToken(String token) {
-        this.token = token;
-        jwt = new JWT(token);
+    public void saveToken(String token) {
+        tokenUtils.saveToken(token);
     }
 
-    public void init(String projectId) {
+    public void init(String projectId, Activity activity) {
+        tokenUtils = new TokenUtils(activity);
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://login.xsolla.com")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -78,6 +81,7 @@ public class XLogin {
     }
 
     public boolean isTokenValid() {
+        JWT jwt = tokenUtils.getJwt();
         return !jwt.isExpired(0);
     }
 

@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        XLogin.getInstance().init(LOGIN_PROJECT_ID);
+        XLogin.getInstance().init(LOGIN_PROJECT_ID, this);
         initFragment();
     }
 

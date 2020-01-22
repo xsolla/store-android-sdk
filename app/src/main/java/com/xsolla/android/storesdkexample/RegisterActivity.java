@@ -24,7 +24,7 @@ public class RegisterActivity extends AppCompatActivity implements XRegisterList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        XLogin.getInstance().init("753ec123-3245-11ea-b687-42010aa80004");
+        XLogin.getInstance().init("753ec123-3245-11ea-b687-42010aa80004", this);
         initUI();
     }
 

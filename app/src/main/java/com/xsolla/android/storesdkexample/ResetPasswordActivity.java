@@ -21,7 +21,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements XResetPa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
 
-        XLogin.getInstance().init("753ec123-3245-11ea-b687-42010aa80004");
+        XLogin.getInstance().init("753ec123-3245-11ea-b687-42010aa80004", this);
         initUI();
     }
 

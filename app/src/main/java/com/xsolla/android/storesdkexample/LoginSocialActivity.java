@@ -20,7 +20,7 @@ public class LoginSocialActivity extends AppCompatActivity implements XSocialAut
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_social);
 
-        XLogin.getInstance().init("753ec123-3245-11ea-b687-42010aa80004");
+        XLogin.getInstance().init("753ec123-3245-11ea-b687-42010aa80004", this);
         initUI();
     }
 

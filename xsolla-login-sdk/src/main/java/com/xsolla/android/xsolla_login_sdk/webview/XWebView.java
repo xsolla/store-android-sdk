@@ -80,7 +80,7 @@ public class XWebView {
                 super.onPageFinished(view, url);
                 if (url.startsWith(XSOLLA_CALLBACK_URL)) {
                     String token = TokenUtils.getTokenFromUrl(url);
-                    XLogin.getInstance().setToken(token);
+                    XLogin.getInstance().saveToken(token);
                     rootView.removeView(containerLayout);
                     listener.onSocialLoginSuccess(token);
                 }
