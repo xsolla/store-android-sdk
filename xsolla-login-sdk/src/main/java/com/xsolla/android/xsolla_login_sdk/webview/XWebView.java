@@ -2,7 +2,6 @@ package com.xsolla.android.xsolla_login_sdk.webview;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.view.View;
 import android.webkit.WebView;

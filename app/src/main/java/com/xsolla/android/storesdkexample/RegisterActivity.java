@@ -22,7 +22,7 @@ public class RegisterActivity extends AppCompatActivity implements XRegisterList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.fragment_register);
 
         XLogin.getInstance().init("753ec123-3245-11ea-b687-42010aa80004", this);
         initUI();
