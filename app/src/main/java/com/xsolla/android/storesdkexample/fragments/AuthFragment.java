@@ -57,13 +57,13 @@ public class AuthFragment extends BaseFragment implements XAuthListener, XSocial
         });
 
         final TextView usernameInput = rootView.findViewById(R.id.username_input);
-        final TextView emailInput = rootView.findViewById(R.id.email_input);
+        final TextView passwordInput = rootView.findViewById(R.id.password_input);
 
         rootView.findViewById(R.id.login_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String username = usernameInput.getText().toString();
-                String password = emailInput.getText().toString();
+                String password = passwordInput.getText().toString();
                 LoginUser user = new LoginUser(username, password);
                 XLogin.getInstance().login(user, AuthFragment.this);
             }

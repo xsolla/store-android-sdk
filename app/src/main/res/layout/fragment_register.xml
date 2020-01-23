@@ -43,7 +43,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/input_rounded_bg"
         android:gravity="center"
-        android:hint="password"
+        android:hint="Password"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/register_button"
         app:layout_constraintEnd_toEndOf="parent"
