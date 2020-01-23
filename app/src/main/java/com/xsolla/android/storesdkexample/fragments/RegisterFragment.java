@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.xsolla_login_sdk.XLogin;
-import com.xsolla.android.xsolla_login_sdk.entity.request.NewUser;
 import com.xsolla.android.xsolla_login_sdk.listener.XRegisterListener;
 
 public class RegisterFragment extends BaseFragment implements XRegisterListener {
@@ -40,8 +39,7 @@ public class RegisterFragment extends BaseFragment implements XRegisterListener 
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
 
-        NewUser newUser = new NewUser(username, email, password);
-        XLogin.getInstance().registerUser(newUser, this);
+        XLogin.getInstance().registerUser(username, email, password, this);
     }
 
 

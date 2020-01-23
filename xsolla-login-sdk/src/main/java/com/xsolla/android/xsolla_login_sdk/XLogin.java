@@ -69,12 +69,12 @@ public class XLogin {
     }
 
     // TODO Check if requestExecutor is not null
-    public void registerUser(NewUser newUser, final XRegisterListener listener) {
-        requestExecutor.registerUser(newUser, listener);
+    public void registerUser(String username, String email, String password, final XRegisterListener listener) {
+        requestExecutor.registerUser(new NewUser(username, email, password), listener);
     }
 
-    public void login(LoginUser loginUser, final XAuthListener listener) {
-        requestExecutor.login(loginUser, listener);
+    public void login(String username, String password, final XAuthListener listener) {
+        requestExecutor.login(new LoginUser(username, password), listener);
     }
 
     public void resetPassword(String username, XResetPasswordListener listener) {

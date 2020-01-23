@@ -5,7 +5,6 @@ import android.widget.TextView;
 
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.xsolla_login_sdk.XLogin;
-import com.xsolla.android.xsolla_login_sdk.entity.request.LoginUser;
 import com.xsolla.android.xsolla_login_sdk.entity.request.Social;
 import com.xsolla.android.xsolla_login_sdk.listener.XAuthListener;
 import com.xsolla.android.xsolla_login_sdk.listener.XSocialAuthListener;
@@ -64,8 +63,7 @@ public class AuthFragment extends BaseFragment implements XAuthListener, XSocial
             public void onClick(View v) {
                 String username = usernameInput.getText().toString();
                 String password = passwordInput.getText().toString();
-                LoginUser user = new LoginUser(username, password);
-                XLogin.getInstance().login(user, AuthFragment.this);
+                XLogin.getInstance().login(username, password, AuthFragment.this);
             }
         });
 
