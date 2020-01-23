@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         if (token != null && XLogin.getInstance().isTokenValid()) {
             return new ProfileFragment();
         } else {
-            getSupportActionBar().setTitle("Login");
             return new AuthFragment();
         }
     }

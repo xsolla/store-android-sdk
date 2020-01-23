@@ -1,21 +1,20 @@
 package com.xsolla.android.storesdkexample.fragments;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
-
-import androidx.fragment.app.Fragment;
 
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.xsolla_login_sdk.XLogin;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends BaseFragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+    int getLayout() {
+        return R.layout.fragment_profile;
+    }
+
+    @Override
+    void initUI() {
         String username = XLogin.getInstance().getValue("username");
         String email = XLogin.getInstance().getValue("email");
 
@@ -29,15 +28,9 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 XLogin.getInstance().logout();
-                getFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container, new AuthFragment())
-                        .commit();
+                openRootFragment();
             }
         });
-
-        return rootView;
     }
-
 
 }
