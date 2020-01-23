@@ -20,13 +20,54 @@ public class AuthFragment extends BaseFragment implements XAuthListener, XSocial
 
     @Override
     void initUI() {
-        rootView.findViewById(R.id.register_button).setOnClickListener(new View.OnClickListener() {
+
+        rootView.findViewById(R.id.google_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFragment(new RegisterFragment());
+                XLogin.getInstance().loginSocial(Social.GOOGLE, AuthFragment.this);
             }
         });
 
+        rootView.findViewById(R.id.facebook_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                XLogin.getInstance().loginSocial(Social.FACEBOOK, AuthFragment.this);
+            }
+        });
+
+        rootView.findViewById(R.id.twitter_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                XLogin.getInstance().loginSocial(Social.TWITTER, AuthFragment.this);
+            }
+        });
+
+        rootView.findViewById(R.id.linkedin_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                XLogin.getInstance().loginSocial(Social.LINKEDIN, AuthFragment.this);
+            }
+        });
+
+        rootView.findViewById(R.id.naver_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                XLogin.getInstance().loginSocial(Social.NAVER, AuthFragment.this);
+            }
+        });
+
+        final TextView usernameInput = rootView.findViewById(R.id.username_input);
+        final TextView emailInput = rootView.findViewById(R.id.email_input);
+
+        rootView.findViewById(R.id.login_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = usernameInput.getText().toString();
+                String password = emailInput.getText().toString();
+                LoginUser user = new LoginUser(username, password);
+                XLogin.getInstance().login(user, AuthFragment.this);
+            }
+        });
 
         rootView.findViewById(R.id.forgot_password_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,20 +76,10 @@ public class AuthFragment extends BaseFragment implements XAuthListener, XSocial
             }
         });
 
-        rootView.findViewById(R.id.auth_button).setOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.register_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = ((TextView) rootView.findViewById(R.id.username_input)).getText().toString();
-                String password = ((TextView) rootView.findViewById(R.id.password_input)).getText().toString();
-                LoginUser user = new LoginUser(username, password);
-                XLogin.getInstance().login(user, AuthFragment.this);
-            }
-        });
-
-        rootView.findViewById(R.id.facebook_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                XLogin.getInstance().loginSocial(Social.FACEBOOK, AuthFragment.this);
+                openFragment(new RegisterFragment());
             }
         });
     }
