@@ -85,7 +85,6 @@ public class XLogin {
     }
 
     public boolean isTokenValid() {
-        if (tokenUtils.getToken() == null) return false;
         JWT jwt = tokenUtils.getJwt();
         if (jwt == null) return false;
         return !jwt.isExpired(0);

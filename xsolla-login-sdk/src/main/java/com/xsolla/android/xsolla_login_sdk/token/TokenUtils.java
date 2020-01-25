@@ -11,19 +11,18 @@ import com.xsolla.android.xsolla_login_sdk.jwt.JWT;
 public class TokenUtils {
 
     private SharedPreferences preferences;
-    private JWT jwt;
 
     public TokenUtils(Activity activity) {
         this.preferences = activity.getPreferences(Context.MODE_PRIVATE);
     }
 
     public JWT getJwt() {
-        return jwt;
+        String token = getToken();
+        if (token == null) return null;
+        return new JWT(token);
     }
 
     public void saveToken(String token) {
-        jwt = new JWT(token);
-
         preferences
                 .edit()
                 .putString("jwtToken", token)
