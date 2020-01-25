@@ -5,7 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.UrlQuerySanitizer;
 
-import com.auth0.android.jwt.JWT;
+import com.xsolla.android.xsolla_login_sdk.jwt.JWT;
+
 
 public class TokenUtils {
 

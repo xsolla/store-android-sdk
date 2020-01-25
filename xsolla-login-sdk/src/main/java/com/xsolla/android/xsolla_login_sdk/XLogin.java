@@ -2,23 +2,18 @@ package com.xsolla.android.xsolla_login_sdk;
 
 import android.app.Activity;
 
-import com.auth0.android.jwt.Claim;
-import com.auth0.android.jwt.JWT;
 import com.xsolla.android.xsolla_login_sdk.api.LoginApi;
 import com.xsolla.android.xsolla_login_sdk.api.RequestExecutor;
 import com.xsolla.android.xsolla_login_sdk.entity.request.LoginUser;
 import com.xsolla.android.xsolla_login_sdk.entity.request.NewUser;
 import com.xsolla.android.xsolla_login_sdk.entity.request.Social;
+import com.xsolla.android.xsolla_login_sdk.jwt.JWT;
 import com.xsolla.android.xsolla_login_sdk.listener.XAuthListener;
 import com.xsolla.android.xsolla_login_sdk.listener.XRegisterListener;
 import com.xsolla.android.xsolla_login_sdk.listener.XResetPasswordListener;
 import com.xsolla.android.xsolla_login_sdk.listener.XSocialAuthListener;
 import com.xsolla.android.xsolla_login_sdk.token.TokenUtils;
 import com.xsolla.android.xsolla_login_sdk.webview.XWebView;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -90,44 +85,14 @@ public class XLogin {
     }
 
     public boolean isTokenValid() {
+        if (tokenUtils.getToken() == null) return false;
         JWT jwt = tokenUtils.getJwt();
+        if (jwt == null) return false;
         return !jwt.isExpired(0);
     }
 
-    public String getValue(String key) {
-        return tokenUtils.getJwt().getClaim(key).asString();
-    }
-
-    public String getIssuer() {
-        return tokenUtils.getJwt().getIssuer();
-    }
-
-    public String getSubject() {
-        return tokenUtils.getJwt().getSubject();
-    }
-
-    public List<String> getAudience() {
-        return tokenUtils.getJwt().getAudience();
-    }
-
-    public Date getExpiresAt() {
-        return tokenUtils.getJwt().getExpiresAt();
-    }
-
-    public Date getNotBefore() {
-        return tokenUtils.getJwt().getNotBefore();
-    }
-
-    public Date getIssuedAt() {
-        return tokenUtils.getJwt().getIssuedAt();
-    }
-
-    public Claim getClaim(String name) {
-        return tokenUtils.getJwt().getClaim(name);
-    }
-
-    public Map<String, Claim> getClaims() {
-        return tokenUtils.getJwt().getClaims();
+    public JWT getJwt() {
+        return tokenUtils.getJwt();
     }
 
 }
