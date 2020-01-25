@@ -4,14 +4,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.xsolla.android.storesdkexample.fragments.AuthFragment;
 import com.xsolla.android.storesdkexample.fragments.ProfileFragment;
-import com.xsolla.android.xsolla_login_sdk.XLogin;
+import com.xsolla.android.login.XLogin;
 
 public class MainActivity extends AppCompatActivity {
 

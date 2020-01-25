@@ -1,4 +1,4 @@
-package com.xsolla.android.xsolla_login_sdk.jwt;
+package com.xsolla.android.login.jwt;
 
 import android.os.Parcel;
 import android.os.Parcelable;

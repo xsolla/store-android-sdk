@@ -1,10 +1,10 @@
-package com.xsolla.android.xsolla_login_sdk.api;
+package com.xsolla.android.login.api;
 
-import com.xsolla.android.xsolla_login_sdk.entity.request.LoginUser;
-import com.xsolla.android.xsolla_login_sdk.entity.request.NewUser;
-import com.xsolla.android.xsolla_login_sdk.entity.request.ResetPassword;
-import com.xsolla.android.xsolla_login_sdk.entity.response.LoginResponse;
-import com.xsolla.android.xsolla_login_sdk.entity.response.SocialAuthResponse;
+import com.xsolla.android.login.entity.request.LoginUser;
+import com.xsolla.android.login.entity.request.NewUser;
+import com.xsolla.android.login.entity.request.ResetPassword;
+import com.xsolla.android.login.entity.response.LoginResponse;
+import com.xsolla.android.login.entity.response.SocialAuthResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

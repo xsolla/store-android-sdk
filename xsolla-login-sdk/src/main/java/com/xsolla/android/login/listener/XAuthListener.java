@@ -1,4 +1,4 @@
-package com.xsolla.android.xsolla_login_sdk.listener;
+package com.xsolla.android.login.listener;
 
 public interface XAuthListener {
 

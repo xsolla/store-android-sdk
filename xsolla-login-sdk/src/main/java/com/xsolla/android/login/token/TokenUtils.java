@@ -1,11 +1,11 @@
-package com.xsolla.android.xsolla_login_sdk.token;
+package com.xsolla.android.login.token;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.UrlQuerySanitizer;
 
-import com.xsolla.android.xsolla_login_sdk.jwt.JWT;
+import com.xsolla.android.login.jwt.JWT;
 
 
 public class TokenUtils {

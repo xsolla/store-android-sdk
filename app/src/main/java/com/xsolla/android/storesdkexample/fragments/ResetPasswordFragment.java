@@ -5,8 +5,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.xsolla.android.storesdkexample.R;
-import com.xsolla.android.xsolla_login_sdk.XLogin;
-import com.xsolla.android.xsolla_login_sdk.listener.XResetPasswordListener;
+import com.xsolla.android.login.XLogin;
+import com.xsolla.android.login.listener.XResetPasswordListener;
 
 public class ResetPasswordFragment extends BaseFragment implements XResetPasswordListener {
 

@@ -1,19 +1,19 @@
-package com.xsolla.android.xsolla_login_sdk;
+package com.xsolla.android.login;
 
 import android.app.Activity;
 
-import com.xsolla.android.xsolla_login_sdk.api.LoginApi;
-import com.xsolla.android.xsolla_login_sdk.api.RequestExecutor;
-import com.xsolla.android.xsolla_login_sdk.entity.request.LoginUser;
-import com.xsolla.android.xsolla_login_sdk.entity.request.NewUser;
-import com.xsolla.android.xsolla_login_sdk.entity.request.Social;
-import com.xsolla.android.xsolla_login_sdk.jwt.JWT;
-import com.xsolla.android.xsolla_login_sdk.listener.XAuthListener;
-import com.xsolla.android.xsolla_login_sdk.listener.XRegisterListener;
-import com.xsolla.android.xsolla_login_sdk.listener.XResetPasswordListener;
-import com.xsolla.android.xsolla_login_sdk.listener.XSocialAuthListener;
-import com.xsolla.android.xsolla_login_sdk.token.TokenUtils;
-import com.xsolla.android.xsolla_login_sdk.webview.XWebView;
+import com.xsolla.android.login.api.LoginApi;
+import com.xsolla.android.login.api.RequestExecutor;
+import com.xsolla.android.login.entity.request.LoginUser;
+import com.xsolla.android.login.entity.request.NewUser;
+import com.xsolla.android.login.entity.request.Social;
+import com.xsolla.android.login.jwt.JWT;
+import com.xsolla.android.login.listener.XAuthListener;
+import com.xsolla.android.login.listener.XRegisterListener;
+import com.xsolla.android.login.listener.XResetPasswordListener;
+import com.xsolla.android.login.listener.XSocialAuthListener;
+import com.xsolla.android.login.token.TokenUtils;
+import com.xsolla.android.login.webview.XWebView;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

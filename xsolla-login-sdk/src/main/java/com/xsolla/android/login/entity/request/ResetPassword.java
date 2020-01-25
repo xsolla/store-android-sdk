@@ -1,4 +1,4 @@
-package com.xsolla.android.xsolla_login_sdk.entity.request;
+package com.xsolla.android.login.entity.request;
 
 public class ResetPassword {
 

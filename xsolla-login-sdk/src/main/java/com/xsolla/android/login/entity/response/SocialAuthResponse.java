@@ -1,4 +1,4 @@
-package com.xsolla.android.xsolla_login_sdk.entity.response;
+package com.xsolla.android.login.entity.response;
 
 public class SocialAuthResponse {
 

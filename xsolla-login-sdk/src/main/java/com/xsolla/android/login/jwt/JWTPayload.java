@@ -1,4 +1,4 @@
-package com.xsolla.android.xsolla_login_sdk.jwt;
+package com.xsolla.android.login.jwt;
 
 import java.util.Collections;
 import java.util.Date;

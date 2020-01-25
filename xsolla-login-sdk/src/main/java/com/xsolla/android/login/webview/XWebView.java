@@ -1,4 +1,4 @@
-package com.xsolla.android.xsolla_login_sdk.webview;
+package com.xsolla.android.login.webview;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -9,10 +9,10 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.xsolla.android.xsolla_login_sdk.R;
-import com.xsolla.android.xsolla_login_sdk.XLogin;
-import com.xsolla.android.xsolla_login_sdk.listener.XSocialAuthListener;
-import com.xsolla.android.xsolla_login_sdk.token.TokenUtils;
+import com.xsolla.android.login.R;
+import com.xsolla.android.login.XLogin;
+import com.xsolla.android.login.listener.XSocialAuthListener;
+import com.xsolla.android.login.token.TokenUtils;
 
 public class XWebView {
 

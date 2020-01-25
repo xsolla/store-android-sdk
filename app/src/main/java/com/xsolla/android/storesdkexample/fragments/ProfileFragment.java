@@ -4,8 +4,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.xsolla.android.storesdkexample.R;
-import com.xsolla.android.xsolla_login_sdk.XLogin;
-import com.xsolla.android.xsolla_login_sdk.jwt.JWT;
+import com.xsolla.android.login.XLogin;
+import com.xsolla.android.login.jwt.JWT;
 
 public class ProfileFragment extends BaseFragment {
 
