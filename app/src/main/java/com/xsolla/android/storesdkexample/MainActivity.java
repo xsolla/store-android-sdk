@@ -1,9 +1,9 @@
 package com.xsolla.android.storesdkexample;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
-import android.os.Bundle;
 
 import com.xsolla.android.storesdkexample.fragments.AuthFragment;
 import com.xsolla.android.storesdkexample.fragments.ProfileFragment;
@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         int count = getSupportFragmentManager().getBackStackEntryCount();
-        if (count == 0) {
-            super.onBackPressed();
+        if (count == 1) {
+            finish();
         } else {
             getSupportFragmentManager().popBackStack();
         }
