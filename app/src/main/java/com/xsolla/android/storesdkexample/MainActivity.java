@@ -1,8 +1,12 @@
 package com.xsolla.android.storesdkexample;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.xsolla.android.storesdkexample.fragments.AuthFragment;
@@ -20,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         XLogin.getInstance().init(LOGIN_PROJECT_ID, this);
         initFragment();
+        initStatusBar();
     }
 
     private void initFragment() {
@@ -49,5 +54,16 @@ public class MainActivity extends AppCompatActivity {
         } else {
             getSupportFragmentManager().popBackStack();
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void initStatusBar() {
+        if (Build.VERSION.SDK_INT < 23) {
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.statusBarColorLowApi));
+        } else {
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.statusBarColor));
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+
     }
 }
