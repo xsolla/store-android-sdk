@@ -1,9 +1,11 @@
 package com.xsolla.android.storesdkexample.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,7 +43,7 @@ public abstract class BaseFragment extends Fragment {
 
     void openRootFragment() {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        for(int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+        for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
             fragmentManager.popBackStack();
         }
 
@@ -51,6 +53,11 @@ public abstract class BaseFragment extends Fragment {
     void showSnack(String message) {
         View rootView = getActivity().findViewById(android.R.id.content);
         Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
     }
 
 }

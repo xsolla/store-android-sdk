@@ -35,6 +35,7 @@ public class RegisterFragment extends BaseFragment implements XRegisterListener 
     }
 
     private void registerUser() {
+        hideKeyboard();
         String username = usernameInput.getText().toString();
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();

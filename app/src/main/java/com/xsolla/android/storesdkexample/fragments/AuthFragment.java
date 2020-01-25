@@ -61,6 +61,7 @@ public class AuthFragment extends BaseFragment implements XAuthListener, XSocial
         rootView.findViewById(R.id.login_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideKeyboard();
                 String username = usernameInput.getText().toString();
                 String password = passwordInput.getText().toString();
                 XLogin.getInstance().login(username, password, AuthFragment.this);

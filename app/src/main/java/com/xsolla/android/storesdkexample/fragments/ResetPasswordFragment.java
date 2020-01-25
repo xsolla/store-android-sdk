@@ -31,6 +31,7 @@ public class ResetPasswordFragment extends BaseFragment implements XResetPasswor
     }
 
     private void resetPassword() {
+        hideKeyboard();
         String username = usernameInput.getText().toString();
         XLogin.getInstance().resetPassword(username, this);
     }
