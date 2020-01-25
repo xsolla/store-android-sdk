@@ -210,6 +210,7 @@
         android:background="@drawable/input_rounded_bg"
         android:gravity="center"
         android:hint="Username"
+        android:nextFocusForward="@id/password_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -222,6 +223,7 @@
         android:background="@drawable/input_rounded_bg"
         android:gravity="center"
         android:hint="Password"
+        android:imeOptions="actionDone"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
