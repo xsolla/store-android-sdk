@@ -16,7 +16,7 @@ import com.xsolla.android.xsolla_login_sdk.token.TokenUtils;
 
 public class XWebView {
 
-    private final static String XSOLLA_CALLBACK_URL = "https://login.xsolla.com/api/blank";
+    private String callbackUrl = "https://login.xsolla.com/api/blank";
     private static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19";
     private Activity context;
     private FrameLayout systemRootView;
@@ -24,8 +24,12 @@ public class XWebView {
 
     private boolean isLoading = false;
 
-    public XWebView(Activity activity) {
-        this.context = activity;
+    public XWebView(Activity context, String callbackUrl) {
+        this.context = context;
+
+        if (callbackUrl != null) {
+            this.callbackUrl = callbackUrl;
+        }
     }
 
     public void loadAuthPage(String loginUrl, XSocialAuthListener listener) {
@@ -69,7 +73,7 @@ public class XWebView {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 isLoading = false;
-                if (url.startsWith(XSOLLA_CALLBACK_URL)) {
+                if (url.startsWith(callbackUrl)) {
                     String token = TokenUtils.getTokenFromUrl(url);
                     XLogin.getInstance().saveToken(token);
                     systemRootView.removeView(webViewLayout);

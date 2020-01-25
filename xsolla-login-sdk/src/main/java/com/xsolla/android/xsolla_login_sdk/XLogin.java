@@ -50,8 +50,12 @@ public class XLogin {
     }
 
     public void init(String projectId, Activity activity) {
+        init(projectId, null, activity);
+    }
+
+    public void init(String projectId, String callbackUrl, Activity activity) {
         tokenUtils = new TokenUtils(activity);
-        xWebView = new XWebView(activity);
+        xWebView = new XWebView(activity, callbackUrl);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://login.xsolla.com")
