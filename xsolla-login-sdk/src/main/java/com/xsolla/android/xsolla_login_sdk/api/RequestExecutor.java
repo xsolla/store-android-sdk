@@ -1,8 +1,5 @@
 package com.xsolla.android.xsolla_login_sdk.api;
 
-import android.app.Activity;
-import android.util.Log;
-
 import com.xsolla.android.xsolla_login_sdk.XLogin;
 import com.xsolla.android.xsolla_login_sdk.entity.request.LoginUser;
 import com.xsolla.android.xsolla_login_sdk.entity.request.NewUser;
@@ -64,7 +61,7 @@ public class RequestExecutor {
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful()) {
                     String token = TokenUtils.getTokenFromUrl(response.body().getLoginUrl());
-                    XLogin.getInstance().setToken(token);
+                    XLogin.getInstance().saveToken(token);
                     listener.onLoginSuccess(token);
                 } else {
                     listener.onLoginFailed(getErrorMessage(response.errorBody()));
@@ -83,7 +80,7 @@ public class RequestExecutor {
             @Override
             public void onResponse(Call<SocialAuthResponse> call, Response<SocialAuthResponse> response) {
                 if (response.isSuccessful()) {
-                    XWebView xWebView = new XWebView();
+                    XWebView xWebView = XLogin.getInstance().getWebView();
                     xWebView.loadAuthPage(response.body().getUrl(), listener);
                 } else {
                     listener.onSocialLoginFailed(getErrorMessage(response.errorBody()));

@@ -2,14 +2,12 @@ package com.xsolla.android.xsolla_login_sdk.webview;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Fragment;
-import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.xsolla.android.xsolla_login_sdk.R;
 import com.xsolla.android.xsolla_login_sdk.XLogin;
@@ -18,50 +16,46 @@ import com.xsolla.android.xsolla_login_sdk.token.TokenUtils;
 
 public class XWebView {
 
-    private final static String XSOLLA_CALLBACK_URL = "https://login.xsolla.com/api/blank";
+    private String callbackUrl = "https://login.xsolla.com/api/blank";
     private static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19";
-    private FrameLayout rootView;
-    private RelativeLayout containerLayout;
+    private Activity context;
+    private FrameLayout systemRootView;
+    private View webViewLayout;
+
+    private boolean isLoading = false;
+
+    public XWebView(Activity context, String callbackUrl) {
+        this.context = context;
+
+        if (callbackUrl != null) {
+            this.callbackUrl = callbackUrl;
+        }
+    }
 
     public void loadAuthPage(String loginUrl, XSocialAuthListener listener) {
-        Activity context = null;
 
-        if (listener instanceof Activity) {
-            context = (Activity) listener;
-        } else if (listener instanceof Fragment) {
-            context = ((Fragment) listener).getActivity();
-        }
+        if (isLoading) return;
+        isLoading = true;
 
-        WebView webView = createWebView(context, listener);
-        webView.loadUrl(loginUrl);
+        systemRootView = context.findViewById(android.R.id.content);
+        webViewLayout = LayoutInflater.from(context).inflate(R.layout.x_web_view, null);
+        WebView webView = webViewLayout.findViewById(R.id.web_view);
+        initWebView(webView, listener);
 
-        rootView = context.findViewById(android.R.id.content);
-
-        containerLayout = new RelativeLayout(context);
-        ImageView closeIcon = new ImageView(context);
-        closeIcon.setImageResource(R.drawable.close_webview_icon);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        closeIcon.setLayoutParams(params);
+        ImageView closeIcon = webViewLayout.findViewById(R.id.close_icon);
         closeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rootView.removeView(containerLayout);
+                systemRootView.removeView(webViewLayout);
             }
         });
 
-        containerLayout.addView(webView);
-        containerLayout.addView(closeIcon);
-
-        rootView.addView(containerLayout);
+        webView.loadUrl(loginUrl);
+        systemRootView.addView(webViewLayout);
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private WebView createWebView(Context context, XSocialAuthListener listener) {
-        WebView webView = new WebView(context);
+    private WebView initWebView(WebView webView, XSocialAuthListener listener) {
         webView.setWebViewClient(createWebViewClient(listener));
         webView.getSettings().setUserAgentString(USER_AGENT);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -78,10 +72,11 @@ public class XWebView {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if (url.startsWith(XSOLLA_CALLBACK_URL)) {
+                isLoading = false;
+                if (url.startsWith(callbackUrl)) {
                     String token = TokenUtils.getTokenFromUrl(url);
-                    XLogin.getInstance().setToken(token);
-                    rootView.removeView(containerLayout);
+                    XLogin.getInstance().saveToken(token);
+                    systemRootView.removeView(webViewLayout);
                     listener.onSocialLoginSuccess(token);
                 }
             }
