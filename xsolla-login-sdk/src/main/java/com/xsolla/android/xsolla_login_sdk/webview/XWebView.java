@@ -2,13 +2,12 @@ package com.xsolla.android.xsolla_login_sdk.webview;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.xsolla.android.xsolla_login_sdk.R;
 import com.xsolla.android.xsolla_login_sdk.XLogin;
@@ -20,8 +19,10 @@ public class XWebView {
     private final static String XSOLLA_CALLBACK_URL = "https://login.xsolla.com/api/blank";
     private static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19";
     private Activity context;
-    private FrameLayout rootView;
-    private RelativeLayout containerLayout;
+    private FrameLayout systemRootView;
+    private View webViewLayout;
+
+    private boolean isLoading = false;
 
     public XWebView(Activity activity) {
         this.context = activity;
@@ -29,36 +30,28 @@ public class XWebView {
 
     public void loadAuthPage(String loginUrl, XSocialAuthListener listener) {
 
-        WebView webView = createWebView(context, listener);
-        webView.loadUrl(loginUrl);
+        if (isLoading) return;
+        isLoading = true;
 
-        rootView = context.findViewById(android.R.id.content);
+        systemRootView = context.findViewById(android.R.id.content);
+        webViewLayout = LayoutInflater.from(context).inflate(R.layout.x_web_view, null);
+        WebView webView = webViewLayout.findViewById(R.id.web_view);
+        initWebView(webView, listener);
 
-        containerLayout = new RelativeLayout(context);
-        ImageView closeIcon = new ImageView(context);
-        closeIcon.setImageResource(R.drawable.close_webview_icon);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        closeIcon.setLayoutParams(params);
+        ImageView closeIcon = webViewLayout.findViewById(R.id.close_icon);
         closeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rootView.removeView(containerLayout);
+                systemRootView.removeView(webViewLayout);
             }
         });
 
-        containerLayout.addView(webView);
-        containerLayout.addView(closeIcon);
-
-        rootView.addView(containerLayout);
+        webView.loadUrl(loginUrl);
+        systemRootView.addView(webViewLayout);
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private WebView createWebView(Context context, XSocialAuthListener listener) {
-        WebView webView = new WebView(context);
+    private WebView initWebView(WebView webView, XSocialAuthListener listener) {
         webView.setWebViewClient(createWebViewClient(listener));
         webView.getSettings().setUserAgentString(USER_AGENT);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -75,10 +68,11 @@ public class XWebView {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                isLoading = false;
                 if (url.startsWith(XSOLLA_CALLBACK_URL)) {
                     String token = TokenUtils.getTokenFromUrl(url);
                     XLogin.getInstance().saveToken(token);
-                    rootView.removeView(containerLayout);
+                    systemRootView.removeView(webViewLayout);
                     listener.onSocialLoginSuccess(token);
                 }
             }
