@@ -10,16 +10,19 @@ import com.auth0.android.jwt.JWT;
 public class TokenUtils {
 
     private SharedPreferences preferences;
+    private JWT jwt;
 
     public TokenUtils(Activity activity) {
         this.preferences = activity.getPreferences(Context.MODE_PRIVATE);
     }
 
     public JWT getJwt() {
-        return new JWT(getToken());
+        return jwt;
     }
 
     public void saveToken(String token) {
+        jwt = new JWT(token);
+
         preferences
                 .edit()
                 .putString("jwtToken", token)
