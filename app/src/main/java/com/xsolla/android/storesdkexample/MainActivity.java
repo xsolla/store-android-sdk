@@ -56,8 +56,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initStatusBar() {
+        if (Build.VERSION.SDK_INT < 21) {
+            return;
+        }
+
         if (Build.VERSION.SDK_INT < 23) {
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.statusBarColorLowApi));
         } else {
