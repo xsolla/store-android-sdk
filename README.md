@@ -59,6 +59,12 @@ XLogin.getInstance().login("username", "password", this);
 See example in [AuthFragment](https://github.com/xsolla/android-store-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/AuthFragment.java) from Sample App.
 
 ## Auth via Social Network
+*NOTE* Default callback URL is `https://login.xsolla.com/api/blank`
+
+If you changed `Callback url` in your Publisher account, then you should init SDK like this:
+```java
+XLogin.getInstance().init("login-project-id", "callback-url", this);
+```
 Available Social Networks:
 * Google
 * Facebook
