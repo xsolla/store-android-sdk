@@ -3,38 +3,46 @@ package com.xsolla.android.login;
 import android.app.Activity;
 
 import com.xsolla.android.login.api.LoginApi;
-import com.xsolla.android.login.api.RequestExecutor;
-import com.xsolla.android.login.entity.request.LoginUser;
+import com.xsolla.android.login.api.XStoreCallback;
+import com.xsolla.android.login.entity.request.User;
 import com.xsolla.android.login.entity.request.NewUser;
-import com.xsolla.android.login.entity.request.Social;
+import com.xsolla.android.login.entity.request.ResetPasswordBody;
+import com.xsolla.android.login.social.Social;
+import com.xsolla.android.login.entity.response.AuthResponse;
+import com.xsolla.android.login.entity.response.SocialAuthResponse;
 import com.xsolla.android.login.jwt.JWT;
-import com.xsolla.android.login.listener.XAuthListener;
-import com.xsolla.android.login.listener.XRegisterListener;
-import com.xsolla.android.login.listener.XResetPasswordListener;
-import com.xsolla.android.login.listener.XSocialAuthListener;
 import com.xsolla.android.login.token.TokenUtils;
-import com.xsolla.android.login.webview.XWebView;
+import com.xsolla.android.login.social.XWebView;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class XLogin {
 
+    private String projectId;
+
     private static XLogin instance;
 
-    private RequestExecutor requestExecutor;
     private TokenUtils tokenUtils;
     private XWebView xWebView;
+    private LoginApi loginApi;
 
-    private XLogin() {
+    private XLogin(String projectId, TokenUtils tokenUtils, XWebView xWebView, LoginApi loginApi) {
+        this.projectId = projectId;
+        this.tokenUtils = tokenUtils;
+        this.xWebView = xWebView;
+        this.loginApi = loginApi;
     }
 
     public static XLogin getInstance() {
         if (instance == null) {
-            instance = new XLogin();
+            throw new IllegalStateException("XLogin SDK not initialized. Call \"XLogin.init(\"your-login-project-id\") in MainActivity.onCreate()");
         }
-
         return instance;
+    }
+
+    public LoginApi getLoginApi() {
+        return loginApi;
     }
 
     public String getToken() {
@@ -49,38 +57,40 @@ public class XLogin {
         return xWebView;
     }
 
-    public void init(String projectId, Activity activity) {
+    public static void init(String projectId, Activity activity) {
         init(projectId, null, activity);
     }
 
-    public void init(String projectId, String callbackUrl, Activity activity) {
-        tokenUtils = new TokenUtils(activity);
-        xWebView = new XWebView(activity, callbackUrl);
-
+    public static void init(String projectId, String callbackUrl, Activity activity) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://login.xsolla.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         LoginApi loginApi = retrofit.create(LoginApi.class);
-        requestExecutor = new RequestExecutor(loginApi, projectId);
+        TokenUtils tokenUtils = new TokenUtils(activity);
+        XWebView xWebView = new XWebView(activity, callbackUrl);
+
+        instance = new XLogin(projectId, tokenUtils, xWebView, loginApi);
     }
 
-    // TODO Check if requestExecutor is not null
-    public void registerUser(String username, String email, String password, final XRegisterListener listener) {
-        requestExecutor.registerUser(new NewUser(username, email, password), listener);
+    public void registerUser(String username, String email, String password, XStoreCallback<Void> callback) {
+        NewUser newUser = new NewUser(username, email, password);
+        loginApi.registerUser(projectId, newUser).enqueue(callback);
     }
 
-    public void login(String username, String password, final XAuthListener listener) {
-        requestExecutor.login(new LoginUser(username, password), listener);
+    public void login(String username, String password, XStoreCallback<AuthResponse> callback) {
+        User user = new User(username, password);
+        loginApi.login(projectId, user).enqueue(callback);
     }
 
-    public void resetPassword(String username, XResetPasswordListener listener) {
-        requestExecutor.resetPassword(username, listener);
+    public void loginSocial(Social social, XStoreCallback<SocialAuthResponse> callback) {
+        loginApi.getLinkForSocialAuth(social.providerName, projectId).enqueue(callback);
     }
 
-    public void loginSocial(Social social, XSocialAuthListener listener) {
-        requestExecutor.loginSocial(social, listener);
+    public void resetPassword(String username, XStoreCallback<Void> callback) {
+        ResetPasswordBody resetPasswordBody = new ResetPasswordBody(username);
+        loginApi.resetPassword(projectId, resetPasswordBody).enqueue(callback);
     }
 
     public void logout() {

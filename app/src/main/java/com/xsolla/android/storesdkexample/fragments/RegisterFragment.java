@@ -4,11 +4,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.login.XLogin;
-import com.xsolla.android.login.listener.XRegisterListener;
+import com.xsolla.android.login.api.XStoreCallback;
+import com.xsolla.android.storesdkexample.R;
 
-public class RegisterFragment extends BaseFragment implements XRegisterListener {
+public class RegisterFragment extends BaseFragment {
 
     private TextView usernameInput;
     private TextView emailInput;
@@ -40,19 +40,18 @@ public class RegisterFragment extends BaseFragment implements XRegisterListener 
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
 
-        XLogin.getInstance().registerUser(username, email, password, this);
-    }
+        XLogin.getInstance().registerUser(username, email, password, new XStoreCallback<Void>() {
+            @Override
+            protected void onSuccess(Void response) {
+                showSnack("Registration success. Please check your email");
+                openFragment(new AuthFragment());
+            }
 
-
-    @Override
-    public void onRegisterSuccess() {
-        showSnack("Registration success. Please check your email");
-        openFragment(new AuthFragment());
-    }
-
-    @Override
-    public void onRegisterFailed(String errorMessage) {
-        showSnack(errorMessage);
+            @Override
+            protected void onFailure(String errorMessage) {
+                showSnack(errorMessage);
+            }
+        });
     }
 
 }

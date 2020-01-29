@@ -1,4 +1,4 @@
-package com.xsolla.android.login.entity.request;
+package com.xsolla.android.login.social;
 
 public enum Social {
 

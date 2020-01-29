@@ -1,4 +1,4 @@
-package com.xsolla.android.login.webview;
+package com.xsolla.android.login.social;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -11,7 +11,6 @@ import android.widget.ImageView;
 
 import com.xsolla.android.login.R;
 import com.xsolla.android.login.XLogin;
-import com.xsolla.android.login.listener.XSocialAuthListener;
 import com.xsolla.android.login.token.TokenUtils;
 
 public class XWebView {

@@ -4,11 +4,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.login.XLogin;
-import com.xsolla.android.login.listener.XResetPasswordListener;
+import com.xsolla.android.login.api.XStoreCallback;
+import com.xsolla.android.storesdkexample.R;
 
-public class ResetPasswordFragment extends BaseFragment implements XResetPasswordListener {
+public class ResetPasswordFragment extends BaseFragment {
 
     private TextView usernameInput;
     private Button resetPasswordButton;
@@ -33,18 +33,17 @@ public class ResetPasswordFragment extends BaseFragment implements XResetPasswor
     private void resetPassword() {
         hideKeyboard();
         String username = usernameInput.getText().toString();
-        XLogin.getInstance().resetPassword(username, this);
-    }
+        XLogin.getInstance().resetPassword(username, new XStoreCallback<Void>() {
+            @Override
+            protected void onSuccess(Void response) {
+                showSnack("Password reset success. Check your email");
+            }
 
-    @Override
-    public void onResetPasswordSuccess() {
-        showSnack("Password reset success. Check your email");
-        openFragment(new AuthFragment());
-    }
-
-    @Override
-    public void onResetPasswordError(String errorMessage) {
-        showSnack(errorMessage);
+            @Override
+            protected void onFailure(String errorMessage) {
+                showSnack(errorMessage);
+            }
+        });
     }
 
 }
