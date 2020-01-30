@@ -1,2 +1,2 @@
-include ':app', ':xsolla-login-sdk'
+include ':app', ':xsolla-login-sdk', ':xsolla-store-sdk'
 rootProject.name='android-store-sdk'

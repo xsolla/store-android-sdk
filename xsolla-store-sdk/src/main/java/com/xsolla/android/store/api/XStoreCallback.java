@@ -1,10 +1,4 @@
-package com.xsolla.android.login.api;
-
-import com.xsolla.android.login.XLogin;
-import com.xsolla.android.login.entity.response.AuthResponse;
-import com.xsolla.android.login.entity.response.SocialAuthResponse;
-import com.xsolla.android.login.social.XSocialAuthListener;
-import com.xsolla.android.login.social.XWebView;
+package com.xsolla.android.store.api;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +18,7 @@ abstract public class XStoreCallback<T> implements Callback<T> {
     public void onResponse(Call<T> call, Response<T> response) {
 
         if (response.isSuccessful()) {
-            handleResponse(response.body());
+            onSuccess(response.body());
         } else {
             String errorMessage = getErrorMessage(response.errorBody());
             onFailure(errorMessage);
@@ -50,33 +44,6 @@ abstract public class XStoreCallback<T> implements Callback<T> {
             e.printStackTrace();
         }
         return "Unknown Error";
-    }
-
-    private void handleResponse(T responseBody) {
-        if (responseBody instanceof AuthResponse) {
-            handleAuthResponse(responseBody);
-        } else if (responseBody instanceof SocialAuthResponse) {
-            handleSocialAuthResponse(responseBody);
-        } else {
-            onSuccess(responseBody);
-        }
-    }
-
-    private void handleAuthResponse(T responseBody) {
-        String token = ((AuthResponse) responseBody).getToken();
-        XLogin.saveToken(token);
-        onSuccess(responseBody);
-    }
-
-    private void handleSocialAuthResponse(final T responseBody) {
-        String url = ((SocialAuthResponse) responseBody).getUrl();
-        XWebView xWebView = XLogin.getWebView();
-        xWebView.loadAuthPage(url, new XSocialAuthListener() {
-            @Override
-            public void onSocialLoginSuccess(String token) {
-                onSuccess(responseBody);
-            }
-        });
     }
 
 }
