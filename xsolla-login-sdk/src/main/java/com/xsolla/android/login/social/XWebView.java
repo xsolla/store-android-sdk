@@ -74,7 +74,7 @@ public class XWebView {
                 isLoading = false;
                 if (url.startsWith(callbackUrl)) {
                     String token = TokenUtils.getTokenFromUrl(url);
-                    XLogin.getInstance().saveToken(token);
+                    XLogin.saveToken(token);
                     systemRootView.removeView(webViewLayout);
                     listener.onSocialLoginSuccess(token);
                 }

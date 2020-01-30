@@ -1,7 +1,7 @@
 package com.xsolla.android.login.api;
 
-import com.xsolla.android.login.entity.request.User;
-import com.xsolla.android.login.entity.request.NewUser;
+import com.xsolla.android.login.entity.request.AuthUserBody;
+import com.xsolla.android.login.entity.request.RegisterUserBody;
 import com.xsolla.android.login.entity.request.ResetPasswordBody;
 import com.xsolla.android.login.entity.response.AuthResponse;
 import com.xsolla.android.login.entity.response.SocialAuthResponse;
@@ -16,10 +16,10 @@ import retrofit2.http.Query;
 public interface LoginApi {
 
     @POST("/api/user")
-    Call<Void> registerUser(@Query("projectId") String projectId, @Body NewUser newUser);
+    Call<Void> registerUser(@Query("projectId") String projectId, @Body RegisterUserBody registerUserBody);
 
     @POST("/api/login")
-    Call<AuthResponse> login(@Query("projectId") String projectId, @Body User user);
+    Call<AuthResponse> login(@Query("projectId") String projectId, @Body AuthUserBody authUserBody);
 
     @POST("/api/password/reset/request")
     Call<Void> resetPassword(@Query("projectId") String projectId, @Body ResetPasswordBody resetPasswordBody);

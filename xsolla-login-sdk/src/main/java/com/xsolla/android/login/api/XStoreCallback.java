@@ -64,13 +64,13 @@ abstract public class XStoreCallback<T> implements Callback<T> {
 
     private void handleAuthResponse(T responseBody) {
         String token = ((AuthResponse) responseBody).getToken();
-        XLogin.getInstance().saveToken(token);
+        XLogin.saveToken(token);
         onSuccess(responseBody);
     }
 
     private void handleSocialAuthResponse(final T responseBody) {
         String url = ((SocialAuthResponse) responseBody).getUrl();
-        XWebView xWebView = XLogin.getInstance().getWebView();
+        XWebView xWebView = XLogin.getWebView();
         xWebView.loadAuthPage(url, new XSocialAuthListener() {
             @Override
             public void onSocialLoginSuccess(String token) {

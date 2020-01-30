@@ -1,6 +1,6 @@
 package com.xsolla.android.login.social;
 
-public enum Social {
+public enum SocialNetwork {
 
     GOOGLE("google"),
     FACEBOOK("facebook"),
@@ -11,7 +11,7 @@ public enum Social {
 
     public final String providerName;
 
-    Social(String providerName) {
+    SocialNetwork(String providerName) {
         this.providerName = providerName;
     }
 }
