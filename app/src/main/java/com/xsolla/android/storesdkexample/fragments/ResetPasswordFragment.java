@@ -33,7 +33,7 @@ public class ResetPasswordFragment extends BaseFragment {
     private void resetPassword() {
         hideKeyboard();
         String username = usernameInput.getText().toString();
-        XLogin.getInstance().resetPassword(username, new XStoreCallback<Void>() {
+        XLogin.resetPassword(username, new XStoreCallback<Void>() {
             @Override
             protected void onSuccess(Void response) {
                 showSnack("Password reset success. Check your email");

@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 import com.xsolla.android.login.XLogin;
 import com.xsolla.android.login.api.XStoreCallback;
-import com.xsolla.android.login.social.Social;
+import com.xsolla.android.login.social.SocialNetwork;
 import com.xsolla.android.login.entity.response.AuthResponse;
 import com.xsolla.android.login.entity.response.SocialAuthResponse;
 import com.xsolla.android.storesdkexample.R;
@@ -24,35 +24,35 @@ public class AuthFragment extends BaseFragment {
         rootView.findViewById(R.id.google_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                XLogin.getInstance().loginSocial(Social.GOOGLE, socialAuthCallback);
+                XLogin.loginSocial(SocialNetwork.GOOGLE, socialAuthCallback);
             }
         });
 
         rootView.findViewById(R.id.facebook_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                XLogin.getInstance().loginSocial(Social.FACEBOOK, socialAuthCallback);
+                XLogin.loginSocial(SocialNetwork.FACEBOOK, socialAuthCallback);
             }
         });
 
         rootView.findViewById(R.id.twitter_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                XLogin.getInstance().loginSocial(Social.TWITTER, socialAuthCallback);
+                XLogin.loginSocial(SocialNetwork.TWITTER, socialAuthCallback);
             }
         });
 
         rootView.findViewById(R.id.linkedin_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                XLogin.getInstance().loginSocial(Social.LINKEDIN, socialAuthCallback);
+                XLogin.loginSocial(SocialNetwork.LINKEDIN, socialAuthCallback);
             }
         });
 
         rootView.findViewById(R.id.naver_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                XLogin.getInstance().loginSocial(Social.NAVER, socialAuthCallback);
+                XLogin.loginSocial(SocialNetwork.NAVER, socialAuthCallback);
             }
         });
 
@@ -67,7 +67,7 @@ public class AuthFragment extends BaseFragment {
                 String password = passwordInput.getText().toString();
 
 
-                XLogin.getInstance().login(username, password, new XStoreCallback<AuthResponse>() {
+                XLogin.login(username, password, new XStoreCallback<AuthResponse>() {
                     @Override
                     protected void onSuccess(AuthResponse response) {
                         openFragment(new ProfileFragment());

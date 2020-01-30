@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private Fragment getFragment() {
-        String token = XLogin.getInstance().getToken();
-        if (token != null && XLogin.getInstance().isTokenValid()) {
+        String token = XLogin.getToken();
+        if (token != null && XLogin.isTokenValid()) {
             return new ProfileFragment();
         } else {
             return new AuthFragment();

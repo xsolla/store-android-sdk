@@ -1,12 +1,12 @@
 package com.xsolla.android.login.entity.request;
 
-public class NewUser {
+public class RegisterUserBody {
 
     private String username;
     private String email;
     private String password;
 
-    public NewUser(String username, String email, String password) {
+    public RegisterUserBody(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;

@@ -24,8 +24,7 @@ public class ProfileFragment extends BaseFragment {
         TextView expiresAt = rootView.findViewById(R.id.expires_at);
         TextView issuer = rootView.findViewById(R.id.issuer);
 
-        XLogin xLogin = XLogin.getInstance();
-        JWT jwt = xLogin.getJwt();
+        JWT jwt = XLogin.getJwt();
 
         username.setText(jwt.getClaim("username").asString());
         email.setText(jwt.getClaim("email").asString());
@@ -38,7 +37,7 @@ public class ProfileFragment extends BaseFragment {
         rootView.findViewById(R.id.logout_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                XLogin.getInstance().logout();
+                XLogin.logout();
                 openRootFragment();
             }
         });
