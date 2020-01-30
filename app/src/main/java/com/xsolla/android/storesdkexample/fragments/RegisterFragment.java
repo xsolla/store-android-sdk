@@ -5,7 +5,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.xsolla.android.login.XLogin;
-import com.xsolla.android.login.api.XStoreCallback;
+import com.xsolla.android.login.api.XLoginCallback;
 import com.xsolla.android.storesdkexample.R;
 
 public class RegisterFragment extends BaseFragment {
@@ -40,7 +40,7 @@ public class RegisterFragment extends BaseFragment {
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
 
-        XLogin.registerUser(username, email, password, new XStoreCallback<Void>() {
+        XLogin.registerUser(username, email, password, new XLoginCallback<Void>() {
             @Override
             protected void onSuccess(Void response) {
                 showSnack("Registration success. Please check your email");

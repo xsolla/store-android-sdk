@@ -5,7 +5,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.xsolla.android.login.XLogin;
-import com.xsolla.android.login.api.XStoreCallback;
+import com.xsolla.android.login.api.XLoginCallback;
 import com.xsolla.android.storesdkexample.R;
 
 public class ResetPasswordFragment extends BaseFragment {
@@ -33,7 +33,7 @@ public class ResetPasswordFragment extends BaseFragment {
     private void resetPassword() {
         hideKeyboard();
         String username = usernameInput.getText().toString();
-        XLogin.resetPassword(username, new XStoreCallback<Void>() {
+        XLogin.resetPassword(username, new XLoginCallback<Void>() {
             @Override
             protected void onSuccess(Void response) {
                 showSnack("Password reset success. Check your email");

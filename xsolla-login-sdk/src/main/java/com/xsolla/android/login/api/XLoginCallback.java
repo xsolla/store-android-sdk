@@ -16,7 +16,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-abstract public class XStoreCallback<T> implements Callback<T> {
+abstract public class XLoginCallback<T> implements Callback<T> {
 
     private String SERVER_IS_NOT_RESPONDING = "Server is not responding. Please try later.";
 

@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.xsolla.android.login.XLogin;
-import com.xsolla.android.login.api.XStoreCallback;
+import com.xsolla.android.login.api.XLoginCallback;
 import com.xsolla.android.login.social.SocialNetwork;
 import com.xsolla.android.login.entity.response.AuthResponse;
 import com.xsolla.android.login.entity.response.SocialAuthResponse;
@@ -67,7 +67,7 @@ public class AuthFragment extends BaseFragment {
                 String password = passwordInput.getText().toString();
 
 
-                XLogin.login(username, password, new XStoreCallback<AuthResponse>() {
+                XLogin.login(username, password, new XLoginCallback<AuthResponse>() {
                     @Override
                     protected void onSuccess(AuthResponse response) {
                         openFragment(new ProfileFragment());
@@ -98,7 +98,7 @@ public class AuthFragment extends BaseFragment {
         });
     }
 
-    private XStoreCallback<SocialAuthResponse> socialAuthCallback = new XStoreCallback<SocialAuthResponse>() {
+    private XLoginCallback<SocialAuthResponse> socialAuthCallback = new XLoginCallback<SocialAuthResponse>() {
         @Override
         protected void onSuccess(SocialAuthResponse response) {
             openFragment(new ProfileFragment());

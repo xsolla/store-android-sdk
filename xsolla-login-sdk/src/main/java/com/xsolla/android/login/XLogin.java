@@ -3,7 +3,7 @@ package com.xsolla.android.login;
 import android.app.Activity;
 
 import com.xsolla.android.login.api.LoginApi;
-import com.xsolla.android.login.api.XStoreCallback;
+import com.xsolla.android.login.api.XLoginCallback;
 import com.xsolla.android.login.entity.request.AuthUserBody;
 import com.xsolla.android.login.entity.request.RegisterUserBody;
 import com.xsolla.android.login.entity.request.ResetPasswordBody;
@@ -70,21 +70,21 @@ public class XLogin {
         instance = new XLogin(projectId, tokenUtils, xWebView, loginApi);
     }
 
-    public static void registerUser(String username, String email, String password, XStoreCallback<Void> callback) {
+    public static void registerUser(String username, String email, String password, XLoginCallback<Void> callback) {
         RegisterUserBody registerUserBody = new RegisterUserBody(username, email, password);
         getInstance().loginApi.registerUser(getInstance().projectId, registerUserBody).enqueue(callback);
     }
 
-    public static void login(String username, String password, XStoreCallback<AuthResponse> callback) {
+    public static void login(String username, String password, XLoginCallback<AuthResponse> callback) {
         AuthUserBody authUserBody = new AuthUserBody(username, password);
         getInstance().loginApi.login(getInstance().projectId, authUserBody).enqueue(callback);
     }
 
-    public static void loginSocial(SocialNetwork socialNetwork, XStoreCallback<SocialAuthResponse> callback) {
+    public static void loginSocial(SocialNetwork socialNetwork, XLoginCallback<SocialAuthResponse> callback) {
         getInstance().loginApi.getLinkForSocialAuth(socialNetwork.providerName, getInstance().projectId).enqueue(callback);
     }
 
-    public static void resetPassword(String username, XStoreCallback<Void> callback) {
+    public static void resetPassword(String username, XLoginCallback<Void> callback) {
         ResetPasswordBody resetPasswordBody = new ResetPasswordBody(username);
         getInstance().loginApi.resetPassword(getInstance().projectId, resetPasswordBody).enqueue(callback);
     }
