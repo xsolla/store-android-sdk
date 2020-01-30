@@ -1,11 +1,11 @@
-# Xsolla Store Android Asset
+# Xsolla Login Android Asset
 
-**Xsolla Store Android Asset** is used to integrate Xsolla products with Android apps. The asset includes the following SDKs:
+**Xsolla Login Android Asset** is used to integrate Xsolla Login, a single sign-on tool that uses API methods to authenticate and secure user passwords. This creates a seamless one-click registration experience players can use for fast and safe transactions across all of your games. Create a  [Publisher Account](https://publisher.xsolla.com/signup?store_type=sdk) with Xsolla to get started. The asset includes the following SDKs:
 
 * Xsolla Login Android SDK
 
 ## Install
-The library is available both in Maven Central and JCenter. To start using it add this line to your `build.gradle` dependencies file:
+The library is available both in Maven Central and JCenter. To start using it, add this line to your `build.gradle` dependencies file:
 
 ```groovy
 // TODO Publish to Maven Central and JCenter
@@ -17,53 +17,54 @@ The library is available both in Maven Central and JCenter. To start using it ad
 Initialize Xsolla Login SDK in MainActivity
 
 ```java
-XLogin.getInstance().init("login-project-id", this);
+XLogin.init("login-project-id", this);
+```
+Or if you changed `Callback Url` in your Publisher Account
+```java
+XLogin.init("login-project-id", "your-callback-url", this);
 ```
 
 ## Register User
+
 ```java
-XLogin.getInstance().registerUser("username", "email", "password", this);
+XLogin.registerUser("username", "email", "password", new XStoreCallback<Void>() {
+        @Override
+        protected void onSuccess(Void response) {
+            // Registration success. Show the user an explanation to check email and confirm account.
+        }
+
+        @Override
+        protected void onFailure(String errorMessage) {
+            // Something went wrong. Reason is passed in errorMessage
+        }
+});    
 ```
-Сlass where you call this method must implement `XRegisterListener` and override two methods, such as:
-
-```java
-    @Override
-    public void onRegisterSuccess() {
-        // Regisration success. Show the user an explanation to check email and confirm account.
-    }
-
-    @Override
-    public void onRegisterFailed(String errorMessage) {
-        // Something went wrong. Reason is passed in errorMessage
-    }
-``` 
 See example in [RegisterFragment](https://github.com/xsolla/android-store-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/RegisterFragment.java) from Sample App.
 
 ## Auth by Username and Password
-```java
-XLogin.getInstance().login("username", "password", this);
-````
-Сlass where you call this method must implement `XAuthListener` and override two methods, such as:
 
 ```java
-    @Override
-    public void onLoginSuccess(String token) {
-        // User is authentificated. Token retrieved, saved in SDK and passed here.
-    }
+XLogin.login(username, password, new XStoreCallback<AuthResponse>() {
+        @Override
+        protected void onSuccess(AuthResponse response) {
+            // User is authenticated. Token retrieved, saved in SDK, and passed here.       
+            String token = response.getToken();     
+        }
 
-    @Override
-    public void onLoginFailed(String errorMessage) {
-        // Something went wrong. Reason is passed in errorMessage
-    }
-``` 
+        @Override
+        protected void onFailure(String errorMessage) {
+            // Something went wrong. Reason is passed in errorMessage
+        }
+});    
+```
 See example in [AuthFragment](https://github.com/xsolla/android-store-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/AuthFragment.java) from Sample App.
 
 ## Auth via Social Network
-*NOTE* Default callback URL is `https://login.xsolla.com/api/blank`
+**NOTE** Default callback URL is `https://login.xsolla.com/api/blank`
 
-If you changed `Callback url` in your Publisher account, then you should init SDK like this:
+If you changed `Callback Url` in your Publisher account, then you should init SDK like this:
 ```java
-XLogin.getInstance().init("login-project-id", "callback-url", this);
+XLogin.getInstance().init("login-project-id", "your-callback-url", this);
 ```
 Available Social Networks:
 * Google
@@ -74,46 +75,43 @@ Available Social Networks:
 * Baidu
 
 ```java
-XLogin.getInstance().loginSocial(Social.GOOGLE, this);
-``` 
-Сlass where you call this method must implement `XSocialAuthListener` and override two methods, such as:
-
-```java
+XLogin.loginSocial(SocialNetwork.GOOGLE, new XStoreCallback<SocialAuthResponse>() {
     @Override
-    public void onSocialLoginSuccess(String token) {
-        // User is authentificated. Token retrieved, saved in SDK and passed here.
+    protected void onSuccess(SocialAuthResponse response) {
+        // User is authenticated. Token retrieved, saved in SDK, and passed here.
+        String token = response.getToken();
     }
 
     @Override
-    public void onSocialLoginFailed(String errorMessage) {
+    protected void onFailure(String errorMessage) {
         // Something went wrong. Reason is passed in errorMessage
     }
+});    
 ```
-See example in [AuthFragment](https://github.com/xsolla/android-store-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/AuthFragment.java) from Sample App. 
+See example in [AuthFragment](https://github.com/xsolla/android-store-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/AuthFragment.java) from Sample App.
 
 ## Reset Password
+
 ```java
-XLogin.getInstance().resetPassword("username", this);
-``` 
-Сlass where you call this method must implement `XResetPasswordListener` and override two methods, such as:
-```java
+XLogin.resetPassword("username", new XStoreCallback<Void>() {
     @Override
-    public void onResetPasswordSuccess(String token) {
+    protected void onSuccess(Void response) {
         // Password reset success. Show the user an explanation to check email and set new password.
-        // *NOTE* You will recieve success callback even when specific user doesn't exists!
+        // **NOTE** You will receive success callback even when specific user doesn't exist!
     }
 
     @Override
-    public void onResetPasswordFailed(String errorMessage) {
+    protected void onFailure(String errorMessage) {
         // Something went wrong. Reason is passed in errorMessage
     }
-``` 
+});    
+```
 See example in [ResetPasswordFragment](https://github.com/xsolla/android-store-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/ResetPasswordFragment.java) from Sample App.
 
 ## Logout
 ```java
-XLogin.getInstance().logout(); // Token is cleared
-``` 
+XLogin.logout(); // Token is cleared
+```
 
 # Token and User info
 At any time you can get a token from SDK
@@ -126,10 +124,10 @@ Check if either token valid or not
 ```java
 XLogin xLogin = XLogin.getInstance();
 boolean isTokenValid = xLogin.isTokenValid();
-``` 
+```
 
 ## User info
-You can get all available information from token according to JWT Specification. For more information see [https://jwt.io/]
+You can get all available information from the token according to JWT Specification. For more information see [https://jwt.io/]
 
 See example in [RegisterFragment](https://github.com/xsolla/android-store-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/RegisterFragment.java) from Sample App.
 
@@ -215,7 +213,7 @@ The Claim class is a wrapper for the Claim values. It allows you to get the Clai
 * **asDate()**: Returns the Date value or null if it can't be converted. Note that the [JWT Standard](https://tools.ietf.org/html/rfc7519#section-2) specified that all the *NumericDate* values must be in seconds. (Epoch / Unix time)
 
 #### Collections
-To obtain a Claim as a Collection you'll need to provide the **Class Type** of the contents to convert from.
+To obtain a Claim as a Collection, you'll need to provide the **Class Type** of the contents to convert from.
 
 * **asArray(class)**: Returns the value parsed as an Array of elements of type **Class Type**, or an empty Array if the value isn't an JSON Array.
 * **asList(class)**: Returns the value parsed as a List of elements of type **Class Type**, or an empty List if the value isn't an JSON Array.

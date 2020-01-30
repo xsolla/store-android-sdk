@@ -1,5 +1,7 @@
 package com.xsolla.android.login.entity.response;
 
+import com.xsolla.android.login.token.TokenUtils;
+
 public class SocialAuthResponse {
 
     private String url;
@@ -12,7 +14,7 @@ public class SocialAuthResponse {
         return url;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public String getToken() {
+        return TokenUtils.getTokenFromUrl(url);
     }
 }
