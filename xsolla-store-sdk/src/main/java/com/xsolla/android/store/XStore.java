@@ -2,6 +2,7 @@ package com.xsolla.android.store;
 
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
+import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
@@ -108,4 +109,19 @@ public class XStore {
         ).enqueue(callback);
     }
 
+    public static void getPhysicalItems(
+            int limit,
+            int offset,
+            String locale,
+            List<String> additionalFields,
+            XStoreCallback<PhysicalItemsResponse> callback
+    ) {
+        getInstance().storeApi.getPhysicalItems(
+                getInstance().projectId,
+                limit,
+                offset,
+                locale,
+                additionalFields
+        ).enqueue(callback);
+    }
 }
