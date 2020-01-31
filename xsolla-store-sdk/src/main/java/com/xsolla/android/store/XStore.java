@@ -90,4 +90,22 @@ public class XStore {
         ).enqueue(callback);
     }
 
+    public static void getItemsBySpecifiedGroup(
+            int limit,
+            String externalId,
+            int offset,
+            String locale,
+            List<String> additionalFields,
+            XStoreCallback<VirtualItemsResponse> callback
+    ) {
+        getInstance().storeApi.getItemsBySpecifiedGroup(
+                getInstance().projectId,
+                externalId,
+                limit,
+                offset,
+                locale,
+                additionalFields
+        ).enqueue(callback);
+    }
+
 }

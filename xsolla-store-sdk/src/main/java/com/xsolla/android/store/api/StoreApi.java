@@ -39,4 +39,14 @@ public interface StoreApi {
             @Query("locale") String locale,
             @Query("additional_fields") List<String> additionalFields
     );
+
+    @GET("/api/v2/project/{project_id}/items/virtual_items/group/{external_id}")
+    Call<VirtualItemsResponse> getItemsBySpecifiedGroup(
+            @Path("project_id") int projectId,
+            @Path("external_id") String externalId,
+            @Query("limit") int limit,
+            @Query("offset") int offset,
+            @Query("locale") String locale,
+            @Query("additional_fields") List<String> additionalFields
+    );
 }
