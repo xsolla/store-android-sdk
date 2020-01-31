@@ -2,6 +2,7 @@ package com.xsolla.android.store;
 
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
+import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 
@@ -65,6 +66,22 @@ public class XStore {
             XStoreCallback<VirtualCurrencyResponse> callback
     ) {
         getInstance().storeApi.getVirtualCurrency(
+                getInstance().projectId,
+                limit,
+                offset,
+                locale,
+                additionalFields
+        ).enqueue(callback);
+    }
+
+    public static void getVirtualCurrencyPackage(
+            int limit,
+            int offset,
+            String locale,
+            List<String> additionalFields,
+            XStoreCallback<VirtualCurrencyPackageResponse> callback
+    ) {
+        getInstance().storeApi.getVirtualCurrencyPackage(
                 getInstance().projectId,
                 limit,
                 offset,

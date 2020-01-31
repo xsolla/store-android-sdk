@@ -1,5 +1,6 @@
 package com.xsolla.android.store.api;
 
+import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 
@@ -30,4 +31,12 @@ public interface StoreApi {
             @Query("additional_fields") List<String> additionalFields
     );
 
+    @GET("/api/v2/project/{project_id}/items/virtual_currency/package")
+    Call<VirtualCurrencyPackageResponse> getVirtualCurrencyPackage(
+            @Path("project_id") int projectId,
+            @Query("limit") int limit,
+            @Query("offset") int offset,
+            @Query("locale") String locale,
+            @Query("additional_fields") List<String> additionalFields
+    );
 }
