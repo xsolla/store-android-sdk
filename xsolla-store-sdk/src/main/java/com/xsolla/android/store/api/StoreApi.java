@@ -17,8 +17,8 @@ public interface StoreApi {
     @GET("/api/v2/project/{project_id}/items/virtual_items")
     Call<VirtualItemsResponse> getVirtualItems(
             @Path("project_id") int projectId,
-            @Query("limit") int limit,
-            @Query("offset") int offset,
+            @Query("limit") Integer limit,
+            @Query("offset") Integer offset,
             @Query("locale") String locale,
             @Query("additional_fields") List<String> additionalFields
     );
@@ -26,8 +26,8 @@ public interface StoreApi {
     @GET("/api/v2/project/{project_id}/items/virtual_currency")
     Call<VirtualCurrencyResponse> getVirtualCurrency(
             @Path("project_id") int projectId,
-            @Query("limit") int limit,
-            @Query("offset") int offset,
+            @Query("limit") Integer limit,
+            @Query("offset") Integer offset,
             @Query("locale") String locale,
             @Query("additional_fields") List<String> additionalFields
     );
@@ -35,8 +35,8 @@ public interface StoreApi {
     @GET("/api/v2/project/{project_id}/items/virtual_currency/package")
     Call<VirtualCurrencyPackageResponse> getVirtualCurrencyPackage(
             @Path("project_id") int projectId,
-            @Query("limit") int limit,
-            @Query("offset") int offset,
+            @Query("limit") Integer limit,
+            @Query("offset") Integer offset,
             @Query("locale") String locale,
             @Query("additional_fields") List<String> additionalFields
     );
@@ -45,8 +45,8 @@ public interface StoreApi {
     Call<VirtualItemsResponse> getItemsBySpecifiedGroup(
             @Path("project_id") int projectId,
             @Path("external_id") String externalId,
-            @Query("limit") int limit,
-            @Query("offset") int offset,
+            @Query("limit") Integer limit,
+            @Query("offset") Integer offset,
             @Query("locale") String locale,
             @Query("additional_fields") List<String> additionalFields
     );
@@ -54,8 +54,8 @@ public interface StoreApi {
     @GET("/api/v2/project/{project_id}/items/physical_good")
     Call<PhysicalItemsResponse> getPhysicalItems(
             @Path("project_id") int projectId,
-            @Query("limit") int limit,
-            @Query("offset") int offset,
+            @Query("limit") Integer limit,
+            @Query("offset") Integer offset,
             @Query("locale") String locale,
             @Query("additional_fields") List<String> additionalFields
     );
