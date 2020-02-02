@@ -7,6 +7,7 @@ import com.xsolla.android.store.entity.request.inventory.GrantItemsByPurchaseReq
 import com.xsolla.android.store.entity.request.inventory.GrantItemsRequest;
 import com.xsolla.android.store.entity.request.inventory.RevokeItemsRequest;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
+import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
 import com.xsolla.android.store.entity.response.inventory.GrantItemsByPurchaseResponse;
@@ -19,6 +20,8 @@ import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResp
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.store.entity.response.order.OrderResponse;
+import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse;
+import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -176,6 +179,35 @@ public class XStore {
     // Order
     public static void getOrder(String orderId, XStoreCallback<OrderResponse> callback) {
         getRequestExecutor().getOrder(orderId, callback);
+    }
+
+    // Payment
+    public static void createOrderFromCartById(String cartId, XStoreCallback<CreateOrderResponse> callback) {
+        getRequestExecutor().createOrderFromCartById(cartId, null, callback);
+    }
+
+    public static void createOrderFromCartById(String cartId, PaymentOptions options, XStoreCallback<CreateOrderResponse> callback) {
+        getRequestExecutor().createOrderFromCartById(cartId, options, callback);
+    }
+
+    public static void createOrderFromCurrentCart(XStoreCallback<CreateOrderResponse> callback) {
+        getRequestExecutor().createOrderFromCurrentCart(null, callback);
+    }
+
+    public static void createOrderFromCurrentCart(PaymentOptions options, XStoreCallback<CreateOrderResponse> callback) {
+        getRequestExecutor().createOrderFromCurrentCart(options, callback);
+    }
+
+    public static void createOrderByItemSku(String itemSku, XStoreCallback<CreateOrderResponse> callback) {
+        getRequestExecutor().createOrderByItemSku(itemSku, null, callback);
+    }
+
+    public static void createOrderByItemSku(String itemSku, PaymentOptions options, XStoreCallback<CreateOrderResponse> callback) {
+        getRequestExecutor().createOrderByItemSku(itemSku, options, callback);
+    }
+
+    public static void createOrderByVirtualCurrency(String itemSku, String virtualCurrencySku, XStoreCallback<CreateOrderByVirtualCurrencyResponse> callback) {
+        getRequestExecutor().createOrderByVirtualCurrency(itemSku, virtualCurrencySku, callback);
     }
 
 }
