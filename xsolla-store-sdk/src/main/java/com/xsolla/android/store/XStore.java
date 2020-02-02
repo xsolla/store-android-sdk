@@ -108,4 +108,12 @@ public class XStore {
         getRequestExecutor().getCurrentUserCart(options, callback);
     }
 
+    public static void clearCartById(String cartId, XStoreCallback<Void> callback) {
+        getRequestExecutor().clearCartById(cartId, callback);
+    }
+
+    public static void clearCurrentCart(XStoreCallback<Void> callback) {
+        getRequestExecutor().clearCurrentCart(callback);
+    }
+
 }

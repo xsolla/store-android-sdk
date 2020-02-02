@@ -89,4 +89,13 @@ class RequestExecutor {
                 options != null ? options.getLocale() : "en"
         ).enqueue(callback);
     }
+
+    public void clearCartById(String cartId, XStoreCallback<Void> callback) {
+        storeApi.clearCartById(projectId, cartId).enqueue(callback);
+    }
+
+    public void clearCurrentCart(XStoreCallback<Void> callback) {
+        storeApi.clearCurrentCart(projectId).enqueue(callback);
+    }
+
 }
