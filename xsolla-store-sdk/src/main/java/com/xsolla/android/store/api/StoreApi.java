@@ -15,6 +15,8 @@ import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResp
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.store.entity.response.order.OrderResponse;
+import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse;
+import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 
 import java.util.List;
 
@@ -158,5 +160,38 @@ public interface StoreApi {
 
     @GET("api/v2/project/{project_id}/order/{order_id}")
     Call<OrderResponse> getOrder(@Path("project_id") int projectId, @Path("order_id") String orderId);
+
+    @POST("api/v2/project/{project_id}/payment/cart/{cart_id}")
+    Call<CreateOrderResponse> createOrderFromCartById(
+            @Path("project_id") int projectId,
+            @Path("cart_id") String cartId,
+            @Field("currency") String currency,
+            @Field("locale") String locale,
+            @Field("sandbox") boolean sandbox
+    );
+
+    @POST("api/v2/project/{project_id}/payment/cart")
+    Call<CreateOrderResponse> createOrderFromCurrentCart(
+            @Path("project_id") int projectId,
+            @Field("currency") String currency,
+            @Field("locale") String locale,
+            @Field("sandbox") boolean sandbox
+    );
+
+    @POST("api/v2/project/{project_id}/payment/item/{item_sku}")
+    Call<CreateOrderResponse> createOrderByItemSku(
+            @Path("project_id") int projectId,
+            @Path("item_sku") String itemSku,
+            @Field("currency") String currency,
+            @Field("locale") String locale,
+            @Field("sandbox") boolean sandbox
+    );
+
+    @POST("api/v2/project/{project_id}/payment/item/{item_sku}/virtual/{virtual_currency_sku}")
+    Call<CreateOrderByVirtualCurrencyResponse> createOrderByVirtualCurrency(
+            @Path("project_id") int projectId,
+            @Path("item_sku") String itemSku,
+            @Path("virtual_currency_sku") String virtualCurrencySku
+    );
 
 }

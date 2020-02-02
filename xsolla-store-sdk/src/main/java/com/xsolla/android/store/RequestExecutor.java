@@ -7,6 +7,7 @@ import com.xsolla.android.store.entity.request.inventory.GrantItemsByPurchaseReq
 import com.xsolla.android.store.entity.request.inventory.GrantItemsRequest;
 import com.xsolla.android.store.entity.request.inventory.RevokeItemsRequest;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
+import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
 import com.xsolla.android.store.entity.response.inventory.GrantItemsByPurchaseResponse;
@@ -19,6 +20,8 @@ import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResp
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.store.entity.response.order.OrderResponse;
+import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse;
+import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 
 class RequestExecutor {
 
@@ -154,6 +157,39 @@ class RequestExecutor {
 
     public void getOrder(String orderId, XStoreCallback<OrderResponse> callback) {
         storeApi.getOrder(projectId, orderId).enqueue(callback);
+    }
+
+    public void createOrderFromCartById(String cartId, PaymentOptions options, XStoreCallback<CreateOrderResponse> callback) {
+        storeApi.createOrderFromCartById(
+                projectId,
+                cartId,
+                options != null ? options.getCurrency() : "USD",
+                options != null ? options.getLocale() : "en",
+                options != null ? options.isSandbox() : false
+        ).enqueue(callback);
+    }
+
+    public void createOrderFromCurrentCart(PaymentOptions options, XStoreCallback<CreateOrderResponse> callback) {
+        storeApi.createOrderFromCurrentCart(
+                projectId,
+                options != null ? options.getCurrency() : "USD",
+                options != null ? options.getLocale() : "en",
+                options != null ? options.isSandbox() : false
+        ).enqueue(callback);
+    }
+
+    public void createOrderByItemSku(String itemSku, PaymentOptions options, XStoreCallback<CreateOrderResponse> callback) {
+        storeApi.createOrderByItemSku(
+                projectId,
+                itemSku,
+                options != null ? options.getCurrency() : "USD",
+                options != null ? options.getLocale() : "en",
+                options != null ? options.isSandbox() : false
+        ).enqueue(callback);
+    }
+
+    public void createOrderByVirtualCurrency(String itemSku, String virtualCurrencySku, XStoreCallback<CreateOrderByVirtualCurrencyResponse> callback) {
+        storeApi.createOrderByVirtualCurrency(projectId, itemSku, virtualCurrencySku).enqueue(callback);
     }
 
 }
