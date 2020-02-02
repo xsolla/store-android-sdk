@@ -8,6 +8,7 @@ import com.xsolla.android.store.entity.request.inventory.GrantItemsRequest;
 import com.xsolla.android.store.entity.request.inventory.RevokeItemsRequest;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
+import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
 import com.xsolla.android.store.entity.response.inventory.GrantItemsByPurchaseResponse;
 import com.xsolla.android.store.entity.response.inventory.GrantItemsResponse;
 import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
@@ -164,6 +165,11 @@ public class XStore {
 
     public static void grantItemsByPurchase(GrantItemsByPurchaseRequest request, XStoreCallback<GrantItemsByPurchaseResponse> callback) {
         getRequestExecutor().grantItemsByPurchase(request, callback);
+    }
+
+    // Groups
+    public static void getItemsGroups(XStoreCallback<ItemsGroupsResponse> callback) {
+        getRequestExecutor().getItemsGroups(callback);
     }
 
 }

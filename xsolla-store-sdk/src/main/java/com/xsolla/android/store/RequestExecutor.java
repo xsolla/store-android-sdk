@@ -8,6 +8,7 @@ import com.xsolla.android.store.entity.request.inventory.GrantItemsRequest;
 import com.xsolla.android.store.entity.request.inventory.RevokeItemsRequest;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
+import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
 import com.xsolla.android.store.entity.response.inventory.GrantItemsByPurchaseResponse;
 import com.xsolla.android.store.entity.response.inventory.GrantItemsResponse;
 import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
@@ -144,5 +145,9 @@ class RequestExecutor {
 
     public void grantItemsByPurchase(GrantItemsByPurchaseRequest request, XStoreCallback<GrantItemsByPurchaseResponse> callback) {
         storeApi.grantItemsByPurchase(projectId, request).enqueue(callback);
+    }
+
+    public void getItemsGroups(XStoreCallback<ItemsGroupsResponse> callback) {
+        storeApi.getItemsGroups(projectId).enqueue(callback);
     }
 }
