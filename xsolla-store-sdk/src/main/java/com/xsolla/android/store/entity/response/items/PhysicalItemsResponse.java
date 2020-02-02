@@ -1,9 +1,9 @@
 package com.xsolla.android.store.entity.response.items;
 
 import com.google.gson.annotations.SerializedName;
-import com.xsolla.android.store.entity.response.items.fields.Group;
-import com.xsolla.android.store.entity.response.items.fields.Price;
-import com.xsolla.android.store.entity.response.items.fields.VirtualPrice;
+import com.xsolla.android.store.entity.response.common.Group;
+import com.xsolla.android.store.entity.response.common.Price;
+import com.xsolla.android.store.entity.response.common.VirtualPrice;
 
 import java.util.List;
 
