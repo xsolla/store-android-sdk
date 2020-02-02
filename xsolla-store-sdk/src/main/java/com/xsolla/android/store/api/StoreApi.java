@@ -9,6 +9,7 @@ import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -86,6 +87,21 @@ public interface StoreApi {
     @PUT("/api/v2/project/{project_id}/cart/clear")
     Call<Void> clearCurrentCart(
             @Path("project_id") int projectId
+    );
+
+    @PUT("api/v2/project/{project_id}/cart/{cart_id}/item/{item_sku}")
+    Call<Void> updateItemFromCartByCartId(
+            @Path("project_id") int projectId,
+            @Path("cart_id") String cartId,
+            @Path("item_sku") String itemSku,
+            @Field("quantity") int quantity
+    );
+
+    @PUT("api/v2/project/{project_id}/cart/item/{item_sku}")
+    Call<Void> updateItemFromCurrentCart(
+            @Path("project_id") int projectId,
+            @Path("item_sku") String itemSku,
+            @Field("quantity") int quantity
     );
 
 }

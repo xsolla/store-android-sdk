@@ -100,12 +100,12 @@ public class XStore {
         getRequestExecutor().getCardById(cartId, options, callback);
     }
 
-    public static void getCurrentUserCart(XStoreCallback<CartResponse> callback) {
-        getRequestExecutor().getCurrentUserCart(null, callback);
+    public static void getCurrentCart(XStoreCallback<CartResponse> callback) {
+        getRequestExecutor().getCurrentCart(null, callback);
     }
 
-    public static void getCurrentUserCart(CartRequestOptions options, XStoreCallback<CartResponse> callback) {
-        getRequestExecutor().getCurrentUserCart(options, callback);
+    public static void getCurrentCart(CartRequestOptions options, XStoreCallback<CartResponse> callback) {
+        getRequestExecutor().getCurrentCart(options, callback);
     }
 
     public static void clearCartById(String cartId, XStoreCallback<Void> callback) {
@@ -114,6 +114,14 @@ public class XStore {
 
     public static void clearCurrentCart(XStoreCallback<Void> callback) {
         getRequestExecutor().clearCurrentCart(callback);
+    }
+
+    public static void updateItemFromCartByCartId(String cartId, String itemSku, int quantity, XStoreCallback<Void> callback) {
+        getRequestExecutor().updateItemFromCartByCartId(cartId, itemSku, quantity, callback);
+    }
+
+    public static void updateItemFromCurrentCart(String itemSku, int quantity, XStoreCallback<Void> callback) {
+        getRequestExecutor().updateItemFromCurrentCart(itemSku, quantity, callback);
     }
 
 }

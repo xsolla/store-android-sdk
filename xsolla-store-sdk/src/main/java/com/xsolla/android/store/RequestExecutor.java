@@ -82,7 +82,7 @@ class RequestExecutor {
         ).enqueue(callback);
     }
 
-    public void getCurrentUserCart(CartRequestOptions options, XStoreCallback<CartResponse> callback) {
+    public void getCurrentCart(CartRequestOptions options, XStoreCallback<CartResponse> callback) {
         storeApi.getCurrentUserCart(
                 projectId,
                 options != null ? options.getCurrency() : "USD",
@@ -96,6 +96,14 @@ class RequestExecutor {
 
     public void clearCurrentCart(XStoreCallback<Void> callback) {
         storeApi.clearCurrentCart(projectId).enqueue(callback);
+    }
+
+    public void updateItemFromCartByCartId(String cartId, String itemSku, int quantity, XStoreCallback<Void> callback) {
+        storeApi.updateItemFromCartByCartId(projectId, cartId, itemSku, quantity).enqueue(callback);
+    }
+
+    public void updateItemFromCurrentCart(String itemSku, int quantity, XStoreCallback<Void> callback) {
+        storeApi.updateItemFromCurrentCart(projectId, itemSku, quantity).enqueue(callback);
     }
 
 }
