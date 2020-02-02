@@ -4,6 +4,7 @@ import com.xsolla.android.store.entity.request.inventory.GrantItemsByPurchaseReq
 import com.xsolla.android.store.entity.request.inventory.GrantItemsRequest;
 import com.xsolla.android.store.entity.request.inventory.RevokeItemsRequest;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
+import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
 import com.xsolla.android.store.entity.response.inventory.GrantItemsByPurchaseResponse;
 import com.xsolla.android.store.entity.response.inventory.GrantItemsResponse;
 import com.xsolla.android.store.entity.response.inventory.RevokeItemsResponse;
@@ -150,4 +151,8 @@ public interface StoreApi {
 
     @POST("api/v2/project/{project_id}/inventory/purchase")
     Call<GrantItemsByPurchaseResponse> grantItemsByPurchase(@Path("project_id") int projectId, @Body GrantItemsByPurchaseRequest body);
+
+    @GET("api/v2/project/{project_id}/items/groups")
+    Call<ItemsGroupsResponse> getItemsGroups(@Path("project_id") int projectId);
+
 }
