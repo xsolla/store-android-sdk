@@ -1,6 +1,8 @@
 package com.xsolla.android.store.api;
 
 import com.xsolla.android.store.entity.response.cart.CartResponse;
+import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
+import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
@@ -12,6 +14,7 @@ import retrofit2.Call;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -116,6 +119,20 @@ public interface StoreApi {
     Call<Void> deleteItemFromCurrentCart(
             @Path("project_id") int projectId,
             @Path("item_sku") String itemSku
+    );
+
+    @GET("api/v2/project/{project_id}/user/inventory/items")
+    Call<InventoryResponse> getInventory(@Path("project_id") int projectId);
+
+    @GET("api/v2/project/{project_id}/user/virtual_currency_balance")
+    Call<VirtualBalanceResponse> getVirtualBalance(@Path("project_id") int projectId);
+
+    @POST("api/v2/project/{project_id}/user/inventory/item/consume")
+    Call<Void> consumeItem(
+            @Path("project_id") int projectId,
+            @Field("sku") String sku,
+            @Field("quantity") int quantity,
+            @Field("instance_id") String instanceId
     );
 
 }

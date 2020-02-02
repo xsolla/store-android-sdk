@@ -5,6 +5,8 @@ import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
+import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
+import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
@@ -112,6 +114,18 @@ class RequestExecutor {
 
     public void deleteItemFromCurrentCart(String itemSku, XStoreCallback<Void> callback) {
         storeApi.deleteItemFromCurrentCart(projectId, itemSku).enqueue(callback);
+    }
+
+    public void getInventory(XStoreCallback<InventoryResponse> callback) {
+        storeApi.getInventory(projectId).enqueue(callback);
+    }
+
+    public void getVirtualBalance(XStoreCallback<VirtualBalanceResponse> callback) {
+        storeApi.getVirtualBalance(projectId).enqueue(callback);
+    }
+
+    public void consumeItem(String sku, int quantity, String instanceId, XStoreCallback<Void> callback) {
+        storeApi.consumeItem(projectId, sku, quantity, instanceId).enqueue(callback);
     }
 
 }
