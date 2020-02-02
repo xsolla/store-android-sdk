@@ -2,7 +2,9 @@ package com.xsolla.android.store;
 
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
+import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
+import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
@@ -50,8 +52,7 @@ class RequestExecutor {
         ).enqueue(callback);
     }
 
-    public void getItemsBySpecifiedGroup(ItemsRequestOptions options, XStoreCallback<VirtualItemsResponse> callback
-    ) {
+    public void getItemsBySpecifiedGroup(ItemsRequestOptions options, XStoreCallback<VirtualItemsResponse> callback) {
         storeApi.getItemsBySpecifiedGroup(
                 projectId,
                 options != null ? options.getExternalId() : null,
@@ -62,8 +63,7 @@ class RequestExecutor {
         ).enqueue(callback);
     }
 
-    public void getPhysicalItems(ItemsRequestOptions options, XStoreCallback<PhysicalItemsResponse> callback
-    ) {
+    public void getPhysicalItems(ItemsRequestOptions options, XStoreCallback<PhysicalItemsResponse> callback) {
         storeApi.getPhysicalItems(
                 projectId,
                 options != null ? options.getLimit() : null,
@@ -72,4 +72,46 @@ class RequestExecutor {
                 options != null ? options.getAdditionalFields() : null
         ).enqueue(callback);
     }
+
+    public void getCardById(String cartId, CartRequestOptions options, XStoreCallback<CartResponse> callback) {
+        storeApi.getCartById(
+                projectId,
+                cartId,
+                options != null ? options.getCurrency() : "USD",
+                options != null ? options.getLocale() : "en"
+        ).enqueue(callback);
+    }
+
+    public void getCurrentCart(CartRequestOptions options, XStoreCallback<CartResponse> callback) {
+        storeApi.getCurrentUserCart(
+                projectId,
+                options != null ? options.getCurrency() : "USD",
+                options != null ? options.getLocale() : "en"
+        ).enqueue(callback);
+    }
+
+    public void clearCartById(String cartId, XStoreCallback<Void> callback) {
+        storeApi.clearCartById(projectId, cartId).enqueue(callback);
+    }
+
+    public void clearCurrentCart(XStoreCallback<Void> callback) {
+        storeApi.clearCurrentCart(projectId).enqueue(callback);
+    }
+
+    public void updateItemFromCartByCartId(String cartId, String itemSku, int quantity, XStoreCallback<Void> callback) {
+        storeApi.updateItemFromCartByCartId(projectId, cartId, itemSku, quantity).enqueue(callback);
+    }
+
+    public void updateItemFromCurrentCart(String itemSku, int quantity, XStoreCallback<Void> callback) {
+        storeApi.updateItemFromCurrentCart(projectId, itemSku, quantity).enqueue(callback);
+    }
+
+    public void deleteItemFromCartByCartId(String cartId, String itemSku, XStoreCallback<Void> callback) {
+        storeApi.deleteItemFromCartByCartId(projectId, cartId, itemSku).enqueue(callback);
+    }
+
+    public void deleteItemFromCurrentCart(String itemSku, XStoreCallback<Void> callback) {
+        storeApi.deleteItemFromCurrentCart(projectId, itemSku).enqueue(callback);
+    }
+
 }

@@ -1,19 +1,20 @@
-package com.xsolla.android.store.entity.response.items;
+package com.xsolla.android.store.entity.response.cart;
 
 import com.google.gson.annotations.SerializedName;
-import com.xsolla.android.store.entity.response.common.Content;
 import com.xsolla.android.store.entity.response.common.Group;
+import com.xsolla.android.store.entity.response.common.InventoryOption;
 import com.xsolla.android.store.entity.response.common.Price;
 import com.xsolla.android.store.entity.response.common.VirtualPrice;
 
 import java.util.List;
 
-public class VirtualCurrencyPackageResponse {
-    private List<Item> items;
+public class CartResponse {
 
-    public List<Item> getItems() {
-        return items;
-    }
+    @SerializedName("cart_id")
+    private String cartId;
+
+    private Price price;
+    private boolean isFree;
 
     private class Item {
         private String sku;
@@ -21,10 +22,8 @@ public class VirtualCurrencyPackageResponse {
         private List<Group> groups;
         private List<Object> attribites;
         private String type;
-
-        @SerializedName("bundle_type")
-        private String bundleType;
         private String description;
+        private int quantity;
 
         @SerializedName("image_url")
         private String imageUrl;
@@ -36,7 +35,8 @@ public class VirtualCurrencyPackageResponse {
         @SerializedName("virtual_prices")
         private List<VirtualPrice> virtualPrices;
 
-        private Content content;
+        @SerializedName("inventory_options")
+        private InventoryOption inventoryOption;
 
         public String getSku() {
             return sku;
@@ -58,12 +58,12 @@ public class VirtualCurrencyPackageResponse {
             return type;
         }
 
-        public String getBundleType() {
-            return bundleType;
-        }
-
         public String getDescription() {
             return description;
+        }
+
+        public int getQuantity() {
+            return quantity;
         }
 
         public String getImageUrl() {
@@ -82,8 +82,9 @@ public class VirtualCurrencyPackageResponse {
             return virtualPrices;
         }
 
-        public Content getContent() {
-            return content;
+        public InventoryOption getInventoryOption() {
+            return inventoryOption;
         }
     }
+
 }

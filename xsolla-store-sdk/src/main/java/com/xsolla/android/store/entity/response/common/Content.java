@@ -1,4 +1,4 @@
-package com.xsolla.android.store.entity.response.items.fields;
+package com.xsolla.android.store.entity.response.common;
 
 import com.google.gson.annotations.SerializedName;
 

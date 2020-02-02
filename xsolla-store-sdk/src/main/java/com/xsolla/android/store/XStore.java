@@ -2,7 +2,9 @@ package com.xsolla.android.store;
 
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
+import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
+import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
@@ -89,5 +91,45 @@ public class XStore {
         getRequestExecutor().getPhysicalItems(options, callback);
     }
 
+    // Cart
+    public static void getCartById(String cartId, XStoreCallback<CartResponse> callback) {
+        getRequestExecutor().getCardById(cartId, null, callback);
+    }
+
+    public static void getCartById(String cartId, CartRequestOptions options, XStoreCallback<CartResponse> callback) {
+        getRequestExecutor().getCardById(cartId, options, callback);
+    }
+
+    public static void getCurrentCart(XStoreCallback<CartResponse> callback) {
+        getRequestExecutor().getCurrentCart(null, callback);
+    }
+
+    public static void getCurrentCart(CartRequestOptions options, XStoreCallback<CartResponse> callback) {
+        getRequestExecutor().getCurrentCart(options, callback);
+    }
+
+    public static void clearCartById(String cartId, XStoreCallback<Void> callback) {
+        getRequestExecutor().clearCartById(cartId, callback);
+    }
+
+    public static void clearCurrentCart(XStoreCallback<Void> callback) {
+        getRequestExecutor().clearCurrentCart(callback);
+    }
+
+    public static void updateItemFromCartByCartId(String cartId, String itemSku, int quantity, XStoreCallback<Void> callback) {
+        getRequestExecutor().updateItemFromCartByCartId(cartId, itemSku, quantity, callback);
+    }
+
+    public static void updateItemFromCurrentCart(String itemSku, int quantity, XStoreCallback<Void> callback) {
+        getRequestExecutor().updateItemFromCurrentCart(itemSku, quantity, callback);
+    }
+
+    public static void deleteItemFromCartByCartId(String cartId, String itemSku, XStoreCallback<Void> callback) {
+        getRequestExecutor().deleteItemFromCartByCartId(cartId, itemSku, callback);
+    }
+
+    public static void deleteItemFromCurrentCArt(String itemSku, XStoreCallback<Void> callback) {
+        getRequestExecutor().deleteItemFromCurrentCart(itemSku, callback);
+    }
 
 }

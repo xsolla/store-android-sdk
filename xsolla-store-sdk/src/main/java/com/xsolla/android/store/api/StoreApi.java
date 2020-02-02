@@ -1,5 +1,6 @@
 package com.xsolla.android.store.api;
 
+import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
@@ -8,7 +9,10 @@ import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -59,5 +63,59 @@ public interface StoreApi {
             @Query("locale") String locale,
             @Query("additional_fields") List<String> additionalFields
     );
-    
+
+    @GET("/api/v2/project/{project_id}/cart/{cart_id}")
+    Call<CartResponse> getCartById(
+            @Path("project_id") int projectId,
+            @Path("cart_id") String cartId,
+            @Query("currency") String currency,
+            @Query("locale") String locale
+    );
+
+    @GET("/api/v2/project/{project_id}/cart")
+    Call<CartResponse> getCurrentUserCart(
+            @Path("project_id") int projectId,
+            @Query("currency") String currency,
+            @Query("locale") String locale
+    );
+
+    @PUT("/api/v2/project/{project_id}/cart/{cart_id}/clear")
+    Call<Void> clearCartById(
+            @Path("project_id") int projectId,
+            @Path("cart_id") String cartId
+    );
+
+    @PUT("/api/v2/project/{project_id}/cart/clear")
+    Call<Void> clearCurrentCart(
+            @Path("project_id") int projectId
+    );
+
+    @PUT("api/v2/project/{project_id}/cart/{cart_id}/item/{item_sku}")
+    Call<Void> updateItemFromCartByCartId(
+            @Path("project_id") int projectId,
+            @Path("cart_id") String cartId,
+            @Path("item_sku") String itemSku,
+            @Field("quantity") int quantity
+    );
+
+    @PUT("api/v2/project/{project_id}/cart/item/{item_sku}")
+    Call<Void> updateItemFromCurrentCart(
+            @Path("project_id") int projectId,
+            @Path("item_sku") String itemSku,
+            @Field("quantity") int quantity
+    );
+
+    @DELETE("api/v2/project/{project_id}/cart/{cart_id}/item/{item_sku}")
+    Call<Void> deleteItemFromCartByCartId(
+            @Path("project_id") int projectId,
+            @Path("cart_id") String cartId,
+            @Path("item_sku") String itemSku
+    );
+
+    @DELETE("api/v2/project/{project_id}/cart/item/{item_sku}")
+    Call<Void> deleteItemFromCurrentCart(
+            @Path("project_id") int projectId,
+            @Path("item_sku") String itemSku
+    );
+
 }
