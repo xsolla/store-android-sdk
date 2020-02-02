@@ -2,7 +2,9 @@ package com.xsolla.android.store;
 
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
+import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
+import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
@@ -89,5 +91,21 @@ public class XStore {
         getRequestExecutor().getPhysicalItems(options, callback);
     }
 
+    // Cart
+    public static void getCartById(String cartId, XStoreCallback<CartResponse> callback) {
+        getRequestExecutor().getCardById(cartId, null, callback);
+    }
+
+    public static void getCartById(String cartId, CartRequestOptions options, XStoreCallback<CartResponse> callback) {
+        getRequestExecutor().getCardById(cartId, options, callback);
+    }
+
+    public static void getCurrentUserCart(XStoreCallback<CartResponse> callback) {
+        getRequestExecutor().getCurrentUserCart(null, callback);
+    }
+
+    public static void getCurrentUserCart(CartRequestOptions options, XStoreCallback<CartResponse> callback) {
+        getRequestExecutor().getCurrentUserCart(options, callback);
+    }
 
 }

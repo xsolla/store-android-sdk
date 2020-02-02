@@ -1,5 +1,6 @@
 package com.xsolla.android.store.api;
 
+import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
@@ -59,5 +60,20 @@ public interface StoreApi {
             @Query("locale") String locale,
             @Query("additional_fields") List<String> additionalFields
     );
-    
+
+    @GET("/api/v2/project/{project_id}/cart/{cart_id}")
+    Call<CartResponse> getCartById(
+            @Path("project_id") int projectId,
+            @Path("cart_id") String cartId,
+            @Query("currency") String currency,
+            @Query("locale") String locale
+    );
+
+    @GET("/api/v2/project/{project_id}/cart")
+    Call<CartResponse> getCurrentUserCart(
+            @Path("project_id") int projectId,
+            @Query("currency") String currency,
+            @Query("locale") String locale
+    );
+
 }
