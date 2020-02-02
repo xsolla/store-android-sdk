@@ -106,4 +106,12 @@ class RequestExecutor {
         storeApi.updateItemFromCurrentCart(projectId, itemSku, quantity).enqueue(callback);
     }
 
+    public void deleteItemFromCartByCartId(String cartId, String itemSku, XStoreCallback<Void> callback) {
+        storeApi.deleteItemFromCartByCartId(projectId, cartId, itemSku).enqueue(callback);
+    }
+
+    public void deleteItemFromCurrentCart(String itemSku, XStoreCallback<Void> callback) {
+        storeApi.deleteItemFromCurrentCart(projectId, itemSku).enqueue(callback);
+    }
+
 }

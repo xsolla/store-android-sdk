@@ -124,4 +124,12 @@ public class XStore {
         getRequestExecutor().updateItemFromCurrentCart(itemSku, quantity, callback);
     }
 
+    public static void deleteItemFromCartByCartId(String cartId, String itemSku, XStoreCallback<Void> callback) {
+        getRequestExecutor().deleteItemFromCartByCartId(cartId, itemSku, callback);
+    }
+
+    public static void deleteItemFromCurrentCArt(String itemSku, XStoreCallback<Void> callback) {
+        getRequestExecutor().deleteItemFromCurrentCart(itemSku, callback);
+    }
+
 }
