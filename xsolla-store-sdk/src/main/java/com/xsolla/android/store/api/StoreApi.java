@@ -7,13 +7,14 @@ import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
 import com.xsolla.android.store.entity.response.inventory.GrantItemsByPurchaseResponse;
 import com.xsolla.android.store.entity.response.inventory.GrantItemsResponse;
+import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
 import com.xsolla.android.store.entity.response.inventory.RevokeItemsResponse;
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
-import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
+import com.xsolla.android.store.entity.response.order.OrderResponse;
 
 import java.util.List;
 
@@ -154,5 +155,8 @@ public interface StoreApi {
 
     @GET("api/v2/project/{project_id}/items/groups")
     Call<ItemsGroupsResponse> getItemsGroups(@Path("project_id") int projectId);
+
+    @GET("api/v2/project/{project_id}/order/{order_id}")
+    Call<OrderResponse> getOrder(@Path("project_id") int projectId, @Path("order_id") String orderId);
 
 }

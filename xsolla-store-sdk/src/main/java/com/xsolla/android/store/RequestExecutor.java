@@ -18,6 +18,7 @@ import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
+import com.xsolla.android.store.entity.response.order.OrderResponse;
 
 class RequestExecutor {
 
@@ -150,4 +151,9 @@ class RequestExecutor {
     public void getItemsGroups(XStoreCallback<ItemsGroupsResponse> callback) {
         storeApi.getItemsGroups(projectId).enqueue(callback);
     }
+
+    public void getOrder(String orderId, XStoreCallback<OrderResponse> callback) {
+        storeApi.getOrder(projectId, orderId).enqueue(callback);
+    }
+
 }

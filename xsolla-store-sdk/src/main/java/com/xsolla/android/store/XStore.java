@@ -18,6 +18,7 @@ import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
+import com.xsolla.android.store.entity.response.order.OrderResponse;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -170,6 +171,11 @@ public class XStore {
     // Groups
     public static void getItemsGroups(XStoreCallback<ItemsGroupsResponse> callback) {
         getRequestExecutor().getItemsGroups(callback);
+    }
+
+    // Order
+    public static void getOrder(String orderId, XStoreCallback<OrderResponse> callback) {
+        getRequestExecutor().getOrder(orderId, callback);
     }
 
 }
