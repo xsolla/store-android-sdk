@@ -7,6 +7,7 @@ import com.xsolla.android.store.entity.request.inventory.GrantItemsByPurchaseReq
 import com.xsolla.android.store.entity.request.inventory.GrantItemsRequest;
 import com.xsolla.android.store.entity.request.inventory.RevokeItemsRequest;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
+import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
@@ -182,9 +183,11 @@ class RequestExecutor {
         storeApi.createOrderByItemSku(
                 projectId,
                 itemSku,
-                options != null ? options.getCurrency() : "USD",
-                options != null ? options.getLocale() : "en",
-                options != null ? options.isSandbox() : false
+                new CreateOrderRequestBody(
+                        options != null ? options.getCurrency() : "USD",
+                        options != null ? options.getLocale() : "en",
+                        options != null ? options.isSandbox() : false
+                )
         ).enqueue(callback);
     }
 

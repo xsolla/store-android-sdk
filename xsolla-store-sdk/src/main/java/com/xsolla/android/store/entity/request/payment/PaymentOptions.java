@@ -22,7 +22,7 @@ public class PaymentOptions {
         return new PaymentOptions().new Builder();
     }
 
-    private class Builder {
+    public class Builder {
 
         private Builder() {
 

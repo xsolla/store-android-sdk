@@ -3,6 +3,7 @@ package com.xsolla.android.storesdkexample.fragments;
 import android.view.View;
 import android.widget.TextView;
 
+import com.xsolla.android.store.XStore;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.login.XLogin;
 import com.xsolla.android.login.jwt.JWT;
@@ -37,8 +38,10 @@ public class ProfileFragment extends BaseFragment {
         rootView.findViewById(R.id.logout_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                XLogin.logout();
-                openRootFragment();
+                String token = XLogin.getToken();
+                XStore.init(48017, token);
+
+                openFragment(new ShopFragment());
             }
         });
     }

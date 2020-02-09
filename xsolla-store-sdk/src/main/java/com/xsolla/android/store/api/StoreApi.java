@@ -3,6 +3,7 @@ package com.xsolla.android.store.api;
 import com.xsolla.android.store.entity.request.inventory.GrantItemsByPurchaseRequest;
 import com.xsolla.android.store.entity.request.inventory.GrantItemsRequest;
 import com.xsolla.android.store.entity.request.inventory.RevokeItemsRequest;
+import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
 import com.xsolla.android.store.entity.response.inventory.GrantItemsByPurchaseResponse;
@@ -182,9 +183,7 @@ public interface StoreApi {
     Call<CreateOrderResponse> createOrderByItemSku(
             @Path("project_id") int projectId,
             @Path("item_sku") String itemSku,
-            @Field("currency") String currency,
-            @Field("locale") String locale,
-            @Field("sandbox") boolean sandbox
+            @Body CreateOrderRequestBody body
     );
 
     @POST("api/v2/project/{project_id}/payment/item/{item_sku}/virtual/{virtual_currency_sku}")

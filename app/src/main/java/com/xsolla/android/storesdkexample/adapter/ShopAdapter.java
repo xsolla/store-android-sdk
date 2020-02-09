@@ -3,14 +3,21 @@ package com.xsolla.android.storesdkexample.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.xsolla.android.sdk.XsollaSDK;
+import com.xsolla.android.store.XStore;
+import com.xsolla.android.store.api.XStoreCallback;
+import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
+import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 import com.xsolla.android.storesdkexample.R;
 
 import java.util.List;
@@ -50,15 +57,18 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
         ImageView itemIcon;
         TextView itemName;
         TextView itemPrice;
+        Button buyButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             itemIcon = itemView.findViewById(R.id.item_icon);
             itemName = itemView.findViewById(R.id.item_name);
             itemPrice = itemView.findViewById(R.id.item_price);
+            buyButton = itemView.findViewById(R.id.buy_button);
         }
 
-        private void bind(VirtualItemsResponse.Item item) {
+        private void bind(final VirtualItemsResponse.Item item) {
+            Glide.with(itemView).load(item.getImageUrl()).into(itemIcon);
             itemName.setText(item.getName());
 
             String price = item.getPrice().getAmount();
@@ -67,7 +77,31 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
 
             itemPrice.setText(formattedPrice);
 
-            Glide.with(itemView).load(item.getImageUrl()).into(itemIcon);
+            buyButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    PaymentOptions paymentOptions = new PaymentOptions().create()
+                            .setSandbox(true)
+                            .build();
+
+
+                    XStore.createOrderByItemSku(item.getSku(), paymentOptions, new XStoreCallback<CreateOrderResponse>() {
+                        @Override
+                        protected void onSuccess(CreateOrderResponse response) {
+                            String orderId = String.valueOf(response.getOrderId());
+                            String token = response.getToken();
+                            Toast.makeText(itemView.getContext(), orderId, Toast.LENGTH_SHORT).show();
+                            XsollaSDK.createPaymentForm(itemView.getContext(), token, true);
+                        }
+
+                        @Override
+                        protected void onFailure(String errorMessage) {
+                            Toast.makeText(itemView.getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
         }
 
     }
