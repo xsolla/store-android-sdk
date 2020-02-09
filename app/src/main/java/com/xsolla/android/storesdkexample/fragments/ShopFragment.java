@@ -1,5 +1,6 @@
 package com.xsolla.android.storesdkexample.fragments;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,8 +12,8 @@ import com.xsolla.android.storesdkexample.adapter.ShopAdapter;
 
 public class ShopFragment extends BaseFragment {
 
-    ShopAdapter shopAdapter;
-    RecyclerView recyclerView;
+    private ShopAdapter shopAdapter;
+    private RecyclerView recyclerView;
 
     @Override
     int getLayout() {
@@ -22,7 +23,12 @@ public class ShopFragment extends BaseFragment {
     @Override
     void initUI() {
         recyclerView = rootView.findViewById(R.id.items_rv);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                layoutManager.getOrientation());
+
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         getItems();
     }
