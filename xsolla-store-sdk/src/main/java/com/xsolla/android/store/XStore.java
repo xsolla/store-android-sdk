@@ -38,7 +38,7 @@ public class XStore {
 
     private static XStore getInstance() {
         if (instance == null) {
-            throw new IllegalStateException("XLogin SDK not initialized. You should call \"XStore.init(project-id)\" first.");
+            throw new IllegalStateException("XStore SDK not initialized. You should call \"XStore.init(project-id)\" first.");
         }
         return instance;
     }
