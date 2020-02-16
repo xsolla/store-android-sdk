@@ -3,6 +3,7 @@ package com.xsolla.android.store;
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
+import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
 import com.xsolla.android.store.entity.request.inventory.GrantItemsByPurchaseRequest;
 import com.xsolla.android.store.entity.request.inventory.GrantItemsRequest;
 import com.xsolla.android.store.entity.request.inventory.RevokeItemsRequest;
@@ -117,7 +118,11 @@ class RequestExecutor {
     }
 
     public void updateItemFromCurrentCart(String itemSku, int quantity, XStoreCallback<Void> callback) {
-        storeApi.updateItemFromCurrentCart(projectId, itemSku, quantity).enqueue(callback);
+        storeApi.updateItemFromCurrentCart(
+                projectId,
+                itemSku,
+                new UpdateItemBody(quantity)
+        ).enqueue(callback);
     }
 
     public void deleteItemFromCartByCartId(String cartId, String itemSku, XStoreCallback<Void> callback) {

@@ -18,6 +18,7 @@ import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
+import com.xsolla.android.storesdkexample.AddToCartListener;
 import com.xsolla.android.storesdkexample.R;
 
 import java.util.List;
@@ -25,9 +26,11 @@ import java.util.List;
 public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
 
     private List<VirtualItemsResponse.Item> items;
+    private AddToCartListener addToCartListener;
 
-    public ShopAdapter(List<VirtualItemsResponse.Item> items) {
+    public ShopAdapter(List<VirtualItemsResponse.Item> items, AddToCartListener listener) {
         this.items = items;
+        this.addToCartListener = listener;
     }
 
     public void setItems(List<VirtualItemsResponse.Item> items) {
@@ -81,23 +84,15 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
                 @Override
                 public void onClick(View v) {
 
-                    PaymentOptions paymentOptions = new PaymentOptions().create()
-                            .setSandbox(true)
-                            .build();
-
-
-                    XStore.createOrderByItemSku(item.getSku(), paymentOptions, new XStoreCallback<CreateOrderResponse>() {
+                    XStore.updateItemFromCurrentCart(item.getSku(), 1, new XStoreCallback<Void>() {
                         @Override
-                        protected void onSuccess(CreateOrderResponse response) {
-                            String orderId = String.valueOf(response.getOrderId());
-                            String token = response.getToken();
-                            Toast.makeText(itemView.getContext(), orderId, Toast.LENGTH_SHORT).show();
-                            XsollaSDK.createPaymentForm(itemView.getContext(), token, true);
+                        protected void onSuccess(Void response) {
+                            addToCartListener.onSuccess();
                         }
 
                         @Override
                         protected void onFailure(String errorMessage) {
-                            Toast.makeText(itemView.getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+
                         }
                     });
                 }

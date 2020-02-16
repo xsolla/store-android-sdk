@@ -1,5 +1,6 @@
 package com.xsolla.android.store.api;
 
+import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
 import com.xsolla.android.store.entity.request.inventory.GrantItemsByPurchaseRequest;
 import com.xsolla.android.store.entity.request.inventory.GrantItemsRequest;
 import com.xsolla.android.store.entity.request.inventory.RevokeItemsRequest;
@@ -117,7 +118,7 @@ public interface StoreApi {
     Call<Void> updateItemFromCurrentCart(
             @Path("project_id") int projectId,
             @Path("item_sku") String itemSku,
-            @Field("quantity") int quantity
+            @Body UpdateItemBody updateItemBody
     );
 
     @DELETE("api/v2/project/{project_id}/cart/{cart_id}/item/{item_sku}")

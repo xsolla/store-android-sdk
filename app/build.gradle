@@ -29,7 +29,7 @@ dependencies {
 
     implementation project(":xsolla-login-sdk")
     implementation project(":xsolla-store-sdk")
-    implementation 'com.xsolla.android:xsollasdk:2.3.0'
+    implementation 'com.xsolla.android:xsollasdk:2.3.3'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }
