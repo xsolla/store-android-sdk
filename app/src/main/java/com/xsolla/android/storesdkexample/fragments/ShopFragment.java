@@ -14,7 +14,7 @@ import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
-import com.xsolla.android.storesdkexample.AddToCartListener;
+import com.xsolla.android.storesdkexample.listener.AddToCartListener;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.ShopAdapter;
 
@@ -80,6 +80,11 @@ public class ShopFragment extends BaseFragment implements AddToCartListener {
                 showSnack(errorMessage);
             }
         });
+    }
+
+    @Override
+    public void onFailure(String errorMessage) {
+        showSnack(errorMessage);
     }
 
     private void setupBadge(int count) {

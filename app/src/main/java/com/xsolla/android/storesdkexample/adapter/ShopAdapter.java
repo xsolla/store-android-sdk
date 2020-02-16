@@ -15,7 +15,7 @@ import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
-import com.xsolla.android.storesdkexample.AddToCartListener;
+import com.xsolla.android.storesdkexample.listener.AddToCartListener;
 import com.xsolla.android.storesdkexample.R;
 
 import java.util.List;
@@ -100,14 +100,14 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
 
                                 @Override
                                 protected void onFailure(String errorMessage) {
-
+                                    addToCartListener.onFailure(errorMessage);
                                 }
                             });
                         }
 
                         @Override
                         protected void onFailure(String errorMessage) {
-
+                            addToCartListener.onFailure(errorMessage);
                         }
                     });
 
