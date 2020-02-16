@@ -43,7 +43,7 @@ public class ShopFragment extends BaseFragment implements AddToCartListener {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         getItems();
-//        setupBadge(5);
+        updateBadge();
     }
 
 
@@ -64,6 +64,15 @@ public class ShopFragment extends BaseFragment implements AddToCartListener {
 
     @Override
     public void onSuccess() {
+        updateBadge();
+    }
+
+    @Override
+    public void onFailure(String errorMessage) {
+        showSnack(errorMessage);
+    }
+
+    private void updateBadge() {
         XStore.getCurrentCart(new XStoreCallback<CartResponse>() {
             @Override
             protected void onSuccess(CartResponse response) {
@@ -80,11 +89,6 @@ public class ShopFragment extends BaseFragment implements AddToCartListener {
                 showSnack(errorMessage);
             }
         });
-    }
-
-    @Override
-    public void onFailure(String errorMessage) {
-        showSnack(errorMessage);
     }
 
     private void setupBadge(int count) {
