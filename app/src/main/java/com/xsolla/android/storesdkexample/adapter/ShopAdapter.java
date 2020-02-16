@@ -6,18 +6,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.xsolla.android.sdk.XsollaSDK;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
-import com.xsolla.android.store.entity.request.payment.PaymentOptions;
+import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
-import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 import com.xsolla.android.storesdkexample.AddToCartListener;
 import com.xsolla.android.storesdkexample.R;
 
@@ -84,10 +81,28 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
                 @Override
                 public void onClick(View v) {
 
-                    XStore.updateItemFromCurrentCart(item.getSku(), 1, new XStoreCallback<Void>() {
+                    XStore.getCurrentCart(new XStoreCallback<CartResponse>() {
                         @Override
-                        protected void onSuccess(Void response) {
-                            addToCartListener.onSuccess();
+                        protected void onSuccess(CartResponse response) {
+                            int quantity = 1;
+
+                            for (CartResponse.Item cartItem: response.getItems()) {
+                                if (cartItem.getSku().equals(item.getSku())) {
+                                    quantity += cartItem.getQuantity();
+                                }
+                            }
+
+                            XStore.updateItemFromCurrentCart(item.getSku(), quantity, new XStoreCallback<Void>() {
+                                @Override
+                                protected void onSuccess(Void response) {
+                                    addToCartListener.onSuccess();
+                                }
+
+                                @Override
+                                protected void onFailure(String errorMessage) {
+
+                                }
+                            });
                         }
 
                         @Override
@@ -95,6 +110,8 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
 
                         }
                     });
+
+
                 }
             });
         }
