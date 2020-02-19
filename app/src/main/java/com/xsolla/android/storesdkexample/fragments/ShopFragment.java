@@ -3,7 +3,6 @@ package com.xsolla.android.storesdkexample.fragments;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -14,9 +13,9 @@ import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
-import com.xsolla.android.storesdkexample.listener.AddToCartListener;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.ShopAdapter;
+import com.xsolla.android.storesdkexample.listener.AddToCartListener;
 
 public class ShopFragment extends BaseFragment implements AddToCartListener {
 
@@ -106,7 +105,7 @@ public class ShopFragment extends BaseFragment implements AddToCartListener {
         actionView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Open cart", Toast.LENGTH_SHORT).show();
+                openFragment(new CartFragment());
             }
         });
     }
