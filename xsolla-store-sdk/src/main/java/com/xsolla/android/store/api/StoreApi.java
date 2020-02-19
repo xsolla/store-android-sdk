@@ -167,17 +167,13 @@ public interface StoreApi {
     Call<CreateOrderResponse> createOrderFromCartById(
             @Path("project_id") int projectId,
             @Path("cart_id") String cartId,
-            @Field("currency") String currency,
-            @Field("locale") String locale,
-            @Field("sandbox") boolean sandbox
+            @Body CreateOrderRequestBody body
     );
 
     @POST("api/v2/project/{project_id}/payment/cart")
     Call<CreateOrderResponse> createOrderFromCurrentCart(
             @Path("project_id") int projectId,
-            @Field("currency") String currency,
-            @Field("locale") String locale,
-            @Field("sandbox") boolean sandbox
+            @Body CreateOrderRequestBody body
     );
 
     @POST("api/v2/project/{project_id}/payment/item/{item_sku}")

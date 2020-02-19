@@ -15,15 +15,18 @@ import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.storesdkexample.R;
+import com.xsolla.android.storesdkexample.listener.UpdateCartListener;
 
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     private List<CartResponse.Item> items;
+    private UpdateCartListener updateCartListener;
 
-    public CartAdapter(List<CartResponse.Item> items) {
+    public CartAdapter(List<CartResponse.Item> items, UpdateCartListener updateCartListener) {
         this.items = items;
+        this.updateCartListener = updateCartListener;
     }
 
     @NonNull
@@ -93,6 +96,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 @Override
                 protected void onSuccess(CartResponse response) {
                     items = response.getItems();
+                    updateCartListener.onCartUpdated(response.getPrice().getPrettyPrintAmount());
                     notifyDataSetChanged();
                 }
 

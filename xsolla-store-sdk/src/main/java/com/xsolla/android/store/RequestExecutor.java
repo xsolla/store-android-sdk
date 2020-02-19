@@ -169,18 +169,22 @@ class RequestExecutor {
         storeApi.createOrderFromCartById(
                 projectId,
                 cartId,
-                options != null ? options.getCurrency() : "USD",
-                options != null ? options.getLocale() : "en",
-                options != null ? options.isSandbox() : false
+                new CreateOrderRequestBody(
+                        options != null ? options.getCurrency() : "USD",
+                        options != null ? options.getLocale() : "en",
+                        options != null ? options.isSandbox() : false
+                )
         ).enqueue(callback);
     }
 
     public void createOrderFromCurrentCart(PaymentOptions options, XStoreCallback<CreateOrderResponse> callback) {
         storeApi.createOrderFromCurrentCart(
                 projectId,
-                options != null ? options.getCurrency() : "USD",
-                options != null ? options.getLocale() : "en",
-                options != null ? options.isSandbox() : false
+                new CreateOrderRequestBody(
+                        options != null ? options.getCurrency() : "USD",
+                        options != null ? options.getLocale() : "en",
+                        options != null ? options.isSandbox() : false
+                )
         ).enqueue(callback);
     }
 

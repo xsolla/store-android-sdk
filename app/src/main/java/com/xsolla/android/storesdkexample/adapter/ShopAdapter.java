@@ -70,12 +70,7 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
         private void bind(final VirtualItemsResponse.Item item) {
             Glide.with(itemView).load(item.getImageUrl()).into(itemIcon);
             itemName.setText(item.getName());
-
-            String price = item.getPrice().getAmount();
-            String currency = item.getPrice().getCurrency();
-            String formattedPrice = price.substring(0, price.indexOf(".") + 3) + " " + currency;
-
-            itemPrice.setText(formattedPrice);
+            itemPrice.setText(item.getPrice().getPrettyPrintAmount());
 
             buyButton.setOnClickListener(new View.OnClickListener() {
                 @Override
