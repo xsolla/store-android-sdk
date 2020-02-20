@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.xsolla.android.storesdkexample.fragments.AuthFragment;
+import com.xsolla.android.storesdkexample.fragments.MainFragment;
 import com.xsolla.android.storesdkexample.fragments.ProfileFragment;
 import com.xsolla.android.login.XLogin;
 
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment getFragment() {
         String token = XLogin.getToken();
         if (token != null && XLogin.isTokenValid()) {
-            return new ProfileFragment();
+            return new MainFragment();
         } else {
             return new AuthFragment();
         }

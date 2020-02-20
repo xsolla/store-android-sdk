@@ -13,10 +13,7 @@ import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
-import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
-import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.storesdkexample.R;
-import com.xsolla.android.storesdkexample.adapter.ShopAdapter;
 import com.xsolla.android.storesdkexample.adapter.VirtualCurrencyAdapter;
 import com.xsolla.android.storesdkexample.listener.AddToCartListener;
 
@@ -35,6 +32,7 @@ public class VirtualCurrencyFragment extends BaseFragment implements AddToCartLi
     void initUI() {
         toolbar = rootView.findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.main_menu);
+        toolbar.setTitle("Virtual Currency");
 
         recyclerView = rootView.findViewById(R.id.items_rv);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());

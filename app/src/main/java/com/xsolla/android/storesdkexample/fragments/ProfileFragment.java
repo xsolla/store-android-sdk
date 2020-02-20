@@ -35,16 +35,6 @@ public class ProfileFragment extends BaseFragment {
         expiresAt.setText(jwt.getExpiresAt().toString());
         issuer.setText(jwt.getIssuer());
 
-        rootView.findViewById(R.id.shop_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String token = XLogin.getToken();
-                XStore.init(48017, token);
-
-                openFragment(new VirtualCurrencyFragment());
-            }
-        });
-
         rootView.findViewById(R.id.logout_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

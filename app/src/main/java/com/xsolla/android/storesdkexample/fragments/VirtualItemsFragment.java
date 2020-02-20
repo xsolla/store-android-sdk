@@ -14,12 +14,12 @@ import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.storesdkexample.R;
-import com.xsolla.android.storesdkexample.adapter.ShopAdapter;
+import com.xsolla.android.storesdkexample.adapter.VirtualItemsAdapter;
 import com.xsolla.android.storesdkexample.listener.AddToCartListener;
 
-public class ShopFragment extends BaseFragment implements AddToCartListener {
+public class VirtualItemsFragment extends BaseFragment implements AddToCartListener {
 
-    private ShopAdapter shopAdapter;
+    private VirtualItemsAdapter virtualItemsAdapter;
     private RecyclerView recyclerView;
     private Toolbar toolbar;
 
@@ -32,6 +32,7 @@ public class ShopFragment extends BaseFragment implements AddToCartListener {
     void initUI() {
         toolbar = rootView.findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.main_menu);
+        toolbar.setTitle("Virtual Items");
 
         recyclerView = rootView.findViewById(R.id.items_rv);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -50,8 +51,8 @@ public class ShopFragment extends BaseFragment implements AddToCartListener {
         XStore.getVirtualItems(new XStoreCallback<VirtualItemsResponse>() {
             @Override
             protected void onSuccess(VirtualItemsResponse response) {
-                shopAdapter = new ShopAdapter(response.getItems(), ShopFragment.this);
-                recyclerView.setAdapter(shopAdapter);
+                virtualItemsAdapter = new VirtualItemsAdapter(response.getItems(), VirtualItemsFragment.this);
+                recyclerView.setAdapter(virtualItemsAdapter);
             }
 
             @Override

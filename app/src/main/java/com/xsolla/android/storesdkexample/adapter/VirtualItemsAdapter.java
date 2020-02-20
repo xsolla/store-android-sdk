@@ -19,12 +19,12 @@ import com.xsolla.android.storesdkexample.R;
 
 import java.util.List;
 
-public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
+public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapter.ViewHolder> {
 
     private List<VirtualItemsResponse.Item> items;
     private AddToCartListener addToCartListener;
 
-    public ShopAdapter(List<VirtualItemsResponse.Item> items, AddToCartListener listener) {
+    public VirtualItemsAdapter(List<VirtualItemsResponse.Item> items, AddToCartListener listener) {
         this.items = items;
         this.addToCartListener = listener;
     }
