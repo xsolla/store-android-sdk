@@ -15,7 +15,7 @@ public class VirtualCurrencyPackageResponse {
         return items;
     }
 
-    private class Item {
+    public class Item {
         private String sku;
         private String name;
         private List<Group> groups;
@@ -36,7 +36,7 @@ public class VirtualCurrencyPackageResponse {
         @SerializedName("virtual_prices")
         private List<VirtualPrice> virtualPrices;
 
-        private Content content;
+        private List<Content> content;
 
         public String getSku() {
             return sku;
@@ -82,7 +82,7 @@ public class VirtualCurrencyPackageResponse {
             return virtualPrices;
         }
 
-        public Content getContent() {
+        public List<Content> getContent() {
             return content;
         }
     }

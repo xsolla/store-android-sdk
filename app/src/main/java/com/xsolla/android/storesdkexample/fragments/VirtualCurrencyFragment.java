@@ -12,14 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
+import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
+import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.ShopAdapter;
+import com.xsolla.android.storesdkexample.adapter.VirtualCurrencyAdapter;
 import com.xsolla.android.storesdkexample.listener.AddToCartListener;
 
-public class ShopFragment extends BaseFragment implements AddToCartListener {
+public class VirtualCurrencyFragment extends BaseFragment implements AddToCartListener {
 
-    private ShopAdapter shopAdapter;
+    private VirtualCurrencyAdapter shopAdapter;
     private RecyclerView recyclerView;
     private Toolbar toolbar;
 
@@ -47,10 +50,10 @@ public class ShopFragment extends BaseFragment implements AddToCartListener {
 
 
     private void getItems() {
-        XStore.getVirtualItems(new XStoreCallback<VirtualItemsResponse>() {
+        XStore.getVirtualCurrencyPackage(new XStoreCallback<VirtualCurrencyPackageResponse>() {
             @Override
-            protected void onSuccess(VirtualItemsResponse response) {
-                shopAdapter = new ShopAdapter(response.getItems(), ShopFragment.this);
+            protected void onSuccess(VirtualCurrencyPackageResponse response) {
+                shopAdapter = new VirtualCurrencyAdapter(response.getItems(), VirtualCurrencyFragment.this);
                 recyclerView.setAdapter(shopAdapter);
             }
 

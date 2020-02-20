@@ -13,25 +13,20 @@ import com.bumptech.glide.Glide;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
-import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
-import com.xsolla.android.storesdkexample.listener.AddToCartListener;
+import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.storesdkexample.R;
+import com.xsolla.android.storesdkexample.listener.AddToCartListener;
 
 import java.util.List;
 
-public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
+public class VirtualCurrencyAdapter extends RecyclerView.Adapter<VirtualCurrencyAdapter.ViewHolder> {
 
-    private List<VirtualItemsResponse.Item> items;
+    private List<VirtualCurrencyPackageResponse.Item> items;
     private AddToCartListener addToCartListener;
 
-    public ShopAdapter(List<VirtualItemsResponse.Item> items, AddToCartListener listener) {
+    public VirtualCurrencyAdapter(List<VirtualCurrencyPackageResponse.Item> items, AddToCartListener listener) {
         this.items = items;
         this.addToCartListener = listener;
-    }
-
-    public void setItems(List<VirtualItemsResponse.Item> items) {
-        this.items = items;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -66,7 +61,7 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
             addToCartButton = itemView.findViewById(R.id.buy_button);
         }
 
-        private void bind(final VirtualItemsResponse.Item item) {
+        private void bind(final VirtualCurrencyPackageResponse.Item item) {
             Glide.with(itemView).load(item.getImageUrl()).into(itemIcon);
             itemName.setText(item.getName());
             itemPrice.setText(item.getPrice().getPrettyPrintAmount());

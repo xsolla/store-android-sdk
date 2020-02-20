@@ -41,7 +41,7 @@ public class ProfileFragment extends BaseFragment {
                 String token = XLogin.getToken();
                 XStore.init(48017, token);
 
-                openFragment(new ShopFragment());
+                openFragment(new VirtualCurrencyFragment());
             }
         });
 
