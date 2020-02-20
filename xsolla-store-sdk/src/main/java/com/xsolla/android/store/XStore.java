@@ -64,6 +64,7 @@ public class XStore {
                 Request originalRequest = chain.request();
                 Request.Builder builder = originalRequest.newBuilder()
                         .addHeader("Authorization", "Bearer " + token);
+                // TODO Add platform + version
                 Request newRequest = builder.build();
                 return chain.proceed(newRequest);
             }
