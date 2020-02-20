@@ -70,7 +70,7 @@ public class AuthFragment extends BaseFragment {
                 XLogin.login(username, password, new XLoginCallback<AuthResponse>() {
                     @Override
                     protected void onSuccess(AuthResponse response) {
-                        openFragment(new ProfileFragment());
+                        openFragment(new MainFragment());
                     }
 
                     @Override
@@ -101,7 +101,7 @@ public class AuthFragment extends BaseFragment {
     private XLoginCallback<SocialAuthResponse> socialAuthCallback = new XLoginCallback<SocialAuthResponse>() {
         @Override
         protected void onSuccess(SocialAuthResponse response) {
-            openFragment(new ProfileFragment());
+            openFragment(new MainFragment());
         }
 
         @Override
