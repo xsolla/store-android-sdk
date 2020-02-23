@@ -1,8 +1,11 @@
 package com.xsolla.android.store.api;
 
+import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
+import com.xsolla.android.store.entity.request.inventory.ConsumeItemBody;
 import com.xsolla.android.store.entity.request.inventory.GrantItemsByPurchaseRequest;
 import com.xsolla.android.store.entity.request.inventory.GrantItemsRequest;
 import com.xsolla.android.store.entity.request.inventory.RevokeItemsRequest;
+import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
 import com.xsolla.android.store.entity.response.inventory.GrantItemsByPurchaseResponse;
@@ -116,7 +119,7 @@ public interface StoreApi {
     Call<Void> updateItemFromCurrentCart(
             @Path("project_id") int projectId,
             @Path("item_sku") String itemSku,
-            @Field("quantity") int quantity
+            @Body UpdateItemBody updateItemBody
     );
 
     @DELETE("api/v2/project/{project_id}/cart/{cart_id}/item/{item_sku}")
@@ -141,9 +144,7 @@ public interface StoreApi {
     @POST("api/v2/project/{project_id}/user/inventory/item/consume")
     Call<Void> consumeItem(
             @Path("project_id") int projectId,
-            @Field("sku") String sku,
-            @Field("quantity") int quantity,
-            @Field("instance_id") String instanceId
+            @Body ConsumeItemBody body
     );
 
     @POST("api/v2/project/{project_id}/inventory/reward")
@@ -165,26 +166,20 @@ public interface StoreApi {
     Call<CreateOrderResponse> createOrderFromCartById(
             @Path("project_id") int projectId,
             @Path("cart_id") String cartId,
-            @Field("currency") String currency,
-            @Field("locale") String locale,
-            @Field("sandbox") boolean sandbox
+            @Body CreateOrderRequestBody body
     );
 
     @POST("api/v2/project/{project_id}/payment/cart")
     Call<CreateOrderResponse> createOrderFromCurrentCart(
             @Path("project_id") int projectId,
-            @Field("currency") String currency,
-            @Field("locale") String locale,
-            @Field("sandbox") boolean sandbox
+            @Body CreateOrderRequestBody body
     );
 
     @POST("api/v2/project/{project_id}/payment/item/{item_sku}")
     Call<CreateOrderResponse> createOrderByItemSku(
             @Path("project_id") int projectId,
             @Path("item_sku") String itemSku,
-            @Field("currency") String currency,
-            @Field("locale") String locale,
-            @Field("sandbox") boolean sandbox
+            @Body CreateOrderRequestBody body
     );
 
     @POST("api/v2/project/{project_id}/payment/item/{item_sku}/virtual/{virtual_currency_sku}")

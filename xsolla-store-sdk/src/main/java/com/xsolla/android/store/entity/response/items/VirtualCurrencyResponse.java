@@ -14,7 +14,7 @@ public class VirtualCurrencyResponse {
         return items;
     }
 
-    private class Item {
+    public class Item {
         private String sku;
         private String name;
         private List<Group> groups;

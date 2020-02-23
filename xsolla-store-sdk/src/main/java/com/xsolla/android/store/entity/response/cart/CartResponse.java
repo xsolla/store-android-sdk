@@ -15,8 +15,25 @@ public class CartResponse {
 
     private Price price;
     private boolean isFree;
+    private List<Item> items;
 
-    private class Item {
+    public String getCartId() {
+        return cartId;
+    }
+
+    public Price getPrice() {
+        return price;
+    }
+
+    public boolean isFree() {
+        return isFree;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public class Item {
         private String sku;
         private String name;
         private List<Group> groups;

@@ -1,21 +1,21 @@
 package com.xsolla.android.storesdkexample.fragments;
 
-import android.view.View;
 import android.widget.TextView;
 
-import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.login.XLogin;
 import com.xsolla.android.login.jwt.JWT;
+import com.xsolla.android.storesdkexample.R;
+import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 
 public class ProfileFragment extends BaseFragment {
 
     @Override
-    int getLayout() {
+    public int getLayout() {
         return R.layout.fragment_profile;
     }
 
     @Override
-    void initUI() {
+    public void initUI() {
         TextView username = rootView.findViewById(R.id.username);
         TextView email = rootView.findViewById(R.id.email);
         TextView tokenType = rootView.findViewById(R.id.token_type);
@@ -34,12 +34,9 @@ public class ProfileFragment extends BaseFragment {
         expiresAt.setText(jwt.getExpiresAt().toString());
         issuer.setText(jwt.getIssuer());
 
-        rootView.findViewById(R.id.logout_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                XLogin.logout();
-                openRootFragment();
-            }
+        rootView.findViewById(R.id.logout_button).setOnClickListener(v -> {
+            XLogin.logout();
+            openRootFragment();
         });
     }
 

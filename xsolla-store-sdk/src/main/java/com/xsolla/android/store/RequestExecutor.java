@@ -3,10 +3,13 @@ package com.xsolla.android.store;
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
+import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
+import com.xsolla.android.store.entity.request.inventory.ConsumeItemBody;
 import com.xsolla.android.store.entity.request.inventory.GrantItemsByPurchaseRequest;
 import com.xsolla.android.store.entity.request.inventory.GrantItemsRequest;
 import com.xsolla.android.store.entity.request.inventory.RevokeItemsRequest;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
+import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
@@ -116,7 +119,11 @@ class RequestExecutor {
     }
 
     public void updateItemFromCurrentCart(String itemSku, int quantity, XStoreCallback<Void> callback) {
-        storeApi.updateItemFromCurrentCart(projectId, itemSku, quantity).enqueue(callback);
+        storeApi.updateItemFromCurrentCart(
+                projectId,
+                itemSku,
+                new UpdateItemBody(quantity)
+        ).enqueue(callback);
     }
 
     public void deleteItemFromCartByCartId(String cartId, String itemSku, XStoreCallback<Void> callback) {
@@ -136,7 +143,10 @@ class RequestExecutor {
     }
 
     public void consumeItem(String sku, int quantity, String instanceId, XStoreCallback<Void> callback) {
-        storeApi.consumeItem(projectId, sku, quantity, instanceId).enqueue(callback);
+        storeApi.consumeItem(
+                projectId,
+                new ConsumeItemBody(sku, quantity, instanceId)
+        ).enqueue(callback);
     }
 
     public void grantItemsToUser(GrantItemsRequest request, XStoreCallback<GrantItemsResponse> callback) {
@@ -163,18 +173,22 @@ class RequestExecutor {
         storeApi.createOrderFromCartById(
                 projectId,
                 cartId,
-                options != null ? options.getCurrency() : "USD",
-                options != null ? options.getLocale() : "en",
-                options != null ? options.isSandbox() : false
+                new CreateOrderRequestBody(
+                        options != null ? options.getCurrency() : "USD",
+                        options != null ? options.getLocale() : "en",
+                        options != null ? options.isSandbox() : false
+                )
         ).enqueue(callback);
     }
 
     public void createOrderFromCurrentCart(PaymentOptions options, XStoreCallback<CreateOrderResponse> callback) {
         storeApi.createOrderFromCurrentCart(
                 projectId,
-                options != null ? options.getCurrency() : "USD",
-                options != null ? options.getLocale() : "en",
-                options != null ? options.isSandbox() : false
+                new CreateOrderRequestBody(
+                        options != null ? options.getCurrency() : "USD",
+                        options != null ? options.getLocale() : "en",
+                        options != null ? options.isSandbox() : false
+                )
         ).enqueue(callback);
     }
 
@@ -182,9 +196,11 @@ class RequestExecutor {
         storeApi.createOrderByItemSku(
                 projectId,
                 itemSku,
-                options != null ? options.getCurrency() : "USD",
-                options != null ? options.getLocale() : "en",
-                options != null ? options.isSandbox() : false
+                new CreateOrderRequestBody(
+                        options != null ? options.getCurrency() : "USD",
+                        options != null ? options.getLocale() : "en",
+                        options != null ? options.isSandbox() : false
+                )
         ).enqueue(callback);
     }
 

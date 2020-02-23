@@ -21,4 +21,8 @@ public class Price {
     public String getCurrency() {
         return currency;
     }
+
+    public String getPrettyPrintAmount() {
+        return getAmount().substring(0, getAmount().indexOf(".") + 3) + " " + getCurrency();
+    }
 }

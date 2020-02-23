@@ -9,12 +9,12 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.xsolla.android.storesdkexample.fragments.AuthFragment;
-import com.xsolla.android.storesdkexample.fragments.ProfileFragment;
+import com.xsolla.android.storesdkexample.fragments.MainFragment;
 import com.xsolla.android.login.XLogin;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String LOGIN_PROJECT_ID = "login-project-id"; // Replace to your Login Project Id
+    private final String LOGIN_PROJECT_ID = "753ec123-3245-11ea-b687-42010aa80004"; // Replace to your Login Project Id
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment getFragment() {
         String token = XLogin.getToken();
         if (token != null && XLogin.isTokenValid()) {
-            return new ProfileFragment();
+            return new MainFragment();
         } else {
             return new AuthFragment();
         }

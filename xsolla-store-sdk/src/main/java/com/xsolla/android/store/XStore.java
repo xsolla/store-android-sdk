@@ -1,5 +1,8 @@
 package com.xsolla.android.store;
 
+import android.os.Build;
+
+import com.google.gson.GsonBuilder;
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
@@ -23,6 +26,13 @@ import com.xsolla.android.store.entity.response.order.OrderResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 
+import java.io.IOException;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.OkHttpClient.Builder;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -38,7 +48,7 @@ public class XStore {
 
     private static XStore getInstance() {
         if (instance == null) {
-            throw new IllegalStateException("XLogin SDK not initialized. You should call \"XStore.init(project-id)\" first.");
+            throw new IllegalStateException("XStore SDK not initialized. You should call \"XStore.init(project-id)\" first.");
         }
         return instance;
     }
@@ -47,11 +57,33 @@ public class XStore {
         return getInstance().requestExecutor;
     }
 
-    public static void init(int projectId) {
+    public static void init(int projectId, final String token) {
+
+        Interceptor interceptor = new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request originalRequest = chain.request();
+                Request.Builder builder = originalRequest.newBuilder()
+                        .addHeader("Authorization", "Bearer " + token)
+                        .addHeader("engine", "android")
+                        .addHeader("engine_v", Build.VERSION.RELEASE)
+                        .addHeader("sdk", "Store")
+                        .addHeader("sdk_v", BuildConfig.VERSION_NAME);
+
+                Request newRequest = builder.build();
+                return chain.proceed(newRequest);
+            }
+        };
+
+        Builder httpClient = new OkHttpClient().newBuilder();
+        httpClient.addInterceptor(interceptor);
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://store.xsolla.com")
-                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().serializeNulls().create()))
                 .build();
+
 
         StoreApi storeApi = retrofit.create(StoreApi.class);
 

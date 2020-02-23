@@ -37,7 +37,7 @@ abstract public class XStoreCallback<T> implements Callback<T> {
     private String getErrorMessage(ResponseBody errorBody) {
         try {
             JSONObject errorObject = new JSONObject(errorBody.string());
-            return errorObject.getJSONObject("error").getString("description");
+            return errorObject.getString("errorMessage");
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {

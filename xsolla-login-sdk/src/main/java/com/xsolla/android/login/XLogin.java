@@ -1,6 +1,7 @@
 package com.xsolla.android.login;
 
 import android.app.Activity;
+import android.os.Build;
 
 import com.xsolla.android.login.api.LoginApi;
 import com.xsolla.android.login.api.XLoginCallback;
@@ -14,6 +15,12 @@ import com.xsolla.android.login.social.SocialNetwork;
 import com.xsolla.android.login.social.XWebView;
 import com.xsolla.android.login.token.TokenUtils;
 
+import java.io.IOException;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -58,8 +65,27 @@ public class XLogin {
     }
 
     public static void init(String projectId, String callbackUrl, Activity activity) {
+        Interceptor interceptor = new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request originalRequest = chain.request();
+                Request.Builder builder = originalRequest.newBuilder()
+                        .addHeader("engine", "android")
+                        .addHeader("engine_v", Build.VERSION.RELEASE)
+                        .addHeader("sdk", "Login")
+                        .addHeader("sdk_v", BuildConfig.VERSION_NAME);
+
+                Request newRequest = builder.build();
+                return chain.proceed(newRequest);
+            }
+        };
+
+        OkHttpClient.Builder httpClient = new OkHttpClient().newBuilder();
+        httpClient.addInterceptor(interceptor);
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://login.xsolla.com")
+                .client(httpClient.build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
