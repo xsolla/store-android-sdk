@@ -28,8 +28,8 @@ import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 
 class RequestExecutor {
 
-    int projectId;
-    StoreApi storeApi;
+    private int projectId;
+    private StoreApi storeApi;
 
     public RequestExecutor(int projectId, StoreApi storeApi) {
         this.projectId = projectId;
@@ -115,7 +115,12 @@ class RequestExecutor {
     }
 
     public void updateItemFromCartByCartId(String cartId, String itemSku, int quantity, XStoreCallback<Void> callback) {
-        storeApi.updateItemFromCartByCartId(projectId, cartId, itemSku, quantity).enqueue(callback);
+        storeApi.updateItemFromCartByCartId(
+                projectId,
+                cartId,
+                itemSku,
+                new UpdateItemBody(quantity)
+        ).enqueue(callback);
     }
 
     public void updateItemFromCurrentCart(String itemSku, int quantity, XStoreCallback<Void> callback) {
@@ -173,22 +178,14 @@ class RequestExecutor {
         storeApi.createOrderFromCartById(
                 projectId,
                 cartId,
-                new CreateOrderRequestBody(
-                        options != null ? options.getCurrency() : "USD",
-                        options != null ? options.getLocale() : "en",
-                        options != null ? options.isSandbox() : false
-                )
+                CreateOrderRequestBody.create(options)
         ).enqueue(callback);
     }
 
     public void createOrderFromCurrentCart(PaymentOptions options, XStoreCallback<CreateOrderResponse> callback) {
         storeApi.createOrderFromCurrentCart(
                 projectId,
-                new CreateOrderRequestBody(
-                        options != null ? options.getCurrency() : "USD",
-                        options != null ? options.getLocale() : "en",
-                        options != null ? options.isSandbox() : false
-                )
+                CreateOrderRequestBody.create(options)
         ).enqueue(callback);
     }
 
@@ -196,11 +193,7 @@ class RequestExecutor {
         storeApi.createOrderByItemSku(
                 projectId,
                 itemSku,
-                new CreateOrderRequestBody(
-                        options != null ? options.getCurrency() : "USD",
-                        options != null ? options.getLocale() : "en",
-                        options != null ? options.isSandbox() : false
-                )
+                CreateOrderRequestBody.create(options)
         ).enqueue(callback);
     }
 

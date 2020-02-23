@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
-import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.VirtualItemsAdapter;
