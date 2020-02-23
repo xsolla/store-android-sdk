@@ -1,4 +1,4 @@
-package com.xsolla.android.storesdkexample.fragments;
+package com.xsolla.android.storesdkexample.fragments.base;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,15 +14,15 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.xsolla.android.storesdkexample.R;
+import com.xsolla.android.storesdkexample.fragments.AuthFragment;
 
 public abstract class BaseFragment extends Fragment {
 
-    View rootView;
+    public View rootView;
 
-    abstract int getLayout();
+    public abstract int getLayout();
 
-
-    abstract void initUI();
+    public abstract void initUI();
 
     @Nullable
     @Override
@@ -32,7 +32,7 @@ public abstract class BaseFragment extends Fragment {
         return rootView;
     }
 
-    void openFragment(Fragment fragment) {
+    public void openFragment(Fragment fragment) {
         getFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
@@ -41,7 +41,7 @@ public abstract class BaseFragment extends Fragment {
                 .commit();
     }
 
-    void openRootFragment() {
+    public void openRootFragment() {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
             fragmentManager.popBackStack();
@@ -50,7 +50,12 @@ public abstract class BaseFragment extends Fragment {
         openFragment(new AuthFragment());
     }
 
-    void showSnack(String message) {
+    public void popFragment() {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.popBackStack();
+    }
+
+    public void showSnack(String message) {
         View rootView = getActivity().findViewById(android.R.id.content);
         Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show();
     }

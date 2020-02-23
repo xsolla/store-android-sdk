@@ -16,20 +16,22 @@ import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.CartAdapter;
+import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
+import com.xsolla.android.storesdkexample.fragments.base.CatalogFragment;
 import com.xsolla.android.storesdkexample.listener.UpdateCartListener;
 
-public class CartFragment extends BaseFragment implements UpdateCartListener {
+public class CartFragment extends CatalogFragment implements UpdateCartListener {
 
     private RecyclerView recyclerView;
     private CartAdapter cartAdapter;
 
     @Override
-    int getLayout() {
+    public int getLayout() {
         return R.layout.fragment_cart;
     }
 
     @Override
-    void initUI() {
+    public void initUI() {
         recyclerView = rootView.findViewById(R.id.items_rv);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
@@ -39,25 +41,22 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         TextView checkoutButton = rootView.findViewById(R.id.checkout_button);
-        checkoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PaymentOptions paymentOptions = new PaymentOptions().create()
-                        .setSandbox(true)
-                        .build();
+        checkoutButton.setOnClickListener(v -> {
+            PaymentOptions paymentOptions = new PaymentOptions().create()
+                    .setSandbox(true)
+                    .build();
 
-                XStore.createOrderFromCurrentCart(paymentOptions, new XStoreCallback<CreateOrderResponse>() {
-                    @Override
-                    protected void onSuccess(CreateOrderResponse response) {
-                        XsollaSDK.createPaymentForm(getContext(), response.getToken(), true);
-                    }
+            XStore.createOrderFromCurrentCart(paymentOptions, new XStoreCallback<CreateOrderResponse>() {
+                @Override
+                protected void onSuccess(CreateOrderResponse response) {
+                    XsollaSDK.createPaymentForm(getContext(), response.getToken(), true);
+                }
 
-                    @Override
-                    protected void onFailure(String errorMessage) {
-                        showSnack(errorMessage);
-                    }
-                });
-            }
+                @Override
+                protected void onFailure(String errorMessage) {
+                    showSnack(errorMessage);
+                }
+            });
         });
 
         getItems();
@@ -81,7 +80,6 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
 
     @Override
     public void onCartUpdated(String totalAmount) {
-        Toolbar toolbar = rootView.findViewById(R.id.toolbar);
-        toolbar.setTitle("Total: " + totalAmount);
+        setupToolbar("Total: " + totalAmount);
     }
 }

@@ -11,10 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/holo_blue_light"
+        android:elevation="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:elevation="4dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat"
+        app:titleTextColor="@android:color/white"
         tools:targetApi="lollipop" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -33,12 +34,12 @@
         android:background="@android:color/holo_green_dark">
 
         <TextView
-            android:elevation="4dp"
             android:id="@+id/checkout_button"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
+            android:elevation="4dp"
             android:gravity="center_vertical|center_horizontal"
             android:text="CHECKOUT"
             android:textColor="@android:color/white"

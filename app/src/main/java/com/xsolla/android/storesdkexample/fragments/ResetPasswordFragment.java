@@ -1,12 +1,12 @@
 package com.xsolla.android.storesdkexample.fragments;
 
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.xsolla.android.login.XLogin;
 import com.xsolla.android.login.api.XLoginCallback;
 import com.xsolla.android.storesdkexample.R;
+import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 
 public class ResetPasswordFragment extends BaseFragment {
 
@@ -14,20 +14,15 @@ public class ResetPasswordFragment extends BaseFragment {
     private Button resetPasswordButton;
 
     @Override
-    int getLayout() {
+    public int getLayout() {
         return R.layout.fragment_reset_password;
     }
 
     @Override
-    void initUI() {
+    public void initUI() {
         usernameInput = rootView.findViewById(R.id.username_input);
         resetPasswordButton = rootView.findViewById(R.id.reset_password_button);
-        resetPasswordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resetPassword();
-            }
-        });
+        resetPasswordButton.setOnClickListener(v -> resetPassword());
     }
 
     private void resetPassword() {

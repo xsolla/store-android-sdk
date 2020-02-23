@@ -4,7 +4,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,25 +14,21 @@ import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.VirtualCurrencyAdapter;
+import com.xsolla.android.storesdkexample.fragments.base.CatalogFragment;
 import com.xsolla.android.storesdkexample.listener.AddToCartListener;
 
-public class VirtualCurrencyFragment extends BaseFragment implements AddToCartListener {
+public class VirtualCurrencyFragment extends CatalogFragment implements AddToCartListener {
 
     private VirtualCurrencyAdapter shopAdapter;
     private RecyclerView recyclerView;
-    private Toolbar toolbar;
 
     @Override
-    int getLayout() {
+    public int getLayout() {
         return R.layout.fragment_shop;
     }
 
     @Override
-    void initUI() {
-        toolbar = rootView.findViewById(R.id.toolbar);
-        toolbar.inflateMenu(R.menu.main_menu);
-        toolbar.setTitle("Virtual Currency");
-
+    public void initUI() {
         recyclerView = rootView.findViewById(R.id.items_rv);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
@@ -42,6 +37,7 @@ public class VirtualCurrencyFragment extends BaseFragment implements AddToCartLi
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
+        setupToolbar("Virtual Currency");
         getItems();
         updateBadge();
     }
@@ -103,12 +99,7 @@ public class VirtualCurrencyFragment extends BaseFragment implements AddToCartLi
             cartItemCount.setText(String.valueOf(count));
         }
 
-        actionView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openFragment(new CartFragment());
-            }
-        });
+        actionView.setOnClickListener(v -> openFragment(new CartFragment()));
     }
 
 
