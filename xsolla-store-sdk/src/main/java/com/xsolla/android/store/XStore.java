@@ -1,5 +1,7 @@
 package com.xsolla.android.store;
 
+import android.os.Build;
+
 import com.google.gson.GsonBuilder;
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
@@ -44,8 +46,6 @@ public class XStore {
         this.requestExecutor = requestExecutor;
     }
 
-    private String token;
-
     private static XStore getInstance() {
         if (instance == null) {
             throw new IllegalStateException("XStore SDK not initialized. You should call \"XStore.init(project-id)\" first.");
@@ -64,17 +64,19 @@ public class XStore {
             public Response intercept(Chain chain) throws IOException {
                 Request originalRequest = chain.request();
                 Request.Builder builder = originalRequest.newBuilder()
-                        .addHeader("Authorization", "Bearer " + token);
-                // TODO Add platform + version
+                        .addHeader("Authorization", "Bearer " + token)
+                        .addHeader("engine", "android")
+                        .addHeader("engine_v", Build.VERSION.RELEASE)
+                        .addHeader("sdk", "Store")
+                        .addHeader("sdk_v", BuildConfig.VERSION_NAME);
+
                 Request newRequest = builder.build();
                 return chain.proceed(newRequest);
             }
         };
 
         Builder httpClient = new OkHttpClient().newBuilder();
-        if (token != null) {
-            httpClient.addInterceptor(interceptor);
-        }
+        httpClient.addInterceptor(interceptor);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://store.xsolla.com")
@@ -87,14 +89,6 @@ public class XStore {
 
         RequestExecutor requestExecutor = new RequestExecutor(projectId, storeApi);
         instance = new XStore(requestExecutor);
-    }
-
-    public static String getToken() {
-        return getInstance().token;
-    }
-
-    public static void setToken(String token) {
-        getInstance().token = token;
     }
 
     // Virtual items
