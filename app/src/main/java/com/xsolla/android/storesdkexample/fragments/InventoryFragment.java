@@ -1,23 +1,15 @@
 package com.xsolla.android.storesdkexample.fragments;
 
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
-import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
-import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.InventoryAdapter;
-import com.xsolla.android.storesdkexample.adapter.PhysicalItemsAdapter;
 import com.xsolla.android.storesdkexample.fragments.base.CatalogFragment;
-import com.xsolla.android.storesdkexample.listener.AddToCartListener;
 import com.xsolla.android.storesdkexample.listener.ConsumeListener;
 
 public class InventoryFragment extends CatalogFragment implements ConsumeListener {
@@ -40,9 +32,8 @@ public class InventoryFragment extends CatalogFragment implements ConsumeListene
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        setupToolbar("Inventory");
+        setupToolbar();
         getItems();
-        updateBadge();
     }
 
 
@@ -63,7 +54,7 @@ public class InventoryFragment extends CatalogFragment implements ConsumeListene
 
     @Override
     public void onSuccess() {
-        showSnack("Consume success");
+        showSnack("Item consumed");
     }
 
     @Override
@@ -71,39 +62,11 @@ public class InventoryFragment extends CatalogFragment implements ConsumeListene
         showSnack(errorMessage);
     }
 
-    private void updateBadge() {
-        XStore.getCurrentCart(new XStoreCallback<CartResponse>() {
-            @Override
-            protected void onSuccess(CartResponse response) {
-                int itemsCount = 0;
-                for (CartResponse.Item item: response.getItems()) {
-                    itemsCount += item.getQuantity();
-                }
-
-                setupBadge(itemsCount);
-            }
-
-            @Override
-            protected void onFailure(String errorMessage) {
-                showSnack(errorMessage);
-            }
-        });
+    private void setupToolbar() {
+        toolbar = rootView.findViewById(R.id.toolbar);
+        toolbar.setTitle("Inventory");
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(v -> popFragment());
     }
-
-    private void setupBadge(int count) {
-        MenuItem cartItem = toolbar.getMenu().findItem(R.id.action_cart);
-        View actionView = cartItem.getActionView();
-        TextView cartItemCount = actionView.findViewById(R.id.cart_badge);
-
-        if (count == 0) {
-            cartItemCount.setVisibility(View.GONE);
-        } else {
-            cartItemCount.setVisibility(View.VISIBLE);
-            cartItemCount.setText(String.valueOf(count));
-        }
-
-        actionView.setOnClickListener(v -> openFragment(new CartFragment()));
-    }
-
 
 }
