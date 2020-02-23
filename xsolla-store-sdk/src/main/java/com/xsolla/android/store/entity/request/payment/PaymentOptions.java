@@ -2,9 +2,9 @@ package com.xsolla.android.store.entity.request.payment;
 
 public class PaymentOptions {
 
-    private String currency;
-    private String locale;
-    private boolean sandbox;
+    private String currency = "USD";
+    private String locale = "en";
+    private boolean sandbox = false;
 
     public String getCurrency() {
         return currency;
