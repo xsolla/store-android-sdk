@@ -30,7 +30,7 @@ public class ItemsRequestOptions {
         return additionalFields;
     }
 
-    public static Builder create() {
+    public Builder create() {
         return new ItemsRequestOptions().new Builder();
     }
 
