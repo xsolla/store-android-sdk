@@ -29,6 +29,7 @@ public class CartFragment extends CatalogFragment implements UpdateCartListener 
 
     @Override
     public void initUI() {
+        setupToolbar();
         recyclerView = rootView.findViewById(R.id.items_rv);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
@@ -75,8 +76,14 @@ public class CartFragment extends CatalogFragment implements UpdateCartListener 
         });
     }
 
+    private void setupToolbar() {
+        toolbar = rootView.findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(v -> popFragment());
+    }
+
     @Override
     public void onCartUpdated(String totalAmount) {
-        setupToolbar("Total: " + totalAmount);
+        toolbar.setTitle("Total: " + totalAmount);
     }
 }
