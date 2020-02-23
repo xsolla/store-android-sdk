@@ -1,6 +1,7 @@
 package com.xsolla.android.store.api;
 
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
+import com.xsolla.android.store.entity.request.inventory.ConsumeItemBody;
 import com.xsolla.android.store.entity.request.inventory.GrantItemsByPurchaseRequest;
 import com.xsolla.android.store.entity.request.inventory.GrantItemsRequest;
 import com.xsolla.android.store.entity.request.inventory.RevokeItemsRequest;
@@ -143,9 +144,7 @@ public interface StoreApi {
     @POST("api/v2/project/{project_id}/user/inventory/item/consume")
     Call<Void> consumeItem(
             @Path("project_id") int projectId,
-            @Field("sku") String sku,
-            @Field("quantity") int quantity,
-            @Field("instance_id") String instanceId
+            @Body ConsumeItemBody body
     );
 
     @POST("api/v2/project/{project_id}/inventory/reward")

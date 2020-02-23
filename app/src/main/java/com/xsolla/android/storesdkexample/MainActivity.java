@@ -14,7 +14,7 @@ import com.xsolla.android.login.XLogin;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String LOGIN_PROJECT_ID = "e6dfaac6-78a8-11e9-9244-42010aa80004"; // Replace to your Login Project Id
+    private final String LOGIN_PROJECT_ID = "753ec123-3245-11ea-b687-42010aa80004"; // Replace to your Login Project Id
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

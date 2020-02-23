@@ -4,6 +4,7 @@ import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
+import com.xsolla.android.store.entity.request.inventory.ConsumeItemBody;
 import com.xsolla.android.store.entity.request.inventory.GrantItemsByPurchaseRequest;
 import com.xsolla.android.store.entity.request.inventory.GrantItemsRequest;
 import com.xsolla.android.store.entity.request.inventory.RevokeItemsRequest;
@@ -142,7 +143,10 @@ class RequestExecutor {
     }
 
     public void consumeItem(String sku, int quantity, String instanceId, XStoreCallback<Void> callback) {
-        storeApi.consumeItem(projectId, sku, quantity, instanceId).enqueue(callback);
+        storeApi.consumeItem(
+                projectId,
+                new ConsumeItemBody(sku, quantity, instanceId)
+        ).enqueue(callback);
     }
 
     public void grantItemsToUser(GrantItemsRequest request, XStoreCallback<GrantItemsResponse> callback) {

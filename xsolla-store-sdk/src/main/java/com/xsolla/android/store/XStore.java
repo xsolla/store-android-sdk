@@ -1,5 +1,6 @@
 package com.xsolla.android.store;
 
+import com.google.gson.GsonBuilder;
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
@@ -78,7 +79,7 @@ public class XStore {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://store.xsolla.com")
                 .client(httpClient.build())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().serializeNulls().create()))
                 .build();
 
 

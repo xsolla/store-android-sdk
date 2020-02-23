@@ -20,7 +20,7 @@ public class MainFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String token = XLogin.getToken();
-        XStore.init(44056, token);
+        XStore.init(48017, token);
     }
 
     @Override
@@ -30,6 +30,8 @@ public class MainFragment extends BaseFragment {
         rootView.findViewById(R.id.virtual_currency_button).setOnClickListener(v -> openFragment(new VirtualCurrencyFragment()));
 
         rootView.findViewById(R.id.merchandise_button).setOnClickListener(v -> openFragment(new PhysicalItemsFragment()));
+
+        rootView.findViewById(R.id.inventory_button).setOnClickListener(v -> openFragment(new InventoryFragment()));
 
         rootView.findViewById(R.id.profile_button).setOnClickListener(v -> openFragment(new ProfileFragment()));
     }

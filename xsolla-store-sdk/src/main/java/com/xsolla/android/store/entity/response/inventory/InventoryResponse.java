@@ -13,7 +13,7 @@ public class InventoryResponse {
         return items;
     }
 
-    private class Item {
+    public class Item {
 
         @SerializedName("instance_id")
         private String instanceId;
