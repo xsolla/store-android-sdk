@@ -64,23 +64,4 @@ public class PhysicalItemsFragment extends CatalogFragment implements AddToCartL
         showSnack(errorMessage);
     }
 
-    private void updateBadge() {
-        XStore.getCurrentCart(new XStoreCallback<CartResponse>() {
-            @Override
-            protected void onSuccess(CartResponse response) {
-                int itemsCount = 0;
-                for (CartResponse.Item item: response.getItems()) {
-                    itemsCount += item.getQuantity();
-                }
-
-                setupBadge(itemsCount);
-            }
-
-            @Override
-            protected void onFailure(String errorMessage) {
-                showSnack(errorMessage);
-            }
-        });
-    }
-
 }
