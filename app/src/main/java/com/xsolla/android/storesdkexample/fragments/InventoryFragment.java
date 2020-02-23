@@ -1,5 +1,6 @@
 package com.xsolla.android.storesdkexample.fragments;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,10 +10,11 @@ import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.InventoryAdapter;
+import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.fragments.base.CatalogFragment;
 import com.xsolla.android.storesdkexample.listener.ConsumeListener;
 
-public class InventoryFragment extends CatalogFragment implements ConsumeListener {
+public class InventoryFragment extends BaseFragment implements ConsumeListener {
 
     private InventoryAdapter inventoryAdapter;
     private RecyclerView recyclerView;
@@ -63,7 +65,7 @@ public class InventoryFragment extends CatalogFragment implements ConsumeListene
     }
 
     private void setupToolbar() {
-        toolbar = rootView.findViewById(R.id.toolbar);
+        Toolbar toolbar = rootView.findViewById(R.id.toolbar);
         toolbar.setTitle("Inventory");
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(v -> popFragment());

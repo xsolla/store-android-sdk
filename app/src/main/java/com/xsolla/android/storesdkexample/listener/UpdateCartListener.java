@@ -4,4 +4,5 @@ public interface UpdateCartListener {
 
     void onCartUpdated(String totalAmount);
 
+    void onCartEmpty();
 }

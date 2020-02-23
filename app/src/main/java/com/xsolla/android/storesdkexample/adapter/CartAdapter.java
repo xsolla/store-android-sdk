@@ -96,8 +96,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 @Override
                 protected void onSuccess(CartResponse response) {
                     items = response.getItems();
-                    updateCartListener.onCartUpdated(response.getPrice().getPrettyPrintAmount());
-                    notifyDataSetChanged();
+                    if (!items.isEmpty()) {
+                        updateCartListener.onCartUpdated(response.getPrice().getPrettyPrintAmount());
+                        notifyDataSetChanged();
+                    } else {
+                        updateCartListener.onCartEmpty();
+                    }
                 }
 
                 @Override

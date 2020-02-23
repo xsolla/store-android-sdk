@@ -2,6 +2,7 @@ package com.xsolla.android.storesdkexample.fragments;
 
 import android.widget.TextView;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,13 +15,15 @@ import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.CartAdapter;
+import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.fragments.base.CatalogFragment;
 import com.xsolla.android.storesdkexample.listener.UpdateCartListener;
 
-public class CartFragment extends CatalogFragment implements UpdateCartListener {
+public class CartFragment extends BaseFragment implements UpdateCartListener {
 
     private RecyclerView recyclerView;
     private CartAdapter cartAdapter;
+    private Toolbar toolbar;
 
     @Override
     public int getLayout() {
@@ -64,9 +67,11 @@ public class CartFragment extends CatalogFragment implements UpdateCartListener 
         XStore.getCurrentCart(new XStoreCallback<CartResponse>() {
             @Override
             protected void onSuccess(CartResponse response) {
-                cartAdapter = new CartAdapter(response.getItems(), CartFragment.this);
-                recyclerView.setAdapter(cartAdapter);
-                onCartUpdated(response.getPrice().getPrettyPrintAmount());
+                if (!response.getItems().isEmpty()) {
+                    cartAdapter = new CartAdapter(response.getItems(), CartFragment.this);
+                    recyclerView.setAdapter(cartAdapter);
+                    onCartUpdated(response.getPrice().getPrettyPrintAmount());
+                }
             }
 
             @Override
@@ -85,5 +90,10 @@ public class CartFragment extends CatalogFragment implements UpdateCartListener 
     @Override
     public void onCartUpdated(String totalAmount) {
         toolbar.setTitle("Total: " + totalAmount);
+    }
+
+    @Override
+    public void onCartEmpty() {
+        openFragment(new MainFragment());
     }
 }

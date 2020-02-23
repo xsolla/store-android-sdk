@@ -1,9 +1,5 @@
 package com.xsolla.android.storesdkexample.fragments;
 
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -86,21 +82,5 @@ public class PhysicalItemsFragment extends CatalogFragment implements AddToCartL
             }
         });
     }
-
-    private void setupBadge(int count) {
-        MenuItem cartItem = toolbar.getMenu().findItem(R.id.action_cart);
-        View actionView = cartItem.getActionView();
-        TextView cartItemCount = actionView.findViewById(R.id.cart_badge);
-
-        if (count == 0) {
-            cartItemCount.setVisibility(View.GONE);
-        } else {
-            cartItemCount.setVisibility(View.VISIBLE);
-            cartItemCount.setText(String.valueOf(count));
-        }
-
-        actionView.setOnClickListener(v -> openFragment(new CartFragment()));
-    }
-
 
 }
