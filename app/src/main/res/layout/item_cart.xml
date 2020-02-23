@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textSize="20sp"
+            android:fontFamily="@font/roboto_medium"
             tools:text="Some item" />
 
         <TextView
@@ -34,6 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textSize="18sp"
+            android:fontFamily="@font/roboto"
             tools:text="$10" />
 
     </LinearLayout>
@@ -51,7 +53,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            app:srcCompat="@drawable/ic_remove_circle_24dp" />
+            app:srcCompat="@drawable/ic_remove_item_button" />
 
         <TextView
             android:id="@+id/quantity_label"
@@ -68,7 +70,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            app:srcCompat="@drawable/ic_add_circle_24dp" />
+            app:srcCompat="@drawable/ic_add_item_button" />
 
     </LinearLayout>
 
