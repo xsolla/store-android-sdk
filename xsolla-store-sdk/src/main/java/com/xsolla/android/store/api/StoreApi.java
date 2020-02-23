@@ -112,7 +112,7 @@ public interface StoreApi {
             @Path("project_id") int projectId,
             @Path("cart_id") String cartId,
             @Path("item_sku") String itemSku,
-            @Field("quantity") int quantity
+            @Body UpdateItemBody updateItemBody
     );
 
     @PUT("api/v2/project/{project_id}/cart/item/{item_sku}")
