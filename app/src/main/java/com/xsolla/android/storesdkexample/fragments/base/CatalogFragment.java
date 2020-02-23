@@ -6,6 +6,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.xsolla.android.store.XStore;
+import com.xsolla.android.store.api.XStoreCallback;
+import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.CartFragment;
 
@@ -34,6 +37,25 @@ public abstract class CatalogFragment extends BaseFragment {
             cartItemCount.setText(String.valueOf(count));
             actionView.setOnClickListener(v -> openFragment(new CartFragment()));
         }
+    }
+
+    protected void updateBadge() {
+        XStore.getCurrentCart(new XStoreCallback<CartResponse>() {
+            @Override
+            protected void onSuccess(CartResponse response) {
+                int itemsCount = 0;
+                for (CartResponse.Item item: response.getItems()) {
+                    itemsCount += item.getQuantity();
+                }
+
+                setupBadge(itemsCount);
+            }
+
+            @Override
+            protected void onFailure(String errorMessage) {
+                showSnack(errorMessage);
+            }
+        });
     }
 
 }

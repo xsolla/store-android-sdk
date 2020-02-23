@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textSize="20sp"
+            android:fontFamily="@font/roboto_medium"
             tools:text="Some item" />
 
         <TextView
@@ -34,6 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textSize="18sp"
+            android:fontFamily="@font/roboto"
             tools:text="$10" />
 
     </LinearLayout>
@@ -47,6 +49,6 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:padding="16dp"
-        app:srcCompat="@drawable/ic_add_shopping_cart_24dp" />
+        app:srcCompat="@drawable/ic_add_to_cart_button" />
 
 </LinearLayout>

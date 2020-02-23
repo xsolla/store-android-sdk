@@ -85,9 +85,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             addButton.setOnClickListener(new ChangeQuantityListener(itemSku, quantity + 1));
 
             if (quantity == 1) {
-                minusButton.setImageResource(R.drawable.ic_delete_24dp);
+                minusButton.setImageResource(R.drawable.ic_delete_item_button);
             } else {
-                minusButton.setImageResource(R.drawable.ic_remove_circle_24dp);
+                minusButton.setImageResource(R.drawable.ic_remove_item_button);
             }
         }
 

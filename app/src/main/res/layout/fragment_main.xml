@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
     android:background="@color/fragment_bg_color"
+    android:orientation="vertical"
     android:padding="8dp">
-
-    <Button
-        android:id="@+id/virtual_items_button"
-        style="@style/XButton"
-        android:layout_width="@dimen/input_width"
-        android:layout_height="@dimen/input_height"
-        android:layout_marginTop="24dp"
-        android:text="Virtual Items" />
 
     <Button
         android:id="@+id/virtual_currency_button"
@@ -20,15 +16,21 @@
         android:layout_width="@dimen/input_width"
         android:layout_height="@dimen/input_height"
         android:layout_marginTop="24dp"
-        android:text="Virtual Currency" />
+        android:text="Virtual Currency"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/virtual_items_button" />
 
     <Button
-        android:id="@+id/merchandise_button"
+        android:id="@+id/virtual_items_button"
         style="@style/XButton"
         android:layout_width="@dimen/input_width"
         android:layout_height="@dimen/input_height"
-        android:layout_marginTop="24dp"
-        android:text="Merchandise" />
+        android:layout_marginTop="32dp"
+        android:text="Virtual Items"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/inventory_button"
@@ -36,12 +38,21 @@
         android:layout_width="@dimen/input_width"
         android:layout_height="@dimen/input_height"
         android:layout_marginTop="24dp"
-        android:text="Inventory" />
+        android:text="Inventory"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/merchandise_button" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+    <Button
+        android:id="@+id/merchandise_button"
+        style="@style/XButton"
+        android:layout_width="@dimen/input_width"
+        android:layout_height="@dimen/input_height"
+        android:layout_marginTop="24dp"
+        android:text="Merchandise"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/virtual_currency_button" />
 
     <Button
         android:id="@+id/profile_button"
@@ -49,6 +60,9 @@
         android:layout_width="@dimen/input_width"
         android:layout_height="@dimen/input_height"
         android:layout_marginBottom="24dp"
-        android:text="Profile" />
+        android:text="Profile"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

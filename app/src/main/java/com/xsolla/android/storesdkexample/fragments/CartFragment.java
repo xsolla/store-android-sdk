@@ -16,7 +16,6 @@ import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.CartAdapter;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
-import com.xsolla.android.storesdkexample.fragments.base.CatalogFragment;
 import com.xsolla.android.storesdkexample.listener.UpdateCartListener;
 
 public class CartFragment extends BaseFragment implements UpdateCartListener {
