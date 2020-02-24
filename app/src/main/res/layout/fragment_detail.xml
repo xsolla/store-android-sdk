@@ -38,6 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/item_icon"
+        android:textColor="@android:color/holo_green_dark"
         tools:text="100 Coins" />
 
     <TextView
@@ -50,6 +51,7 @@
         android:fontFamily="@font/roboto"
         android:text="Choose payment method"
         android:textSize="18sp"
+        android:textColor="#aa000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/item_name" />
 
