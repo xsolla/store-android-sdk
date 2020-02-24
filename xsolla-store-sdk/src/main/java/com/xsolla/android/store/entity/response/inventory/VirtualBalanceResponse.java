@@ -8,7 +8,11 @@ public class VirtualBalanceResponse {
 
     private List<Item> items;
 
-    private class Item {
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public class Item {
         private String sku;
         private String type;
         private String name;

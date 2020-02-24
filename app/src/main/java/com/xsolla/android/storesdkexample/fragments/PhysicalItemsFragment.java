@@ -8,6 +8,7 @@ import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
+import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.PhysicalItemsAdapter;
 import com.xsolla.android.storesdkexample.fragments.base.CatalogFragment;
@@ -62,6 +63,11 @@ public class PhysicalItemsFragment extends CatalogFragment implements AddToCartL
     @Override
     public void onFailure(String errorMessage) {
         showSnack(errorMessage);
+    }
+
+    @Override
+    public void onItemClicked(VirtualItemsResponse.Item item) {
+        showSnack("Item clicked");
     }
 
 }

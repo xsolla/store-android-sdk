@@ -8,6 +8,7 @@ import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
+import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.VirtualCurrencyAdapter;
 import com.xsolla.android.storesdkexample.fragments.base.CatalogFragment;
@@ -64,4 +65,8 @@ public class VirtualCurrencyFragment extends CatalogFragment implements AddToCar
         showSnack(errorMessage);
     }
 
+    @Override
+    public void onItemClicked(VirtualItemsResponse.Item item) {
+        showSnack("Item clicked");
+    }
 }
