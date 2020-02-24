@@ -1,32 +1,38 @@
 package com.xsolla.android.storesdkexample.fragments;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Spinner;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 
+import com.bumptech.glide.Glide;
+import com.xsolla.android.sdk.XsollaSDK;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
-import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
+import com.xsolla.android.store.entity.request.payment.PaymentOptions;
+import com.xsolla.android.store.entity.response.common.VirtualPrice;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
+import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse;
+import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DetailFragment extends BaseFragment {
 
-    private List<VirtualItemsResponse.Item> currencies;
-    private Spinner currencyDropdown;
-    private TextView balanceLabel;
+    private RadioGroup radioGroup;
+    private TextView checkoutButton;
+
+    private VirtualItemsResponse.Item item;
+
+    private int checkedIndex = -1;
 
     @Override
     public int getLayout() {
@@ -34,7 +40,7 @@ public class DetailFragment extends BaseFragment {
     }
 
     public static DetailFragment newInstance(VirtualItemsResponse.Item item) {
-        
+
         Bundle args = new Bundle();
         args.putParcelable("item", item);
         DetailFragment fragment = new DetailFragment();
@@ -44,74 +50,89 @@ public class DetailFragment extends BaseFragment {
 
     @Override
     public void initUI() {
-        currencyDropdown = rootView.findViewById(R.id.vc_dropdown);
-        balanceLabel = rootView.findViewById(R.id.balance_label);
-        getCurrencyList();
-        initTest();
+        ImageView itemIcon = rootView.findViewById(R.id.item_icon);
+        Glide.with(getContext()).load(item.getImageUrl()).into(itemIcon);
+
+        TextView itemName = rootView.findViewById(R.id.item_name);
+        itemName.setText(item.getName());
+
+        radioGroup = rootView.findViewById(R.id.radio_group);
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton checkedRadioButton = radioGroup.findViewById(checkedId);
+            checkedIndex = radioGroup.indexOfChild(checkedRadioButton);
+        });
+
+        checkoutButton = rootView.findViewById(R.id.checkout_button);
+        initPaymentMethodSelector();
+        initCheckoutButton();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        VirtualItemsResponse.Item item = getArguments().getParcelable("item");
-        Log.d("Parcel", "get");
+        item = getArguments().getParcelable("item");
     }
 
-    private void getCurrencyList() {
-        /*XStore.getVirtualBalance(new XStoreCallback<VirtualBalanceResponse>() {
-            @Override
-            protected void onSuccess(VirtualBalanceResponse response) {
-                currencies = response.getItems();
-                initCurrencyDropdown();
-            }
+    private void initPaymentMethodSelector() {
+        Typeface font = ResourcesCompat.getFont(getContext(), R.font.roboto);
 
-            @Override
-            protected void onFailure(String errorMessage) {
-                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
-            }
-        });*/
-    }
+        RadioButton button = new RadioButton(getContext());
+        button.setText(item.getPrice().getPrettyPrintAmount());
+        button.setTextSize(24f);
+        button.setTypeface(font);
+        radioGroup.addView(button);
 
-    private void initCurrencyDropdown() {
-        /*List<String> currenciesNames = new ArrayList<>();
-        for (VirtualBalanceResponse.Item item : currencies) {
-            currenciesNames.add(item.getName());
+        List<VirtualPrice> virtualPrices = item.getVirtualPrices();
+        for (VirtualPrice price : virtualPrices) {
+            RadioButton radioButton = new RadioButton(getContext());
+            radioButton.setText(price.getAmount() + " " + price.getName());
+            radioButton.setTextSize(24f);
+            radioButton.setTypeface(font);
+            radioGroup.addView(radioButton);
         }
-
-        ArrayAdapter adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, currenciesNames);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        currencyDropdown.setAdapter(adapter);
-
-        currencyDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String balance = String.valueOf(currencies.get(position).getAmount());
-                balanceLabel.setText(balance);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });*/
     }
 
-    private void initTest() {
-        String[] countries = new String[] {"Russia", "Canada", "USA", "China"};
+    private void initCheckoutButton() {
+        checkoutButton.setOnClickListener(v -> {
+            if (checkedIndex == -1) {
+                showSnack("Please select payment method");
+            }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                getContext(),
-                R.layout.dropdown_menu_popup_item,
-                countries
-        );
+            if (checkedIndex == 0) {
+                PaymentOptions options = new PaymentOptions().create()
+                        .setSandbox(true)
+                        .build();
 
-        AutoCompleteTextView editTextFilledExposedDropdown = rootView.findViewById(R.id.filled_exposed_dropdown);
-        editTextFilledExposedDropdown.setAdapter(adapter);
-        editTextFilledExposedDropdown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(), countries[position], Toast.LENGTH_SHORT).show();
+                XStore.createOrderByItemSku(item.getSku(), options, new XStoreCallback<CreateOrderResponse>() {
+                    @Override
+                    protected void onSuccess(CreateOrderResponse response) {
+                        String token = response.getToken();
+                        XsollaSDK.createPaymentForm(getContext(), token, true);
+                    }
+
+                    @Override
+                    protected void onFailure(String errorMessage) {
+                        showSnack(errorMessage);
+                    }
+                });
+
+            } else {
+                VirtualPrice virtualPrice = item.getVirtualPrices().get(checkedIndex - 1);
+                XStore.createOrderByVirtualCurrency(item.getSku(), virtualPrice.getSku(), new XStoreCallback<CreateOrderByVirtualCurrencyResponse>() {
+                    @Override
+                    protected void onSuccess(CreateOrderByVirtualCurrencyResponse response) {
+                        showSnack("Purchased by Virtual currency");
+                        openFragment(new MainFragment());
+                    }
+
+                    @Override
+                    protected void onFailure(String errorMessage) {
+                        showSnack(errorMessage);
+                    }
+                });
             }
         });
+
     }
+
 }
