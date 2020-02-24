@@ -2,13 +2,15 @@ package com.xsolla.android.storesdkexample.fragments;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +19,7 @@ import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.common.VirtualPrice;
+import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
@@ -63,6 +66,9 @@ public class DetailFragment extends BaseFragment {
         });
 
         checkoutButton = rootView.findViewById(R.id.checkout_button);
+
+        initToolbar();
+        getBalance();
         initPaymentMethodSelector();
         initCheckoutButton();
     }
@@ -71,6 +77,50 @@ public class DetailFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         item = getArguments().getParcelable("item");
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = rootView.findViewById(R.id.toolbar);
+        toolbar.setTitle(item.getName());
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(v -> popFragment());
+    }
+
+    private void getBalance() {
+
+        XStore.getVirtualBalance(new XStoreCallback<VirtualBalanceResponse>() {
+            @Override
+            protected void onSuccess(VirtualBalanceResponse response) {
+                updateBalanceContainer(response.getItems());
+            }
+
+            @Override
+            protected void onFailure(String errorMessage) {
+
+            }
+        });
+    }
+
+    private void updateBalanceContainer(List<VirtualBalanceResponse.Item> items) {
+        LinearLayout balanceContainer = rootView.findViewById(R.id.balance_container);
+
+        for (VirtualBalanceResponse.Item item : items) {
+            ImageView balanceIcon = new ImageView(getContext());
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(60, 60);
+            layoutParams.setMargins(100, 0, 20, 0);
+            balanceIcon.setLayoutParams(layoutParams);
+            Glide.with(getContext()).load(item.getImageUrl()).into(balanceIcon);
+
+            balanceContainer.addView(balanceIcon);
+
+            TextView balanceAmount = new TextView(getContext());
+            balanceAmount.setText(String.valueOf(item.getAmount()));
+            balanceAmount.setTextSize(16f);
+            layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(20, 0, 20, 0);
+
+            balanceContainer.addView(balanceAmount);
+        }
     }
 
     private void initPaymentMethodSelector() {
