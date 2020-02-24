@@ -63,4 +63,9 @@ public class VirtualItemsFragment extends CatalogFragment implements AddToCartLi
         showSnack(errorMessage);
     }
 
+    @Override
+    public void onItemClicked(VirtualItemsResponse.Item item) {
+        DetailFragment detailFragment = DetailFragment.newInstance(item);
+        openFragment(detailFragment);
+    }
 }

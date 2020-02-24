@@ -26,11 +26,8 @@ public class MainFragment extends BaseFragment {
     @Override
     public void initUI() {
         rootView.findViewById(R.id.virtual_items_button).setOnClickListener(v -> openFragment(new VirtualItemsFragment()));
-
         rootView.findViewById(R.id.virtual_currency_button).setOnClickListener(v -> openFragment(new VirtualCurrencyFragment()));
-
         rootView.findViewById(R.id.merchandise_button).setOnClickListener(v -> openFragment(new PhysicalItemsFragment()));
-
         rootView.findViewById(R.id.inventory_button).setOnClickListener(v -> openFragment(new InventoryFragment()));
 
         rootView.findViewById(R.id.profile_button).setOnClickListener(v -> openFragment(new ProfileFragment()));

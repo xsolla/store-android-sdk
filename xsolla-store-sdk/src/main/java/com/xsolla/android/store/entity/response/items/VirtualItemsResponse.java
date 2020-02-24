@@ -1,5 +1,8 @@
 package com.xsolla.android.store.entity.response.items;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 import com.xsolla.android.store.entity.response.common.Group;
 import com.xsolla.android.store.entity.response.common.InventoryOption;
@@ -15,7 +18,7 @@ public class VirtualItemsResponse {
         return items;
     }
 
-    public class Item {
+    public class Item implements Parcelable {
         private String sku;
         private String name;
         private List<Group> groups;
@@ -35,6 +38,30 @@ public class VirtualItemsResponse {
 
         @SerializedName("inventory_options")
         private InventoryOption inventoryOption;
+
+        protected Item(Parcel in) {
+            sku = in.readString();
+            name = in.readString();
+            type = in.readString();
+            description = in.readString();
+            imageUrl = in.readString();
+            isFree = in.readByte() != 0;
+            price = in.readParcelable(Price.class.getClassLoader());
+            virtualPrices = in.createTypedArrayList(VirtualPrice.CREATOR);
+            inventoryOption = in.readParcelable(InventoryOption.class.getClassLoader());
+        }
+
+        public final Creator<Item> CREATOR = new Creator<Item>() {
+            @Override
+            public Item createFromParcel(Parcel in) {
+                return new Item(in);
+            }
+
+            @Override
+            public Item[] newArray(int size) {
+                return new Item[size];
+            }
+        };
 
         public String getSku() {
             return sku;
@@ -78,6 +105,24 @@ public class VirtualItemsResponse {
 
         public InventoryOption getInventoryOption() {
             return inventoryOption;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(sku);
+            dest.writeString(name);
+            dest.writeString(type);
+            dest.writeString(description);
+            dest.writeString(imageUrl);
+            dest.writeByte((byte) (isFree ? 1 : 0));
+            dest.writeParcelable(price, flags);
+            dest.writeTypedList(virtualPrices);
+            dest.writeParcelable(inventoryOption, flags);
         }
     }
 }

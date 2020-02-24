@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,11 +28,6 @@ public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapte
     public VirtualItemsAdapter(List<VirtualItemsResponse.Item> items, AddToCartListener listener) {
         this.items = items;
         this.addToCartListener = listener;
-    }
-
-    public void setItems(List<VirtualItemsResponse.Item> items) {
-        this.items = items;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -71,32 +67,23 @@ public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapte
             itemName.setText(item.getName());
             itemPrice.setText(item.getPrice().getPrettyPrintAmount());
 
-            addToCartButton.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(v -> addToCartListener.onItemClicked(item));
+
+            addToCartButton.setOnClickListener(v -> XStore.getCurrentCart(new XStoreCallback<CartResponse>() {
                 @Override
-                public void onClick(View v) {
+                protected void onSuccess(CartResponse response) {
+                    int quantity = 1;
 
-                    XStore.getCurrentCart(new XStoreCallback<CartResponse>() {
+                    for (CartResponse.Item cartItem: response.getItems()) {
+                        if (cartItem.getSku().equals(item.getSku())) {
+                            quantity += cartItem.getQuantity();
+                        }
+                    }
+
+                    XStore.updateItemFromCurrentCart(item.getSku(), quantity, new XStoreCallback<Void>() {
                         @Override
-                        protected void onSuccess(CartResponse response) {
-                            int quantity = 1;
-
-                            for (CartResponse.Item cartItem: response.getItems()) {
-                                if (cartItem.getSku().equals(item.getSku())) {
-                                    quantity += cartItem.getQuantity();
-                                }
-                            }
-
-                            XStore.updateItemFromCurrentCart(item.getSku(), quantity, new XStoreCallback<Void>() {
-                                @Override
-                                protected void onSuccess(Void response) {
-                                    addToCartListener.onSuccess();
-                                }
-
-                                @Override
-                                protected void onFailure(String errorMessage) {
-                                    addToCartListener.onFailure(errorMessage);
-                                }
-                            });
+                        protected void onSuccess(Void response) {
+                            addToCartListener.onSuccess();
                         }
 
                         @Override
@@ -104,10 +91,13 @@ public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapte
                             addToCartListener.onFailure(errorMessage);
                         }
                     });
-
-
                 }
-            });
+
+                @Override
+                protected void onFailure(String errorMessage) {
+                    addToCartListener.onFailure(errorMessage);
+                }
+            }));
         }
 
     }
