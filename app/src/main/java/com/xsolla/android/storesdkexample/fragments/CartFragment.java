@@ -1,13 +1,17 @@
 package com.xsolla.android.storesdkexample.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.xsolla.android.sdk.XsollaSDK;
+import com.xsolla.android.paystation.XPaystation;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
@@ -19,6 +23,8 @@ import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.listener.UpdateCartListener;
 
 public class CartFragment extends BaseFragment implements UpdateCartListener {
+
+    private static final int RC_PAYSTATION = 1;
 
     private RecyclerView recyclerView;
     private CartAdapter cartAdapter;
@@ -49,7 +55,10 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
             XStore.createOrderFromCurrentCart(paymentOptions, new XStoreCallback<CreateOrderResponse>() {
                 @Override
                 protected void onSuccess(CreateOrderResponse response) {
-                    XsollaSDK.createPaymentForm(getContext(), response.getToken(), true);
+                    Intent intent = XPaystation.createIntentBuilder(getContext())
+                            .token(response.getToken())
+                            .build();
+                    startActivityForResult(intent, RC_PAYSTATION);
                 }
 
                 @Override
@@ -94,5 +103,19 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
     @Override
     public void onCartEmpty() {
         openFragment(new MainFragment());
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_PAYSTATION) {
+            XPaystation.Result result = XPaystation.Result.fromResultIntent(data);
+            if (resultCode == Activity.RESULT_OK) {
+                Toast.makeText(getContext(), "OK\n" + result, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getContext(), "Fail\n" + result, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

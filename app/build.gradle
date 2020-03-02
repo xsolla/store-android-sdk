@@ -34,5 +34,5 @@ dependencies {
 
     implementation project(":xsolla-login-sdk")
     implementation project(":xsolla-store-sdk")
-    implementation 'com.xsolla.android:xsollasdk:2.3.3'
+    implementation project(":xsolla-paystation-sdk")
 }

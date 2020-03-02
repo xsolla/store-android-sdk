@@ -1,5 +1,7 @@
 package com.xsolla.android.storesdkexample.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.ViewGroup;
@@ -8,13 +10,14 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.bumptech.glide.Glide;
-import com.xsolla.android.sdk.XsollaSDK;
+import com.xsolla.android.paystation.XPaystation;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
@@ -29,6 +32,8 @@ import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import java.util.List;
 
 public class DetailFragment extends BaseFragment {
+
+    private static final int RC_PAYSTATION = 1;
 
     private RadioGroup radioGroup;
     private TextView checkoutButton;
@@ -157,7 +162,10 @@ public class DetailFragment extends BaseFragment {
                     @Override
                     protected void onSuccess(CreateOrderResponse response) {
                         String token = response.getToken();
-                        XsollaSDK.createPaymentForm(getContext(), token, true);
+                        Intent intent = XPaystation.createIntentBuilder(getContext())
+                                .token(token)
+                                .build();
+                        startActivityForResult(intent, RC_PAYSTATION);
                     }
 
                     @Override
@@ -183,6 +191,20 @@ public class DetailFragment extends BaseFragment {
             }
         });
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_PAYSTATION) {
+            XPaystation.Result result = XPaystation.Result.fromResultIntent(data);
+            if (resultCode == Activity.RESULT_OK) {
+                Toast.makeText(getContext(), "OK\n" + result, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getContext(), "Fail\n" + result, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
 }
