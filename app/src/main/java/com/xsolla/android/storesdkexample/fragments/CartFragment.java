@@ -17,6 +17,7 @@ import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
+import com.xsolla.android.storesdkexample.BuildConfig;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.CartAdapter;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
@@ -49,7 +50,7 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
         TextView checkoutButton = rootView.findViewById(R.id.checkout_button);
         checkoutButton.setOnClickListener(v -> {
             PaymentOptions paymentOptions = new PaymentOptions().create()
-                    .setSandbox(true)
+                    .setSandbox(BuildConfig.IS_SANDBOX)
                     .build();
 
             XStore.createOrderFromCurrentCart(paymentOptions, new XStoreCallback<CreateOrderResponse>() {
@@ -57,6 +58,7 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
                 protected void onSuccess(CreateOrderResponse response) {
                     Intent intent = XPaystation.createIntentBuilder(getContext())
                             .token(response.getToken())
+                            .isSandbox(BuildConfig.IS_SANDBOX)
                             .build();
                     startActivityForResult(intent, RC_PAYSTATION);
                 }

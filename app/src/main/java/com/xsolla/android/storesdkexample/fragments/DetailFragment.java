@@ -26,6 +26,7 @@ import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
+import com.xsolla.android.storesdkexample.BuildConfig;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 
@@ -155,7 +156,7 @@ public class DetailFragment extends BaseFragment {
 
             if (checkedIndex == 0) {
                 PaymentOptions options = new PaymentOptions().create()
-                        .setSandbox(true)
+                        .setSandbox(BuildConfig.IS_SANDBOX)
                         .build();
 
                 XStore.createOrderByItemSku(item.getSku(), options, new XStoreCallback<CreateOrderResponse>() {
@@ -164,6 +165,7 @@ public class DetailFragment extends BaseFragment {
                         String token = response.getToken();
                         Intent intent = XPaystation.createIntentBuilder(getContext())
                                 .token(token)
+                                .isSandbox(BuildConfig.IS_SANDBOX)
                                 .build();
                         startActivityForResult(intent, RC_PAYSTATION);
                     }
