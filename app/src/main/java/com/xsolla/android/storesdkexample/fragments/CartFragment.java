@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.xsolla.android.paystation.XPaystation;
+import com.xsolla.android.paystation.XPaystationWebView;
+import com.xsolla.android.paystation.data.AccessToken;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
@@ -56,8 +57,8 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
             XStore.createOrderFromCurrentCart(paymentOptions, new XStoreCallback<CreateOrderResponse>() {
                 @Override
                 protected void onSuccess(CreateOrderResponse response) {
-                    Intent intent = XPaystation.createIntentBuilder(getContext())
-                            .token(response.getToken())
+                    Intent intent = XPaystationWebView.createIntentBuilder(getContext())
+                            .accessToken(new AccessToken(response.getToken()))
                             .isSandbox(BuildConfig.IS_SANDBOX)
                             .build();
                     startActivityForResult(intent, RC_PAYSTATION);
@@ -112,7 +113,7 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_PAYSTATION) {
-            XPaystation.Result result = XPaystation.Result.fromResultIntent(data);
+            XPaystationWebView.Result result = XPaystationWebView.Result.fromResultIntent(data);
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(getContext(), "OK\n" + result, Toast.LENGTH_LONG).show();
             } else {

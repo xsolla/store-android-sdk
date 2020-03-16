@@ -4,7 +4,7 @@
 
     <application>
         <activity
-            android:name=".ui.ActivityPaystation"
+            android:name=".ui.ActivityPaystationWebView"
             android:configChanges="orientation|screenSize"
             android:theme="@style/xsolla_paystation_Theme" />
     </application>

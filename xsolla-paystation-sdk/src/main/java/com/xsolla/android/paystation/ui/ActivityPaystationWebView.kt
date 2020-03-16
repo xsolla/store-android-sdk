@@ -9,34 +9,28 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import com.xsolla.android.paystation.R
-import com.xsolla.android.paystation.XPaystation
+import com.xsolla.android.paystation.XPaystationWebView
 import kotlinx.android.synthetic.main.xsolla_paystation_activity_paystation.*
 
-class ActivityPaystation : AppCompatActivity() {
+class ActivityPaystationWebView : AppCompatActivity() {
 
     companion object {
-        const val ARG_TOKEN = "token"
-        const val ARG_SANDBOX = "sandbox"
+        const val ARG_URL = "token"
 
         const val RESULT = "result"
-
-        const val SERVER_SANDBOX = "sandbox-secure.xsolla.com"
-        const val SERVER_PROD = "secure.xsolla.com"
     }
 
-    private lateinit var token: String
-    private var isSandbox = true
+    private lateinit var url: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.xsolla_paystation_activity_paystation)
 
-        token = intent.getStringExtra(ARG_TOKEN) ?: ""
-        isSandbox = intent.getBooleanExtra(ARG_SANDBOX, true)
+        url = intent.getStringExtra(ARG_URL) ?: ""
 
         configureWebView()
 
-        webview.loadUrl(generateUrl())
+        webview.loadUrl(url)
     }
 
     override fun onBackPressed() {
@@ -45,7 +39,7 @@ class ActivityPaystation : AppCompatActivity() {
         } else {
             finishWithResult(
                     Activity.RESULT_CANCELED,
-                    XPaystation.Result("cancelled", null)
+                    XPaystationWebView.Result("cancelled", null)
             )
         }
     }
@@ -60,18 +54,19 @@ class ActivityPaystation : AppCompatActivity() {
 
             override fun doUpdateVisitedHistory(view: WebView, url: String, isReload: Boolean) {
                 val uri = Uri.parse(url)
-                if (uri.authority == getServer() && uri.queryParameterNames.contains("status")) {
+                // TODO check redirect setting from PA
+                if (uri.authority?.endsWith("xsolla.com") == true && uri.queryParameterNames.contains("status")) {
                     val status = uri.getQueryParameter("status")!!
                     val invoiceId = uri.getQueryParameter("invoice_id")
                     if (status == "done") {
                         finishWithResult(
                                 Activity.RESULT_OK,
-                                XPaystation.Result("done", invoiceId)
+                                XPaystationWebView.Result("done", invoiceId)
                         )
                     } else {
                         finishWithResult(
                                 Activity.RESULT_CANCELED,
-                                XPaystation.Result(status, invoiceId)
+                                XPaystationWebView.Result(status, invoiceId)
                         )
                     }
                 }
@@ -80,11 +75,7 @@ class ActivityPaystation : AppCompatActivity() {
         }
     }
 
-    private fun generateUrl() = "https://${getServer()}/paystation3/?access_token=$token"
-
-    private fun getServer() = if (isSandbox) SERVER_SANDBOX else SERVER_PROD
-
-    private fun finishWithResult(resultCode: Int, resultData: XPaystation.Result) {
+    private fun finishWithResult(resultCode: Int, resultData: XPaystationWebView.Result) {
         val intent = Intent()
         intent.putExtra(RESULT, resultData)
         setResult(resultCode, intent)
