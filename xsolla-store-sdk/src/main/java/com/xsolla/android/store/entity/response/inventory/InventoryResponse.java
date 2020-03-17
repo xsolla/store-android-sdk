@@ -21,7 +21,7 @@ public class InventoryResponse {
         private String type;
         private String name;
         private int quantity;
-        private String dexcription;
+        private String description;
         @SerializedName("image_url")
         String imageUrl;
         private List<Group> groups;
@@ -49,8 +49,8 @@ public class InventoryResponse {
             return quantity;
         }
 
-        public String getDexcription() {
-            return dexcription;
+        public String getDescription() {
+            return description;
         }
 
         public String getImageUrl() {
