@@ -66,8 +66,13 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
             Glide.with(itemView).load(item.getImageUrl()).into(itemIcon);
             itemName.setText(item.getName());
 
-            quantityLabel.setText(String.valueOf(item.getQuantity()));
+            if (item.getRemainingUses() == 0) {
+                quantityLabel.setVisibility(View.GONE);
+                consumeButton.setVisibility(View.GONE);
+                return;
+            }
 
+            quantityLabel.setText(String.valueOf(item.getQuantity()));
             consumeButton.setOnClickListener(v -> XStore.consumeItem(item.getSku(), 1, null, new XStoreCallback<Void>() {
                 @Override
                 protected void onSuccess(Void response) {
