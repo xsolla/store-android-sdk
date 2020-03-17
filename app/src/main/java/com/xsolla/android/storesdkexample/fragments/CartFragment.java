@@ -1,13 +1,19 @@
 package com.xsolla.android.storesdkexample.fragments;
 
+import android.content.Intent;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.xsolla.android.sdk.XsollaObject;
 import com.xsolla.android.sdk.XsollaSDK;
+import com.xsolla.android.sdk.api.model.XError;
+import com.xsolla.android.sdk.view.XsollaActivity;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
@@ -17,6 +23,8 @@ import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.CartAdapter;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.listener.UpdateCartListener;
+
+import static android.app.Activity.RESULT_OK;
 
 public class CartFragment extends BaseFragment implements UpdateCartListener {
 
@@ -49,7 +57,7 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
             XStore.createOrderFromCurrentCart(paymentOptions, new XStoreCallback<CreateOrderResponse>() {
                 @Override
                 protected void onSuccess(CreateOrderResponse response) {
-                    XsollaSDK.createPaymentForm(getContext(), response.getToken(), true);
+                    XsollaSDK.createPaymentForm(getActivity(), response.getToken(), true);
                 }
 
                 @Override
@@ -94,5 +102,31 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
     @Override
     public void onCartEmpty() {
         openFragment(new MainFragment());
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == XsollaActivity.REQUEST_CODE) {
+            if (data != null) {
+                if (resultCode == RESULT_OK) {
+                    showSnack("Payment is completed");
+
+                    XStore.clearCurrentCart(new XStoreCallback<Void>() {
+                        @Override
+                        protected void onSuccess(Void response) {
+                            openFragment(new MainFragment());
+                        }
+
+                        @Override
+                        protected void onFailure(String errorMessage) {
+                            showSnack(errorMessage);
+                        }
+                    });
+                } else {
+                    showSnack("Payment is canceled");
+                }
+            }
+        }
     }
 }
