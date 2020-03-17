@@ -126,16 +126,18 @@ public class DetailFragment extends BaseFragment {
     private void initPaymentMethodSelector() {
         Typeface font = ResourcesCompat.getFont(getContext(), R.font.roboto);
 
-        RadioButton button = new RadioButton(getContext());
-        button.setText(item.getPrice().getPrettyPrintAmount());
-        button.setTextSize(24f);
-        button.setTypeface(font);
-        radioGroup.addView(button);
+        if (item.getPrice() != null) {
+            RadioButton button = new RadioButton(getContext());
+            button.setText(item.getPrice().getPrettyPrintAmount());
+            button.setTextSize(24f);
+            button.setTypeface(font);
+            radioGroup.addView(button);
+        }
 
         List<VirtualPrice> virtualPrices = item.getVirtualPrices();
         for (VirtualPrice price : virtualPrices) {
             RadioButton radioButton = new RadioButton(getContext());
-            radioButton.setText(price.getAmount() + " " + price.getName());
+            radioButton.setText(price.getPrettyPrintAmount());
             radioButton.setTextSize(24f);
             radioButton.setTypeface(font);
             radioGroup.addView(radioButton);
