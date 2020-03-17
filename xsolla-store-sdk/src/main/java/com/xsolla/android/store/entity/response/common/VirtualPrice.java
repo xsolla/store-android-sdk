@@ -77,6 +77,10 @@ public class VirtualPrice implements Parcelable {
         return description;
     }
 
+    public String getPrettyPrintAmount() {
+        return getAmount() + " " + getName();
+    }
+
     @Override
     public int describeContents() {
         return 0;

@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
+import com.xsolla.android.store.entity.response.common.Price;
+import com.xsolla.android.store.entity.response.common.VirtualPrice;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.storesdkexample.listener.AddToCartListener;
 import com.xsolla.android.storesdkexample.R;
@@ -65,7 +67,16 @@ public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapte
         private void bind(final VirtualItemsResponse.Item item) {
             Glide.with(itemView).load(item.getImageUrl()).into(itemIcon);
             itemName.setText(item.getName());
-            itemPrice.setText(item.getPrice().getPrettyPrintAmount());
+
+            Price realPrice = item.getPrice();
+            List<VirtualPrice> virtualPrices = item.getVirtualPrices();
+
+            if (realPrice != null) {
+                itemPrice.setText(realPrice.getPrettyPrintAmount());
+            } else {
+                itemPrice.setText(virtualPrices.get(0).getPrettyPrintAmount());
+            }
+
 
             itemView.setOnClickListener(v -> addToCartListener.onItemClicked(item));
 
