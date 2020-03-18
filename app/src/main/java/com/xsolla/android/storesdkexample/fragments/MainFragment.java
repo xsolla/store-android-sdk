@@ -29,7 +29,7 @@ public class MainFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String token = XLogin.getToken();
-        XStore.init(48017, token);
+        XStore.init(53916, token);
     }
 
     @Override

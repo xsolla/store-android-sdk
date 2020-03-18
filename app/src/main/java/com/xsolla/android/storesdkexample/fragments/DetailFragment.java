@@ -17,7 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.bumptech.glide.Glide;
-import com.xsolla.android.paystation.XPaystationWebView;
+import com.xsolla.android.paystation.XPaystationBrowser;
 import com.xsolla.android.paystation.data.AccessToken;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
@@ -164,7 +164,7 @@ public class DetailFragment extends BaseFragment {
                     @Override
                     protected void onSuccess(CreateOrderResponse response) {
                         String token = response.getToken();
-                        Intent intent = XPaystationWebView.createIntentBuilder(getContext())
+                        Intent intent = XPaystationBrowser.createIntentBuilder(getContext())
                                 .accessToken(new AccessToken(token))
                                 .isSandbox(BuildConfig.IS_SANDBOX)
                                 .build();
@@ -201,7 +201,7 @@ public class DetailFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_PAYSTATION) {
-            XPaystationWebView.Result result = XPaystationWebView.Result.fromResultIntent(data);
+            XPaystationBrowser.Result result = XPaystationBrowser.Result.fromResultIntent(data);
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(getContext(), "OK\n" + result, Toast.LENGTH_LONG).show();
             } else {
