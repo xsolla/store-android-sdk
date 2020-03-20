@@ -9,8 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.xsolla.android.paystation.XPaystationBrowser
-import com.xsolla.android.paystation.XPaystationWebView
+import com.xsolla.android.paystation.XPaystation
 import com.xsolla.android.paystationsample.R
 import kotlinx.android.synthetic.main.fragment_paystation.*
 
@@ -53,7 +52,7 @@ class FragmentPaystation : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_PAYSTATION) {
-            val result = XPaystationWebView.Result.fromResultIntent(data)
+            val result = XPaystation.Result.fromResultIntent(data)
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(context, "OK\n$result", Toast.LENGTH_LONG).show()
             } else {
@@ -64,9 +63,10 @@ class FragmentPaystation : Fragment() {
 
     private fun openWebviewWithToken() {
         context?.let {
-            val intent = XPaystationWebView.createIntentBuilder(it)
+            val intent = XPaystation.createIntentBuilder(it)
                     .accessToken(viewModel.getAccessToken())
                     .isSandbox(viewModel.isSandbox())
+                    .useWebview(true)
                     .build()
             startActivityForResult(intent, RC_PAYSTATION)
         }
@@ -74,27 +74,34 @@ class FragmentPaystation : Fragment() {
 
     private fun openWebviewWithData() {
         context?.let {
-            val intent = XPaystationWebView.createIntentBuilder(it)
+            val intent = XPaystation.createIntentBuilder(it)
                     .accessData(viewModel.getAccessData())
                     .isSandbox(viewModel.isSandbox())
+                    .useWebview(true)
                     .build()
             startActivityForResult(intent, RC_PAYSTATION)
         }
     }
 
     private fun openBrowserWithToken() {
-        val intent = XPaystationBrowser.createIntentBuilder()
-                .accessToken(viewModel.getAccessToken())
-                .isSandbox(viewModel.isSandbox())
-                .build()
-        startActivity(intent)
+        context?.let {
+            val intent = XPaystation.createIntentBuilder(it)
+                    .accessToken(viewModel.getAccessToken())
+                    .isSandbox(viewModel.isSandbox())
+                    .useWebview(false)
+                    .build()
+            startActivityForResult(intent, RC_PAYSTATION)
+        }
     }
 
     private fun openBrowserWithData() {
-        val intent = XPaystationBrowser.createIntentBuilder()
-                .accessData(viewModel.getAccessData())
-                .isSandbox(viewModel.isSandbox())
-                .build()
-        startActivity(intent)
+        context?.let {
+            val intent = XPaystation.createIntentBuilder(it)
+                    .accessData(viewModel.getAccessData())
+                    .isSandbox(viewModel.isSandbox())
+                    .useWebview(false)
+                    .build()
+            startActivityForResult(intent, RC_PAYSTATION)
+        }
     }
 }

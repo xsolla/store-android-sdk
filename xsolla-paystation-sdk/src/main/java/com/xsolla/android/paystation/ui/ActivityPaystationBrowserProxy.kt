@@ -4,57 +4,73 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.xsolla.android.paystation.XPaystationBrowser
+import com.xsolla.android.paystation.XPaystation
 
-class ActivityPaystationBrowserProxy : AppCompatActivity() {
+class ActivityPaystationBrowserProxy : ActivityPaystation() {
 
-    companion object {
-        const val ARG_URL = "token"
-
-        const val RESULT = "result"
-    }
-
+    private var needStartBrowser = false
     private lateinit var url: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        url = intent.getStringExtra(ARG_URL) ?: ""
+        val url = intent.getStringExtra(ARG_URL)
+        if (url == null) {
+            finish()
+            return
+        }
         if (savedInstanceState == null) {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(url)
-            startActivity(intent) //TODO check browser availability
+            needStartBrowser = true
+            this.url = url
         }
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         val uri = intent?.data
-        uri?.let {
-            val status = uri.getQueryParameter("status")!!
-            val invoiceId = uri.getQueryParameter("invoice_id")
-            if (status == "done") {
+        if (uri == null) {
+            finish()
+            return
+        }
+        val status = uri.getQueryParameter("status")
+        val invoiceId = uri.getQueryParameter("invoice_id")
+        when {
+            status == "done" -> {
                 finishWithResult(
                         Activity.RESULT_OK,
-                        XPaystationBrowser.Result("done", invoiceId)
+                        XPaystation.Result("done", invoiceId)
                 )
-            } else {
+            }
+            status != null -> {
                 finishWithResult(
                         Activity.RESULT_CANCELED,
-                        XPaystationBrowser.Result(status, invoiceId)
+                        XPaystation.Result(status, invoiceId)
+                )
+            }
+            else -> {
+                finishWithResult(
+                        Activity.RESULT_CANCELED,
+                        XPaystation.Result("unknown", invoiceId)
                 )
             }
         }
     }
 
-    override fun onBackPressed() {
-        finishWithResult(
-                Activity.RESULT_CANCELED,
-                XPaystationBrowser.Result("cancelled", null)
-        )
+    override fun onResume() {
+        super.onResume()
+        if (needStartBrowser) {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(url)
+            startActivity(intent)
+            needStartBrowser = false
+        } else {
+            finishWithResult(
+                    Activity.RESULT_CANCELED,
+                    XPaystation.Result("cancelled", null)
+            )
+        }
     }
 
-    private fun finishWithResult(resultCode: Int, resultData: XPaystationBrowser.Result) {
+    private fun finishWithResult(resultCode: Int, resultData: XPaystation.Result) {
         val intent = Intent()
         intent.putExtra(RESULT, resultData)
         setResult(resultCode, intent)

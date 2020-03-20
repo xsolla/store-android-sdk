@@ -13,9 +13,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
-                    android:host="artyomnikolaev.github.io"
-                    android:pathPrefix="/payment"
-                    android:scheme="https" />
+                    android:scheme="@string/xsolla_paystation_redirect_scheme"
+                    android:host="@string/xsolla_paystation_redirect_host"
+                    android:pathPrefix="@string/xsolla_paystation_redirect_path_prefix" />
             </intent-filter>
         </activity>
         <activity

@@ -7,18 +7,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.appcompat.app.AppCompatActivity
 import com.xsolla.android.paystation.R
-import com.xsolla.android.paystation.XPaystationWebView
+import com.xsolla.android.paystation.XPaystation
 import kotlinx.android.synthetic.main.xsolla_paystation_activity_paystation.*
 
-class ActivityPaystationWebView : AppCompatActivity() {
-
-    companion object {
-        const val ARG_URL = "token"
-
-        const val RESULT = "result"
-    }
+class ActivityPaystationWebView : ActivityPaystation() {
 
     private lateinit var url: String
 
@@ -26,10 +19,9 @@ class ActivityPaystationWebView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.xsolla_paystation_activity_paystation)
 
-        url = intent.getStringExtra(ARG_URL) ?: ""
+        url = intent.getStringExtra(ARG_URL)!!
 
         configureWebView()
-
         webview.loadUrl(url)
     }
 
@@ -39,7 +31,7 @@ class ActivityPaystationWebView : AppCompatActivity() {
         } else {
             finishWithResult(
                     Activity.RESULT_CANCELED,
-                    XPaystationWebView.Result("cancelled", null)
+                    XPaystation.Result("cancelled", null)
             )
         }
     }
@@ -54,20 +46,28 @@ class ActivityPaystationWebView : AppCompatActivity() {
 
             override fun doUpdateVisitedHistory(view: WebView, url: String, isReload: Boolean) {
                 val uri = Uri.parse(url)
-                // TODO check redirect setting from PA
-                if (uri.authority?.endsWith("xsolla.com") == true && uri.queryParameterNames.contains("status")) {
-                    val status = uri.getQueryParameter("status")!!
+                if (uri.authority == getString(R.string.xsolla_paystation_redirect_host)) {
+                    val status = uri.getQueryParameter("status")
                     val invoiceId = uri.getQueryParameter("invoice_id")
-                    if (status == "done") {
-                        finishWithResult(
-                                Activity.RESULT_OK,
-                                XPaystationWebView.Result("done", invoiceId)
-                        )
-                    } else {
-                        finishWithResult(
-                                Activity.RESULT_CANCELED,
-                                XPaystationWebView.Result(status, invoiceId)
-                        )
+                    when {
+                        status == "done" -> {
+                            finishWithResult(
+                                    Activity.RESULT_OK,
+                                    XPaystation.Result("done", invoiceId)
+                            )
+                        }
+                        status != null -> {
+                            finishWithResult(
+                                    Activity.RESULT_CANCELED,
+                                    XPaystation.Result(status, invoiceId)
+                            )
+                        }
+                        else -> {
+                            finishWithResult(
+                                    Activity.RESULT_CANCELED,
+                                    XPaystation.Result("unknown", invoiceId)
+                            )
+                        }
                     }
                 }
                 super.doUpdateVisitedHistory(view, url, isReload)
@@ -75,7 +75,7 @@ class ActivityPaystationWebView : AppCompatActivity() {
         }
     }
 
-    private fun finishWithResult(resultCode: Int, resultData: XPaystationWebView.Result) {
+    private fun finishWithResult(resultCode: Int, resultData: XPaystation.Result) {
         val intent = Intent()
         intent.putExtra(RESULT, resultData)
         setResult(resultCode, intent)
