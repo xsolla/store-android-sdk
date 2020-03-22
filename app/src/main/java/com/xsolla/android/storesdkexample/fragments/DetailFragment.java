@@ -18,6 +18,7 @@ import com.xsolla.android.sdk.XsollaSDK;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
+import com.xsolla.android.store.entity.response.common.Price;
 import com.xsolla.android.store.entity.response.common.VirtualPrice;
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
@@ -148,43 +149,57 @@ public class DetailFragment extends BaseFragment {
         checkoutButton.setOnClickListener(v -> {
             if (checkedIndex == -1) {
                 showSnack("Please select payment method");
+                return;
             }
 
-            if (checkedIndex == 0) {
-                PaymentOptions options = new PaymentOptions().create()
-                        .setSandbox(true)
-                        .build();
+            Price realPrice = item.getPrice();
 
-                XStore.createOrderByItemSku(item.getSku(), options, new XStoreCallback<CreateOrderResponse>() {
-                    @Override
-                    protected void onSuccess(CreateOrderResponse response) {
-                        String token = response.getToken();
-                        XsollaSDK.createPaymentForm(getContext(), token, true);
-                    }
-
-                    @Override
-                    protected void onFailure(String errorMessage) {
-                        showSnack(errorMessage);
-                    }
-                });
-
+            if (realPrice != null) {
+                if (checkedIndex == 0) {
+                    buyWithRealCurrency();
+                } else {
+                    buyWithVirtualCurrency(checkedIndex - 1);
+                }
             } else {
-                VirtualPrice virtualPrice = item.getVirtualPrices().get(checkedIndex - 1);
-                XStore.createOrderByVirtualCurrency(item.getSku(), virtualPrice.getSku(), new XStoreCallback<CreateOrderByVirtualCurrencyResponse>() {
-                    @Override
-                    protected void onSuccess(CreateOrderByVirtualCurrencyResponse response) {
-                        showSnack("Purchased by Virtual currency");
-                        openFragment(new MainFragment());
-                    }
-
-                    @Override
-                    protected void onFailure(String errorMessage) {
-                        showSnack(errorMessage);
-                    }
-                });
+                buyWithVirtualCurrency(checkedIndex);
             }
         });
+    }
 
+    private void buyWithRealCurrency() {
+        PaymentOptions options = new PaymentOptions().create()
+                .setSandbox(true)
+                .build();
+
+        XStore.createOrderByItemSku(item.getSku(), options, new XStoreCallback<CreateOrderResponse>() {
+            @Override
+            protected void onSuccess(CreateOrderResponse response) {
+                String token = response.getToken();
+                XsollaSDK.createPaymentForm(getContext(), token, true);
+            }
+
+            @Override
+            protected void onFailure(String errorMessage) {
+                showSnack(errorMessage);
+            }
+        });
+    }
+
+    private void buyWithVirtualCurrency(int virtualPriceIndex) {
+        VirtualPrice virtualPrice = item.getVirtualPrices().get(virtualPriceIndex);
+
+        XStore.createOrderByVirtualCurrency(item.getSku(), virtualPrice.getSku(), new XStoreCallback<CreateOrderByVirtualCurrencyResponse>() {
+            @Override
+            protected void onSuccess(CreateOrderByVirtualCurrencyResponse response) {
+                showSnack("Purchased by Virtual currency");
+                openFragment(new MainFragment());
+            }
+
+            @Override
+            protected void onFailure(String errorMessage) {
+                showSnack(errorMessage);
+            }
+        });
     }
 
 }
