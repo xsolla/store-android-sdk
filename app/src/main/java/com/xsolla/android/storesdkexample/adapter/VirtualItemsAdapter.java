@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,8 +16,9 @@ import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.common.Price;
 import com.xsolla.android.store.entity.response.common.VirtualPrice;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
-import com.xsolla.android.storesdkexample.listener.AddToCartListener;
+import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse;
 import com.xsolla.android.storesdkexample.R;
+import com.xsolla.android.storesdkexample.listener.AddToCartListener;
 
 import java.util.List;
 
@@ -54,14 +54,14 @@ public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapte
         ImageView itemIcon;
         TextView itemName;
         TextView itemPrice;
-        ImageView addToCartButton;
+        ImageView buyButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             itemIcon = itemView.findViewById(R.id.item_icon);
             itemName = itemView.findViewById(R.id.item_name);
             itemPrice = itemView.findViewById(R.id.item_price);
-            addToCartButton = itemView.findViewById(R.id.buy_button);
+            buyButton = itemView.findViewById(R.id.buy_button);
         }
 
         private void bind(final VirtualItemsResponse.Item item) {
@@ -71,21 +71,28 @@ public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapte
             Price realPrice = item.getPrice();
             List<VirtualPrice> virtualPrices = item.getVirtualPrices();
 
-            if (realPrice != null) {
-                itemPrice.setText(realPrice.getPrettyPrintAmount());
-            } else {
+            if (!virtualPrices.isEmpty()) {
                 itemPrice.setText(virtualPrices.get(0).getPrettyPrintAmount());
+                buyButton.setImageResource(R.drawable.ic_buy_button);
+                initForVirtualCurrency(item);
+                return;
             }
 
+            if (realPrice != null) {
+                itemView.setOnClickListener(v -> addToCartListener.onItemClicked(item));
+                itemPrice.setText(realPrice.getPrettyPrintAmount());
+                buyButton.setImageResource(R.drawable.ic_add_to_cart_button);
+                initForRealCurrency(item);
+            }
+        }
 
-            itemView.setOnClickListener(v -> addToCartListener.onItemClicked(item));
-
-            addToCartButton.setOnClickListener(v -> XStore.getCurrentCart(new XStoreCallback<CartResponse>() {
+        private void initForRealCurrency(VirtualItemsResponse.Item item) {
+            buyButton.setOnClickListener(v -> XStore.getCurrentCart(new XStoreCallback<CartResponse>() {
                 @Override
                 protected void onSuccess(CartResponse response) {
                     int quantity = 1;
 
-                    for (CartResponse.Item cartItem: response.getItems()) {
+                    for (CartResponse.Item cartItem : response.getItems()) {
                         if (cartItem.getSku().equals(item.getSku())) {
                             quantity += cartItem.getQuantity();
                         }
@@ -111,6 +118,23 @@ public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapte
             }));
         }
 
+        private void initForVirtualCurrency(VirtualItemsResponse.Item item) {
+            VirtualPrice virtualPrice = item.getVirtualPrices().get(0);
+
+            buyButton.setOnClickListener(v -> {
+                XStore.createOrderByVirtualCurrency(item.getSku(), virtualPrice.getSku(), new XStoreCallback<CreateOrderByVirtualCurrencyResponse>() {
+                    @Override
+                    protected void onSuccess(CreateOrderByVirtualCurrencyResponse response) {
+                        addToCartListener.showMessage("Purchased by Virtual currency");
+                    }
+
+                    @Override
+                    protected void onFailure(String errorMessage) {
+                        addToCartListener.showMessage(errorMessage);
+                    }
+                });
+            });
+        }
     }
 
 }
