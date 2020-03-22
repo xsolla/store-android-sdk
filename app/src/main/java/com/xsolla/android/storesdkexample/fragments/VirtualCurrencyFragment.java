@@ -69,4 +69,9 @@ public class VirtualCurrencyFragment extends CatalogFragment implements AddToCar
     public void onItemClicked(VirtualItemsResponse.Item item) {
         showSnack("Item clicked");
     }
+
+    @Override
+    public void showMessage(String message) {
+        showSnack(message);
+    }
 }

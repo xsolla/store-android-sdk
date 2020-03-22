@@ -70,4 +70,8 @@ public class PhysicalItemsFragment extends CatalogFragment implements AddToCartL
         showSnack("Item clicked");
     }
 
+    @Override
+    public void showMessage(String message) {
+        showSnack(message);
+    }
 }

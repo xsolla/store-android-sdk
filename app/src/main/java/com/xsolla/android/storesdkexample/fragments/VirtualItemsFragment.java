@@ -68,4 +68,9 @@ public class VirtualItemsFragment extends CatalogFragment implements AddToCartLi
         DetailFragment detailFragment = DetailFragment.newInstance(item);
         openFragment(detailFragment);
     }
+
+    @Override
+    public void showMessage(String message) {
+        showSnack(message);
+    }
 }

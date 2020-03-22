@@ -9,4 +9,6 @@ public interface AddToCartListener {
     void onFailure(String errorMessage);
 
     void onItemClicked(VirtualItemsResponse.Item item);
+
+    void showMessage(String message);
 }
