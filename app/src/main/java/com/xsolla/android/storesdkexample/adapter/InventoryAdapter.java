@@ -70,6 +70,9 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
                 quantityLabel.setVisibility(View.GONE);
                 consumeButton.setVisibility(View.GONE);
                 return;
+            } else {
+                quantityLabel.setVisibility(View.VISIBLE);
+                consumeButton.setVisibility(View.VISIBLE);
             }
 
             quantityLabel.setText(String.valueOf(item.getQuantity()));
