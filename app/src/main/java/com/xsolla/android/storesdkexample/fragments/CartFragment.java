@@ -1,9 +1,8 @@
 package com.xsolla.android.storesdkexample.fragments;
 
-import android.content.Intent;
 import android.app.Activity;
+import android.content.Intent;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -13,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.xsolla.android.paystation.XPaystation;
 import com.xsolla.android.paystation.data.AccessToken;
-import com.xsolla.android.sdk.api.model.XError;
-import com.xsolla.android.sdk.view.XsollaActivity;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
@@ -25,8 +22,6 @@ import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.CartAdapter;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.listener.UpdateCartListener;
-
-import static android.app.Activity.RESULT_OK;
 
 public class CartFragment extends BaseFragment implements UpdateCartListener {
 
