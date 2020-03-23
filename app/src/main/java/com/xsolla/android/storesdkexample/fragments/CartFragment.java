@@ -1,6 +1,7 @@
 package com.xsolla.android.storesdkexample.fragments;
 
 import android.content.Intent;
+import android.app.Activity;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -10,8 +11,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.xsolla.android.sdk.XsollaObject;
-import com.xsolla.android.sdk.XsollaSDK;
+import com.xsolla.android.paystation.XPaystation;
+import com.xsolla.android.paystation.data.AccessToken;
 import com.xsolla.android.sdk.api.model.XError;
 import com.xsolla.android.sdk.view.XsollaActivity;
 import com.xsolla.android.store.XStore;
@@ -19,6 +20,7 @@ import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
+import com.xsolla.android.storesdkexample.BuildConfig;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.CartAdapter;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
@@ -27,6 +29,8 @@ import com.xsolla.android.storesdkexample.listener.UpdateCartListener;
 import static android.app.Activity.RESULT_OK;
 
 public class CartFragment extends BaseFragment implements UpdateCartListener {
+
+    private static final int RC_PAYSTATION = 1;
 
     private RecyclerView recyclerView;
     private CartAdapter cartAdapter;
@@ -51,13 +55,17 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
         TextView checkoutButton = rootView.findViewById(R.id.checkout_button);
         checkoutButton.setOnClickListener(v -> {
             PaymentOptions paymentOptions = new PaymentOptions().create()
-                    .setSandbox(true)
+                    .setSandbox(BuildConfig.IS_SANDBOX)
                     .build();
 
             XStore.createOrderFromCurrentCart(paymentOptions, new XStoreCallback<CreateOrderResponse>() {
                 @Override
                 protected void onSuccess(CreateOrderResponse response) {
-                    XsollaSDK.createPaymentForm(getActivity(), response.getToken(), true);
+                    Intent intent = XPaystation.createIntentBuilder(getContext())
+                            .accessToken(new AccessToken(response.getToken()))
+                            .isSandbox(BuildConfig.IS_SANDBOX)
+                            .build();
+                    startActivityForResult(intent, RC_PAYSTATION);
                 }
 
                 @Override
@@ -107,25 +115,24 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == XsollaActivity.REQUEST_CODE) {
-            if (data != null) {
-                if (resultCode == RESULT_OK) {
-                    showSnack("Payment is completed");
 
-                    XStore.clearCurrentCart(new XStoreCallback<Void>() {
-                        @Override
-                        protected void onSuccess(Void response) {
-                            openFragment(new MainFragment());
-                        }
+        if (requestCode == RC_PAYSTATION) {
+            XPaystation.Result result = XPaystation.Result.fromResultIntent(data);
+            if (resultCode == Activity.RESULT_OK) {
+                showSnack("Payment is completed");
+                XStore.clearCurrentCart(new XStoreCallback<Void>() {
+                    @Override
+                    protected void onSuccess(Void response) {
+                        openFragment(new MainFragment());
+                    }
 
-                        @Override
-                        protected void onFailure(String errorMessage) {
-                            showSnack(errorMessage);
-                        }
-                    });
-                } else {
-                    showSnack("Payment is canceled");
-                }
+                    @Override
+                    protected void onFailure(String errorMessage) {
+                        showSnack(errorMessage);
+                    }
+                });
+            } else {
+                showSnack("Payment is canceled");
             }
         }
     }

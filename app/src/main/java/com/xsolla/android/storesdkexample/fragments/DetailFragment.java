@@ -1,23 +1,31 @@
 package com.xsolla.android.storesdkexample.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
-import com.xsolla.android.sdk.XsollaSDK;
+import com.xsolla.android.paystation.XPaystation;
+import com.xsolla.android.paystation.data.AccessToken;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
+import com.xsolla.android.storesdkexample.BuildConfig;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 
 public class DetailFragment extends BaseFragment {
+
+    private static final int RC_PAYSTATION = 1;
 
     private TextView checkoutButton;
 
@@ -67,14 +75,18 @@ public class DetailFragment extends BaseFragment {
         checkoutButton.setText(buttonText);
         checkoutButton.setOnClickListener(v -> {
             PaymentOptions options = new PaymentOptions().create()
-                    .setSandbox(true)
+                    .setSandbox(BuildConfig.IS_SANDBOX)
                     .build();
 
             XStore.createOrderByItemSku(item.getSku(), options, new XStoreCallback<CreateOrderResponse>() {
                 @Override
                 protected void onSuccess(CreateOrderResponse response) {
                     String token = response.getToken();
-                    XsollaSDK.createPaymentForm(getContext(), token, true);
+                    Intent intent = XPaystation.createIntentBuilder(getContext())
+                                .accessToken(new AccessToken(token))
+                                .isSandbox(BuildConfig.IS_SANDBOX)
+                                .build();
+                        startActivityForResult(intent, RC_PAYSTATION);
                 }
 
                 @Override
@@ -83,6 +95,20 @@ public class DetailFragment extends BaseFragment {
                 }
             });
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_PAYSTATION) {
+            XPaystation.Result result = XPaystation.Result.fromResultIntent(data);
+            if (resultCode == Activity.RESULT_OK) {
+                Toast.makeText(getContext(), "OK\n" + result, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getContext(), "Fail\n" + result, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
 }

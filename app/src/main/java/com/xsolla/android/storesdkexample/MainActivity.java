@@ -9,13 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.xsolla.android.login.XLogin;
 import com.xsolla.android.storesdkexample.fragments.AuthFragment;
 import com.xsolla.android.storesdkexample.fragments.MainFragment;
-import com.xsolla.android.login.XLogin;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String LOGIN_PROJECT_ID = "753ec123-3245-11ea-b687-42010aa80004"; // Replace to your Login Project Id
+    private final String LOGIN_PROJECT_ID = "17d7cb3e-684f-11ea-b687-42010aa80004"; // Replace to your Login Project Id
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
