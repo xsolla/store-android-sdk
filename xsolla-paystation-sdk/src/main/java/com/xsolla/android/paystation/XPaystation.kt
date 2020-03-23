@@ -3,6 +3,7 @@ package com.xsolla.android.paystation
 import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
+import android.util.Log
 import androidx.core.os.bundleOf
 import com.xsolla.android.paystation.data.AccessData
 import com.xsolla.android.paystation.data.AccessToken
@@ -34,20 +35,25 @@ class XPaystation {
         fun useWebview(useWebview: Boolean) = apply { this.useWebview = useWebview }
 
         fun build(): Intent {
+            val url = generateUrl()
             val intent = Intent()
-            intent.setClass(context, getActivityClass())
+            intent.setClass(context, getActivityClass(url))
             intent.putExtras(bundleOf(
-                    ActivityPaystation.ARG_URL to generateUrl()
+                    ActivityPaystation.ARG_URL to url
             ))
             return intent
         }
 
-        private fun getActivityClass() =
+        private fun getActivityClass(url: String) =
                 if (useWebview) {
                     ActivityPaystationWebView::class.java
                 } else {
-                    //TODO check browser availability
-                    ActivityPaystationBrowserProxy::class.java
+                    if (ActivityPaystationBrowserProxy.checkAvailability(context, url)) {
+                        ActivityPaystationBrowserProxy::class.java
+                    } else {
+                        Log.d(XPaystation::class.java.simpleName, "Browser is not available")
+                        ActivityPaystationWebView::class.java
+                    }
                 }
 
         private fun generateUrl(): String {
@@ -63,15 +69,20 @@ class XPaystation {
         private fun getServer() = if (isSandbox) SERVER_SANDBOX else SERVER_PROD
     }
 
-    //TODO list all possible statuses
     @Parcelize
-    data class Result(val status: String, val invoiceId: String?) : Parcelable {
+    data class Result(val status: Status, val invoiceId: String?) : Parcelable {
         companion object {
             @JvmStatic
             fun fromResultIntent(intent: Intent?): Result =
                     intent?.getParcelableExtra(ActivityPaystation.RESULT)
-                            ?: Result("unknown", null)
+                            ?: Result(Status.UNKNOWN, null)
         }
+    }
+
+    enum class Status {
+        COMPLETED,
+        CANCELLED,
+        UNKNOWN
     }
 
 }

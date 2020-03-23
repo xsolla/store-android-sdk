@@ -31,7 +31,7 @@ class ActivityPaystationWebView : ActivityPaystation() {
         } else {
             finishWithResult(
                     Activity.RESULT_CANCELED,
-                    XPaystation.Result("cancelled", null)
+                    XPaystation.Result(XPaystation.Status.CANCELLED, null)
             )
         }
     }
@@ -47,28 +47,11 @@ class ActivityPaystationWebView : ActivityPaystation() {
             override fun doUpdateVisitedHistory(view: WebView, url: String, isReload: Boolean) {
                 val uri = Uri.parse(url)
                 if (uri.authority == getString(R.string.xsolla_paystation_redirect_host)) {
-                    val status = uri.getQueryParameter("status")
                     val invoiceId = uri.getQueryParameter("invoice_id")
-                    when {
-                        status == "done" -> {
-                            finishWithResult(
-                                    Activity.RESULT_OK,
-                                    XPaystation.Result("done", invoiceId)
-                            )
-                        }
-                        status != null -> {
-                            finishWithResult(
-                                    Activity.RESULT_CANCELED,
-                                    XPaystation.Result(status, invoiceId)
-                            )
-                        }
-                        else -> {
-                            finishWithResult(
-                                    Activity.RESULT_CANCELED,
-                                    XPaystation.Result("unknown", invoiceId)
-                            )
-                        }
-                    }
+                    finishWithResult(
+                            Activity.RESULT_OK,
+                            XPaystation.Result(XPaystation.Status.COMPLETED, invoiceId)
+                    )
                 }
                 super.doUpdateVisitedHistory(view, url, isReload)
             }

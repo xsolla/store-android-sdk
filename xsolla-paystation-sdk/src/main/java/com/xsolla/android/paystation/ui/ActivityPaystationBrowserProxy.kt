@@ -1,12 +1,24 @@
 package com.xsolla.android.paystation.ui
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import com.xsolla.android.paystation.XPaystation
 
 class ActivityPaystationBrowserProxy : ActivityPaystation() {
+
+    companion object {
+        private fun createIntent(url: String): Intent {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(url)
+            return intent
+        }
+
+        fun checkAvailability(context: Context, url: String) =
+                createIntent(url).resolveActivity(context.packageManager) != null
+    }
 
     private var needStartBrowser = false
     private lateinit var url: String
@@ -31,41 +43,22 @@ class ActivityPaystationBrowserProxy : ActivityPaystation() {
             finish()
             return
         }
-        val status = uri.getQueryParameter("status")
         val invoiceId = uri.getQueryParameter("invoice_id")
-        when {
-            status == "done" -> {
-                finishWithResult(
-                        Activity.RESULT_OK,
-                        XPaystation.Result("done", invoiceId)
-                )
-            }
-            status != null -> {
-                finishWithResult(
-                        Activity.RESULT_CANCELED,
-                        XPaystation.Result(status, invoiceId)
-                )
-            }
-            else -> {
-                finishWithResult(
-                        Activity.RESULT_CANCELED,
-                        XPaystation.Result("unknown", invoiceId)
-                )
-            }
-        }
+        finishWithResult(
+                Activity.RESULT_OK,
+                XPaystation.Result(XPaystation.Status.COMPLETED, invoiceId)
+        )
     }
 
     override fun onResume() {
         super.onResume()
         if (needStartBrowser) {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(url)
-            startActivity(intent)
+            startActivity(createIntent(url))
             needStartBrowser = false
         } else {
             finishWithResult(
                     Activity.RESULT_CANCELED,
-                    XPaystation.Result("cancelled", null)
+                    XPaystation.Result(XPaystation.Status.CANCELLED, null)
             )
         }
     }
