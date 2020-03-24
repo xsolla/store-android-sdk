@@ -9,6 +9,7 @@ import com.xsolla.android.login.entity.response.SocialAuthResponse;
 import com.xsolla.android.login.social.SocialNetwork;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
+import com.xsolla.android.storesdkexample.util.ViewUtils;
 
 public class AuthFragment extends BaseFragment {
 
@@ -35,24 +36,25 @@ public class AuthFragment extends BaseFragment {
         final TextView passwordInput = rootView.findViewById(R.id.password_input);
 
         rootView.findViewById(R.id.login_button).setOnClickListener(v -> {
+            ViewUtils.disable(v);
+
             hideKeyboard();
             String username = usernameInput.getText().toString();
             String password = passwordInput.getText().toString();
-
 
             XLogin.login(username, password, new XLoginCallback<AuthResponse>() {
                 @Override
                 protected void onSuccess(AuthResponse response) {
                     openFragment(new MainFragment());
+                    ViewUtils.enable(v);
                 }
 
                 @Override
                 protected void onFailure(String errorMessage) {
                     showSnack(errorMessage);
+                    ViewUtils.enable(v);
                 }
             });
-
-
         });
 
         rootView.findViewById(R.id.forgot_password_button).setOnClickListener(v -> openFragment(new ResetPasswordFragment()));
