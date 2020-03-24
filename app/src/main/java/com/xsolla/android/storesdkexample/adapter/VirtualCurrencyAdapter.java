@@ -16,6 +16,7 @@ import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.listener.AddToCartListener;
+import com.xsolla.android.storesdkexample.util.ViewUtils;
 
 import java.util.List;
 
@@ -66,42 +67,40 @@ public class VirtualCurrencyAdapter extends RecyclerView.Adapter<VirtualCurrency
             itemName.setText(item.getName());
             itemPrice.setText(item.getPrice().getPrettyPrintAmount());
 
-            addToCartButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            addToCartButton.setOnClickListener(v -> {
+                ViewUtils.disable(v);
+                XStore.getCurrentCart(new XStoreCallback<CartResponse>() {
+                    @Override
+                    protected void onSuccess(CartResponse response) {
+                        int quantity = 1;
 
-                    XStore.getCurrentCart(new XStoreCallback<CartResponse>() {
-                        @Override
-                        protected void onSuccess(CartResponse response) {
-                            int quantity = 1;
+                        for (CartResponse.Item cartItem: response.getItems()) {
+                            if (cartItem.getSku().equals(item.getSku())) {
+                                quantity += cartItem.getQuantity();
+                            }
+                        }
 
-                            for (CartResponse.Item cartItem: response.getItems()) {
-                                if (cartItem.getSku().equals(item.getSku())) {
-                                    quantity += cartItem.getQuantity();
-                                }
+                        XStore.updateItemFromCurrentCart(item.getSku(), quantity, new XStoreCallback<Void>() {
+                            @Override
+                            protected void onSuccess(Void response) {
+                                addToCartListener.onSuccess();
+                                ViewUtils.enable(v);
                             }
 
-                            XStore.updateItemFromCurrentCart(item.getSku(), quantity, new XStoreCallback<Void>() {
-                                @Override
-                                protected void onSuccess(Void response) {
-                                    addToCartListener.onSuccess();
-                                }
+                            @Override
+                            protected void onFailure(String errorMessage) {
+                                addToCartListener.onFailure(errorMessage);
+                                ViewUtils.enable(v);
+                            }
+                        });
+                    }
 
-                                @Override
-                                protected void onFailure(String errorMessage) {
-                                    addToCartListener.onFailure(errorMessage);
-                                }
-                            });
-                        }
-
-                        @Override
-                        protected void onFailure(String errorMessage) {
-                            addToCartListener.onFailure(errorMessage);
-                        }
-                    });
-
-
-                }
+                    @Override
+                    protected void onFailure(String errorMessage) {
+                        addToCartListener.onFailure(errorMessage);
+                        ViewUtils.enable(v);
+                    }
+                });
             });
         }
 

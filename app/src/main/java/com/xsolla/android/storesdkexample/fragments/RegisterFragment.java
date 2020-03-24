@@ -7,6 +7,7 @@ import com.xsolla.android.login.XLogin;
 import com.xsolla.android.login.api.XLoginCallback;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
+import com.xsolla.android.storesdkexample.util.ViewUtils;
 
 public class RegisterFragment extends BaseFragment {
 
@@ -26,7 +27,10 @@ public class RegisterFragment extends BaseFragment {
         emailInput = rootView.findViewById(R.id.email_input);
         passwordInput = rootView.findViewById(R.id.password_input);
         registerButton = rootView.findViewById(R.id.register_button);
-        registerButton.setOnClickListener(v -> registerUser());
+        registerButton.setOnClickListener(v -> {
+            ViewUtils.disable(registerButton);
+            registerUser();
+        });
     }
 
     private void registerUser() {
@@ -40,11 +44,13 @@ public class RegisterFragment extends BaseFragment {
             protected void onSuccess(Void response) {
                 showSnack("Registration success. Please check your email");
                 openFragment(new AuthFragment());
+                ViewUtils.enable(registerButton);
             }
 
             @Override
             protected void onFailure(String errorMessage) {
                 showSnack(errorMessage);
+                ViewUtils.enable(registerButton);
             }
         });
     }
