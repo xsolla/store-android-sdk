@@ -29,25 +29,18 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/checkout_button"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@android:color/holo_green_dark">
-
-        <TextView
-            android:id="@+id/checkout_button"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:elevation="4dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="CHECKOUT"
-            android:textColor="@android:color/white"
-            android:textSize="30sp"
-            android:fontFamily="@font/roboto_medium"
-            tools:targetApi="lollipop" />
-
-    </LinearLayout>
+        android:background="@drawable/ic_checkout_button_bg"
+        android:clickable="true"
+        android:elevation="4dp"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="CHECKOUT"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        tools:targetApi="lollipop" />
 
 </LinearLayout>

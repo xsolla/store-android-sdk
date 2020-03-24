@@ -16,6 +16,7 @@ import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
+import com.xsolla.android.storesdkexample.util.ViewUtils;
 
 public class DetailFragment extends BaseFragment {
 
@@ -66,6 +67,7 @@ public class DetailFragment extends BaseFragment {
         String buttonText = "Buy for " + item.getPrice().getPrettyPrintAmount();
         checkoutButton.setText(buttonText);
         checkoutButton.setOnClickListener(v -> {
+            ViewUtils.disable(v);
             PaymentOptions options = new PaymentOptions().create()
                     .setSandbox(true)
                     .build();
@@ -75,11 +77,13 @@ public class DetailFragment extends BaseFragment {
                 protected void onSuccess(CreateOrderResponse response) {
                     String token = response.getToken();
                     XsollaSDK.createPaymentForm(getContext(), token, true);
+                    ViewUtils.enable(v);
                 }
 
                 @Override
                 protected void onFailure(String errorMessage) {
                     showSnack(errorMessage);
+                    ViewUtils.enable(v);
                 }
             });
         });
