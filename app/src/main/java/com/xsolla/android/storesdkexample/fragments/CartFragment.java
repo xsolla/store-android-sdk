@@ -2,7 +2,6 @@ package com.xsolla.android.storesdkexample.fragments;
 
 import android.content.Intent;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -10,9 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.xsolla.android.sdk.XsollaObject;
 import com.xsolla.android.sdk.XsollaSDK;
-import com.xsolla.android.sdk.api.model.XError;
 import com.xsolla.android.sdk.view.XsollaActivity;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
@@ -23,6 +20,7 @@ import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.CartAdapter;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.listener.UpdateCartListener;
+import com.xsolla.android.storesdkexample.util.ViewUtils;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -50,6 +48,7 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
 
         TextView checkoutButton = rootView.findViewById(R.id.checkout_button);
         checkoutButton.setOnClickListener(v -> {
+            ViewUtils.disable(v);
             PaymentOptions paymentOptions = new PaymentOptions().create()
                     .setSandbox(true)
                     .build();
@@ -58,11 +57,13 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
                 @Override
                 protected void onSuccess(CreateOrderResponse response) {
                     XsollaSDK.createPaymentForm(getActivity(), response.getToken(), true);
+                    ViewUtils.enable(v);
                 }
 
                 @Override
                 protected void onFailure(String errorMessage) {
                     showSnack(errorMessage);
+                    ViewUtils.enable(v);
                 }
             });
         });
