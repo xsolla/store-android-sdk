@@ -13,12 +13,12 @@ public class InventoryResponse {
         return items;
     }
 
-    public class Item {
+    public static class Item {
 
         @SerializedName("instance_id")
         private String instanceId;
         private String sku;
-        private String type;
+        private Type type;
         private String name;
         private int quantity;
         private String description;
@@ -37,7 +37,7 @@ public class InventoryResponse {
             return sku;
         }
 
-        public String getType() {
+        public Type getType() {
             return type;
         }
 
@@ -67,6 +67,13 @@ public class InventoryResponse {
 
         public int getRemainingUses() {
             return remainingUses;
+        }
+
+        public enum Type {
+            @SerializedName("virtual_good")
+            VIRTUAL_GOOD,
+            @SerializedName("virtual_currency")
+            VIRTUAL_CURRENCY
         }
     }
 
