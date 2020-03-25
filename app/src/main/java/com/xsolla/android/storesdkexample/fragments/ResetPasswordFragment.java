@@ -7,6 +7,7 @@ import com.xsolla.android.login.XLogin;
 import com.xsolla.android.login.api.XLoginCallback;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
+import com.xsolla.android.storesdkexample.util.ViewUtils;
 
 public class ResetPasswordFragment extends BaseFragment {
 
@@ -22,7 +23,10 @@ public class ResetPasswordFragment extends BaseFragment {
     public void initUI() {
         usernameInput = rootView.findViewById(R.id.username_input);
         resetPasswordButton = rootView.findViewById(R.id.reset_password_button);
-        resetPasswordButton.setOnClickListener(v -> resetPassword());
+        resetPasswordButton.setOnClickListener(v -> {
+            ViewUtils.disable(resetPasswordButton);
+            resetPassword();
+        });
     }
 
     private void resetPassword() {
@@ -32,11 +36,14 @@ public class ResetPasswordFragment extends BaseFragment {
             @Override
             protected void onSuccess(Void response) {
                 showSnack("Password reset success. Check your email");
+                openRootFragment();
+                ViewUtils.enable(resetPasswordButton);
             }
 
             @Override
             protected void onFailure(String errorMessage) {
                 showSnack(errorMessage);
+                ViewUtils.enable(resetPasswordButton);
             }
         });
     }

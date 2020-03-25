@@ -22,6 +22,7 @@ import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.CartAdapter;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.listener.UpdateCartListener;
+import com.xsolla.android.storesdkexample.util.ViewUtils;
 
 public class CartFragment extends BaseFragment implements UpdateCartListener {
 
@@ -49,6 +50,7 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
 
         TextView checkoutButton = rootView.findViewById(R.id.checkout_button);
         checkoutButton.setOnClickListener(v -> {
+            ViewUtils.disable(v);
             PaymentOptions paymentOptions = new PaymentOptions().create()
                     .setSandbox(BuildConfig.IS_SANDBOX)
                     .build();
@@ -61,11 +63,13 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
                             .isSandbox(BuildConfig.IS_SANDBOX)
                             .build();
                     startActivityForResult(intent, RC_PAYSTATION);
+                    ViewUtils.enable(v);
                 }
 
                 @Override
                 protected void onFailure(String errorMessage) {
                     showSnack(errorMessage);
+                    ViewUtils.enable(v);
                 }
             });
         });

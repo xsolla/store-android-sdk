@@ -16,6 +16,7 @@ import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.listener.UpdateCartListener;
+import com.xsolla.android.storesdkexample.util.ViewUtils;
 
 import java.util.List;
 
@@ -91,6 +92,34 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             }
         }
 
+        private class ChangeQuantityListener implements View.OnClickListener {
+            private String itemSku;
+            private int newQuantity;
+
+            ChangeQuantityListener(String itemSku, int newQuantity) {
+                this.itemSku = itemSku;
+                this.newQuantity = newQuantity;
+            }
+
+            @Override
+            public void onClick(View v) {
+                ViewUtils.disable(v);
+                XStore.updateItemFromCurrentCart(itemSku, newQuantity, new XStoreCallback<Void>() {
+                    @Override
+                    protected void onSuccess(Void response) {
+                        updateCart();
+                        ViewUtils.enable(v);
+                    }
+
+                    @Override
+                    protected void onFailure(String errorMessage) {
+                        Toast.makeText(itemView.getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                        ViewUtils.enable(v);
+                    }
+                });
+            }
+        }
+
         private void updateCart() {
             XStore.getCurrentCart(new XStoreCallback<CartResponse>() {
                 @Override
@@ -110,32 +139,5 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 }
             });
         }
-
-        private class ChangeQuantityListener implements View.OnClickListener {
-            private String itemSku;
-            private int newQuantity;
-
-            ChangeQuantityListener(String itemSku, int newQuantity) {
-                this.itemSku = itemSku;
-                this.newQuantity = newQuantity;
-            }
-
-            @Override
-            public void onClick(View v) {
-                XStore.updateItemFromCurrentCart(itemSku, newQuantity, new XStoreCallback<Void>() {
-                    @Override
-                    protected void onSuccess(Void response) {
-                        updateCart();
-                    }
-
-                    @Override
-                    protected void onFailure(String errorMessage) {
-                        Toast.makeText(itemView.getContext(), errorMessage, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        }
-
     }
-
 }

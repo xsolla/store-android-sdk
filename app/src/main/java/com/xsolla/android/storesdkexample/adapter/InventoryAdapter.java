@@ -16,7 +16,9 @@ import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.listener.ConsumeListener;
+import com.xsolla.android.storesdkexample.util.ViewUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.ViewHolder> {
@@ -76,29 +78,43 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
             }
 
             quantityLabel.setText(String.valueOf(item.getQuantity()));
-            consumeButton.setOnClickListener(v -> XStore.consumeItem(item.getSku(), 1, null, new XStoreCallback<Void>() {
-                @Override
-                protected void onSuccess(Void response) {
-                    consumeListener.onSuccess();
-                    XStore.getInventory(new XStoreCallback<InventoryResponse>() {
-                        @Override
-                        protected void onSuccess(InventoryResponse response) {
-                            items = response.getItems();
-                            notifyDataSetChanged();
-                        }
+            consumeButton.setOnClickListener(v -> {
+                ViewUtils.disable(v);
 
-                        @Override
-                        protected void onFailure(String errorMessage) {
-                            consumeListener.onFailure(errorMessage);
-                        }
-                    });
-                }
+                XStore.consumeItem(item.getSku(), 1, null, new XStoreCallback<Void>() {
+                    @Override
+                    protected void onSuccess(Void response) {
+                        consumeListener.onSuccess();
+                        XStore.getInventory(new XStoreCallback<InventoryResponse>() {
+                            @Override
+                            protected void onSuccess(InventoryResponse response) {
+                                List<InventoryResponse.Item> virtualItems = new ArrayList<>();
+                                for (InventoryResponse.Item item : response.getItems()) {
+                                    if (item.getType() == InventoryResponse.Item.Type.VIRTUAL_GOOD) {
+                                        virtualItems.add(item);
+                                    }
+                                }
 
-                @Override
-                protected void onFailure(String errorMessage) {
-                    consumeListener.onFailure(errorMessage);
-                }
-            }));
+                                items = virtualItems;
+                                notifyDataSetChanged();
+                                ViewUtils.enable(v);
+                            }
+
+                            @Override
+                            protected void onFailure(String errorMessage) {
+                                consumeListener.onFailure(errorMessage);
+                                ViewUtils.enable(v);
+                            }
+                        });
+                    }
+
+                    @Override
+                    protected void onFailure(String errorMessage) {
+                        consumeListener.onFailure(errorMessage);
+                        ViewUtils.enable(v);
+                    }
+                });
+            });
         }
     }
 

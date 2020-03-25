@@ -11,8 +11,10 @@ import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.InventoryAdapter;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
-import com.xsolla.android.storesdkexample.fragments.base.CatalogFragment;
 import com.xsolla.android.storesdkexample.listener.ConsumeListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InventoryFragment extends BaseFragment implements ConsumeListener {
 
@@ -43,7 +45,14 @@ public class InventoryFragment extends BaseFragment implements ConsumeListener {
         XStore.getInventory(new XStoreCallback<InventoryResponse>() {
             @Override
             protected void onSuccess(InventoryResponse response) {
-                inventoryAdapter = new InventoryAdapter(response.getItems(), InventoryFragment.this);
+                List<InventoryResponse.Item> virtualItems = new ArrayList<>();
+                for (InventoryResponse.Item item : response.getItems()) {
+                    if (item.getType() == InventoryResponse.Item.Type.VIRTUAL_GOOD) {
+                        virtualItems.add(item);
+                    }
+                }
+
+                inventoryAdapter = new InventoryAdapter(virtualItems, InventoryFragment.this);
                 recyclerView.setAdapter(inventoryAdapter);
             }
 

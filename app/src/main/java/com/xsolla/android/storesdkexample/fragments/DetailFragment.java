@@ -22,6 +22,7 @@ import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 import com.xsolla.android.storesdkexample.BuildConfig;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
+import com.xsolla.android.storesdkexample.util.ViewUtils;
 
 public class DetailFragment extends BaseFragment {
 
@@ -74,6 +75,7 @@ public class DetailFragment extends BaseFragment {
         String buttonText = "Buy for " + item.getPrice().getPrettyPrintAmount();
         checkoutButton.setText(buttonText);
         checkoutButton.setOnClickListener(v -> {
+            ViewUtils.disable(v);
             PaymentOptions options = new PaymentOptions().create()
                     .setSandbox(BuildConfig.IS_SANDBOX)
                     .build();
@@ -87,11 +89,13 @@ public class DetailFragment extends BaseFragment {
                                 .isSandbox(BuildConfig.IS_SANDBOX)
                                 .build();
                         startActivityForResult(intent, RC_PAYSTATION);
+                    ViewUtils.enable(v);
                 }
 
                 @Override
                 protected void onFailure(String errorMessage) {
                     showSnack(errorMessage);
+                    ViewUtils.enable(v);
                 }
             });
         });

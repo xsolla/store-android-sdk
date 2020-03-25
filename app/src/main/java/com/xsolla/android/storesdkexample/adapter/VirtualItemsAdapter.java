@@ -19,6 +19,7 @@ import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.listener.AddToCartListener;
+import com.xsolla.android.storesdkexample.util.ViewUtils;
 
 import java.util.List;
 
@@ -87,50 +88,58 @@ public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapte
         }
 
         private void initForRealCurrency(VirtualItemsResponse.Item item) {
-            buyButton.setOnClickListener(v -> XStore.getCurrentCart(new XStoreCallback<CartResponse>() {
-                @Override
-                protected void onSuccess(CartResponse response) {
-                    int quantity = 1;
+            buyButton.setOnClickListener(v -> {
+                ViewUtils.disable(v);
+                XStore.getCurrentCart(new XStoreCallback<CartResponse>() {
+                    @Override
+                    protected void onSuccess(CartResponse response) {
+                        int quantity = 1;
 
-                    for (CartResponse.Item cartItem : response.getItems()) {
-                        if (cartItem.getSku().equals(item.getSku())) {
-                            quantity += cartItem.getQuantity();
+                        for (CartResponse.Item cartItem : response.getItems()) {
+                            if (cartItem.getSku().equals(item.getSku())) {
+                                quantity += cartItem.getQuantity();
+                            }
                         }
+
+                        XStore.updateItemFromCurrentCart(item.getSku(), quantity, new XStoreCallback<Void>() {
+                            @Override
+                            protected void onSuccess(Void response) {
+                                ViewUtils.enable(v);
+                                addToCartListener.onSuccess();
+                            }
+
+                            @Override
+                            protected void onFailure(String errorMessage) {
+                                addToCartListener.onFailure(errorMessage);
+                                ViewUtils.enable(v);
+                            }
+                        });
                     }
 
-                    XStore.updateItemFromCurrentCart(item.getSku(), quantity, new XStoreCallback<Void>() {
-                        @Override
-                        protected void onSuccess(Void response) {
-                            addToCartListener.onSuccess();
-                        }
-
-                        @Override
-                        protected void onFailure(String errorMessage) {
-                            addToCartListener.onFailure(errorMessage);
-                        }
-                    });
-                }
-
-                @Override
-                protected void onFailure(String errorMessage) {
-                    addToCartListener.onFailure(errorMessage);
-                }
-            }));
+                    @Override
+                    protected void onFailure(String errorMessage) {
+                        addToCartListener.onFailure(errorMessage);
+                        ViewUtils.enable(v);
+                    }
+                });
+            });
         }
 
         private void initForVirtualCurrency(VirtualItemsResponse.Item item) {
             VirtualPrice virtualPrice = item.getVirtualPrices().get(0);
-
             buyButton.setOnClickListener(v -> {
+                ViewUtils.disable(v);
                 XStore.createOrderByVirtualCurrency(item.getSku(), virtualPrice.getSku(), new XStoreCallback<CreateOrderByVirtualCurrencyResponse>() {
                     @Override
                     protected void onSuccess(CreateOrderByVirtualCurrencyResponse response) {
                         addToCartListener.showMessage("Purchased by Virtual currency");
+                        ViewUtils.enable(v);
                     }
 
                     @Override
                     protected void onFailure(String errorMessage) {
                         addToCartListener.showMessage(errorMessage);
+                        ViewUtils.enable(v);
                     }
                 });
             });
