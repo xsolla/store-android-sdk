@@ -3,6 +3,8 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 29
 
+    resourcePrefix 'xsolla_login_'
+
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 29

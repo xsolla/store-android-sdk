@@ -37,7 +37,7 @@ public class XWebView {
         isLoading = true;
 
         systemRootView = context.findViewById(android.R.id.content);
-        webViewLayout = LayoutInflater.from(context).inflate(R.layout.x_web_view, null);
+        webViewLayout = LayoutInflater.from(context).inflate(R.layout.xsolla_login_web_view, null);
         WebView webView = webViewLayout.findViewById(R.id.web_view);
         initWebView(webView, listener);
 
