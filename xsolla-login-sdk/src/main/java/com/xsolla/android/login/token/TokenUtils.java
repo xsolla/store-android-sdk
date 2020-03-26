@@ -1,19 +1,19 @@
 package com.xsolla.android.login.token;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.UrlQuerySanitizer;
 
 import com.xsolla.android.login.jwt.JWT;
 
-
 public class TokenUtils {
+
+    private static final String PREFS_FILE_NAME = "XSOLLA_LOGIN";
 
     private SharedPreferences preferences;
 
-    public TokenUtils(Activity activity) {
-        this.preferences = activity.getPreferences(Context.MODE_PRIVATE);
+    public TokenUtils(Context context) {
+        this.preferences = context.getApplicationContext().getSharedPreferences(PREFS_FILE_NAME, Context.MODE_PRIVATE);
     }
 
     public JWT getJwt() {
