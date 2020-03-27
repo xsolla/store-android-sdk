@@ -39,7 +39,7 @@ public class RegisterFragment extends BaseFragment {
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
 
-        XLogin.registerUser(username, email, password, new XLoginCallback<Void>() {
+        XLogin.register(username, email, password, new XLoginCallback<Void>() {
             @Override
             protected void onSuccess(Void response) {
                 showSnack("Registration success. Please check your email");

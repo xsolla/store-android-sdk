@@ -13,6 +13,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Callback for handling authentication requests
+ */
 abstract public class XLoginCallback<T> implements Callback<T> {
 
     private static final String SERVER_IS_NOT_RESPONDING = "Server is not responding. Please try later.";
@@ -33,8 +36,16 @@ abstract public class XLoginCallback<T> implements Callback<T> {
         onFailure(SERVER_IS_NOT_RESPONDING);
     }
 
+    /**
+     * Called upon successful request
+     * @param response response data
+     */
     abstract protected void onSuccess(T response);
 
+    /**
+     * Called upon unsuccessful request
+     * @param errorMessage error message
+     */
     abstract protected void onFailure(String errorMessage);
 
     private String getErrorMessage(ResponseBody errorBody) {

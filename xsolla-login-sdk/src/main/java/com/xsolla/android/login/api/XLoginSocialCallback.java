@@ -8,6 +8,9 @@ import com.xsolla.android.login.entity.response.SocialAuthResponse;
 import com.xsolla.android.login.social.XSocialAuthListener;
 import com.xsolla.android.login.social.XWebView;
 
+/**
+ * Callback for handling social network authentication requests
+ */
 abstract public class XLoginSocialCallback<T> extends XLoginCallback<T> {
 
     abstract protected Activity getActivityForSocialAuth();

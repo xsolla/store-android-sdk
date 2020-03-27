@@ -1,5 +1,8 @@
 package com.xsolla.android.login.social;
 
+/**
+ * Social networks enumeration
+ */
 public enum SocialNetwork {
 
     GOOGLE("google"),

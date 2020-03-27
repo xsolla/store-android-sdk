@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Fragment getFragment() {
         String token = XLogin.getToken();
-        if (token != null && XLogin.isTokenValid()) {
+        if (token != null && !XLogin.isTokenExpired()) {
             return new MainFragment();
         } else {
             return new AuthFragment();
