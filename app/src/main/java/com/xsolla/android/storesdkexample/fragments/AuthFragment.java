@@ -1,9 +1,11 @@
 package com.xsolla.android.storesdkexample.fragments;
 
+import android.app.Activity;
 import android.widget.TextView;
 
 import com.xsolla.android.login.XLogin;
 import com.xsolla.android.login.api.XLoginCallback;
+import com.xsolla.android.login.api.XLoginSocialCallback;
 import com.xsolla.android.login.entity.response.AuthResponse;
 import com.xsolla.android.login.entity.response.SocialAuthResponse;
 import com.xsolla.android.login.social.SocialNetwork;
@@ -62,7 +64,7 @@ public class AuthFragment extends BaseFragment {
         rootView.findViewById(R.id.register_button).setOnClickListener(v -> openFragment(new RegisterFragment()));
     }
 
-    private XLoginCallback<SocialAuthResponse> socialAuthCallback = new XLoginCallback<SocialAuthResponse>() {
+    private XLoginSocialCallback<SocialAuthResponse> socialAuthCallback = new XLoginSocialCallback<SocialAuthResponse>() {
         @Override
         protected void onSuccess(SocialAuthResponse response) {
             openFragment(new MainFragment());
@@ -71,6 +73,11 @@ public class AuthFragment extends BaseFragment {
         @Override
         protected void onFailure(String errorMessage) {
             showSnack(errorMessage);
+        }
+
+        @Override
+        protected Activity getActivityForSocialAuth() {
+            return getActivity();
         }
     };
 

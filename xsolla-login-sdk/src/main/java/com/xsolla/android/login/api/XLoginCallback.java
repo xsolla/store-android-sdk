@@ -2,9 +2,6 @@ package com.xsolla.android.login.api;
 
 import com.xsolla.android.login.XLogin;
 import com.xsolla.android.login.entity.response.AuthResponse;
-import com.xsolla.android.login.entity.response.SocialAuthResponse;
-import com.xsolla.android.login.social.XSocialAuthListener;
-import com.xsolla.android.login.social.XWebView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +15,7 @@ import retrofit2.Response;
 
 abstract public class XLoginCallback<T> implements Callback<T> {
 
-    private String SERVER_IS_NOT_RESPONDING = "Server is not responding. Please try later.";
+    private static final String SERVER_IS_NOT_RESPONDING = "Server is not responding. Please try later.";
 
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
@@ -52,31 +49,18 @@ abstract public class XLoginCallback<T> implements Callback<T> {
         return "Unknown Error";
     }
 
-    private void handleResponse(T responseBody) {
+    protected void handleResponse(T responseBody) {
         if (responseBody instanceof AuthResponse) {
             handleAuthResponse(responseBody);
-        } else if (responseBody instanceof SocialAuthResponse) {
-            handleSocialAuthResponse(responseBody);
         } else {
             onSuccess(responseBody);
         }
     }
 
-    private void handleAuthResponse(T responseBody) {
+    protected void handleAuthResponse(T responseBody) {
         String token = ((AuthResponse) responseBody).getToken();
         XLogin.saveToken(token);
         onSuccess(responseBody);
-    }
-
-    private void handleSocialAuthResponse(final T responseBody) {
-        String url = ((SocialAuthResponse) responseBody).getUrl();
-        XWebView xWebView = XLogin.getWebView();
-        xWebView.loadAuthPage(url, new XSocialAuthListener() {
-            @Override
-            public void onSocialLoginSuccess(String token) {
-                onSuccess(responseBody);
-            }
-        });
     }
 
 }

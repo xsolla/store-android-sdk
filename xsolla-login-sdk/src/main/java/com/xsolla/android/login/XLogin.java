@@ -1,10 +1,12 @@
 package com.xsolla.android.login;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 
 import com.xsolla.android.login.api.LoginApi;
 import com.xsolla.android.login.api.XLoginCallback;
+import com.xsolla.android.login.api.XLoginSocialCallback;
 import com.xsolla.android.login.entity.request.AuthUserBody;
 import com.xsolla.android.login.entity.request.RegisterUserBody;
 import com.xsolla.android.login.entity.request.ResetPasswordBody;
@@ -12,7 +14,6 @@ import com.xsolla.android.login.entity.response.AuthResponse;
 import com.xsolla.android.login.entity.response.SocialAuthResponse;
 import com.xsolla.android.login.jwt.JWT;
 import com.xsolla.android.login.social.SocialNetwork;
-import com.xsolla.android.login.social.XWebView;
 import com.xsolla.android.login.token.TokenUtils;
 
 import java.io.IOException;
@@ -27,17 +28,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class XLogin {
 
     private String projectId;
+    private String callbackUrl;
 
     private TokenUtils tokenUtils;
-    private XWebView xWebView;
     private LoginApi loginApi;
 
     private static XLogin instance;
 
-    private XLogin(String projectId, TokenUtils tokenUtils, XWebView xWebView, LoginApi loginApi) {
+    private XLogin(String projectId, String callbackUrl, TokenUtils tokenUtils, LoginApi loginApi) {
         this.projectId = projectId;
+        this.callbackUrl = callbackUrl;
         this.tokenUtils = tokenUtils;
-        this.xWebView = xWebView;
         this.loginApi = loginApi;
     }
 
@@ -56,15 +57,11 @@ public class XLogin {
         getInstance().tokenUtils.saveToken(token);
     }
 
-    public static XWebView getWebView() {
-        return getInstance().xWebView;
-    }
-
     public static void init(String projectId, Activity activity) {
         init(projectId, null, activity);
     }
 
-    public static void init(String projectId, String callbackUrl, Activity activity) {
+    public static void init(String projectId, String callbackUrl, Context context) {
         Interceptor interceptor = new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
@@ -90,10 +87,9 @@ public class XLogin {
                 .build();
 
         LoginApi loginApi = retrofit.create(LoginApi.class);
-        TokenUtils tokenUtils = new TokenUtils(activity);
-        XWebView xWebView = new XWebView(activity, callbackUrl);
+        TokenUtils tokenUtils = new TokenUtils(context);
 
-        instance = new XLogin(projectId, tokenUtils, xWebView, loginApi);
+        instance = new XLogin(projectId, callbackUrl, tokenUtils, loginApi);
     }
 
     public static void registerUser(String username, String email, String password, XLoginCallback<Void> callback) {
@@ -106,7 +102,7 @@ public class XLogin {
         getInstance().loginApi.login(getInstance().projectId, authUserBody).enqueue(callback);
     }
 
-    public static void loginSocial(SocialNetwork socialNetwork, XLoginCallback<SocialAuthResponse> callback) {
+    public static void loginSocial(SocialNetwork socialNetwork, XLoginSocialCallback<SocialAuthResponse> callback) {
         getInstance().loginApi.getLinkForSocialAuth(socialNetwork.providerName, getInstance().projectId).enqueue(callback);
     }
 
@@ -127,6 +123,10 @@ public class XLogin {
 
     public static JWT getJwt() {
         return getInstance().tokenUtils.getJwt();
+    }
+
+    public static String getCallbackUrl() {
+        return getInstance().callbackUrl;
     }
 
 }
