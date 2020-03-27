@@ -1,6 +1,5 @@
 package com.xsolla.android.login;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 
@@ -57,8 +56,8 @@ public class XLogin {
         getInstance().tokenUtils.saveToken(token);
     }
 
-    public static void init(String projectId, Activity activity) {
-        init(projectId, null, activity);
+    public static void init(String projectId, Context context) {
+        init(projectId, null, context);
     }
 
     public static void init(String projectId, String callbackUrl, Context context) {
