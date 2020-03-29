@@ -198,7 +198,7 @@ class RequestExecutor {
     }
 
     public void createOrderByVirtualCurrency(String itemSku, String virtualCurrencySku, XStoreCallback<CreateOrderByVirtualCurrencyResponse> callback) {
-        storeApi.createOrderByVirtualCurrency(projectId, itemSku, virtualCurrencySku).enqueue(callback);
+        storeApi.createOrderByVirtualCurrency(projectId, itemSku, virtualCurrencySku, "android_standalone").enqueue(callback);
     }
 
 }
