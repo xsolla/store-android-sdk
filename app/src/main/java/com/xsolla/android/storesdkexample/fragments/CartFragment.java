@@ -112,11 +112,12 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
             if (data != null) {
                 if (resultCode == RESULT_OK) {
                     showSnack("Payment is completed");
+                    openFragment(new MainFragment());
 
                     XStore.clearCurrentCart(new XStoreCallback<Void>() {
                         @Override
                         protected void onSuccess(Void response) {
-                            openFragment(new MainFragment());
+
                         }
 
                         @Override
