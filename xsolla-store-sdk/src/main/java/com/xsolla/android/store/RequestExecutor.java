@@ -89,7 +89,7 @@ class RequestExecutor {
         ).enqueue(callback);
     }
 
-    public void getCardById(String cartId, CartRequestOptions options, XStoreCallback<CartResponse> callback) {
+    public void getCartById(String cartId, CartRequestOptions options, XStoreCallback<CartResponse> callback) {
         storeApi.getCartById(
                 projectId,
                 cartId,
@@ -198,7 +198,12 @@ class RequestExecutor {
     }
 
     public void createOrderByVirtualCurrency(String itemSku, String virtualCurrencySku, XStoreCallback<CreateOrderByVirtualCurrencyResponse> callback) {
-        storeApi.createOrderByVirtualCurrency(projectId, itemSku, virtualCurrencySku, "android_standalone").enqueue(callback);
+        storeApi.createOrderByVirtualCurrency(
+                projectId,
+                itemSku,
+                virtualCurrencySku,
+                "android_standalone" // TODO another android platforms
+        ).enqueue(callback);
     }
 
 }

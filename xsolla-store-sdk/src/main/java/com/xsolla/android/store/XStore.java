@@ -138,11 +138,11 @@ public class XStore {
 
     // Cart
     public static void getCartById(String cartId, XStoreCallback<CartResponse> callback) {
-        getRequestExecutor().getCardById(cartId, null, callback);
+        getRequestExecutor().getCartById(cartId, null, callback);
     }
 
     public static void getCartById(String cartId, CartRequestOptions options, XStoreCallback<CartResponse> callback) {
-        getRequestExecutor().getCardById(cartId, options, callback);
+        getRequestExecutor().getCartById(cartId, options, callback);
     }
 
     public static void getCurrentCart(XStoreCallback<CartResponse> callback) {
