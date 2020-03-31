@@ -186,7 +186,8 @@ public interface StoreApi {
     Call<CreateOrderByVirtualCurrencyResponse> createOrderByVirtualCurrency(
             @Path("project_id") int projectId,
             @Path("item_sku") String itemSku,
-            @Path("virtual_currency_sku") String virtualCurrencySku
+            @Path("virtual_currency_sku") String virtualCurrencySku,
+            @Query("platform") String platform
     );
 
 }
