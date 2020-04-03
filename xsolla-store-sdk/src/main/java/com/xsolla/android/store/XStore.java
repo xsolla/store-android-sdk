@@ -91,38 +91,64 @@ public class XStore {
         instance = new XStore(requestExecutor);
     }
 
-    // Virtual items
+    /**
+     * Get a virtual items list for building a catalog
+     * @see <a href="https://developers.xsolla.com/store-api/items/get-virtual-items">Store API Reference</a>
+     * @param callback status callback
+     */
     public static void getVirtualItems(XStoreCallback<VirtualItemsResponse> callback) {
         getRequestExecutor().getVirtualItems(null, callback);
     }
 
+    /**
+     * Get a virtual items list for building a catalog
+     * @see <a href="https://developers.xsolla.com/store-api/items/get-virtual-items">Store API Reference</a>
+     * @param options request options
+     * @param callback status callback
+     */
     public static void getVirtualItems(ItemsRequestOptions options, XStoreCallback<VirtualItemsResponse> callback) {
         getRequestExecutor().getVirtualItems(options, callback);
     }
 
-    // Virtual currency
+    /**
+     * Get a virtual currency list for building a catalog
+     * @param callback status callback
+     */
     public static void getVirtualCurrency(XStoreCallback<VirtualCurrencyResponse> callback) {
         getRequestExecutor().getVirtualCurrency(null, callback);
     }
 
+    /**
+     * Get a virtual currency list for building a catalog
+     * @param options request options
+     * @param callback status callback
+     */
     public static void getVirtualCurrency(ItemsRequestOptions options, XStoreCallback<VirtualCurrencyResponse> callback) {
         getRequestExecutor().getVirtualCurrency(options, callback);
     }
 
-    // Virtual currency package
+    /**
+     * Get a virtual currency packages list for building a catalog
+     * @param callback status callback
+     */
     public static void getVirtualCurrencyPackage(XStoreCallback<VirtualCurrencyPackageResponse> callback) {
         getRequestExecutor().getVirtualCurrencyPackage(null, callback);
     }
 
+    /**
+     * Get a virtual currency packages list for building a catalog
+     * @param options request options
+     * @param callback status callback
+     */
     public static void getVirtualCurrencyPackage(ItemsRequestOptions options, XStoreCallback<VirtualCurrencyPackageResponse> callback) {
         getRequestExecutor().getVirtualCurrencyPackage(options, callback);
     }
 
-    // Items by specified group
-    public static void getItemsBySpecifiedGroup(XStoreCallback<VirtualItemsResponse> callback) {
-        getRequestExecutor().getItemsBySpecifiedGroup(null, callback);
-    }
-
+    /**
+     * Get an items list from the specified group for building a catalog
+     * @param options request options, must contain group external id
+     * @param callback status callback
+     */
     public static void getItemsBySpecifiedGroup(ItemsRequestOptions options, XStoreCallback<VirtualItemsResponse> callback) {
         getRequestExecutor().getItemsBySpecifiedGroup(options, callback);
     }
@@ -136,61 +162,127 @@ public class XStore {
         getRequestExecutor().getPhysicalItems(options, callback);
     }
 
-    // Cart
+    /**
+     * Get user’s cart by ID
+     * @param cartId cart id
+     * @param callback status callback
+     */
     public static void getCartById(String cartId, XStoreCallback<CartResponse> callback) {
         getRequestExecutor().getCartById(cartId, null, callback);
     }
 
+    /**
+     * Get user’s cart by ID
+     * @param cartId cart id
+     * @param options request options
+     * @param callback status callback
+     */
     public static void getCartById(String cartId, CartRequestOptions options, XStoreCallback<CartResponse> callback) {
         getRequestExecutor().getCartById(cartId, options, callback);
     }
 
+    /**
+     * Get current user’s cart
+     * @param callback status callback
+     */
     public static void getCurrentCart(XStoreCallback<CartResponse> callback) {
         getRequestExecutor().getCurrentCart(null, callback);
     }
 
+    /**
+     * Get current user’s cart
+     * @param options request options
+     * @param callback status callback
+     */
     public static void getCurrentCart(CartRequestOptions options, XStoreCallback<CartResponse> callback) {
         getRequestExecutor().getCurrentCart(options, callback);
     }
 
+    /**
+     * Delete all cart items
+     * @param cartId cart id
+     * @param callback status callback
+     */
     public static void clearCartById(String cartId, XStoreCallback<Void> callback) {
         getRequestExecutor().clearCartById(cartId, callback);
     }
 
+    /**
+     * Delete all items from current user's cart
+     * @param callback status callback
+     */
     public static void clearCurrentCart(XStoreCallback<Void> callback) {
         getRequestExecutor().clearCurrentCart(callback);
     }
 
+    /**
+     * Update an existing item or create the one in the cart
+     * @param cartId cart id
+     * @param itemSku item SKU
+     * @param quantity item quantity
+     * @param callback status callback
+     */
     public static void updateItemFromCartByCartId(String cartId, String itemSku, int quantity, XStoreCallback<Void> callback) {
         getRequestExecutor().updateItemFromCartByCartId(cartId, itemSku, quantity, callback);
     }
 
+    /**
+     * Update an existing item or create the one in the current user's cart
+     * @param itemSku item SKU
+     * @param quantity item quantity
+     * @param callback status callback
+     */
     public static void updateItemFromCurrentCart(String itemSku, int quantity, XStoreCallback<Void> callback) {
         getRequestExecutor().updateItemFromCurrentCart(itemSku, quantity, callback);
     }
 
+    /**
+     * Delete item from the cart
+     * @param cartId cart id
+     * @param itemSku item SKU
+     * @param callback status callback
+     */
     public static void deleteItemFromCartByCartId(String cartId, String itemSku, XStoreCallback<Void> callback) {
         getRequestExecutor().deleteItemFromCartByCartId(cartId, itemSku, callback);
     }
 
-    public static void deleteItemFromCurrentCArt(String itemSku, XStoreCallback<Void> callback) {
+    /**
+     * Delete item from the current user's cart
+     * @param itemSku item SKU
+     * @param callback status callback
+     */
+    public static void deleteItemFromCurrentCart(String itemSku, XStoreCallback<Void> callback) {
         getRequestExecutor().deleteItemFromCurrentCart(itemSku, callback);
     }
 
-    // Inventory
+    /**
+     * Get the current user’s inventory
+     * @param callback status callback
+     */
     public static void getInventory(XStoreCallback<InventoryResponse> callback) {
         getRequestExecutor().getInventory(callback);
     }
 
+    /**
+     * Get the current user’s virtual balance
+     * @param callback status callback
+     */
     public static void getVirtualBalance(XStoreCallback<VirtualBalanceResponse> callback) {
         getRequestExecutor().getVirtualBalance(callback);
     }
 
+    /**
+     * Consume an item from the current user’s inventory
+     * @param sku item SKU
+     * @param quantity item quantity, if item is uncountable, should be null
+     * @param instanceId instance item id, if item is countable, should be null
+     * @param callback status callback
+     */
     public static void consumeItem(String sku, int quantity, String instanceId, XStoreCallback<Void> callback) {
         getRequestExecutor().consumeItem(sku, quantity, instanceId, callback);
     }
 
-    // Inventory management
+    // Inventory management TODO remove
     public static void grantItemsToUser(GrantItemsRequest request, XStoreCallback<GrantItemsResponse> callback) {
         getRequestExecutor().grantItemsToUser(request, callback);
     }
@@ -203,41 +295,84 @@ public class XStore {
         getRequestExecutor().grantItemsByPurchase(request, callback);
     }
 
-    // Groups
+    /**
+     * Get items groups list for building a catalog
+     * @param callback status callback
+     */
     public static void getItemsGroups(XStoreCallback<ItemsGroupsResponse> callback) {
         getRequestExecutor().getItemsGroups(callback);
     }
 
-    // Order
+    /**
+     * Get a specified order
+     * @param orderId order id
+     * @param callback status callback
+     */
     public static void getOrder(String orderId, XStoreCallback<OrderResponse> callback) {
         getRequestExecutor().getOrder(orderId, callback);
     }
 
-    // Payment
+    /**
+     * Create an order with all items from the particular cart
+     * @param cartId cart id
+     * @param callback status callback
+     */
     public static void createOrderFromCartById(String cartId, XStoreCallback<CreateOrderResponse> callback) {
         getRequestExecutor().createOrderFromCartById(cartId, null, callback);
     }
 
+    /**
+     * Create an order with all items from the particular cart
+     * @param cartId cart id
+     * @param options payment options
+     * @param callback status callback
+     */
     public static void createOrderFromCartById(String cartId, PaymentOptions options, XStoreCallback<CreateOrderResponse> callback) {
         getRequestExecutor().createOrderFromCartById(cartId, options, callback);
     }
 
+    /**
+     * Create an order with all items from the current user's cart
+     * @param callback status callback
+     */
     public static void createOrderFromCurrentCart(XStoreCallback<CreateOrderResponse> callback) {
         getRequestExecutor().createOrderFromCurrentCart(null, callback);
     }
 
+    /**
+     * Create an order with all items from the current user's cart
+     * @param options payment options
+     * @param callback status callback
+     */
     public static void createOrderFromCurrentCart(PaymentOptions options, XStoreCallback<CreateOrderResponse> callback) {
         getRequestExecutor().createOrderFromCurrentCart(options, callback);
     }
 
+    /**
+     * Create an order with a specified item
+     * @param itemSku item SKU
+     * @param callback status callback
+     */
     public static void createOrderByItemSku(String itemSku, XStoreCallback<CreateOrderResponse> callback) {
         getRequestExecutor().createOrderByItemSku(itemSku, null, callback);
     }
 
+    /**
+     * Create an order with a specified item
+     * @param itemSku item SKU
+     * @param options payment options
+     * @param callback status callback
+     */
     public static void createOrderByItemSku(String itemSku, PaymentOptions options, XStoreCallback<CreateOrderResponse> callback) {
         getRequestExecutor().createOrderByItemSku(itemSku, options, callback);
     }
 
+    /**
+     * Purchase item using virtual currency
+     * @param itemSku item SKU
+     * @param virtualCurrencySku virtual currency SKU
+     * @param callback status callback
+     */
     public static void createOrderByVirtualCurrency(String itemSku, String virtualCurrencySku, XStoreCallback<CreateOrderByVirtualCurrencyResponse> callback) {
         getRequestExecutor().createOrderByVirtualCurrency(itemSku, virtualCurrencySku, callback);
     }
