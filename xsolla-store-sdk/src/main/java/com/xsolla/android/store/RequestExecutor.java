@@ -5,18 +5,12 @@ import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
 import com.xsolla.android.store.entity.request.inventory.ConsumeItemBody;
-import com.xsolla.android.store.entity.request.inventory.GrantItemsByPurchaseRequest;
-import com.xsolla.android.store.entity.request.inventory.GrantItemsRequest;
-import com.xsolla.android.store.entity.request.inventory.RevokeItemsRequest;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
 import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
-import com.xsolla.android.store.entity.response.inventory.GrantItemsByPurchaseResponse;
-import com.xsolla.android.store.entity.response.inventory.GrantItemsResponse;
 import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
-import com.xsolla.android.store.entity.response.inventory.RevokeItemsResponse;
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
@@ -152,18 +146,6 @@ class RequestExecutor {
                 projectId,
                 new ConsumeItemBody(sku, quantity, instanceId)
         ).enqueue(callback);
-    }
-
-    public void grantItemsToUser(GrantItemsRequest request, XStoreCallback<GrantItemsResponse> callback) {
-        storeApi.grantItemsToUser(projectId, request).enqueue(callback);
-    }
-
-    public void revokeItems(RevokeItemsRequest request, XStoreCallback<RevokeItemsResponse> callback) {
-        storeApi.revokeItems(projectId, request).enqueue(callback);
-    }
-
-    public void grantItemsByPurchase(GrantItemsByPurchaseRequest request, XStoreCallback<GrantItemsByPurchaseResponse> callback) {
-        storeApi.grantItemsByPurchase(projectId, request).enqueue(callback);
     }
 
     public void getItemsGroups(XStoreCallback<ItemsGroupsResponse> callback) {

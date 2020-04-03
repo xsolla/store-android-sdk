@@ -2,16 +2,10 @@ package com.xsolla.android.store.api;
 
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
 import com.xsolla.android.store.entity.request.inventory.ConsumeItemBody;
-import com.xsolla.android.store.entity.request.inventory.GrantItemsByPurchaseRequest;
-import com.xsolla.android.store.entity.request.inventory.GrantItemsRequest;
-import com.xsolla.android.store.entity.request.inventory.RevokeItemsRequest;
 import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
-import com.xsolla.android.store.entity.response.inventory.GrantItemsByPurchaseResponse;
-import com.xsolla.android.store.entity.response.inventory.GrantItemsResponse;
 import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
-import com.xsolla.android.store.entity.response.inventory.RevokeItemsResponse;
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
@@ -26,7 +20,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
-import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -146,15 +139,6 @@ public interface StoreApi {
             @Path("project_id") int projectId,
             @Body ConsumeItemBody body
     );
-
-    @POST("api/v2/project/{project_id}/inventory/reward")
-    Call<GrantItemsResponse> grantItemsToUser(@Path("project_id") int projectId, @Body GrantItemsRequest body);
-
-    @POST("api/v2/project/{project_id}/inventory/revoke")
-    Call<RevokeItemsResponse> revokeItems(@Path("project_id") int projectId, @Body RevokeItemsRequest body);
-
-    @POST("api/v2/project/{project_id}/inventory/purchase")
-    Call<GrantItemsByPurchaseResponse> grantItemsByPurchase(@Path("project_id") int projectId, @Body GrantItemsByPurchaseRequest body);
 
     @GET("api/v2/project/{project_id}/items/groups")
     Call<ItemsGroupsResponse> getItemsGroups(@Path("project_id") int projectId);
