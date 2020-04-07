@@ -30,6 +30,9 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * Entry point for Xsolla Store SDK
+ */
 public class XStore {
 
     private RequestExecutor requestExecutor;
