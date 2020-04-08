@@ -28,7 +28,7 @@ public class AuthFragment extends BaseFragment {
 
         rootView.findViewById(R.id.facebook_button).setOnClickListener(v -> XLogin.loginSocial(SocialNetwork.FACEBOOK, socialAuthCallback));
 
-        rootView.findViewById(R.id.twitter_button).setOnClickListener(v -> XLogin.loginSocial(SocialNetwork.TWITTER, socialAuthCallback));
+        rootView.findViewById(R.id.baidu_button).setOnClickListener(v -> XLogin.loginSocial(SocialNetwork.BAIDU, socialAuthCallback));
 
         rootView.findViewById(R.id.linkedin_button).setOnClickListener(v -> XLogin.loginSocial(SocialNetwork.LINKEDIN, socialAuthCallback));
 

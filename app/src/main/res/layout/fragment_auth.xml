@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/fragment_bg_color"
@@ -27,7 +26,7 @@
         android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/twitter_pane" />
+        app:layout_constraintTop_toBottomOf="@+id/baidu_pane" />
 
     <Button
         android:id="@+id/login_button"
@@ -73,13 +72,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/google_pane"
-        app:layout_constraintEnd_toStartOf="@+id/twitter_pane"
+        app:layout_constraintEnd_toStartOf="@+id/baidu_pane"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/google_pane"
         app:srcCompat="@drawable/circle_shadow" />
 
     <ImageView
-        android:id="@+id/twitter_pane"
+        android:id="@+id/baidu_pane"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/facebook_pane"
@@ -92,10 +91,10 @@
         android:id="@+id/linkedin_pane"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/twitter_pane"
+        app:layout_constraintBottom_toBottomOf="@+id/baidu_pane"
         app:layout_constraintEnd_toStartOf="@+id/naver_pane"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/twitter_pane"
+        app:layout_constraintStart_toEndOf="@+id/baidu_pane"
         app:srcCompat="@drawable/circle_shadow" />
 
     <ImageView
@@ -133,16 +132,16 @@
         app:srcCompat="@drawable/ic_facebook" />
 
     <ImageView
-        android:id="@+id/twitter_button"
+        android:id="@+id/baidu_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="@+id/twitter_pane"
-        app:layout_constraintEnd_toEndOf="@+id/twitter_pane"
-        app:layout_constraintStart_toStartOf="@+id/twitter_pane"
-        app:layout_constraintTop_toTopOf="@+id/twitter_pane"
-        app:srcCompat="@drawable/ic_twitter" />
+        app:layout_constraintBottom_toBottomOf="@+id/baidu_pane"
+        app:layout_constraintEnd_toEndOf="@+id/baidu_pane"
+        app:layout_constraintStart_toStartOf="@+id/baidu_pane"
+        app:layout_constraintTop_toTopOf="@+id/baidu_pane"
+        app:srcCompat="@drawable/ic_baidu" />
 
     <ImageView
         android:id="@+id/linkedin_button"

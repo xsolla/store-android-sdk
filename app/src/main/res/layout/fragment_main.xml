@@ -55,6 +55,7 @@
     <Button
         android:id="@+id/merchandise_button"
         style="@style/XButton"
+        android:visibility="gone"
         android:layout_width="@dimen/input_width"
         android:layout_height="@dimen/input_height"
         android:layout_marginTop="24dp"
