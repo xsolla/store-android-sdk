@@ -2,7 +2,7 @@ package com.xsolla.android.login.token;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.UrlQuerySanitizer;
+import android.net.Uri;
 
 import com.xsolla.android.login.jwt.JWT;
 
@@ -41,10 +41,8 @@ public class TokenUtils {
     }
 
     public static String getTokenFromUrl(String url) {
-        UrlQuerySanitizer sanitizer = new UrlQuerySanitizer();
-        sanitizer.setAllowUnregisteredParamaters(true);
-        sanitizer.parseUrl(url);
-        return sanitizer.getValue("token");
+        Uri uri = Uri.parse(url);
+        return uri.getQueryParameter("token");
     }
 
 }
