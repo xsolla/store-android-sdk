@@ -12,12 +12,18 @@ import com.xsolla.android.paystation.ui.ActivityPaystationBrowserProxy
 import com.xsolla.android.paystation.ui.ActivityPaystationWebView
 import kotlinx.android.parcel.Parcelize
 
+/**
+ * Entry point for Xsolla Paystation SDK
+ */
 class XPaystation {
 
     companion object {
         const val SERVER_PROD = "secure.xsolla.com"
         const val SERVER_SANDBOX = "sandbox-secure.xsolla.com"
 
+        /**
+         * Create builder for Paystation intent
+         */
         @JvmStatic
         fun createIntentBuilder(context: Context) = IntentBuilder(context)
     }
@@ -29,11 +35,24 @@ class XPaystation {
         private var isSandbox: Boolean = true
         private var useWebview: Boolean = false
 
+        /**
+         * Set Paystation access token
+         */
         fun accessToken(accessToken: AccessToken) = apply { this.accessToken = accessToken }
         fun accessData(accessData: AccessData) = apply { this.accessData = accessData }
+        /**
+         * Set sandbox mode
+         */
         fun isSandbox(isSandbox: Boolean) = apply { this.isSandbox = isSandbox }
+
+        /**
+         * Set use webview instead of browser
+         */
         fun useWebview(useWebview: Boolean) = apply { this.useWebview = useWebview }
 
+        /**
+         * Build the intent
+         */
         fun build(): Intent {
             val url = generateUrl()
             val intent = Intent()
@@ -69,9 +88,15 @@ class XPaystation {
         private fun getServer() = if (isSandbox) SERVER_SANDBOX else SERVER_PROD
     }
 
+    /**
+     * Paystation result
+     */
     @Parcelize
     data class Result(val status: Status, val invoiceId: String?) : Parcelable {
         companion object {
+            /**
+             * Parse result from result intent
+             */
             @JvmStatic
             fun fromResultIntent(intent: Intent?): Result =
                     intent?.getParcelableExtra(ActivityPaystation.RESULT)
@@ -79,8 +104,17 @@ class XPaystation {
         }
     }
 
+    /**
+     * Paystation result possible values
+     */
     enum class Status {
+        /**
+         * User completed flow and returned back
+         */
         COMPLETED,
+        /**
+         * User cancelled flow
+         */
         CANCELLED,
         UNKNOWN
     }
