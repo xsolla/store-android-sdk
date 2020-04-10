@@ -4,7 +4,7 @@ public class PaymentOptions {
 
     private String currency = "USD";
     private String locale = "en";
-    private boolean sandbox = false;
+    private boolean sandbox = true;
 
     public String getCurrency() {
         return currency;
