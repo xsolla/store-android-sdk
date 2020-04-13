@@ -2,13 +2,8 @@ package com.xsolla.android.storesdkexample.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.TextView;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.xsolla.android.paystation.XPaystation;
 import com.xsolla.android.paystation.data.AccessToken;
@@ -16,6 +11,7 @@ import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
+import com.xsolla.android.store.entity.response.order.OrderResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 import com.xsolla.android.storesdkexample.BuildConfig;
 import com.xsolla.android.storesdkexample.R;
@@ -24,6 +20,13 @@ import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.listener.UpdateCartListener;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class CartFragment extends BaseFragment implements UpdateCartListener {
 
     private static final int RC_PAYSTATION = 1;
@@ -31,6 +34,22 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
     private RecyclerView recyclerView;
     private CartAdapter cartAdapter;
     private Toolbar toolbar;
+
+    private String orderId;
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            orderId = savedInstanceState.getString("orderId");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("orderId", orderId);
+    }
 
     @Override
     public int getLayout() {
@@ -58,6 +77,7 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
             XStore.createOrderFromCurrentCart(paymentOptions, new XStoreCallback<CreateOrderResponse>() {
                 @Override
                 protected void onSuccess(CreateOrderResponse response) {
+                    orderId = Integer.toString(response.getOrderId());
                     Intent intent = XPaystation.createIntentBuilder(getContext())
                             .accessToken(new AccessToken(response.getToken()))
                             .isSandbox(BuildConfig.IS_SANDBOX)
@@ -119,11 +139,24 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
             XPaystation.Result result = XPaystation.Result.fromResultIntent(data);
             if (resultCode == Activity.RESULT_OK) {
                 showSnack("Payment is completed");
-                openFragment(new MainFragment());
-                XStore.clearCurrentCart(new XStoreCallback<Void>() {
+                XStore.getOrder(orderId, new XStoreCallback<OrderResponse>() {
                     @Override
-                    protected void onSuccess(Void response) {
+                    protected void onSuccess(OrderResponse response) {
+                        if (response.getStatus() == OrderResponse.Status.DONE) {
+                            showSnack("Order is done");
+                            openFragment(new MainFragment());
+                            XStore.clearCurrentCart(new XStoreCallback<Void>() {
+                                @Override
+                                protected void onSuccess(Void response) {
 
+                                }
+
+                                @Override
+                                protected void onFailure(String errorMessage) {
+                                    showSnack(errorMessage);
+                                }
+                            });
+                        }
                     }
 
                     @Override

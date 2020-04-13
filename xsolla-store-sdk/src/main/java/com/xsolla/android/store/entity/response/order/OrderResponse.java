@@ -11,12 +11,23 @@ public class OrderResponse {
     private Status status;
     private Content content;
 
+    public int getOrderId() {
+        return orderId;
+    }
 
-    private enum Status {
+    public Status getStatus() {
+        return status;
+    }
+
+    public Content getContent() {
+        return content;
+    }
+
+    public enum Status {
         @SerializedName("new") NEW,
         @SerializedName("paid") PAID,
-        @SerializedName("canceled") CANCELED,
-        @SerializedName("delivered") DELIVERED
+        @SerializedName("done") DONE,
+        @SerializedName("canceled") CANCELED
     }
 
     private class Content {

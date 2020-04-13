@@ -2,14 +2,10 @@ package com.xsolla.android.storesdkexample.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.xsolla.android.paystation.XPaystation;
@@ -18,11 +14,16 @@ import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
+import com.xsolla.android.store.entity.response.order.OrderResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 import com.xsolla.android.storesdkexample.BuildConfig;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 
 public class DetailFragment extends BaseFragment {
 
@@ -31,6 +32,22 @@ public class DetailFragment extends BaseFragment {
     private TextView checkoutButton;
 
     private VirtualItemsResponse.Item item;
+
+    private String orderId;
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            orderId = savedInstanceState.getString("orderId");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("orderId", orderId);
+    }
 
     @Override
     public int getLayout() {
@@ -83,6 +100,7 @@ public class DetailFragment extends BaseFragment {
             XStore.createOrderByItemSku(item.getSku(), options, new XStoreCallback<CreateOrderResponse>() {
                 @Override
                 protected void onSuccess(CreateOrderResponse response) {
+                    orderId = Integer.toString(response.getOrderId());
                     String token = response.getToken();
                     Intent intent = XPaystation.createIntentBuilder(getContext())
                                 .accessToken(new AccessToken(token))
@@ -108,9 +126,20 @@ public class DetailFragment extends BaseFragment {
         if (requestCode == RC_PAYSTATION) {
             XPaystation.Result result = XPaystation.Result.fromResultIntent(data);
             if (resultCode == Activity.RESULT_OK) {
-                Toast.makeText(getContext(), "OK\n" + result, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Payment OK\n" + result, Toast.LENGTH_LONG).show();
+                XStore.getOrder(orderId, new XStoreCallback<OrderResponse>() {
+                    @Override
+                    protected void onSuccess(OrderResponse response) {
+                        Toast.makeText(getContext(), "Order OK\n" + result, Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    protected void onFailure(String errorMessage) {
+                        Toast.makeText(getContext(), "Order Fail\n" + result, Toast.LENGTH_LONG).show();
+                    }
+                });
             } else {
-                Toast.makeText(getContext(), "Fail\n" + result, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Payment Fail\n" + result, Toast.LENGTH_LONG).show();
             }
         }
     }
