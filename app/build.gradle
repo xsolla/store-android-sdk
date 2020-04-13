@@ -11,6 +11,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary true
+
+        buildConfigField 'int', 'PROJECT_ID', '53916' // Replace to your Project ID
+        buildConfigField 'String', 'LOGIN_ID', '"17d7cb3e-684f-11ea-b687-42010aa80004"' // Replace to your project's Login ID
     }
     buildTypes {
         release {
@@ -33,7 +36,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.2.0-alpha03'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.google.android.material:material:1.2.0-alpha05'

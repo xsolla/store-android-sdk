@@ -5,24 +5,22 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import com.xsolla.android.login.XLogin;
 import com.xsolla.android.storesdkexample.fragments.AuthFragment;
 import com.xsolla.android.storesdkexample.fragments.MainFragment;
 
-public class MainActivity extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
-    private final String LOGIN_PROJECT_ID = "17d7cb3e-684f-11ea-b687-42010aa80004"; // Replace to your Login Project Id
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        XLogin.init(LOGIN_PROJECT_ID, this);
+        XLogin.init(BuildConfig.LOGIN_ID, this);
         initFragment();
         initStatusBar();
     }

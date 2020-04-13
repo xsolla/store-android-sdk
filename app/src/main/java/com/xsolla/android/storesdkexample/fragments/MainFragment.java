@@ -6,17 +6,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-
 import com.bumptech.glide.Glide;
 import com.xsolla.android.login.XLogin;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
+import com.xsolla.android.storesdkexample.BuildConfig;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 
 import java.util.List;
+
+import androidx.annotation.Nullable;
 
 public class MainFragment extends BaseFragment {
 
@@ -29,7 +30,7 @@ public class MainFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String token = XLogin.getToken();
-        XStore.init(53916, token);
+        XStore.init(BuildConfig.PROJECT_ID, token);
     }
 
     @Override
