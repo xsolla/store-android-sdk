@@ -1,3 +1,2 @@
 include ':app', ':xsolla-login-sdk', ':xsolla-store-sdk', ':xsolla-paystation-sdk'
 rootProject.name='android-store-sdk'
-include ':paystationsample'
