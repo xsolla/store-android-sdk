@@ -12,8 +12,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary true
 
-        buildConfigField 'int', 'PROJECT_ID', '53916' // Replace to your Project ID
-        buildConfigField 'String', 'LOGIN_ID', '"17d7cb3e-684f-11ea-b687-42010aa80004"' // Replace to your project's Login ID
+        buildConfigField 'int', 'PROJECT_ID', '58917' // Replace to your Project ID
+        buildConfigField 'String', 'LOGIN_ID', '"026201e3-7e40-11ea-a85b-42010aa80004"' // Replace to your project's Login ID
     }
     buildTypes {
         release {
