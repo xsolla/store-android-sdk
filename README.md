@@ -16,7 +16,7 @@ Please note that the Internet connection is essential for the Xsolla Android SDK
 
 1. [Download](https://developer.android.com/studio)  and [install](https://developer.android.com/studio/install) Android Studio.
 2. Create a new project.
-3. Register an Xsolla [Publisher Account](https://publisher.xsolla.com/signup?store_type=sdk). More instructions are on [Xsolla Developers portal](https://developers.xsolla.com/sdk/game-engines/android/).
+3. Register an Xsolla [Publisher Account](https://publisher.xsolla.com/signup?store_type=sdk).
 4. Create and set up a Publisher Account project:
     1. Go to Projects and click **Create new project**.
     2. In setup mode, add **Project name** and click **Create**.
