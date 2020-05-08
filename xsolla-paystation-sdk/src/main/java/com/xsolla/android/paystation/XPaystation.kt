@@ -13,7 +13,7 @@ import com.xsolla.android.paystation.ui.ActivityPaystationWebView
 import kotlinx.android.parcel.Parcelize
 
 /**
- * Entry point for Xsolla Paystation SDK
+ * Entry point for Xsolla Pay Station SDK
  */
 class XPaystation {
 
@@ -22,7 +22,7 @@ class XPaystation {
         const val SERVER_SANDBOX = "sandbox-secure.xsolla.com"
 
         /**
-         * Create builder for Paystation intent
+         * Create builder for the Pay Station intent
          */
         @JvmStatic
         fun createIntentBuilder(context: Context) = IntentBuilder(context)
@@ -36,17 +36,17 @@ class XPaystation {
         private var useWebview: Boolean = false
 
         /**
-         * Set Paystation access token
+         * Set a Pay Station access token
          */
         fun accessToken(accessToken: AccessToken) = apply { this.accessToken = accessToken }
         fun accessData(accessData: AccessData) = apply { this.accessData = accessData }
         /**
-         * Set sandbox mode
+         * Set the sandbox mode
          */
         fun isSandbox(isSandbox: Boolean) = apply { this.isSandbox = isSandbox }
 
         /**
-         * Set use webview instead of browser
+         * Set use webview instead of a browser
          */
         fun useWebview(useWebview: Boolean) = apply { this.useWebview = useWebview }
 
@@ -89,13 +89,13 @@ class XPaystation {
     }
 
     /**
-     * Paystation result
+     * Pay Station result
      */
     @Parcelize
     data class Result(val status: Status, val invoiceId: String?) : Parcelable {
         companion object {
             /**
-             * Parse result from result intent
+             * Parse result from the result intent
              */
             @JvmStatic
             fun fromResultIntent(intent: Intent?): Result =
@@ -105,15 +105,15 @@ class XPaystation {
     }
 
     /**
-     * Paystation result possible values
+     * Pay Station result possible values
      */
     enum class Status {
         /**
-         * User completed flow and returned back
+         * User completed a flow and returned back
          */
         COMPLETED,
         /**
-         * User cancelled flow
+         * User cancelled a flow
          */
         CANCELLED,
         UNKNOWN

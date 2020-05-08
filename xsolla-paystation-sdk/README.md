@@ -11,14 +11,14 @@ implementation 'com.xsolla.android:paystation:0.9.0'
 
 # Usage
 
-## Configure Callback URL
-Add the following strings to project's strings resources file to specify Callback URL configured in Publisher Account 
+## Configure Return URL
+Add the following strings to project's strings resources file to specify Return URL configured in Publisher Account 
 ```xml
 <string name="xsolla_paystation_redirect_scheme">https</string>
 <string name="xsolla_paystation_redirect_host">example.com</string>
 <string name="xsolla_paystation_redirect_path_prefix">/payment</string>
 ```
-There you should set Callback URL split into 3 parts. (The example is for `https://example.com/payment`)
+There you should set Return URL split into 3 parts. (The example is for `https://example.com/payment`)
 
 ## Create Paystation intent
 

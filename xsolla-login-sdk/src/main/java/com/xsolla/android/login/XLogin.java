@@ -65,7 +65,7 @@ public class XLogin {
 
     /**
      * Initialize SDK
-     * @param projectId project id from Publisher Account
+     * @param projectId login ID from Publisher Account > Login settings
      * @param context application context
      */
     public static void init(String projectId, Context context) {
@@ -74,8 +74,8 @@ public class XLogin {
 
     /**
      * Initialize SDK
-     * @param projectId project id from Publisher Account
-     * @param callbackUrl callback URL from Publisher Account
+     * @param projectId login ID from Publisher Account > Login settings
+     * @param callbackUrl callback URL specified in Publisher Account > Login settings
      * @param context application context
      */
     public static void init(String projectId, String callbackUrl, Context context) {
@@ -110,7 +110,7 @@ public class XLogin {
     }
 
     /**
-     * Register new user
+     * Register a new user
      * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-register">Login API Reference</a>
      * @param username new user's username
      * @param email new user's email
@@ -135,9 +135,9 @@ public class XLogin {
     }
 
     /**
-     * Authenticate via social network
+     * Authenticate via a social network
      * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
-     * @param socialNetwork social network to authenticate with
+     * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
      * @param callback status callback
      */
     public static void loginSocial(SocialNetwork socialNetwork, XLoginSocialCallback<SocialAuthResponse> callback) {
