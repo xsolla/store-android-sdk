@@ -65,7 +65,7 @@ public class XLogin {
 
     /**
      * Initialize SDK
-     * @param projectId login ID from Publisher Account > Login settings
+     * @param projectId login ID from Publisher Account &gt; Login settings
      * @param context application context
      */
     public static void init(String projectId, Context context) {
@@ -74,8 +74,8 @@ public class XLogin {
 
     /**
      * Initialize SDK
-     * @param projectId login ID from Publisher Account > Login settings
-     * @param callbackUrl callback URL specified in Publisher Account > Login settings
+     * @param projectId login ID from Publisher Account &gt; Login settings
+     * @param callbackUrl callback URL specified in Publisher Account &gt; Login settings
      * @param context application context
      */
     public static void init(String projectId, String callbackUrl, Context context) {

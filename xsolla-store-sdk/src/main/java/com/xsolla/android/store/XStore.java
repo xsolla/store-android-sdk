@@ -148,7 +148,7 @@ public class XStore {
     /**
      * Get an items list from the specified group for building a catalog
      * @see <a href="https://developers.xsolla.com/store-api/items/get-virtual-items-group">Store API Reference</a>
-     * @param options request options, must contain group external ID from Publisher Account > Store Settings > Virtual Items
+     * @param options request options, must contain group external ID from Publisher Account &gt; Store Settings &gt; Virtual Items
      * @param callback status callback
      */
     public static void getItemsBySpecifiedGroup(ItemsRequestOptions options, XStoreCallback<VirtualItemsResponse> callback) {
