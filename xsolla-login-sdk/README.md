@@ -6,7 +6,7 @@
 The library is available in JCenter. To start using it, add the following line to the dependencies section of your `build.gradle` file:
 
 ```groovy
-implementation 'com.xsolla.android:login:0.9.0'
+implementation 'com.xsolla.android:login:0.9.1'
 ```
 
 # Usage
