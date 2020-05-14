@@ -5,12 +5,18 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-public class VirtualPrice implements Parcelable {
+import java.io.Serializable;
+import java.math.BigDecimal;
+
+public class VirtualPrice implements IPrice, Parcelable {
 
     private int amount;
-
     @SerializedName("amount_without_discount")
     private int amountWithoutDiscount;
+
+    @SerializedName("calculated_price")
+    private CalculatedPrice calculatedPrice;
+
     private String sku;
 
     @SerializedName("is_default")
@@ -31,6 +37,7 @@ public class VirtualPrice implements Parcelable {
         name = in.readString();
         type = in.readString();
         description = in.readString();
+        calculatedPrice = (CalculatedPrice) in.readSerializable();
     }
 
     public static final Creator<VirtualPrice> CREATOR = new Creator<VirtualPrice>() {
@@ -45,12 +52,44 @@ public class VirtualPrice implements Parcelable {
         }
     };
 
+    @Deprecated
     public int getAmount() {
         return amount;
     }
 
+    @Deprecated
     public int getAmountWithoutDiscount() {
         return amountWithoutDiscount;
+    }
+
+    @Override
+    public String getAmountRaw() {
+        return calculatedPrice.amount.toPlainString();
+    }
+
+    @Override
+    public String getAmountWithoutDiscountRaw() {
+        return calculatedPrice.amountWithoutDiscount.toPlainString();
+    }
+
+    @Override
+    public BigDecimal getAmountDecimal() {
+        return calculatedPrice.amount;
+    }
+
+    @Override
+    public BigDecimal getAmountWithoutDiscountDecimal() {
+        return calculatedPrice.amountWithoutDiscount;
+    }
+
+    @Override
+    public String getCurrencyId() {
+        return getSku();
+    }
+
+    @Override
+    public String getCurrencyName() {
+        return getName();
     }
 
     public String getSku() {
@@ -77,8 +116,9 @@ public class VirtualPrice implements Parcelable {
         return description;
     }
 
+    @Deprecated
     public String getPrettyPrintAmount() {
-        return getAmount() + " " + getName();
+        return getAmountDecimal().stripTrailingZeros().toPlainString() + " " + getName();
     }
 
     @Override
@@ -96,5 +136,12 @@ public class VirtualPrice implements Parcelable {
         dest.writeString(name);
         dest.writeString(type);
         dest.writeString(description);
+        dest.writeSerializable(calculatedPrice);
+    }
+
+    public static class CalculatedPrice implements Serializable {
+        public BigDecimal amount;
+        @SerializedName("amount_without_discount")
+        public BigDecimal amountWithoutDiscount;
     }
 }
