@@ -7,18 +7,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
+import com.xsolla.android.store.entity.response.common.IPrice;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.listener.UpdateCartListener;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
 
+import java.math.RoundingMode;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
@@ -75,9 +77,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             Glide.with(itemView).load(item.getImageUrl()).into(itemIcon);
             itemName.setText(item.getName());
 
-            String price = item.getPrice().getAmount();
-            String currency = item.getPrice().getCurrency();
-            String formattedPrice = price.substring(0, price.indexOf(".") + 3) + " " + currency;
+            IPrice price = item.getPrice();
+            String formattedPrice = price.getAmountDecimal().setScale(2, RoundingMode.HALF_UP) + " " + price.getCurrencyName();
 
             itemPrice.setText(formattedPrice);
             quantityLabel.setText(String.valueOf(quantity));

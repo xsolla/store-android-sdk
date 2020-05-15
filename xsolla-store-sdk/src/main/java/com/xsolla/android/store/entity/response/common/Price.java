@@ -5,17 +5,20 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Price implements Parcelable {
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
-    private String amount;
+public class Price implements IPrice, Parcelable {
 
+    private BigDecimal amount;
     @SerializedName("amount_without_discount")
-    private String amountWithoutDiscount;
+    private BigDecimal amountWithoutDiscount;
+
     private String currency;
 
     protected Price(Parcel in) {
-        amount = in.readString();
-        amountWithoutDiscount = in.readString();
+        amount = (BigDecimal) in.readSerializable();
+        amountWithoutDiscount = (BigDecimal) in.readSerializable();
         currency = in.readString();
     }
 
@@ -31,20 +34,53 @@ public class Price implements Parcelable {
         }
     };
 
+    @Deprecated
     public String getAmount() {
+        return amount.toPlainString();
+    }
+
+    @Deprecated
+    public String getAmountWithoutDiscount() {
+        return amountWithoutDiscount.toPlainString();
+    }
+
+    @Override
+    public String getAmountRaw() {
+        return amount.toPlainString();
+    }
+
+    @Override
+    public String getAmountWithoutDiscountRaw() {
+        return amountWithoutDiscount.toPlainString();
+    }
+
+    @Override
+    public BigDecimal getAmountDecimal() {
         return amount;
     }
 
-    public String getAmountWithoutDiscount() {
+    @Override
+    public BigDecimal getAmountWithoutDiscountDecimal() {
         return amountWithoutDiscount;
+    }
+
+    @Override
+    public String getCurrencyId() {
+        return getCurrency();
+    }
+
+    @Override
+    public String getCurrencyName() {
+        return getCurrency();
     }
 
     public String getCurrency() {
         return currency;
     }
 
+    @Deprecated
     public String getPrettyPrintAmount() {
-        return getAmount().substring(0, getAmount().indexOf(".") + 3) + " " + getCurrency();
+        return getAmountDecimal().setScale(2, RoundingMode.HALF_UP).toPlainString() + " " + getCurrency();
     }
 
     @Override
@@ -54,8 +90,8 @@ public class Price implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(amount);
-        dest.writeString(amountWithoutDiscount);
+        dest.writeSerializable(amount);
+        dest.writeSerializable(amountWithoutDiscount);
         dest.writeString(currency);
     }
 }
