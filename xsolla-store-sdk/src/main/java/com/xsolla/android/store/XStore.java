@@ -11,6 +11,7 @@ import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
 import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
+import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse;
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
@@ -274,6 +275,15 @@ public class XStore {
      */
     public static void getInventory(XStoreCallback<InventoryResponse> callback) {
         getRequestExecutor().getInventory(callback);
+    }
+
+    /**
+     * Get a current user’s subscriptions
+     * @see <a href="https://developers.xsolla.com/store-api/inventory-client/get-user-subscriptions">Store API Reference</a>
+     * @param callback status callback
+     */
+    public static void getSubscriptions(XStoreCallback<SubscriptionsResponse> callback) {
+        getRequestExecutor().getSubscriptions(callback);
     }
 
     /**

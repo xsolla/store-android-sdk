@@ -7,28 +7,36 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
+import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.listener.ConsumeListener;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.ViewHolder> {
 
     private List<InventoryResponse.Item> items;
+    private List<SubscriptionsResponse.Item> subscriptions;
     private ConsumeListener consumeListener;
 
     public InventoryAdapter(List<InventoryResponse.Item> items, ConsumeListener consumeListener) {
         this.items = items;
         this.consumeListener = consumeListener;
+    }
+
+    public void setSubscriptions(List<SubscriptionsResponse.Item> subscriptions) {
+        this.subscriptions = subscriptions;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -52,6 +60,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
 
         ImageView itemIcon;
         TextView itemName;
+        TextView itemExpiration;
         Button consumeButton;
         TextView quantityLabel;
 
@@ -59,6 +68,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
             super(itemView);
             itemIcon = itemView.findViewById(R.id.item_icon);
             itemName = itemView.findViewById(R.id.item_name);
+            itemExpiration = itemView.findViewById(R.id.item_expiration);
             consumeButton = itemView.findViewById(R.id.consume_button);
             quantityLabel = itemView.findViewById(R.id.quantity_label);
         }
@@ -67,6 +77,14 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
 
             Glide.with(itemView).load(item.getImageUrl()).into(itemIcon);
             itemName.setText(item.getName());
+
+            String expirationText = getExpirationText(item);
+            if (expirationText != null) {
+                itemExpiration.setText(expirationText);
+                itemExpiration.setVisibility(View.VISIBLE);
+            } else {
+                itemExpiration.setVisibility(View.GONE);
+            }
 
             if (item.getRemainingUses() == 0) {
                 quantityLabel.setVisibility(View.GONE);
@@ -116,6 +134,22 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
                 });
             });
         }
+    }
+
+    private String getExpirationText(InventoryResponse.Item item) {
+        if (subscriptions == null) {
+            return null;
+        }
+        for (SubscriptionsResponse.Item subscription : subscriptions) {
+            if (subscription.getSku().equals(item.getSku())) {
+                long secondsLeft = subscription.getExpiredAt() - TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+                long days = TimeUnit.SECONDS.toDays(secondsLeft);
+                long hours = TimeUnit.SECONDS.toHours(secondsLeft - TimeUnit.DAYS.toSeconds(days));
+                long minutes = TimeUnit.SECONDS.toMinutes(secondsLeft - TimeUnit.DAYS.toSeconds(days) - TimeUnit.HOURS.toSeconds(hours));
+                return "Expires in: " + days + "d " + hours + "h " + minutes + "m";
+            }
+        }
+        return null;
     }
 
 }

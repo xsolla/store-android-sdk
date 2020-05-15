@@ -1,13 +1,9 @@
 package com.xsolla.android.storesdkexample.fragments;
 
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
+import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.InventoryAdapter;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
@@ -15,6 +11,11 @@ import com.xsolla.android.storesdkexample.listener.ConsumeListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class InventoryFragment extends BaseFragment implements ConsumeListener {
 
@@ -54,6 +55,23 @@ public class InventoryFragment extends BaseFragment implements ConsumeListener {
 
                 inventoryAdapter = new InventoryAdapter(virtualItems, InventoryFragment.this);
                 recyclerView.setAdapter(inventoryAdapter);
+
+                getSubscriptions();
+            }
+
+            @Override
+            protected void onFailure(String errorMessage) {
+                showSnack(errorMessage);
+            }
+        });
+    }
+
+    private void getSubscriptions() {
+        XStore.getSubscriptions(new XStoreCallback<SubscriptionsResponse>() {
+            @Override
+            protected void onSuccess(SubscriptionsResponse response) {
+                List<SubscriptionsResponse.Item> subscriptions = response.getItems();
+                inventoryAdapter.setSubscriptions(subscriptions);
             }
 
             @Override

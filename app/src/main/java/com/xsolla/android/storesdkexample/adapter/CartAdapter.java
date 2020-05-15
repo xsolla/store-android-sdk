@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
+import com.xsolla.android.store.entity.response.common.ExpirationPeriod;
 import com.xsolla.android.store.entity.response.common.IPrice;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.listener.UpdateCartListener;
@@ -54,6 +55,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         ImageView itemIcon;
         TextView itemName;
         TextView itemPrice;
+        TextView itemExpiration;
         ImageView minusButton;
         ImageView addButton;
         TextView quantityLabel;
@@ -63,6 +65,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             itemIcon = itemView.findViewById(R.id.item_icon);
             itemName = itemView.findViewById(R.id.item_name);
             itemPrice = itemView.findViewById(R.id.item_price);
+            itemExpiration = itemView.findViewById(R.id.item_expiration);
             minusButton = itemView.findViewById(R.id.minus_button);
             addButton = itemView.findViewById(R.id.add_button);
             quantityLabel = itemView.findViewById(R.id.quantity_label);
@@ -76,6 +79,22 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
             Glide.with(itemView).load(item.getImageUrl()).into(itemIcon);
             itemName.setText(item.getName());
+
+            ExpirationPeriod expirationPeriod = item.getInventoryOption().getExpirationPeriod();
+            if (expirationPeriod == null) {
+                itemExpiration.setVisibility(View.GONE);
+            } else {
+                itemExpiration.setVisibility(View.VISIBLE);
+                StringBuilder sb = new StringBuilder();
+                sb.append("Expiration: ");
+                sb.append(expirationPeriod.getValue());
+                sb.append(' ');
+                sb.append(expirationPeriod.getType().name().toLowerCase());
+                if (expirationPeriod.getValue() != 1) {
+                    sb.append('s');
+                }
+                itemExpiration.setText(sb);
+            }
 
             IPrice price = item.getPrice();
             String formattedPrice = price.getAmountDecimal().setScale(2, RoundingMode.HALF_UP) + " " + price.getCurrencyName();
