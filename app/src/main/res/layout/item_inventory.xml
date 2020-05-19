@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -27,6 +26,15 @@
             android:layout_gravity="center_vertical"
             android:textSize="20sp"
             tools:text="Some item" />
+
+        <TextView
+            android:id="@+id/item_expiration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/roboto"
+            android:textSize="18sp"
+            tools:text="Expire in 10 days" />
 
     </LinearLayout>
 

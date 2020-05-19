@@ -11,6 +11,7 @@ import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
 import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
+import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse;
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
@@ -135,6 +136,10 @@ class RequestExecutor {
 
     public void getInventory(XStoreCallback<InventoryResponse> callback) {
         storeApi.getInventory(projectId).enqueue(callback);
+    }
+
+    public void getSubscriptions(XStoreCallback<SubscriptionsResponse> callback) {
+        storeApi.getSubscriptions(projectId).enqueue(callback);
     }
 
     public void getVirtualBalance(XStoreCallback<VirtualBalanceResponse> callback) {

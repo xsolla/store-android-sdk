@@ -6,13 +6,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
+import com.xsolla.android.store.entity.response.common.ExpirationPeriod;
 import com.xsolla.android.store.entity.response.common.Price;
 import com.xsolla.android.store.entity.response.common.VirtualPrice;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
@@ -22,6 +20,9 @@ import com.xsolla.android.storesdkexample.listener.AddToCartListener;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapter.ViewHolder> {
 
@@ -55,6 +56,7 @@ public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapte
         ImageView itemIcon;
         TextView itemName;
         TextView itemPrice;
+        TextView itemExpiration;
         ImageView buyButton;
 
         public ViewHolder(@NonNull View itemView) {
@@ -62,12 +64,29 @@ public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapte
             itemIcon = itemView.findViewById(R.id.item_icon);
             itemName = itemView.findViewById(R.id.item_name);
             itemPrice = itemView.findViewById(R.id.item_price);
+            itemExpiration = itemView.findViewById(R.id.item_expiration);
             buyButton = itemView.findViewById(R.id.buy_button);
         }
 
         private void bind(final VirtualItemsResponse.Item item) {
             Glide.with(itemView).load(item.getImageUrl()).into(itemIcon);
             itemName.setText(item.getName());
+
+            ExpirationPeriod expirationPeriod = item.getInventoryOption().getExpirationPeriod();
+            if (expirationPeriod == null) {
+                itemExpiration.setVisibility(View.GONE);
+            } else {
+                itemExpiration.setVisibility(View.VISIBLE);
+                StringBuilder sb = new StringBuilder();
+                sb.append("Expiration: ");
+                sb.append(expirationPeriod.getValue());
+                sb.append(' ');
+                sb.append(expirationPeriod.getType().name().toLowerCase());
+                if (expirationPeriod.getValue() != 1) {
+                    sb.append('s');
+                }
+                itemExpiration.setText(sb);
+            }
 
             Price realPrice = item.getPrice();
             List<VirtualPrice> virtualPrices = item.getVirtualPrices();
