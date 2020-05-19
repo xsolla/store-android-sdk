@@ -142,11 +142,15 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
         }
         for (SubscriptionsResponse.Item subscription : subscriptions) {
             if (subscription.getSku().equals(item.getSku())) {
-                long secondsLeft = subscription.getExpiredAt() - TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-                long days = TimeUnit.SECONDS.toDays(secondsLeft);
-                long hours = TimeUnit.SECONDS.toHours(secondsLeft - TimeUnit.DAYS.toSeconds(days));
-                long minutes = TimeUnit.SECONDS.toMinutes(secondsLeft - TimeUnit.DAYS.toSeconds(days) - TimeUnit.HOURS.toSeconds(hours));
-                return "Expires in: " + days + "d " + hours + "h " + minutes + "m";
+                if (subscription.getStatus() == SubscriptionsResponse.Item.Status.ACTIVE) {
+                    long secondsLeft = subscription.getExpiredAt() - TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+                    long days = TimeUnit.SECONDS.toDays(secondsLeft);
+                    long hours = TimeUnit.SECONDS.toHours(secondsLeft - TimeUnit.DAYS.toSeconds(days));
+                    long minutes = TimeUnit.SECONDS.toMinutes(secondsLeft - TimeUnit.DAYS.toSeconds(days) - TimeUnit.HOURS.toSeconds(hours));
+                    return "Expires in: " + days + "d " + hours + "h " + minutes + "m";
+                } else {
+                    return "Expired";
+                }
             }
         }
         return null;
