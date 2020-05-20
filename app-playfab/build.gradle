@@ -1,10 +1,12 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+
     defaultConfig {
-        applicationId "com.xsolla.android.storesdkexample"
+        applicationId "com.xsolla.android.playfabexample"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
@@ -12,8 +14,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary true
 
-        buildConfigField 'int', 'PROJECT_ID', '58917' // Replace to your Project ID
-        buildConfigField 'String', 'LOGIN_ID', '"026201e3-7e40-11ea-a85b-42010aa80004"' // Replace to your project's Login ID
+        buildConfigField 'String', 'PLAYFAB_ID', '"2915B"' // Replace to your project's Playfab Title ID
     }
     buildTypes {
         release {
@@ -33,16 +34,23 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7"
+    implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.appcompat:appcompat:1.2.0-alpha03'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.google.android.material:material:1.2.0-alpha05'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    implementation project(":xsolla-login-sdk")
+    implementation 'com.playfab:client-sdk:0.107.200330'
+
     implementation project(":xsolla-store-sdk")
     implementation project(":xsolla-paystation-sdk")
 }

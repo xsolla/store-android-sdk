@@ -7,6 +7,17 @@
     android:background="@color/fragment_bg_color"
     android:padding="8dp">
 
+    <Button
+        android:id="@+id/logout_button"
+        style="@style/XButton"
+        android:layout_width="@dimen/input_width"
+        android:layout_height="@dimen/input_height"
+        android:layout_marginBottom="24dp"
+        android:text="Logout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
@@ -145,17 +156,6 @@
         app:layout_constraintStart_toStartOf="@+id/textView6"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-    <Button
-        android:id="@+id/logout_button"
-        style="@style/XButton"
-        android:layout_width="@dimen/input_width"
-        android:layout_height="@dimen/input_height"
-        android:layout_marginBottom="24dp"
-        android:text="Logout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -194,5 +194,13 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/textView6"
         app:layout_constraintStart_toEndOf="@+id/textView6"
         tools:text="John Doe" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="textView12,textView8,token_type,textView10,username,textView18,textView6,issuer,email,publisher_id,issued_at,textView16,expires_at,textView14"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

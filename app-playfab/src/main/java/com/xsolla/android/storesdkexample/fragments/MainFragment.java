@@ -7,11 +7,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.xsolla.android.login.XLogin;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
-import com.xsolla.android.storesdkexample.BuildConfig;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 
@@ -29,13 +27,13 @@ public class MainFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String token = XLogin.getToken();
-        XStore.init(BuildConfig.PROJECT_ID, token);
+//        String token = XLogin.getToken();
+//        XStore.init(BuildConfig.PROJECT_ID, token);
     }
 
     @Override
     public void initUI() {
-        getBalance();
+//        getBalance();
 
         rootView.findViewById(R.id.virtual_items_button).setOnClickListener(v -> openFragment(new VirtualItemsFragment()));
         rootView.findViewById(R.id.virtual_currency_button).setOnClickListener(v -> openFragment(new VirtualCurrencyFragment()));

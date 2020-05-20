@@ -3,9 +3,8 @@ package com.xsolla.android.storesdkexample.fragments;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.xsolla.android.login.XLogin;
-import com.xsolla.android.login.api.XLoginCallback;
 import com.xsolla.android.storesdkexample.R;
+import com.xsolla.android.storesdkexample.data.auth.Auth;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
 
@@ -39,16 +38,16 @@ public class RegisterFragment extends BaseFragment {
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
 
-        XLogin.register(username, email, password, new XLoginCallback<Void>() {
+        Auth.INSTANCE.register(username, email, password, new Auth.AuthCallback() {
             @Override
-            protected void onSuccess(Void response) {
+            public void onSuccess() {
                 showSnack("Registration success. Please check your email");
                 openFragment(new AuthFragment());
                 ViewUtils.enable(registerButton);
             }
 
             @Override
-            protected void onFailure(String errorMessage) {
+            public void onFailure(String errorMessage) {
                 showSnack(errorMessage);
                 ViewUtils.enable(registerButton);
             }

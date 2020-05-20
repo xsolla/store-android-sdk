@@ -5,7 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
-import com.xsolla.android.login.XLogin;
+import com.xsolla.android.storesdkexample.data.auth.Auth;
 import com.xsolla.android.storesdkexample.fragments.AuthFragment;
 import com.xsolla.android.storesdkexample.fragments.MainFragment;
 
@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        XLogin.init(BuildConfig.LOGIN_ID, this);
+        Auth.INSTANCE.init(BuildConfig.PLAYFAB_ID);
         initFragment();
         initStatusBar();
     }
@@ -36,11 +36,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private Fragment getFragment() {
-        String token = XLogin.getToken();
-        if (token != null && !XLogin.isTokenExpired()) {
-            return new MainFragment();
-        } else {
+        if (Auth.INSTANCE.isTokenExpired()) {
             return new AuthFragment();
+        } else {
+            return new MainFragment();
         }
     }
 
