@@ -1,15 +1,13 @@
 package com.xsolla.android.storesdkexample.fragments;
 
-import com.xsolla.android.store.XStore;
-import com.xsolla.android.store.api.XStoreCallback;
-import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
-import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.InventoryAdapter;
+import com.xsolla.android.storesdkexample.data.store.Store;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.listener.ConsumeListener;
 
-import java.util.ArrayList;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import androidx.appcompat.widget.Toolbar;
@@ -43,39 +41,15 @@ public class InventoryFragment extends BaseFragment implements ConsumeListener {
 
 
     private void getItems() {
-        XStore.getInventory(new XStoreCallback<InventoryResponse>() {
+        Store.INSTANCE.getInventory(new Store.InventoryCallback() {
             @Override
-            protected void onSuccess(InventoryResponse response) {
-                List<InventoryResponse.Item> virtualItems = new ArrayList<>();
-                for (InventoryResponse.Item item : response.getItems()) {
-                    if (item.getType() == InventoryResponse.Item.Type.VIRTUAL_GOOD) {
-                        virtualItems.add(item);
-                    }
-                }
-
-                inventoryAdapter = new InventoryAdapter(virtualItems, InventoryFragment.this);
+            public void onSuccess(@NotNull List<Store.InventoryItem> inventoryItems) {
+                inventoryAdapter = new InventoryAdapter(inventoryItems, InventoryFragment.this);
                 recyclerView.setAdapter(inventoryAdapter);
-
-                getSubscriptions();
             }
 
             @Override
-            protected void onFailure(String errorMessage) {
-                showSnack(errorMessage);
-            }
-        });
-    }
-
-    private void getSubscriptions() {
-        XStore.getSubscriptions(new XStoreCallback<SubscriptionsResponse>() {
-            @Override
-            protected void onSuccess(SubscriptionsResponse response) {
-                List<SubscriptionsResponse.Item> subscriptions = response.getItems();
-                inventoryAdapter.setSubscriptions(subscriptions);
-            }
-
-            @Override
-            protected void onFailure(String errorMessage) {
+            public void onFailure(@NotNull String errorMessage) {
                 showSnack(errorMessage);
             }
         });

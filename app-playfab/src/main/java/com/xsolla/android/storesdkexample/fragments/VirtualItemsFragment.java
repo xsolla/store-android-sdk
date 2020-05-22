@@ -1,18 +1,31 @@
 package com.xsolla.android.storesdkexample.fragments;
 
-import com.xsolla.android.store.XStore;
-import com.xsolla.android.store.api.XStoreCallback;
-import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
+import android.app.Activity;
+import android.content.Intent;
+import android.widget.Toast;
+
+import com.xsolla.android.paystation.XPaystation;
+import com.xsolla.android.paystation.data.AccessToken;
+import com.xsolla.android.storesdkexample.BuildConfig;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.VirtualItemsAdapter;
+import com.xsolla.android.storesdkexample.data.store.Store;
 import com.xsolla.android.storesdkexample.fragments.base.CatalogFragment;
-import com.xsolla.android.storesdkexample.listener.AddToCartListener;
+import com.xsolla.android.storesdkexample.listener.BuyForVirtualCurrencyListener;
+import com.xsolla.android.storesdkexample.listener.CreateOrderListener;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class VirtualItemsFragment extends CatalogFragment implements AddToCartListener {
+public class VirtualItemsFragment extends CatalogFragment {
+
+    private static final int RC_PAYSTATION = 1;
 
     private VirtualItemsAdapter virtualItemsAdapter;
     private RecyclerView recyclerView;
@@ -34,43 +47,63 @@ public class VirtualItemsFragment extends CatalogFragment implements AddToCartLi
 
         setupToolbar("Virtual Items");
         getItems();
-        updateBadge();
     }
 
 
     private void getItems() {
-        XStore.getVirtualItems(new XStoreCallback<VirtualItemsResponse>() {
+        Store.INSTANCE.getVirtualItems(new Store.VirtualItemsCallback() {
             @Override
-            protected void onSuccess(VirtualItemsResponse response) {
-                virtualItemsAdapter = new VirtualItemsAdapter(response.getItems(), VirtualItemsFragment.this);
+            public void onSuccess(@NotNull List<Store.VirtualItem> virtualItems) {
+                virtualItemsAdapter = new VirtualItemsAdapter(
+                        virtualItems,
+                        new CreateOrderListener() {
+                            @Override
+                            public void onOrderCreated(String psToken) {
+                                Intent intent = XPaystation.createIntentBuilder(getContext())
+                                        .accessToken(new AccessToken(psToken))
+                                        .useWebview(true)
+                                        .isSandbox(BuildConfig.IS_SANDBOX)
+                                        .build();
+                                startActivityForResult(intent, RC_PAYSTATION);
+                            }
+
+                            @Override
+                            public void onFailure(String message) {
+                                showSnack(message);
+                            }
+                        },
+                        new BuyForVirtualCurrencyListener() {
+                            @Override
+                            public void onSuccess() {
+                                showSnack("Purchased by Virtual currency");
+                            }
+
+                            @Override
+                            public void onFailure(String errorMessage) {
+                                showSnack(errorMessage);
+                            }
+                        });
                 recyclerView.setAdapter(virtualItemsAdapter);
             }
 
             @Override
-            protected void onFailure(String errorMessage) {
+            public void onFailure(@NotNull String errorMessage) {
                 showSnack(errorMessage);
             }
         });
     }
 
     @Override
-    public void onSuccess() {
-        updateBadge();
-    }
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-    @Override
-    public void onFailure(String errorMessage) {
-        showSnack(errorMessage);
-    }
-
-    @Override
-    public void onItemClicked(VirtualItemsResponse.Item item) {
-        DetailFragment detailFragment = DetailFragment.newInstance(item);
-        openFragment(detailFragment);
-    }
-
-    @Override
-    public void showMessage(String message) {
-        showSnack(message);
+        if (requestCode == RC_PAYSTATION) {
+            XPaystation.Result result = XPaystation.Result.fromResultIntent(data);
+            if (resultCode == Activity.RESULT_OK) {
+                Toast.makeText(getContext(), "Payment OK\n" + result, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getContext(), "Payment Fail\n" + result, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

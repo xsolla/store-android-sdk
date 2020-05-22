@@ -8,35 +8,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.xsolla.android.store.XStore;
-import com.xsolla.android.store.api.XStoreCallback;
-import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
-import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse;
 import com.xsolla.android.storesdkexample.R;
+import com.xsolla.android.storesdkexample.data.store.Store;
 import com.xsolla.android.storesdkexample.listener.ConsumeListener;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
 
-import java.util.ArrayList;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.ViewHolder> {
 
-    private List<InventoryResponse.Item> items;
-    private List<SubscriptionsResponse.Item> subscriptions;
+    private List<Store.InventoryItem> items;
     private ConsumeListener consumeListener;
 
-    public InventoryAdapter(List<InventoryResponse.Item> items, ConsumeListener consumeListener) {
+    public InventoryAdapter(List<Store.InventoryItem> items, ConsumeListener consumeListener) {
         this.items = items;
         this.consumeListener = consumeListener;
-    }
-
-    public void setSubscriptions(List<SubscriptionsResponse.Item> subscriptions) {
-        this.subscriptions = subscriptions;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -73,18 +64,12 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
             quantityLabel = itemView.findViewById(R.id.quantity_label);
         }
 
-        public void bind(InventoryResponse.Item item) {
+        public void bind(Store.InventoryItem item) {
 
             Glide.with(itemView).load(item.getImageUrl()).into(itemIcon);
             itemName.setText(item.getName());
 
-            String expirationText = getExpirationText(item);
-            if (expirationText != null) {
-                itemExpiration.setText(expirationText);
-                itemExpiration.setVisibility(View.VISIBLE);
-            } else {
-                itemExpiration.setVisibility(View.GONE);
-            }
+            itemExpiration.setVisibility(View.GONE);
 
             if (item.getRemainingUses() == 0) {
                 quantityLabel.setVisibility(View.GONE);
@@ -99,27 +84,20 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
             consumeButton.setOnClickListener(v -> {
                 ViewUtils.disable(v);
 
-                XStore.consumeItem(item.getSku(), 1, null, new XStoreCallback<Void>() {
+                Store.INSTANCE.consumeItem(item.getInstanceId(), 1, new Store.ConsumeCallback() {
                     @Override
-                    protected void onSuccess(Void response) {
+                    public void onSuccess() {
                         consumeListener.onSuccess();
-                        XStore.getInventory(new XStoreCallback<InventoryResponse>() {
+                        Store.INSTANCE.getInventory(new Store.InventoryCallback() {
                             @Override
-                            protected void onSuccess(InventoryResponse response) {
-                                List<InventoryResponse.Item> virtualItems = new ArrayList<>();
-                                for (InventoryResponse.Item item : response.getItems()) {
-                                    if (item.getType() == InventoryResponse.Item.Type.VIRTUAL_GOOD) {
-                                        virtualItems.add(item);
-                                    }
-                                }
-
-                                items = virtualItems;
+                            public void onSuccess(@NotNull List<Store.InventoryItem> inventoryItems) {
+                                items = inventoryItems;
                                 notifyDataSetChanged();
                                 ViewUtils.enable(v);
                             }
 
                             @Override
-                            protected void onFailure(String errorMessage) {
+                            public void onFailure(@NotNull String errorMessage) {
                                 consumeListener.onFailure(errorMessage);
                                 ViewUtils.enable(v);
                             }
@@ -127,33 +105,13 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
                     }
 
                     @Override
-                    protected void onFailure(String errorMessage) {
+                    public void onFailure(@NotNull String errorMessage) {
                         consumeListener.onFailure(errorMessage);
                         ViewUtils.enable(v);
                     }
                 });
             });
         }
-    }
-
-    private String getExpirationText(InventoryResponse.Item item) {
-        if (subscriptions == null) {
-            return null;
-        }
-        for (SubscriptionsResponse.Item subscription : subscriptions) {
-            if (subscription.getSku().equals(item.getSku())) {
-                if (subscription.getStatus() == SubscriptionsResponse.Item.Status.ACTIVE) {
-                    long secondsLeft = subscription.getExpiredAt() - TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-                    long days = TimeUnit.SECONDS.toDays(secondsLeft);
-                    long hours = TimeUnit.SECONDS.toHours(secondsLeft - TimeUnit.DAYS.toSeconds(days));
-                    long minutes = TimeUnit.SECONDS.toMinutes(secondsLeft - TimeUnit.DAYS.toSeconds(days) - TimeUnit.HOURS.toSeconds(hours));
-                    return "Expires in: " + days + "d " + hours + "h " + minutes + "m";
-                } else {
-                    return "Expired";
-                }
-            }
-        }
-        return null;
     }
 
 }

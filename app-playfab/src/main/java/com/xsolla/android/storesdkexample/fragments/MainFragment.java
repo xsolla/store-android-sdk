@@ -7,14 +7,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.xsolla.android.store.XStore;
-import com.xsolla.android.store.api.XStoreCallback;
-import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
+import com.xsolla.android.storesdkexample.BuildConfig;
 import com.xsolla.android.storesdkexample.R;
+import com.xsolla.android.storesdkexample.data.auth.Auth;
+import com.xsolla.android.storesdkexample.data.store.Store;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class MainFragment extends BaseFragment {
@@ -27,41 +28,38 @@ public class MainFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        String token = XLogin.getToken();
-//        XStore.init(BuildConfig.PROJECT_ID, token);
+        Store.INSTANCE.init(BuildConfig.PLAYFAB_ID, Auth.INSTANCE.getToken());
     }
 
     @Override
     public void initUI() {
-//        getBalance();
+        getBalance();
 
         rootView.findViewById(R.id.virtual_items_button).setOnClickListener(v -> openFragment(new VirtualItemsFragment()));
         rootView.findViewById(R.id.virtual_currency_button).setOnClickListener(v -> openFragment(new VirtualCurrencyFragment()));
-        rootView.findViewById(R.id.merchandise_button).setOnClickListener(v -> openFragment(new PhysicalItemsFragment()));
         rootView.findViewById(R.id.inventory_button).setOnClickListener(v -> openFragment(new InventoryFragment()));
 
         rootView.findViewById(R.id.profile_button).setOnClickListener(v -> openFragment(new ProfileFragment()));
     }
 
     private void getBalance() {
-
-        XStore.getVirtualBalance(new XStoreCallback<VirtualBalanceResponse>() {
+        Store.INSTANCE.getVirtualBalance(new Store.VirtualBalanceCallback() {
             @Override
-            protected void onSuccess(VirtualBalanceResponse response) {
-                updateBalanceContainer(response.getItems());
+            public void onSuccess(@NonNull List<Store.VirtualBalance> currencies) {
+                updateBalanceContainer(currencies);
             }
 
             @Override
-            protected void onFailure(String errorMessage) {
+            public void onFailure(@NonNull String errorMessage) {
 
             }
         });
     }
 
-    private void updateBalanceContainer(List<VirtualBalanceResponse.Item> items) {
+    private void updateBalanceContainer(List<Store.VirtualBalance> items) {
         LinearLayout balanceContainer = rootView.findViewById(R.id.balance_container);
 
-        for (VirtualBalanceResponse.Item item : items) {
+        for (Store.VirtualBalance item : items) {
             ImageView balanceIcon = new ImageView(getContext());
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(60, 60);
             layoutParams.setMargins(100, 0, 20, 0);

@@ -7,17 +7,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.xsolla.android.store.XStore;
-import com.xsolla.android.store.api.XStoreCallback;
-import com.xsolla.android.store.entity.response.cart.CartResponse;
-import com.xsolla.android.store.entity.response.common.ExpirationPeriod;
-import com.xsolla.android.store.entity.response.common.Price;
-import com.xsolla.android.store.entity.response.common.VirtualPrice;
-import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
-import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse;
 import com.xsolla.android.storesdkexample.R;
-import com.xsolla.android.storesdkexample.listener.AddToCartListener;
+import com.xsolla.android.storesdkexample.data.store.Store;
+import com.xsolla.android.storesdkexample.listener.BuyForVirtualCurrencyListener;
+import com.xsolla.android.storesdkexample.listener.CreateOrderListener;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -26,12 +22,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapter.ViewHolder> {
 
-    private List<VirtualItemsResponse.Item> items;
-    private AddToCartListener addToCartListener;
+    private List<Store.VirtualItem> items;
+    private CreateOrderListener createOrderListener;
+    private BuyForVirtualCurrencyListener buyForVirtualCurrencyListener;
 
-    public VirtualItemsAdapter(List<VirtualItemsResponse.Item> items, AddToCartListener listener) {
+    public VirtualItemsAdapter(
+            List<Store.VirtualItem> items,
+            CreateOrderListener createOrderListener,
+            BuyForVirtualCurrencyListener buyForVirtualCurrencyListener
+    ) {
         this.items = items;
-        this.addToCartListener = listener;
+        this.createOrderListener = createOrderListener;
+        this.buyForVirtualCurrencyListener = buyForVirtualCurrencyListener;
     }
 
     @NonNull
@@ -68,99 +70,69 @@ public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapte
             buyButton = itemView.findViewById(R.id.buy_button);
         }
 
-        private void bind(final VirtualItemsResponse.Item item) {
+        private void bind(final Store.VirtualItem item) {
             Glide.with(itemView).load(item.getImageUrl()).into(itemIcon);
             itemName.setText(item.getName());
 
-            ExpirationPeriod expirationPeriod = item.getInventoryOption().getExpirationPeriod();
-            if (expirationPeriod == null) {
-                itemExpiration.setVisibility(View.GONE);
-            } else {
-                itemExpiration.setVisibility(View.VISIBLE);
-                StringBuilder sb = new StringBuilder();
-                sb.append("Expiration: ");
-                sb.append(expirationPeriod.getValue());
-                sb.append(' ');
-                sb.append(expirationPeriod.getType().name().toLowerCase());
-                if (expirationPeriod.getValue() != 1) {
-                    sb.append('s');
-                }
-                itemExpiration.setText(sb);
-            }
+            List<Store.Price> realPrices = item.getRealPrices();
+            List<Store.Price> virtualPrices = item.getVirtualPrices();
 
-            Price realPrice = item.getPrice();
-            List<VirtualPrice> virtualPrices = item.getVirtualPrices();
-
-            if (!virtualPrices.isEmpty()) {
-                itemPrice.setText(virtualPrices.get(0).getPrettyPrintAmount());
+            if (virtualPrices != null && !virtualPrices.isEmpty()) {
+                String priceText = virtualPrices.get(0).getAmount().toPlainString() + " " + virtualPrices.get(0).getCurrencyName();
+                itemPrice.setText(priceText);
                 buyButton.setImageResource(R.drawable.ic_buy_button);
                 initForVirtualCurrency(item);
                 return;
             }
 
-            if (realPrice != null) {
-                itemView.setOnClickListener(v -> addToCartListener.onItemClicked(item));
-                itemPrice.setText(realPrice.getPrettyPrintAmount());
-                buyButton.setImageResource(R.drawable.ic_add_to_cart_button);
+            if (realPrices != null && !realPrices.isEmpty()) {
+                String priceText = realPrices.get(0).getAmount().toPlainString() + " " + realPrices.get(0).getCurrencyName();
+                itemPrice.setText(priceText);
+                buyButton.setImageResource(R.drawable.ic_buy_button);
                 initForRealCurrency(item);
             }
         }
 
-        private void initForRealCurrency(VirtualItemsResponse.Item item) {
+        private void initForRealCurrency(Store.VirtualItem item) {
             buyButton.setOnClickListener(v -> {
                 ViewUtils.disable(v);
-                XStore.getCurrentCart(new XStoreCallback<CartResponse>() {
+                Store.INSTANCE.createOrderByItemSku(item.getSku(), new Store.CreateOrderByItemSkuCallback() {
                     @Override
-                    protected void onSuccess(CartResponse response) {
-                        int quantity = 1;
-
-                        for (CartResponse.Item cartItem : response.getItems()) {
-                            if (cartItem.getSku().equals(item.getSku())) {
-                                quantity += cartItem.getQuantity();
-                            }
-                        }
-
-                        XStore.updateItemFromCurrentCart(item.getSku(), quantity, new XStoreCallback<Void>() {
-                            @Override
-                            protected void onSuccess(Void response) {
-                                ViewUtils.enable(v);
-                                addToCartListener.onSuccess();
-                            }
-
-                            @Override
-                            protected void onFailure(String errorMessage) {
-                                addToCartListener.onFailure(errorMessage);
-                                ViewUtils.enable(v);
-                            }
-                        });
+                    public void onSuccess(@NotNull String psToken) {
+                        createOrderListener.onOrderCreated(psToken);
+                        ViewUtils.enable(v);
                     }
 
                     @Override
-                    protected void onFailure(String errorMessage) {
-                        addToCartListener.onFailure(errorMessage);
+                    public void onFailure(@NotNull String errorMessage) {
+                        createOrderListener.onFailure(errorMessage);
                         ViewUtils.enable(v);
                     }
                 });
             });
         }
 
-        private void initForVirtualCurrency(VirtualItemsResponse.Item item) {
-            VirtualPrice virtualPrice = item.getVirtualPrices().get(0);
+        private void initForVirtualCurrency(Store.VirtualItem item) {
+            Store.Price price = item.getVirtualPrices().get(0);
             buyButton.setOnClickListener(v -> {
                 ViewUtils.disable(v);
-                XStore.createOrderByVirtualCurrency(item.getSku(), virtualPrice.getSku(), new XStoreCallback<CreateOrderByVirtualCurrencyResponse>() {
-                    @Override
-                    protected void onSuccess(CreateOrderByVirtualCurrencyResponse response) {
-                        addToCartListener.showMessage("Purchased by Virtual currency");
-                        ViewUtils.enable(v);
-                    }
+                Store.INSTANCE.buyForVirtualCurrency(
+                        item.getSku(),
+                        price.getCurrencyId(),
+                        price.getAmount(),
+                        new Store.BuyForVirtualCurrencyCallback() {
+                            @Override
+                            public void onSuccess() {
+                                buyForVirtualCurrencyListener.onSuccess();
+                                ViewUtils.enable(v);
+                            }
 
-                    @Override
-                    protected void onFailure(String errorMessage) {
-                        addToCartListener.showMessage(errorMessage);
-                        ViewUtils.enable(v);
-                    }
-                });
+                            @Override
+                            public void onFailure(@NotNull String errorMessage) {
+                                buyForVirtualCurrencyListener.onFailure(errorMessage);
+                                ViewUtils.enable(v);
+                            }
+                        });
             });
         }
     }
