@@ -20,23 +20,7 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void initUI() {
 
-        if (!Auth.INSTANCE.isSocialAuthEnabled()) {
-            rootView.findViewById(R.id.group_social).setVisibility(View.GONE);
-        }
-
-        if (!Auth.INSTANCE.isResetPasswordEnabled()) {
-            rootView.findViewById(R.id.forgot_password_button).setVisibility(View.INVISIBLE);
-        }
-
-//        rootView.findViewById(R.id.google_button).setOnClickListener(v -> XLogin.loginSocial(SocialNetwork.GOOGLE, socialAuthCallback));
-//
-//        rootView.findViewById(R.id.facebook_button).setOnClickListener(v -> XLogin.loginSocial(SocialNetwork.FACEBOOK, socialAuthCallback));
-//
-//        rootView.findViewById(R.id.baidu_button).setOnClickListener(v -> XLogin.loginSocial(SocialNetwork.BAIDU, socialAuthCallback));
-//
-//        rootView.findViewById(R.id.linkedin_button).setOnClickListener(v -> XLogin.loginSocial(SocialNetwork.LINKEDIN, socialAuthCallback));
-//
-//        rootView.findViewById(R.id.naver_button).setOnClickListener(v -> XLogin.loginSocial(SocialNetwork.NAVER, socialAuthCallback));
+        rootView.findViewById(R.id.group_social).setVisibility(View.GONE);
 
         final TextView usernameInput = rootView.findViewById(R.id.username_input);
         final TextView passwordInput = rootView.findViewById(R.id.password_input);
@@ -67,22 +51,5 @@ public class AuthFragment extends BaseFragment {
 
         rootView.findViewById(R.id.register_button).setOnClickListener(v -> openFragment(new RegisterFragment()));
     }
-
-//    private XLoginSocialCallback<SocialAuthResponse> socialAuthCallback = new XLoginSocialCallback<SocialAuthResponse>() {
-//        @Override
-//        protected void onSuccess(SocialAuthResponse response) {
-//            openFragment(new MainFragment());
-//        }
-//
-//        @Override
-//        protected void onFailure(String errorMessage) {
-//            showSnack(errorMessage);
-//        }
-//
-//        @Override
-//        protected Activity getActivityForSocialAuth() {
-//            return getActivity();
-//        }
-//    };
 
 }

@@ -4,12 +4,15 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.xsolla.android.storesdkexample.R;
+import com.xsolla.android.storesdkexample.data.auth.Auth;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ResetPasswordFragment extends BaseFragment {
 
-    private TextView usernameInput;
+    private TextView emailInput;
     private Button resetPasswordButton;
 
     @Override
@@ -19,7 +22,7 @@ public class ResetPasswordFragment extends BaseFragment {
 
     @Override
     public void initUI() {
-        usernameInput = rootView.findViewById(R.id.username_input);
+        emailInput = rootView.findViewById(R.id.username_input);
         resetPasswordButton = rootView.findViewById(R.id.reset_password_button);
         resetPasswordButton.setOnClickListener(v -> {
             ViewUtils.disable(resetPasswordButton);
@@ -29,21 +32,21 @@ public class ResetPasswordFragment extends BaseFragment {
 
     private void resetPassword() {
         hideKeyboard();
-        String username = usernameInput.getText().toString();
-//        XLogin.resetPassword(username, new XLoginCallback<Void>() {
-//            @Override
-//            protected void onSuccess(Void response) {
-//                showSnack("Password reset success. Check your email");
-//                openRootFragment();
-//                ViewUtils.enable(resetPasswordButton);
-//            }
-//
-//            @Override
-//            protected void onFailure(String errorMessage) {
-//                showSnack(errorMessage);
-//                ViewUtils.enable(resetPasswordButton);
-//            }
-//        });
+        String email = emailInput.getText().toString();
+        Auth.INSTANCE.resetPassword(email, new Auth.AuthCallback() {
+            @Override
+            public void onSuccess() {
+                showSnack("Password reset success. Check your email");
+                openRootFragment();
+                ViewUtils.enable(resetPasswordButton);
+            }
+
+            @Override
+            public void onFailure(@NotNull String errorMessage) {
+                showSnack(errorMessage);
+                ViewUtils.enable(resetPasswordButton);
+            }
+        });
     }
 
 }
