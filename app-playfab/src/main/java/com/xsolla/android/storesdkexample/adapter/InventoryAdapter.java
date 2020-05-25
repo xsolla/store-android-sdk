@@ -84,11 +84,11 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
             consumeButton.setOnClickListener(v -> {
                 ViewUtils.disable(v);
 
-                Store.INSTANCE.consumeItem(item.getInstanceId(), 1, new Store.ConsumeCallback() {
+                Store.consumeItem(item.getInstanceId(), 1, new Store.ConsumeCallback() {
                     @Override
                     public void onSuccess() {
                         consumeListener.onSuccess();
-                        Store.INSTANCE.getInventory(new Store.InventoryCallback() {
+                        Store.getInventory(new Store.InventoryCallback() {
                             @Override
                             public void onSuccess(@NotNull List<Store.InventoryItem> inventoryItems) {
                                 items = inventoryItems;

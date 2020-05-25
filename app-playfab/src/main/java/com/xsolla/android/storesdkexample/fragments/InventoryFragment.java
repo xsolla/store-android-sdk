@@ -41,7 +41,7 @@ public class InventoryFragment extends BaseFragment implements ConsumeListener {
 
 
     private void getItems() {
-        Store.INSTANCE.getInventory(new Store.InventoryCallback() {
+        Store.getInventory(new Store.InventoryCallback() {
             @Override
             public void onSuccess(@NotNull List<Store.InventoryItem> inventoryItems) {
                 inventoryAdapter = new InventoryAdapter(inventoryItems, InventoryFragment.this);

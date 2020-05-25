@@ -28,7 +28,7 @@ public class MainFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Store.INSTANCE.init(BuildConfig.PLAYFAB_ID, Auth.INSTANCE.getToken());
+        Store.init(BuildConfig.PLAYFAB_ID, Auth.getToken());
     }
 
     @Override
@@ -43,7 +43,7 @@ public class MainFragment extends BaseFragment {
     }
 
     private void getBalance() {
-        Store.INSTANCE.getVirtualBalance(new Store.VirtualBalanceCallback() {
+        Store.getVirtualBalance(new Store.VirtualBalanceCallback() {
             @Override
             public void onSuccess(@NonNull List<Store.VirtualBalance> currencies) {
                 updateBalanceContainer(currencies);

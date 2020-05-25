@@ -12,6 +12,7 @@ import java.math.BigDecimal
 
 object Store {
 
+    @JvmStatic
     fun init(playFabTitleId: String, sessionTicket: String) {
         PlayFabSettings.TitleId = playFabTitleId
         PlayFabSettings.ClientSessionTicket = sessionTicket
@@ -26,6 +27,7 @@ object Store {
     )
 
 
+    @JvmStatic
     fun getVirtualBalance(callback: VirtualBalanceCallback) = GlobalScope.launch {
         val inventoryResult = withContext(Dispatchers.IO) {
             val request = PlayFabClientModels.GetUserInventoryRequest()
@@ -68,6 +70,7 @@ object Store {
     }
 
 
+    @JvmStatic
     fun getVirtualCurrencyPacks(callback: VirtualCurrencyPacksCallback) = GlobalScope.launch {
         val inventoryResult = withContext(Dispatchers.IO) {
             val request = PlayFabClientModels.GetUserInventoryRequest()
@@ -126,6 +129,7 @@ object Store {
     }
 
 
+    @JvmStatic
     fun createOrderByItemSku(sku: String, callback: CreateOrderByItemSkuCallback) = GlobalScope.launch {
         var orderId: String?
         val startPurchaseResult = withContext(Dispatchers.IO) {
@@ -167,6 +171,7 @@ object Store {
     }
 
 
+    @JvmStatic
     fun buyForVirtualCurrency(itemSku: String, currencyId: String, price: BigDecimal, callback: BuyForVirtualCurrencyCallback) = GlobalScope.launch {
         val purchaseItemResult = withContext(Dispatchers.IO) {
             val request = PlayFabClientModels.PurchaseItemRequest()
@@ -190,6 +195,7 @@ object Store {
     }
 
 
+    @JvmStatic
     fun getVirtualItems(callback: VirtualItemsCallback) = GlobalScope.launch {
         val inventoryResult = withContext(Dispatchers.IO) {
             val request = PlayFabClientModels.GetUserInventoryRequest()
@@ -248,6 +254,7 @@ object Store {
     }
 
 
+    @JvmStatic
     fun getInventory(callback: InventoryCallback) = GlobalScope.launch {
         val inventoryResult = withContext(Dispatchers.IO) {
             val request = PlayFabClientModels.GetUserInventoryRequest()
@@ -294,6 +301,7 @@ object Store {
     }
 
 
+    @JvmStatic
     fun consumeItem(instanceId: String, quantity: Int, callback: ConsumeCallback) = GlobalScope.launch {
         val consumeResult = withContext(Dispatchers.IO) {
             val request = PlayFabClientModels.ConsumeItemRequest()

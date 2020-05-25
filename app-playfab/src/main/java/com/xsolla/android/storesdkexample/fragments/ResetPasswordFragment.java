@@ -33,7 +33,7 @@ public class ResetPasswordFragment extends BaseFragment {
     private void resetPassword() {
         hideKeyboard();
         String email = emailInput.getText().toString();
-        Auth.INSTANCE.resetPassword(email, new Auth.AuthCallback() {
+        Auth.resetPassword(email, new Auth.AuthCallback() {
             @Override
             public void onSuccess() {
                 showSnack("Password reset success. Check your email");

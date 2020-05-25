@@ -38,7 +38,7 @@ public class RegisterFragment extends BaseFragment {
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
 
-        Auth.INSTANCE.register(username, email, password, new Auth.AuthCallback() {
+        Auth.register(username, email, password, new Auth.AuthCallback() {
             @Override
             public void onSuccess() {
                 showSnack("Registration success. Please check your email");

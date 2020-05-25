@@ -51,7 +51,7 @@ public class VirtualItemsFragment extends CatalogFragment {
 
 
     private void getItems() {
-        Store.INSTANCE.getVirtualItems(new Store.VirtualItemsCallback() {
+        Store.getVirtualItems(new Store.VirtualItemsCallback() {
             @Override
             public void onSuccess(@NotNull List<Store.VirtualItem> virtualItems) {
                 virtualItemsAdapter = new VirtualItemsAdapter(

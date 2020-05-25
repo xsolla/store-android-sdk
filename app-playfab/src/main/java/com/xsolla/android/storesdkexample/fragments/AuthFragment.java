@@ -32,7 +32,7 @@ public class AuthFragment extends BaseFragment {
             String username = usernameInput.getText().toString();
             String password = passwordInput.getText().toString();
 
-            Auth.INSTANCE.login(username, password, new Auth.AuthCallback() {
+            Auth.login(username, password, new Auth.AuthCallback() {
                 @Override
                 public void onSuccess() {
                     openFragment(new MainFragment());

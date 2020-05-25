@@ -10,14 +10,18 @@ import kotlinx.coroutines.withContext
 
 object Auth {
 
+    @JvmStatic
     fun init(playFabTitleId: String) {
         PlayFabSettings.TitleId = playFabTitleId
     }
 
+    @JvmStatic
     fun getToken() = PlayFabSettings.ClientSessionTicket
 
+    @JvmStatic
     fun isTokenExpired() = getToken() == null
 
+    @JvmStatic
     fun register(username: String, email: String, password: String, callback: AuthCallback) = GlobalScope.launch {
         val result = withContext(Dispatchers.IO) {
             val request = PlayFabClientModels.RegisterPlayFabUserRequest()
@@ -35,6 +39,7 @@ object Auth {
         }
     }
 
+    @JvmStatic
     fun login(username: String, password: String, callback: AuthCallback) = GlobalScope.launch {
         val result = withContext(Dispatchers.IO) {
             val request = PlayFabClientModels.LoginWithPlayFabRequest()
@@ -52,10 +57,12 @@ object Auth {
         }
     }
 
+    @JvmStatic
     fun logout() {
         PlayFabSettings.ClientSessionTicket = null
     }
 
+    @JvmStatic
     fun resetPassword(email: String, callback: AuthCallback) = GlobalScope.launch {
         val result = withContext(Dispatchers.IO) {
             val request = PlayFabClientModels.SendAccountRecoveryEmailRequest()

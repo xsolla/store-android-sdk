@@ -51,7 +51,7 @@ public class VirtualCurrencyFragment extends CatalogFragment {
 
 
     private void getItems() {
-        Store.INSTANCE.getVirtualCurrencyPacks(new Store.VirtualCurrencyPacksCallback() {
+        Store.getVirtualCurrencyPacks(new Store.VirtualCurrencyPacksCallback() {
             @Override
             public void onSuccess(@NotNull List<Store.VirtualCurrencyPack> virtualCurrencyPacks) {
                 shopAdapter = new VirtualCurrencyAdapter(

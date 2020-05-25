@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Auth.INSTANCE.init(BuildConfig.PLAYFAB_ID);
+        Auth.init(BuildConfig.PLAYFAB_ID);
         initFragment();
         initStatusBar();
     }
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private Fragment getFragment() {
-        if (Auth.INSTANCE.isTokenExpired()) {
+        if (Auth.isTokenExpired()) {
             return new AuthFragment();
         } else {
             return new MainFragment();

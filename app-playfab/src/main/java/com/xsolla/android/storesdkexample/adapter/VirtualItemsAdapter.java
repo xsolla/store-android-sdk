@@ -96,7 +96,7 @@ public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapte
         private void initForRealCurrency(Store.VirtualItem item) {
             buyButton.setOnClickListener(v -> {
                 ViewUtils.disable(v);
-                Store.INSTANCE.createOrderByItemSku(item.getSku(), new Store.CreateOrderByItemSkuCallback() {
+                Store.createOrderByItemSku(item.getSku(), new Store.CreateOrderByItemSkuCallback() {
                     @Override
                     public void onSuccess(@NotNull String psToken) {
                         createOrderListener.onOrderCreated(psToken);
@@ -116,7 +116,7 @@ public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapte
             Store.Price price = item.getVirtualPrices().get(0);
             buyButton.setOnClickListener(v -> {
                 ViewUtils.disable(v);
-                Store.INSTANCE.buyForVirtualCurrency(
+                Store.buyForVirtualCurrency(
                         item.getSku(),
                         price.getCurrencyId(),
                         price.getAmount(),

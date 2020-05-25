@@ -19,7 +19,7 @@ public class ProfileFragment extends BaseFragment {
         rootView.findViewById(R.id.group_info).setVisibility(View.GONE);
 
         rootView.findViewById(R.id.logout_button).setOnClickListener(v -> {
-            Auth.INSTANCE.logout();
+            Auth.logout();
             openRootFragment();
         });
     }
