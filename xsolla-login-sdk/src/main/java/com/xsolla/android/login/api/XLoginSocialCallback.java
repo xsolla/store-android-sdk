@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import com.xsolla.android.login.XLogin;
 import com.xsolla.android.login.entity.response.AuthResponse;
-import com.xsolla.android.login.entity.response.SocialAuthResponse;
+import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse;
 import com.xsolla.android.login.social.XSocialAuthListener;
 import com.xsolla.android.login.social.XWebView;
 
@@ -18,7 +18,7 @@ abstract public class XLoginSocialCallback<T> extends XLoginCallback<T> {
     protected void handleResponse(T responseBody) {
         if (responseBody instanceof AuthResponse) {
             handleAuthResponse(responseBody);
-        } else if (responseBody instanceof SocialAuthResponse) {
+        } else if (responseBody instanceof LinkForSocialAuthResponse) {
             handleSocialAuthResponse(responseBody);
         } else {
             onSuccess(responseBody);
@@ -26,7 +26,7 @@ abstract public class XLoginSocialCallback<T> extends XLoginCallback<T> {
     }
 
     private void handleSocialAuthResponse(final T responseBody) {
-        String url = ((SocialAuthResponse) responseBody).getUrl();
+        String url = ((LinkForSocialAuthResponse) responseBody).getUrl();
         XWebView xWebView = new XWebView(getActivityForSocialAuth(), XLogin.getCallbackUrl());
         xWebView.loadAuthPage(url, new XSocialAuthListener() {
             @Override

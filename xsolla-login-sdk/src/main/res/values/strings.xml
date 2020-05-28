@@ -1,2 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="facebook_app_id" tools:ignore="ResourceName" />
+    <string name="fb_login_protocol_scheme" tools:ignore="ResourceName" />
 </resources>

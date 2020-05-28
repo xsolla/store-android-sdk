@@ -2,11 +2,11 @@ package com.xsolla.android.login.entity.response;
 
 import com.xsolla.android.login.token.TokenUtils;
 
-public class SocialAuthResponse {
+public class LinkForSocialAuthResponse {
 
     private String url;
 
-    public SocialAuthResponse(String url) {
+    public LinkForSocialAuthResponse(String url) {
         this.url = url;
     }
 

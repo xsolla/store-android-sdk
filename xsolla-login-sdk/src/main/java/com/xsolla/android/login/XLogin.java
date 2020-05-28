@@ -1,22 +1,28 @@
 package com.xsolla.android.login;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 
 import com.xsolla.android.login.api.LoginApi;
 import com.xsolla.android.login.api.XLoginCallback;
 import com.xsolla.android.login.api.XLoginSocialCallback;
+import com.xsolla.android.login.callback.FinishSocialCallback;
+import com.xsolla.android.login.callback.StartSocialCallback;
 import com.xsolla.android.login.entity.request.AuthUserBody;
 import com.xsolla.android.login.entity.request.RegisterUserBody;
 import com.xsolla.android.login.entity.request.ResetPasswordBody;
 import com.xsolla.android.login.entity.response.AuthResponse;
-import com.xsolla.android.login.entity.response.SocialAuthResponse;
+import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse;
 import com.xsolla.android.login.jwt.JWT;
+import com.xsolla.android.login.social.LoginSocial;
 import com.xsolla.android.login.social.SocialNetwork;
 import com.xsolla.android.login.token.TokenUtils;
 
 import java.io.IOException;
 
+import androidx.fragment.app.Fragment;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -37,11 +43,14 @@ public class XLogin {
 
     private static XLogin instance;
 
+    private static LoginSocial loginSocial = LoginSocial.INSTANCE;
+
     private XLogin(String projectId, String callbackUrl, TokenUtils tokenUtils, LoginApi loginApi) {
         this.projectId = projectId;
         this.callbackUrl = callbackUrl;
         this.tokenUtils = tokenUtils;
         this.loginApi = loginApi;
+        loginSocial.init(loginApi, projectId, callbackUrl);
     }
 
     private static XLogin getInstance() {
@@ -53,6 +62,7 @@ public class XLogin {
 
     /**
      * Get authentication token
+     *
      * @return token
      */
     public static String getToken() {
@@ -65,18 +75,20 @@ public class XLogin {
 
     /**
      * Initialize SDK
+     *
      * @param projectId login ID from Publisher Account &gt; Login settings
-     * @param context application context
+     * @param context   application context
      */
     public static void init(String projectId, Context context) {
-        init(projectId, null, context);
+        init(projectId, "https://login.xsolla.com/api/blank", context);
     }
 
     /**
      * Initialize SDK
-     * @param projectId login ID from Publisher Account &gt; Login settings
+     *
+     * @param projectId   login ID from Publisher Account &gt; Login settings
      * @param callbackUrl callback URL specified in Publisher Account &gt; Login settings
-     * @param context application context
+     * @param context     application context
      */
     public static void init(String projectId, String callbackUrl, Context context) {
         Interceptor interceptor = new Interceptor() {
@@ -118,11 +130,12 @@ public class XLogin {
 
     /**
      * Register a new user
-     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-register">Login API Reference</a>
+     *
      * @param username new user's username
-     * @param email new user's email
+     * @param email    new user's email
      * @param password new user's password
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-register">Login API Reference</a>
      */
     public static void register(String username, String email, String password, XLoginCallback<Void> callback) {
         RegisterUserBody registerUserBody = new RegisterUserBody(username, email, password);
@@ -131,10 +144,11 @@ public class XLogin {
 
     /**
      * Authenticate via username and password
-     * @see <a href="https://developers.xsolla.com/login-api/jwt/auth-by-username-and-password">Login API Reference</a>
+     *
      * @param username user's username
      * @param password user's email
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/login-api/jwt/auth-by-username-and-password">Login API Reference</a>
      */
     public static void login(String username, String password, XLoginCallback<AuthResponse> callback) {
         AuthUserBody authUserBody = new AuthUserBody(username, password);
@@ -143,19 +157,33 @@ public class XLogin {
 
     /**
      * Authenticate via a social network
-     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
+     *
      * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
-     * @param callback status callback
+     * @param callback      status callback
+     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
      */
-    public static void loginSocial(SocialNetwork socialNetwork, XLoginSocialCallback<SocialAuthResponse> callback) {
+    public static void loginSocial(SocialNetwork socialNetwork, XLoginSocialCallback<LinkForSocialAuthResponse> callback) {
         getInstance().loginApi.getLinkForSocialAuth(socialNetwork.providerName, getInstance().projectId).enqueue(callback);
+    }
+
+    public static void startSocialAuth(Fragment fragment, SocialNetwork socialNetwork, StartSocialCallback callback) {
+        loginSocial.startSocialAuth(null, fragment, socialNetwork, callback);
+    }
+
+    public static void startSocialAuth(Activity activity, SocialNetwork socialNetwork, StartSocialCallback callback) {
+        loginSocial.startSocialAuth(activity, null, socialNetwork, callback);
+    }
+
+    public static void finishSocialAuth(SocialNetwork socialNetwork, int activityResultRequestCode, int activityResultCode, Intent activityResultData, FinishSocialCallback callback) {
+        loginSocial.finishSocialAuth(socialNetwork, activityResultRequestCode, activityResultCode, activityResultData, callback);
     }
 
     /**
      * Reset user's password
-     * @see <a href="https://developers.xsolla.com/login-api/general/reset-password">Login API Reference</a>
+     *
      * @param username user's username
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/login-api/general/reset-password">Login API Reference</a>
      */
     public static void resetPassword(String username, XLoginCallback<Void> callback) {
         ResetPasswordBody resetPasswordBody = new ResetPasswordBody(username);
@@ -177,6 +205,7 @@ public class XLogin {
 
     /**
      * Get current user's token metadata
+     *
      * @return parsed JWT content
      */
     public static JWT getJwt() {
