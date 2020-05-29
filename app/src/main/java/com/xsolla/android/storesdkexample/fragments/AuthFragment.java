@@ -86,7 +86,7 @@ public class AuthFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        XLogin.finishSocialAuth(SocialNetwork.FACEBOOK, requestCode, resultCode, data, finishSocialCallback);
+        XLogin.finishSocialAuth(selectedSocialNetwork, requestCode, resultCode, data, finishSocialCallback);
         super.onActivityResult(requestCode, resultCode, data);
     }
 
