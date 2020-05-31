@@ -9,6 +9,11 @@ import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes
+import com.google.android.gms.common.api.ApiException
+import com.xsolla.android.login.R
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.api.LoginApi
 import com.xsolla.android.login.callback.FinishSocialCallback
@@ -30,6 +35,7 @@ import java.util.*
 object LoginSocial {
 
     private const val RC_AUTH_WEBVIEW = 31000
+    private const val RC_AUTH_GOOGLE = 31001
 
     private lateinit var loginApi: LoginApi
     private lateinit var projectId: String
@@ -38,6 +44,8 @@ object LoginSocial {
     private lateinit var fbCallbackManager: CallbackManager
     private lateinit var fbCallback: FacebookCallback<LoginResult>
 
+    private var googleSignInAvailable = false
+
     private var finishSocialCallback: FinishSocialCallback? = null
 
     fun init(loginApi: LoginApi, projectId: String, callbackUrl: String) {
@@ -45,6 +53,7 @@ object LoginSocial {
         this.projectId = projectId
         this.callbackUrl = callbackUrl
         initFacebook()
+        initGoogle()
     }
 
     private fun initFacebook() {
@@ -53,7 +62,7 @@ object LoginSocial {
             fbCallback = object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
                     val facebookToken = loginResult.accessToken.token
-                    getJwtFromSocial(SocialNetwork.FACEBOOK, facebookToken) {error ->
+                    getJwtFromSocial(SocialNetwork.FACEBOOK, facebookToken) { error ->
                         if (error == null) {
                             finishSocialCallback?.onAuthSuccess()
                         } else {
@@ -87,6 +96,15 @@ object LoginSocial {
             LoginManager.getInstance().registerCallback(fbCallbackManager, fbCallback)
         } catch (e: NoClassDefFoundError) {
             // Facebook SDK isn't bundled, use webview instead
+        }
+    }
+
+    private fun initGoogle() {
+        try {
+            Class.forName("com.google.android.gms.auth.api.signin.GoogleSignIn")
+            googleSignInAvailable = true
+        } catch (e: ClassNotFoundException) {
+            // play-services-auth isn't bundled, use webview instead
         }
     }
 
@@ -150,8 +168,37 @@ object LoginSocial {
         }
         if (socialNetwork == SocialNetwork.FACEBOOK) {
             finishSocialCallback = callback
-            if (fbCallbackManager.onActivityResult(activityResultRequestCode, activityResultCode, activityResultData)) {
-                return
+            fbCallbackManager.onActivityResult(activityResultRequestCode, activityResultCode, activityResultData)
+            return
+        }
+        if (socialNetwork == SocialNetwork.GOOGLE) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(activityResultData)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                if (account == null) {
+                    callback.onAuthError("Account is null")
+                } else {
+                    val googleToken = account.idToken
+                    if (googleToken == null) {
+                        callback.onAuthError("Google token is null")
+                    } else {
+                        finishSocialCallback = callback
+                        getJwtFromSocial(SocialNetwork.GOOGLE, googleToken) { error ->
+                            if (error == null) {
+                                finishSocialCallback?.onAuthSuccess()
+                            } else {
+                                finishSocialCallback?.onAuthError(error)
+                            }
+                            finishSocialCallback = null
+                        }
+                    }
+                }
+            } catch (e: ApiException) {
+                if (e.statusCode == GoogleSignInStatusCodes.SIGN_IN_CANCELLED) {
+                    callback.onAuthCancelled()
+                } else {
+                    callback.onAuthError(e.message ?: e.javaClass.name)
+                }
             }
         }
     }
@@ -164,6 +211,22 @@ object LoginSocial {
                 LoginManager.getInstance().logIn(fragment, ArrayList())
             }
             callback.onAuthStarted()
+            return true
+        }
+        if (socialNetwork == SocialNetwork.GOOGLE && googleSignInAvailable) {
+            val context = activity ?: fragment!!.context!!
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(context.getString(R.string.xsolla_login_google_server_client_id))
+                    .build()
+            if (activity != null) {
+                val mGoogleSignInClient = GoogleSignIn.getClient(context, gso)
+                val signInIntent = mGoogleSignInClient.signInIntent
+                activity.startActivityForResult(signInIntent, RC_AUTH_GOOGLE)
+            } else {
+                val mGoogleSignInClient = GoogleSignIn.getClient(context, gso)
+                val signInIntent = mGoogleSignInClient.signInIntent
+                fragment!!.startActivityForResult(signInIntent, RC_AUTH_GOOGLE)
+            }
             return true
         }
         return false
