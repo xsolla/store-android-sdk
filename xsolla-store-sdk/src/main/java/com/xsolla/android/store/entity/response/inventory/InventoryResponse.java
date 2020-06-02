@@ -28,6 +28,8 @@ public class InventoryResponse {
         private Object attributes;
         @SerializedName("remaining_uses")
         private int remainingUses;
+        @SerializedName("virtual_item_type")
+        private VirtualItemType virtualItemType;
 
         public String getInstanceId() {
             return instanceId;
@@ -69,11 +71,24 @@ public class InventoryResponse {
             return remainingUses;
         }
 
+        public VirtualItemType getVirtualItemType() {
+            return virtualItemType;
+        }
+
         public enum Type {
             @SerializedName("virtual_good")
             VIRTUAL_GOOD,
             @SerializedName("virtual_currency")
             VIRTUAL_CURRENCY
+        }
+
+        public enum VirtualItemType {
+            @SerializedName("consumable")
+            CONSUMABLE,
+            @SerializedName("non_consumable")
+            NON_CONSUMABLE,
+            @SerializedName("non_renewing_subscription")
+            NON_RENEWING_SUBSCRIPTION
         }
     }
 

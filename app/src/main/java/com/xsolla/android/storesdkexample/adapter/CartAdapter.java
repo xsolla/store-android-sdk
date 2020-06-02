@@ -13,6 +13,7 @@ import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.common.ExpirationPeriod;
 import com.xsolla.android.store.entity.response.common.IPrice;
+import com.xsolla.android.store.entity.response.common.InventoryOption;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.listener.UpdateCartListener;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
@@ -80,7 +81,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             Glide.with(itemView).load(item.getImageUrl()).into(itemIcon);
             itemName.setText(item.getName());
 
-            ExpirationPeriod expirationPeriod = item.getInventoryOption().getExpirationPeriod();
+            InventoryOption inventoryOption = item.getInventoryOption();
+            ExpirationPeriod expirationPeriod = null;
+            if (inventoryOption != null) {
+                expirationPeriod = inventoryOption.getExpirationPeriod();
+            }
             if (expirationPeriod == null) {
                 itemExpiration.setVisibility(View.GONE);
             } else {

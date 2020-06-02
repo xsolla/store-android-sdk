@@ -16,9 +16,11 @@ import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.listener.ConsumeListener;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -78,9 +80,8 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
             Glide.with(itemView).load(item.getImageUrl()).into(itemIcon);
             itemName.setText(item.getName());
 
-            String expirationText = getExpirationText(item);
-            if (expirationText != null) {
-                itemExpiration.setText(expirationText);
+            if (item.getVirtualItemType() == InventoryResponse.Item.VirtualItemType.NON_RENEWING_SUBSCRIPTION) {
+                itemExpiration.setText(getExpirationText(item));
                 itemExpiration.setVisibility(View.VISIBLE);
             } else {
                 itemExpiration.setVisibility(View.GONE);
@@ -140,14 +141,16 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
         if (subscriptions == null) {
             return null;
         }
+        if (item.getVirtualItemType() != InventoryResponse.Item.VirtualItemType.NON_RENEWING_SUBSCRIPTION) {
+            return null;
+        }
         for (SubscriptionsResponse.Item subscription : subscriptions) {
             if (subscription.getSku().equals(item.getSku())) {
                 if (subscription.getStatus() == SubscriptionsResponse.Item.Status.ACTIVE) {
-                    long secondsLeft = subscription.getExpiredAt() - TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-                    long days = TimeUnit.SECONDS.toDays(secondsLeft);
-                    long hours = TimeUnit.SECONDS.toHours(secondsLeft - TimeUnit.DAYS.toSeconds(days));
-                    long minutes = TimeUnit.SECONDS.toMinutes(secondsLeft - TimeUnit.DAYS.toSeconds(days) - TimeUnit.HOURS.toSeconds(hours));
-                    return "Expires in: " + days + "d " + hours + "h " + minutes + "m";
+                    Date date = new java.util.Date(subscription.getExpiredAt()*1000);
+                    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.US);
+                    String formattedDate = sdf.format(date);
+                    return "Active until: " + formattedDate;
                 } else {
                     return "Expired";
                 }
