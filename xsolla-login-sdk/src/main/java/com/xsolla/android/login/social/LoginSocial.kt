@@ -100,12 +100,12 @@ object LoginSocial {
     }
 
     private fun initGoogle() {
-        try {
-            Class.forName("com.google.android.gms.auth.api.signin.GoogleSignIn")
-            googleSignInAvailable = true
-        } catch (e: ClassNotFoundException) {
-            // play-services-auth isn't bundled, use webview instead
-        }
+//        try {
+//            Class.forName("com.google.android.gms.auth.api.signin.GoogleSignIn")
+//            googleSignInAvailable = true
+//        } catch (e: ClassNotFoundException) {
+//            // play-services-auth isn't bundled, use webview instead
+//        }
     }
 
     fun startSocialAuth(activity: Activity?, fragment: Fragment?, socialNetwork: SocialNetwork, callback: StartSocialCallback) {
@@ -178,6 +178,8 @@ object LoginSocial {
                 if (account == null) {
                     callback.onAuthError("Account is null")
                 } else {
+                    println("!!! id token = ${account.idToken}")
+                    println("!!! code = ${account.serverAuthCode}")
                     val googleToken = account.idToken
                     if (googleToken == null) {
                         callback.onAuthError("Google token is null")
@@ -217,6 +219,7 @@ object LoginSocial {
             val context = activity ?: fragment!!.context!!
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(context.getString(R.string.xsolla_login_google_server_client_id))
+                    .requestServerAuthCode(context.getString(R.string.xsolla_login_google_server_client_id))
                     .build()
             if (activity != null) {
                 val mGoogleSignInClient = GoogleSignIn.getClient(context, gso)
