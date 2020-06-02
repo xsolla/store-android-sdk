@@ -7,14 +7,12 @@ import android.os.Build;
 
 import com.xsolla.android.login.api.LoginApi;
 import com.xsolla.android.login.api.XLoginCallback;
-import com.xsolla.android.login.api.XLoginSocialCallback;
 import com.xsolla.android.login.callback.FinishSocialCallback;
 import com.xsolla.android.login.callback.StartSocialCallback;
 import com.xsolla.android.login.entity.request.AuthUserBody;
 import com.xsolla.android.login.entity.request.RegisterUserBody;
 import com.xsolla.android.login.entity.request.ResetPasswordBody;
 import com.xsolla.android.login.entity.response.AuthResponse;
-import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse;
 import com.xsolla.android.login.jwt.JWT;
 import com.xsolla.android.login.social.LoginSocial;
 import com.xsolla.android.login.social.SocialNetwork;
@@ -156,24 +154,42 @@ public class XLogin {
     }
 
     /**
-     * Authenticate via a social network
+     * Start authentication via a social network
      *
+     * @param fragment current fragment
      * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
      * @param callback      status callback
      * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
      */
-    public static void loginSocial(SocialNetwork socialNetwork, XLoginSocialCallback<LinkForSocialAuthResponse> callback) {
-        getInstance().loginApi.getLinkForSocialAuth(socialNetwork.providerName, getInstance().projectId).enqueue(callback);
-    }
-
     public static void startSocialAuth(Fragment fragment, SocialNetwork socialNetwork, StartSocialCallback callback) {
         loginSocial.startSocialAuth(null, fragment, socialNetwork, callback);
     }
 
+    /**
+     * Start authentication via a social network
+     *
+     * @param activity current activity
+     * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
+     * @param callback      status callback
+     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
+     */
     public static void startSocialAuth(Activity activity, SocialNetwork socialNetwork, StartSocialCallback callback) {
         loginSocial.startSocialAuth(activity, null, socialNetwork, callback);
     }
 
+    /**
+     * Finish authentication via a social network
+     *
+     * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
+     * @param activityResultRequestCode request code from onActivityResult
+     * @param activityResultCode result code from onActivityResult
+     * @param activityResultData data from onActivityResult
+     * @param callback      status callback
+     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
+     */
     public static void finishSocialAuth(SocialNetwork socialNetwork, int activityResultRequestCode, int activityResultCode, Intent activityResultData, FinishSocialCallback callback) {
         loginSocial.finishSocialAuth(socialNetwork, activityResultRequestCode, activityResultCode, activityResultData, callback);
     }
