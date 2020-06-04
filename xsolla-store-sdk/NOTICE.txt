@@ -3,5 +3,3 @@ Copyright 2020 Xsolla (USA), Inc.
 
 This product includes software developed at
 Xsolla (USA), Inc. (https://xsolla.com/).
-
-This software contains code derived from Retrofit by Square, Inc.
