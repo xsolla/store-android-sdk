@@ -63,10 +63,17 @@ public class XStore {
                 Request originalRequest = chain.request();
                 Request.Builder builder = originalRequest.newBuilder()
                         .addHeader("Authorization", "Bearer " + token)
-                        .addHeader("engine", "android")
-                        .addHeader("engine_v", Build.VERSION.RELEASE)
-                        .addHeader("sdk", "Store")
-                        .addHeader("sdk_v", BuildConfig.VERSION_NAME);
+                        .addHeader("X-ENGINE", "ANDROID")
+                        .addHeader("X-ENGINE-V", Build.VERSION.RELEASE)
+                        .addHeader("X-SDK", "STORE")
+                        .addHeader("X-SDK-V", BuildConfig.VERSION_NAME)
+                        .url(originalRequest.url().newBuilder()
+                                .addQueryParameter("engine", "android")
+                                .addQueryParameter("engine_v", Build.VERSION.RELEASE)
+                                .addQueryParameter("sdk", "store")
+                                .addQueryParameter("sdk_v", BuildConfig.VERSION_NAME)
+                                .build()
+                        );
 
                 Request newRequest = builder.build();
                 return chain.proceed(newRequest);
@@ -91,8 +98,9 @@ public class XStore {
 
     /**
      * Get a virtual items list for building a catalog
-     * @see <a href="https://developers.xsolla.com/store-api/items/get-virtual-items">Store API Reference</a>
+     *
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/items/get-virtual-items">Store API Reference</a>
      */
     public static void getVirtualItems(XStoreCallback<VirtualItemsResponse> callback) {
         getRequestExecutor().getVirtualItems(null, callback);
@@ -100,9 +108,10 @@ public class XStore {
 
     /**
      * Get a virtual items list for building a catalog
-     * @see <a href="https://developers.xsolla.com/store-api/items/get-virtual-items">Store API Reference</a>
-     * @param options request options
+     *
+     * @param options  request options
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/items/get-virtual-items">Store API Reference</a>
      */
     public static void getVirtualItems(ItemsRequestOptions options, XStoreCallback<VirtualItemsResponse> callback) {
         getRequestExecutor().getVirtualItems(options, callback);
@@ -110,8 +119,9 @@ public class XStore {
 
     /**
      * Get a virtual currency list for building a catalog
-     * @see <a href="https://developers.xsolla.com/store-api/items/get-virtual-currency">Store API Reference</a>
+     *
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/items/get-virtual-currency">Store API Reference</a>
      */
     public static void getVirtualCurrency(XStoreCallback<VirtualCurrencyResponse> callback) {
         getRequestExecutor().getVirtualCurrency(null, callback);
@@ -119,9 +129,10 @@ public class XStore {
 
     /**
      * Get a virtual currency list for building a catalog
-     * @see <a href="https://developers.xsolla.com/store-api/items/get-virtual-currency">Store API Reference</a>
-     * @param options request options
+     *
+     * @param options  request options
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/items/get-virtual-currency">Store API Reference</a>
      */
     public static void getVirtualCurrency(ItemsRequestOptions options, XStoreCallback<VirtualCurrencyResponse> callback) {
         getRequestExecutor().getVirtualCurrency(options, callback);
@@ -129,8 +140,9 @@ public class XStore {
 
     /**
      * Get a virtual currency packages list for building a catalog
-     * @see <a href="https://developers.xsolla.com/store-api/items/get-virtual-currency-package">Store API Reference</a>
+     *
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/items/get-virtual-currency-package">Store API Reference</a>
      */
     public static void getVirtualCurrencyPackage(XStoreCallback<VirtualCurrencyPackageResponse> callback) {
         getRequestExecutor().getVirtualCurrencyPackage(null, callback);
@@ -138,9 +150,10 @@ public class XStore {
 
     /**
      * Get a virtual currency packages list for building a catalog
-     * @see <a href="https://developers.xsolla.com/store-api/items/get-virtual-currency-package">Store API Reference</a>
-     * @param options request options
+     *
+     * @param options  request options
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/items/get-virtual-currency-package">Store API Reference</a>
      */
     public static void getVirtualCurrencyPackage(ItemsRequestOptions options, XStoreCallback<VirtualCurrencyPackageResponse> callback) {
         getRequestExecutor().getVirtualCurrencyPackage(options, callback);
@@ -148,9 +161,10 @@ public class XStore {
 
     /**
      * Get an items list from the specified group for building a catalog
-     * @see <a href="https://developers.xsolla.com/store-api/items/get-virtual-items-group">Store API Reference</a>
-     * @param options request options, must contain group external ID from Publisher Account &gt; Store Settings &gt; Virtual Items
+     *
+     * @param options  request options, must contain group external ID from Publisher Account &gt; Store Settings &gt; Virtual Items
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/items/get-virtual-items-group">Store API Reference</a>
      */
     public static void getItemsBySpecifiedGroup(ItemsRequestOptions options, XStoreCallback<VirtualItemsResponse> callback) {
         getRequestExecutor().getItemsBySpecifiedGroup(options, callback);
@@ -167,9 +181,10 @@ public class XStore {
 
     /**
      * Get a user’s cart by ID
-     * @see <a href="https://developers.xsolla.com/store-api/cart/get-cart-by-id">Store API Reference</a>
-     * @param cartId cart ID
+     *
+     * @param cartId   cart ID
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/cart/get-cart-by-id">Store API Reference</a>
      */
     public static void getCartById(String cartId, XStoreCallback<CartResponse> callback) {
         getRequestExecutor().getCartById(cartId, null, callback);
@@ -177,10 +192,11 @@ public class XStore {
 
     /**
      * Get a user’s cart by ID
-     * @see <a href="https://developers.xsolla.com/store-api/cart/get-cart-by-id">Store API Reference</a>
-     * @param cartId cart ID
-     * @param options request options
+     *
+     * @param cartId   cart ID
+     * @param options  request options
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/cart/get-cart-by-id">Store API Reference</a>
      */
     public static void getCartById(String cartId, CartRequestOptions options, XStoreCallback<CartResponse> callback) {
         getRequestExecutor().getCartById(cartId, options, callback);
@@ -188,8 +204,9 @@ public class XStore {
 
     /**
      * Get a current user’s cart
-     * @see <a href="https://developers.xsolla.com/store-api/cart/get-user-cart">Store API Reference</a>
+     *
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/cart/get-user-cart">Store API Reference</a>
      */
     public static void getCurrentCart(XStoreCallback<CartResponse> callback) {
         getRequestExecutor().getCurrentCart(null, callback);
@@ -197,9 +214,10 @@ public class XStore {
 
     /**
      * Get a current user’s cart
-     * @see <a href="https://developers.xsolla.com/store-api/cart/get-user-cart">Store API Reference</a>
-     * @param options request options
+     *
+     * @param options  request options
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/cart/get-user-cart">Store API Reference</a>
      */
     public static void getCurrentCart(CartRequestOptions options, XStoreCallback<CartResponse> callback) {
         getRequestExecutor().getCurrentCart(options, callback);
@@ -207,9 +225,10 @@ public class XStore {
 
     /**
      * Delete all cart items
-     * @see <a href="https://developers.xsolla.com/store-api/cart/cart-clear-by-id">Store API Reference</a>
-     * @param cartId cart ID
+     *
+     * @param cartId   cart ID
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/cart/cart-clear-by-id">Store API Reference</a>
      */
     public static void clearCartById(String cartId, XStoreCallback<Void> callback) {
         getRequestExecutor().clearCartById(cartId, callback);
@@ -217,8 +236,9 @@ public class XStore {
 
     /**
      * Delete all items from a current user's cart
-     * @see <a href="https://developers.xsolla.com/store-api/cart/cart-clear">Store API Reference</a>
+     *
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/cart/cart-clear">Store API Reference</a>
      */
     public static void clearCurrentCart(XStoreCallback<Void> callback) {
         getRequestExecutor().clearCurrentCart(callback);
@@ -226,11 +246,12 @@ public class XStore {
 
     /**
      * Update an existing item or create the one in the cart
-     * @see <a href="https://developers.xsolla.com/store-api/cart/put-item-by-cart-id">Store API Reference</a>
-     * @param cartId cart ID
-     * @param itemSku item SKU
+     *
+     * @param cartId   cart ID
+     * @param itemSku  item SKU
      * @param quantity item quantity
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/cart/put-item-by-cart-id">Store API Reference</a>
      */
     public static void updateItemFromCartByCartId(String cartId, String itemSku, int quantity, XStoreCallback<Void> callback) {
         getRequestExecutor().updateItemFromCartByCartId(cartId, itemSku, quantity, callback);
@@ -238,10 +259,11 @@ public class XStore {
 
     /**
      * Update an existing item or create the one in a current user's cart
-     * @see <a href="https://developers.xsolla.com/store-api/cart/put-item">Store API Reference</a>
-     * @param itemSku item SKU
+     *
+     * @param itemSku  item SKU
      * @param quantity item quantity
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/cart/put-item">Store API Reference</a>
      */
     public static void updateItemFromCurrentCart(String itemSku, int quantity, XStoreCallback<Void> callback) {
         getRequestExecutor().updateItemFromCurrentCart(itemSku, quantity, callback);
@@ -249,10 +271,11 @@ public class XStore {
 
     /**
      * Delete an item from the cart
-     * @see <a href="https://developers.xsolla.com/store-api/cart/delete-item-by-cart-id">Store API Reference</a>
-     * @param cartId cart id
-     * @param itemSku item SKU
+     *
+     * @param cartId   cart id
+     * @param itemSku  item SKU
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/cart/delete-item-by-cart-id">Store API Reference</a>
      */
     public static void deleteItemFromCartByCartId(String cartId, String itemSku, XStoreCallback<Void> callback) {
         getRequestExecutor().deleteItemFromCartByCartId(cartId, itemSku, callback);
@@ -260,9 +283,10 @@ public class XStore {
 
     /**
      * Delete an item from a current user's cart
-     * @see <a href="https://developers.xsolla.com/store-api/cart/delete-item">Store API Reference</a>
-     * @param itemSku item SKU
+     *
+     * @param itemSku  item SKU
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/cart/delete-item">Store API Reference</a>
      */
     public static void deleteItemFromCurrentCart(String itemSku, XStoreCallback<Void> callback) {
         getRequestExecutor().deleteItemFromCurrentCart(itemSku, callback);
@@ -270,8 +294,9 @@ public class XStore {
 
     /**
      * Get a current user’s inventory
-     * @see <a href="https://developers.xsolla.com/store-api/inventory-client/get-user-inventory">Store API Reference</a>
+     *
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/inventory-client/get-user-inventory">Store API Reference</a>
      */
     public static void getInventory(XStoreCallback<InventoryResponse> callback) {
         getRequestExecutor().getInventory(callback);
@@ -279,8 +304,9 @@ public class XStore {
 
     /**
      * Get a current user’s subscriptions
-     * @see <a href="https://developers.xsolla.com/store-api/inventory-client/get-user-subscriptions">Store API Reference</a>
+     *
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/inventory-client/get-user-subscriptions">Store API Reference</a>
      */
     public static void getSubscriptions(XStoreCallback<SubscriptionsResponse> callback) {
         getRequestExecutor().getSubscriptions(callback);
@@ -288,8 +314,9 @@ public class XStore {
 
     /**
      * Get a current user’s virtual balance
-     * @see <a href="https://developers.xsolla.com/store-api/inventory-client/get-user-virtual-balance">Store API Reference</a>
+     *
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/inventory-client/get-user-virtual-balance">Store API Reference</a>
      */
     public static void getVirtualBalance(XStoreCallback<VirtualBalanceResponse> callback) {
         getRequestExecutor().getVirtualBalance(callback);
@@ -297,11 +324,12 @@ public class XStore {
 
     /**
      * Consume an item from a current user’s inventory
-     * @see <a href="https://developers.xsolla.com/store-api/inventory-client/consume-item">Store API Reference</a>
-     * @param sku item SKU
-     * @param quantity item quantity, if an item is uncountable, should be null
+     *
+     * @param sku        item SKU
+     * @param quantity   item quantity, if an item is uncountable, should be null
      * @param instanceId instance item ID, if an item is countable, should be null
-     * @param callback status callback
+     * @param callback   status callback
+     * @see <a href="https://developers.xsolla.com/store-api/inventory-client/consume-item">Store API Reference</a>
      */
     public static void consumeItem(String sku, int quantity, String instanceId, XStoreCallback<Void> callback) {
         getRequestExecutor().consumeItem(sku, quantity, instanceId, callback);
@@ -309,8 +337,9 @@ public class XStore {
 
     /**
      * Get an items groups list for building a catalog
-     * @see <a href="https://developers.xsolla.com/store-api/groups/get-item-groups">Store API Reference</a>
+     *
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/groups/get-item-groups">Store API Reference</a>
      */
     public static void getItemsGroups(XStoreCallback<ItemsGroupsResponse> callback) {
         getRequestExecutor().getItemsGroups(callback);
@@ -318,9 +347,10 @@ public class XStore {
 
     /**
      * Get a specified order
-     * @see <a href="https://developers.xsolla.com/store-api/order/get-order">Store API Reference</a>
-     * @param orderId order ID
+     *
+     * @param orderId  order ID
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/order/get-order">Store API Reference</a>
      */
     public static void getOrder(String orderId, XStoreCallback<OrderResponse> callback) {
         getRequestExecutor().getOrder(orderId, callback);
@@ -328,9 +358,10 @@ public class XStore {
 
     /**
      * Create an order with all items from a particular cart
-     * @see <a href="https://developers.xsolla.com/store-api/payment/create-order-by-cart-id">Store API Reference</a>
-     * @param cartId cart ID
+     *
+     * @param cartId   cart ID
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/payment/create-order-by-cart-id">Store API Reference</a>
      */
     public static void createOrderFromCartById(String cartId, XStoreCallback<CreateOrderResponse> callback) {
         getRequestExecutor().createOrderFromCartById(cartId, null, callback);
@@ -338,10 +369,11 @@ public class XStore {
 
     /**
      * Create an order with all items from a particular cart
-     * @see <a href="https://developers.xsolla.com/store-api/payment/create-order-by-cart-id">Store API Reference</a>
-     * @param cartId cart ID
-     * @param options payment options
+     *
+     * @param cartId   cart ID
+     * @param options  payment options
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/payment/create-order-by-cart-id">Store API Reference</a>
      */
     public static void createOrderFromCartById(String cartId, PaymentOptions options, XStoreCallback<CreateOrderResponse> callback) {
         getRequestExecutor().createOrderFromCartById(cartId, options, callback);
@@ -349,8 +381,9 @@ public class XStore {
 
     /**
      * Create an order with all items from a current user's cart
-     * @see <a href="https://developers.xsolla.com/store-api/payment/create-order">Store API Reference</a>
+     *
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/payment/create-order">Store API Reference</a>
      */
     public static void createOrderFromCurrentCart(XStoreCallback<CreateOrderResponse> callback) {
         getRequestExecutor().createOrderFromCurrentCart(null, callback);
@@ -358,9 +391,10 @@ public class XStore {
 
     /**
      * Create an order with all items from a current user's cart
-     * @see <a href="https://developers.xsolla.com/store-api/payment/create-order">Store API Reference</a>
-     * @param options payment options
+     *
+     * @param options  payment options
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/payment/create-order">Store API Reference</a>
      */
     public static void createOrderFromCurrentCart(PaymentOptions options, XStoreCallback<CreateOrderResponse> callback) {
         getRequestExecutor().createOrderFromCurrentCart(options, callback);
@@ -368,9 +402,10 @@ public class XStore {
 
     /**
      * Create an order with a specified item
-     * @see <a href="https://developers.xsolla.com/store-api/payment/create-order-with-item">Store API Reference</a>
-     * @param itemSku item SKU
+     *
+     * @param itemSku  item SKU
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/payment/create-order-with-item">Store API Reference</a>
      */
     public static void createOrderByItemSku(String itemSku, XStoreCallback<CreateOrderResponse> callback) {
         getRequestExecutor().createOrderByItemSku(itemSku, null, callback);
@@ -378,10 +413,11 @@ public class XStore {
 
     /**
      * Create an order with a specified item
-     * @see <a href="https://developers.xsolla.com/store-api/payment/create-order-with-item">Store API Reference</a>
-     * @param itemSku item SKU
-     * @param options payment options
+     *
+     * @param itemSku  item SKU
+     * @param options  payment options
      * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/payment/create-order-with-item">Store API Reference</a>
      */
     public static void createOrderByItemSku(String itemSku, PaymentOptions options, XStoreCallback<CreateOrderResponse> callback) {
         getRequestExecutor().createOrderByItemSku(itemSku, options, callback);
@@ -389,10 +425,11 @@ public class XStore {
 
     /**
      * Purchase an item using virtual currency
-     * @see <a href="https://developers.xsolla.com/store-api/payment/create-order-with-item-for-virtual-currency">Store API Reference</a>
-     * @param itemSku item SKU
+     *
+     * @param itemSku            item SKU
      * @param virtualCurrencySku virtual currency SKU
-     * @param callback status callback
+     * @param callback           status callback
+     * @see <a href="https://developers.xsolla.com/store-api/payment/create-order-with-item-for-virtual-currency">Store API Reference</a>
      */
     public static void createOrderByVirtualCurrency(String itemSku, String virtualCurrencySku, XStoreCallback<CreateOrderByVirtualCurrencyResponse> callback) {
         getRequestExecutor().createOrderByVirtualCurrency(itemSku, virtualCurrencySku, callback);

@@ -84,10 +84,17 @@ public class XLogin {
             public Response intercept(Chain chain) throws IOException {
                 Request originalRequest = chain.request();
                 Request.Builder builder = originalRequest.newBuilder()
-                        .addHeader("engine", "android")
-                        .addHeader("engine_v", Build.VERSION.RELEASE)
-                        .addHeader("sdk", "Login")
-                        .addHeader("sdk_v", BuildConfig.VERSION_NAME);
+                        .addHeader("X-ENGINE", "ANDROID")
+                        .addHeader("X-ENGINE-V", Build.VERSION.RELEASE)
+                        .addHeader("X-SDK", "LOGIN")
+                        .addHeader("X-SDK-V", BuildConfig.VERSION_NAME)
+                        .url(originalRequest.url().newBuilder()
+                                .addQueryParameter("engine", "android")
+                                .addQueryParameter("engine_v", Build.VERSION.RELEASE)
+                                .addQueryParameter("sdk", "login")
+                                .addQueryParameter("sdk_v", BuildConfig.VERSION_NAME)
+                                .build()
+                        );
 
                 Request newRequest = builder.build();
                 return chain.proceed(newRequest);
