@@ -41,7 +41,7 @@ public class RegisterFragment extends BaseFragment {
         Auth.register(username, email, password, new Auth.AuthCallback() {
             @Override
             public void onSuccess() {
-                showSnack("Registration success. Please check your email");
+                showSnack("Registration success");
                 openFragment(new AuthFragment());
                 ViewUtils.enable(registerButton);
             }

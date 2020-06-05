@@ -275,7 +275,7 @@ object Store {
                             catalogItem.Description,
                             catalogItem.ItemImageUrl,
                             inventoryItem.RemainingUses,
-                            inventoryItem.RemainingUses
+                            catalogItem.Consumable.UsageCount != null
                     )
                 }
                 callback.onSuccess(inventoryItems)
@@ -292,7 +292,7 @@ object Store {
             val description: String? = null,
             val imageUrl: String? = null,
             val quantity: Int,
-            val remainingUses: Int
+            val isConsumable: Boolean
     )
 
     interface InventoryCallback {

@@ -71,7 +71,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
 
             itemExpiration.setVisibility(View.GONE);
 
-            if (item.getRemainingUses() == 0) {
+            if (!item.isConsumable()) {
                 quantityLabel.setVisibility(View.GONE);
                 consumeButton.setVisibility(View.GONE);
                 return;
