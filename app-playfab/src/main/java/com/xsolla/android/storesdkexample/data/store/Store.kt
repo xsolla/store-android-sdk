@@ -7,7 +7,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
 import java.math.BigDecimal
 
 object Store {
@@ -151,8 +150,9 @@ object Store {
 
         withContext(Dispatchers.Main) {
             if (startPurchaseResult.Error == null && createTokenResult.Error == null) {
-                val json = JSONObject(createTokenResult.Result.FunctionResult as String)
-                callback.onSuccess(json.getString("token"))
+                val result = createTokenResult.Result.FunctionResult as Map<*, *>
+                val token = result["token"].toString()
+                callback.onSuccess(token)
             } else {
                 callback.onFailure(startPurchaseResult.Error?.errorMessage + '\n' + createTokenResult.Error?.errorMessage)
             }
