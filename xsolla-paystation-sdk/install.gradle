@@ -9,7 +9,7 @@ install {
                 artifactId 'paystation'
                 name 'Xsolla Paystation Android SDK'
                 description 'Xsolla Paystation Android SDK allows partners to monetize their product by providing users with a convenient UI to pay for in-game purchases in the game store'
-                url 'https://github.com/xsolla/android-store-sdk'
+                url 'https://github.com/xsolla/store-android-sdk'
 
                 licenses {
                     license {
@@ -24,9 +24,9 @@ install {
                 }
 
                 scm {
-                    connection 'https://github.com/xsolla/android-store-sdk.git'
-                    developerConnection 'https://github.com/xsolla/android-store-sdk.git'
-                    url 'https://github.com/xsolla/android-store-sdk.git'
+                    connection 'https://github.com/xsolla/store-android-sdk.git'
+                    developerConnection 'https://github.com/xsolla/store-android-sdk.git'
+                    url 'https://github.com/xsolla/store-android-sdk.git'
                 }
             }
         }

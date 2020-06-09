@@ -33,10 +33,10 @@ bintray {
         repo = 'maven'
         name = 'xsolla-store'
         licenses = ["Apache-2.0"]
-        vcsUrl = 'https://github.com/xsolla/android-store-sdk'
+        vcsUrl = 'https://github.com/xsolla/store-android-sdk'
         configurations = ['archives']
         desc = 'Xsolla Store Android SDK is used to integrate Xsolla Store, a comprehensive e-store solution for partners that supports various monetization options'
-        websiteUrl = 'https://github.com/xsolla/android-store-sdk'
+        websiteUrl = 'https://github.com/xsolla/store-android-sdk'
         publish = true
         publicDownloadNumbers = true
     }

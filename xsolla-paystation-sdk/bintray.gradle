@@ -31,10 +31,10 @@ bintray {
         repo = 'maven'
         name = 'xsolla-paystation'
         licenses = ["Apache-2.0"]
-        vcsUrl = 'https://github.com/xsolla/android-store-sdk'
+        vcsUrl = 'https://github.com/xsolla/store-android-sdk'
         configurations = ['archives']
         desc = 'Xsolla Paystation Android SDK allows partners to monetize their product by providing users with a convenient UI to pay for in-game purchases in the game store'
-        websiteUrl = 'https://github.com/xsolla/android-store-sdk'
+        websiteUrl = 'https://github.com/xsolla/store-android-sdk'
         publish = true
         publicDownloadNumbers = true
     }

@@ -37,7 +37,7 @@ XLogin.register("username", "email", "password", new XStoreCallback<Void>() {
         }
 });
 ```
-See example in [RegisterFragment](https://github.com/xsolla/android-store-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/RegisterFragment.java) from Sample App.
+See example in [RegisterFragment](https://github.com/xsolla/store-android-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/RegisterFragment.java) from Sample App.
 
 ## Auth by Username and Password
 
@@ -55,7 +55,7 @@ XLogin.login(username, password, new XStoreCallback<AuthResponse>() {
         }
 });
 ```
-See example in [AuthFragment](https://github.com/xsolla/android-store-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/AuthFragment.java) from Sample App.
+See example in [AuthFragment](https://github.com/xsolla/store-android-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/AuthFragment.java) from Sample App.
 
 ## Auth via Social Network
 **NOTE** Default callback URL is `https://login.xsolla.com/api/blank`
@@ -92,7 +92,7 @@ XLogin.loginSocial(SocialNetwork.GOOGLE, new XLoginSocialCallback<SocialAuthResp
     }
 });
 ```
-See example in [AuthFragment](https://github.com/xsolla/android-store-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/AuthFragment.java) from Sample App.
+See example in [AuthFragment](https://github.com/xsolla/store-android-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/AuthFragment.java) from Sample App.
 
 ## Reset Password
 
@@ -110,7 +110,7 @@ XLogin.resetPassword("username", new XStoreCallback<Void>() {
     }
 });
 ```
-See example in [ResetPasswordFragment](https://github.com/xsolla/android-store-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/ResetPasswordFragment.java) from Sample App.
+See example in [ResetPasswordFragment](https://github.com/xsolla/store-android-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/ResetPasswordFragment.java) from Sample App.
 
 ## Logout
 ```java
@@ -132,7 +132,7 @@ boolean isTokenValid = xLogin.isTokenValid();
 ## User info
 You can get all available information from the token according to JWT Specification. For more information see [https://jwt.io/]
 
-See example in [RegisterFragment](https://github.com/xsolla/android-store-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/RegisterFragment.java) from Sample App.
+See example in [RegisterFragment](https://github.com/xsolla/store-android-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/RegisterFragment.java) from Sample App.
 
 Get JWT
 ```java

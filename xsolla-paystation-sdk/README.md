@@ -47,4 +47,4 @@ public void onActivityResult(int requestCode, int resultCode, @Nullable Intent d
 }
 ```
 
-See example in [DetailFragment](https://github.com/xsolla/android-store-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/DetailFragment.java) from Sample App.
+See example in [DetailFragment](https://github.com/xsolla/store-android-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/DetailFragment.java) from Sample App.

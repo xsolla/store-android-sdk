@@ -21,5 +21,5 @@ Please note that the Internet connection is essential for the Xsolla Android SDK
     1. Go to Projects and click **Create new project**.
     2. In setup mode, add **Project name** and click **Create**.
     3. Go to **Project settings > Integration settings** and check that **Тokenless integration** is disabled.
-5. Go to the [wiki](https://github.com/xsolla/android-store-sdk/wiki/) to learn how to integrate Xsolla products using **Xsolla Android SDK**.
+5. Go to the [wiki](https://github.com/xsolla/store-android-sdk/wiki/) to learn how to integrate Xsolla products using **Xsolla Android SDK**.
 
