@@ -9,7 +9,7 @@ install {
                 artifactId 'store'
                 name 'Xsolla Store Android SDK'
                 description 'Xsolla Store Android SDK is used to integrate Xsolla Store, a comprehensive e-store solution for partners that supports various monetization options'
-                url 'https://github.com/xsolla/android-store-sdk'
+                url 'https://github.com/xsolla/store-android-sdk'
 
                 licenses {
                     license {
@@ -24,9 +24,9 @@ install {
                 }
 
                 scm {
-                    connection 'https://github.com/xsolla/android-store-sdk.git'
-                    developerConnection 'https://github.com/xsolla/android-store-sdk.git'
-                    url 'https://github.com/xsolla/android-store-sdk.git'
+                    connection 'https://github.com/xsolla/store-android-sdk.git'
+                    developerConnection 'https://github.com/xsolla/store-android-sdk.git'
+                    url 'https://github.com/xsolla/store-android-sdk.git'
                 }
             }
         }

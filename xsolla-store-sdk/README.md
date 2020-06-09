@@ -33,7 +33,7 @@ XStore.getVirtualItems(new XStoreCallback<VirtualItemsResponse>() {
     }
 });
 ```
-See example in [VirtualItemsFragment](https://github.com/xsolla/android-store-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/VirtualItemsFragment.java) from Sample App.
+See example in [VirtualItemsFragment](https://github.com/xsolla/store-android-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/VirtualItemsFragment.java) from Sample App.
 
 ## Add item to cart
 
@@ -50,7 +50,7 @@ XStore.updateItemFromCurrentCart(item.getSku(), 1, new XStoreCallback<Void>() {
     }
 });
 ```
-See example in [VirtualItemsAdapter](https://github.com/xsolla/android-store-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/adapter/VirtualItemsAdapter.java) from Sample App.
+See example in [VirtualItemsAdapter](https://github.com/xsolla/store-android-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/adapter/VirtualItemsAdapter.java) from Sample App.
 
 ## Create an order with all items from the cart
 
@@ -68,7 +68,7 @@ XStore.createOrderFromCurrentCart(paymentOptions, new XStoreCallback<CreateOrder
     }
 });
 ```
-See example in [CartFragment](https://github.com/xsolla/android-store-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/CartFragment.java) from Sample App.
+See example in [CartFragment](https://github.com/xsolla/store-android-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/CartFragment.java) from Sample App.
 
 ## Retrieve current user’s inventory
 
@@ -85,4 +85,4 @@ XStore.getInventory(new XStoreCallback<InventoryResponse>() {
     }
 });
 ```
-See example in [InventoryFragment](https://github.com/xsolla/android-store-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/InventoryFragment.java) from Sample App.
+See example in [InventoryFragment](https://github.com/xsolla/store-android-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/InventoryFragment.java) from Sample App.

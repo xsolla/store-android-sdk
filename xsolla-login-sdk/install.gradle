@@ -9,7 +9,7 @@ install {
                 artifactId 'login'
                 name 'Xsolla Login Android SDK'
                 description 'Xsolla Login Android SDK is used to integrate Xsolla Login, a single sign-on tool that uses API methods to authenticate and secure user passwords. This creates a seamless one-click registration experience players can use for fast and safe transactions across all of your games.'
-                url 'https://github.com/xsolla/android-store-sdk'
+                url 'https://github.com/xsolla/store-android-sdk'
 
                 licenses {
                     license {
@@ -24,9 +24,9 @@ install {
                 }
 
                 scm {
-                    connection 'https://github.com/xsolla/android-store-sdk.git'
-                    developerConnection 'https://github.com/xsolla/android-store-sdk.git'
-                    url 'https://github.com/xsolla/android-store-sdk.git'
+                    connection 'https://github.com/xsolla/store-android-sdk.git'
+                    developerConnection 'https://github.com/xsolla/store-android-sdk.git'
+                    url 'https://github.com/xsolla/store-android-sdk.git'
                 }
             }
         }
