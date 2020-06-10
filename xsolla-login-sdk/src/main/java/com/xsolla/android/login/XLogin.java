@@ -17,6 +17,7 @@ import com.xsolla.android.login.jwt.JWT;
 import com.xsolla.android.login.social.LoginSocial;
 import com.xsolla.android.login.social.SocialNetwork;
 import com.xsolla.android.login.token.TokenUtils;
+import com.xsolla.android.login.ui.UnityProxyActivity;
 
 import java.io.IOException;
 
@@ -177,6 +178,12 @@ public class XLogin {
      */
     public static void startSocialAuth(Activity activity, SocialNetwork socialNetwork, StartSocialCallback callback) {
         loginSocial.startSocialAuth(activity, null, socialNetwork, callback);
+    }
+
+    public static void unityStartFacebookAuth(Activity activity) {
+        Intent intent = new Intent(activity, UnityProxyActivity.class);
+        intent.putExtra(UnityProxyActivity.ARG_SOCIAL_NETWORK, SocialNetwork.FACEBOOK.name());
+        activity.startActivity(intent);
     }
 
     /**
