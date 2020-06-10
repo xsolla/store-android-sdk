@@ -14,7 +14,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary true
 
-        buildConfigField 'String', 'PLAYFAB_ID', '"2915B"' // Replace to your project's Playfab Title ID
+        buildConfigField 'String', 'PLAYFAB_ID', '"EC4C5"' // Replace to your project's Playfab Title ID
     }
     buildTypes {
         release {
