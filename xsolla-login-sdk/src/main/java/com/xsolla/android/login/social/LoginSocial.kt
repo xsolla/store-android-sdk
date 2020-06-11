@@ -1,12 +1,10 @@
 package com.xsolla.android.login.social
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.Fragment
-import com.facebook.AccessToken
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
+import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -44,20 +42,26 @@ object LoginSocial {
     private lateinit var fbCallbackManager: CallbackManager
     private lateinit var fbCallback: FacebookCallback<LoginResult>
 
+    public var facebookAppId: String? = null
+
     private var googleSignInAvailable = false
 
     private var finishSocialCallback: FinishSocialCallback? = null
 
-    fun init(loginApi: LoginApi, projectId: String, callbackUrl: String) {
+    fun init(context: Context, loginApi: LoginApi, projectId: String, callbackUrl: String) {
         this.loginApi = loginApi
         this.projectId = projectId
         this.callbackUrl = callbackUrl
-        initFacebook()
+        initFacebook(context)
         initGoogle()
     }
 
-    private fun initFacebook() {
+    private fun initFacebook(context: Context) {
         try {
+            if (facebookAppId != null) {
+                FacebookSdk.setApplicationId(facebookAppId)
+            }
+            FacebookSdk.sdkInitialize(context)
             fbCallbackManager = CallbackManager.Factory.create()
             fbCallback = object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {

@@ -9,7 +9,7 @@
             android:name=".ui.ActivityAuthWebView"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name=".ui.UnityProxyActivity"
+            android:name=".unity.UnityProxyActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/XsollaLoginTheme.Transparent"/>
     </application>

@@ -1,4 +1,4 @@
-package com.xsolla.android.login.ui
+package com.xsolla.android.login.unity
 
 import android.app.Activity
 import android.content.Intent
@@ -19,12 +19,12 @@ class UnityProxyActivity : Activity() {
 
         val socialNetwork = SocialNetwork.valueOf(intent.getStringExtra(ARG_SOCIAL_NETWORK)!!)
 
-        XLogin.startSocialAuth(this, SocialNetwork.FACEBOOK, object : StartSocialCallback {
+        XLogin.startSocialAuth(this, socialNetwork, object : StartSocialCallback {
             override fun onAuthStarted() {
-
             }
             override fun onError(errorMessage: String) {
-                println("!!! error $errorMessage")
+                UnityUtils.sendMessage(socialNetwork.providerName, "ERROR", errorMessage)
+                finish()
             }
         })
 
@@ -32,19 +32,20 @@ class UnityProxyActivity : Activity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        XLogin.finishSocialAuth(SocialNetwork.FACEBOOK, requestCode, resultCode, data, object : FinishSocialCallback {
+        val socialNetwork = SocialNetwork.valueOf(intent.getStringExtra(ARG_SOCIAL_NETWORK)!!)
+        XLogin.finishSocialAuth(socialNetwork, requestCode, resultCode, data, object : FinishSocialCallback {
             override fun onAuthSuccess() {
-                println("!!! success")
+                UnityUtils.sendMessage(socialNetwork.providerName, "SUCCESS", XLogin.getToken())
                 finish()
             }
 
             override fun onAuthCancelled() {
-                println("!!! cancelled")
+                UnityUtils.sendMessage(socialNetwork.providerName, "CANCELLED", null)
                 finish()
             }
 
             override fun onAuthError(errorMessage: String) {
-                println("!!! error $errorMessage")
+                UnityUtils.sendMessage(socialNetwork.providerName, "ERROR", errorMessage)
                 finish()
             }
         })

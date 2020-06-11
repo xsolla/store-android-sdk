@@ -17,7 +17,7 @@ import com.xsolla.android.login.jwt.JWT;
 import com.xsolla.android.login.social.LoginSocial;
 import com.xsolla.android.login.social.SocialNetwork;
 import com.xsolla.android.login.token.TokenUtils;
-import com.xsolla.android.login.ui.UnityProxyActivity;
+import com.xsolla.android.login.unity.UnityProxyActivity;
 
 import java.io.IOException;
 
@@ -44,12 +44,12 @@ public class XLogin {
 
     private static LoginSocial loginSocial = LoginSocial.INSTANCE;
 
-    private XLogin(String projectId, String callbackUrl, TokenUtils tokenUtils, LoginApi loginApi) {
+    private XLogin(Context context, String projectId, String callbackUrl, TokenUtils tokenUtils, LoginApi loginApi) {
         this.projectId = projectId;
         this.callbackUrl = callbackUrl;
         this.tokenUtils = tokenUtils;
         this.loginApi = loginApi;
-        loginSocial.init(loginApi, projectId, callbackUrl);
+        loginSocial.init(context.getApplicationContext(), loginApi, projectId, callbackUrl);
     }
 
     private static XLogin getInstance() {
@@ -70,6 +70,10 @@ public class XLogin {
 
     public static void saveToken(String token) {
         getInstance().tokenUtils.saveToken(token);
+    }
+
+    public static void setFacebookAppId(String facebookAppId) {
+        XLogin.loginSocial.setFacebookAppId(facebookAppId);
     }
 
     /**
@@ -124,7 +128,7 @@ public class XLogin {
         LoginApi loginApi = retrofit.create(LoginApi.class);
         TokenUtils tokenUtils = new TokenUtils(context);
 
-        instance = new XLogin(projectId, callbackUrl, tokenUtils, loginApi);
+        instance = new XLogin(context, projectId, callbackUrl, tokenUtils, loginApi);
     }
 
     /**
@@ -180,12 +184,6 @@ public class XLogin {
         loginSocial.startSocialAuth(activity, null, socialNetwork, callback);
     }
 
-    public static void unityStartFacebookAuth(Activity activity) {
-        Intent intent = new Intent(activity, UnityProxyActivity.class);
-        intent.putExtra(UnityProxyActivity.ARG_SOCIAL_NETWORK, SocialNetwork.FACEBOOK.name());
-        activity.startActivity(intent);
-    }
-
     /**
      * Finish authentication via a social network
      *
@@ -237,6 +235,14 @@ public class XLogin {
 
     public static String getCallbackUrl() {
         return getInstance().callbackUrl;
+    }
+
+    public static class Unity {
+        public static void authSocial(Activity activity, SocialNetwork socialNetwork) {
+            Intent intent = new Intent(activity, UnityProxyActivity.class);
+            intent.putExtra(UnityProxyActivity.ARG_SOCIAL_NETWORK, socialNetwork.name());
+            activity.startActivity(intent);
+        }
     }
 
 }

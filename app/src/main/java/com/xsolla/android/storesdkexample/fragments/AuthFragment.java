@@ -35,9 +35,8 @@ public class AuthFragment extends BaseFragment {
         });
 
         rootView.findViewById(R.id.facebook_button).setOnClickListener(v -> {
-//            selectedSocialNetwork = SocialNetwork.FACEBOOK;
-//            XLogin.startSocialAuth(this, SocialNetwork.FACEBOOK, startSocialCallback);
-            XLogin.unityStartFacebookAuth(getActivity());
+            selectedSocialNetwork = SocialNetwork.FACEBOOK;
+            XLogin.startSocialAuth(this, SocialNetwork.FACEBOOK, startSocialCallback);
         });
 
         rootView.findViewById(R.id.baidu_button).setOnClickListener(v -> {
