@@ -1,2 +1,2 @@
-include ':app', ':app-playfab', ':xsolla-login-sdk', ':xsolla-store-sdk', ':xsolla-paystation-sdk'
+include ':app', ':app-playfab', ':app-simplified', ':xsolla-login-sdk', ':xsolla-store-sdk', ':xsolla-paystation-sdk'
 rootProject.name='store-android-sdk'

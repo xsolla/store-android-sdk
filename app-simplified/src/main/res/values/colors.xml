@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="fragment_bg_color">#FBF7F1</color>
+    <color name="statusBarColor">#FBF7F1</color>
+    <color name="statusBarColorLowApi">#ADAEB1</color>
+
+    <color name="checkout_button_bg_enabled">@android:color/holo_green_dark</color>
+    <color name="checkout_button_bg_disabled">#C5CAE9</color>
+</resources>

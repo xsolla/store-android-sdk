@@ -1,0 +1,155 @@
+[
+   {
+      "sku":"x_gun",
+      "type":"virtual_good",
+      "display_name":"Xsolla Blaster",
+      "description":"That's quite a deadly blaster right here!",
+      "image_url":"https://cdn.xsolla.net/img/misc/images/0c59a7698d4f66c1008b27ee752089b7.png",
+      "price":{
+            "currency": "USD",
+            "amount": 12.000000
+      },
+      "bundle_content": null
+   },
+   {
+      "sku":"x_minigun",
+      "type":"virtual_good",
+      "display_name":"Xsolla Minigun",
+      "description":"Just hold the trigger and praise Xsolla!",
+      "image_url":"https://cdn.xsolla.net/img/misc/images/3093eeb39d5ec7def3af6396607a30ba.png",
+      "price":{
+            "currency": "USD",
+            "amount": 29.990000
+      },
+      "bundle_content": null
+   },
+   {
+      "sku":"x_swords",
+      "type":"virtual_good",
+      "display_name":"Xsolla Swords",
+      "description":"Honshu Boshin Wakizashi - Modern Tactical Samurai Sword",
+      "image_url":"https://cdn.xsolla.net/img/misc/images/ed1179ac76acf5e695bf0d9b8816e00c.png",
+      "price":{
+            "currency": "USD",
+            "amount": 20.000000
+      },
+      "bundle_content": null
+   },
+   {
+      "sku":"x_booster_max",
+      "type":"virtual_good",
+      "display_name":"Xsolla Booster Mega",
+      "description":"Take it, take it all!!! All of Xsolla's riches in one mega booster! ",
+      "image_url":"https://cdn.xsolla.net/img/misc/images/e9f2f4a634bc96ea03b5d5ceadd7c55f.png",
+      "price":{
+            "currency": "USD",
+            "amount": 50.000000
+      },
+      "bundle_content": null
+   },
+   {
+      "sku":"x_keys",
+      "type":"virtual_good",
+      "display_name":"Xsolla Keys",
+      "description":"Opens ONE Xsolla lootbox of any kind",
+      "image_url":"https://cdn3.xsolla.com/img/misc/images/30d672384898b500b9ddbcb5ae3e04c3.png",
+      "price":{
+            "currency": "USD",
+            "amount": 5.000000
+      },
+      "bundle_content": null
+   },
+   {
+      "sku":"x_dog",
+      "type":"virtual_good",
+      "display_name":"Xsolla DogBot",
+      "description":"Zip zap bark. DogBot fulfills every need as a pet + more!",
+      "image_url":"https://cdn.xsolla.net/img/misc/images/10c41787f86b81007a3b5043dca8c553.png",
+      "price":{
+            "currency": "USD",
+            "amount": 7.990000
+      },
+      "bundle_content": null
+   },
+   {
+      "sku":"x_lootbox",
+      "type":"virtual_good",
+      "display_name":"Xsolla Lootbox",
+      "description":"What hidden treasures will you find?",
+      "image_url":"https://cdn.xsolla.net/img/misc/images/9452770924475de851ac8129168c3e98.png",
+      "price":{
+            "currency": "USD",
+            "amount": 9.990000
+      },
+      "bundle_content": null
+   },
+   {
+      "sku":"x_shield",
+      "type":"virtual_good",
+      "display_name":"Xsolla Shield",
+      "description":"The Strategic Homeland Intervention",
+      "image_url":"https://cdn.xsolla.net/img/misc/images/cf8021e9bcd5eb25aaa8f7f72ff0311a.png",
+      "price":{
+            "currency": "USD",
+            "amount": 9.990000
+      },
+      "bundle_content": null
+   },
+   {
+      "sku":"x_launcher",
+      "type":"virtual_good",
+      "display_name":"Xsolla Rocket Launcher",
+      "description":"Blast fools into outer space with the Rocket Launcher",
+      "image_url":"https://cdn.xsolla.net/img/misc/images/73f6060f23b0daac38ed345b1cc48a28.png",
+      "price":{
+            "currency": "USD",
+            "amount": 19.990000
+      },
+      "bundle_content": null
+   },
+   {
+      "sku":"CR100",
+      "type":"virtual_currency_package",
+      "display_name":"100 Crystals",
+      "description":"Small Crystal Pack",
+      "image_url":"https://cdn3.xsolla.com/img/misc/images/92991bd99f377aa7dc01d3a4c133710f.png",
+      "price":{
+            "currency": "USD",
+            "amount": 5.000000
+      },
+      "bundle_content":{
+            "currency": "Crystal",
+            "quantity": 100.000000
+      }
+   },
+   {
+      "sku":"CR500",
+      "type":"virtual_currency_package",
+      "display_name":"500 Crystals",
+      "description":"Medium Crystal Pack",
+      "image_url":"https://cdn3.xsolla.com/img/misc/images/92991bd99f377aa7dc01d3a4c133710f.png",
+      "price":{
+            "currency": "USD",
+            "amount": 10.000000
+      },
+      "bundle_content":{
+            "currency": "Crystal",
+            "quantity": 500.000000
+      }
+   },
+   {
+      "sku":"CR1500",
+      "type":"virtual_currency_package",
+      "display_name":"1500 Crystals",
+      "description":"Large Crystals Pack",
+      "image_url":"https://cdn3.xsolla.com/img/misc/images/1d67a1d2f92d69e021a97effa692dff3.png",
+      "price":{
+            "currency": "USD",
+            "amount": 19.990000
+      },
+      "bundle_content":{
+            "currency": "Crystal",
+            "quantity": 1500.000000
+      }
+   }
+]

@@ -1,0 +1,124 @@
+package com.xsolla.android.storesdkexample.adapter;
+
+import android.content.Context;
+import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.xsolla.android.storesdkexample.R;
+import com.xsolla.android.storesdkexample.data.store.Store;
+import com.xsolla.android.storesdkexample.listener.CreatePaystationIntentListener;
+import com.xsolla.android.storesdkexample.util.ViewUtils;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.math.RoundingMode;
+import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapter.ViewHolder> {
+
+    private Context context;
+    private List<Store.VirtualItem> items;
+    private CreatePaystationIntentListener createPaystationIntentListener;
+
+    public VirtualItemsAdapter(
+            Context context,
+            List<Store.VirtualItem> items,
+            CreatePaystationIntentListener createPaystationIntentListener
+    ) {
+        this.context = context;
+        this.items = items;
+        this.createPaystationIntentListener = createPaystationIntentListener;
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_shop, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.bind(items.get(position));
+    }
+
+    @Override
+    public int getItemCount() {
+        return items.size();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView itemIcon;
+        TextView itemName;
+        TextView itemPrice;
+        TextView itemExpiration;
+        ImageView buyButton;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            itemIcon = itemView.findViewById(R.id.item_icon);
+            itemName = itemView.findViewById(R.id.item_name);
+            itemPrice = itemView.findViewById(R.id.item_price);
+            itemExpiration = itemView.findViewById(R.id.item_expiration);
+            buyButton = itemView.findViewById(R.id.buy_button);
+        }
+
+        private void bind(final Store.VirtualItem item) {
+            Glide.with(itemView).load(item.getImageUrl()).into(itemIcon);
+            itemName.setText(item.getName());
+
+            List<Store.Price> realPrices = item.getRealPrices();
+            List<Store.Price> virtualPrices = item.getVirtualPrices();
+
+            if (virtualPrices != null && !virtualPrices.isEmpty()) {
+                String priceText = virtualPrices.get(0).getAmount().setScale(2, RoundingMode.HALF_UP).toPlainString() + " " + virtualPrices.get(0).getCurrencyName();
+                itemPrice.setText(priceText);
+                buyButton.setImageResource(R.drawable.ic_buy_button);
+                initForVirtualCurrency(item);
+                return;
+            }
+
+            if (realPrices != null && !realPrices.isEmpty()) {
+                String priceText = realPrices.get(0).getAmount().setScale(2, RoundingMode.HALF_UP).toPlainString() + " " + realPrices.get(0).getCurrencyName();
+                itemPrice.setText(priceText);
+                buyButton.setImageResource(R.drawable.ic_buy_button);
+                initForRealCurrency(item);
+            }
+        }
+
+        private void initForRealCurrency(Store.VirtualItem item) {
+            buyButton.setOnClickListener(v -> {
+                ViewUtils.disable(v);
+                Store.createPaystationIntent(context, item.getSku(), new Store.CreatePaystationIntentCallback() {
+                    @Override
+                    public void onSuccess(@NotNull Intent intent) {
+                        createPaystationIntentListener.onIntentCreated(intent);
+                        ViewUtils.enable(v);
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull String errorMessage) {
+                        createPaystationIntentListener.onFailure(errorMessage);
+                        ViewUtils.enable(v);
+                    }
+                });
+            });
+        }
+
+        private void initForVirtualCurrency(Store.VirtualItem item) {
+            Store.Price price = item.getVirtualPrices().get(0);
+            buyButton.setOnClickListener(v -> {
+            });
+        }
+    }
+
+}

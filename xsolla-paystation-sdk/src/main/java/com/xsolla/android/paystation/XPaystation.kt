@@ -11,6 +11,7 @@ import com.xsolla.android.paystation.ui.ActivityPaystation
 import com.xsolla.android.paystation.ui.ActivityPaystationBrowserProxy
 import com.xsolla.android.paystation.ui.ActivityPaystationWebView
 import kotlinx.android.parcel.Parcelize
+import java.util.*
 
 /**
  * Entry point for Xsolla Pay Station SDK
@@ -26,6 +27,12 @@ class XPaystation {
          */
         @JvmStatic
         fun createIntentBuilder(context: Context) = IntentBuilder(context)
+
+        /**
+         * Generate external ID, needed to check payment status
+         */
+        @JvmStatic
+        fun generateExternalId() = UUID.randomUUID().toString()
     }
 
     class IntentBuilder(private val context: Context) {
@@ -39,6 +46,9 @@ class XPaystation {
          * Set a Pay Station access token
          */
         fun accessToken(accessToken: AccessToken) = apply { this.accessToken = accessToken }
+        /**
+         * Set a Pay Station access data
+         */
         fun accessData(accessData: AccessData) = apply { this.accessData = accessData }
         /**
          * Set the sandbox mode
