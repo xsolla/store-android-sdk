@@ -8,7 +8,7 @@ version = '0.9.1'
 android {
     compileSdkVersion 29
 
-    resourcePrefix 'xsolla_login_facebook_'
+    resourcePrefix 'xsolla_login_google_'
 
     defaultConfig {
         minSdkVersion 21
@@ -30,7 +30,8 @@ android {
 }
 
 dependencies {
-    api 'com.facebook.android:facebook-login:7.0.0'
+    api 'com.auth0.android:jwtdecode:2.0.0'
+    api 'com.google.android.gms:play-services-auth:18.0.0'
 }
 
 apply from: 'install.gradle'

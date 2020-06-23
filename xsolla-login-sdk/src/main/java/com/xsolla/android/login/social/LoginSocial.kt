@@ -3,15 +3,19 @@ package com.xsolla.android.login.social
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
+import com.auth0.android.jwt.JWT
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes
+import com.google.android.gms.auth.GoogleAuthUtil
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.common.api.ApiException
-import com.xsolla.android.login.R
+import com.google.android.gms.common.api.CommonStatusCodes
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.api.LoginApi
 import com.xsolla.android.login.callback.FinishSocialCallback
@@ -35,6 +39,8 @@ object LoginSocial {
     private const val RC_AUTH_WEBVIEW = 31000
     private const val RC_AUTH_GOOGLE = 31001
 
+    private const val magicString = "oauth2:https://www.googleapis.com/auth/plus.login"
+
     private lateinit var loginApi: LoginApi
     private lateinit var projectId: String
     private lateinit var callbackUrl: String
@@ -42,25 +48,26 @@ object LoginSocial {
     private lateinit var fbCallbackManager: CallbackManager
     private lateinit var fbCallback: FacebookCallback<LoginResult>
 
-    public var facebookAppId: String? = null
+    var facebookAppId: String? = null
+    var googleServerId: String? = null
 
-    private var googleSignInAvailable = false
+    private var googleAvailable = false
 
     private var finishSocialCallback: FinishSocialCallback? = null
 
-    fun init(context: Context, loginApi: LoginApi, projectId: String, callbackUrl: String) {
+    fun init(context: Context, loginApi: LoginApi, projectId: String, callbackUrl: String, socialConfig: XLogin.SocialConfig?) {
         this.loginApi = loginApi
         this.projectId = projectId
         this.callbackUrl = callbackUrl
+        facebookAppId = socialConfig?.facebookAppId
+        googleServerId = socialConfig?.googleServerId
         initFacebook(context)
         initGoogle()
     }
 
     private fun initFacebook(context: Context) {
         try {
-            if (facebookAppId != null) {
-                FacebookSdk.setApplicationId(facebookAppId)
-            }
+            FacebookSdk.setApplicationId(facebookAppId)
             FacebookSdk.sdkInitialize(context)
             fbCallbackManager = CallbackManager.Factory.create()
             fbCallback = object : FacebookCallback<LoginResult> {
@@ -104,12 +111,12 @@ object LoginSocial {
     }
 
     private fun initGoogle() {
-//        try {
-//            Class.forName("com.google.android.gms.auth.api.signin.GoogleSignIn")
-//            googleSignInAvailable = true
-//        } catch (e: ClassNotFoundException) {
-//            // play-services-auth isn't bundled, use webview instead
-//        }
+        try {
+            Class.forName("com.google.android.gms.auth.api.identity.Identity")
+            googleAvailable = true
+        } catch (e: ClassNotFoundException) {
+            // play-services-auth isn't bundled, use webview instead
+        }
     }
 
     fun startSocialAuth(activity: Activity?, fragment: Fragment?, socialNetwork: SocialNetwork, callback: StartSocialCallback) {
@@ -157,7 +164,7 @@ object LoginSocial {
         })
     }
 
-    fun finishSocialAuth(socialNetwork: SocialNetwork, activityResultRequestCode: Int, activityResultCode: Int, activityResultData: Intent?, callback: FinishSocialCallback) {
+    fun finishSocialAuth(context: Context, socialNetwork: SocialNetwork, activityResultRequestCode: Int, activityResultCode: Int, activityResultData: Intent?, callback: FinishSocialCallback) {
         if (activityResultRequestCode == RC_AUTH_WEBVIEW) {
             val (status, token, error) = fromResultIntent(activityResultData)
             when (status) {
@@ -175,21 +182,24 @@ object LoginSocial {
             fbCallbackManager.onActivityResult(activityResultRequestCode, activityResultCode, activityResultData)
             return
         }
-        if (socialNetwork == SocialNetwork.GOOGLE) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(activityResultData)
+        if (activityResultRequestCode == RC_AUTH_GOOGLE && socialNetwork == SocialNetwork.GOOGLE) {
             try {
-                val account = task.getResult(ApiException::class.java)
-                if (account == null) {
-                    callback.onAuthError("Account is null")
+                val oneTapClient = Identity.getSignInClient(context)
+                val credential = oneTapClient.getSignInCredentialFromIntent(activityResultData)
+                val idToken = credential.googleIdToken
+                if (idToken == null) {
+                    callback.onAuthError("idToken is null")
                 } else {
-                    println("!!! id token = ${account.idToken}")
-                    println("!!! code = ${account.serverAuthCode}")
-                    val googleToken = account.idToken
-                    if (googleToken == null) {
-                        callback.onAuthError("Google token is null")
-                    } else {
+                    val email = JWT(idToken).getClaim("email").asString()
+                    Thread(Runnable {
+                        val oauthToken = GoogleAuthUtil.getToken(context, email, magicString)
+                        if (oauthToken == null) {
+                            Handler(Looper.getMainLooper()).post {
+                                callback.onAuthError("oauthToken is null")
+                            }
+                        }
                         finishSocialCallback = callback
-                        getJwtFromSocial(SocialNetwork.GOOGLE, googleToken) { error ->
+                        getJwtFromSocial(SocialNetwork.GOOGLE, oauthToken) { error ->
                             if (error == null) {
                                 finishSocialCallback?.onAuthSuccess()
                             } else {
@@ -197,10 +207,10 @@ object LoginSocial {
                             }
                             finishSocialCallback = null
                         }
-                    }
+                    }).start()
                 }
             } catch (e: ApiException) {
-                if (e.statusCode == GoogleSignInStatusCodes.SIGN_IN_CANCELLED) {
+                if (e.statusCode == CommonStatusCodes.CANCELED) {
                     callback.onAuthCancelled()
                 } else {
                     callback.onAuthError(e.message ?: e.javaClass.name)
@@ -219,21 +229,32 @@ object LoginSocial {
             callback.onAuthStarted()
             return true
         }
-        if (socialNetwork == SocialNetwork.GOOGLE && googleSignInAvailable) {
-            val context = activity ?: fragment!!.context!!
-            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(context.getString(R.string.xsolla_login_google_server_client_id))
-                    .requestServerAuthCode(context.getString(R.string.xsolla_login_google_server_client_id))
+        if (socialNetwork == SocialNetwork.GOOGLE && googleAvailable) {
+            val oneTapClient = Identity.getSignInClient(activity ?: fragment?.activity!!)
+            val oneTapRequest = BeginSignInRequest.builder()
+                    .setGoogleIdTokenRequestOptions(
+                            BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                                    .setSupported(true)
+                                    .setServerClientId(googleServerId!!)
+                                    .setFilterByAuthorizedAccounts(false)
+                                    .build()
+                    )
                     .build()
-            if (activity != null) {
-                val mGoogleSignInClient = GoogleSignIn.getClient(context, gso)
-                val signInIntent = mGoogleSignInClient.signInIntent
-                activity.startActivityForResult(signInIntent, RC_AUTH_GOOGLE)
-            } else {
-                val mGoogleSignInClient = GoogleSignIn.getClient(context, gso)
-                val signInIntent = mGoogleSignInClient.signInIntent
-                fragment!!.startActivityForResult(signInIntent, RC_AUTH_GOOGLE)
-            }
+            oneTapClient.beginSignIn(oneTapRequest)
+                    .addOnSuccessListener {
+                        try {
+                            val currentActivity = activity ?: fragment?.activity!!
+                            currentActivity.startIntentSenderForResult(
+                                    it.pendingIntent.intentSender,
+                                    RC_AUTH_GOOGLE,
+                                    null,
+                                    0, 0, 0
+                            )
+                        } catch (e: IntentSender.SendIntentException) {
+                            e.printStackTrace()
+                        }
+                    }
+                    .addOnFailureListener { it.printStackTrace() }
             return true
         }
         return false

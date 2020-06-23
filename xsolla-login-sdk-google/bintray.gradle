@@ -29,12 +29,12 @@ bintray {
 
     pkg {
         repo = 'maven'
-        name = 'xsolla-login'
+        name = 'xsolla-login-google'
         licenses = ["Apache-2.0"]
-        vcsUrl = 'https://github.com/xsolla/store-android-sdk'
+        vcsUrl = 'https://github.com/xsolla/android-store-sdk'
         configurations = ['archives']
         desc = 'Xsolla Login Android SDK is used to integrate Xsolla Login, a single sign-on tool that uses API methods to authenticate and secure user passwords. This creates a seamless one-click registration experience players can use for fast and safe transactions across all of your games.'
-        websiteUrl = 'https://github.com/xsolla/store-android-sdk'
+        websiteUrl = 'https://github.com/xsolla/android-store-sdk'
         publish = true
         publicDownloadNumbers = true
     }

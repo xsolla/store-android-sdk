@@ -33,7 +33,7 @@ class UnityProxyActivity : Activity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val socialNetwork = SocialNetwork.valueOf(intent.getStringExtra(ARG_SOCIAL_NETWORK)!!)
-        XLogin.finishSocialAuth(socialNetwork, requestCode, resultCode, data, object : FinishSocialCallback {
+        XLogin.finishSocialAuth(this, socialNetwork, requestCode, resultCode, data, object : FinishSocialCallback {
             override fun onAuthSuccess() {
                 UnityUtils.sendMessage(socialNetwork.providerName, "SUCCESS", XLogin.getToken())
                 finish()

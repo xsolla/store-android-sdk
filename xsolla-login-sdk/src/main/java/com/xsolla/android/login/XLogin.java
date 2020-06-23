@@ -21,6 +21,7 @@ import com.xsolla.android.login.unity.UnityProxyActivity;
 
 import java.io.IOException;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -44,12 +45,12 @@ public class XLogin {
 
     private static LoginSocial loginSocial = LoginSocial.INSTANCE;
 
-    private XLogin(Context context, String projectId, String callbackUrl, TokenUtils tokenUtils, LoginApi loginApi) {
+    private XLogin(Context context, String projectId, String callbackUrl, TokenUtils tokenUtils, LoginApi loginApi, SocialConfig socialConfig) {
         this.projectId = projectId;
         this.callbackUrl = callbackUrl;
         this.tokenUtils = tokenUtils;
         this.loginApi = loginApi;
-        loginSocial.init(context.getApplicationContext(), loginApi, projectId, callbackUrl);
+        loginSocial.init(context.getApplicationContext(), loginApi, projectId, callbackUrl, socialConfig);
     }
 
     private static XLogin getInstance() {
@@ -72,28 +73,26 @@ public class XLogin {
         getInstance().tokenUtils.saveToken(token);
     }
 
-    public static void setFacebookAppId(String facebookAppId) {
-        XLogin.loginSocial.setFacebookAppId(facebookAppId);
+    /**
+     * Initialize SDK
+     *
+     * @param projectId    login ID from Publisher Account &gt; Login settings
+     * @param context      application context
+     * @param socialConfig configuration for native social auth
+     */
+    public static void init(String projectId, Context context, @Nullable SocialConfig socialConfig) {
+        init(projectId, "https://login.xsolla.com/api/blank", context, socialConfig);
     }
 
     /**
      * Initialize SDK
      *
-     * @param projectId login ID from Publisher Account &gt; Login settings
-     * @param context   application context
+     * @param projectId    login ID from Publisher Account &gt; Login settings
+     * @param callbackUrl  callback URL specified in Publisher Account &gt; Login settings
+     * @param context      application context
+     * @param socialConfig configuration for native social auth
      */
-    public static void init(String projectId, Context context) {
-        init(projectId, "https://login.xsolla.com/api/blank", context);
-    }
-
-    /**
-     * Initialize SDK
-     *
-     * @param projectId   login ID from Publisher Account &gt; Login settings
-     * @param callbackUrl callback URL specified in Publisher Account &gt; Login settings
-     * @param context     application context
-     */
-    public static void init(String projectId, String callbackUrl, Context context) {
+    public static void init(String projectId, String callbackUrl, Context context, @Nullable SocialConfig socialConfig) {
         Interceptor interceptor = new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
@@ -128,7 +127,7 @@ public class XLogin {
         LoginApi loginApi = retrofit.create(LoginApi.class);
         TokenUtils tokenUtils = new TokenUtils(context);
 
-        instance = new XLogin(context, projectId, callbackUrl, tokenUtils, loginApi);
+        instance = new XLogin(context, projectId, callbackUrl, tokenUtils, loginApi, socialConfig);
     }
 
     /**
@@ -161,7 +160,7 @@ public class XLogin {
     /**
      * Start authentication via a social network
      *
-     * @param fragment current fragment
+     * @param fragment      current fragment
      * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
      * @param callback      status callback
      * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
@@ -174,7 +173,7 @@ public class XLogin {
     /**
      * Start authentication via a social network
      *
-     * @param activity current activity
+     * @param activity      current activity
      * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
      * @param callback      status callback
      * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
@@ -187,16 +186,17 @@ public class XLogin {
     /**
      * Finish authentication via a social network
      *
-     * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
+     * @param context                   application context
+     * @param socialNetwork             social network to authenticate with, must be connected to Login in Publisher Account
      * @param activityResultRequestCode request code from onActivityResult
-     * @param activityResultCode result code from onActivityResult
-     * @param activityResultData data from onActivityResult
-     * @param callback      status callback
+     * @param activityResultCode        result code from onActivityResult
+     * @param activityResultData        data from onActivityResult
+     * @param callback                  status callback
      * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
      * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
      */
-    public static void finishSocialAuth(SocialNetwork socialNetwork, int activityResultRequestCode, int activityResultCode, Intent activityResultData, FinishSocialCallback callback) {
-        loginSocial.finishSocialAuth(socialNetwork, activityResultRequestCode, activityResultCode, activityResultData, callback);
+    public static void finishSocialAuth(Context context, SocialNetwork socialNetwork, int activityResultRequestCode, int activityResultCode, Intent activityResultData, FinishSocialCallback callback) {
+        loginSocial.finishSocialAuth(context, socialNetwork, activityResultRequestCode, activityResultCode, activityResultData, callback);
     }
 
     /**
@@ -235,6 +235,33 @@ public class XLogin {
 
     public static String getCallbackUrl() {
         return getInstance().callbackUrl;
+    }
+
+    public static class SocialConfig {
+        public String facebookAppId;
+        public String googleServerId;
+
+        public static class Builder {
+            private String facebookAppId;
+            private String googleServerId;
+
+            public Builder facebookAppId(String facebookAppId) {
+                this.facebookAppId = facebookAppId;
+                return this;
+            }
+
+            public Builder googleServerId(String googleServerId) {
+                this.googleServerId = googleServerId;
+                return this;
+            }
+
+            public SocialConfig build() {
+                SocialConfig socialConfig = new SocialConfig();
+                socialConfig.facebookAppId = facebookAppId;
+                socialConfig.googleServerId = googleServerId;
+                return socialConfig;
+            }
+        }
     }
 
     public static class Unity {

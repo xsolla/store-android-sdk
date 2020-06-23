@@ -10,7 +10,17 @@ object UnityUtils {
                 unityPlayer = Class.forName("com.unity3d.player.UnityPlayer")
             }
             val method = unityPlayer.getMethod("UnitySendMessage", String::class.java, String::class.java, String::class.java)
-            method.invoke(unityPlayer, "SocialNetworks", "ReceiveSocialAuthResult", arrayOf(socialNetwork, status, body))
+            val unityArgument = with(StringBuilder()) {
+                append(socialNetwork)
+                append('#')
+                append(status)
+                if (body != null) {
+                    append('#')
+                    append(body)
+                }
+                toString()
+            }
+            method.invoke(unityPlayer, "SocialNetworks", "ReceiveSocialAuthResult", unityArgument)
         } catch (e: Exception) {
             e.printStackTrace()
         }
