@@ -37,9 +37,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.2.0'
 
-    complieOnly 'com.facebook.android:facebook-login:7.0.0'
-    complieOnly 'com.google.android.gms:play-services-auth:18.0.0'
-    complieOnly 'com.auth0.android:jwtdecode:2.0.0'
+    compileOnly 'com.facebook.android:facebook-login:7.0.0'
+    compileOnly 'com.google.android.gms:play-services-auth:18.0.0'
+    compileOnly 'com.auth0.android:jwtdecode:2.0.0'
 }
 
 apply from: 'install.gradle'
