@@ -1,5 +1,7 @@
 package com.xsolla.android.paystation.data
 
+import android.os.Build
+import com.xsolla.android.paystation.BuildConfig
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.URLEncoder
@@ -38,6 +40,7 @@ class AccessData(
         if (externalId != null) {
             settings.put("external_id", externalId)
         }
+        settings.put("xsolla_product_tag", "SDK-payments_ver-${BuildConfig.VERSION_NAME}_integr-simplified_engine-android_enginever-${Build.VERSION.RELEASE}")
         root.put("settings", settings)
 
         if (virtualItems != null) {
