@@ -1,8 +1,10 @@
 package com.xsolla.android.storesdkexample.data.store
 
+import android.os.Build
 import com.playfab.PlayFabClientAPI
 import com.playfab.PlayFabClientModels
 import com.playfab.PlayFabSettings
+import com.xsolla.android.paystation.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -144,7 +146,13 @@ object Store {
         val createTokenResult = withContext(Dispatchers.IO) {
             val tokenRequest = PlayFabClientModels.ExecuteCloudScriptRequest()
             tokenRequest.FunctionName = "CreatePaystationToken"
-            tokenRequest.FunctionParameter = CreateOrderEntity(sku, 1, orderId)
+            tokenRequest.FunctionParameter = CreateOrderEntity(
+                    sku,
+                    1,
+                    orderId,
+                    "SDK-payments_ver-${BuildConfig.VERSION_NAME}_integr-playfab_engine-android_enginever-${Build.VERSION.RELEASE}",
+                    null
+            )
             PlayFabClientAPI.ExecuteCloudScript(tokenRequest)
         }
 
@@ -162,7 +170,9 @@ object Store {
     private data class CreateOrderEntity(
             val sku: String,
             val amount: Int,
-            val orderId: String?
+            val orderId: String?,
+            val sdkTag: String,
+            val theme: String?
     )
 
     interface CreateOrderByItemSkuCallback {
