@@ -13,9 +13,7 @@ android {
         vectorDrawables.useSupportLibrary true
 
         buildConfigField 'int', 'PROJECT_ID', '58917' // Replace to your Project ID
-        buildConfigField 'String', 'LOGIN_ID', '"ba55b4f6-babf-11ea-a85b-42010aa80004"' // Replace to your project's Login ID
-        buildConfigField 'String', 'FACEBOOK_ID', '"2328630590776238"' // Replace to your Facebook App ID
-        buildConfigField 'String', 'GOOGLE_ID', '"107627831226-2di9prb3vv5o8pgu1o5la8mfsq0nld3o.apps.googleusercontent.com"' // Replace to your Google Web application client ID
+        buildConfigField 'String', 'LOGIN_ID', '"026201e3-7e40-11ea-a85b-42010aa80004"' // Replace to your project's Login ID
     }
     buildTypes {
         release {
@@ -45,8 +43,9 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     implementation project(":xsolla-login-sdk")
-    implementation project(":xsolla-login-sdk-facebook")
-    implementation project(":xsolla-login-sdk-google")
+    // Uncomment to implement native auth
+//    implementation project(":xsolla-login-sdk-facebook")
+//    implementation project(":xsolla-login-sdk-google")
     implementation project(":xsolla-store-sdk")
     implementation project(":xsolla-paystation-sdk")
 }

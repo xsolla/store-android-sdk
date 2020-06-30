@@ -21,12 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        XLogin.SocialConfig socialConfig = new XLogin.SocialConfig.Builder()
-                .facebookAppId(BuildConfig.FACEBOOK_ID)
-                .googleServerId(BuildConfig.GOOGLE_ID)
-                .build();
-
-        XLogin.init(BuildConfig.LOGIN_ID, this, socialConfig);
+        XLogin.init(BuildConfig.LOGIN_ID, this, null);
         initFragment();
         initStatusBar();
     }
