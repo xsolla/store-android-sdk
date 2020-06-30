@@ -177,7 +177,7 @@ object LoginSocial {
             }
             return
         }
-        if (socialNetwork == SocialNetwork.FACEBOOK) {
+        if (socialNetwork == SocialNetwork.FACEBOOK && ::fbCallbackManager.isInitialized) {
             finishSocialCallback = callback
             fbCallbackManager.onActivityResult(activityResultRequestCode, activityResultCode, activityResultData)
             return
