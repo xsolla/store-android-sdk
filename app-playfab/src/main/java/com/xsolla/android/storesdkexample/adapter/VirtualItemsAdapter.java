@@ -6,7 +6,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
+import com.xsolla.android.payments.playfab.XPlayfabWrapper;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.data.store.Store;
 import com.xsolla.android.storesdkexample.listener.BuyForVirtualCurrencyListener;
@@ -16,9 +20,6 @@ import com.xsolla.android.storesdkexample.util.ViewUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapter.ViewHolder> {
 
@@ -96,19 +97,23 @@ public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapte
         private void initForRealCurrency(Store.VirtualItem item) {
             buyButton.setOnClickListener(v -> {
                 ViewUtils.disable(v);
-                Store.createOrderByItemSku(item.getSku(), new Store.CreateOrderByItemSkuCallback() {
-                    @Override
-                    public void onSuccess(@NotNull String psToken) {
-                        createOrderListener.onOrderCreated(psToken);
-                        ViewUtils.enable(v);
-                    }
+                XPlayfabWrapper.createPlayfabOrder(
+                        item.getSku(),
+                        1,
+                        null,
+                        new XPlayfabWrapper.CreatePlayfabOrderCallback() {
+                            @Override
+                            public void onSuccess(@NotNull String paystationToken, @NotNull String playfabOrderId) {
+                                createOrderListener.onOrderCreated(paystationToken);
+                                ViewUtils.enable(v);
+                            }
 
-                    @Override
-                    public void onFailure(@NotNull String errorMessage) {
-                        createOrderListener.onFailure(errorMessage);
-                        ViewUtils.enable(v);
-                    }
-                });
+                            @Override
+                            public void onFailure(@NotNull String errorMessage) {
+                                createOrderListener.onFailure(errorMessage);
+                                ViewUtils.enable(v);
+                            }
+                        });
             });
         }
 

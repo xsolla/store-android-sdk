@@ -1,10 +1,8 @@
 package com.xsolla.android.storesdkexample.data.store
 
-import android.os.Build
 import com.playfab.PlayFabClientAPI
 import com.playfab.PlayFabClientModels
 import com.playfab.PlayFabSettings
-import com.xsolla.android.paystation.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -126,57 +124,6 @@ object Store {
 
     interface VirtualCurrencyPacksCallback {
         fun onSuccess(virtualCurrencyPacks: List<VirtualCurrencyPack>)
-        fun onFailure(errorMessage: String)
-    }
-
-
-    @JvmStatic
-    fun createOrderByItemSku(sku: String, callback: CreateOrderByItemSkuCallback) = GlobalScope.launch {
-        var orderId: String?
-        val startPurchaseResult = withContext(Dispatchers.IO) {
-            val item = PlayFabClientModels.ItemPurchaseRequest()
-            item.ItemId = sku
-            item.Quantity = 1
-            val orderRequest = PlayFabClientModels.StartPurchaseRequest()
-            orderRequest.Items = arrayListOf(item)
-            val result = PlayFabClientAPI.StartPurchase(orderRequest)
-            orderId = result.Result?.OrderId
-            result
-        }
-        val createTokenResult = withContext(Dispatchers.IO) {
-            val tokenRequest = PlayFabClientModels.ExecuteCloudScriptRequest()
-            tokenRequest.FunctionName = "CreatePaystationToken"
-            tokenRequest.FunctionParameter = CreateOrderEntity(
-                    sku,
-                    1,
-                    orderId,
-                    "SDK-payments_ver-${BuildConfig.VERSION_NAME}_integr-playfab_engine-android_enginever-${Build.VERSION.RELEASE}",
-                    null
-            )
-            PlayFabClientAPI.ExecuteCloudScript(tokenRequest)
-        }
-
-        withContext(Dispatchers.Main) {
-            if (startPurchaseResult.Error == null && createTokenResult.Error == null) {
-                val result = createTokenResult.Result.FunctionResult as Map<*, *>
-                val token = result["token"].toString()
-                callback.onSuccess(token)
-            } else {
-                callback.onFailure(startPurchaseResult.Error?.errorMessage + '\n' + createTokenResult.Error?.errorMessage)
-            }
-        }
-    }
-
-    private data class CreateOrderEntity(
-            val sku: String,
-            val amount: Int,
-            val orderId: String?,
-            val sdkTag: String,
-            val theme: String?
-    )
-
-    interface CreateOrderByItemSkuCallback {
-        fun onSuccess(psToken: String)
         fun onFailure(errorMessage: String)
     }
 
