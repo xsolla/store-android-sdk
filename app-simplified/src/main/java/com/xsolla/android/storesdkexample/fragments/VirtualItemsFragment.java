@@ -4,8 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.xsolla.android.paystation.XPaystation;
-import com.xsolla.android.storesdkexample.R;
+import com.xsolla.android.simplifiedexample.R;
 import com.xsolla.android.storesdkexample.adapter.VirtualItemsAdapter;
 import com.xsolla.android.storesdkexample.data.db.DB;
 import com.xsolla.android.storesdkexample.data.db.VirtualItem;
@@ -16,11 +21,6 @@ import com.xsolla.android.storesdkexample.listener.CreatePaystationIntentListene
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class VirtualItemsFragment extends CatalogFragment {
 

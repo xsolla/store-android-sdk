@@ -1,8 +1,8 @@
 package com.xsolla.android.storesdkexample.fragments.base;
 
-import com.xsolla.android.storesdkexample.R;
-
 import androidx.appcompat.widget.Toolbar;
+
+import com.xsolla.android.simplifiedexample.R;
 
 public abstract class CatalogFragment extends BaseFragment {
 

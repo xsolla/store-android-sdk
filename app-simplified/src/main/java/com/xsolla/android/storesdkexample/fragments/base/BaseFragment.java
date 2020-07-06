@@ -7,14 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.xsolla.android.storesdkexample.R;
-import com.xsolla.android.storesdkexample.fragments.MainFragment;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
+import com.google.android.material.snackbar.Snackbar;
+import com.xsolla.android.simplifiedexample.R;
+import com.xsolla.android.storesdkexample.fragments.MainFragment;
 
 public abstract class BaseFragment extends Fragment {
 

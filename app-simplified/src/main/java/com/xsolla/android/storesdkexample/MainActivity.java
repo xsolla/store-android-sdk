@@ -5,13 +5,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
-import com.xsolla.android.storesdkexample.data.db.DB;
-import com.xsolla.android.storesdkexample.data.store.Catalog;
-import com.xsolla.android.storesdkexample.fragments.MainFragment;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import com.xsolla.android.simplifiedexample.R;
+import com.xsolla.android.storesdkexample.data.db.DB;
+import com.xsolla.android.storesdkexample.data.store.Catalog;
+import com.xsolla.android.storesdkexample.fragments.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
 

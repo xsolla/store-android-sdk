@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import com.xsolla.android.paystation.XPaystation
 import com.xsolla.android.paystation.data.AccessData
-import com.xsolla.android.storesdkexample.BuildConfig
+import com.xsolla.android.simplifiedexample.BuildConfig
 import com.xsolla.android.storesdkexample.data.db.DB
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".MainActivity"
+            android:name="com.xsolla.android.storesdkexample.MainActivity"
             android:windowSoftInputMode="adjustPan"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait">

@@ -8,8 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import com.xsolla.android.storesdkexample.R;
+import com.xsolla.android.simplifiedexample.R;
 import com.xsolla.android.storesdkexample.data.store.Store;
 import com.xsolla.android.storesdkexample.listener.CreatePaystationIntentListener;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
@@ -18,9 +21,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.RoundingMode;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class VirtualCurrencyAdapter extends RecyclerView.Adapter<VirtualCurrencyAdapter.ViewHolder> {
 
