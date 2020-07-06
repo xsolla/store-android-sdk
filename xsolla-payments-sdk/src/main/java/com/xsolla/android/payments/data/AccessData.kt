@@ -1,4 +1,4 @@
-package com.xsolla.android.paystation.data
+package com.xsolla.android.payments.data
 
 import android.os.Build
 import com.xsolla.android.paystation.BuildConfig

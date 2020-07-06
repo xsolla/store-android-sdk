@@ -7,9 +7,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+
 import com.bumptech.glide.Glide;
-import com.xsolla.android.paystation.XPaystation;
-import com.xsolla.android.paystation.data.AccessToken;
+import com.xsolla.android.payments.XPayments;
+import com.xsolla.android.payments.data.AccessToken;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
@@ -20,10 +24,6 @@ import com.xsolla.android.storesdkexample.BuildConfig;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 
 public class DetailFragment extends BaseFragment {
 
@@ -102,7 +102,7 @@ public class DetailFragment extends BaseFragment {
                 protected void onSuccess(CreateOrderResponse response) {
                     orderId = Integer.toString(response.getOrderId());
                     String token = response.getToken();
-                    Intent intent = XPaystation.createIntentBuilder(getContext())
+                    Intent intent = XPayments.createIntentBuilder(getContext())
                                 .accessToken(new AccessToken(token))
                                 .isSandbox(BuildConfig.IS_SANDBOX)
                                 .build();
@@ -124,7 +124,7 @@ public class DetailFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_PAYSTATION) {
-            XPaystation.Result result = XPaystation.Result.fromResultIntent(data);
+            XPayments.Result result = XPayments.Result.fromResultIntent(data);
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(getContext(), "Payment OK\n" + result, Toast.LENGTH_LONG).show();
                 XStore.getOrder(orderId, new XStoreCallback<OrderResponse>() {

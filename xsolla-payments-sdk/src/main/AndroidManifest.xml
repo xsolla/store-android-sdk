@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xsolla.android.paystation">
+    package="com.xsolla.android.payments">
 
     <application>
         <activity
-            android:name=".ui.ActivityPaystationBrowserProxy"
+            android:name="com.xsolla.android.payments.ui.ActivityPaystationBrowserProxy"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/xsolla_paystation_Theme"
+            android:theme="@style/xsolla_payments_Theme"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
-                    android:scheme="@string/xsolla_paystation_redirect_scheme"
-                    android:host="@string/xsolla_paystation_redirect_host"
-                    android:pathPrefix="@string/xsolla_paystation_redirect_path_prefix" />
+                    android:scheme="@string/xsolla_payments_redirect_scheme"
+                    android:host="@string/xsolla_payments_redirect_host"
+                    android:pathPrefix="@string/xsolla_payments_redirect_path_prefix" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.ActivityPaystationWebView"
+            android:name="com.xsolla.android.payments.ui.ActivityPaystationWebView"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/xsolla_paystation_Theme" />
+            android:theme="@style/xsolla_payments_Theme" />
     </application>
 
 </manifest>

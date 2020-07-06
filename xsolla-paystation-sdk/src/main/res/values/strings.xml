@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="xsolla_paystation_redirect_scheme">https</string>
-    <string name="xsolla_paystation_redirect_host">redirect.xsolla.com</string>
-    <string name="xsolla_paystation_redirect_path_prefix">/payment</string>
-</resources>

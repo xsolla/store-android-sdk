@@ -1,22 +1,22 @@
-package com.xsolla.android.paystation
+package com.xsolla.android.payments
 
 import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
 import android.util.Log
 import androidx.core.os.bundleOf
-import com.xsolla.android.paystation.data.AccessData
-import com.xsolla.android.paystation.data.AccessToken
-import com.xsolla.android.paystation.ui.ActivityPaystation
-import com.xsolla.android.paystation.ui.ActivityPaystationBrowserProxy
-import com.xsolla.android.paystation.ui.ActivityPaystationWebView
+import com.xsolla.android.payments.data.AccessData
+import com.xsolla.android.payments.data.AccessToken
+import com.xsolla.android.payments.ui.ActivityPaystation
+import com.xsolla.android.payments.ui.ActivityPaystationBrowserProxy
+import com.xsolla.android.payments.ui.ActivityPaystationWebView
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 /**
- * Entry point for Xsolla Pay Station SDK
+ * Entry point for Xsolla Payments SDK
  */
-class XPaystation {
+class XPayments {
 
     companion object {
         const val SERVER_PROD = "secure.xsolla.com"
@@ -80,7 +80,7 @@ class XPaystation {
                     if (ActivityPaystationBrowserProxy.checkAvailability(context, url)) {
                         ActivityPaystationBrowserProxy::class.java
                     } else {
-                        Log.d(XPaystation::class.java.simpleName, "Browser is not available")
+                        Log.d(XPayments::class.java.simpleName, "Browser is not available")
                         ActivityPaystationWebView::class.java
                     }
                 }

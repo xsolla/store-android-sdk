@@ -4,8 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.xsolla.android.paystation.XPaystation;
-import com.xsolla.android.paystation.data.AccessToken;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.xsolla.android.payments.XPayments;
+import com.xsolla.android.payments.data.AccessToken;
 import com.xsolla.android.storesdkexample.BuildConfig;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.adapter.VirtualItemsAdapter;
@@ -17,11 +22,6 @@ import com.xsolla.android.storesdkexample.listener.CreateOrderListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class VirtualItemsFragment extends CatalogFragment {
 
@@ -59,7 +59,7 @@ public class VirtualItemsFragment extends CatalogFragment {
                         new CreateOrderListener() {
                             @Override
                             public void onOrderCreated(String psToken) {
-                                Intent intent = XPaystation.createIntentBuilder(getContext())
+                                Intent intent = XPayments.createIntentBuilder(getContext())
                                         .accessToken(new AccessToken(psToken))
                                         .useWebview(true)
                                         .isSandbox(BuildConfig.IS_SANDBOX)
@@ -98,7 +98,7 @@ public class VirtualItemsFragment extends CatalogFragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_PAYSTATION) {
-            XPaystation.Result result = XPaystation.Result.fromResultIntent(data);
+            XPayments.Result result = XPayments.Result.fromResultIntent(data);
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(getContext(), "Payment OK\n" + result, Toast.LENGTH_LONG).show();
             } else {
