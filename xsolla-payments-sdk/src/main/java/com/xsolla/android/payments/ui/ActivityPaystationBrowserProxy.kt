@@ -1,11 +1,11 @@
-package com.xsolla.android.paystation.ui
+package com.xsolla.android.payments.ui
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import com.xsolla.android.paystation.XPaystation
+import com.xsolla.android.payments.XPayments
 
 class ActivityPaystationBrowserProxy : ActivityPaystation() {
 
@@ -46,7 +46,7 @@ class ActivityPaystationBrowserProxy : ActivityPaystation() {
         val invoiceId = uri.getQueryParameter("invoice_id")
         finishWithResult(
                 Activity.RESULT_OK,
-                XPaystation.Result(XPaystation.Status.COMPLETED, invoiceId)
+                XPayments.Result(XPayments.Status.COMPLETED, invoiceId)
         )
     }
 
@@ -58,12 +58,12 @@ class ActivityPaystationBrowserProxy : ActivityPaystation() {
         } else {
             finishWithResult(
                     Activity.RESULT_CANCELED,
-                    XPaystation.Result(XPaystation.Status.CANCELLED, null)
+                    XPayments.Result(XPayments.Status.CANCELLED, null)
             )
         }
     }
 
-    private fun finishWithResult(resultCode: Int, resultData: XPaystation.Result) {
+    private fun finishWithResult(resultCode: Int, resultData: XPayments.Result) {
         val intent = Intent()
         intent.putExtra(RESULT, resultData)
         setResult(resultCode, intent)

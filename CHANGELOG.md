@@ -16,4 +16,4 @@
 
 - Login demo.
 - Store demo.
-- PayStation demo.
+- Payments demo.

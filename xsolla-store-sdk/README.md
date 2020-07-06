@@ -59,7 +59,7 @@ XStore.createOrderFromCurrentCart(paymentOptions, new XStoreCallback<CreateOrder
     @Override
     protected void onSuccess(CreateOrderResponse response) {
         String token = response.getToken()
-        // Use Paystation SDK to start payment with this token
+        // Use Payments SDK to start payment with this token
     }
 
     @Override

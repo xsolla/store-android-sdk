@@ -1,4 +1,4 @@
-package com.xsolla.android.paystation.ui
+package com.xsolla.android.payments.ui
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -7,9 +7,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.xsolla.android.paystation.R
-import com.xsolla.android.paystation.XPaystation
-import kotlinx.android.synthetic.main.xsolla_paystation_activity_paystation.*
+import com.xsolla.android.payments.R
+import com.xsolla.android.payments.XPayments
+import kotlinx.android.synthetic.main.xsolla_payments_activity_paystation.*
 
 class ActivityPaystationWebView : ActivityPaystation() {
 
@@ -17,7 +17,7 @@ class ActivityPaystationWebView : ActivityPaystation() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.xsolla_paystation_activity_paystation)
+        setContentView(R.layout.xsolla_payments_activity_paystation)
 
         url = intent.getStringExtra(ARG_URL)!!
 
@@ -31,7 +31,7 @@ class ActivityPaystationWebView : ActivityPaystation() {
         } else {
             finishWithResult(
                     Activity.RESULT_CANCELED,
-                    XPaystation.Result(XPaystation.Status.CANCELLED, null)
+                    XPayments.Result(XPayments.Status.CANCELLED, null)
             )
         }
     }
@@ -46,11 +46,11 @@ class ActivityPaystationWebView : ActivityPaystation() {
 
             override fun doUpdateVisitedHistory(view: WebView, url: String, isReload: Boolean) {
                 val uri = Uri.parse(url)
-                if (uri.authority == getString(R.string.xsolla_paystation_redirect_host)) {
+                if (uri.authority == getString(R.string.xsolla_payments_redirect_host)) {
                     val invoiceId = uri.getQueryParameter("invoice_id")
                     finishWithResult(
                             Activity.RESULT_OK,
-                            XPaystation.Result(XPaystation.Status.COMPLETED, invoiceId)
+                            XPayments.Result(XPayments.Status.COMPLETED, invoiceId)
                     )
                 }
                 super.doUpdateVisitedHistory(view, url, isReload)
@@ -58,7 +58,7 @@ class ActivityPaystationWebView : ActivityPaystation() {
         }
     }
 
-    private fun finishWithResult(resultCode: Int, resultData: XPaystation.Result) {
+    private fun finishWithResult(resultCode: Int, resultData: XPayments.Result) {
         val intent = Intent()
         intent.putExtra(RESULT, resultData)
         setResult(resultCode, intent)
