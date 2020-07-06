@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.xsolla.android.paystation.XPaystation;
+import com.xsolla.android.payments.XPayments;
 import com.xsolla.android.simplifiedexample.R;
 import com.xsolla.android.storesdkexample.adapter.VirtualCurrencyAdapter;
 import com.xsolla.android.storesdkexample.data.store.Store;
@@ -80,7 +80,7 @@ public class VirtualCurrencyFragment extends CatalogFragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_PAYSTATION) {
-            XPaystation.Result result = XPaystation.Result.fromResultIntent(data);
+            XPayments.Result result = XPayments.Result.fromResultIntent(data);
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(getContext(), "Payment OK\n" + result, Toast.LENGTH_LONG).show();
             } else {

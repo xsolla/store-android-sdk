@@ -2,8 +2,8 @@ package com.xsolla.android.storesdkexample.data.store
 
 import android.content.Context
 import android.content.Intent
-import com.xsolla.android.paystation.XPaystation
-import com.xsolla.android.paystation.data.AccessData
+import com.xsolla.android.payments.XPayments
+import com.xsolla.android.payments.data.AccessData
 import com.xsolla.android.simplifiedexample.BuildConfig
 import com.xsolla.android.storesdkexample.data.db.DB
 import kotlinx.coroutines.Dispatchers
@@ -102,7 +102,7 @@ object Store {
 
     @JvmStatic
     fun createPaystationIntent(context: Context, sku: String, callback: CreatePaystationIntentCallback) = GlobalScope.launch {
-        val externalId = XPaystation.generateExternalId()
+        val externalId = XPayments.generateExternalId()
         val accessData = AccessData.Builder()
                 .projectId(BuildConfig.PROJECT_ID)
                 .userId(UUID.randomUUID().toString())
@@ -111,7 +111,7 @@ object Store {
                 .externalId(externalId)
                 .virtualItems(listOf(AccessData.VirtualItem(sku, 1)))
                 .build()
-        val intent = XPaystation.createIntentBuilder(context)
+        val intent = XPayments.createIntentBuilder(context)
                 .accessData(accessData)
                 .useWebview(true)
                 .isSandbox(BuildConfig.IS_SANDBOX)

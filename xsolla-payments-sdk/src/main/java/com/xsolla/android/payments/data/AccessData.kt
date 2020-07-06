@@ -1,7 +1,7 @@
 package com.xsolla.android.payments.data
 
 import android.os.Build
-import com.xsolla.android.paystation.BuildConfig
+import com.xsolla.android.payments.BuildConfig
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.URLEncoder
