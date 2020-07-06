@@ -1,4 +1,4 @@
-package com.xsolla.android.paystation.ui
+package com.xsolla.android.payments.ui
 
 import androidx.appcompat.app.AppCompatActivity
 

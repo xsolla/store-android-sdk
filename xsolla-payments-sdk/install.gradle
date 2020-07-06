@@ -6,9 +6,9 @@ install {
             project {
                 packaging 'aar'
                 groupId 'com.xsolla.android'
-                artifactId 'paystation'
-                name 'Xsolla Paystation Android SDK'
-                description 'Xsolla Paystation Android SDK allows partners to monetize their product by providing users with a convenient UI to pay for in-game purchases in the game store'
+                artifactId 'payments'
+                name 'Xsolla Payments Android SDK'
+                description 'Xsolla Payments Android SDK allows partners to monetize their product by providing users with a convenient UI to pay for in-game purchases in the game store'
                 url 'https://github.com/xsolla/store-android-sdk'
 
                 licenses {

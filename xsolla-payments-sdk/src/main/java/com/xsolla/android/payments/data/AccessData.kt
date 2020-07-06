@@ -1,4 +1,4 @@
-package com.xsolla.android.paystation.data
+package com.xsolla.android.payments.data
 
 import org.json.JSONObject
 import java.net.URLEncoder

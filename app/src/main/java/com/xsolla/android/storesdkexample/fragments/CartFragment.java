@@ -5,8 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.xsolla.android.paystation.XPaystation;
-import com.xsolla.android.paystation.data.AccessToken;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.xsolla.android.payments.XPayments;
+import com.xsolla.android.payments.data.AccessToken;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
@@ -19,13 +26,6 @@ import com.xsolla.android.storesdkexample.adapter.CartAdapter;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.listener.UpdateCartListener;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class CartFragment extends BaseFragment implements UpdateCartListener {
 
@@ -78,7 +78,7 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
                 @Override
                 protected void onSuccess(CreateOrderResponse response) {
                     orderId = Integer.toString(response.getOrderId());
-                    Intent intent = XPaystation.createIntentBuilder(getContext())
+                    Intent intent = XPayments.createIntentBuilder(getContext())
                             .accessToken(new AccessToken(response.getToken()))
                             .isSandbox(BuildConfig.IS_SANDBOX)
                             .build();
@@ -136,7 +136,7 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_PAYSTATION) {
-            XPaystation.Result result = XPaystation.Result.fromResultIntent(data);
+            XPayments.Result result = XPayments.Result.fromResultIntent(data);
             if (resultCode == Activity.RESULT_OK) {
                 showSnack("Payment is completed");
                 XStore.getOrder(orderId, new XStoreCallback<OrderResponse>() {

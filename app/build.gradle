@@ -44,5 +44,5 @@ dependencies {
 
     implementation project(":xsolla-login-sdk")
     implementation project(":xsolla-store-sdk")
-    implementation project(":xsolla-paystation-sdk")
+    implementation project(":xsolla-payments-sdk")
 }
