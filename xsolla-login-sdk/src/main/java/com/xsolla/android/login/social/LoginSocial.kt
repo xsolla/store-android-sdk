@@ -254,7 +254,9 @@ object LoginSocial {
                             e.printStackTrace()
                         }
                     }
-                    .addOnFailureListener { it.printStackTrace() }
+                    .addOnFailureListener {
+                        it.printStackTrace()
+                    }
             return true
         }
         return false
