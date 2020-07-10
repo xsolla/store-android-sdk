@@ -29,7 +29,7 @@ class XPlayfabWrapper {
          * Create PlayFab order and its payment token
          */
         @JvmStatic
-        fun createPlayfabOrder(itemSku: String, quantity: Int, paystationTheme: String?, callback: CreatePlayfabOrderCallback) = GlobalScope.launch {
+        fun createPlayfabOrder(itemSku: String, quantity: Int, paystationTheme: String?, isSandbox: Boolean, callback: CreatePlayfabOrderCallback) = GlobalScope.launch {
             var orderId: String?
             val startPurchaseResult = withContext(Dispatchers.IO) {
                 val item = PlayFabClientModels.ItemPurchaseRequest()
@@ -49,7 +49,8 @@ class XPlayfabWrapper {
                         quantity,
                         orderId,
                         "SDK-payments_ver-${BuildConfig.VERSION_NAME}_integr-playfab_engine-android_enginever-${Build.VERSION.RELEASE}",
-                        paystationTheme
+                        paystationTheme,
+                        isSandbox
                 )
                 PlayFabClientAPI.ExecuteCloudScript(tokenRequest)
             }
@@ -76,6 +77,7 @@ class XPlayfabWrapper {
             val amount: Int,
             val orderId: String?,
             val sdkTag: String,
-            val theme: String?
+            val theme: String?,
+            val sandbox: Boolean
     )
 }

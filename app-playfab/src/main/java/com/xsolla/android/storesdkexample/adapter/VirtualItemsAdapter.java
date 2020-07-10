@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.xsolla.android.payments.playfab.XPlayfabWrapper;
+import com.xsolla.android.storesdkexample.BuildConfig;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.data.store.Store;
 import com.xsolla.android.storesdkexample.listener.BuyForVirtualCurrencyListener;
@@ -101,6 +102,7 @@ public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapte
                         item.getSku(),
                         1,
                         null,
+                        BuildConfig.IS_SANDBOX,
                         new XPlayfabWrapper.CreatePlayfabOrderCallback() {
                             @Override
                             public void onSuccess(@NotNull String paystationToken, @NotNull String playfabOrderId) {
