@@ -51,5 +51,6 @@ dependencies {
 
     implementation 'com.playfab:client-sdk:0.107.200330'
 
-    implementation project(":xsolla-paystation-sdk")
+    implementation project(":xsolla-payments-sdk")
+    implementation project(":xsolla-payments-sdk-playfab")
 }
