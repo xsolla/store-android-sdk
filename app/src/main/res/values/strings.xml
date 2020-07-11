@@ -7,4 +7,6 @@
     
     <string name="login_tab">LOG IN</string>
     <string name="sign_up_tab">SIGN UP</string>
+    <string name="username_input_hint">Username</string>
+    <string name="password_input_hint">Password</string>
 </resources>

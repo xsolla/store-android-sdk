@@ -14,4 +14,5 @@
     <color name="main_bg_color">#070816</color>
     <color name="magneta_color">#FF005B</color>
     <color name="secondary_color">#848EB1</color>
+    <color name="white_color">#FFFFFF</color>
 </resources>
