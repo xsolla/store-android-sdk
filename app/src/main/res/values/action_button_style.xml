@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="XsollaActionButton">
+        <item name="android:textColor">@color/white_color</item>
+        <item name="android:minHeight">60dp</item>
+        <item name="android:layout_marginTop">@dimen/input_top_margin</item>
+        <item name="android:layout_marginBottom">@dimen/input_bottom_margin</item>
+        <item name="cornerRadius">2dp</item>
+        <item name="fontFamily">@font/brutal_type_bold</item>
+        <item name="backgroundTint">@color/action_button_color</item>
+    </style>
+
+</resources>

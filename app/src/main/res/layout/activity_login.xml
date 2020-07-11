@@ -44,9 +44,9 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/usernameInput"
+        style="@style/Widget.Xsolla.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.Xsolla.TextInputLayout"
         android:hint="@string/username_input_hint">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -57,9 +57,9 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordInput"
+        style="@style/Widget.Xsolla.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.Xsolla.TextInputLayout"
         android:hint="@string/password_input_hint"
         app:passwordToggleEnabled="true"
         app:passwordToggleTint="@color/white_color">
@@ -70,6 +70,12 @@
             android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+       style="@style/XsollaActionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/log_in_button" />
 
 </LinearLayout>
 
