@@ -6,41 +6,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/statusBarColor</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="textInputStyle">@style/XsollaTextInputEditText</item>
+        <item name="textInputStyle">@style/Widget.Xsolla.TextInputLayout</item>
     </style>
 
     <style name="XsollaTabFontStyle" parent="@android:style/TextAppearance.Small">
         <item name="android:fontFamily">@font/brutal_type</item>
-    </style>
-
-    <style name="XsollaTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:layout_marginTop">@dimen/input_top_margin</item>
-        <item name="android:layout_marginBottom">@dimen/input_bottom_margin</item>
-        <item name="boxStrokeColor">@color/input_outline_color</item>
-        <item name="boxCornerRadiusTopStart">@dimen/input_outline_radius</item>
-        <item name="boxCornerRadiusTopEnd">@dimen/input_outline_radius</item>
-        <item name="boxCornerRadiusBottomStart">@dimen/input_outline_radius</item>
-        <item name="boxCornerRadiusBottomEnd">@dimen/input_outline_radius</item>
-        <item name="android:textColorHint">@color/secondary_color</item>
-        <item name="hintTextColor">@color/magneta_color</item>
-        <item name="android:textColor">@color/white_color</item>
-    </style>
-
-    <style name="XsollaTextInputEditText" parent="Widget.Design.TextInputEditText">
-        <item name="android:textCursorDrawable">@drawable/input_cursor</item>
-        <item name="hintTextAppearance">@style/InputHintTextAppearance</item>
-        <item name="android:textAppearance">@style/InputTextAppearance</item>
-    </style>
-
-
-    <style name="InputHintTextAppearance">
-        <item name="fontFamily">@font/brutal_type</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="InputTextAppearance">
-        <item name="fontFamily">@font/brutal_type</item>
-        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="XButton">

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Xsolla.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_marginTop">@dimen/input_top_margin</item>
+        <item name="android:layout_marginBottom">@dimen/input_bottom_margin</item>
+        <item name="boxCornerRadiusTopStart">@dimen/input_outline_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/input_outline_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/input_outline_radius</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/input_outline_radius</item>
+        <item name="android:textColorHint">@color/secondary_color</item>
+        <item name="strokeColor">@color/input_outline_color</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Xsolla.TextInputLayout</item>
+    </style>
+
+    <style name="ThemeOverlay.Xsolla.TextInputLayout" parent="">
+        <item name="colorPrimary">@color/magneta_color</item>
+        <item name="editTextStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="android:textCursorDrawable">@drawable/input_cursor</item>
+        <item name="textAppearanceCaption">@style/TextAppearanceXsollaInputHint</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearanceXsollaInputText</item>
+    </style>
+
+    <style name="TextAppearanceXsollaInputHint">
+        <item name="fontFamily">@font/brutal_type</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearanceXsollaInputText">
+        <item name="fontFamily">@font/brutal_type</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+</resources>
