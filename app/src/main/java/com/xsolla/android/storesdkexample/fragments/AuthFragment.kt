@@ -3,12 +3,12 @@ package com.xsolla.android.storesdkexample.fragments
 import com.google.android.material.tabs.TabLayout
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_auth_new.*
-import kotlinx.android.synthetic.main.fragment_auth_new.view.*
+import kotlinx.android.synthetic.main.fragment_auth.*
+import kotlinx.android.synthetic.main.fragment_auth.view.*
 
-class NewAuthFragment : BaseFragment() {
+class AuthFragment : BaseFragment() {
     override fun getLayout(): Int {
-        return R.layout.fragment_auth_new
+        return R.layout.fragment_auth
     }
 
     override fun initUI() {

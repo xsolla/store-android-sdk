@@ -20,7 +20,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordInput"
+        android:id="@+id/passwordInputLayout"
         style="@style/Widget.Xsolla.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
