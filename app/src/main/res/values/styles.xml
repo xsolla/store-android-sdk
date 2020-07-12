@@ -4,7 +4,6 @@
     <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/statusBarColor</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="textInputStyle">@style/Widget.Xsolla.TextInputLayout</item>
     </style>
