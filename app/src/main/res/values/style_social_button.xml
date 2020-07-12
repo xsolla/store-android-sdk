@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Xsolla.SocialButton.Big" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
+        <item name="android:minHeight">60dp</item>
+        <item name="strokeColor">@color/magneta_color</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="cornerRadius">2dp</item>
+        <item name="android:textColor">@color/white_color</item>
+        <item name="fontFamily">@font/brutal_type_bold</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconEndPadding">6dp</item>
+        <item name="iconTint">@color/white_color</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Google.Big" parent="Widget.Xsolla.SocialButton.Big">
+        <item name="icon">@drawable/ic_google</item>
+        <item name="android:text">@string/log_in_with_google_button</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Facebook.Big" parent="Widget.Xsolla.SocialButton.Big">
+        <item name="icon">@drawable/ic_facebook</item>
+        <item name="android:text">@string/log_in_with_facebook_button</item>
+    </style>
+
+
+
+</resources>

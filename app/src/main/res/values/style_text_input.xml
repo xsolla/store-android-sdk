@@ -17,16 +17,16 @@
         <item name="colorPrimary">@color/magneta_color</item>
         <item name="editTextStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
         <item name="android:textCursorDrawable">@drawable/input_cursor</item>
-        <item name="textAppearanceCaption">@style/TextAppearanceXsollaInputHint</item>
-        <item name="textAppearanceSubtitle1">@style/TextAppearanceXsollaInputText</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.Xsolla.Input.Hint</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.Xsolla.Input.Text</item>
     </style>
 
-    <style name="TextAppearanceXsollaInputHint">
+    <style name="TextAppearance.Xsolla.Input.Hint" parent="">
         <item name="fontFamily">@font/brutal_type</item>
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="TextAppearanceXsollaInputText">
+    <style name="TextAppearance.Xsolla.Input.Text" parent="">
         <item name="fontFamily">@font/brutal_type</item>
         <item name="android:textSize">14sp</item>
     </style>

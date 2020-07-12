@@ -72,10 +72,15 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-       style="@style/XsollaActionButton"
+       style="@style/Widget.Xsolla.ActionButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/log_in_button" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.Xsolla.SocialButton.Facebook.Big" />
 
 </LinearLayout>
 
