@@ -82,38 +82,50 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginTop="10dp">
 
         <Button
+            android:id="@+id/button"
             style="@style/Widget.Xsolla.SocialButton.Facebook.Small"
-            android:layout_marginRight="@dimen/social_button_small_horizontal_margin"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:layout_constraintBaseline_toBaselineOf="@+id/button2"
+            app:layout_constraintEnd_toStartOf="@+id/button2"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
+            android:id="@+id/button2"
             style="@style/Widget.Xsolla.SocialButton.Twitter.Small"
-            android:layout_marginLeft="@dimen/social_button_small_horizontal_margin"
-            android:layout_marginRight="@dimen/social_button_small_horizontal_margin"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="219dp"
+            app:layout_constraintEnd_toStartOf="@+id/button3"
+            app:layout_constraintStart_toEndOf="@+id/button"
+            app:layout_constraintTop_toBottomOf="parent" />
 
         <Button
+            android:id="@+id/button3"
             style="@style/Widget.Xsolla.SocialButton.LinkedIn.Small"
-            android:layout_marginLeft="@dimen/social_button_small_horizontal_margin"
-            android:layout_marginRight="@dimen/social_button_small_horizontal_margin"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:layout_constraintBaseline_toBaselineOf="@+id/button2"
+            app:layout_constraintEnd_toStartOf="@+id/button4"
+            app:layout_constraintStart_toEndOf="@+id/button2" />
 
         <Button
+            android:id="@+id/button4"
             style="@style/Widget.Xsolla.SocialButton.Naver.Small"
-            android:layout_marginLeft="@dimen/social_button_small_horizontal_margin"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:layout_constraintBaseline_toBaselineOf="@+id/button3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/button3" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
 
