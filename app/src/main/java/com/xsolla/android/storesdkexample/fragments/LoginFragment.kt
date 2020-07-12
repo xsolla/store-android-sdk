@@ -79,7 +79,7 @@ class LoginFragment : BaseFragment() {
         activity?.let {
             it.supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.rootFragmentContainer, ResetPasswordFragmentNew())
+                    .add(R.id.rootFragmentContainer, ResetPasswordFragment())
                     .addToBackStack(null)
                     .commit()
         }

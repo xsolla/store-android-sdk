@@ -79,7 +79,7 @@ public class OldAuthFragment extends BaseFragment {
             });
         });
 
-        rootView.findViewById(R.id.forgot_password_button).setOnClickListener(v -> openFragment(new ResetPasswordFragment()));
+        rootView.findViewById(R.id.forgot_password_button).setOnClickListener(v -> openFragment(new OldResetPasswordFragment()));
 
         rootView.findViewById(R.id.register_button).setOnClickListener(v -> openFragment(new RegisterFragment()));
     }

@@ -9,14 +9,14 @@ import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
 
-public class ResetPasswordFragment extends BaseFragment {
+public class OldResetPasswordFragment extends BaseFragment {
 
     private TextView usernameInput;
     private Button resetPasswordButton;
 
     @Override
     public int getLayout() {
-        return R.layout.fragment_reset_password;
+        return R.layout.fragment_reset_password_old;
     }
 
     @Override

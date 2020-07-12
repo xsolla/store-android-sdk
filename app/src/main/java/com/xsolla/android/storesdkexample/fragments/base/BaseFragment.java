@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.xsolla.android.storesdkexample.R;
-import com.xsolla.android.storesdkexample.fragments.OldAuthFragment;
+import com.xsolla.android.storesdkexample.fragments.LoginFragment;
 
 public abstract class BaseFragment extends Fragment {
 
@@ -47,7 +47,7 @@ public abstract class BaseFragment extends Fragment {
             fragmentManager.popBackStack();
         }
 
-        openFragment(new OldAuthFragment());
+        openFragment(new LoginFragment());
     }
 
     public void popFragment() {
