@@ -4,10 +4,10 @@
     <style name="Widget.Xsolla.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_marginTop">@dimen/input_top_margin</item>
         <item name="android:layout_marginBottom">@dimen/input_bottom_margin</item>
-        <item name="boxCornerRadiusTopStart">@dimen/input_outline_radius</item>
-        <item name="boxCornerRadiusTopEnd">@dimen/input_outline_radius</item>
-        <item name="boxCornerRadiusBottomStart">@dimen/input_outline_radius</item>
-        <item name="boxCornerRadiusBottomEnd">@dimen/input_outline_radius</item>
+        <item name="boxCornerRadiusTopStart">@dimen/input_corner_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/input_corner_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/input_corner_radius</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/input_corner_radius</item>
         <item name="android:textColorHint">@color/secondary_color</item>
         <item name="strokeColor">@color/input_outline_color</item>
         <item name="materialThemeOverlay">@style/ThemeOverlay.Xsolla.TextInputLayout</item>
