@@ -29,6 +29,7 @@ class AuthFragment : BaseFragment() {
                     fragmentManager
                             ?.beginTransaction()
                             ?.replace(R.id.fragmentContainer, newFragment)
+                            ?.addToBackStack(null)
                             ?.commit()
                 }
             }
