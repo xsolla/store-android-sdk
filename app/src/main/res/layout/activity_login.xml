@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -16,10 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_xsolla_logo" />
-
-
-    <!--    Move to fragment-->
-
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
@@ -39,102 +34,17 @@
 
     </com.google.android.material.tabs.TabLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/usernameInput"
-        style="@style/Widget.Xsolla.TextInputLayout"
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/username_input_hint">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:inputType="text"
+        <fragment
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:name="com.xsolla.android.storesdkexample.fragments.LoginFragment" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordInput"
-        style="@style/Widget.Xsolla.TextInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/password_input_hint"
-        app:passwordToggleEnabled="true"
-        app:passwordToggleTint="@color/white_color">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        style="@style/Widget.Xsolla.ActionButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/log_in_button" />
-
-    <Button
-        style="@style/Widget.Xsolla.SocialButton.Google.Big"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
-
-        <Button
-            android:id="@+id/button"
-            style="@style/Widget.Xsolla.SocialButton.Facebook.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBaseline_toBaselineOf="@+id/button2"
-            app:layout_constraintEnd_toStartOf="@+id/button2"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/button2"
-            style="@style/Widget.Xsolla.SocialButton.Twitter.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toStartOf="@+id/button3"
-            app:layout_constraintStart_toEndOf="@+id/button"
-            app:layout_constraintTop_toBottomOf="parent" />
-
-        <Button
-            android:id="@+id/button3"
-            style="@style/Widget.Xsolla.SocialButton.LinkedIn.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBaseline_toBaselineOf="@+id/button2"
-            app:layout_constraintEnd_toStartOf="@+id/button4"
-            app:layout_constraintStart_toEndOf="@+id/button2" />
-
-        <Button
-            android:id="@+id/button4"
-            style="@style/Widget.Xsolla.SocialButton.Naver.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBaseline_toBaselineOf="@+id/button3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button3" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/forgot_your_password"
-        android:fontFamily="@font/brutal_type"
-        android:textColor="@color/secondary_color"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:layout_gravity="left"
-        android:layout_marginTop="20dp"
-        android:textSize="14sp" />
+    </FrameLayout>
 
 </LinearLayout>
 
