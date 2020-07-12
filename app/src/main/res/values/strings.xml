@@ -12,4 +12,5 @@
     <string name="log_in_button">LOG IN</string>
     <string name="log_in_with_google_button">LOG IN WITH GOOGLE</string>
     <string name="log_in_with_facebook_button">LOG IN WITH FACEBOOK</string>
+    <string name="forgot_your_password">Forgot your password?</string>
 </resources>
