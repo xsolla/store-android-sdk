@@ -17,6 +17,7 @@ class SignUpFragment : BaseFragment() {
 
     override fun initUI() {
         rootView.signUpButton.setOnClickListener { v ->
+            ViewUtils.disable(v)
             hideKeyboard()
             val username = usernameInput.text.toString()
             val email = emailInput.text.toString()
