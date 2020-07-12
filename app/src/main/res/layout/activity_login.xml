@@ -9,6 +9,7 @@
     android:orientation="vertical"
     android:paddingStart="@dimen/login_activity_padding"
     android:paddingEnd="@dimen/login_activity_padding"
+    android:background="@color/main_bg_color"
     tools:context=".LoginActivity">
 
     <ImageView
@@ -16,15 +17,15 @@
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_xsolla_logo" />
 
+
+    <!--    Move to fragment-->
+
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/tabs_bottom_margin"
-        app:tabIndicatorColor="@color/magneta_color"
-        app:tabSelectedTextColor="@color/magneta_color"
-        app:tabTextAppearance="@style/XsollaTabFontStyle"
-        app:tabTextColor="@color/secondary_color">
+        style="@style/Widget.Xsolla.TabLayout">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
@@ -37,10 +38,6 @@
             android:text="@string/sign_up_tab" />
 
     </com.google.android.material.tabs.TabLayout>
-
-
-    <!--    Move to fragment-->
-
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/usernameInput"
@@ -103,7 +100,6 @@
             style="@style/Widget.Xsolla.SocialButton.Twitter.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="219dp"
             app:layout_constraintEnd_toStartOf="@+id/button3"
             app:layout_constraintStart_toEndOf="@+id/button"
             app:layout_constraintTop_toBottomOf="parent" />

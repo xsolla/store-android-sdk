@@ -2,14 +2,14 @@
 <resources>
 
     <style name="Widget.Xsolla.SocialButton.Big" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
-        <item name="android:minHeight">60dp</item>
+        <item name="android:minHeight">@dimen/social_button_big_height</item>
         <item name="strokeColor">@color/magneta_color</item>
-        <item name="strokeWidth">2dp</item>
-        <item name="cornerRadius">2dp</item>
+        <item name="strokeWidth">@dimen/input_stroke_width</item>
+        <item name="cornerRadius">@dimen/input_corner_radius</item>
         <item name="android:textColor">@color/white_color</item>
         <item name="fontFamily">@font/brutal_type_bold</item>
         <item name="iconGravity">textStart</item>
-        <item name="iconEndPadding">6dp</item>
+        <item name="iconEndPadding">@dimen/social_button_big_icon_end_padding</item>
         <item name="iconTint">@color/white_color</item>
     </style>
 
@@ -24,17 +24,17 @@
     </style>
 
     <style name="Widget.Xsolla.SocialButton.Small" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
-        <item name="android:minWidth">70dp</item>
-        <item name="android:minHeight">60dp</item>
-        <item name="strokeWidth">1dp</item>
+        <item name="android:minWidth">@dimen/social_button_small_width</item>
+        <item name="android:minHeight">@dimen/social_button_small_height</item>
+        <item name="strokeWidth">@dimen/input_stroke_width</item>
         <item name="strokeColor">@color/secondary_color_20</item>
-        <item name="cornerRadius">2dp</item>
+        <item name="cornerRadius">@dimen/input_corner_radius</item>
         <item name="iconTint">@color/secondary_color</item>
         <item name="iconPadding">0dp</item>
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
-        <item name="android:paddingLeft">23dp</item>
-        <item name="android:paddingRight">23dp</item>
+        <item name="android:paddingLeft">@dimen/social_button_small_left_padding</item>
+        <item name="android:paddingRight">@dimen/social_button_small_right_padding</item>
     </style>
 
     <style name="Widget.Xsolla.SocialButton.Google.Small" parent="Widget.Xsolla.SocialButton.Small">

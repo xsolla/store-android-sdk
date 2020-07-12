@@ -9,8 +9,13 @@
         <item name="textInputStyle">@style/Widget.Xsolla.TextInputLayout</item>
     </style>
 
-    <style name="XsollaTabFontStyle" parent="@android:style/TextAppearance.Small">
+    <style name="Widget.Xsolla.TabLayout" parent="@android:style/TextAppearance.Small">
         <item name="android:fontFamily">@font/brutal_type</item>
+        <item name="android:layout_marginBottom">@dimen/tabs_bottom_margin</item>
+        <item name="android:background">@color/main_bg_color</item>
+        <item name="tabIndicatorColor">@color/magneta_color</item>
+        <item name="tabSelectedTextColor">@color/magneta_color</item>
+        <item name="tabTextColor">@color/secondary_color</item>
     </style>
 
     <style name="XButton">
