@@ -72,15 +72,48 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-       style="@style/Widget.Xsolla.ActionButton"
+        style="@style/Widget.Xsolla.ActionButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/log_in_button" />
 
     <Button
+        style="@style/Widget.Xsolla.SocialButton.Google.Big"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.Xsolla.SocialButton.Facebook.Big" />
+        android:orientation="horizontal">
+
+        <Button
+            style="@style/Widget.Xsolla.SocialButton.Facebook.Small"
+            android:layout_marginRight="@dimen/social_button_small_horizontal_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            style="@style/Widget.Xsolla.SocialButton.Twitter.Small"
+            android:layout_marginLeft="@dimen/social_button_small_horizontal_margin"
+            android:layout_marginRight="@dimen/social_button_small_horizontal_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            style="@style/Widget.Xsolla.SocialButton.LinkedIn.Small"
+            android:layout_marginLeft="@dimen/social_button_small_horizontal_margin"
+            android:layout_marginRight="@dimen/social_button_small_horizontal_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            style="@style/Widget.Xsolla.SocialButton.Naver.Small"
+            android:layout_marginLeft="@dimen/social_button_small_horizontal_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
 </LinearLayout>
 
