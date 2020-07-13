@@ -29,11 +29,11 @@ bintray {
 
     pkg {
         repo = 'maven'
-        name = 'xsolla-login'
+        name = 'xsolla-payments-playfab'
         licenses = ["Apache-2.0"]
         vcsUrl = 'https://github.com/xsolla/store-android-sdk'
         configurations = ['archives']
-        desc = 'Xsolla Login Android SDK is used to integrate Xsolla Login, a single sign-on tool that uses API methods to authenticate and secure user passwords. This creates a seamless one-click registration experience players can use for fast and safe transactions across all of your games.'
+        desc = 'Xsolla Payments Android SDK allows partners to monetize their product by providing users with a convenient UI to pay for in-game purchases in the game store'
         websiteUrl = 'https://github.com/xsolla/store-android-sdk'
         publish = true
         publicDownloadNumbers = true

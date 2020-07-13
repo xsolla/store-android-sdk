@@ -1,1 +1,18 @@
-<manifest package="com.xsolla.android.login" />
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xsolla.android.login">
+
+    <application>
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+        <activity
+            android:name=".ui.ActivityAuthWebView"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/XsollaLoginTheme.Default"/>
+        <activity
+            android:name=".unity.UnityProxyActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/XsollaLoginTheme.Transparent"/>
+    </application>
+
+</manifest>

@@ -8,7 +8,7 @@ version = '0.12.0'
 android {
     compileSdkVersion 29
 
-    resourcePrefix 'xsolla_login_'
+    resourcePrefix 'xsolla_login_google_'
 
     defaultConfig {
         minSdkVersion 21
@@ -30,16 +30,8 @@ android {
 }
 
 dependencies {
-    api 'com.squareup.retrofit2:retrofit:2.6.4'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.4'
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0'
-
-    compileOnly 'com.facebook.android:facebook-login:7.0.0'
-    compileOnly 'com.google.android.gms:play-services-auth:18.0.0'
-    compileOnly 'com.auth0.android:jwtdecode:2.0.0'
+    api 'com.auth0.android:jwtdecode:2.0.0'
+    api 'com.google.android.gms:play-services-auth:18.0.0'
 }
 
 apply from: 'install.gradle'

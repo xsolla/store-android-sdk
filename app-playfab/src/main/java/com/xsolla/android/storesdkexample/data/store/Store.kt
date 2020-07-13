@@ -129,49 +129,6 @@ object Store {
 
 
     @JvmStatic
-    fun createOrderByItemSku(sku: String, callback: CreateOrderByItemSkuCallback) = GlobalScope.launch {
-        var orderId: String?
-        val startPurchaseResult = withContext(Dispatchers.IO) {
-            val item = PlayFabClientModels.ItemPurchaseRequest()
-            item.ItemId = sku
-            item.Quantity = 1
-            val orderRequest = PlayFabClientModels.StartPurchaseRequest()
-            orderRequest.Items = arrayListOf(item)
-            val result = PlayFabClientAPI.StartPurchase(orderRequest)
-            orderId = result.Result?.OrderId
-            result
-        }
-        val createTokenResult = withContext(Dispatchers.IO) {
-            val tokenRequest = PlayFabClientModels.ExecuteCloudScriptRequest()
-            tokenRequest.FunctionName = "CreatePaystationToken"
-            tokenRequest.FunctionParameter = CreateOrderEntity(sku, 1, orderId)
-            PlayFabClientAPI.ExecuteCloudScript(tokenRequest)
-        }
-
-        withContext(Dispatchers.Main) {
-            if (startPurchaseResult.Error == null && createTokenResult.Error == null) {
-                val result = createTokenResult.Result.FunctionResult as Map<*, *>
-                val token = result["token"].toString()
-                callback.onSuccess(token)
-            } else {
-                callback.onFailure(startPurchaseResult.Error?.errorMessage + '\n' + createTokenResult.Error?.errorMessage)
-            }
-        }
-    }
-
-    private data class CreateOrderEntity(
-            val sku: String,
-            val amount: Int,
-            val orderId: String?
-    )
-
-    interface CreateOrderByItemSkuCallback {
-        fun onSuccess(psToken: String)
-        fun onFailure(errorMessage: String)
-    }
-
-
-    @JvmStatic
     fun buyForVirtualCurrency(itemSku: String, currencyId: String, price: BigDecimal, callback: BuyForVirtualCurrencyCallback) = GlobalScope.launch {
         val purchaseItemResult = withContext(Dispatchers.IO) {
             val request = PlayFabClientModels.PurchaseItemRequest()

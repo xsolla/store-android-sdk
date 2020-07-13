@@ -1,20 +1,25 @@
 package com.xsolla.android.storesdkexample.fragments;
 
-import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.widget.TextView;
 
 import com.xsolla.android.login.XLogin;
 import com.xsolla.android.login.api.XLoginCallback;
-import com.xsolla.android.login.api.XLoginSocialCallback;
+import com.xsolla.android.login.callback.FinishSocialCallback;
+import com.xsolla.android.login.callback.StartSocialCallback;
 import com.xsolla.android.login.entity.response.AuthResponse;
-import com.xsolla.android.login.entity.response.SocialAuthResponse;
 import com.xsolla.android.login.social.SocialNetwork;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 public class AuthFragment extends BaseFragment {
 
+    private SocialNetwork selectedSocialNetwork;
 
     @Override
     public int getLayout() {
@@ -24,15 +29,30 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void initUI() {
 
-        rootView.findViewById(R.id.google_button).setOnClickListener(v -> XLogin.loginSocial(SocialNetwork.GOOGLE, socialAuthCallback));
+        rootView.findViewById(R.id.google_button).setOnClickListener(v -> {
+            selectedSocialNetwork = SocialNetwork.GOOGLE;
+            XLogin.startSocialAuth(this, SocialNetwork.GOOGLE, startSocialCallback);
+        });
 
-        rootView.findViewById(R.id.facebook_button).setOnClickListener(v -> XLogin.loginSocial(SocialNetwork.FACEBOOK, socialAuthCallback));
+        rootView.findViewById(R.id.facebook_button).setOnClickListener(v -> {
+            selectedSocialNetwork = SocialNetwork.FACEBOOK;
+            XLogin.startSocialAuth(this, SocialNetwork.FACEBOOK, startSocialCallback);
+        });
 
-        rootView.findViewById(R.id.baidu_button).setOnClickListener(v -> XLogin.loginSocial(SocialNetwork.BAIDU, socialAuthCallback));
+        rootView.findViewById(R.id.baidu_button).setOnClickListener(v -> {
+            selectedSocialNetwork = SocialNetwork.BAIDU;
+            XLogin.startSocialAuth(this, SocialNetwork.BAIDU, startSocialCallback);
+        });
 
-        rootView.findViewById(R.id.linkedin_button).setOnClickListener(v -> XLogin.loginSocial(SocialNetwork.LINKEDIN, socialAuthCallback));
+        rootView.findViewById(R.id.linkedin_button).setOnClickListener(v -> {
+            selectedSocialNetwork = SocialNetwork.LINKEDIN;
+            XLogin.startSocialAuth(this, SocialNetwork.LINKEDIN, startSocialCallback);
+        });
 
-        rootView.findViewById(R.id.naver_button).setOnClickListener(v -> XLogin.loginSocial(SocialNetwork.NAVER, socialAuthCallback));
+        rootView.findViewById(R.id.naver_button).setOnClickListener(v -> {
+            selectedSocialNetwork = SocialNetwork.NAVER;
+            XLogin.startSocialAuth(this, SocialNetwork.NAVER, startSocialCallback);
+        });
 
         final TextView usernameInput = rootView.findViewById(R.id.username_input);
         final TextView passwordInput = rootView.findViewById(R.id.password_input);
@@ -64,21 +84,57 @@ public class AuthFragment extends BaseFragment {
         rootView.findViewById(R.id.register_button).setOnClickListener(v -> openFragment(new RegisterFragment()));
     }
 
-    private XLoginSocialCallback<SocialAuthResponse> socialAuthCallback = new XLoginSocialCallback<SocialAuthResponse>() {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        XLogin.finishSocialAuth(getContext(), selectedSocialNetwork, requestCode, resultCode, data, finishSocialCallback);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private StartSocialCallback startSocialCallback = new StartSocialCallback() {
         @Override
-        protected void onSuccess(SocialAuthResponse response) {
+        public void onAuthStarted() {
+            // auth successfully started
+        }
+
+        @Override
+        public void onError(@NonNull String errorMessage) {
+            showSnack(errorMessage);
+        }
+    };
+
+    private FinishSocialCallback finishSocialCallback = new FinishSocialCallback() {
+        @Override
+        public void onAuthSuccess() {
             openFragment(new MainFragment());
         }
 
         @Override
-        protected void onFailure(String errorMessage) {
-            showSnack(errorMessage);
+        public void onAuthCancelled() {
+            showSnack("Auth cancelled");
         }
 
         @Override
-        protected Activity getActivityForSocialAuth() {
-            return getActivity();
+        public void onAuthError(@NonNull String errorMessage) {
+            showSnack(errorMessage);
         }
     };
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (selectedSocialNetwork != null) {
+            outState.putString("selectedSocialNetwork", selectedSocialNetwork.name());
+        }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            String selectedSocialNetworkString = savedInstanceState.getString("selectedSocialNetwork");
+            if (selectedSocialNetworkString != null) {
+                selectedSocialNetwork = SocialNetwork.valueOf(selectedSocialNetworkString);
+            }
+        }
+    }
 }

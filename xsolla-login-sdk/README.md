@@ -6,7 +6,7 @@
 The library is available in JCenter. To start using it, add the following line to the dependencies section of your `build.gradle` file:
 
 ```groovy
-implementation 'com.xsolla.android:login:0.10.0'
+implementation 'com.xsolla.android:login:0.12.0'
 ```
 
 # Usage
@@ -15,11 +15,11 @@ implementation 'com.xsolla.android:login:0.10.0'
 Initialize Xsolla Login SDK
 
 ```java
-XLogin.init("login-project-id", context);
+XLogin.init("login-project-id", context, null);
 ```
 Or if you changed `Callback URL` in your Publisher Account
 ```java
-XLogin.init("login-project-id", "your-callback-url", context);
+XLogin.init("login-project-id", "your-callback-url", context, null);
 ```
 
 ## Register User
@@ -62,7 +62,7 @@ See example in [AuthFragment](https://github.com/xsolla/store-android-sdk/blob/m
 
 If you changed `Callback Url` in your Publisher account, then you should init SDK like this:
 ```java
-XLogin.getInstance().init("login-project-id", "your-callback-url", this);
+XLogin.init("login-project-id", "your-callback-url", context, null);
 ```
 Available Social Networks:
 * Google
@@ -72,23 +72,37 @@ Available Social Networks:
 * Naver
 * Baidu
 
+Call `XLogin.startSocialAuth` to open authentication UI
 ```java
-XLogin.loginSocial(SocialNetwork.GOOGLE, new XLoginSocialCallback<SocialAuthResponse>() {
+XLogin.startSocialAuth(this, socialNetwork, new StartSocialCallback() {
     @Override
-    protected void onSuccess(SocialAuthResponse response) {
-        // User is authenticated. Token retrieved, saved in SDK, and passed here.
-        String token = response.getToken();
+    public void onAuthStarted() {
+        // auth successfully started
     }
 
     @Override
-    protected void onFailure(String errorMessage) {
-        // Something went wrong. Reason is passed in errorMessage
+    public void onError(@NonNull String errorMessage) {
+        // error while starting auth
+    }
+});
+```
+Add `XLogin.finishSocialAuth` call to `onActivityResult()` method to finish authentication and save token
+```java
+XLogin.finishSocialAuth(getContext(), socialNetwork, requestCode, resultCode, data, new FinishSocialCallback() {
+    @Override
+    public void onAuthSuccess() {
+        // auth successfully finished
+        String token = XLogin.getToken();
     }
 
     @Override
-    protected Activity getActivityForSocialAuth() {
-        // Provide an activity to show authentication web page within
-        return getActivity();
+    public void onAuthCancelled() {
+        // auth was cancelled by user
+    }
+
+    @Override
+    public void onAuthError(@NonNull String errorMessage) {
+        // auth error
     }
 });
 ```
