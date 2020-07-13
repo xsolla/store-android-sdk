@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Xsolla.TabLayout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="android:background">@color/color_transparent</item>
+        <item name="tabIndicatorColor">@color/magneta_color</item>
+        <item name="tabSelectedTextColor">@color/magneta_color</item>
+        <item name="tabTextColor">@color/secondary_color</item>
+        <item name="tabTextAppearance">@style/TextAppearance.Xsolla.TabLayout</item>
+    </style>
+
+    <style name="TextAppearance.Xsolla.TabLayout" parent="@android:style/TextAppearance.Small">
+        <item name="android:fontFamily">@font/brutal_type</item>
+        <item name="android:letterSpacing">-0.03</item>
+        <item name="android:textSize">@dimen/tabs_text_size</item>
+    </style>
+
+</resources>
