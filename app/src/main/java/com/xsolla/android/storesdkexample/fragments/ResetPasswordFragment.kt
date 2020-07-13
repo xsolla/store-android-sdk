@@ -1,5 +1,7 @@
 package com.xsolla.android.storesdkexample.fragments
 
+import android.text.Editable
+import android.text.TextWatcher
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.api.XLoginCallback
 import com.xsolla.android.storesdkexample.R
@@ -16,6 +18,21 @@ class ResetPasswordFragment : BaseFragment() {
     override fun initUI() {
         rootView.toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
         rootView.toolbar.setNavigationOnClickListener { popFragment() }
+
+        rootView.usernameInput.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable) {
+                rootView.resetPasswordButton.isEnabled = s.isNotEmpty()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+        })
 
         rootView.resetPasswordButton.setOnClickListener { v ->
             ViewUtils.disable(v)

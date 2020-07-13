@@ -2,6 +2,8 @@ package com.xsolla.android.storesdkexample.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.api.XLoginCallback
 import com.xsolla.android.login.callback.FinishSocialCallback
@@ -16,14 +18,19 @@ import kotlinx.android.synthetic.main.fragment_login.view.*
 
 class LoginFragment : BaseFragment() {
 
-    private var selectedSocialNetwork: SocialNetwork? = null
+    companion object {
+        private const val MIN_PASSWORD_LENGTH = 6
+    }
 
+    private var selectedSocialNetwork: SocialNetwork? = null
 
     override fun getLayout(): Int {
         return R.layout.fragment_login
     }
 
     override fun initUI() {
+        initLoginButtonEnabling()
+
         rootView.loginButton.setOnClickListener { v ->
             ViewUtils.disable(v)
 
@@ -73,7 +80,40 @@ class LoginFragment : BaseFragment() {
         rootView.resetPasswordButton.setOnClickListener { restPassword() }
     }
 
+    private fun initLoginButtonEnabling() {
+        rootView.usernameInput.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                updateLoginButtonEnable()
+            }
 
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
+
+        rootView.passwordInput.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                updateLoginButtonEnable()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
+    }
+
+    private fun updateLoginButtonEnable() {
+        rootView.loginButton.isEnabled = rootView.usernameInput.text?.isNotEmpty() == true
+                && (rootView.passwordInput?.text?.length == MIN_PASSWORD_LENGTH) == true
+    }
 
     private fun restPassword() {
         activity?.let {
