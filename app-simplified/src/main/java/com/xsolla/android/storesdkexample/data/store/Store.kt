@@ -117,12 +117,12 @@ object Store {
                 .isSandbox(BuildConfig.IS_SANDBOX)
                 .build()
         withContext(Dispatchers.Main) {
-            callback.onSuccess(intent)
+            callback.onSuccess(intent, externalId)
         }
     }
 
     interface CreatePaystationIntentCallback {
-        fun onSuccess(intent: Intent)
+        fun onSuccess(intent: Intent, externalId: String)
         fun onFailure(errorMessage: String)
     }
 

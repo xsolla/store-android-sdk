@@ -27,6 +27,8 @@ android {
         }
     }
 
+    kotlinOptions { jvmTarget = "1.8" }
+
 }
 
 dokka {
@@ -41,6 +43,9 @@ dependencies {
 
     implementation 'com.squareup.retrofit2:retrofit:2.6.4'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.4'
+
+    implementation 'androidx.work:work-runtime:2.3.4'
+    implementation 'androidx.work:work-runtime-ktx:2.3.4'
 }
 
 apply from: 'install.gradle'

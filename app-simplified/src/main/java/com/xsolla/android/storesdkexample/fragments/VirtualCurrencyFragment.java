@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xsolla.android.payments.XPayments;
+import com.xsolla.android.simplifiedexample.BuildConfig;
 import com.xsolla.android.simplifiedexample.R;
 import com.xsolla.android.storesdkexample.adapter.VirtualCurrencyAdapter;
 import com.xsolla.android.storesdkexample.data.store.Store;
@@ -56,8 +57,9 @@ public class VirtualCurrencyFragment extends CatalogFragment {
                         virtualCurrencyPacks,
                         new CreatePaystationIntentListener() {
                             @Override
-                            public void onIntentCreated(Intent intent) {
+                            public void onIntentCreated(Intent intent, String externalId) {
                                 startActivityForResult(intent, RC_PAYSTATION);
+                                XPayments.checkTransactionStatus(getContext(), BuildConfig.PROJECT_ID, externalId);
                             }
 
                             @Override

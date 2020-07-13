@@ -98,8 +98,8 @@ public class VirtualCurrencyAdapter extends RecyclerView.Adapter<VirtualCurrency
                 ViewUtils.disable(v);
                 Store.createPaystationIntent(context, item.getSku(), new Store.CreatePaystationIntentCallback() {
                     @Override
-                    public void onSuccess(@NotNull Intent intent) {
-                        createPaystationIntentListener.onIntentCreated(intent);
+                    public void onSuccess(@NotNull Intent intent, @NotNull String externalId) {
+                        createPaystationIntentListener.onIntentCreated(intent, externalId);
                         ViewUtils.enable(v);
                     }
 
