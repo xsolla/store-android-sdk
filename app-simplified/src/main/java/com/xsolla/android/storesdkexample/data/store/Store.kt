@@ -4,8 +4,11 @@ import android.content.Context
 import android.content.Intent
 import com.xsolla.android.payments.XPayments
 import com.xsolla.android.payments.data.AccessData
+import com.xsolla.android.payments.status.PaymentStatus
 import com.xsolla.android.simplifiedexample.BuildConfig
 import com.xsolla.android.storesdkexample.data.db.DB
+import com.xsolla.android.storesdkexample.data.db.VirtualCurrency
+import com.xsolla.android.storesdkexample.data.db.VirtualItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -196,5 +199,65 @@ object Store {
         fun onSuccess(inventoryItems: List<InventoryItem>)
         fun onFailure(errorMessage: String)
     }
+
+
+    @JvmStatic
+    fun addToInventory(paymentStatus: PaymentStatus) {
+        val sku = paymentStatus.purchase.virtual_items!![0].sku
+        if (isItemSku(sku)) {
+            GlobalScope.launch {
+                withContext(Dispatchers.IO) {
+                    val viDao = DB.db.virtualItemDao()
+                    val viList = viDao.getAll()
+                    val item = viList.find { it.sku == sku }
+                    if (item == null) {
+                        viDao.insertItem(VirtualItem(0, sku, BigDecimal.ONE.toPlainString()))
+                    } else {
+                        val amount = BigDecimal(item.amount).plus(BigDecimal.ONE).toPlainString()
+                        val newItem = VirtualItem(item.id, item.sku, amount)
+                        viDao.updateItem(newItem)
+                    }
+                }
+            }
+        }
+        if (isCurrencySku(sku)) {
+            GlobalScope.launch {
+                withContext(Dispatchers.IO) {
+                    val vcPacks = HashMap<String, Pair<String, BigDecimal>>()
+                    Catalog.catalog.filter {
+                        it.type == "virtual_currency_package"
+                    }.forEach {
+                        vcPacks[it.sku] = Pair(it.bundle_content!!.currency, it.bundle_content.quantity)
+                    }
+                    val vcDao = DB.db.virtualCurrencyDao()
+                    val vcList = vcDao.getAll()
+                    val vcId = vcPacks[sku]!!.first
+                    val vcAmount = vcPacks[sku]!!.second
+                    val item = vcList.find { it.currency == vcId }
+                    if (item == null) {
+                        vcDao.insertCurrency(VirtualCurrency(0, vcId, vcAmount.toPlainString()))
+                    } else {
+                        val amount = BigDecimal(item.amount).plus(vcAmount)
+                        val newItem = VirtualCurrency(item.id, item.currency, amount.toPlainString())
+                        vcDao.updateCurrency(newItem)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun isItemSku(sku: String) =
+            Catalog.catalog.filter {
+                it.type == "virtual_good"
+            }.map {
+                it.sku
+            }.contains(sku)
+
+    private fun isCurrencySku(sku: String) =
+            Catalog.catalog.filter {
+                it.type == "virtual_currency_package"
+            }.map {
+                it.sku
+            }.contains(sku)
 
 }

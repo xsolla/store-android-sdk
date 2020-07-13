@@ -13,8 +13,6 @@ import com.xsolla.android.payments.XPayments;
 import com.xsolla.android.simplifiedexample.BuildConfig;
 import com.xsolla.android.simplifiedexample.R;
 import com.xsolla.android.storesdkexample.adapter.VirtualItemsAdapter;
-import com.xsolla.android.storesdkexample.data.db.DB;
-import com.xsolla.android.storesdkexample.data.db.VirtualItem;
 import com.xsolla.android.storesdkexample.data.store.Store;
 import com.xsolla.android.storesdkexample.fragments.base.CatalogFragment;
 import com.xsolla.android.storesdkexample.listener.CreatePaystationIntentListener;
@@ -87,12 +85,6 @@ public class VirtualItemsFragment extends CatalogFragment {
         if (requestCode == RC_PAYSTATION) {
             XPayments.Result result = XPayments.Result.fromResultIntent(data);
             if (resultCode == Activity.RESULT_OK) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        DB.INSTANCE.getDb().virtualItemDao().insertItem(new VirtualItem(0, "x_gun", "1"));
-                    }
-                }).start();
                 Toast.makeText(getContext(), "Payment OK\n" + result, Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(getContext(), "Payment Fail\n" + result, Toast.LENGTH_LONG).show();

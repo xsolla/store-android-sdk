@@ -13,6 +13,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:name="com.xsolla.android.storesdkexample.App"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name="com.xsolla.android.storesdkexample.MainActivity"
