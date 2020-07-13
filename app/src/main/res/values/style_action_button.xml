@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Xsolla.ActionButton" parent="">
+        <item name="android:textColor">@color/white_color</item>
+        <item name="android:height">@dimen/action_button_height</item>
+        <item name="android:layout_marginTop">@dimen/action_button_top_margin</item>
+        <item name="android:layout_marginBottom">@dimen/action_button_bottom_margin</item>
+        <item name="cornerRadius">@dimen/input_corner_radius</item>
+        <item name="backgroundTint">@color/action_button_color</item>
+        <item name="android:fontFamily">@font/brutal_type_bold</item>
+        <item name="android:letterSpacing">-0.03</item>
+        <item name="android:textSize">@dimen/action_button_text_size</item>
+    </style>
+
+</resources>

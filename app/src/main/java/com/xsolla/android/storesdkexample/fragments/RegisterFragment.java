@@ -43,7 +43,7 @@ public class RegisterFragment extends BaseFragment {
             @Override
             protected void onSuccess(Void response) {
                 showSnack("Registration success. Please check your email");
-                openFragment(new AuthFragment());
+                openFragment(new OldAuthFragment());
                 ViewUtils.enable(registerButton);
             }
 

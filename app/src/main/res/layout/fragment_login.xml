@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Xsolla.TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/username_input_hint">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/usernameInput"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Xsolla.TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/password_input_hint"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/white_color">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordInput"
+            android:imeOptions="actionDone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/loginButton"
+        style="@style/Widget.Xsolla.ActionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="@string/log_in_button" />
+
+    <Button
+        android:id="@+id/googleButton"
+        style="@style/Widget.Xsolla.SocialButton.Google.Big"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp">
+
+        <Button
+            android:id="@+id/facebookButton"
+            style="@style/Widget.Xsolla.SocialButton.Facebook.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBaseline_toBaselineOf="@+id/twitterButton"
+            app:layout_constraintEnd_toStartOf="@+id/twitterButton"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/twitterButton"
+            style="@style/Widget.Xsolla.SocialButton.Twitter.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/linkedinButton"
+            app:layout_constraintStart_toEndOf="@+id/facebookButton"
+            app:layout_constraintTop_toBottomOf="parent" />
+
+        <Button
+            android:id="@+id/linkedinButton"
+            style="@style/Widget.Xsolla.SocialButton.LinkedIn.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBaseline_toBaselineOf="@+id/twitterButton"
+            app:layout_constraintEnd_toStartOf="@+id/naverButton"
+            app:layout_constraintStart_toEndOf="@+id/twitterButton" />
+
+        <Button
+            android:id="@+id/naverButton"
+            style="@style/Widget.Xsolla.SocialButton.Naver.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBaseline_toBaselineOf="@+id/linkedinButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/linkedinButton" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/resetPasswordButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/forgot_your_password"
+        android:fontFamily="@font/brutal_type"
+        android:textColor="@color/secondary_color_50"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:layout_gravity="left"
+        android:layout_marginTop="23dp"
+        android:textSize="14sp" />
+
+</LinearLayout>

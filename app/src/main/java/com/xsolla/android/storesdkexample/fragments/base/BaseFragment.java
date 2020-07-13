@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.xsolla.android.storesdkexample.R;
-import com.xsolla.android.storesdkexample.fragments.AuthFragment;
+import com.xsolla.android.storesdkexample.fragments.LoginFragment;
 
 public abstract class BaseFragment extends Fragment {
 
@@ -36,7 +36,7 @@ public abstract class BaseFragment extends Fragment {
         getFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                .replace(R.id.fragment_container, fragment)
+                .replace(R.id.fragmentContainer, fragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -47,7 +47,7 @@ public abstract class BaseFragment extends Fragment {
             fragmentManager.popBackStack();
         }
 
-        openFragment(new AuthFragment());
+        openFragment(new LoginFragment());
     }
 
     public void popFragment() {

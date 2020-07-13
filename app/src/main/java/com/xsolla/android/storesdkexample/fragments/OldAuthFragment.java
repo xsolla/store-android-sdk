@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.xsolla.android.login.XLogin;
 import com.xsolla.android.login.api.XLoginCallback;
 import com.xsolla.android.login.callback.FinishSocialCallback;
@@ -14,27 +17,24 @@ import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-public class AuthFragment extends BaseFragment {
+public class OldAuthFragment extends BaseFragment {
 
     private SocialNetwork selectedSocialNetwork;
 
     @Override
     public int getLayout() {
-        return R.layout.fragment_auth;
+        return R.layout.fragment_auth_old;
     }
 
     @Override
     public void initUI() {
 
-        rootView.findViewById(R.id.google_button).setOnClickListener(v -> {
+        rootView.findViewById(R.id.googleButton).setOnClickListener(v -> {
             selectedSocialNetwork = SocialNetwork.GOOGLE;
             XLogin.startSocialAuth(this, SocialNetwork.GOOGLE, startSocialCallback);
         });
 
-        rootView.findViewById(R.id.facebook_button).setOnClickListener(v -> {
+        rootView.findViewById(R.id.facebookButton).setOnClickListener(v -> {
             selectedSocialNetwork = SocialNetwork.FACEBOOK;
             XLogin.startSocialAuth(this, SocialNetwork.FACEBOOK, startSocialCallback);
         });
@@ -44,12 +44,12 @@ public class AuthFragment extends BaseFragment {
             XLogin.startSocialAuth(this, SocialNetwork.BAIDU, startSocialCallback);
         });
 
-        rootView.findViewById(R.id.linkedin_button).setOnClickListener(v -> {
+        rootView.findViewById(R.id.linkedinButton).setOnClickListener(v -> {
             selectedSocialNetwork = SocialNetwork.LINKEDIN;
             XLogin.startSocialAuth(this, SocialNetwork.LINKEDIN, startSocialCallback);
         });
 
-        rootView.findViewById(R.id.naver_button).setOnClickListener(v -> {
+        rootView.findViewById(R.id.naverButton).setOnClickListener(v -> {
             selectedSocialNetwork = SocialNetwork.NAVER;
             XLogin.startSocialAuth(this, SocialNetwork.NAVER, startSocialCallback);
         });
@@ -79,7 +79,7 @@ public class AuthFragment extends BaseFragment {
             });
         });
 
-        rootView.findViewById(R.id.forgot_password_button).setOnClickListener(v -> openFragment(new ResetPasswordFragment()));
+        rootView.findViewById(R.id.forgot_password_button).setOnClickListener(v -> openFragment(new OldResetPasswordFragment()));
 
         rootView.findViewById(R.id.register_button).setOnClickListener(v -> openFragment(new RegisterFragment()));
     }

@@ -5,14 +5,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
-import com.xsolla.android.login.XLogin;
-import com.xsolla.android.storesdkexample.fragments.AuthFragment;
-import com.xsolla.android.storesdkexample.fragments.MainFragment;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import com.xsolla.android.login.XLogin;
+import com.xsolla.android.storesdkexample.fragments.MainFragment;
+import com.xsolla.android.storesdkexample.fragments.OldAuthFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, fragment)
+                .replace(R.id.fragmentContainer, fragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         if (token != null && !XLogin.isTokenExpired()) {
             return new MainFragment();
         } else {
-            return new AuthFragment();
+            return new OldAuthFragment();
         }
     }
 
