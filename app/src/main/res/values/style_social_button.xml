@@ -3,14 +3,18 @@
 
     <style name="Widget.Xsolla.SocialButton.Big" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
         <item name="android:minHeight">@dimen/social_button_big_height</item>
-        <item name="strokeColor">@color/magneta_color</item>
+        <item name="strokeColor">@color/magenta_color</item>
         <item name="strokeWidth">@dimen/input_stroke_width</item>
         <item name="cornerRadius">@dimen/input_corner_radius</item>
         <item name="android:textColor">@color/white_color</item>
-        <item name="fontFamily">@font/brutal_type_bold</item>
         <item name="iconGravity">textStart</item>
+        <item name="android:layout_marginTop">@dimen/social_button_big_top_margin</item>
+        <item name="android:layout_marginBottom">@dimen/social_button_big_bottom_margin</item>
         <item name="iconEndPadding">@dimen/social_button_big_icon_end_padding</item>
         <item name="iconTint">@color/white_color</item>
+        <item name="fontFamily">@font/brutal_type_bold</item>
+        <item name="android:textSize">@dimen/social_button_big_text_size</item>
+        <item name="android:letterSpacing">-0.03</item>
     </style>
 
     <style name="Widget.Xsolla.SocialButton.Google.Big" parent="Widget.Xsolla.SocialButton.Big">
@@ -27,7 +31,7 @@
         <item name="android:minWidth">@dimen/social_button_small_width</item>
         <item name="android:minHeight">@dimen/social_button_small_height</item>
         <item name="strokeWidth">@dimen/input_stroke_width</item>
-        <item name="strokeColor">@color/secondary_color_20</item>
+        <item name="strokeColor">@color/secondary_color_50</item>
         <item name="cornerRadius">@dimen/input_corner_radius</item>
         <item name="iconTint">@color/secondary_color</item>
         <item name="iconPadding">0dp</item>

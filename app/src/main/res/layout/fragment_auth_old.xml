@@ -31,8 +31,8 @@
     <Button
         android:id="@+id/login_button"
         style="@style/XButton"
-        android:layout_width="@dimen/input_width"
-        android:layout_height="@dimen/input_height"
+        android:layout_width="@dimen/old_input_width"
+        android:layout_height="@dimen/old_input_height"
         android:layout_marginTop="24dp"
         android:text="Login"
         app:layout_constraintEnd_toEndOf="parent"
@@ -206,8 +206,8 @@
 
     <EditText
         android:id="@+id/username_input"
-        android:layout_width="@dimen/input_width"
-        android:layout_height="@dimen/input_height"
+        android:layout_width="@dimen/old_input_width"
+        android:layout_height="@dimen/old_input_height"
         android:layout_marginTop="16dp"
         android:background="@drawable/input_rounded_bg"
         android:gravity="center"
@@ -219,8 +219,8 @@
 
     <EditText
         android:id="@+id/password_input"
-        android:layout_width="@dimen/input_width"
-        android:layout_height="@dimen/input_height"
+        android:layout_width="@dimen/old_input_width"
+        android:layout_height="@dimen/old_input_height"
         android:layout_marginTop="8dp"
         android:background="@drawable/input_rounded_bg"
         android:gravity="center"
