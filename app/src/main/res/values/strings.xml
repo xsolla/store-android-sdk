@@ -5,17 +5,17 @@
     <string name="xsolla_payments_redirect_host">example.com</string>
     <string name="xsolla_payments_redirect_path_prefix">/payment</string>
 
-    <string name="login_tab">LOG IN</string>
-    <string name="sign_up_tab">SIGN UP</string>
+    <string name="login_tab">log in</string>
+    <string name="sign_up_tab">sign up</string>
     <string name="username_input_hint">Username</string>
     <string name="email_input_hint">E-mail</string>
     <string name="password_input_hint">Password</string>
     <string name="password_confirm_input_hint">Confirm password</string>
-    <string name="log_in_button">LOG IN</string>
-    <string name="sign_up_button">SIGN UP</string>
-    <string name="reset_password_button">RESET PASSWORD</string>
-    <string name="log_in_with_google_button">LOG IN WITH GOOGLE</string>
-    <string name="log_in_with_facebook_button">LOG IN WITH FACEBOOK</string>
+    <string name="log_in_button">log in</string>
+    <string name="sign_up_button">sign up</string>
+    <string name="reset_password_button">reset password</string>
+    <string name="log_in_with_google_button">log in with google</string>
+    <string name="log_in_with_facebook_button">log in with facebook</string>
     <string name="forgot_your_password">Forgot your password?</string>
 
     <string name="menu_virtual_items">virtual items</string>
