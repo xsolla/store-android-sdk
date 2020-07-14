@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Xsolla.Balance.Text" parent="">
+        <item name="android:textColor">@color/secondary_color</item>
+        <item name="android:textSize">@dimen/appbar_balance_item_text_size</item>
+        <item name="fontFamily">@font/brutal_type</item>
+        <item name="android:layout_marginLeft">@dimen/appbar_balance_item_text_left_margin</item>
+        <item name="android:layout_marginRight">@dimen/appbar_balance_item_text_right_margin</item>
+    </style>
+
+    <style name="Widget.Xsolla.Balance.ChargeButton" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
+        <item name="android:minHeight">@dimen/appbar_balance_charge_button_size</item>
+        <item name="android:minWidth">@dimen/appbar_balance_charge_button_size</item>
+        <item name="backgroundTint">@color/white_color</item>
+        <item name="cornerRadius">@dimen/appbar_balance_charge_button_corner_radius</item>
+        <item name="iconPadding">0dp</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+        <item name="icon">@drawable/ic_charge_button_icon</item>
+        <item name="iconTint">@color/appbar_bg</item>
+    </style>
+
+</resources>

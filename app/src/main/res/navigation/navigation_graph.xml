@@ -8,18 +8,18 @@
     <fragment
         android:id="@+id/nav_vi"
         android:name="com.xsolla.android.storesdkexample.fragments.VirtualItemsFragment"
-        android:label="@string/menu_virtual_items"
+        android:label=""
         tools:layout="@layout/fragment_shop" />
 
     <fragment
         android:id="@+id/nav_vc"
         android:name="com.xsolla.android.storesdkexample.fragments.VirtualCurrencyFragment"
-        android:label="@string/menu_virtual_currency"
+        android:label=""
         tools:layout="@layout/fragment_shop" />
 
     <fragment
         android:id="@+id/nav_inventory"
         android:name="com.xsolla.android.storesdkexample.fragments.InventoryFragment"
-        android:label="@string/menu_inventory"
+        android:label=""
         tools:layout="@layout/fragment_shop" />
 </navigation>
