@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="48dp"
-    android:layout_height="48dp"
+    android:layout_width="68dp"
+    android:layout_height="24dp"
     android:clipToPadding="false"
-    android:background="?attr/selectableItemBackgroundBorderless"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
     android:clickable="true"
     android:focusable="true">
 
@@ -12,21 +13,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:background="?attr/selectableItemBackgroundBorderless"
         app:srcCompat="@drawable/ic_shopping_cart_24dp" />
 
     <TextView
         android:id="@+id/cart_badge"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_gravity="right|top"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="2dp"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="24dp"
         android:background="@drawable/badge_background"
         android:gravity="center"
-        android:padding="3dp"
         android:textColor="@android:color/white"
+        android:fontFamily="@font/brutal_type"
         android:visibility="gone"
         android:text="0"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
-</FrameLayout>
+</LinearLayout>

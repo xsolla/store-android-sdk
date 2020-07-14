@@ -2,6 +2,7 @@ package com.xsolla.android.storesdkexample
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -59,6 +60,12 @@ class StoreActivity : AppCompatActivity() {
         }
 
         chargeBalanceButton.setOnClickListener { findNavController(R.id.nav_host_fragment).navigate(R.id.nav_vc) }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.main, menu)
+        return true
     }
 
     private fun initNavController() {
