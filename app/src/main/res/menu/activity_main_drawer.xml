@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_vi"
+            android:title="@string/menu_virtual_items" />
+        <item
+            android:id="@+id/nav_vc"
+            android:title="@string/menu_virtual_currency" />
+        <item
+            android:id="@+id/nav_inventory"
+            android:title="@string/menu_inventory" />
+    </group>
+</menu>
