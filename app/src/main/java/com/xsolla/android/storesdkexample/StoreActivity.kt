@@ -6,6 +6,7 @@ import android.view.Menu
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -19,6 +20,7 @@ import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.item_balance.view.*
+import kotlinx.android.synthetic.main.layout_drawer.*
 
 class StoreActivity : AppCompatActivity() {
 
@@ -36,6 +38,7 @@ class StoreActivity : AppCompatActivity() {
 
 
         initNavController()
+        initDrawer()
         getBalance()
     }
 
@@ -81,5 +84,25 @@ class StoreActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun initDrawer() {
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        val navController = findNavController(R.id.nav_host_fragment)
+        textInventory.setOnClickListener {
+            navController.navigate(R.id.nav_inventory)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        textVirtualItems.setOnClickListener {
+            navController.navigate(R.id.nav_vi)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        textVirtualCurrency.setOnClickListener {
+            navController.navigate(R.id.nav_vc)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        textEmail.text = "a.nikonova@xsolla.com" // TODO take from XLogin
+        textUsername.text = "usikpusik" // TODO take from XLogin
+        textCartCounter.text = "2" // TODO take from XStore
     }
 }
