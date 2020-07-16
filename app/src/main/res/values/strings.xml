@@ -18,9 +18,12 @@
     <string name="log_in_with_facebook_button">log in with facebook</string>
     <string name="forgot_your_password">Forgot your password?</string>
 
-    <string name="menu_virtual_items">virtual items</string>
-    <string name="menu_virtual_currency">virtual currency</string>
-    <string name="menu_inventory">my inventory</string>
+    <string name="drawer_item_vi">Virtual items</string>
+    <string name="drawer_item_vc">Virtual currency</string>
+    <string name="drawer_item_inventory">My inventory</string>
+    <string name="drawer_title_store">Store</string>
+    <string name="drawer_item_logout">Log out</string>
+    <string name="drawer_item_cart">Cart</string>
 
 <!--    Auto-generated-->
     <string name="title_activity_store">StoreActivity</string>
