@@ -52,6 +52,13 @@
     <dimen name="catalog_fragment_title_text_size">16sp</dimen>
     <dimen name="catalog_fragment_title_left_margin">28dp</dimen>
 
+    <dimen name="catalog_item_name_text_size">15sp</dimen>
+    <dimen name="catalog_item_price_text_size">17sp</dimen>
+    <dimen name="catalog_item_old_price_text_size">15sp</dimen>
+    <dimen name="catalog_item_add_to_cart_button_size">40dp</dimen>
+    <dimen name="catalog_item_add_to_cart_button_corner_radius">4dp</dimen>
+    <dimen name="catalog_item_add_to_cart_button_stroke_width">1dp</dimen>
+
     <!-- Auto-generated -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>

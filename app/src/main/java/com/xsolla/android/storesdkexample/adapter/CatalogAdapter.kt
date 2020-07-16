@@ -1,13 +1,15 @@
 package com.xsolla.android.storesdkexample.adapter
 
+import android.graphics.Paint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.util.AmountUtils
+import kotlinx.android.synthetic.main.item_catalog.view.*
 
 class CatalogAdapter(
         private val items: List<VirtualItemsResponse.Item> //,
@@ -31,13 +33,22 @@ class CatalogAdapter(
             parent: ViewGroup
     ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_catalog, parent, false)) {
 
-        private var itemIcon: ImageView = itemView.findViewById(R.id.item_icon)
-        private var itemName: TextView = itemView.findViewById(R.id.item_name)
-        private var itemPrice: TextView = itemView.findViewById(R.id.item_price)
-
         fun bind(item: VirtualItemsResponse.Item) {
-            Glide.with(itemView).load(item.imageUrl).into(itemIcon)
-            itemName.text = item.name
+            Glide.with(itemView).load(item.imageUrl).into(itemView.itemIcon)
+            itemView.itemName.text = item.name
+            item.price?.let { bindItemPrice(item) }
+        }
+
+        private fun bindItemPrice(item: VirtualItemsResponse.Item) {
+            val price = item.price
+            if (price.amountDecimal == price.amountWithoutDiscountDecimal) {
+                itemView.itemPrice.text = AmountUtils.prettyPrint(price.amountDecimal, price.currency)
+            } else {
+                itemView.itemPrice.text = AmountUtils.prettyPrint(price.amountDecimal, price.currency)
+                itemView.itemOldPrice.text = AmountUtils.prettyPrint(price.amountWithoutDiscountDecimal, price.currency)
+                itemView.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+                itemView.itemSaleLabel.visibility = View.VISIBLE
+            }
         }
 
     }

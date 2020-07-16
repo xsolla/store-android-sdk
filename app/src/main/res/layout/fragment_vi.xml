@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/secondary_color_10"
     android:orientation="vertical">
 
     <TextView
+        style="@style/Widget.Xsolla.Fragment.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.Xsolla.Fragment.Title"
         android:text="@string/menu_virtual_items" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
+        style="@style/Widget.Xsolla.TabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabMode="scrollable"
         android:layout_marginLeft="20dp"
-        style="@style/Widget.Xsolla.TabLayout">
+        app:tabMode="scrollable">
 
     </com.google.android.material.tabs.TabLayout>
 
