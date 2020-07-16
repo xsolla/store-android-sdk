@@ -15,6 +15,7 @@
     <color name="color_transparent">#00000000</color>
     <color name="magenta_color">#FF005B</color>
     <color name="secondary_color">#848EB1</color>
+    <color name="secondary_color_10">#1A848EB1</color>
     <color name="secondary_color_20">#33848EB1</color>
     <color name="secondary_color_50">#7F848EB1</color>
     <color name="white_color">#FFFFFF</color>

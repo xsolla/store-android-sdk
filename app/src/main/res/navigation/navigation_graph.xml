@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/nav_vi"
-        android:name="com.xsolla.android.storesdkexample.fragments.VirtualItemsFragment"
+        android:name="com.xsolla.android.storesdkexample.ui.ViFragment"
         android:label=""
-        tools:layout="@layout/fragment_shop" />
+        tools:layout="@layout/fragment_vi" />
 
     <fragment
         android:id="@+id/nav_vc"

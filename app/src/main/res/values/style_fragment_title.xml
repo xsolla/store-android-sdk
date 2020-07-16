@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Xsolla.Fragment.Title" parent="">
+        <item name="android:height">@dimen/catalog_fragment_title_height</item>
+        <item name="fontFamily">@font/brutal_type</item>
+        <item name="android:textSize">@dimen/catalog_fragment_title_text_size</item>
+        <item name="textAllCaps">true</item>
+        <item name="background">@color/secondary_color_10</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginLeft">@dimen/catalog_fragment_title_left_margin</item>
+    </style>
+
+</resources>

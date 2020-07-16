@@ -48,6 +48,10 @@
     <dimen name="appbar_balance_charge_button_size">18dp</dimen>
     <dimen name="appbar_balance_charge_button_corner_radius">2dp</dimen>
 
+    <dimen name="catalog_fragment_title_height">56dp</dimen>
+    <dimen name="catalog_fragment_title_text_size">16sp</dimen>
+    <dimen name="catalog_fragment_title_left_margin">28dp</dimen>
+
     <!-- Auto-generated -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
