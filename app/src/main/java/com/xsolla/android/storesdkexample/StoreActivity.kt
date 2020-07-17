@@ -37,7 +37,7 @@ class StoreActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_store)
 //        val token = XLogin.getToken()
-        val token = "eyJhbGc..."
+        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEubmlrb2xhZXZAeHNvbGxhLmNvbSIsImV4cCI6MTU5NTAwODIwMiwiZ3JvdXBzIjpbeyJpZCI6NjQ4MSwibmFtZSI6ImRlZmF1bHQiLCJpc19kZWZhdWx0Ijp0cnVlfV0sImlhdCI6MTU5NDkyMTgwMiwiaXNfbWFzdGVyIjp0cnVlLCJpc3MiOiJodHRwczovL2xvZ2luLnhzb2xsYS5jb20iLCJwcm9tb19lbWFpbF9hZ3JlZW1lbnQiOnRydWUsInB1Ymxpc2hlcl9pZCI6MTM2NTkzLCJzdWIiOiI4ZTFhN2E5Yi1hY2U2LTQyMzMtOTk4Mi01MTU5ZTVkNzM3NTIiLCJ0eXBlIjoieHNvbGxhX2xvZ2luIiwidXNlcm5hbWUiOiJhIiwieHNvbGxhX2xvZ2luX2FjY2Vzc19rZXkiOiIzUEFpdHNsTjlqTEc1NG1TN2VoUlpFenQyblk5MEZmaDBVOTdCSE5rUG00IiwieHNvbGxhX2xvZ2luX3Byb2plY3RfaWQiOiIwMjYyMDFlMy03ZTQwLTExZWEtYTg1Yi00MjAxMGFhODAwMDQifQ.LL7kPfogFk13Zp6UwSyigxu4Un53C3dlRYrvG8hpEz4"
         XStore.init(BuildConfig.PROJECT_ID, token)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
@@ -79,8 +79,9 @@ class StoreActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
+        val cartView = menu.findItem(R.id.action_cart).actionView
         vmCart.cartContent.observe(this, Observer {
-            val cartCounter = menu.findItem(R.id.action_cart).actionView.findViewById<TextView>(R.id.cart_badge)
+            val cartCounter = cartView.findViewById<TextView>(R.id.cart_badge)
             val count = it.size
             cartCounter.text = count.toString()
             if (count == 0) {
@@ -89,6 +90,9 @@ class StoreActivity : AppCompatActivity() {
                 cartCounter.visibility = View.VISIBLE
             }
         })
+        cartView.setOnClickListener {
+            findNavController(R.id.nav_host_fragment).navigate(R.id.nav_cart)
+        }
         return true
     }
 
