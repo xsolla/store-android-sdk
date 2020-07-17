@@ -22,17 +22,17 @@ import com.xsolla.android.store.entity.response.order.OrderResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 import com.xsolla.android.storesdkexample.BuildConfig;
 import com.xsolla.android.storesdkexample.R;
-import com.xsolla.android.storesdkexample.adapter.CartAdapter;
+import com.xsolla.android.storesdkexample.adapter.OldCartAdapter;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.listener.UpdateCartListener;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
 
-public class CartFragment extends BaseFragment implements UpdateCartListener {
+public class OldCartFragment extends BaseFragment implements UpdateCartListener {
 
     private static final int RC_PAYSTATION = 1;
 
     private RecyclerView recyclerView;
-    private CartAdapter cartAdapter;
+    private OldCartAdapter oldCartAdapter;
     private Toolbar toolbar;
 
     private String orderId;
@@ -53,7 +53,7 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
 
     @Override
     public int getLayout() {
-        return R.layout.fragment_cart;
+        return R.layout.fragment_cart_old;
     }
 
     @Override
@@ -102,8 +102,8 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
             @Override
             protected void onSuccess(CartResponse response) {
                 if (!response.getItems().isEmpty()) {
-                    cartAdapter = new CartAdapter(response.getItems(), CartFragment.this);
-                    recyclerView.setAdapter(cartAdapter);
+                    oldCartAdapter = new OldCartAdapter(response.getItems(), OldCartFragment.this);
+                    recyclerView.setAdapter(oldCartAdapter);
                     onCartUpdated(response.getPrice().getPrettyPrintAmount());
                 }
             }
