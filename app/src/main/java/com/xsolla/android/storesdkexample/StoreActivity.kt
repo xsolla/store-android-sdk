@@ -3,11 +3,15 @@ package com.xsolla.android.storesdkexample
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
+import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -18,11 +22,14 @@ import com.google.android.material.navigation.NavigationView
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse
+import com.xsolla.android.storesdkexample.vm.VmCart
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.item_balance.view.*
 import kotlinx.android.synthetic.main.layout_drawer.*
 
 class StoreActivity : AppCompatActivity() {
+
+    private val vmCart: VmCart by viewModels()
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -39,7 +46,12 @@ class StoreActivity : AppCompatActivity() {
 
         initNavController()
         initDrawer()
-        getBalance()
+        getBalance() // TODO update in onResume
+    }
+
+    override fun onResume() {
+        super.onResume()
+        vmCart.updateCart()
     }
 
     private fun getBalance() {
@@ -66,8 +78,17 @@ class StoreActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
+        vmCart.cartContent.observe(this, Observer {
+            val cartCounter = menu.findItem(R.id.action_cart).actionView.findViewById<TextView>(R.id.cart_badge)
+            val count = it.size
+            cartCounter.text = count.toString()
+            if (count == 0) {
+                cartCounter.visibility = View.GONE
+            } else {
+                cartCounter.visibility = View.VISIBLE
+            }
+        })
         return true
     }
 
@@ -101,8 +122,22 @@ class StoreActivity : AppCompatActivity() {
             navController.navigate(R.id.nav_vc)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
+        textCart.setOnClickListener {
+            navController.navigate(R.id.nav_cart)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
         textEmail.text = "a.nikonova@xsolla.com" // TODO take from XLogin
         textUsername.text = "usikpusik" // TODO take from XLogin
-        textCartCounter.text = "2" // TODO take from XStore
+        vmCart.cartContent.observe(this, Observer {
+            val count = it.size
+            textCartCounter.text = count.toString()
+            if (count == 0) {
+                bgCartCounter.visibility = View.GONE
+                textCartCounter.visibility = View.GONE
+            } else {
+                bgCartCounter.visibility = View.VISIBLE
+                textCartCounter.visibility = View.VISIBLE
+            }
+        })
     }
 }

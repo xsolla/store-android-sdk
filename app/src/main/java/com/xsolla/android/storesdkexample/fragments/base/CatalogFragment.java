@@ -10,7 +10,7 @@ import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.storesdkexample.R;
-import com.xsolla.android.storesdkexample.fragments.CartFragment;
+import com.xsolla.android.storesdkexample.fragments.OldCartFragment;
 
 public abstract class CatalogFragment extends BaseFragment {
 
@@ -35,7 +35,7 @@ public abstract class CatalogFragment extends BaseFragment {
         } else {
             cartItemCount.setVisibility(View.VISIBLE);
             cartItemCount.setText(String.valueOf(count));
-            actionView.setOnClickListener(v -> openFragment(new CartFragment()));
+            actionView.setOnClickListener(v -> openFragment(new OldCartFragment()));
         }
     }
 

@@ -7,6 +7,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
@@ -21,15 +24,12 @@ import com.xsolla.android.storesdkexample.util.ViewUtils;
 import java.math.RoundingMode;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
+public class OldCartAdapter extends RecyclerView.Adapter<OldCartAdapter.ViewHolder> {
 
     private List<CartResponse.Item> items;
     private UpdateCartListener updateCartListener;
 
-    public CartAdapter(List<CartResponse.Item> items, UpdateCartListener updateCartListener) {
+    public OldCartAdapter(List<CartResponse.Item> items, UpdateCartListener updateCartListener) {
         this.items = items;
         this.updateCartListener = updateCartListener;
     }
