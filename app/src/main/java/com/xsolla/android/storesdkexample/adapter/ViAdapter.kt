@@ -7,11 +7,13 @@ import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.storesdkexample.adapter.holder.ViRealPriceViewHolder
 import com.xsolla.android.storesdkexample.adapter.holder.ViVirtualPriceViewHolder
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
+import com.xsolla.android.storesdkexample.vm.VmBalance
 import com.xsolla.android.storesdkexample.vm.VmCart
 
 class ViAdapter(
         private val items: List<VirtualItemsResponse.Item>,
         private val vmCart: VmCart,
+        private val vmBalance: VmBalance,
         private val purchaseListener: PurchaseListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -31,8 +33,8 @@ class ViAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            REAL_PRICE -> ViRealPriceViewHolder(inflater, parent, vmCart)
-            else -> ViVirtualPriceViewHolder(inflater, parent, purchaseListener)
+            REAL_PRICE -> ViRealPriceViewHolder(inflater, parent, vmCart, purchaseListener)
+            else -> ViVirtualPriceViewHolder(inflater, parent, vmBalance, purchaseListener)
         }
     }
 

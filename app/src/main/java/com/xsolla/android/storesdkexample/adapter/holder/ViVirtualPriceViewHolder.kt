@@ -16,11 +16,13 @@ import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.util.AmountUtils
 import com.xsolla.android.storesdkexample.util.ViewUtils
+import com.xsolla.android.storesdkexample.vm.VmBalance
 import kotlinx.android.synthetic.main.item_vi_virtual_price.view.*
 
 class ViVirtualPriceViewHolder(
         inflater: LayoutInflater,
         parent: ViewGroup,
+        private val vmBalance: VmBalance,
         private val purchaseListener: PurchaseListener
 ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_vi_virtual_price, parent, false)) {
 
@@ -50,7 +52,7 @@ class ViVirtualPriceViewHolder(
     }
 
     private fun binExpirationPeriod(expirationPeriod: ExpirationPeriod) {
-        itemView.itemExpiration.visibility = View.VISIBLE
+        itemView.itemAdditionalInfo.visibility = View.VISIBLE
         val sb = StringBuilder()
         sb.append("Expiration: ")
         sb.append(expirationPeriod.value)
@@ -59,7 +61,7 @@ class ViVirtualPriceViewHolder(
         if (expirationPeriod.value != 1) {
             sb.append('s')
         }
-        itemView.itemExpiration.text = sb
+        itemView.itemAdditionalInfo.text = sb
     }
 
     private fun initBuyButton(item: VirtualItemsResponse.Item, virtualPrice: VirtualPrice) {
@@ -67,6 +69,7 @@ class ViVirtualPriceViewHolder(
             ViewUtils.disable(v)
             XStore.createOrderByVirtualCurrency(item.sku, virtualPrice.sku, object : XStoreCallback<CreateOrderByVirtualCurrencyResponse?>() {
                 override fun onSuccess(response: CreateOrderByVirtualCurrencyResponse?) {
+                    vmBalance.updateVirtualBalance()
                     purchaseListener.showMessage("Purchased by Virtual currency")
                     ViewUtils.enable(v)
                 }

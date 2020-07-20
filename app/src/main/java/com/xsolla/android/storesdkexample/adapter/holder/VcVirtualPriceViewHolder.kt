@@ -15,11 +15,14 @@ import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.util.AmountUtils
 import com.xsolla.android.storesdkexample.util.ViewUtils
+import com.xsolla.android.storesdkexample.vm.VmBalance
 import kotlinx.android.synthetic.main.item_vi_virtual_price.view.*
+
 
 class VcVirtualPriceViewHolder(
         inflater: LayoutInflater,
         parent: ViewGroup,
+        private val vmBalance: VmBalance,
         private val purchaseListener: PurchaseListener
 ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_vi_virtual_price, parent, false)) {
 
@@ -27,11 +30,12 @@ class VcVirtualPriceViewHolder(
         val price = item.virtualPrices[0]
         Glide.with(itemView).load(item.imageUrl).into(itemView.itemIcon)
         itemView.itemName.text = item.name
-        bindItemPrice(item, price)
+        itemView.itemAdditionalInfo.text = item.description
+        bindItemPrice(price)
         initBuyButton(item, price)
     }
 
-    private fun bindItemPrice(item: VirtualCurrencyPackageResponse.Item, price: VirtualPrice) {
+    private fun bindItemPrice(price: VirtualPrice) {
         Glide.with(itemView.context).load(price.imageUrl).into(itemView.itemVirtualPriceIcon)
 
         if (price.amountDecimal == price.amountWithoutDiscountDecimal) {
@@ -52,6 +56,7 @@ class VcVirtualPriceViewHolder(
             ViewUtils.disable(v)
             XStore.createOrderByVirtualCurrency(item.sku, virtualPrice.sku, object : XStoreCallback<CreateOrderByVirtualCurrencyResponse?>() {
                 override fun onSuccess(response: CreateOrderByVirtualCurrencyResponse?) {
+                    vmBalance.updateVirtualBalance()
                     purchaseListener.showMessage("Purchased by Virtual currency")
                     ViewUtils.enable(v)
                 }

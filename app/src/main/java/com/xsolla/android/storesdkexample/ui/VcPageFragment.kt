@@ -13,12 +13,14 @@ import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.VcAdapter
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.util.BaseParcelable
+import com.xsolla.android.storesdkexample.vm.VmBalance
 import com.xsolla.android.storesdkexample.vm.VmCart
 import kotlinx.android.synthetic.main.fragment_catalog.view.*
 
 class VcPageFragment : Fragment(), PurchaseListener {
 
     private val vmCart: VmCart by activityViewModels()
+    private val vmBalance: VmBalance by activityViewModels()
 
     companion object {
         const val ARG_ITEMS = "items"
@@ -42,7 +44,7 @@ class VcPageFragment : Fragment(), PurchaseListener {
         items?.let {
             with(view.catalogRecyclerView) {
                 layoutManager = LinearLayoutManager(view.context)
-                adapter = VcAdapter(it, vmCart, this@VcPageFragment)
+                adapter = VcAdapter(it, vmCart, vmBalance, this@VcPageFragment)
             }
         }
     }

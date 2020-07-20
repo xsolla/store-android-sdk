@@ -20,8 +20,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
-import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse
+import com.xsolla.android.storesdkexample.vm.VmBalance
 import com.xsolla.android.storesdkexample.vm.VmCart
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.item_balance.view.*
@@ -30,6 +29,7 @@ import kotlinx.android.synthetic.main.layout_drawer.*
 class StoreActivity : AppCompatActivity() {
 
     private val vmCart: VmCart by viewModels()
+    private val vmBalance: VmBalance by viewModels()
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -46,34 +46,26 @@ class StoreActivity : AppCompatActivity() {
 
         initNavController()
         initDrawer()
-        getBalance() // TODO update in onResume
+        initVirtualBalance()
     }
 
     override fun onResume() {
         super.onResume()
         vmCart.updateCart()
+        vmBalance.updateVirtualBalance()
     }
 
-    private fun getBalance() {
-        XStore.getVirtualBalance(object : XStoreCallback<VirtualBalanceResponse>() {
-            override fun onSuccess(response: VirtualBalanceResponse) {
-                updateBalanceContainer(response.items)
-            }
-
-            override fun onFailure(errorMessage: String) {}
-        })
-    }
-
-    private fun updateBalanceContainer(items: List<VirtualBalanceResponse.Item>) {
+    private fun initVirtualBalance() {
         val balanceContainer: LinearLayout = findViewById(R.id.balanceContainer)
-
-        items.forEach { item ->
-            val balanceView = LayoutInflater.from(this).inflate(R.layout.item_balance, null)
-            Glide.with(this).load(item.imageUrl).into(balanceView.balanceIcon)
-            balanceView.balanceAmount.text = item.amount.toString()
-            balanceContainer.addView(balanceView, 0)
-        }
-
+        vmBalance.virtualBalance.observe(this, Observer { virtualBalanceList ->
+            balanceContainer.removeAllViews()
+                virtualBalanceList.forEach { item ->
+                    val balanceView = LayoutInflater.from(this).inflate(R.layout.item_balance, null)
+                    Glide.with(this).load(item.imageUrl).into(balanceView.balanceIcon)
+                    balanceView.balanceAmount.text = item.amount.toString()
+                    balanceContainer.addView(balanceView, 0)
+                }
+        })
         chargeBalanceButton.setOnClickListener { findNavController(R.id.nav_host_fragment).navigate(R.id.nav_vc) }
     }
 
@@ -82,7 +74,7 @@ class StoreActivity : AppCompatActivity() {
         val cartView = menu.findItem(R.id.action_cart).actionView
         vmCart.cartContent.observe(this, Observer {
             val cartCounter = cartView.findViewById<TextView>(R.id.cart_badge)
-            val count = it.size
+            val count = it.sumBy { item -> item.quantity }
             cartCounter.text = count.toString()
             if (count == 0) {
                 cartCounter.visibility = View.GONE

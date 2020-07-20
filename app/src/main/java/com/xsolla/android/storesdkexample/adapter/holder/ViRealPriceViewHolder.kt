@@ -11,14 +11,17 @@ import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.common.ExpirationPeriod
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.util.AmountUtils
+import com.xsolla.android.storesdkexample.util.ViewUtils
 import com.xsolla.android.storesdkexample.vm.VmCart
 import kotlinx.android.synthetic.main.item_vi_real_price.view.*
 
 class ViRealPriceViewHolder(
         inflater: LayoutInflater,
         parent: ViewGroup,
-        private val vmCart: VmCart
+        private val vmCart: VmCart,
+        private val purchaseListener: PurchaseListener
 ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_vi_real_price, parent, false)) {
 
     fun bind(item: VirtualItemsResponse.Item) {
@@ -42,24 +45,26 @@ class ViRealPriceViewHolder(
             itemView.itemSaleLabel.visibility = View.VISIBLE
         }
 
-        itemView.addToCartButton.setOnClickListener {
+        itemView.addToCartButton.setOnClickListener { v ->
+            ViewUtils.disable(v)
             val cartContent = vmCart.cartContent.value
             val quantity = cartContent?.find { it.sku == item.sku }?.quantity ?: 0
             XStore.updateItemFromCurrentCart(item.sku, quantity + 1, object : XStoreCallback<Void>() {
                 override fun onSuccess(response: Void?) {
                     vmCart.updateCart()
+                    ViewUtils.enable(v)
                 }
 
-                override fun onFailure(errorMessage: String?) {
-                    //
+                override fun onFailure(errorMessage: String) {
+                    purchaseListener.onFailure(errorMessage)
+                    ViewUtils.enable(v)
                 }
-
             })
         }
     }
 
     private fun binExpirationPeriod(expirationPeriod: ExpirationPeriod) {
-        itemView.itemExpiration.visibility = View.VISIBLE
+        itemView.itemAdditionalInfo.visibility = View.VISIBLE
         val sb = StringBuilder()
         sb.append("Expiration: ")
         sb.append(expirationPeriod.value)
@@ -68,7 +73,7 @@ class ViRealPriceViewHolder(
         if (expirationPeriod.value != 1) {
             sb.append('s')
         }
-        itemView.itemExpiration.text = sb
+        itemView.itemAdditionalInfo.text = sb
     }
 
 }

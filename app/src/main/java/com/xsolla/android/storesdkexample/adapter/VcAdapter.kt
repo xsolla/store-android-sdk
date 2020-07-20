@@ -7,11 +7,13 @@ import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResp
 import com.xsolla.android.storesdkexample.adapter.holder.VcRealPriceViewHolder
 import com.xsolla.android.storesdkexample.adapter.holder.VcVirtualPriceViewHolder
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
+import com.xsolla.android.storesdkexample.vm.VmBalance
 import com.xsolla.android.storesdkexample.vm.VmCart
 
 class VcAdapter(
         private val items: List<VirtualCurrencyPackageResponse.Item>,
         private val vmCart: VmCart,
+        private val vmBalance: VmBalance,
         private val purchaseListener: PurchaseListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -31,8 +33,8 @@ class VcAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            REAL_PRICE -> VcRealPriceViewHolder(inflater, parent, vmCart)
-            else -> VcVirtualPriceViewHolder(inflater, parent, purchaseListener)
+            REAL_PRICE -> VcRealPriceViewHolder(inflater, parent, vmCart, purchaseListener)
+            else -> VcVirtualPriceViewHolder(inflater, parent, vmBalance, purchaseListener)
         }
     }
 

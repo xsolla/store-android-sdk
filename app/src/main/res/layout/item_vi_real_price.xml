@@ -70,7 +70,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/itemExpiration"
+            android:id="@+id/itemAdditionalInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_medium"
