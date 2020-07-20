@@ -33,8 +33,12 @@ class ViFragment : Fragment() {
                         .flatMap { it.groups }
                         .map { it.name }
                         .distinct()
+                        .toMutableList()
 
-                val packOfItems = mutableListOf<List<VirtualItemsResponse.Item>>()
+
+                val packOfItems = mutableListOf<List<VirtualItemsResponse.Item>>().apply {
+                    add(items)
+                }
 
                 groups.forEach { name ->
                     val filteredItems = items.filter { item ->
@@ -43,6 +47,7 @@ class ViFragment : Fragment() {
                     packOfItems.add(filteredItems)
                 }
 
+                groups.add(0, "ALL")
                 rootView.viewPager.adapter = CatalogPagerAdapter(this@ViFragment, packOfItems)
 
                 TabLayoutMediator(tabLayout, viewPager) { tab, position ->

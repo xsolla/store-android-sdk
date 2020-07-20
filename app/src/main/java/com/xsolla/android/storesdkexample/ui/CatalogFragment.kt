@@ -7,14 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.CatalogAdapter
+import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.util.BaseParcelable
 import com.xsolla.android.storesdkexample.vm.VmCart
 import kotlinx.android.synthetic.main.fragment_catalog.view.*
 
-class CatalogFragment : Fragment() {
+class CatalogFragment : Fragment(), PurchaseListener {
 
     private val vmCart: VmCart by activityViewModels()
 
@@ -40,7 +42,7 @@ class CatalogFragment : Fragment() {
         items?.let {
             with(view.catalogRecyclerView) {
                 layoutManager = LinearLayoutManager(view.context)
-                adapter = CatalogAdapter(it, vmCart)
+                adapter = CatalogAdapter(it, vmCart, this@CatalogFragment)
             }
         }
     }
@@ -48,6 +50,23 @@ class CatalogFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         vmCart.updateCart()
+    }
+
+    override fun onSuccess() {
+        showSnackBar("Success")
+    }
+
+    override fun onFailure(errorMessage: String) {
+        showSnackBar(errorMessage)
+    }
+
+    override fun showMessage(message: String) {
+        showSnackBar(message)
+    }
+
+    private fun showSnackBar(message: String) {
+        val rootView = requireActivity().findViewById<View>(android.R.id.content)
+        Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show()
     }
 
 }
