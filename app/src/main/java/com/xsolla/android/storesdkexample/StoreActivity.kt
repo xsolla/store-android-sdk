@@ -133,7 +133,7 @@ class StoreActivity : AppCompatActivity() {
         textEmail.text = "a.nikonova@xsolla.com" // TODO take from XLogin
         textUsername.text = "usikpusik" // TODO take from XLogin
         vmCart.cartContent.observe(this, Observer {
-            val count = it.size
+            val count = it.sumBy { item -> item.quantity }
             textCartCounter.text = count.toString()
             if (count == 0) {
                 bgCartCounter.visibility = View.GONE

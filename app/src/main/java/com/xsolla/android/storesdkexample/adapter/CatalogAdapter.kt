@@ -6,20 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.xsolla.android.store.XStore
+import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.common.ExpirationPeriod
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.util.AmountUtils
+import com.xsolla.android.storesdkexample.vm.VmCart
 import kotlinx.android.synthetic.main.item_catalog.view.*
 
 class CatalogAdapter(
-        private val items: List<VirtualItemsResponse.Item> //,
+        private val items: List<VirtualItemsResponse.Item>,
+        private val vmCart: VmCart
         // private val addToCartListener: AddToCartListener
 ) : RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatalogViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return CatalogViewHolder(inflater, parent)
+        return CatalogViewHolder(inflater, parent, vmCart)
     }
 
     override fun onBindViewHolder(holder: CatalogViewHolder, position: Int) {
@@ -31,7 +35,8 @@ class CatalogAdapter(
 
     class CatalogViewHolder(
             inflater: LayoutInflater,
-            parent: ViewGroup
+            parent: ViewGroup,
+            private val vmCart: VmCart
     ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_catalog, parent, false)) {
 
         fun bind(item: VirtualItemsResponse.Item) {
@@ -59,6 +64,21 @@ class CatalogAdapter(
                 itemView.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                 itemView.itemOldPrice.visibility = View.VISIBLE
                 itemView.itemSaleLabel.visibility = View.VISIBLE
+            }
+
+            itemView.addToCartButton.setOnClickListener {
+                val cartContent = vmCart.cartContent.value
+                val quantity = cartContent?.find { it.sku == item.sku }?.quantity ?: 0
+                XStore.updateItemFromCurrentCart(item.sku, quantity + 1, object : XStoreCallback<Void>() {
+                    override fun onSuccess(response: Void?) {
+                        vmCart.updateCart()
+                    }
+
+                    override fun onFailure(errorMessage: String?) {
+                        //
+                    }
+
+                })
             }
         }
 
