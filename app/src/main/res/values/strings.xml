@@ -25,6 +25,8 @@
     <string name="drawer_item_logout">Log out</string>
     <string name="drawer_item_cart">Cart</string>
 
+    <string name="cart_button_buy">Checkout</string>
+
 <!--    Auto-generated-->
     <string name="title_activity_store">StoreActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
