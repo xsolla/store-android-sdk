@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.xsolla.android.login.api.LoginApi;
 import com.xsolla.android.login.api.XLoginCallback;
 import com.xsolla.android.login.callback.FinishSocialCallback;
@@ -21,8 +24,6 @@ import com.xsolla.android.login.unity.UnityProxyActivity;
 
 import java.io.IOException;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -218,10 +219,10 @@ public class XLogin {
         getInstance().tokenUtils.clearToken();
     }
 
-    public static boolean isTokenExpired() {
+    public static boolean isTokenExpired(long leewaySec) {
         JWT jwt = getInstance().tokenUtils.getJwt();
         if (jwt == null) return true;
-        return jwt.isExpired(0);
+        return jwt.isExpired(leewaySec);
     }
 
     /**
