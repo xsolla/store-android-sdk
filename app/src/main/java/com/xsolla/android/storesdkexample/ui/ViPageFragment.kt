@@ -10,21 +10,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.adapter.CatalogAdapter
+import com.xsolla.android.storesdkexample.adapter.ViAdapter
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.util.BaseParcelable
 import com.xsolla.android.storesdkexample.vm.VmCart
 import kotlinx.android.synthetic.main.fragment_catalog.view.*
 
-class CatalogFragment : Fragment(), PurchaseListener {
+class ViPageFragment : Fragment(), PurchaseListener {
 
     private val vmCart: VmCart by activityViewModels()
 
     companion object {
         const val ARG_ITEMS = "items"
 
-        fun getInstance(items: ArrayList<VirtualItemsResponse.Item>): CatalogFragment {
-            val catalogFragment = CatalogFragment()
+        fun getInstance(items: ArrayList<VirtualItemsResponse.Item>): ViPageFragment {
+            val catalogFragment = ViPageFragment()
             val bundle = Bundle()
             bundle.putParcelableArrayList(ARG_ITEMS, items)
             bundle.putParcelable(ARG_ITEMS, BaseParcelable(items))
@@ -42,7 +42,7 @@ class CatalogFragment : Fragment(), PurchaseListener {
         items?.let {
             with(view.catalogRecyclerView) {
                 layoutManager = LinearLayoutManager(view.context)
-                adapter = CatalogAdapter(it, vmCart, this@CatalogFragment)
+                adapter = ViAdapter(it, vmCart, this@ViPageFragment)
             }
         }
     }

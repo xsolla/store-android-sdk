@@ -3,14 +3,14 @@ package com.xsolla.android.storesdkexample.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
-import com.xsolla.android.storesdkexample.adapter.holder.ViRealPriceViewHolder
-import com.xsolla.android.storesdkexample.adapter.holder.ViVirtualPriceViewHolder
+import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
+import com.xsolla.android.storesdkexample.adapter.holder.VcRealPriceViewHolder
+import com.xsolla.android.storesdkexample.adapter.holder.VcVirtualPriceViewHolder
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.vm.VmCart
 
-class CatalogAdapter(
-        private val items: List<VirtualItemsResponse.Item>,
+class VcAdapter(
+        private val items: List<VirtualCurrencyPackageResponse.Item>,
         private val vmCart: VmCart,
         private val purchaseListener: PurchaseListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -31,16 +31,16 @@ class CatalogAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            REAL_PRICE -> ViRealPriceViewHolder(inflater, parent, vmCart)
-            else -> ViVirtualPriceViewHolder(inflater, parent, purchaseListener)
+            REAL_PRICE -> VcRealPriceViewHolder(inflater, parent, vmCart)
+            else -> VcVirtualPriceViewHolder(inflater, parent, purchaseListener)
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = items[position]
         when (holder.itemViewType) {
-            REAL_PRICE -> (holder as ViRealPriceViewHolder).bind(item)
-            VIRTUAL_PRICE -> (holder as ViVirtualPriceViewHolder).bind(item)
+            REAL_PRICE -> (holder as VcRealPriceViewHolder).bind(item)
+            VIRTUAL_PRICE -> (holder as VcVirtualPriceViewHolder).bind(item)
         }
     }
 

@@ -8,9 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
-import com.xsolla.android.store.entity.response.common.ExpirationPeriod
 import com.xsolla.android.store.entity.response.common.VirtualPrice
-import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
+import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
@@ -18,22 +17,21 @@ import com.xsolla.android.storesdkexample.util.AmountUtils
 import com.xsolla.android.storesdkexample.util.ViewUtils
 import kotlinx.android.synthetic.main.item_vi_virtual_price.view.*
 
-class ViVirtualPriceViewHolder(
+class VcVirtualPriceViewHolder(
         inflater: LayoutInflater,
         parent: ViewGroup,
         private val purchaseListener: PurchaseListener
 ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_vi_virtual_price, parent, false)) {
 
-    fun bind(item: VirtualItemsResponse.Item) {
+    fun bind(item: VirtualCurrencyPackageResponse.Item) {
         val price = item.virtualPrices[0]
         Glide.with(itemView).load(item.imageUrl).into(itemView.itemIcon)
         itemView.itemName.text = item.name
-        bindItemPrice(price)
-        item.inventoryOption.expirationPeriod?.let { binExpirationPeriod(it) }
+        bindItemPrice(item, price)
         initBuyButton(item, price)
     }
 
-    private fun bindItemPrice(price: VirtualPrice) {
+    private fun bindItemPrice(item: VirtualCurrencyPackageResponse.Item, price: VirtualPrice) {
         Glide.with(itemView.context).load(price.imageUrl).into(itemView.itemVirtualPriceIcon)
 
         if (price.amountDecimal == price.amountWithoutDiscountDecimal) {
@@ -49,20 +47,7 @@ class ViVirtualPriceViewHolder(
         }
     }
 
-    private fun binExpirationPeriod(expirationPeriod: ExpirationPeriod) {
-        itemView.itemExpiration.visibility = View.VISIBLE
-        val sb = StringBuilder()
-        sb.append("Expiration: ")
-        sb.append(expirationPeriod.value)
-        sb.append(' ')
-        sb.append(expirationPeriod.type.name.toLowerCase())
-        if (expirationPeriod.value != 1) {
-            sb.append('s')
-        }
-        itemView.itemExpiration.text = sb
-    }
-
-    private fun initBuyButton(item: VirtualItemsResponse.Item, virtualPrice: VirtualPrice) {
+    private fun initBuyButton(item: VirtualCurrencyPackageResponse.Item, virtualPrice: VirtualPrice) {
         itemView.buyButton.setOnClickListener { v ->
             ViewUtils.disable(v)
             XStore.createOrderByVirtualCurrency(item.sku, virtualPrice.sku, object : XStoreCallback<CreateOrderByVirtualCurrencyResponse?>() {
