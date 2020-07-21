@@ -72,13 +72,39 @@ class AccessData(
         private var externalId: String? = null
         private var virtualItems: List<VirtualItem>? = null
 
+        /**
+         * Set Project ID from Publisher Account. Simplified integration must be enabled for this project.
+         */
         fun projectId(projectId: Int) = apply { this.projectId = projectId }
+
+        /**
+         * Set User ID
+         */
         fun userId(userId: String) = apply { this.userId = userId }
+
+        /**
+         * Set Sandbox mode
+         */
         fun isSandbox(isSandbox: Boolean) = apply { this.isSandbox = isSandbox }
+
+        /**
+         * Set Pay Station theme
+         */
         fun theme(theme: String) = apply { this.theme = theme }
+
+        /**
+         * Set transaction external ID. Used to query its status.
+         */
         fun externalId(externalId: String) = apply { this.externalId = externalId }
+
+        /**
+         * Set a list of Virtual Items to purchase
+         */
         fun virtualItems(virtualItems: List<VirtualItem>) = apply { this.virtualItems = virtualItems }
 
+        /**
+         * Build AccessData object
+         */
         fun build(): AccessData {
             val projectId = projectId?: throw IllegalArgumentException()
             val userId = userId?: throw IllegalArgumentException()
