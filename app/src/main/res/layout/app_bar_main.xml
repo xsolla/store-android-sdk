@@ -19,15 +19,22 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <LinearLayout
-                android:id="@+id/balanceContainer"
                 android:layout_width="wrap_content"
-                android:background="@drawable/balance_container_bg"
-                tools:layout_width="200dp"
-                android:gravity="center_vertical"
                 android:layout_height="@dimen/appbar_balance_container_height"
+                android:background="@drawable/balance_container_bg"
+                android:orientation="horizontal"
                 android:paddingLeft="@dimen/appbar_balance_container_padding"
-                android:paddingRight="@dimen/appbar_balance_container_padding"
-                android:orientation="horizontal">
+                android:paddingRight="@dimen/appbar_balance_container_padding">
+
+                <LinearLayout
+                    android:id="@+id/balanceContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+                    tools:layout_width="200dp">
+
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/chargeBalanceButton"

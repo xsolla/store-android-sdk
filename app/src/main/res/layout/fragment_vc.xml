@@ -10,7 +10,7 @@
         style="@style/Widget.Xsolla.Fragment.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/drawer_item_vi" />
+        android:text="@string/drawer_item_vc" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"

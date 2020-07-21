@@ -6,9 +6,9 @@
         <item name="fontFamily">@font/brutal_type</item>
         <item name="android:textSize">@dimen/catalog_fragment_title_text_size</item>
         <item name="textAllCaps">true</item>
-        <item name="background">@color/secondary_color_10</item>
+        <item name="android:background">@color/secondary_color_10</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_marginLeft">@dimen/catalog_fragment_title_left_margin</item>
+        <item name="android:paddingLeft">@dimen/catalog_fragment_title_left_margin</item>
     </style>
 
 </resources>

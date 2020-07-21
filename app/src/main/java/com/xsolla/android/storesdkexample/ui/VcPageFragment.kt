@@ -7,22 +7,26 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
+import com.google.android.material.snackbar.Snackbar
+import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.adapter.CatalogAdapter
+import com.xsolla.android.storesdkexample.adapter.VcAdapter
+import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.util.BaseParcelable
+import com.xsolla.android.storesdkexample.vm.VmBalance
 import com.xsolla.android.storesdkexample.vm.VmCart
 import kotlinx.android.synthetic.main.fragment_catalog.view.*
 
-class CatalogFragment : Fragment() {
+class VcPageFragment : Fragment(), PurchaseListener {
 
     private val vmCart: VmCart by activityViewModels()
+    private val vmBalance: VmBalance by activityViewModels()
 
     companion object {
         const val ARG_ITEMS = "items"
 
-        fun getInstance(items: ArrayList<VirtualItemsResponse.Item>): CatalogFragment {
-            val catalogFragment = CatalogFragment()
+        fun getInstance(items: ArrayList<VirtualCurrencyPackageResponse.Item>): VcPageFragment {
+            val catalogFragment = VcPageFragment()
             val bundle = Bundle()
             bundle.putParcelableArrayList(ARG_ITEMS, items)
             bundle.putParcelable(ARG_ITEMS, BaseParcelable(items))
@@ -36,11 +40,11 @@ class CatalogFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val items = requireArguments().getParcelable<BaseParcelable>(ARG_ITEMS)?.value as? List<VirtualItemsResponse.Item>
+        val items = requireArguments().getParcelable<BaseParcelable>(ARG_ITEMS)?.value as? List<VirtualCurrencyPackageResponse.Item>
         items?.let {
             with(view.catalogRecyclerView) {
                 layoutManager = LinearLayoutManager(view.context)
-                adapter = CatalogAdapter(it, vmCart)
+                adapter = VcAdapter(it, vmCart, vmBalance, this@VcPageFragment)
             }
         }
     }
@@ -48,6 +52,23 @@ class CatalogFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         vmCart.updateCart()
+    }
+
+    override fun onSuccess() {
+        showSnackBar("Success")
+    }
+
+    override fun onFailure(errorMessage: String) {
+        showSnackBar(errorMessage)
+    }
+
+    override fun showMessage(message: String) {
+        showSnackBar(message)
+    }
+
+    private fun showSnackBar(message: String) {
+        val rootView = requireActivity().findViewById<View>(android.R.id.content)
+        Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show()
     }
 
 }

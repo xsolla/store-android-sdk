@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/nav_vc"
-        android:name="com.xsolla.android.storesdkexample.fragments.VirtualCurrencyFragment"
+        android:name="com.xsolla.android.storesdkexample.ui.VcFragment"
         android:label=""
-        tools:layout="@layout/fragment_shop" />
+        tools:layout="@layout/fragment_vc" />
 
     <fragment
         android:id="@+id/nav_inventory"

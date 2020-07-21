@@ -20,8 +20,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
-import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse
+import com.xsolla.android.storesdkexample.vm.VmBalance
 import com.xsolla.android.storesdkexample.vm.VmCart
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.item_balance.view.*
@@ -30,6 +29,7 @@ import kotlinx.android.synthetic.main.layout_drawer.*
 class StoreActivity : AppCompatActivity() {
 
     private val vmCart: VmCart by viewModels()
+    private val vmBalance: VmBalance by viewModels()
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -37,7 +37,7 @@ class StoreActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_store)
 //        val token = XLogin.getToken()
-        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEubmlrb2xhZXZAeHNvbGxhLmNvbSIsImV4cCI6MTU5NTAwODIwMiwiZ3JvdXBzIjpbeyJpZCI6NjQ4MSwibmFtZSI6ImRlZmF1bHQiLCJpc19kZWZhdWx0Ijp0cnVlfV0sImlhdCI6MTU5NDkyMTgwMiwiaXNfbWFzdGVyIjp0cnVlLCJpc3MiOiJodHRwczovL2xvZ2luLnhzb2xsYS5jb20iLCJwcm9tb19lbWFpbF9hZ3JlZW1lbnQiOnRydWUsInB1Ymxpc2hlcl9pZCI6MTM2NTkzLCJzdWIiOiI4ZTFhN2E5Yi1hY2U2LTQyMzMtOTk4Mi01MTU5ZTVkNzM3NTIiLCJ0eXBlIjoieHNvbGxhX2xvZ2luIiwidXNlcm5hbWUiOiJhIiwieHNvbGxhX2xvZ2luX2FjY2Vzc19rZXkiOiIzUEFpdHNsTjlqTEc1NG1TN2VoUlpFenQyblk5MEZmaDBVOTdCSE5rUG00IiwieHNvbGxhX2xvZ2luX3Byb2plY3RfaWQiOiIwMjYyMDFlMy03ZTQwLTExZWEtYTg1Yi00MjAxMGFhODAwMDQifQ.LL7kPfogFk13Zp6UwSyigxu4Un53C3dlRYrvG8hpEz4"
+        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imxlb25pZC5yYXRhbm9mZkBnbWFpbC5jb20iLCJleHAiOjE1OTUzMzEwMTYsImdyb3VwcyI6W3siaWQiOjY0ODEsIm5hbWUiOiJkZWZhdWx0IiwiaXNfZGVmYXVsdCI6dHJ1ZX1dLCJpYXQiOjE1OTUyNDQ2MTYsImlzX21hc3RlciI6dHJ1ZSwiaXNzIjoiaHR0cHM6Ly9sb2dpbi54c29sbGEuY29tIiwicHJvbW9fZW1haWxfYWdyZWVtZW50Ijp0cnVlLCJwdWJsaXNoZXJfaWQiOjEzNjU5Mywic3ViIjoiMGVjYTNkMzctZmM3Ni00MWFkLWJiYTItYzFiODE4ZTQ4YWFhIiwidHlwZSI6Inhzb2xsYV9sb2dpbiIsInVzZXJuYW1lIjoicmF0YW5vZmYiLCJ4c29sbGFfbG9naW5fYWNjZXNzX2tleSI6InBSazU5UV9HM3RuMml0Y0VxSFhTcklIX2dxMDNxbVNzV2t0d1Nub3g4S2ciLCJ4c29sbGFfbG9naW5fcHJvamVjdF9pZCI6IjAyNjIwMWUzLTdlNDAtMTFlYS1hODViLTQyMDEwYWE4MDAwNCJ9.fdE2DNwrhlH2vg11qI7dyIPOxQ4aKTEyJSTKTZ8oyIc"
         XStore.init(BuildConfig.PROJECT_ID, token)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
@@ -46,34 +46,26 @@ class StoreActivity : AppCompatActivity() {
 
         initNavController()
         initDrawer()
-        getBalance() // TODO update in onResume
+        initVirtualBalance()
     }
 
     override fun onResume() {
         super.onResume()
         vmCart.updateCart()
+        vmBalance.updateVirtualBalance()
     }
 
-    private fun getBalance() {
-        XStore.getVirtualBalance(object : XStoreCallback<VirtualBalanceResponse>() {
-            override fun onSuccess(response: VirtualBalanceResponse) {
-                updateBalanceContainer(response.items)
-            }
-
-            override fun onFailure(errorMessage: String) {}
-        })
-    }
-
-    private fun updateBalanceContainer(items: List<VirtualBalanceResponse.Item>) {
+    private fun initVirtualBalance() {
         val balanceContainer: LinearLayout = findViewById(R.id.balanceContainer)
-
-        items.forEach { item ->
-            val balanceView = LayoutInflater.from(this).inflate(R.layout.item_balance, null)
-            Glide.with(this).load(item.imageUrl).into(balanceView.balanceIcon)
-            balanceView.balanceAmount.text = item.amount.toString()
-            balanceContainer.addView(balanceView, 0)
-        }
-
+        vmBalance.virtualBalance.observe(this, Observer { virtualBalanceList ->
+            balanceContainer.removeAllViews()
+                virtualBalanceList.forEach { item ->
+                    val balanceView = LayoutInflater.from(this).inflate(R.layout.item_balance, null)
+                    Glide.with(this).load(item.imageUrl).into(balanceView.balanceIcon)
+                    balanceView.balanceAmount.text = item.amount.toString()
+                    balanceContainer.addView(balanceView, 0)
+                }
+        })
         chargeBalanceButton.setOnClickListener { findNavController(R.id.nav_host_fragment).navigate(R.id.nav_vc) }
     }
 
@@ -82,7 +74,7 @@ class StoreActivity : AppCompatActivity() {
         val cartView = menu.findItem(R.id.action_cart).actionView
         vmCart.cartContent.observe(this, Observer {
             val cartCounter = cartView.findViewById<TextView>(R.id.cart_badge)
-            val count = it.size
+            val count = it.sumBy { item -> item.quantity }
             cartCounter.text = count.toString()
             if (count == 0) {
                 cartCounter.visibility = View.GONE
