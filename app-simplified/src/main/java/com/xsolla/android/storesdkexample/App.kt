@@ -6,10 +6,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.util.Log
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.preference.PreferenceManager
 import com.xsolla.android.payments.XPayments
 import com.xsolla.android.storesdkexample.data.store.Store
 
 class App : Application() {
+
     override fun onCreate() {
         super.onCreate()
         registerXsollaBroadcastReceiver()
@@ -25,6 +28,16 @@ class App : Application() {
                 if (checkTransactionResult?.status == XPayments.CheckTransactionResultStatus.SUCCESS) {
                     Store.addToInventory(checkTransactionResult.paymentStatus!!)
                 } else {
+                    val prefs = PreferenceManager.getDefaultSharedPreferences(this@App)
+                    prefs
+                            .edit()
+                            .putBoolean(MainActivity.KEY_HAS_ERROR, true)
+                            .apply()
+                    val broadcastIntent = Intent().apply {
+                        action = MainActivity.ACTION_PAYMENT_ERROR
+                    }
+                    val bm = LocalBroadcastManager.getInstance(this@App)
+                    bm.sendBroadcast(broadcastIntent)
                     Log.e("XsollaPayments", checkTransactionResult?.errorMessage ?: "Error")
                 }
             }

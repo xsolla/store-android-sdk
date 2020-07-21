@@ -3,6 +3,7 @@ package com.xsolla.android.payments.status
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.xsolla.android.payments.BuildConfig
@@ -85,6 +86,7 @@ class StatusWorker(val context: Context, params: WorkerParameters) : CoroutineWo
                 }
             } catch (e1: HttpException) {
                 if (e1.code() == 404) {
+                    Log.e("XsollaPayments", "HTTP 404 - Transaction not found")
                     if (isRetryAllowed(startTime)) {
                         Result.retry()
                     } else {
@@ -92,6 +94,9 @@ class StatusWorker(val context: Context, params: WorkerParameters) : CoroutineWo
                         Result.failure()
                     }
                 } else {
+                    if (e1.code() == 403) {
+                        Log.e("XsollaPayments", "HTTP 403 - Method is available only for projects with simplified integration")
+                    }
                     broadcastError(context, "HTTP ${e1.code()}")
                     Result.failure()
                 }
