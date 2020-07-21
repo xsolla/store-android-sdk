@@ -1,5 +1,7 @@
 package com.xsolla.android.storesdkexample
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -19,6 +21,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
+import com.xsolla.android.login.XLogin
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.vm.VmBalance
 import com.xsolla.android.storesdkexample.vm.VmCart
@@ -28,6 +31,10 @@ import kotlinx.android.synthetic.main.layout_drawer.*
 
 class StoreActivity : AppCompatActivity() {
 
+    companion object {
+        const val RC_LOGIN = 1
+    }
+
     private val vmCart: VmCart by viewModels()
     private val vmBalance: VmBalance by viewModels()
 
@@ -36,9 +43,8 @@ class StoreActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_store)
-//        val token = XLogin.getToken()
-        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imxlb25pZC5yYXRhbm9mZkBnbWFpbC5jb20iLCJleHAiOjE1OTUzMzEwMTYsImdyb3VwcyI6W3siaWQiOjY0ODEsIm5hbWUiOiJkZWZhdWx0IiwiaXNfZGVmYXVsdCI6dHJ1ZX1dLCJpYXQiOjE1OTUyNDQ2MTYsImlzX21hc3RlciI6dHJ1ZSwiaXNzIjoiaHR0cHM6Ly9sb2dpbi54c29sbGEuY29tIiwicHJvbW9fZW1haWxfYWdyZWVtZW50Ijp0cnVlLCJwdWJsaXNoZXJfaWQiOjEzNjU5Mywic3ViIjoiMGVjYTNkMzctZmM3Ni00MWFkLWJiYTItYzFiODE4ZTQ4YWFhIiwidHlwZSI6Inhzb2xsYV9sb2dpbiIsInVzZXJuYW1lIjoicmF0YW5vZmYiLCJ4c29sbGFfbG9naW5fYWNjZXNzX2tleSI6InBSazU5UV9HM3RuMml0Y0VxSFhTcklIX2dxMDNxbVNzV2t0d1Nub3g4S2ciLCJ4c29sbGFfbG9naW5fcHJvamVjdF9pZCI6IjAyNjIwMWUzLTdlNDAtMTFlYS1hODViLTQyMDEwYWE4MDAwNCJ9.fdE2DNwrhlH2vg11qI7dyIPOxQ4aKTEyJSTKTZ8oyIc"
-        XStore.init(BuildConfig.PROJECT_ID, token)
+
+        XStore.init(BuildConfig.PROJECT_ID, XLogin.getToken() ?: "")
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -51,8 +57,21 @@ class StoreActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        if (XLogin.isTokenExpired(5)) {
+            startLogin()
+        } else {
+            XStore.init(BuildConfig.PROJECT_ID, XLogin.getToken())
+        }
         vmCart.updateCart()
         vmBalance.updateVirtualBalance()
+        setDrawerData()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_LOGIN && resultCode != Activity.RESULT_OK) {
+            finish()
+        }
     }
 
     private fun initVirtualBalance() {
@@ -122,8 +141,10 @@ class StoreActivity : AppCompatActivity() {
             navController.navigate(R.id.nav_cart)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-        textEmail.text = "a.nikonova@xsolla.com" // TODO take from XLogin
-        textUsername.text = "usikpusik" // TODO take from XLogin
+        textLogout.setOnClickListener {
+            XLogin.logout()
+            startLogin()
+        }
         vmCart.cartContent.observe(this, Observer {
             val count = it.sumBy { item -> item.quantity }
             textCartCounter.text = count.toString()
@@ -136,4 +157,15 @@ class StoreActivity : AppCompatActivity() {
             }
         })
     }
+
+    private fun setDrawerData() {
+        textEmail.text = XLogin.getJwt()?.getClaim("email")?.asString()
+        textUsername.text = XLogin.getJwt()?.getClaim("username")?.asString()
+    }
+
+    private fun startLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivityForResult(intent, RC_LOGIN)
+    }
+
 }

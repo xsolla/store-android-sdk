@@ -1,5 +1,6 @@
 package com.xsolla.android.storesdkexample.fragments
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -40,8 +41,8 @@ class LoginFragment : BaseFragment() {
 
             XLogin.login(username, password, object : XLoginCallback<AuthResponse?>() {
                 override fun onSuccess(response: AuthResponse?) {
-                    // openFragment(MainFragment())
-                    showSnack("Login success")
+                    activity?.setResult(Activity.RESULT_OK)
+                    activity?.finish()
                     ViewUtils.enable(v)
                 }
 
@@ -142,8 +143,8 @@ class LoginFragment : BaseFragment() {
 
     private val finishSocialCallback: FinishSocialCallback = object : FinishSocialCallback {
         override fun onAuthSuccess() {
-            // openFragment(MainFragment())
-            showSnack("Social Auth success")
+            activity?.setResult(Activity.RESULT_OK)
+            activity?.finish()
         }
 
         override fun onAuthCancelled() {
