@@ -2,22 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Xsolla.CatalogItem"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:layout_marginTop="12dp"
-    android:layout_marginBottom="12dp"
-    android:orientation="horizontal"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+    android:layout_height="wrap_content">
 
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/catalog_item_icon_right_margin">
 
         <ImageView
             android:id="@+id/itemIcon"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="@dimen/catalog_item_icon_width"
+            android:layout_height="@dimen/catalog_item_icon_height"
             tools:srcCompat="@tools:sample/avatars[0]" />
 
         <ImageView
@@ -33,7 +30,6 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="12dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -63,7 +59,7 @@
                 style="@style/Widget.Xsolla.CatalogItem.OldPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
+                android:layout_marginLeft="@dimen/catalog_item_virtual_old_price_left_margin"
                 android:visibility="invisible"
                 tools:text="$ 50" />
 
@@ -71,11 +67,9 @@
 
         <TextView
             android:id="@+id/itemAdditionalInfo"
+            style="@style/Widget.Xsolla.CatalogItem.AdditionalInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_medium"
-            android:textColor="@color/secondary_color"
-            android:textSize="15sp"
             tools:text="10 days" />
 
     </LinearLayout>

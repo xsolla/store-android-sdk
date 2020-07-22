@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
@@ -43,7 +45,11 @@ class ViPageFragment : Fragment(), PurchaseListener {
         val items = requireArguments().getParcelable<BaseParcelable>(ARG_ITEMS)?.value as? List<VirtualItemsResponse.Item>
         items?.let {
             with(view.catalogRecyclerView) {
-                layoutManager = LinearLayoutManager(view.context)
+                val linearLayoutManager = LinearLayoutManager(context)
+                addItemDecoration(DividerItemDecoration(context, linearLayoutManager.orientation).apply {
+                    ContextCompat.getDrawable(context, R.drawable.item_divider)?.let { setDrawable(it) }
+                })
+                layoutManager = linearLayoutManager
                 adapter = ViAdapter(it, vmCart, vmBalance, this@ViPageFragment)
             }
         }

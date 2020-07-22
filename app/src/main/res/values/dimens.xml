@@ -54,9 +54,23 @@
     <dimen name="catalog_fragment_title_text_size">16sp</dimen>
     <dimen name="catalog_fragment_title_left_margin">28dp</dimen>
 
-    <dimen name="catalog_item_name_text_size">15sp</dimen>
-    <dimen name="catalog_item_price_text_size">17sp</dimen>
-    <dimen name="catalog_item_old_price_text_size">15sp</dimen>
+    <dimen name="catalog_item_left_padding">20dp</dimen>
+    <dimen name="catalog_item_right_padding">20dp</dimen>
+    <dimen name="catalog_item_top_padding">12dp</dimen>
+    <dimen name="catalog_item_bottom_padding">12dp</dimen>
+    <dimen name="catalog_item_icon_width">94dp</dimen>
+    <dimen name="catalog_item_icon_height">94dp</dimen>
+    <dimen name="catalog_item_icon_right_margin">12dp</dimen>
+    <dimen name="catalog_item_virtual_price_icon_width">20dp</dimen>
+    <dimen name="catalog_item_virtual_price_icon_height">20dp</dimen>
+    <dimen name="catalog_item_virtual_price_right_margin">4dp</dimen>
+    <dimen name="catalog_item_virtual_old_price_left_margin">4dp</dimen>
+    <dimen name="catalog_item_quantity_text_size">17sp</dimen>
+
+    <dimen name="catalog_item_name_text_size">16sp</dimen>
+    <dimen name="catalog_item_price_text_size">18sp</dimen>
+    <dimen name="catalog_item_old_price_text_size">16sp</dimen>
+    <dimen name="catalog_item_additional_info_text_size">16sp</dimen>
     <dimen name="catalog_item_add_to_cart_button_size">40dp</dimen>
     <dimen name="catalog_item_add_to_cart_button_corner_radius">4dp</dimen>
     <dimen name="catalog_item_add_to_cart_button_stroke_width">1dp</dimen>
