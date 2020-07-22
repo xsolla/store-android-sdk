@@ -25,6 +25,7 @@
         <item name="android:textSize">15sp</item>
         <item name="android:text">Consume</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">-0.03</item>
     </style>
 
 </resources>
