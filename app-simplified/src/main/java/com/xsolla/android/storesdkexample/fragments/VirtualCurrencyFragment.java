@@ -1,8 +1,6 @@
 package com.xsolla.android.storesdkexample.fragments;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -83,11 +81,6 @@ public class VirtualCurrencyFragment extends CatalogFragment {
 
         if (requestCode == RC_PAYSTATION) {
             XPayments.Result result = XPayments.Result.fromResultIntent(data);
-            if (resultCode == Activity.RESULT_OK) {
-                Toast.makeText(getContext(), "Payment OK\n" + result, Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getContext(), "Payment Fail\n" + result, Toast.LENGTH_LONG).show();
-            }
         }
     }
 }

@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkPaymentError() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (prefs.getBoolean(KEY_HAS_ERROR, false)) {
-            showSnack("Some transactions you've made recently were not finished. Please, contact the support team");
+            showSnack("Some transactions you've started recently were not finished. If you have successfully completed the payment but the item was not added to the inventory, contact the support team.");
         }
         prefs
                 .edit()
