@@ -51,6 +51,8 @@
     <style name="Widget.Xsolla.Drawer.Text.Item" parent="Widget.Xsolla.Drawer.Text.Main">
         <item name="android:layout_marginTop">@dimen/drawer_margin_between_vertical</item>
         <item name="android:textColor">@color/white_color</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
     </style>
 
     <style name="Widget.Xsolla.Drawer.Text.Store" parent="Widget.Xsolla.Drawer.Text.Main">
@@ -62,11 +64,15 @@
         <item name="android:layout_marginStart">@dimen/drawer_margin_cart_between_horizontal</item>
         <item name="android:layout_marginEnd">@dimen/drawer_margin_horizontal</item>
         <item name="android:textColor">@color/white_color</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
     </style>
 
     <style name="Widget.Xsolla.Drawer.Text.Logout" parent="Widget.Xsolla.Drawer.Text.Main">
         <item name="android:layout_marginTop">@dimen/drawer_margin_logout_top</item>
         <item name="android:textColor">@color/white_color</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
     </style>
 
     <style name="Widget.Xsolla.Drawer.Text.CartCounter" parent="Widget.Xsolla.Drawer.Text">

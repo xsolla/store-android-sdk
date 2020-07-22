@@ -28,4 +28,12 @@
         android:name="com.xsolla.android.storesdkexample.ui.CartFragment"
         android:label=""
         tools:layout="@layout/fragment_cart" />
+
+    <fragment
+        android:id="@+id/fragment_consume"
+        android:name="com.xsolla.android.storesdkexample.ui.ConsumeFragment"
+        android:label=""
+        tools:layout="@layout/fragment_consume">
+    </fragment>
+
 </navigation>

@@ -12,17 +12,33 @@
         <item name="android:letterSpacing">-0.03</item>
         <item name="android:textSize">@dimen/action_button_text_size</item>
     </style>
+    
+    <style name="Widget.Xsolla.ActionButton.Small" parent="Widget.Xsolla.ActionButton">
+        <item name="android:height">@dimen/small_action_button_height</item>
+        <item name="android:textColor">@color/main_bg_color</item>
+    </style>
+
+    <style name="Widget.Xsolla.ActionButton.Small.Secondary" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:height">@dimen/secondary_action_button_height</item>
+        <item name="strokeColor">@color/magenta_color</item>
+        <item name="strokeWidth">@dimen/secondary_action_button_stroke_width</item>
+        <item name="cornerRadius">@dimen/secondary_action_button_corner_radius</item>
+        <item name="android:textColor">@color/white_color</item>
+        <item name="fontFamily">@font/brutal_type_bold</item>
+        <item name="android:textSize">@dimen/secondary_action_button_text_size</item>
+        <item name="android:letterSpacing">-0.03</item>
+    </style>
 
     <style name="Widget.Xsolla.ConsumeButton" parent="">
-        <item name="android:height">40dp</item>
-        <item name="android:width">96dp</item>
+        <item name="android:height">@dimen/inventory_fragment_consume_button_height</item>
+        <item name="android:width">@dimen/inventory_fragment_consume_button_width</item>
         <item name="android:paddingLeft">0dp</item>
         <item name="android:paddingRight">0dp</item>
-        <item name="cornerRadius">4dp</item>
+        <item name="cornerRadius">@dimen/inventory_fragment_consume_button_corner_radius</item>
         <item name="fontFamily">@font/brutal_type</item>
         <item name="backgroundTint">@color/action_button_color</item>
         <item name="android:textColor">@color/main_bg_color</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">@dimen/inventory_fragment_consume_button_text_size</item>
         <item name="android:text">Consume</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:letterSpacing">-0.03</item>

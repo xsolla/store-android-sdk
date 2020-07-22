@@ -27,6 +27,13 @@
     <dimen name="action_button_bottom_margin">3dp</dimen>
     <dimen name="action_button_horizontal_margin">6dp</dimen>
 
+    <dimen name="small_action_button_height">52dp</dimen>
+
+    <dimen name="secondary_action_button_height">52dp</dimen>
+    <dimen name="secondary_action_button_stroke_width">1dp</dimen>
+    <dimen name="secondary_action_button_corner_radius">4dp</dimen>
+    <dimen name="secondary_action_button_text_size">15sp</dimen>
+
     <dimen name="social_button_big_height">72dp</dimen>
     <dimen name="social_button_big_text_size">15sp</dimen>
     <dimen name="social_button_big_top_margin">9dp</dimen>
@@ -74,6 +81,27 @@
     <dimen name="catalog_item_add_to_cart_button_size">40dp</dimen>
     <dimen name="catalog_item_add_to_cart_button_corner_radius">4dp</dimen>
     <dimen name="catalog_item_add_to_cart_button_stroke_width">1dp</dimen>
+
+    <dimen name="inventory_fragment_consume_button_height">40dp</dimen>
+    <dimen name="inventory_fragment_consume_button_width">96dp</dimen>
+    <dimen name="inventory_fragment_consume_button_corner_radius">4dp</dimen>
+    <dimen name="inventory_fragment_consume_button_text_size">15sp</dimen>
+
+    <dimen name="fragment_consume_left_padding">20dp</dimen>
+    <dimen name="fragment_consume_right_padding">20dp</dimen>
+    <dimen name="fragment_consume_icon_width">150dp</dimen>
+    <dimen name="fragment_consume_item_icon_height">150dp</dimen>
+    <dimen name="fragment_consume_item_icon_top_margin">20dp</dimen>
+    <dimen name="fragment_consume_item_name_top_margin">12dp</dimen>
+    <dimen name="fragment_consume_item_name_bottom_margin">8dp</dimen>
+    <dimen name="fragment_consume_item_name_text_size">15sp</dimen>
+    <dimen name="fragment_consume_quantity_input_width">160dp</dimen>
+    <dimen name="fragment_consume_quantity_input_height">40dp</dimen>
+    <dimen name="fragment_consume_quantity_input_left_padding">8dp</dimen>
+    <dimen name="fragment_consume_quantity_input_text_size">15sp</dimen>
+    <dimen name="fragment_consume_quantity_label_text_size">17sp</dimen>
+    <dimen name="fragment_consume_quantity_label_left_margin">8dp</dimen>
+    <dimen name="fragment_consume_quantity_store_button_bottom_margin">24dp</dimen>
 
     <dimen name="drawer_width">284dp</dimen>
     <dimen name="drawer_margin_horizontal">28dp</dimen>

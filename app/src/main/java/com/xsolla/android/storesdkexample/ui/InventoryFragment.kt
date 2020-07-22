@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -63,6 +65,11 @@ class InventoryFragment : Fragment(), ConsumeListener {
                 showSnack(errorMessage)
             }
         })
+    }
+
+    override fun onConsume(item: InventoryResponse.Item) {
+        val bundle = bundleOf(ConsumeFragment.ITEM_ARG to item)
+        findNavController().navigate(R.id.fragment_consume, bundle)
     }
 
     override fun onSuccess() {

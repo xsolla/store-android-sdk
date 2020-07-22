@@ -82,6 +82,11 @@ public class InventoryFragment extends BaseFragment implements ConsumeListener {
     }
 
     @Override
+    public void onConsume(InventoryResponse.Item item) {
+
+    }
+
+    @Override
     public void onSuccess() {
         showSnack("Item consumed");
     }

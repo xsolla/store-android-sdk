@@ -5,13 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.inventory.InventoryResponse
 import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.ConsumeListener
-import com.xsolla.android.storesdkexample.util.ViewUtils
 import kotlinx.android.synthetic.main.item_inventory.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -55,36 +52,7 @@ class InventoryAdapter(
             }
 
             itemView.consumeButton.visibility = if (item.remainingUses == 0) View.INVISIBLE else View.VISIBLE
-            itemView.consumeButton.setOnClickListener { v ->
-                ViewUtils.disable(v)
-
-                XStore.consumeItem(item.sku, 1, null, object : XStoreCallback<Void>() {
-
-                    override fun onSuccess(response: Void?) {
-                        XStore.getInventory(object : XStoreCallback<InventoryResponse>() {
-                            override fun onSuccess(response: InventoryResponse) {
-                                items = response.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
-                                notifyDataSetChanged()
-                                ViewUtils.enable(v)
-                                consumeListener.onSuccess()
-                            }
-
-                            override fun onFailure(errorMessage: String?) {
-                                consumeListener.onFailure(errorMessage)
-                                ViewUtils.enable(v)
-                            }
-
-                        })
-                    }
-
-                    override fun onFailure(errorMessage: String?) {
-                        consumeListener.onFailure(errorMessage)
-                        ViewUtils.enable(v)
-                    }
-
-                })
-            }
-
+            itemView.consumeButton.setOnClickListener { consumeListener.onConsume(item) }
         }
 
         private fun getExpirationText(item: InventoryResponse.Item): String? {

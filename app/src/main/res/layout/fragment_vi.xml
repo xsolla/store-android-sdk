@@ -19,10 +19,12 @@
         android:layout_height="wrap_content"
         android:background="@color/secondary_color_10"
         android:paddingLeft="20dp"
-        android:layout_marginBottom="10dp"
-        app:tabMode="scrollable">
+        app:tabMode="scrollable"/>
 
-    </com.google.android.material.tabs.TabLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:background="@color/secondary_color_10" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
