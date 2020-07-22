@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -120,6 +121,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void showSnack(String message) {
         View rootView = findViewById(android.R.id.content);
-        Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show();
+
+        Snackbar snackbar = Snackbar.make(rootView, message, Snackbar.LENGTH_LONG);
+        View snackbarView = snackbar.getView();
+        TextView snackTextView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+        snackTextView.setMaxLines(5);
+        snackbar.show();
     }
 }
