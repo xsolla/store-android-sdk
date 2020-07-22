@@ -1,5 +1,9 @@
 package com.xsolla.android.storesdkexample.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -8,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.bumptech.glide.Glide;
 import com.xsolla.android.simplifiedexample.R;
@@ -18,6 +23,13 @@ import java.util.List;
 
 public class MainFragment extends BaseFragment {
 
+    private BroadcastReceiver vcUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            getBalance();
+        }
+    };
+
     @Override
     public int getLayout() {
         return R.layout.fragment_main;
@@ -26,13 +38,25 @@ public class MainFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Store.init(BuildConfig.PLAYFAB_ID, Auth.getToken());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getBalance();
+        LocalBroadcastManager.getInstance(requireContext())
+                .registerReceiver(vcUpdateReceiver, new IntentFilter(Store.ACTION_VC_UPDATE));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(requireContext())
+                .unregisterReceiver(vcUpdateReceiver);
     }
 
     @Override
     public void initUI() {
-        getBalance();
-
         rootView.findViewById(R.id.virtual_items_button).setOnClickListener(v -> openFragment(new VirtualItemsFragment()));
         rootView.findViewById(R.id.virtual_currency_button).setOnClickListener(v -> openFragment(new VirtualCurrencyFragment()));
         rootView.findViewById(R.id.inventory_button).setOnClickListener(v -> openFragment(new InventoryFragment()));
@@ -54,6 +78,7 @@ public class MainFragment extends BaseFragment {
 
     private void updateBalanceContainer(List<Store.VirtualBalance> items) {
         LinearLayout balanceContainer = rootView.findViewById(R.id.balance_container);
+        balanceContainer.removeAllViews();
 
         for (Store.VirtualBalance item : items) {
             ImageView balanceIcon = new ImageView(getContext());

@@ -1,6 +1,12 @@
 package com.xsolla.android.storesdkexample.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+
 import androidx.appcompat.widget.Toolbar;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +22,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class InventoryFragment extends BaseFragment implements ConsumeListener {
+
+    private BroadcastReceiver viUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            getItems();
+        }
+    };
 
     private InventoryAdapter inventoryAdapter;
     private RecyclerView recyclerView;
@@ -36,9 +49,22 @@ public class InventoryFragment extends BaseFragment implements ConsumeListener {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         setupToolbar();
-        getItems();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getItems();
+        LocalBroadcastManager.getInstance(requireContext())
+                .registerReceiver(viUpdateReceiver, new IntentFilter(Store.ACTION_VI_UPDATE));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(requireContext())
+                .unregisterReceiver(viUpdateReceiver);
+    }
 
     private void getItems() {
         Store.getInventory(new Store.InventoryCallback() {

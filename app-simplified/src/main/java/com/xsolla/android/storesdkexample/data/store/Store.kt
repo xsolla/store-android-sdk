@@ -2,6 +2,7 @@ package com.xsolla.android.storesdkexample.data.store
 
 import android.content.Context
 import android.content.Intent
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.xsolla.android.payments.XPayments
 import com.xsolla.android.payments.data.AccessData
 import com.xsolla.android.payments.status.PaymentStatus
@@ -18,6 +19,9 @@ import java.util.*
 import kotlin.collections.HashMap
 
 object Store {
+
+    const val ACTION_VI_UPDATE = "ACTION_VI_UPDATE"
+    const val ACTION_VC_UPDATE = "ACTION_VC_UPDATE"
 
     data class Price(
             val currencyId: String,
@@ -202,7 +206,7 @@ object Store {
 
 
     @JvmStatic
-    fun addToInventory(paymentStatus: PaymentStatus) {
+    fun addToInventory(context: Context, paymentStatus: PaymentStatus) {
         val sku = paymentStatus.purchase.virtual_items!![0].sku
         if (isItemSku(sku)) {
             GlobalScope.launch {
@@ -217,6 +221,10 @@ object Store {
                         val newItem = VirtualItem(item.id, item.sku, amount)
                         viDao.updateItem(newItem)
                     }
+                    LocalBroadcastManager.getInstance(context)
+                            .sendBroadcast(Intent().apply {
+                                action = ACTION_VI_UPDATE
+                            })
                 }
             }
         }
@@ -241,6 +249,10 @@ object Store {
                         val newItem = VirtualCurrency(item.id, item.currency, amount.toPlainString())
                         vcDao.updateCurrency(newItem)
                     }
+                    LocalBroadcastManager.getInstance(context)
+                            .sendBroadcast(Intent().apply {
+                                action = ACTION_VC_UPDATE
+                            })
                 }
             }
         }

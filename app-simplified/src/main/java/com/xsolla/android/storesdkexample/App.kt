@@ -26,7 +26,7 @@ class App : Application() {
             override fun onReceive(context: Context, intent: Intent) {
                 val checkTransactionResult = intent.getParcelableExtra<XPayments.CheckTransactionResult>(XPayments.EXTRA_STATUS)
                 if (checkTransactionResult?.status == XPayments.CheckTransactionResultStatus.SUCCESS) {
-                    Store.addToInventory(checkTransactionResult.paymentStatus!!)
+                    Store.addToInventory(this@App, checkTransactionResult.paymentStatus!!)
                 } else {
                     val prefs = PreferenceManager.getDefaultSharedPreferences(this@App)
                     prefs

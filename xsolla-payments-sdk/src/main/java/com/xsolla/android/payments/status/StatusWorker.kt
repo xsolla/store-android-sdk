@@ -93,10 +93,10 @@ class StatusWorker(val context: Context, params: WorkerParameters) : CoroutineWo
                         broadcastError(context, "Timeout")
                         Result.failure()
                     }
+                } else if (e1.code() == 403) {
+                    Log.e("XsollaPayments", "HTTP 403 - Method is available only for projects with simplified integration")
+                    Result.failure()
                 } else {
-                    if (e1.code() == 403) {
-                        Log.e("XsollaPayments", "HTTP 403 - Method is available only for projects with simplified integration")
-                    }
                     broadcastError(context, "HTTP ${e1.code()}")
                     Result.failure()
                 }
