@@ -42,9 +42,9 @@ class CartFragment : Fragment() {
             cartAdapter.items.clear()
             cartAdapter.items.addAll(it)
             cartAdapter.notifyDataSetChanged()
-            buttonBuy.isEnabled = it.isNotEmpty()
+            checkoutButton.isEnabled = it.isNotEmpty()
         })
-        buttonBuy.setOnClickListener {
+        checkoutButton.setOnClickListener {
             vmCart.createOrder()
         }
         vmCart.paymentToken.observe(viewLifecycleOwner, Observer {

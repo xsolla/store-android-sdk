@@ -4,26 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/secondary_color_10"
+    android:background="@color/main_bg_color"
     tools:context=".ui.CartFragment">
 
     <TextView
         android:id="@+id/textFragmentTitle"
         style="@style/Widget.Xsolla.Fragment.Title"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="@string/drawer_item_cart"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonBuy"
-        style="@style/Widget.Xsolla.ActionButton"
+        android:id="@+id/checkoutButton"
+        style="@style/Widget.Xsolla.ActionButton.Small"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/action_button_horizontal_margin"
-        android:layout_marginStart="@dimen/action_button_horizontal_margin"
-        android:text="@string/cart_button_buy"
+        android:layout_marginEnd="@dimen/cart_fragment_action_button_left_margin"
+        android:layout_marginStart="@dimen/cart_fragment_action_button_right_margin"
+        android:text="@string/cart_fragment_checkout_button"
+        app:layout_constraintBottom_toTopOf="@id/continueButton"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/continueButton"
+        style="@style/Widget.Xsolla.ActionButton.Small.Secondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/cart_fragment_action_button_left_margin"
+        android:layout_marginStart="@dimen/cart_fragment_action_button_right_margin"
+        android:text="@string/cart_fragment_continue_button"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -31,9 +43,8 @@
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/black_color"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@id/buttonBuy"
+        app:layout_constraintBottom_toTopOf="@id/checkoutButton"
         app:layout_constraintTop_toBottomOf="@id/textFragmentTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
