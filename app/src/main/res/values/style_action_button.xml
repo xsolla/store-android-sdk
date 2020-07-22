@@ -13,4 +13,18 @@
         <item name="android:textSize">@dimen/action_button_text_size</item>
     </style>
 
+    <style name="Widget.Xsolla.ConsumeButton" parent="">
+        <item name="android:height">40dp</item>
+        <item name="android:width">96dp</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+        <item name="cornerRadius">4dp</item>
+        <item name="fontFamily">@font/brutal_type</item>
+        <item name="backgroundTint">@color/action_button_color</item>
+        <item name="android:textColor">@color/main_bg_color</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:text">Consume</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
 </resources>
