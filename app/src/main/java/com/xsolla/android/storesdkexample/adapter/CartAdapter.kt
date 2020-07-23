@@ -107,10 +107,10 @@ class CartAdapter(
                 itemView.itemButtonMinus.setImageResource(R.drawable.ic_cart_delete)
             }
             itemView.itemButtonMinus.setOnClickListener {
-                vmCart.changeItemCount(item, -1) { result -> cartChangeListener.onChange(result)}
+                vmCart.changeItemCount(item, -1) { result -> cartChangeListener.onChange(result) }
             }
             itemView.itemButtonPlus.setOnClickListener {
-                vmCart.changeItemCount(item, 1) { result -> cartChangeListener.onChange(result)}
+                vmCart.changeItemCount(item, 1) { result -> cartChangeListener.onChange(result) }
             }
         }
 

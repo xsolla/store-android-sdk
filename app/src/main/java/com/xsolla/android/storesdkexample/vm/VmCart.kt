@@ -6,6 +6,7 @@ import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.request.payment.PaymentOptions
 import com.xsolla.android.store.entity.response.cart.CartResponse
+import com.xsolla.android.store.entity.response.common.Price
 import com.xsolla.android.store.entity.response.order.OrderResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse
 import com.xsolla.android.storesdkexample.BuildConfig
@@ -14,6 +15,7 @@ import com.xsolla.android.storesdkexample.util.SingleLiveEvent
 class VmCart : ViewModel() {
 
     val cartContent = MutableLiveData<List<CartResponse.Item>>(listOf())
+    val cartPrice = MutableLiveData<Price>()
 
     val paymentToken = SingleLiveEvent<String>()
     val orderId = SingleLiveEvent<Int>()
@@ -22,6 +24,7 @@ class VmCart : ViewModel() {
         XStore.getCurrentCart(object : XStoreCallback<CartResponse>() {
             override fun onSuccess(response: CartResponse) {
                 cartContent.value = response.items
+                cartPrice.value = response.price
             }
 
             override fun onFailure(errorMessage: String) {

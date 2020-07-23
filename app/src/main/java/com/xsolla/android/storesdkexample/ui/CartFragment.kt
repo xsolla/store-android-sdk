@@ -2,14 +2,17 @@ package com.xsolla.android.storesdkexample.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.payments.XPayments.Companion.createIntentBuilder
@@ -19,8 +22,10 @@ import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.CartAdapter
 import com.xsolla.android.storesdkexample.listener.CartChangeListener
+import com.xsolla.android.storesdkexample.util.AmountUtils
 import com.xsolla.android.storesdkexample.vm.VmCart
 import kotlinx.android.synthetic.main.fragment_cart.*
+import java.math.BigDecimal
 
 class CartFragment : Fragment(), CartChangeListener {
 
@@ -38,15 +43,30 @@ class CartFragment : Fragment(), CartChangeListener {
         val cartAdapter = CartAdapter(mutableListOf(), vmCart, this)
         with(recycler) {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
+            val linearLayoutManager = LinearLayoutManager(context)
+            addItemDecoration(DividerItemDecoration(context, linearLayoutManager.orientation).apply {
+                ContextCompat.getDrawable(context, R.drawable.item_divider)?.let { setDrawable(it) }
+            })
+            layoutManager = linearLayoutManager
             adapter = cartAdapter
         }
 
-        vmCart.cartContent.observe(viewLifecycleOwner, Observer {
+        vmCart.cartContent.observe(viewLifecycleOwner, Observer { items ->
             cartAdapter.items.clear()
-            cartAdapter.items.addAll(it)
+            cartAdapter.items.addAll(items)
             cartAdapter.notifyDataSetChanged()
-            checkoutButton.isEnabled = it.isNotEmpty()
+            checkoutButton.isEnabled = items.isNotEmpty()
+
+            val prices: List<BigDecimal> = items.map { item -> item.price.amountWithoutDiscountDecimal * item.quantity.toBigDecimal() }
+            val subtotal = prices.fold(BigDecimal.ZERO, BigDecimal::add)
+
+            subtotalLabel.text = AmountUtils.prettyPrint(subtotal)
+            subtotalLabel.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+        })
+
+        vmCart.cartPrice.observe(viewLifecycleOwner, Observer { price ->
+            subtotalLabelWithDiscount.text = AmountUtils.prettyPrint(price.amountDecimal, price.currency)
+            // todo get subtotal without discount from vmCart.cartPrice
         })
 
         clearButton.setOnClickListener {
