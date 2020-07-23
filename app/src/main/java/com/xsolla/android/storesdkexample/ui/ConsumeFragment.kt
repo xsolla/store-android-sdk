@@ -45,7 +45,7 @@ class ConsumeFragment : Fragment() {
                                         ?.quantity
                                         ?.let { quantity -> updateQuantity(quantity) }
                                         ?: kotlin.run {
-                                            findNavController().popBackStack()
+                                            findNavController().navigateUp()
                                         }
 
                                 showSnack("Item consumed")

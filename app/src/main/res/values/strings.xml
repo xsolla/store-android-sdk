@@ -25,7 +25,9 @@
     <string name="drawer_item_logout">Log out</string>
     <string name="drawer_item_cart">Cart</string>
 
-    <string name="cart_button_buy">Checkout</string>
+    <string name="cart_fragment_checkout_button">Go to Checkout</string>
+    <string name="cart_fragment_continue_button">Continue Shopping</string>
+    <string name="cart_fragment_clear_button">Clear All</string>
 
 <!--    Auto-generated-->
     <string name="title_activity_store">StoreActivity</string>

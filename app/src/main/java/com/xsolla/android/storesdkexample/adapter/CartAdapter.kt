@@ -9,11 +9,16 @@ import com.bumptech.glide.Glide
 import com.xsolla.android.store.entity.response.cart.CartResponse
 import com.xsolla.android.store.entity.response.common.ExpirationPeriod
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.listener.CartChangeListener
 import com.xsolla.android.storesdkexample.util.AmountUtils
 import com.xsolla.android.storesdkexample.vm.VmCart
 import kotlinx.android.synthetic.main.item_cart.view.*
 
-class CartAdapter(val items: MutableList<CartResponse.Item>, private val vmCart: VmCart)
+class CartAdapter(
+        val items: MutableList<CartResponse.Item>,
+        private val vmCart: VmCart,
+        private val cartChangeListener: CartChangeListener
+)
     : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
@@ -102,10 +107,10 @@ class CartAdapter(val items: MutableList<CartResponse.Item>, private val vmCart:
                 itemView.itemButtonMinus.setImageResource(R.drawable.ic_cart_delete)
             }
             itemView.itemButtonMinus.setOnClickListener {
-                vmCart.changeItemCount(item, -1)
+                vmCart.changeItemCount(item, -1) { result -> cartChangeListener.onChange(result) }
             }
             itemView.itemButtonPlus.setOnClickListener {
-                vmCart.changeItemCount(item, 1)
+                vmCart.changeItemCount(item, 1) { result -> cartChangeListener.onChange(result) }
             }
         }
 
