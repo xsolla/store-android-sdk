@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.0] - 2020-07-23
+
+### Added
+
+- The ability to integrate Xsolla Pay Station for processing purchases with apps that have no server part and game logic is implemented on the client side.
+
+
 ## [0.12.0] - 2020-07-10
 
 ### Added
