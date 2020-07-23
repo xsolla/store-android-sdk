@@ -30,15 +30,18 @@ class VmCart : ViewModel() {
         })
     }
 
-    fun changeItemCount(item: CartResponse.Item, diff: Int) {
-        val currentCount = cartContent.value?.find { it.sku == item.sku }?.quantity
-        currentCount?.let {
-            XStore.updateItemFromCurrentCart(item.sku, currentCount + diff, object : XStoreCallback<Void?>() {
+    fun changeItemCount(item: CartResponse.Item, diff: Int, onChange: (String) -> Unit) {
+        val currentQuantity = cartContent.value?.find { it.sku == item.sku }?.quantity
+        currentQuantity?.let {
+            val newQuantity = it + diff
+            XStore.updateItemFromCurrentCart(item.sku, newQuantity, object : XStoreCallback<Void?>() {
                 override fun onSuccess(response: Void?) {
                     updateCart()
+                    onChange.invoke(if (newQuantity == 0) "Item removed from cart" else "Item's quantity changed")
                 }
 
                 override fun onFailure(errorMessage: String) {
+                    onChange.invoke(errorMessage)
                 }
             })
         }
@@ -74,6 +77,19 @@ class VmCart : ViewModel() {
             }
 
             override fun onFailure(errorMessage: String) {
+            }
+        })
+    }
+
+    fun clearCart(onClear: (String) -> Unit) {
+        XStore.clearCurrentCart(object : XStoreCallback<Void>() {
+            override fun onSuccess(response: Void?) {
+                updateCart()
+                onClear.invoke("Cart is Empty")
+            }
+
+            override fun onFailure(errorMessage: String) {
+                onClear.invoke(errorMessage)
             }
         })
     }

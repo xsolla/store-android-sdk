@@ -27,6 +27,7 @@
 
     <string name="cart_fragment_checkout_button">Go to Checkout</string>
     <string name="cart_fragment_continue_button">Continue Shopping</string>
+    <string name="cart_fragment_clear_button">Clear All</string>
 
 <!--    Auto-generated-->
     <string name="title_activity_store">StoreActivity</string>

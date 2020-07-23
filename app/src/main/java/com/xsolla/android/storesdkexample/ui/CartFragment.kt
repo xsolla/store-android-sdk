@@ -9,17 +9,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.payments.XPayments.Companion.createIntentBuilder
 import com.xsolla.android.payments.XPayments.Result.Companion.fromResultIntent
 import com.xsolla.android.payments.data.AccessToken
 import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.CartAdapter
+import com.xsolla.android.storesdkexample.listener.CartChangeListener
 import com.xsolla.android.storesdkexample.vm.VmCart
 import kotlinx.android.synthetic.main.fragment_cart.*
 
-class CartFragment : Fragment() {
+class CartFragment : Fragment(), CartChangeListener {
 
     private val vmCart: VmCart by activityViewModels()
 
@@ -32,21 +35,33 @@ class CartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val cartAdapter = CartAdapter(mutableListOf(), vmCart)
+        val cartAdapter = CartAdapter(mutableListOf(), vmCart, this)
         with(recycler) {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = cartAdapter
         }
+
         vmCart.cartContent.observe(viewLifecycleOwner, Observer {
             cartAdapter.items.clear()
             cartAdapter.items.addAll(it)
             cartAdapter.notifyDataSetChanged()
             checkoutButton.isEnabled = it.isNotEmpty()
         })
+
+        clearButton.setOnClickListener {
+            vmCart.clearCart { result ->
+                showSnack(result)
+                findNavController().navigateUp()
+            }
+        }
+
         checkoutButton.setOnClickListener {
             vmCart.createOrder()
         }
+
+        continueButton.setOnClickListener { findNavController().navigateUp() }
+
         vmCart.paymentToken.observe(viewLifecycleOwner, Observer {
             val intent = createIntentBuilder(requireContext())
                     .accessToken(AccessToken(it))
@@ -55,6 +70,7 @@ class CartFragment : Fragment() {
                     .build()
             startActivityForResult(intent, RC_PAYSTATION)
         })
+
         vmCart.orderId.observe(viewLifecycleOwner, Observer {
             orderId = it
         })
@@ -85,6 +101,15 @@ class CartFragment : Fragment() {
                 vmCart.checkOrder(orderId)
             }
         }
+    }
+
+    override fun onChange(result: String) {
+        showSnack(result)
+    }
+
+    private fun showSnack(message: String) {
+        val rootView = requireActivity().findViewById<View>(android.R.id.content)
+        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show()
     }
 
     companion object {

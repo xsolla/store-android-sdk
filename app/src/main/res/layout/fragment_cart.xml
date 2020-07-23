@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/textFragmentTitle"
         style="@style/Widget.Xsolla.Fragment.Title"
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/drawer_item_cart"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,8 +21,8 @@
         style="@style/Widget.Xsolla.ActionButton.Small"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/cart_fragment_action_button_left_margin"
         android:layout_marginStart="@dimen/cart_fragment_action_button_right_margin"
+        android:layout_marginEnd="@dimen/cart_fragment_action_button_left_margin"
         android:text="@string/cart_fragment_checkout_button"
         app:layout_constraintBottom_toTopOf="@id/continueButton"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -32,10 +32,10 @@
         style="@style/Widget.Xsolla.ActionButton.Small.Secondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/cart_fragment_action_button_left_margin"
         android:layout_marginStart="@dimen/cart_fragment_action_button_right_margin"
+        android:layout_marginEnd="@dimen/cart_fragment_action_button_left_margin"
+        android:layout_marginBottom="8dp"
         android:text="@string/cart_fragment_continue_button"
-        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -46,5 +46,15 @@
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@id/checkoutButton"
         app:layout_constraintTop_toBottomOf="@id/textFragmentTitle" />
+
+    <Button
+        android:id="@+id/clearButton"
+        style="@style/Widget.Xsolla.Cart.ButtonClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cart_fragment_clear_button"
+        app:layout_constraintBottom_toBottomOf="@+id/textFragmentTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textFragmentTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
