@@ -52,6 +52,11 @@ class CartFragment : Fragment(), CartChangeListener {
         }
 
         vmCart.cartContent.observe(viewLifecycleOwner, Observer { items ->
+            if (items.isEmpty()) {
+                findNavController().navigateUp()
+                return@Observer
+            }
+
             cartAdapter.items.clear()
             cartAdapter.items.addAll(items)
             cartAdapter.notifyDataSetChanged()
@@ -65,8 +70,10 @@ class CartFragment : Fragment(), CartChangeListener {
         })
 
         vmCart.cartPrice.observe(viewLifecycleOwner, Observer { price ->
-            subtotalLabelWithDiscount.text = AmountUtils.prettyPrint(price.amountDecimal, price.currency)
-            // todo get subtotal without discount from vmCart.cartPrice
+            price?.let {
+                subtotalLabelWithDiscount.text = AmountUtils.prettyPrint(it.amountDecimal, it.currency)
+                // todo get subtotal without discount from vmCart.cartPrice
+            }
         })
 
         clearButton.setOnClickListener {
