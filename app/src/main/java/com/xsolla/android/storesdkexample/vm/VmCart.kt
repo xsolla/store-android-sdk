@@ -20,7 +20,7 @@ class VmCart : ViewModel() {
     val paymentToken = SingleLiveEvent<String>()
     val orderId = SingleLiveEvent<Int>()
 
-    fun updateCart() {
+    fun updateCart(onUpdate: ((String) -> Unit)? = null) {
         XStore.getCurrentCart(object : XStoreCallback<CartResponse>() {
             override fun onSuccess(response: CartResponse) {
                 cartContent.value = response.items
@@ -29,6 +29,7 @@ class VmCart : ViewModel() {
 
             override fun onFailure(errorMessage: String) {
                 cartContent.value = listOf()
+                onUpdate?.invoke(errorMessage)
             }
         })
     }
@@ -50,7 +51,7 @@ class VmCart : ViewModel() {
         }
     }
 
-    fun createOrder() {
+    fun createOrder(onCreateOrder: (String) -> Unit) {
         val paymentOptions = PaymentOptions().create()
                 .setSandbox(BuildConfig.IS_SANDBOX)
                 .build()
@@ -61,11 +62,12 @@ class VmCart : ViewModel() {
             }
 
             override fun onFailure(errorMessage: String) {
+                onCreateOrder.invoke(errorMessage)
             }
         })
     }
 
-    fun checkOrder(orderId: Int) {
+    fun checkOrder(orderId: Int, onCheckOrder: (String) -> Unit) {
         XStore.getOrder(orderId.toString(), object : XStoreCallback<OrderResponse>() {
             override fun onSuccess(response: OrderResponse) {
                 if (response.status == OrderResponse.Status.DONE) {
@@ -74,12 +76,14 @@ class VmCart : ViewModel() {
                             updateCart()
                         }
                         override fun onFailure(errorMessage: String) {
+                            onCheckOrder.invoke(errorMessage)
                         }
                     })
                 }
             }
 
             override fun onFailure(errorMessage: String) {
+                onCheckOrder.invoke(errorMessage)
             }
         })
     }

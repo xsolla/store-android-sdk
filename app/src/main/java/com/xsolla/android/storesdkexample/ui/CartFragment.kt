@@ -53,7 +53,7 @@ class CartFragment : Fragment(), CartChangeListener {
 
         vmCart.cartContent.observe(viewLifecycleOwner, Observer { items ->
             if (items.isEmpty()) {
-                findNavController().navigateUp()
+                findNavController().navigate(R.id.nav_inventory)
                 return@Observer
             }
 
@@ -84,7 +84,7 @@ class CartFragment : Fragment(), CartChangeListener {
         }
 
         checkoutButton.setOnClickListener {
-            vmCart.createOrder()
+            vmCart.createOrder { error -> showSnack(error) }
         }
 
         continueButton.setOnClickListener { findNavController().navigateUp() }
@@ -125,7 +125,7 @@ class CartFragment : Fragment(), CartChangeListener {
         if (requestCode == RC_PAYSTATION) {
             val (status, invoiceId) = fromResultIntent(data)
             if (resultCode == Activity.RESULT_OK) {
-                vmCart.checkOrder(orderId)
+                vmCart.checkOrder(orderId) { error -> showSnack(error)}
             }
         }
     }
