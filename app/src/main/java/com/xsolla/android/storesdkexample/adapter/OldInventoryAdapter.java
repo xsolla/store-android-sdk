@@ -7,6 +7,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.xsolla.android.store.XStore;
 import com.xsolla.android.store.api.XStoreCallback;
@@ -22,16 +25,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.ViewHolder> {
+public class OldInventoryAdapter extends RecyclerView.Adapter<OldInventoryAdapter.ViewHolder> {
 
     private List<InventoryResponse.Item> items;
     private List<SubscriptionsResponse.Item> subscriptions;
     private ConsumeListener consumeListener;
 
-    public InventoryAdapter(List<InventoryResponse.Item> items, ConsumeListener consumeListener) {
+    public OldInventoryAdapter(List<InventoryResponse.Item> items, ConsumeListener consumeListener) {
         this.items = items;
         this.consumeListener = consumeListener;
     }
@@ -44,7 +44,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_inventory, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_inventory_old, parent, false);
         return new ViewHolder(view);
     }
 
