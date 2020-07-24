@@ -17,6 +17,7 @@
     <string name="log_in_with_google_button">log in with google</string>
     <string name="log_in_with_facebook_button">log in with facebook</string>
     <string name="forgot_your_password">Forgot your password?</string>
+    <string name="privacy_policy">By continuing, you agree to be bound by our\n<u>Privacy Policy</u></string>
 
     <string name="drawer_item_vi">Virtual items</string>
     <string name="drawer_item_vc">Virtual currency</string>
