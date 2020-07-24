@@ -58,7 +58,7 @@ class StoreActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (XLogin.isTokenExpired(5)) {
+        if (XLogin.isTokenExpired(60)) {
             startLogin()
         } else {
             XStore.init(BuildConfig.PROJECT_ID, XLogin.getToken())
