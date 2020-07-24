@@ -4,18 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.xsolla.android.login.XLogin;
 import com.xsolla.android.login.api.XLoginCallback;
 import com.xsolla.android.login.callback.FinishSocialCallback;
 import com.xsolla.android.login.callback.StartSocialCallback;
 import com.xsolla.android.login.entity.response.AuthResponse;
 import com.xsolla.android.login.social.SocialNetwork;
+import com.xsolla.android.storesdkexample.BuildConfig;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 public class AuthFragment extends BaseFragment {
 
@@ -31,27 +32,27 @@ public class AuthFragment extends BaseFragment {
 
         rootView.findViewById(R.id.google_button).setOnClickListener(v -> {
             selectedSocialNetwork = SocialNetwork.GOOGLE;
-            XLogin.startSocialAuth(this, SocialNetwork.GOOGLE, startSocialCallback);
+            XLogin.startSocialAuth(this, SocialNetwork.GOOGLE, BuildConfig.WITH_LOGOUT, startSocialCallback);
         });
 
         rootView.findViewById(R.id.facebook_button).setOnClickListener(v -> {
             selectedSocialNetwork = SocialNetwork.FACEBOOK;
-            XLogin.startSocialAuth(this, SocialNetwork.FACEBOOK, startSocialCallback);
+            XLogin.startSocialAuth(this, SocialNetwork.FACEBOOK, BuildConfig.WITH_LOGOUT, startSocialCallback);
         });
 
         rootView.findViewById(R.id.baidu_button).setOnClickListener(v -> {
             selectedSocialNetwork = SocialNetwork.BAIDU;
-            XLogin.startSocialAuth(this, SocialNetwork.BAIDU, startSocialCallback);
+            XLogin.startSocialAuth(this, SocialNetwork.BAIDU, BuildConfig.WITH_LOGOUT, startSocialCallback);
         });
 
         rootView.findViewById(R.id.linkedin_button).setOnClickListener(v -> {
             selectedSocialNetwork = SocialNetwork.LINKEDIN;
-            XLogin.startSocialAuth(this, SocialNetwork.LINKEDIN, startSocialCallback);
+            XLogin.startSocialAuth(this, SocialNetwork.LINKEDIN, BuildConfig.WITH_LOGOUT, startSocialCallback);
         });
 
         rootView.findViewById(R.id.naver_button).setOnClickListener(v -> {
             selectedSocialNetwork = SocialNetwork.NAVER;
-            XLogin.startSocialAuth(this, SocialNetwork.NAVER, startSocialCallback);
+            XLogin.startSocialAuth(this, SocialNetwork.NAVER, BuildConfig.WITH_LOGOUT, startSocialCallback);
         });
 
         final TextView usernameInput = rootView.findViewById(R.id.username_input);
@@ -64,7 +65,9 @@ public class AuthFragment extends BaseFragment {
             String username = usernameInput.getText().toString();
             String password = passwordInput.getText().toString();
 
-            XLogin.login(username, password, new XLoginCallback<AuthResponse>() {
+            boolean disableLogout = "xsolla".equals(username) && "xsolla".equals(password);
+
+            XLogin.login(username, password, !disableLogout && BuildConfig.WITH_LOGOUT, new XLoginCallback<AuthResponse>() {
                 @Override
                 protected void onSuccess(AuthResponse response) {
                     openFragment(new MainFragment());
@@ -86,7 +89,7 @@ public class AuthFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        XLogin.finishSocialAuth(getContext(), selectedSocialNetwork, requestCode, resultCode, data, finishSocialCallback);
+        XLogin.finishSocialAuth(getContext(), selectedSocialNetwork, requestCode, resultCode, data, BuildConfig.WITH_LOGOUT, finishSocialCallback);
         super.onActivityResult(requestCode, resultCode, data);
     }
 

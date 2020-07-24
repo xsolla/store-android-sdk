@@ -18,17 +18,36 @@ import retrofit2.http.Query;
 public interface LoginApi {
 
     @POST("/api/user")
-    Call<Void> registerUser(@Query("projectId") String projectId, @Body RegisterUserBody registerUserBody);
+    Call<Void> registerUser(
+            @Query("projectId") String projectId,
+            @Body RegisterUserBody registerUserBody
+    );
 
     @POST("/api/login")
-    Call<AuthResponse> login(@Query("projectId") String projectId, @Body AuthUserBody authUserBody);
+    Call<AuthResponse> login(
+            @Query("projectId") String projectId,
+            @Query("with_logout") String withLogout,
+            @Body AuthUserBody authUserBody
+    );
 
     @POST("/api/social/{providerName}/login_with_token")
-    Call<AuthSocialResponse> loginSocial(@Path("providerName") String providerName, @Query("projectId") String projectId, @Body AuthUserSocialBody authUserSocialBody);
+    Call<AuthSocialResponse> loginSocial(
+            @Path("providerName") String providerName,
+            @Query("projectId") String projectId,
+            @Query("with_logout") String withLogout,
+            @Body AuthUserSocialBody authUserSocialBody
+    );
 
     @POST("/api/password/reset/request")
-    Call<Void> resetPassword(@Query("projectId") String projectId, @Body ResetPasswordBody resetPasswordBody);
+    Call<Void> resetPassword(
+            @Query("projectId") String projectId,
+            @Body ResetPasswordBody resetPasswordBody
+    );
 
     @GET("/api/social/{providerName}/login_url")
-    Call<LinkForSocialAuthResponse> getLinkForSocialAuth(@Path("providerName") String providerName, @Query("projectId") String projectId);
+    Call<LinkForSocialAuthResponse> getLinkForSocialAuth(
+            @Path("providerName") String providerName,
+            @Query("projectId") String projectId,
+            @Query("with_logout") String withLogout
+    );
 }
