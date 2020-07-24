@@ -39,6 +39,7 @@ class StoreActivity : AppCompatActivity() {
     private val vmBalance: VmBalance by viewModels()
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +66,7 @@ class StoreActivity : AppCompatActivity() {
         vmCart.updateCart()
         vmBalance.updateVirtualBalance()
         setDrawerData()
+        drawerLayout.closeDrawer(GravityCompat.START)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -91,19 +93,23 @@ class StoreActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         val cartView = menu.findItem(R.id.action_cart).actionView
-        vmCart.cartContent.observe(this, Observer {
+        vmCart.cartContent.observe(this, Observer { cartItems ->
             val cartCounter = cartView.findViewById<TextView>(R.id.cart_badge)
-            val count = it.sumBy { item -> item.quantity }
+            val count = cartItems.sumBy { item -> item.quantity }
             cartCounter.text = count.toString()
             if (count == 0) {
                 cartCounter.visibility = View.GONE
             } else {
                 cartCounter.visibility = View.VISIBLE
             }
+
+            cartView.setOnClickListener {
+                if (cartItems.isNotEmpty()) {
+                    findNavController(R.id.nav_host_fragment).navigate(R.id.nav_cart)
+                }
+            }
         })
-        cartView.setOnClickListener {
-            findNavController(R.id.nav_host_fragment).navigate(R.id.nav_cart)
-        }
+
         return true
     }
 
@@ -123,7 +129,7 @@ class StoreActivity : AppCompatActivity() {
     }
 
     private fun initDrawer() {
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        drawerLayout = findViewById(R.id.drawer_layout)
         val navController = findNavController(R.id.nav_host_fragment)
         textInventory.setOnClickListener {
             navController.navigate(R.id.nav_inventory)
