@@ -1,11 +1,11 @@
-package com.xsolla.android.storesdkexample.fragments
+package com.xsolla.android.storesdkexample.ui.fragments
 
 import android.text.Editable
 import android.text.TextWatcher
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.api.XLoginCallback
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.fragments.base.BaseFragment
+import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.util.ViewUtils
 import kotlinx.android.synthetic.main.fragmen_reset_password.view.*
 

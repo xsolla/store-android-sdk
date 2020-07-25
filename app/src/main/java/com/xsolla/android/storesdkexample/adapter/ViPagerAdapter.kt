@@ -3,7 +3,7 @@ package com.xsolla.android.storesdkexample.adapter
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
-import com.xsolla.android.storesdkexample.ui.ViPageFragment
+import com.xsolla.android.storesdkexample.ui.fragments.ViPageFragment
 
 class ViPagerAdapter(
         fragment: Fragment,

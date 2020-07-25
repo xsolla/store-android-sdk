@@ -1,8 +1,8 @@
-package com.xsolla.android.storesdkexample.fragments
+package com.xsolla.android.storesdkexample.ui.fragments
 
 import com.google.android.material.tabs.TabLayout
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.fragments.base.BaseFragment
+import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_auth.*
 import kotlinx.android.synthetic.main.fragment_auth.view.*
 

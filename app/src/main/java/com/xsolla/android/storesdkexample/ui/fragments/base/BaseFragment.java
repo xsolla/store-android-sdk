@@ -1,4 +1,4 @@
-package com.xsolla.android.storesdkexample.fragments.base;
+package com.xsolla.android.storesdkexample.ui.fragments.base;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.xsolla.android.storesdkexample.R;
-import com.xsolla.android.storesdkexample.fragments.LoginFragment;
+import com.xsolla.android.storesdkexample.ui.fragments.LoginFragment;
 
 public abstract class BaseFragment extends Fragment {
 

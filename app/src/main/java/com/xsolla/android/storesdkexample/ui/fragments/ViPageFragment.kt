@@ -1,4 +1,4 @@
-package com.xsolla.android.storesdkexample.ui
+package com.xsolla.android.storesdkexample.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,16 +10,16 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
+import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.adapter.VcAdapter
+import com.xsolla.android.storesdkexample.adapter.ViAdapter
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
+import com.xsolla.android.storesdkexample.ui.vm.VmBalance
+import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.util.BaseParcelable
-import com.xsolla.android.storesdkexample.vm.VmBalance
-import com.xsolla.android.storesdkexample.vm.VmCart
 import kotlinx.android.synthetic.main.fragment_catalog.view.*
 
-class VcPageFragment : Fragment(), PurchaseListener {
+class ViPageFragment : Fragment(), PurchaseListener {
 
     private val vmCart: VmCart by activityViewModels()
     private val vmBalance: VmBalance by activityViewModels()
@@ -27,8 +27,8 @@ class VcPageFragment : Fragment(), PurchaseListener {
     companion object {
         const val ARG_ITEMS = "items"
 
-        fun getInstance(items: ArrayList<VirtualCurrencyPackageResponse.Item>): VcPageFragment {
-            val catalogFragment = VcPageFragment()
+        fun getInstance(items: ArrayList<VirtualItemsResponse.Item>): ViPageFragment {
+            val catalogFragment = ViPageFragment()
             val bundle = Bundle()
             bundle.putParcelableArrayList(ARG_ITEMS, items)
             bundle.putParcelable(ARG_ITEMS, BaseParcelable(items))
@@ -42,7 +42,7 @@ class VcPageFragment : Fragment(), PurchaseListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val items = requireArguments().getParcelable<BaseParcelable>(ARG_ITEMS)?.value as? List<VirtualCurrencyPackageResponse.Item>
+        val items = requireArguments().getParcelable<BaseParcelable>(ARG_ITEMS)?.value as? List<VirtualItemsResponse.Item>
         items?.let {
             with(view.catalogRecyclerView) {
                 val linearLayoutManager = LinearLayoutManager(context)
@@ -50,7 +50,7 @@ class VcPageFragment : Fragment(), PurchaseListener {
                     ContextCompat.getDrawable(context, R.drawable.item_divider)?.let { setDrawable(it) }
                 })
                 layoutManager = linearLayoutManager
-                adapter = VcAdapter(it, vmCart, vmBalance, this@VcPageFragment)
+                adapter = ViAdapter(it, vmCart, vmBalance, this@ViPageFragment)
             }
         }
     }

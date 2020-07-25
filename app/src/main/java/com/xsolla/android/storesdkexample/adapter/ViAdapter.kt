@@ -7,8 +7,8 @@ import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.storesdkexample.adapter.holder.ViRealPriceViewHolder
 import com.xsolla.android.storesdkexample.adapter.holder.ViVirtualPriceViewHolder
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
-import com.xsolla.android.storesdkexample.vm.VmBalance
-import com.xsolla.android.storesdkexample.vm.VmCart
+import com.xsolla.android.storesdkexample.ui.vm.VmBalance
+import com.xsolla.android.storesdkexample.ui.vm.VmCart
 
 class ViAdapter(
         private val items: List<VirtualItemsResponse.Item>,

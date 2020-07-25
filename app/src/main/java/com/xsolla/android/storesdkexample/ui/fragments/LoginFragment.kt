@@ -1,4 +1,4 @@
-package com.xsolla.android.storesdkexample.fragments
+package com.xsolla.android.storesdkexample.ui.fragments
 
 import android.app.Activity
 import android.content.Intent
@@ -12,7 +12,7 @@ import com.xsolla.android.login.callback.StartSocialCallback
 import com.xsolla.android.login.entity.response.AuthResponse
 import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.fragments.base.BaseFragment
+import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.util.ViewUtils
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.*

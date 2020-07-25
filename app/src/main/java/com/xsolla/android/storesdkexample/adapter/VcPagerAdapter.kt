@@ -3,7 +3,7 @@ package com.xsolla.android.storesdkexample.adapter
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
-import com.xsolla.android.storesdkexample.ui.VcPageFragment
+import com.xsolla.android.storesdkexample.ui.fragments.VcPageFragment
 
 class VcPagerAdapter(
         fragment: Fragment,

@@ -1,4 +1,4 @@
-package com.xsolla.android.storesdkexample.vm
+package com.xsolla.android.storesdkexample.ui.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

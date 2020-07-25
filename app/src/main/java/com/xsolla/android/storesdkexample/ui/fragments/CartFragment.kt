@@ -1,4 +1,4 @@
-package com.xsolla.android.storesdkexample.ui
+package com.xsolla.android.storesdkexample.ui.fragments
 
 import android.app.Activity
 import android.content.Intent
@@ -22,8 +22,8 @@ import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.CartAdapter
 import com.xsolla.android.storesdkexample.listener.CartChangeListener
+import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.util.AmountUtils
-import com.xsolla.android.storesdkexample.vm.VmCart
 import kotlinx.android.synthetic.main.fragment_cart.*
 import java.math.BigDecimal
 

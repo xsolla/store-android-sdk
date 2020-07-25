@@ -23,8 +23,8 @@ import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.store.XStore
-import com.xsolla.android.storesdkexample.vm.VmBalance
-import com.xsolla.android.storesdkexample.vm.VmCart
+import com.xsolla.android.storesdkexample.ui.vm.VmBalance
+import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.item_balance.view.*
 import kotlinx.android.synthetic.main.layout_drawer.*

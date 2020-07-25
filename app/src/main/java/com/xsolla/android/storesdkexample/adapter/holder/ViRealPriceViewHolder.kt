@@ -12,9 +12,9 @@ import com.xsolla.android.store.entity.response.common.ExpirationPeriod
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
+import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.util.AmountUtils
 import com.xsolla.android.storesdkexample.util.ViewUtils
-import com.xsolla.android.storesdkexample.vm.VmCart
 import kotlinx.android.synthetic.main.item_vi_real_price.view.*
 
 class ViRealPriceViewHolder(
