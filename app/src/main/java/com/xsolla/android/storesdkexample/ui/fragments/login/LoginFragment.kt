@@ -1,4 +1,4 @@
-package com.xsolla.android.storesdkexample.ui.fragments
+package com.xsolla.android.storesdkexample.ui.fragments.login
 
 import android.app.Activity
 import android.content.Intent

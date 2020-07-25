@@ -1,4 +1,4 @@
-package com.xsolla.android.storesdkexample.ui.fragments
+package com.xsolla.android.storesdkexample.ui.fragments.login
 
 import android.text.Editable
 import android.text.TextWatcher

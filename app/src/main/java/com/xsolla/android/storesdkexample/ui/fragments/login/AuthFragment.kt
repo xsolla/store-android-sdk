@@ -1,4 +1,4 @@
-package com.xsolla.android.storesdkexample.ui.fragments
+package com.xsolla.android.storesdkexample.ui.fragments.login
 
 import com.google.android.material.tabs.TabLayout
 import com.xsolla.android.storesdkexample.R
