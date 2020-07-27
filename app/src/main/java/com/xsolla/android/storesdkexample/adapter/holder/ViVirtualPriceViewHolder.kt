@@ -14,9 +14,9 @@ import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
+import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.util.AmountUtils
 import com.xsolla.android.storesdkexample.util.ViewUtils
-import com.xsolla.android.storesdkexample.vm.VmBalance
 import kotlinx.android.synthetic.main.item_vi_virtual_price.view.*
 
 class ViVirtualPriceViewHolder(

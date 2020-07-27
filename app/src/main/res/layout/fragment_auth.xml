@@ -55,7 +55,7 @@
         android:layout_height="match_parent">
 
         <fragment
-            android:name="com.xsolla.android.storesdkexample.fragments.LoginFragment"
+            android:name="com.xsolla.android.storesdkexample.ui.fragments.login.LoginFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

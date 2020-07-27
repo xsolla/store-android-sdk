@@ -11,9 +11,9 @@ import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
+import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.util.AmountUtils
 import com.xsolla.android.storesdkexample.util.ViewUtils
-import com.xsolla.android.storesdkexample.vm.VmCart
 import kotlinx.android.synthetic.main.item_vi_real_price.view.*
 
 class VcRealPriceViewHolder(
