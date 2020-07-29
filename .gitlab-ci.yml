@@ -3,8 +3,7 @@ image: jangrewe/gitlab-ci-android
 stages:
   - build
   - test
-  - generateDebugApp
-  - bintrayUpload
+  - publish
 
 before_script:
   # Extract the SDK version that we're building against
@@ -50,7 +49,7 @@ test:
 generateDebugApp:
   tags:
     - devops
-  stage: generateDebugApp
+  stage: publish
   except:
     - branches
   before_script:
@@ -62,8 +61,8 @@ generateDebugApp:
     - echo "Gitlab pipeline     ${CI_PIPELINE_ID}"      >> ./artifacts/info.txt
   script:
     - mv app/build/outputs/apk/debug/app-debug.apk ./artifacts/SampleApp-Default.apk
-    - mv app-playfab/build/outputs/apk/debug/app-debug.apk ./artifacts/SampleApp-Playfab.apk
-    - mv app-simplified/build/outputs/apk/debug/app-debug.apk ./artifacts/SampleApp-Simplified.apk
+    - mv app-playfab/build/outputs/apk/debug/app-playfab-debug.apk ./artifacts/SampleApp-Playfab.apk
+    - mv app-simplified/build/outputs/apk/debug/app-simplified-debug.apk ./artifacts/SampleApp-Simplified.apk
   artifacts:
     expire_in: 3 days
     paths:
@@ -72,15 +71,14 @@ generateDebugApp:
 bintrayUpload:
   tags:
     - devops
-  stage: bintrayUpload
+  stage: publish
   when: manual
   only:
     - /^v.*/
   except:
     - branches
   script:
-    - ./gradlew :xsollasdk:install
-    - ./gradlew :xsollasdk:bintrayUpload
+    - ./gradlew bintrayUpload
   cache:
     key: ${CI_PROJECT_ID}
     paths:
