@@ -1,7 +1,5 @@
 apply plugin: 'com.android.library'
 
-version = '0.13.0'
-
 android {
     compileSdkVersion 29
 
@@ -11,7 +9,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 6
-        versionName version
+        versionName '0.13.0'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -30,6 +28,3 @@ dependencies {
     api 'com.squareup.retrofit2:retrofit:2.6.4'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.4'
 }
-
-apply from: 'install.gradle'
-apply from: 'bintray.gradle'

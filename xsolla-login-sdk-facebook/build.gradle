@@ -1,9 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'org.jetbrains.dokka'
-
-version = '0.13.0'
 
 android {
     compileSdkVersion 29
@@ -14,7 +11,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 6
-        versionName version
+        versionName '0.13.0'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -32,6 +29,3 @@ android {
 dependencies {
     api 'com.facebook.android:facebook-login:7.0.0'
 }
-
-apply from: 'install.gradle'
-apply from: 'bintray.gradle'
