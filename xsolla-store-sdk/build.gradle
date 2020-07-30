@@ -1,17 +1,15 @@
 apply plugin: 'com.android.library'
 
-version = '0.13.0'
-
 android {
-    compileSdkVersion 29
+    compileSdkVersion sdk_compile
 
     resourcePrefix 'xsolla_store_'
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 6
-        versionName version
+        minSdkVersion sdk_min
+        targetSdkVersion sdk_target
+        versionCode sdk_version_code
+        versionName sdk_version_name
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -31,5 +29,4 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.6.4'
 }
 
-apply from: 'install.gradle'
-apply from: 'bintray.gradle'
+apply from: 'publish.gradle'

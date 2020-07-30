@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    compileSdkVersion sdk_compile
+
     defaultConfig {
         applicationId "com.xsolla.android.storesdkexample"
-        minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 6
-        versionName "0.13.0"
+        minSdkVersion sdk_min
+        targetSdkVersion sdk_target
+        versionCode sdk_version_code
+        versionName sdk_version_name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary true
 

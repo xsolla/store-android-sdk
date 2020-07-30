@@ -1,0 +1,85 @@
+image: jangrewe/gitlab-ci-android
+
+stages:
+  - build
+  - test
+  - publish
+
+before_script:
+  # Extract the SDK version that we're building against
+  - export ANDROID_COMPILE_SDK=`egrep '^[[:blank:]]+ext.sdk_compile'  build.gradle | awk '{print $3}'`
+  - export GRADLE_USER_HOME=$(pwd)/.gradle
+  # Install platform tools and Android SDK for the compile target
+  - echo y | /sdk/tools/bin/sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}" > /dev/null
+  - chmod +x ./gradlew
+  - touch local.properties
+
+build:
+  tags:
+    - devops
+  stage: build
+  except:
+    - branches
+  script:
+    - ./gradlew assembleDebug
+  artifacts:
+    expire_in: 4 hours
+    paths:
+      - app/build/outputs/
+      - app-playfab/build/outputs/
+      - app-simplified/build/outputs/
+  cache:
+    key: ${CI_PROJECT_ID}
+    paths:
+      - .gradle/*
+
+test:
+  tags:
+    - devops
+  stage: test
+  except:
+    - branches
+  script:
+    - ./gradlew test
+  cache:
+    key: ${CI_PROJECT_ID}
+    paths:
+      - .gradle/*
+
+generateDebugApp:
+  tags:
+    - devops
+  stage: publish
+  except:
+    - branches
+  before_script:
+    - mkdir -p artifacts
+    - touch ./artifacts/info.txt
+    - echo "Build date          $(date)"                >> ./artifacts/info.txt
+    - echo "Git tag             ${CI_COMMIT_REF_NAME}"  >> ./artifacts/info.txt
+    - echo "Git commit          ${CI_COMMIT_SHA}"       >> ./artifacts/info.txt
+    - echo "Gitlab pipeline     ${CI_PIPELINE_ID}"      >> ./artifacts/info.txt
+  script:
+    - mv app/build/outputs/apk/debug/app-debug.apk ./artifacts/SampleApp-Default.apk
+    - mv app-playfab/build/outputs/apk/debug/app-playfab-debug.apk ./artifacts/SampleApp-Playfab.apk
+    - mv app-simplified/build/outputs/apk/debug/app-simplified-debug.apk ./artifacts/SampleApp-Simplified.apk
+  artifacts:
+    expire_in: 3 days
+    paths:
+      - artifacts
+
+bintrayUpload:
+  tags:
+    - devops
+  stage: publish
+  when: manual
+  only:
+    - /^v.*/
+  except:
+    - branches
+  script:
+    - ./gradlew bintrayUpload
+  cache:
+    key: ${CI_PROJECT_ID}
+    paths:
+      - .gradle/*

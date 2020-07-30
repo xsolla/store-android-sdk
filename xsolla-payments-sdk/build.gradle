@@ -1,20 +1,17 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'org.jetbrains.dokka'
-
-version = '0.13.0'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion sdk_compile
 
     resourcePrefix 'xsolla_payments_'
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 6
-        versionName version
+        minSdkVersion sdk_min
+        targetSdkVersion sdk_target
+        versionCode sdk_version_code
+        versionName sdk_version_name
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -31,11 +28,6 @@ android {
 
 }
 
-dokka {
-    outputFormat = 'html'
-    outputDirectory = "$buildDir/javadoc"
-}
-
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -48,5 +40,4 @@ dependencies {
     implementation 'androidx.work:work-runtime-ktx:2.3.4'
 }
 
-apply from: 'install.gradle'
-apply from: 'bintray.gradle'
+apply from: 'publish.gradle'
