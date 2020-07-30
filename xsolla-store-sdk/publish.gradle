@@ -14,7 +14,7 @@ afterEvaluate {
                 artifact androidSourcesJar
 
                 groupId = 'com.xsolla.android'
-                artifactId = 'login'
+                artifactId = 'store'
                 version = android.defaultConfig.versionName
 
                 pom {
@@ -46,7 +46,7 @@ afterEvaluate {
         publications = ['release']
         pkg {
             repo = 'maven'
-            name = 'xsolla-login'
+            name = 'xsolla-store'
             vcsUrl = 'https://github.com/xsolla/store-android-sdk'
             licenses = ['Apache-2.0']
 

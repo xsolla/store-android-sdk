@@ -39,3 +39,5 @@ dependencies {
     implementation 'androidx.work:work-runtime:2.3.4'
     implementation 'androidx.work:work-runtime-ktx:2.3.4'
 }
+
+apply from: 'publish.gradle'
