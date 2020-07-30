@@ -4,14 +4,14 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion sdk_compile
 
     defaultConfig {
         applicationId "com.xsolla.android.simplifiedexample"
-        minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 6
-        versionName "0.13.0"
+        minSdkVersion sdk_min
+        targetSdkVersion sdk_target
+        versionCode sdk_version_code
+        versionName sdk_version_name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary true
 
