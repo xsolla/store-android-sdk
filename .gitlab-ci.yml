@@ -7,7 +7,7 @@ stages:
 
 before_script:
   # Extract the SDK version that we're building against
-  - export ANDROID_COMPILE_SDK=`egrep '^[[:blank:]]+compileSdkVersion'  app/build.gradle | awk '{print $2}'`
+  - export ANDROID_COMPILE_SDK=`^[[:blank:]]+ext.sdk_compile'  build.gradle | awk '{print $3}`
   - export GRADLE_USER_HOME=$(pwd)/.gradle
   # Install platform tools and Android SDK for the compile target
   - echo y | /sdk/tools/bin/sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}" > /dev/null
