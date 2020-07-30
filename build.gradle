@@ -2,7 +2,7 @@
 
 buildscript {
 
-    ext.sdk_version_name = '0.13.0-ci'
+    ext.sdk_version_name = '0.13.0'
     ext.sdk_version_code = 6
 
     ext.sdk_min = 21
