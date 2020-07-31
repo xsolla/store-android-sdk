@@ -36,6 +36,7 @@
         <item name="android:layout_marginStart">@dimen/drawer_margin_profile_between_horizontal</item>
         <item name="android:layout_marginEnd">@dimen/drawer_margin_horizontal</item>
         <item name="android:textColor">@color/secondary_color</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="Widget.Xsolla.Drawer.Text.Main" parent="Widget.Xsolla.Drawer.Text">
@@ -46,6 +47,7 @@
     <style name="Widget.Xsolla.Drawer.Text.Username" parent="Widget.Xsolla.Drawer.Text.Main">
         <item name="android:layout_marginTop">@dimen/drawer_margin_username_top</item>
         <item name="android:textColor">@color/secondary_color</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="Widget.Xsolla.Drawer.Text.Item" parent="Widget.Xsolla.Drawer.Text.Main">
@@ -58,6 +60,7 @@
     <style name="Widget.Xsolla.Drawer.Text.Store" parent="Widget.Xsolla.Drawer.Text.Main">
         <item name="android:layout_marginTop">@dimen/drawer_margin_line_vertical</item>
         <item name="android:textColor">@color/secondary_color</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="Widget.Xsolla.Drawer.Text.Cart" parent="Widget.Xsolla.Drawer.Text">
