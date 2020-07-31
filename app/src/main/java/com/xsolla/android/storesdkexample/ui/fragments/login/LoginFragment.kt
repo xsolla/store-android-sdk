@@ -112,8 +112,9 @@ class LoginFragment : BaseFragment() {
     }
 
     private fun updateLoginButtonEnable() {
-        rootView.loginButton.isEnabled = rootView.usernameInput.text?.isNotEmpty() == true
-                && (rootView.passwordInput?.text?.length == MIN_PASSWORD_LENGTH) == true
+        val usernameValid = rootView.usernameInput.text?.isNotEmpty() ?: false
+        val passwordValid = (rootView.passwordInput.text?.length ?: 0) >= MIN_PASSWORD_LENGTH
+        rootView.loginButton.isEnabled = usernameValid && passwordValid
     }
 
     private fun restPassword() {
