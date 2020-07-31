@@ -68,9 +68,9 @@ class LoginFragment : BaseFragment() {
             XLogin.startSocialAuth(this, SocialNetwork.TWITTER, startSocialCallback)
         }
 
-        rootView.linkedinButton.setOnClickListener {
-            selectedSocialNetwork = SocialNetwork.LINKEDIN
-            XLogin.startSocialAuth(this, SocialNetwork.LINKEDIN, startSocialCallback)
+        rootView.baiduButton.setOnClickListener {
+            selectedSocialNetwork = SocialNetwork.BAIDU
+            XLogin.startSocialAuth(this, SocialNetwork.BAIDU, startSocialCallback)
         }
 
         rootView.naverButton.setOnClickListener {
