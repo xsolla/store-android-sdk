@@ -1,7 +1,8 @@
 package com.xsolla.android.storesdkexample.ui.vm
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.request.payment.PaymentOptions
@@ -9,10 +10,12 @@ import com.xsolla.android.store.entity.response.cart.CartResponse
 import com.xsolla.android.store.entity.response.common.Price
 import com.xsolla.android.store.entity.response.order.OrderResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse
+import com.xsolla.android.storesdkexample.App
 import com.xsolla.android.storesdkexample.BuildConfig
+import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.util.SingleLiveEvent
 
-class VmCart : ViewModel() {
+class VmCart(application: Application) : AndroidViewModel(application) {
 
     val cartContent = MutableLiveData<List<CartResponse.Item>>(listOf())
     val cartPrice = MutableLiveData<Price>()
@@ -92,7 +95,7 @@ class VmCart : ViewModel() {
         XStore.clearCurrentCart(object : XStoreCallback<Void>() {
             override fun onSuccess(response: Void?) {
                 updateCart()
-                onClear.invoke("Cart is Empty")
+                onClear.invoke(getApplication<App>().getString(R.string.cart_message_empty))
             }
 
             override fun onFailure(errorMessage: String) {
