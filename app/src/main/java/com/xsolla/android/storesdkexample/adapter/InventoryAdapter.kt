@@ -47,9 +47,7 @@ class InventoryAdapter(
             itemView.itemName.text = item.name
             itemView.itemQuantity.text = item.quantity.toString()
 
-            if (item.virtualItemType == InventoryResponse.Item.VirtualItemType.NON_RENEWING_SUBSCRIPTION) {
-                itemView.itemExpiration.text = getExpirationText(item)
-            }
+            itemView.itemExpiration.text = getExpirationText(item)
 
             itemView.consumeButton.visibility = if (item.remainingUses == 0) View.INVISIBLE else View.VISIBLE
             itemView.consumeButton.setOnClickListener { consumeListener.onConsume(item) }

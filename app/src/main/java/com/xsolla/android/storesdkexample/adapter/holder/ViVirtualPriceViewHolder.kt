@@ -31,7 +31,7 @@ class ViVirtualPriceViewHolder(
         Glide.with(itemView).load(item.imageUrl).into(itemView.itemIcon)
         itemView.itemName.text = item.name
         bindItemPrice(price)
-        item.inventoryOption.expirationPeriod?.let { binExpirationPeriod(it) }
+        bindExpirationPeriod(item.inventoryOption.expirationPeriod)
         initBuyButton(item, price)
     }
 
@@ -51,17 +51,21 @@ class ViVirtualPriceViewHolder(
         }
     }
 
-    private fun binExpirationPeriod(expirationPeriod: ExpirationPeriod) {
-        itemView.itemAdditionalInfo.visibility = View.VISIBLE
-        val sb = StringBuilder()
-        sb.append("Expiration: ")
-        sb.append(expirationPeriod.value)
-        sb.append(' ')
-        sb.append(expirationPeriod.type.name.toLowerCase())
-        if (expirationPeriod.value != 1) {
-            sb.append('s')
+    private fun bindExpirationPeriod(expirationPeriod: ExpirationPeriod?) {
+        if (expirationPeriod == null) {
+            itemView.itemAdditionalInfo.visibility = View.GONE
+        } else {
+            itemView.itemAdditionalInfo.visibility = View.VISIBLE
+            val sb = StringBuilder()
+            sb.append("Expiration: ")
+            sb.append(expirationPeriod.value)
+            sb.append(' ')
+            sb.append(expirationPeriod.type.name.toLowerCase())
+            if (expirationPeriod.value != 1) {
+                sb.append('s')
+            }
+            itemView.itemAdditionalInfo.text = sb
         }
-        itemView.itemAdditionalInfo.text = sb
     }
 
     private fun initBuyButton(item: VirtualItemsResponse.Item, virtualPrice: VirtualPrice) {
