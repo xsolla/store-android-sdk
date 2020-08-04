@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.payments.XPayments.Companion.createIntentBuilder
 import com.xsolla.android.payments.XPayments.Result.Companion.fromResultIntent
 import com.xsolla.android.payments.data.AccessToken
+import com.xsolla.android.store.entity.response.cart.CartResponse
 import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.CartAdapter
@@ -63,17 +64,21 @@ class CartFragment : Fragment(), CartChangeListener {
             cartAdapter.notifyDataSetChanged()
             checkoutButton.isEnabled = items.isNotEmpty()
 
-            val prices: List<BigDecimal> = items.map { item -> item.price.amountWithoutDiscountDecimal * item.quantity.toBigDecimal() }
-            val subtotal = prices.fold(BigDecimal.ZERO, BigDecimal::add)
-
-            subtotalLabel.text = AmountUtils.prettyPrint(subtotal)
+            subtotalLabel.text = AmountUtils.prettyPrint(calculatePriceWithoutDiscount(items))
             subtotalLabel.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
         })
 
-        vmCart.cartPrice.observe(viewLifecycleOwner, Observer { price ->
-            price?.let {
-                subtotalLabelWithDiscount.text = AmountUtils.prettyPrint(it.amountDecimal, it.currency)
+        vmCart.cartPrice.observe(viewLifecycleOwner, Observer { priceValue ->
+            priceValue?.let { price ->
+                subtotalLabelWithDiscount.text = AmountUtils.prettyPrint(price.amountDecimal, price.currency)
                 // todo get subtotal without discount from vmCart.cartPrice
+                vmCart.cartContent.value?.let {
+                    if (price.amountDecimal == calculatePriceWithoutDiscount(it)) {
+                        subtotalLabel.visibility = View.INVISIBLE
+                    } else {
+                        subtotalLabel.visibility = View.VISIBLE
+                    }
+                }
             }
         })
 
@@ -102,6 +107,12 @@ class CartFragment : Fragment(), CartChangeListener {
         vmCart.orderId.observe(viewLifecycleOwner, Observer {
             orderId = it
         })
+    }
+
+    // TODO get subtotal without discount from vmCart.cartPrice
+    private fun calculatePriceWithoutDiscount(items: List<CartResponse.Item>): BigDecimal {
+        val prices: List<BigDecimal> = items.map { item -> item.price.amountWithoutDiscountDecimal * item.quantity.toBigDecimal() }
+        return prices.fold(BigDecimal.ZERO, BigDecimal::add)
     }
 
     override fun onResume() {
