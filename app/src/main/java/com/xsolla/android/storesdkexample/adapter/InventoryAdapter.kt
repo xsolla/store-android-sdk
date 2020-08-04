@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class InventoryAdapter(
-        private var items: List<InventoryResponse.Item>,
+        var items: List<InventoryResponse.Item>,
         private val consumeListener: ConsumeListener
 ) : RecyclerView.Adapter<InventoryAdapter.ViewHolder>() {
 

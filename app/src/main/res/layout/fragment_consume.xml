@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginBottom="@dimen/fragment_consume_quantity_store_button_bottom_margin"
-            android:text="Go to store"/>
+            android:text="@string/go_to_store"/>
 
     </LinearLayout>
 

@@ -36,6 +36,7 @@ class InventoryFragment : Fragment(), ConsumeListener {
                 ContextCompat.getDrawable(context, R.drawable.item_divider)?.let { setDrawable(it) }
             })
             layoutManager = linearLayoutManager
+            goToStoreButton.setOnClickListener { findNavController().navigate(R.id.nav_vi) }
         }
         getItems()
     }
@@ -69,7 +70,8 @@ class InventoryFragment : Fragment(), ConsumeListener {
 
     override fun onConsume(item: InventoryResponse.Item) {
         val bundle = bundleOf(ConsumeFragment.ITEM_ARG to item)
-        findNavController().navigate(R.id.fragment_consume, bundle)
+//        findNavController().navigate(R.id.fragment_consume, bundle)
+        consume(item)
     }
 
     override fun onSuccess() {
@@ -83,6 +85,29 @@ class InventoryFragment : Fragment(), ConsumeListener {
     private fun showSnack(message: String) {
         val rootView = requireActivity().findViewById<View>(android.R.id.content)
         Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show()
+    }
+
+    private fun consume(item: InventoryResponse.Item) {
+        XStore.consumeItem(item.sku, 1, null, object : XStoreCallback<Void>() {
+            override fun onSuccess(response: Void?) {
+                XStore.getInventory(object : XStoreCallback<InventoryResponse>() {
+                    override fun onSuccess(response: InventoryResponse) {
+                        inventoryAdapter.items = response.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
+                        inventoryAdapter.notifyDataSetChanged()
+                        showSnack("Item consumed")
+                    }
+
+                    override fun onFailure(errorMessage: String) {
+                        showSnack(errorMessage)
+                    }
+
+                })
+            }
+
+            override fun onFailure(errorMessage: String) {
+                showSnack(errorMessage)
+            }
+        })
     }
 
 }

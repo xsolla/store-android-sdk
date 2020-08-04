@@ -85,6 +85,8 @@
     <dimen name="inventory_fragment_consume_button_width">96dp</dimen>
     <dimen name="inventory_fragment_consume_button_corner_radius">4dp</dimen>
     <dimen name="inventory_fragment_consume_button_text_size">15sp</dimen>
+    <dimen name="inventory_fragment_go_to_store_margin_vertical">24dp</dimen>
+    <dimen name="inventory_fragment_go_to_store_margin_horizontal">20dp</dimen>
 
     <dimen name="cart_fragment_action_button_left_margin">20dp</dimen>
     <dimen name="cart_fragment_action_button_right_margin">20dp</dimen>

@@ -1,9 +1,11 @@
 package com.xsolla.android.storesdkexample.ui.fragments.store
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -31,11 +33,20 @@ class ConsumeFragment : Fragment() {
             Glide.with(view.context).load(item.imageUrl).into(itemIcon)
             itemName.text = item.name
             updateQuantity(item.quantity)
-            goToStoreButton.setOnClickListener { findNavController().popBackStack() }
+            goToStoreButton.setOnClickListener { findNavController().navigate(R.id.nav_vi) }
 
             consumeButton.setOnClickListener { v ->
                 ViewUtils.disable(v)
-                val quantity = quantityInput.text.toString().toInt()
+                val quantity = try {
+                    quantityInput.text.toString().toInt()
+                } catch (e: Exception) {
+                    0
+                }
+                if (quantity > item.quantity) {
+                    updateQuantity(item.quantity)
+                    ViewUtils.enable(v)
+                    return@setOnClickListener
+                }
                 XStore.consumeItem(item.sku, quantity, null, object : XStoreCallback<Void>() {
                     override fun onSuccess(response: Void?) {
                         XStore.getInventory(object : XStoreCallback<InventoryResponse>() {
@@ -46,6 +57,8 @@ class ConsumeFragment : Fragment() {
                                         ?.let { quantity -> updateQuantity(quantity) }
                                         ?: kotlin.run {
                                             findNavController().navigateUp()
+                                            val inputManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+                                            inputManager?.hideSoftInputFromWindow(activity!!.currentFocus!!.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
                                         }
 
                                 showSnack("Item consumed")
