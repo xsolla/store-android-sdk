@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.xsolla.android.login.api.LoginApi;
 import com.xsolla.android.login.api.XLoginCallback;
 import com.xsolla.android.login.callback.FinishSocialCallback;
@@ -13,7 +16,11 @@ import com.xsolla.android.login.entity.request.AuthUserBody;
 import com.xsolla.android.login.entity.request.RegisterUserBody;
 import com.xsolla.android.login.entity.request.ResetPasswordBody;
 import com.xsolla.android.login.entity.response.AuthResponse;
+import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse;
+import com.xsolla.android.login.entity.response.SocialFriendsResponse;
+import com.xsolla.android.login.entity.response.UserPublicInfoResponse;
 import com.xsolla.android.login.jwt.JWT;
+import com.xsolla.android.login.social.FriendsPlatform;
 import com.xsolla.android.login.social.LoginSocial;
 import com.xsolla.android.login.social.SocialNetwork;
 import com.xsolla.android.login.token.TokenUtils;
@@ -21,8 +28,6 @@ import com.xsolla.android.login.unity.UnityProxyActivity;
 
 import java.io.IOException;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -216,6 +221,32 @@ public class XLogin {
      */
     public static void logout() {
         getInstance().tokenUtils.clearToken();
+    }
+
+    public static void getSocialFriends(
+            FriendsPlatform platform,
+            int offset,
+            int limit,
+            boolean fromGameOnly,
+            XLoginCallback<SocialFriendsResponse> callback
+    ) {
+        getInstance().loginApi.getSocialFriends("Bearer " + getToken(), platform.name().toLowerCase(), offset, limit, fromGameOnly).enqueue(callback);
+    }
+
+    public static void searchUsersByNickname(
+            String nickname,
+            int offset,
+            int limit,
+            XLoginCallback<SearchUsersByNicknameResponse> callback
+    ) {
+        getInstance().loginApi.searchUsersByNickname("Bearer " + getToken(), nickname, offset, limit).enqueue(callback);
+    }
+
+    public static void getUserPublicInfo(
+            String userId,
+            XLoginCallback<UserPublicInfoResponse> callback
+    ) {
+        getInstance().loginApi.getUserPublicInfo("Bearer " + getToken(), userId).enqueue(callback);
     }
 
     public static boolean isTokenExpired() {

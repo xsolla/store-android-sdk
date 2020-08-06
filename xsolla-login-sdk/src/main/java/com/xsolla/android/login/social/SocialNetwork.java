@@ -1,7 +1,7 @@
 package com.xsolla.android.login.social;
 
 /**
- * Social networks enumeration
+ * Social networks enumeration for authentication
  */
 public enum SocialNetwork {
 
