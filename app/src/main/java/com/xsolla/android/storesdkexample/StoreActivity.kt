@@ -26,6 +26,7 @@ import com.xsolla.android.login.XLogin
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
+import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.item_balance.view.*
 import kotlinx.android.synthetic.main.layout_drawer.*
@@ -88,7 +89,7 @@ class StoreActivity : AppCompatActivity() {
                     balanceContainer.addView(balanceView, 0)
                 }
         })
-        chargeBalanceButton.setOnClickListener { findNavController(R.id.nav_host_fragment).navigate(R.id.nav_vc) }
+        chargeBalanceButton.setRateLimitedClickListener { findNavController(R.id.nav_host_fragment).navigate(R.id.nav_vc) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
