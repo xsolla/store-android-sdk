@@ -30,5 +30,8 @@
     <string name="cart_fragment_continue_button">Continue Shopping</string>
     <string name="cart_fragment_clear_button">Clear All</string>
     <string name="cart_message_empty">Your cart is empty</string>
+    <string name="cart_subtotal">Subtotal</string>
+    <string name="cart_discount">Discount</string>
+    <string name="cart_total">Total</string>
 
 </resources>

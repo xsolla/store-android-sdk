@@ -58,59 +58,73 @@
         app:layout_constraintTop_toTopOf="@+id/textFragmentTitle" />
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/subtotalLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="70dp"
         android:fontFamily="@font/roboto"
-        android:text="Subtotal"
+        android:text="@string/cart_subtotal"
         android:textAllCaps="true"
         android:textColor="@color/white_color"
-        android:textSize="17sp"
+        android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/checkoutButton"
         app:layout_constraintStart_toStartOf="@+id/checkoutButton" />
 
     <TextView
-        android:id="@+id/textView10"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto"
-        android:text="Additional taxes and fees may apply"
-        android:textColor="@color/secondary_color"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/centerGuideline"
-        app:layout_constraintStart_toStartOf="@+id/checkoutButton"
-        app:layout_constraintTop_toBottomOf="@id/textView9" />
-
-    <TextView
-        android:id="@+id/subtotalLabelWithDiscount"
+        android:id="@+id/discountLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto"
-        android:text="0"
-        tools:text="12800"
+        android:text="@string/cart_discount"
+        android:textColor="@color/secondary_color"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@+id/checkoutButton"
+        app:layout_constraintTop_toBottomOf="@id/subtotalLabel" />
+
+    <TextView
+        android:id="@+id/totalLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/roboto"
+        android:text="@string/cart_total"
+        android:textAllCaps="true"
         android:textColor="@color/white_color"
         android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView9"
-        app:layout_constraintEnd_toEndOf="@+id/checkoutButton" />
+        app:layout_constraintStart_toStartOf="@+id/checkoutButton"
+        app:layout_constraintTop_toBottomOf="@id/discountLabel" />
 
     <TextView
-        android:id="@+id/subtotalLabel"
+        android:id="@+id/subtotalValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto"
-        android:text="0"
-        tools:text="12800"
-        android:textColor="@color/secondary_color"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/subtotalLabelWithDiscount"
-        app:layout_constraintEnd_toEndOf="@+id/checkoutButton" />
+        android:textColor="@color/white_color"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/subtotalLabel"
+        app:layout_constraintEnd_toEndOf="@+id/checkoutButton"
+        tools:text="12800" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/centerGuideline"
+    <TextView
+        android:id="@+id/discountValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.50121653" />
+        android:fontFamily="@font/roboto"
+        android:textColor="@color/secondary_color"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="@+id/checkoutButton"
+        app:layout_constraintTop_toBottomOf="@id/subtotalValue"
+        tools:text="12800" />
+
+    <TextView
+        android:id="@+id/totalValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:textColor="@color/white_color"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="@+id/checkoutButton"
+        app:layout_constraintTop_toTopOf="@id/totalLabel"
+        tools:text="12800" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
