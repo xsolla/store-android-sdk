@@ -14,6 +14,7 @@ import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.util.ViewUtils
+import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
 
@@ -53,27 +54,27 @@ class LoginFragment : BaseFragment() {
             })
         }
 
-        rootView.googleButton.setOnClickListener {
+        rootView.googleButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.GOOGLE
             XLogin.startSocialAuth(this, SocialNetwork.GOOGLE, startSocialCallback)
         }
 
-        rootView.facebookButton.setOnClickListener {
+        rootView.facebookButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.FACEBOOK
             XLogin.startSocialAuth(this, SocialNetwork.FACEBOOK, startSocialCallback)
         }
 
-        rootView.twitterButton.setOnClickListener {
+        rootView.twitterButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.TWITTER
             XLogin.startSocialAuth(this, SocialNetwork.TWITTER, startSocialCallback)
         }
 
-        rootView.baiduButton.setOnClickListener {
+        rootView.baiduButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.BAIDU
             XLogin.startSocialAuth(this, SocialNetwork.BAIDU, startSocialCallback)
         }
 
-        rootView.naverButton.setOnClickListener {
+        rootView.naverButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.NAVER
             XLogin.startSocialAuth(this, SocialNetwork.NAVER, startSocialCallback)
         }
