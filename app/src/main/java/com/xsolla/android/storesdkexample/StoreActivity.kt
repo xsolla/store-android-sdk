@@ -21,6 +21,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
@@ -106,6 +107,8 @@ class StoreActivity : AppCompatActivity() {
             cartView.setOnClickListener {
                 if (cartItems.isNotEmpty()) {
                     findNavController(R.id.nav_host_fragment).navigate(R.id.nav_cart)
+                } else {
+                    showSnack(getString(R.string.cart_message_empty))
                 }
             }
         })
@@ -144,8 +147,12 @@ class StoreActivity : AppCompatActivity() {
             drawerLayout.closeDrawer(GravityCompat.START)
         }
         textCart.setOnClickListener {
-            navController.navigate(R.id.nav_cart)
-            drawerLayout.closeDrawer(GravityCompat.START)
+            if (vmCart.cartContent.value.isNullOrEmpty()) {
+                showSnack(getString(R.string.cart_message_empty))
+            } else {
+                navController.navigate(R.id.nav_cart)
+                drawerLayout.closeDrawer(GravityCompat.START)
+            }
         }
         textLogout.setOnClickListener {
             XLogin.logout()
@@ -172,6 +179,11 @@ class StoreActivity : AppCompatActivity() {
     private fun startLogin() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivityForResult(intent, RC_LOGIN)
+    }
+
+    fun showSnack(message: String) {
+        val rootView: View = findViewById(android.R.id.content)
+        Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show()
     }
 
 }
