@@ -56,16 +56,14 @@ class InventoryAdapter(
         private fun getExpirationText(item: InventoryResponse.Item): String? {
             if (item.virtualItemType != InventoryResponse.Item.VirtualItemType.NON_RENEWING_SUBSCRIPTION) return null
 
-            subscriptions?.let { subscriptionList ->
-                subscriptionList.forEach { subscription ->
-                    return if (subscription.sku == item.sku && subscription.status == SubscriptionsResponse.Item.Status.ACTIVE) {
-                        val date = Date(subscription.expiredAt * 1000)
-                        val sdf = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.US)
-                        val formattedDate = sdf.format(date)
-                        "Active until: $formattedDate"
-                    } else {
-                        "Expired"
-                    }
+            subscriptions?.find { it.sku == item.sku }?.let {
+                return if (it.status == SubscriptionsResponse.Item.Status.ACTIVE) {
+                    val date = Date(it.expiredAt * 1000)
+                    val sdf = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.US)
+                    val formattedDate = sdf.format(date)
+                    "Active until: $formattedDate"
+                } else {
+                    "Expired"
                 }
             }
 

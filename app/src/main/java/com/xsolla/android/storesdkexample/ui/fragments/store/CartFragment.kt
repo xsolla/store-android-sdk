@@ -53,7 +53,7 @@ class CartFragment : Fragment(), CartChangeListener {
         vmCart.cartContent.observe(viewLifecycleOwner, Observer { items ->
             if (items.isEmpty()) {
                 showSnack(getString(R.string.cart_message_empty))
-                findNavController().navigate(R.id.nav_inventory)
+                findNavController().navigateUp()
                 return@Observer
             }
 
