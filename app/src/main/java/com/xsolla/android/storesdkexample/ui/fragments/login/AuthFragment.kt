@@ -26,11 +26,10 @@ class AuthFragment : BaseFragment() {
 
                 fragment?.let { newFragment ->
                     fragmentContainer.removeAllViews()
-                    fragmentManager
-                            ?.beginTransaction()
-                            ?.replace(R.id.fragmentContainer, newFragment)
-                            ?.addToBackStack(null)
-                            ?.commit()
+                    parentFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.fragmentContainer, newFragment)
+                            .commit()
                 }
             }
 

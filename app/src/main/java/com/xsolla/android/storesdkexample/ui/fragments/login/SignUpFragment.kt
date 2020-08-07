@@ -26,8 +26,6 @@ class SignUpFragment : BaseFragment() {
 
         rootView.signUpButton.setOnClickListener { v ->
 
-
-
             ViewUtils.disable(v)
             hideKeyboard()
             val username = usernameInput.text.toString()
@@ -37,7 +35,10 @@ class SignUpFragment : BaseFragment() {
             XLogin.register(username, email, password, object : XLoginCallback<Void?>() {
                 override fun onSuccess(response: Void?) {
                     showSnack("Registration success. Please check your email")
-                    openFragment(LoginFragment())
+                    parentFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.fragmentContainer, LoginFragment())
+                            .commit()
                     activity?.tabLayout?.getTabAt(0)?.select()
                     ViewUtils.enable(v)
                 }

@@ -17,7 +17,9 @@ class ResetPasswordFragment : BaseFragment() {
 
     override fun initUI() {
         rootView.toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-        rootView.toolbar.setNavigationOnClickListener { popFragment() }
+        rootView.toolbar.setNavigationOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
 
         rootView.usernameInput.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(s: Editable) {

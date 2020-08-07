@@ -79,7 +79,7 @@ class LoginFragment : BaseFragment() {
             XLogin.startSocialAuth(this, SocialNetwork.NAVER, startSocialCallback)
         }
 
-        rootView.resetPasswordButton.setOnClickListener { restPassword() }
+        rootView.resetPasswordButton.setOnClickListener { resetPassword() }
     }
 
     private fun initLoginButtonEnabling() {
@@ -118,14 +118,12 @@ class LoginFragment : BaseFragment() {
         rootView.loginButton.isEnabled = usernameValid && passwordValid
     }
 
-    private fun restPassword() {
-        activity?.let {
-            it.supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.rootFragmentContainer, ResetPasswordFragment())
-                    .addToBackStack(null)
-                    .commit()
-        }
+    private fun resetPassword() {
+        requireActivity().supportFragmentManager
+                .beginTransaction()
+                .add(R.id.rootFragmentContainer, ResetPasswordFragment())
+                .addToBackStack(null)
+                .commit()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

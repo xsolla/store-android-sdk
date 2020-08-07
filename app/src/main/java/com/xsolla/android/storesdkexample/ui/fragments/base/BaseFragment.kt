@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import com.xsolla.android.storesdkexample.R
 
 abstract class BaseFragment : Fragment() {
     lateinit var rootView: View
@@ -21,20 +20,6 @@ abstract class BaseFragment : Fragment() {
         rootView = inflater.inflate(getLayout(), container, false)
         initUI()
         return rootView
-    }
-
-    fun openFragment(fragment: Fragment?) {
-        parentFragmentManager
-                .beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                .replace(R.id.fragmentContainer, fragment!!)
-                .addToBackStack(null)
-                .commit()
-    }
-
-    fun popFragment() {
-        val fragmentManager = requireActivity().supportFragmentManager
-        fragmentManager.popBackStack()
     }
 
     fun showSnack(message: String) {
