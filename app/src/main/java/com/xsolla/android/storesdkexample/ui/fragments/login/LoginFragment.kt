@@ -13,7 +13,6 @@ import com.xsolla.android.login.entity.response.AuthResponse
 import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
-import com.xsolla.android.storesdkexample.util.AsteriskTransformation
 import com.xsolla.android.storesdkexample.util.ViewUtils
 import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -54,8 +53,6 @@ class LoginFragment : BaseFragment() {
                 }
             })
         }
-
-        rootView.passwordInput.transformationMethod = AsteriskTransformation()
 
         rootView.googleButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.GOOGLE
