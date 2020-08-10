@@ -100,9 +100,12 @@
         <TextView
             android:id="@+id/itemTextCount"
             style="@style/Widget.Xsolla.CatalogItem.Price"
-            android:layout_width="24dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:layout_weight="1"
             android:gravity="center"
+            android:minWidth="24dp"
             tools:text="12" />
 
         <ImageView
