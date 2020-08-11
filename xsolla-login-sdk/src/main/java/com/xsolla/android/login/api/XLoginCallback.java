@@ -1,8 +1,5 @@
 package com.xsolla.android.login.api;
 
-import com.xsolla.android.login.XLogin;
-import com.xsolla.android.login.entity.response.AuthResponse;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,6 +11,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
+ * todo remove
  * Callback for handling authentication requests
  */
 abstract public class XLoginCallback<T> implements Callback<T> {
@@ -38,12 +36,14 @@ abstract public class XLoginCallback<T> implements Callback<T> {
 
     /**
      * Called upon successful request
+     *
      * @param response response data
      */
     abstract protected void onSuccess(T response);
 
     /**
      * Called upon unsuccessful request
+     *
      * @param errorMessage error message
      */
     abstract protected void onFailure(String errorMessage);
@@ -61,17 +61,8 @@ abstract public class XLoginCallback<T> implements Callback<T> {
     }
 
     protected void handleResponse(T responseBody) {
-        if (responseBody instanceof AuthResponse) {
-            handleAuthResponse(responseBody);
-        } else {
-            onSuccess(responseBody);
-        }
-    }
-
-    protected void handleAuthResponse(T responseBody) {
-        String token = ((AuthResponse) responseBody).getToken();
-        XLogin.saveToken(token);
         onSuccess(responseBody);
+
     }
 
 }

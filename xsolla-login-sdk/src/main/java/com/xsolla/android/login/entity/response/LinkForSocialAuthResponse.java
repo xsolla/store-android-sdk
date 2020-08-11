@@ -15,6 +15,6 @@ public class LinkForSocialAuthResponse {
     }
 
     public String getToken() {
-        return TokenUtils.getTokenFromUrl(url);
+        return TokenUtils.Companion.getTokenFromUrl(url);
     }
 }

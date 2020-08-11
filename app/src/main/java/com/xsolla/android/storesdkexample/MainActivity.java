@@ -5,14 +5,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
-import com.xsolla.android.login.XLogin;
-import com.xsolla.android.storesdkexample.fragments.AuthFragment;
-import com.xsolla.android.storesdkexample.fragments.MainFragment;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import com.xsolla.android.login.XLogin;
+import com.xsolla.android.storesdkexample.fragments.AuthFragment;
+import com.xsolla.android.storesdkexample.fragments.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        XLogin.init(BuildConfig.LOGIN_ID, this, null);
+        XLogin.init(this, BuildConfig.LOGIN_ID, BuildConfig.USE_OAUTH, null);
         initFragment();
         initStatusBar();
     }

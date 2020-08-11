@@ -4,18 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.xsolla.android.login.XLogin;
-import com.xsolla.android.login.api.XLoginCallback;
+import com.xsolla.android.login.callback.AuthCallback;
 import com.xsolla.android.login.callback.FinishSocialCallback;
 import com.xsolla.android.login.callback.StartSocialCallback;
-import com.xsolla.android.login.entity.response.AuthResponse;
 import com.xsolla.android.login.social.SocialNetwork;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 public class AuthFragment extends BaseFragment {
 
@@ -64,16 +63,20 @@ public class AuthFragment extends BaseFragment {
             String username = usernameInput.getText().toString();
             String password = passwordInput.getText().toString();
 
-            XLogin.login(username, password, new XLoginCallback<AuthResponse>() {
+            XLogin.authenticate(username, password, new AuthCallback() {
                 @Override
-                protected void onSuccess(AuthResponse response) {
+                public void onSuccess() {
                     openFragment(new MainFragment());
                     ViewUtils.enable(v);
                 }
 
                 @Override
-                protected void onFailure(String errorMessage) {
-                    showSnack(errorMessage);
+                public void onError(Throwable throwable, String errorMessage) {
+                    if (errorMessage != null) {
+                        showSnack(errorMessage);
+                    } else {
+                        showSnack(throwable.getClass().getName());
+                    }
                     ViewUtils.enable(v);
                 }
             });

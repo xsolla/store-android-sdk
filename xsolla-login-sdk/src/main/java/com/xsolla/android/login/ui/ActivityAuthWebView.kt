@@ -73,7 +73,7 @@ class ActivityAuthWebView : AppCompatActivity() {
                 if (url.startsWith(callbackUrl)) {
                     val token = TokenUtils.getTokenFromUrl(url)
                     if (token != null) {
-                        XLogin.saveToken(token)
+                        XLogin.saveJwtToken(token)
                         finishWithResult(
                                 Activity.RESULT_OK,
                                 Result(Status.SUCCESS, token, null)

@@ -134,7 +134,7 @@ object LoginSocial {
             val (status, token, error) = fromResultIntent(activityResultData)
             when (status) {
                 ActivityAuthWebView.Status.SUCCESS -> {
-                    XLogin.saveToken(token)
+                    XLogin.saveJwtToken(token)
                     callback.onAuthSuccess()
                 }
                 ActivityAuthWebView.Status.CANCELLED -> callback.onAuthCancelled()
@@ -295,7 +295,7 @@ object LoginSocial {
                                 callback.invoke("Token not found")
                                 return
                             }
-                            XLogin.saveToken(jwtToken)
+                            XLogin.saveJwtToken(jwtToken)
                             callback.invoke(null)
                         } else {
                             val errorBody = response.errorBody()

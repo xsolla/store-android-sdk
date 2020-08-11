@@ -4,7 +4,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.xsolla.android.login.XLogin;
-import com.xsolla.android.login.api.XLoginCallback;
+import com.xsolla.android.login.callback.RegisterCallback;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
@@ -39,17 +39,21 @@ public class RegisterFragment extends BaseFragment {
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
 
-        XLogin.register(username, email, password, new XLoginCallback<Void>() {
+        XLogin.register(username, email, password, new RegisterCallback() {
             @Override
-            protected void onSuccess(Void response) {
+            public void onSuccess() {
                 showSnack("Registration success. Please check your email");
                 openFragment(new AuthFragment());
                 ViewUtils.enable(registerButton);
             }
 
             @Override
-            protected void onFailure(String errorMessage) {
-                showSnack(errorMessage);
+            public void onError(Throwable throwable, String errorMessage) {
+                if (errorMessage != null) {
+                    showSnack(errorMessage);
+                } else {
+                    showSnack(throwable.getClass().getName());
+                }
                 ViewUtils.enable(registerButton);
             }
         });
