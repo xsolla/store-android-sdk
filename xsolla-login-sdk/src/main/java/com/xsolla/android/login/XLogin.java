@@ -13,6 +13,7 @@ import com.xsolla.android.login.api.LoginApi;
 import com.xsolla.android.login.api.XLoginCallback;
 import com.xsolla.android.login.callback.AuthCallback;
 import com.xsolla.android.login.callback.FinishSocialCallback;
+import com.xsolla.android.login.callback.RefreshTokenCallback;
 import com.xsolla.android.login.callback.RegisterCallback;
 import com.xsolla.android.login.callback.StartSocialCallback;
 import com.xsolla.android.login.entity.request.AuthUserBody;
@@ -251,6 +252,36 @@ public class XLogin {
         }
     }
 
+    public static void refreshToken(final RefreshTokenCallback callback) {
+        if (!getInstance().useOauth) {
+            throw new IllegalArgumentException("Impossible to refresh JWT token. Use OAuth 2.0 instead");
+        }
+        getInstance().loginApi
+                .oauthRefreshToken(getInstance().tokenUtils.getOauthRefreshToken(),"refresh_token", 59, getInstance().callbackUrl)
+                .enqueue(new Callback<OauthAuthResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<OauthAuthResponse> call, @NonNull Response<OauthAuthResponse> response) {
+                        if (response.isSuccessful()) {
+                            OauthAuthResponse oauthAuthResponse = response.body();
+                            if (oauthAuthResponse != null) {
+                                String accessToken = oauthAuthResponse.getAccessToken();
+                                String refreshToken = oauthAuthResponse.getRefreshToken();
+                                getInstance().tokenUtils.setOauthAccessToken(accessToken);
+                                getInstance().tokenUtils.setOauthRefreshToken(refreshToken);
+                                callback.onSuccess();
+                            } else {
+                                callback.onError(null, "Empty response");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<OauthAuthResponse> call, @NonNull Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
+    }
+
     /**
      * Start authentication via a social network
      *
@@ -312,6 +343,7 @@ public class XLogin {
         getInstance().tokenUtils.setJwtToken(null);
     }
 
+    //TODO
     public static boolean isTokenExpired() {
         JWT jwt = getInstance().tokenUtils.getJwt();
         if (jwt == null) return true;

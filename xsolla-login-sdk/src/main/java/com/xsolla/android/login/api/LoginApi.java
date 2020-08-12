@@ -13,6 +13,8 @@ import com.xsolla.android.login.entity.response.OauthAuthResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -52,6 +54,15 @@ public interface LoginApi {
             @Query("client_id") int clientId,
             @Query("scope") String scope,
             @Body OauthAuthUserBody oauthAuthUserBody
+    );
+
+    @FormUrlEncoded
+    @POST("/api/oauth2/token")
+    Call<OauthAuthResponse> oauthRefreshToken(
+            @Field("refresh_token") String refreshToken,
+            @Field("grant_type") String grantType,
+            @Field("client_id") int clientId,
+            @Field("redirect_uri") String redirectUri
     );
 
 
