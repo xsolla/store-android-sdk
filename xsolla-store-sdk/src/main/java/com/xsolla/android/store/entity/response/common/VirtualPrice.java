@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 public class VirtualPrice implements IPrice, Parcelable {
 
-    private int amount;
+    private long amount;
     @SerializedName("amount_without_discount")
     private int amountWithoutDiscount;
 
@@ -53,7 +53,7 @@ public class VirtualPrice implements IPrice, Parcelable {
     };
 
     @Deprecated
-    public int getAmount() {
+    public long getAmount() {
         return amount;
     }
 
@@ -128,7 +128,7 @@ public class VirtualPrice implements IPrice, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(amount);
+        dest.writeLong(amount);
         dest.writeInt(amountWithoutDiscount);
         dest.writeString(sku);
         dest.writeByte((byte) (isDefault ? 1 : 0));

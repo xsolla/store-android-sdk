@@ -59,7 +59,7 @@ public class RevokeItemsResponse {
 
     private class Item {
         private String sku;
-        private int quantity;
+        private long quantity;
     }
 
 }

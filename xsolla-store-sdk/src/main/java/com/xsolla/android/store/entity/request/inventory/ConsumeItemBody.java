@@ -5,11 +5,11 @@ import com.google.gson.annotations.SerializedName;
 public class ConsumeItemBody {
 
     private String sku;
-    private int quantity;
+    private long quantity;
     @SerializedName("instance_id")
     private String instanceId;
 
-    public ConsumeItemBody(String sku, int quantity, String instanceId) {
+    public ConsumeItemBody(String sku, long quantity, String instanceId) {
         this.sku = sku;
         this.quantity = quantity;
         this.instanceId = instanceId;

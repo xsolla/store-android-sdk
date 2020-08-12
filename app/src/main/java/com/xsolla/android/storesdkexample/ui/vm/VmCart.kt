@@ -44,7 +44,7 @@ class VmCart(application: Application) : AndroidViewModel(application) {
             XStore.updateItemFromCurrentCart(item.sku, newQuantity, object : XStoreCallback<Void?>() {
                 override fun onSuccess(response: Void?) {
                     updateCart()
-                    onChange.invoke(if (newQuantity == 0) "Item removed from cart" else "Item's quantity changed")
+                    onChange.invoke(if (newQuantity == 0L) "Item removed from cart" else "Item's quantity changed")
                 }
 
                 override fun onFailure(errorMessage: String) {

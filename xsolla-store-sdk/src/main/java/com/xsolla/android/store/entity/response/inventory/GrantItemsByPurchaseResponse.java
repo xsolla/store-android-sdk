@@ -66,7 +66,7 @@ public class GrantItemsByPurchaseResponse {
 
     private class Item {
         private String sku;
-        private int quantity;
+        private long quantity;
     }
 
 }

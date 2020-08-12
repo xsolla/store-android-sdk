@@ -41,7 +41,7 @@ public class OrderResponse {
 
     private class Item {
         private String sku;
-        private int quantity;
+        private long quantity;
         @SerializedName("is_free")
         private boolean isFree;
         private Price price;
@@ -55,7 +55,7 @@ public class OrderResponse {
     }
 
     private class VirtualPrice {
-        private int amount;
+        private long amount;
         @SerializedName("amount_without_discount")
         private String amountWithoutDiscount;
         private String currency;

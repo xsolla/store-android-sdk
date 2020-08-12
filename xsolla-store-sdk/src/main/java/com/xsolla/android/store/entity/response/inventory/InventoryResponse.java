@@ -23,14 +23,14 @@ public class InventoryResponse {
         private String sku;
         private Type type;
         private String name;
-        private int quantity;
+        private long quantity;
         private String description;
         @SerializedName("image_url")
         String imageUrl;
         private List<Group> groups;
         private Object attributes;
         @SerializedName("remaining_uses")
-        private int remainingUses;
+        private long remainingUses;
         @SerializedName("virtual_item_type")
         private VirtualItemType virtualItemType;
 
@@ -72,7 +72,7 @@ public class InventoryResponse {
             return name;
         }
 
-        public int getQuantity() {
+        public long getQuantity() {
             return quantity;
         }
 
@@ -92,7 +92,7 @@ public class InventoryResponse {
             return attributes;
         }
 
-        public int getRemainingUses() {
+        public long getRemainingUses() {
             return remainingUses;
         }
 
@@ -110,10 +110,10 @@ public class InventoryResponse {
             dest.writeString(instanceId);
             dest.writeString(sku);
             dest.writeString(name);
-            dest.writeInt(quantity);
+            dest.writeLong(quantity);
             dest.writeString(description);
             dest.writeString(imageUrl);
-            dest.writeInt(remainingUses);
+            dest.writeLong(remainingUses);
         }
 
         public enum Type {

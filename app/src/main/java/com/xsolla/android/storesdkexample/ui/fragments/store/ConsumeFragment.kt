@@ -38,9 +38,9 @@ class ConsumeFragment : Fragment() {
             consumeButton.setOnClickListener { v ->
                 ViewUtils.disable(v)
                 val quantity = try {
-                    quantityInput.text.toString().toInt()
+                    quantityInput.text.toString().toLong()
                 } catch (e: Exception) {
-                    0
+                    0L
                 }
                 if (quantity > item.quantity) {
                     updateQuantity(item.quantity)
@@ -82,7 +82,7 @@ class ConsumeFragment : Fragment() {
         }
     }
 
-    private fun updateQuantity(quantity: Int) {
+    private fun updateQuantity(quantity: Long) {
         quantityLabel.text = String.format("of %s available", quantity)
         quantityInput.setText("1")
     }

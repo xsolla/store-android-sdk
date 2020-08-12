@@ -27,6 +27,7 @@ import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
+import com.xsolla.android.storesdkexample.util.sumByLong
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.item_balance.view.*
 import kotlinx.android.synthetic.main.layout_drawer.*
@@ -97,9 +98,9 @@ class StoreActivity : AppCompatActivity() {
         val cartView = menu.findItem(R.id.action_cart).actionView
         vmCart.cartContent.observe(this, Observer { cartItems ->
             val cartCounter = cartView.findViewById<TextView>(R.id.cart_badge)
-            val count = cartItems.sumBy { item -> item.quantity }
+            val count = cartItems.sumByLong { item -> item.quantity }
             cartCounter.text = count.toString()
-            if (count == 0) {
+            if (count == 0L) {
                 cartCounter.visibility = View.GONE
             } else {
                 cartCounter.visibility = View.VISIBLE
@@ -160,9 +161,9 @@ class StoreActivity : AppCompatActivity() {
             startLogin()
         }
         vmCart.cartContent.observe(this, Observer {
-            val count = it.sumBy { item -> item.quantity }
+            val count = it.sumByLong { item -> item.quantity }
             textCartCounter.text = count.toString()
-            if (count == 0) {
+            if (count == 0L) {
                 bgCartCounter.visibility = View.GONE
                 textCartCounter.visibility = View.GONE
             } else {

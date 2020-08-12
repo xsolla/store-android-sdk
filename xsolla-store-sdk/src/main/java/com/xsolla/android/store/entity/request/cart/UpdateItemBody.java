@@ -2,17 +2,17 @@ package com.xsolla.android.store.entity.request.cart;
 
 public class UpdateItemBody {
 
-    private int quantity;
+    private long quantity;
 
-    public UpdateItemBody(int quantity) {
+    public UpdateItemBody(long quantity) {
         this.quantity = quantity;
     }
 
-    public int getQuantity() {
+    public long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(long quantity) {
         this.quantity = quantity;
     }
 }

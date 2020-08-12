@@ -10,7 +10,7 @@ public class Content {
 
     @SerializedName("image_url")
     private String imageUrl;
-    private int quantity;
+    private long quantity;
 
     public String getSku() {
         return sku;
@@ -32,7 +32,7 @@ public class Content {
         return imageUrl;
     }
 
-    public int getQuantity() {
+    public long getQuantity() {
         return quantity;
     }
 }
