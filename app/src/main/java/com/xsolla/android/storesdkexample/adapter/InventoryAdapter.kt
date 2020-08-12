@@ -46,6 +46,11 @@ class InventoryAdapter(
             Glide.with(itemView).load(item.imageUrl).into(itemView.itemIcon)
             itemView.itemName.text = item.name
             itemView.itemQuantity.text = item.quantity.toString()
+            if (item.virtualItemType == InventoryResponse.Item.VirtualItemType.NON_RENEWING_SUBSCRIPTION) {
+                itemView.itemQuantity.visibility = View.INVISIBLE
+            } else {
+                itemView.itemQuantity.visibility = View.VISIBLE
+            }
 
             itemView.itemExpiration.text = getExpirationText(item)
 
