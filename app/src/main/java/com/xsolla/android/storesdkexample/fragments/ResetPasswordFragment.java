@@ -4,7 +4,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.xsolla.android.login.XLogin;
-import com.xsolla.android.login.api.XLoginCallback;
+import com.xsolla.android.login.callback.ResetPasswordCallback;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
@@ -32,17 +32,21 @@ public class ResetPasswordFragment extends BaseFragment {
     private void resetPassword() {
         hideKeyboard();
         String username = usernameInput.getText().toString();
-        XLogin.resetPassword(username, new XLoginCallback<Void>() {
+        XLogin.resetPassword(username, new ResetPasswordCallback() {
             @Override
-            protected void onSuccess(Void response) {
+            public void onSuccess() {
                 showSnack("Password reset success. Check your email");
                 openRootFragment();
                 ViewUtils.enable(resetPasswordButton);
             }
 
             @Override
-            protected void onFailure(String errorMessage) {
-                showSnack(errorMessage);
+            public void onError(Throwable throwable, String errorMessage) {
+                if (errorMessage != null) {
+                    showSnack(errorMessage);
+                } else {
+                    showSnack(throwable.getClass().getName());
+                }
                 ViewUtils.enable(resetPasswordButton);
             }
         });

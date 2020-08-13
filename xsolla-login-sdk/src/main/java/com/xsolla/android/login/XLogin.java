@@ -10,11 +10,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.xsolla.android.login.api.LoginApi;
-import com.xsolla.android.login.api.XLoginCallback;
 import com.xsolla.android.login.callback.AuthCallback;
 import com.xsolla.android.login.callback.FinishSocialCallback;
 import com.xsolla.android.login.callback.RefreshTokenCallback;
 import com.xsolla.android.login.callback.RegisterCallback;
+import com.xsolla.android.login.callback.ResetPasswordCallback;
 import com.xsolla.android.login.callback.StartSocialCallback;
 import com.xsolla.android.login.entity.request.AuthUserBody;
 import com.xsolla.android.login.entity.request.OauthAuthUserBody;
@@ -215,6 +215,8 @@ public class XLogin {
                                 } else {
                                     callback.onError(null, "Empty response");
                                 }
+                            } else {
+                                callback.onError(null, getErrorMessage(response.errorBody()));
                             }
                         }
 
@@ -241,6 +243,8 @@ public class XLogin {
                                 } else {
                                     callback.onError(null, "Empty response");
                                 }
+                            } else {
+                                callback.onError(null, getErrorMessage(response.errorBody()));
                             }
                         }
 
@@ -257,7 +261,7 @@ public class XLogin {
             throw new IllegalArgumentException("Impossible to refresh JWT token. Use OAuth 2.0 instead");
         }
         getInstance().loginApi
-                .oauthRefreshToken(getInstance().tokenUtils.getOauthRefreshToken(),"refresh_token", 59, getInstance().callbackUrl)
+                .oauthRefreshToken(getInstance().tokenUtils.getOauthRefreshToken(), "refresh_token", 59, getInstance().callbackUrl)
                 .enqueue(new Callback<OauthAuthResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<OauthAuthResponse> call, @NonNull Response<OauthAuthResponse> response) {
@@ -272,6 +276,8 @@ public class XLogin {
                             } else {
                                 callback.onError(null, "Empty response");
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
                         }
                     }
 
@@ -331,9 +337,25 @@ public class XLogin {
      * @param callback status callback
      * @see <a href="https://developers.xsolla.com/login-api/general/reset-password">Login API Reference</a>
      */
-    public static void resetPassword(String username, XLoginCallback<Void> callback) {
+    public static void resetPassword(String username, final ResetPasswordCallback callback) {
         ResetPasswordBody resetPasswordBody = new ResetPasswordBody(username);
-        getInstance().loginApi.resetPassword(getInstance().projectId, resetPasswordBody).enqueue(callback);
+        getInstance().loginApi
+                .resetPassword(getInstance().projectId, resetPasswordBody)
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            callback.onSuccess();
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
     }
 
     /**
@@ -357,10 +379,6 @@ public class XLogin {
      */
     public static JWT getJwt() {
         return getInstance().tokenUtils.getJwt();
-    }
-
-    public static String getCallbackUrl() {
-        return getInstance().callbackUrl;
     }
 
     public static class SocialConfig {
