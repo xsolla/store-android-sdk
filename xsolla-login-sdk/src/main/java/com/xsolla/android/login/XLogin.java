@@ -66,10 +66,10 @@ public class XLogin {
         this.useOauth = useOauth;
         this.tokenUtils = tokenUtils;
         this.loginApi = loginApi;
-        loginSocial.init(context.getApplicationContext(), loginApi, projectId, callbackUrl, socialConfig);
+        loginSocial.init(context.getApplicationContext(), loginApi, projectId, callbackUrl, tokenUtils, useOauth, socialConfig);
     }
 
-    private static XLogin getInstance() {
+    public static XLogin getInstance() {
         if (instance == null) {
             throw new IllegalStateException("XLogin SDK not initialized. Call \"XLogin.init()\" in MainActivity.onCreate()");
         }
@@ -87,10 +87,6 @@ public class XLogin {
         } else {
             return getInstance().tokenUtils.getJwtToken();
         }
-    }
-
-    public static void saveJwtToken(String token) {
-        getInstance().tokenUtils.setJwtToken(token);
     }
 
     /**
@@ -210,7 +206,7 @@ public class XLogin {
                                 AuthResponse authResponse = response.body();
                                 if (authResponse != null) {
                                     String token = authResponse.getToken();
-                                    XLogin.saveJwtToken(token);
+                                    XLogin.getInstance().tokenUtils.setJwtToken(token);
                                     callback.onSuccess();
                                 } else {
                                     callback.onError(null, "Empty response");

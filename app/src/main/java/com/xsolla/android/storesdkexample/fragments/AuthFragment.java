@@ -100,9 +100,14 @@ public class AuthFragment extends BaseFragment {
         }
 
         @Override
-        public void onError(@NonNull String errorMessage) {
-            showSnack(errorMessage);
+        public void onError(Throwable throwable, String errorMessage) {
+            if (errorMessage != null) {
+                showSnack(errorMessage);
+            } else {
+                showSnack(throwable.getClass().getName());
+            }
         }
+
     };
 
     private FinishSocialCallback finishSocialCallback = new FinishSocialCallback() {
@@ -117,8 +122,12 @@ public class AuthFragment extends BaseFragment {
         }
 
         @Override
-        public void onAuthError(@NonNull String errorMessage) {
-            showSnack(errorMessage);
+        public void onAuthError(Throwable throwable, String errorMessage) {
+            if (errorMessage != null) {
+                showSnack(errorMessage);
+            } else {
+                showSnack(throwable.getClass().getName());
+            }
         }
     };
 

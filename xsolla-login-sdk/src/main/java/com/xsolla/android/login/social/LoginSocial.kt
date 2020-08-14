@@ -23,15 +23,16 @@ import com.xsolla.android.login.callback.StartSocialCallback
 import com.xsolla.android.login.entity.request.AuthUserSocialBody
 import com.xsolla.android.login.entity.response.AuthSocialResponse
 import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse
+import com.xsolla.android.login.entity.response.OauthAuthResponse
+import com.xsolla.android.login.entity.response.OauthLinkForSocialAuthResponse
+import com.xsolla.android.login.token.TokenUtils
 import com.xsolla.android.login.ui.ActivityAuthWebView
 import com.xsolla.android.login.ui.ActivityAuthWebView.Result.Companion.fromResultIntent
 import okhttp3.ResponseBody
-import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.IOException
 import java.util.*
 
 object LoginSocial {
@@ -44,21 +45,25 @@ object LoginSocial {
     private lateinit var loginApi: LoginApi
     private lateinit var projectId: String
     private lateinit var callbackUrl: String
+    private lateinit var tokenUtils: TokenUtils
+    private var useOauth = false
 
     private lateinit var fbCallbackManager: CallbackManager
     private lateinit var fbCallback: FacebookCallback<LoginResult>
 
-    var facebookAppId: String? = null
-    var googleServerId: String? = null
+    private var facebookAppId: String? = null
+    private var googleServerId: String? = null
 
     private var googleAvailable = false
 
     private var finishSocialCallback: FinishSocialCallback? = null
 
-    fun init(context: Context, loginApi: LoginApi, projectId: String, callbackUrl: String, socialConfig: XLogin.SocialConfig?) {
+    fun init(context: Context, loginApi: LoginApi, projectId: String, callbackUrl: String, tokenUtils: TokenUtils, useOauth: Boolean, socialConfig: XLogin.SocialConfig?) {
         this.loginApi = loginApi
         this.projectId = projectId
         this.callbackUrl = callbackUrl
+        this.tokenUtils = tokenUtils
+        this.useOauth = useOauth
         facebookAppId = socialConfig?.facebookAppId
         googleServerId = socialConfig?.googleServerId
         initFacebook(context)
@@ -73,11 +78,11 @@ object LoginSocial {
             fbCallback = object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
                     val facebookToken = loginResult.accessToken.token
-                    getJwtFromSocial(SocialNetwork.FACEBOOK, facebookToken) { error ->
-                        if (error == null) {
+                    getJwtFromSocial(SocialNetwork.FACEBOOK, facebookToken) { t, error ->
+                        if (t == null && error == null) {
                             finishSocialCallback?.onAuthSuccess()
                         } else {
-                            finishSocialCallback?.onAuthError(error)
+                            finishSocialCallback?.onAuthError(t, error)
                         }
                         finishSocialCallback = null
                     }
@@ -85,11 +90,11 @@ object LoginSocial {
 
                 override fun onCancel() {
                     if (AccessToken.isCurrentAccessTokenActive()) {
-                        getJwtFromSocial(SocialNetwork.FACEBOOK, AccessToken.getCurrentAccessToken()!!.token) { error ->
-                            if (error == null) {
+                        getJwtFromSocial(SocialNetwork.FACEBOOK, AccessToken.getCurrentAccessToken()!!.token) { t, error ->
+                            if (t == null && error == null) {
                                 finishSocialCallback?.onAuthSuccess()
                             } else {
-                                finishSocialCallback?.onAuthError(error)
+                                finishSocialCallback?.onAuthError(t, error)
                             }
                             finishSocialCallback = null
                         }
@@ -100,7 +105,7 @@ object LoginSocial {
                 }
 
                 override fun onError(error: FacebookException) {
-                    finishSocialCallback?.onAuthError(error.message ?: error.javaClass.name)
+                    finishSocialCallback?.onAuthError(error, null)
                     finishSocialCallback = null
                 }
             }
@@ -131,14 +136,41 @@ object LoginSocial {
 
     fun finishSocialAuth(context: Context, socialNetwork: SocialNetwork, activityResultRequestCode: Int, activityResultCode: Int, activityResultData: Intent?, callback: FinishSocialCallback) {
         if (activityResultRequestCode == RC_AUTH_WEBVIEW) {
-            val (status, token, error) = fromResultIntent(activityResultData)
+            val (status, token, code, error) = fromResultIntent(activityResultData)
             when (status) {
                 ActivityAuthWebView.Status.SUCCESS -> {
-                    XLogin.saveJwtToken(token)
-                    callback.onAuthSuccess()
+                    if (useOauth) {
+                        loginApi
+                                .oauthGetTokenByCode(code, "authorization_code", 59, callbackUrl)
+                                .enqueue(object : Callback<OauthAuthResponse> {
+                                    override fun onResponse(call: Call<OauthAuthResponse>, response: Response<OauthAuthResponse>) {
+                                        if (response.isSuccessful) {
+                                            val oauthAuthResponse = response.body()
+                                            if (oauthAuthResponse != null) {
+                                                val accessToken = oauthAuthResponse.accessToken
+                                                val refreshToken = oauthAuthResponse.refreshToken
+                                                tokenUtils.oauthAccessToken = accessToken
+                                                tokenUtils.oauthRefreshToken = refreshToken
+                                                callback.onAuthSuccess()
+                                            } else {
+                                                callback.onAuthError(null, "Empty response")
+                                            }
+                                        } else {
+                                            callback.onAuthError(null, getErrorMessage(response.errorBody()))
+                                        }
+                                    }
+
+                                    override fun onFailure(call: Call<OauthAuthResponse>, t: Throwable) {
+                                        callback.onAuthError(t, null)
+                                    }
+                                })
+                    } else {
+                        tokenUtils.jwtToken = token
+                        callback.onAuthSuccess()
+                    }
                 }
                 ActivityAuthWebView.Status.CANCELLED -> callback.onAuthCancelled()
-                ActivityAuthWebView.Status.ERROR -> callback.onAuthError(error!!)
+                ActivityAuthWebView.Status.ERROR -> callback.onAuthError(null, error!!)
             }
             return
         }
@@ -153,22 +185,22 @@ object LoginSocial {
                 val credential = oneTapClient.getSignInCredentialFromIntent(activityResultData)
                 val idToken = credential.googleIdToken
                 if (idToken == null) {
-                    callback.onAuthError("idToken is null")
+                    callback.onAuthError(null, "idToken is null")
                 } else {
                     val email = JWT(idToken).getClaim("email").asString()
                     Thread(Runnable {
                         val oauthToken = GoogleAuthUtil.getToken(context, email, magicString)
                         if (oauthToken == null) {
                             Handler(Looper.getMainLooper()).post {
-                                callback.onAuthError("oauthToken is null")
+                                callback.onAuthError(null, "oauthToken is null")
                             }
                         }
                         finishSocialCallback = callback
-                        getJwtFromSocial(SocialNetwork.GOOGLE, oauthToken) { error ->
-                            if (error == null) {
+                        getJwtFromSocial(SocialNetwork.GOOGLE, oauthToken) { t, error ->
+                            if (t == null && error == null) {
                                 finishSocialCallback?.onAuthSuccess()
                             } else {
-                                finishSocialCallback?.onAuthError(error)
+                                finishSocialCallback?.onAuthError(t, error)
                             }
                             finishSocialCallback = null
                         }
@@ -178,7 +210,7 @@ object LoginSocial {
                 if (e.statusCode == CommonStatusCodes.CANCELED) {
                     callback.onAuthCancelled()
                 } else {
-                    callback.onAuthError(e.message ?: e.javaClass.name)
+                    callback.onAuthError(e, null)
                 }
             }
         }
@@ -231,60 +263,81 @@ object LoginSocial {
     }
 
     private fun tryWebviewBasedSocialAuth(activity: Activity?, fragment: Fragment?, socialNetwork: SocialNetwork, callback: StartSocialCallback) {
-        loginApi.getLinkForSocialAuth(socialNetwork.providerName, projectId).enqueue(object : Callback<LinkForSocialAuthResponse> {
-            override fun onResponse(call: Call<LinkForSocialAuthResponse>, response: Response<LinkForSocialAuthResponse>) {
-                if (response.isSuccessful) {
-                    val url = response.body()?.url
-                    if (url == null) {
-                        callback.onError("Empty response")
-                        return
-                    }
-                    val intent: Intent = if (activity != null) {
-                        Intent(activity, ActivityAuthWebView::class.java)
-                    } else {
-                        Intent(fragment!!.context, ActivityAuthWebView::class.java)
-                    }
-                    with(intent) {
-                        putExtra(ActivityAuthWebView.ARG_AUTH_URL, url)
-                        putExtra(ActivityAuthWebView.ARG_CALLBACK_URL, callbackUrl)
-                    }
-                    if (activity != null) {
-                        activity.startActivityForResult(intent, RC_AUTH_WEBVIEW)
-                    } else {
-                        fragment!!.startActivityForResult(intent, RC_AUTH_WEBVIEW)
-                    }
-                    callback.onAuthStarted()
-                } else {
-                    val errorBody = response.errorBody()
-                    val errorMessage = if (errorBody != null) {
-                        getErrorMessage(errorBody)
-                    } else {
-                        "Error"
-                    }
-                    callback.onError(errorMessage)
-                }
-            }
+        if (!useOauth) {
+            loginApi.getLinkForSocialAuth(socialNetwork.providerName, projectId)
+                    .enqueue(object : Callback<LinkForSocialAuthResponse> {
+                        override fun onResponse(call: Call<LinkForSocialAuthResponse>, response: Response<LinkForSocialAuthResponse>) {
+                            if (response.isSuccessful) {
+                                val url = response.body()?.url
+                                if (url == null) {
+                                    callback.onError(null, "Empty response")
+                                    return
+                                }
+                                openWebviewActivity(url, activity, fragment)
+                                callback.onAuthStarted()
+                            } else {
+                                callback.onError(null, getErrorMessage(response.errorBody()))
+                            }
+                        }
 
-            override fun onFailure(call: Call<LinkForSocialAuthResponse>, t: Throwable) {
-                val errorMessage = t.message ?: t.javaClass.name
-                callback.onError(errorMessage)
-            }
-        })
+                        override fun onFailure(call: Call<LinkForSocialAuthResponse>, t: Throwable) {
+                            callback.onError(t, null)
+                        }
+                    })
+        } else {
+            loginApi.oauthGetLinkForSocialAuth(socialNetwork.providerName, 59, UUID.randomUUID().toString(), callbackUrl, "code", "offline")
+                    .enqueue(object : Callback<OauthLinkForSocialAuthResponse> {
+                        override fun onResponse(call: Call<OauthLinkForSocialAuthResponse>, response: Response<OauthLinkForSocialAuthResponse>) {
+                            if (response.isSuccessful) {
+                                val url = response.body()?.url
+                                if (url == null) {
+                                    callback.onError(null, "Empty response")
+                                    return
+                                }
+                                openWebviewActivity(url, activity, fragment)
+                                callback.onAuthStarted()
+                            } else {
+                                callback.onError(null, getErrorMessage(response.errorBody()))
+                            }
+                        }
+                        override fun onFailure(call: Call<OauthLinkForSocialAuthResponse>, t: Throwable) {
+                            callback.onError(t, null)
+                        }
+                    })
+        }
     }
 
-    private fun getErrorMessage(errorBody: ResponseBody): String {
+    private fun openWebviewActivity(url: String, activity: Activity?, fragment: Fragment?) {
+        val intent: Intent = if (activity != null) {
+            Intent(activity, ActivityAuthWebView::class.java)
+        } else {
+            Intent(fragment!!.context, ActivityAuthWebView::class.java)
+        }
+        with(intent) {
+            putExtra(ActivityAuthWebView.ARG_AUTH_URL, url)
+            putExtra(ActivityAuthWebView.ARG_CALLBACK_URL, callbackUrl)
+        }
+        if (activity != null) {
+            activity.startActivityForResult(intent, RC_AUTH_WEBVIEW)
+        } else {
+            fragment!!.startActivityForResult(intent, RC_AUTH_WEBVIEW)
+        }
+    }
+
+    private fun getErrorMessage(errorBody: ResponseBody?): String {
+        if (errorBody == null) {
+            return "Unknown Error"
+        }
         try {
             val errorObject = JSONObject(errorBody.string())
             return errorObject.getJSONObject("error").getString("description")
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         return "Unknown Error"
     }
 
-    private fun getJwtFromSocial(socialNetwork: SocialNetwork, socialToken: String, callback: (String?) -> Unit) {
+    private fun getJwtFromSocial(socialNetwork: SocialNetwork, socialToken: String, callback: (Throwable?, String?) -> Unit) {
         val authUserSocialBody = AuthUserSocialBody(socialToken)
         loginApi.loginSocial(socialNetwork.providerName, projectId, authUserSocialBody).enqueue(
                 object : Callback<AuthSocialResponse> {
@@ -292,11 +345,11 @@ object LoginSocial {
                         if (response.isSuccessful) {
                             val jwtToken = response.body()?.token
                             if (jwtToken == null) {
-                                callback.invoke("Token not found")
+                                callback.invoke(null, "Token not found")
                                 return
                             }
-                            XLogin.saveJwtToken(jwtToken)
-                            callback.invoke(null)
+                            tokenUtils.jwtToken = jwtToken
+                            callback.invoke(null, null)
                         } else {
                             val errorBody = response.errorBody()
                             val errorMessage = if (errorBody != null) {
@@ -304,13 +357,12 @@ object LoginSocial {
                             } else {
                                 "Error"
                             }
-                            callback.invoke(errorMessage)
+                            callback.invoke(null, errorMessage)
                         }
                     }
 
                     override fun onFailure(call: Call<AuthSocialResponse>, t: Throwable) {
-                        val errorMessage = t.message ?: t.javaClass.name
-                        callback.invoke(errorMessage)
+                        callback.invoke(t, null)
                     }
                 })
     }

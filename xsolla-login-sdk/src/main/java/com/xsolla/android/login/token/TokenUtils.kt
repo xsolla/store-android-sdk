@@ -40,9 +40,14 @@ class TokenUtils(context: Context) {
 
         private const val PREFS_FILE_NAME = "XSOLLA_LOGIN"
 
-        fun getTokenFromUrl(url: String?): String? {
+        fun getTokenFromUrl(url: String): String? {
             val uri = Uri.parse(url)
             return uri.getQueryParameter("token")
+        }
+
+        fun getCodeFromUrl(url: String): String? {
+            val uri = Uri.parse(url)
+            return uri.getQueryParameter("code")
         }
 
     }

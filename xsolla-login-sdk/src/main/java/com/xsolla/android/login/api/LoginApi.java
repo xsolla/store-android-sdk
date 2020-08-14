@@ -10,6 +10,7 @@ import com.xsolla.android.login.entity.response.AuthResponse;
 import com.xsolla.android.login.entity.response.AuthSocialResponse;
 import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse;
 import com.xsolla.android.login.entity.response.OauthAuthResponse;
+import com.xsolla.android.login.entity.response.OauthLinkForSocialAuthResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -63,6 +64,25 @@ public interface LoginApi {
             @Field("grant_type") String grantType,
             @Field("client_id") int clientId,
             @Field("redirect_uri") String redirectUri
+    );
+
+    @FormUrlEncoded
+    @POST("/api/oauth2/token")
+    Call<OauthAuthResponse> oauthGetTokenByCode(
+            @Field("code") String code,
+            @Field("grant_type") String grantType,
+            @Field("client_id") int clientId,
+            @Field("redirect_uri") String redirectUri
+    );
+
+    @GET("/api/oauth2/social/{providerName}/login_url")
+    Call<OauthLinkForSocialAuthResponse> oauthGetLinkForSocialAuth(
+            @Path("providerName") String providerName,
+            @Query("client_id") int clientId,
+            @Query("state") String state,
+            @Query("redirect_uri") String redirectUri,
+            @Query("response_type") String responseType,
+            @Query("scope") String scope
     );
 
 

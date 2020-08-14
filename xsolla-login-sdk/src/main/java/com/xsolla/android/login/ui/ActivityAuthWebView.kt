@@ -9,7 +9,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import com.xsolla.android.login.R
-import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.token.TokenUtils
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.xsolla_login_activity_auth_webview.*
@@ -37,7 +36,7 @@ class ActivityAuthWebView : AppCompatActivity() {
         close_icon.setOnClickListener {
             finishWithResult(
                     Activity.RESULT_CANCELED,
-                    Result(Status.CANCELLED, null, null)
+                    Result(Status.CANCELLED, null, null,null)
             )
         }
 
@@ -51,7 +50,7 @@ class ActivityAuthWebView : AppCompatActivity() {
         } else {
             finishWithResult(
                     Activity.RESULT_CANCELED,
-                    Result(Status.CANCELLED, null, null)
+                    Result(Status.CANCELLED, null, null, null)
             )
         }
     }
@@ -71,22 +70,26 @@ class ActivityAuthWebView : AppCompatActivity() {
 
             override fun doUpdateVisitedHistory(view: WebView, url: String, isReload: Boolean) {
                 if (url.startsWith(callbackUrl)) {
-                    val token = TokenUtils.getTokenFromUrl(url)
-                    if (token != null) {
-                        XLogin.saveJwtToken(token)
-                        finishWithResult(
-                                Activity.RESULT_OK,
-                                Result(Status.SUCCESS, token, null)
-                        )
-                    } else {
-                        finishWithResult(
-                                Activity.RESULT_OK,
-                                Result(Status.ERROR, null, "Token not found")
-                        )
-                    }
+                    handleCallbackUrlRedirect(url)
                 }
                 super.doUpdateVisitedHistory(view, url, isReload)
             }
+        }
+    }
+
+    private fun handleCallbackUrlRedirect(url: String) {
+        val code = TokenUtils.getCodeFromUrl(url)
+        val token = TokenUtils.getTokenFromUrl(url)
+        if (code == null && token == null) {
+            finishWithResult(
+                    Activity.RESULT_OK,
+                    Result(Status.ERROR, null, null, "Code or token not found")
+            )
+        } else {
+            finishWithResult(
+                    Activity.RESULT_OK,
+                    Result(Status.SUCCESS, token, code, null)
+            )
         }
     }
 
@@ -98,12 +101,12 @@ class ActivityAuthWebView : AppCompatActivity() {
     }
 
     @Parcelize
-    data class Result(val status: Status, val token: String?, val error: String?) : Parcelable {
+    data class Result(val status: Status, val token: String?, val code: String?, val error: String?) : Parcelable {
         companion object {
             @JvmStatic
             fun fromResultIntent(intent: Intent?): Result =
                     intent?.getParcelableExtra(RESULT)
-                            ?: Result(Status.ERROR, null, "Unknown")
+                            ?: Result(Status.ERROR, null, null, "Unknown")
         }
     }
 
