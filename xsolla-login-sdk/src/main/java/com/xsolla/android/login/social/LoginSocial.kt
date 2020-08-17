@@ -21,10 +21,8 @@ import com.xsolla.android.login.api.LoginApi
 import com.xsolla.android.login.callback.FinishSocialCallback
 import com.xsolla.android.login.callback.StartSocialCallback
 import com.xsolla.android.login.entity.request.AuthUserSocialBody
-import com.xsolla.android.login.entity.response.AuthSocialResponse
-import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse
-import com.xsolla.android.login.entity.response.OauthAuthResponse
-import com.xsolla.android.login.entity.response.OauthLinkForSocialAuthResponse
+import com.xsolla.android.login.entity.request.OauthGetCodeBySocialTokenBody
+import com.xsolla.android.login.entity.response.*
 import com.xsolla.android.login.token.TokenUtils
 import com.xsolla.android.login.ui.ActivityAuthWebView
 import com.xsolla.android.login.ui.ActivityAuthWebView.Result.Companion.fromResultIntent
@@ -78,7 +76,7 @@ object LoginSocial {
             fbCallback = object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
                     val facebookToken = loginResult.accessToken.token
-                    getJwtFromSocial(SocialNetwork.FACEBOOK, facebookToken) { t, error ->
+                    getLoginTokenFromSocial(SocialNetwork.FACEBOOK, facebookToken) { t, error ->
                         if (t == null && error == null) {
                             finishSocialCallback?.onAuthSuccess()
                         } else {
@@ -90,7 +88,7 @@ object LoginSocial {
 
                 override fun onCancel() {
                     if (AccessToken.isCurrentAccessTokenActive()) {
-                        getJwtFromSocial(SocialNetwork.FACEBOOK, AccessToken.getCurrentAccessToken()!!.token) { t, error ->
+                        getLoginTokenFromSocial(SocialNetwork.FACEBOOK, AccessToken.getCurrentAccessToken()!!.token) { t, error ->
                             if (t == null && error == null) {
                                 finishSocialCallback?.onAuthSuccess()
                             } else {
@@ -140,30 +138,15 @@ object LoginSocial {
             when (status) {
                 ActivityAuthWebView.Status.SUCCESS -> {
                     if (useOauth) {
-                        loginApi
-                                .oauthGetTokenByCode(code, "authorization_code", 59, callbackUrl)
-                                .enqueue(object : Callback<OauthAuthResponse> {
-                                    override fun onResponse(call: Call<OauthAuthResponse>, response: Response<OauthAuthResponse>) {
-                                        if (response.isSuccessful) {
-                                            val oauthAuthResponse = response.body()
-                                            if (oauthAuthResponse != null) {
-                                                val accessToken = oauthAuthResponse.accessToken
-                                                val refreshToken = oauthAuthResponse.refreshToken
-                                                tokenUtils.oauthAccessToken = accessToken
-                                                tokenUtils.oauthRefreshToken = refreshToken
-                                                callback.onAuthSuccess()
-                                            } else {
-                                                callback.onAuthError(null, "Empty response")
-                                            }
-                                        } else {
-                                            callback.onAuthError(null, getErrorMessage(response.errorBody()))
-                                        }
-                                    }
-
-                                    override fun onFailure(call: Call<OauthAuthResponse>, t: Throwable) {
-                                        callback.onAuthError(t, null)
-                                    }
-                                })
+                        getOauthTokensFromCode(code!!) { throwable, errorMessage, accessToken, refreshToken ->
+                            if (throwable == null && errorMessage == null) {
+                                tokenUtils.oauthAccessToken = accessToken
+                                tokenUtils.oauthRefreshToken = refreshToken
+                                callback.onAuthSuccess()
+                            } else {
+                                callback.onAuthError(throwable, errorMessage)
+                            }
+                        }
                     } else {
                         tokenUtils.jwtToken = token
                         callback.onAuthSuccess()
@@ -196,7 +179,7 @@ object LoginSocial {
                             }
                         }
                         finishSocialCallback = callback
-                        getJwtFromSocial(SocialNetwork.GOOGLE, oauthToken) { t, error ->
+                        getLoginTokenFromSocial(SocialNetwork.GOOGLE, oauthToken) { t, error ->
                             if (t == null && error == null) {
                                 finishSocialCallback?.onAuthSuccess()
                             } else {
@@ -300,6 +283,7 @@ object LoginSocial {
                                 callback.onError(null, getErrorMessage(response.errorBody()))
                             }
                         }
+
                         override fun onFailure(call: Call<OauthLinkForSocialAuthResponse>, t: Throwable) {
                             callback.onError(t, null)
                         }
@@ -337,32 +321,85 @@ object LoginSocial {
         return "Unknown Error"
     }
 
-    private fun getJwtFromSocial(socialNetwork: SocialNetwork, socialToken: String, callback: (Throwable?, String?) -> Unit) {
-        val authUserSocialBody = AuthUserSocialBody(socialToken)
-        loginApi.loginSocial(socialNetwork.providerName, projectId, authUserSocialBody).enqueue(
-                object : Callback<AuthSocialResponse> {
-                    override fun onResponse(call: Call<AuthSocialResponse>, response: Response<AuthSocialResponse>) {
-                        if (response.isSuccessful) {
-                            val jwtToken = response.body()?.token
-                            if (jwtToken == null) {
-                                callback.invoke(null, "Token not found")
-                                return
-                            }
-                            tokenUtils.jwtToken = jwtToken
-                            callback.invoke(null, null)
-                        } else {
-                            val errorBody = response.errorBody()
-                            val errorMessage = if (errorBody != null) {
-                                getErrorMessage(errorBody)
+    private fun getLoginTokenFromSocial(socialNetwork: SocialNetwork, socialToken: String, callback: (Throwable?, String?) -> Unit) {
+        if (!useOauth) {
+            val authUserSocialBody = AuthUserSocialBody(socialToken)
+            loginApi.loginSocial(socialNetwork.providerName, projectId, authUserSocialBody)
+                    .enqueue(object : Callback<AuthSocialResponse> {
+                        override fun onResponse(call: Call<AuthSocialResponse>, response: Response<AuthSocialResponse>) {
+                            if (response.isSuccessful) {
+                                val jwtToken = response.body()?.token
+                                if (jwtToken == null) {
+                                    callback.invoke(null, "Token not found")
+                                    return
+                                }
+                                tokenUtils.jwtToken = jwtToken
+                                callback.invoke(null, null)
                             } else {
-                                "Error"
+                                callback.invoke(null, getErrorMessage(response.errorBody()))
                             }
-                            callback.invoke(null, errorMessage)
+                        }
+
+                        override fun onFailure(call: Call<AuthSocialResponse>, t: Throwable) {
+                            callback.invoke(t, null)
+                        }
+                    })
+        } else {
+            val oauthGetCodeBySocialTokenBody = OauthGetCodeBySocialTokenBody(socialToken, null)
+            loginApi.oauthGetCodeBySocialToken(socialNetwork.providerName, 59, UUID.randomUUID().toString(), callbackUrl, "code", "offline", oauthGetCodeBySocialTokenBody)
+                    .enqueue(object : Callback<OauthGetCodeBySocialTokenResponse> {
+                        override fun onResponse(call: Call<OauthGetCodeBySocialTokenResponse>, response: Response<OauthGetCodeBySocialTokenResponse>) {
+                            if (response.isSuccessful) {
+                                val url = response.body()?.loginUrl
+                                if (url == null) {
+                                    callback.invoke(null, "Empty url")
+                                    return
+                                }
+                                val code = TokenUtils.getCodeFromUrl(url)
+                                if (code == null) {
+                                    callback.invoke(null, "Code not found url")
+                                    return
+                                }
+                                getOauthTokensFromCode(code) { throwable, errorMessage, accessToken, refreshToken ->
+                                    if (throwable == null && errorMessage == null) {
+                                        tokenUtils.oauthAccessToken = accessToken
+                                        tokenUtils.oauthRefreshToken = refreshToken
+                                    }
+                                    callback.invoke(throwable, errorMessage)
+                                }
+                            } else {
+                                callback.invoke(null, getErrorMessage(response.errorBody()))
+                            }
+                        }
+
+                        override fun onFailure(call: Call<OauthGetCodeBySocialTokenResponse>, t: Throwable) {
+                            callback.invoke(t, null)
+                        }
+                    })
+        }
+    }
+
+    private fun getOauthTokensFromCode(code: String, callback: (Throwable?, String?, String?, String?) -> Unit) {
+        loginApi
+                .oauthGetTokenByCode(code, "authorization_code", 59, callbackUrl)
+                .enqueue(object : Callback<OauthAuthResponse> {
+                    override fun onResponse(call: Call<OauthAuthResponse>, response: Response<OauthAuthResponse>) {
+                        if (response.isSuccessful) {
+                            val oauthAuthResponse = response.body()
+                            if (oauthAuthResponse != null) {
+                                val accessToken = oauthAuthResponse.accessToken
+                                val refreshToken = oauthAuthResponse.refreshToken
+                                callback.invoke(null, null, accessToken, refreshToken)
+                            } else {
+                                callback.invoke(null, "Empty response", null, null)
+                            }
+                        } else {
+                            callback.invoke(null, getErrorMessage(response.errorBody()), null, null)
                         }
                     }
 
-                    override fun onFailure(call: Call<AuthSocialResponse>, t: Throwable) {
-                        callback.invoke(t, null)
+                    override fun onFailure(call: Call<OauthAuthResponse>, t: Throwable) {
+                        callback.invoke(t, null, null, null)
                     }
                 })
     }

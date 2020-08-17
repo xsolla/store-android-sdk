@@ -3,6 +3,7 @@ package com.xsolla.android.login.api;
 import com.xsolla.android.login.entity.request.AuthUserBody;
 import com.xsolla.android.login.entity.request.AuthUserSocialBody;
 import com.xsolla.android.login.entity.request.OauthAuthUserBody;
+import com.xsolla.android.login.entity.request.OauthGetCodeBySocialTokenBody;
 import com.xsolla.android.login.entity.request.OauthRegisterUserBody;
 import com.xsolla.android.login.entity.request.RegisterUserBody;
 import com.xsolla.android.login.entity.request.ResetPasswordBody;
@@ -10,6 +11,7 @@ import com.xsolla.android.login.entity.response.AuthResponse;
 import com.xsolla.android.login.entity.response.AuthSocialResponse;
 import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse;
 import com.xsolla.android.login.entity.response.OauthAuthResponse;
+import com.xsolla.android.login.entity.response.OauthGetCodeBySocialTokenResponse;
 import com.xsolla.android.login.entity.response.OauthLinkForSocialAuthResponse;
 
 import retrofit2.Call;
@@ -83,6 +85,17 @@ public interface LoginApi {
             @Query("redirect_uri") String redirectUri,
             @Query("response_type") String responseType,
             @Query("scope") String scope
+    );
+
+    @POST("/api/oauth2/social/{providerName}/login_with_token")
+    Call<OauthGetCodeBySocialTokenResponse> oauthGetCodeBySocialToken(
+            @Path("providerName") String providerName,
+            @Query("client_id") int clientId,
+            @Query("state") String state,
+            @Query("redirect_uri") String redirectUri,
+            @Query("response_type") String responseType,
+            @Query("scope") String scope,
+            @Body OauthGetCodeBySocialTokenBody oauthGetCodeBySocialTokenBody
     );
 
 
