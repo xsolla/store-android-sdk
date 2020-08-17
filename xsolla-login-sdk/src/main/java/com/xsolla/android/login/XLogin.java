@@ -235,8 +235,10 @@ public class XLogin {
                                 if (oauthAuthResponse != null) {
                                     String accessToken = oauthAuthResponse.getAccessToken();
                                     String refreshToken = oauthAuthResponse.getRefreshToken();
+                                    int expiresIn = oauthAuthResponse.getExpiresIn();
                                     getInstance().tokenUtils.setOauthAccessToken(accessToken);
                                     getInstance().tokenUtils.setOauthRefreshToken(refreshToken);
+                                    getInstance().tokenUtils.setOauthExpireTimeUnixSec(System.currentTimeMillis() / 1000 + expiresIn);
                                     callback.onSuccess();
                                 } else {
                                     callback.onError(null, "Empty response");
@@ -274,8 +276,10 @@ public class XLogin {
                             if (oauthAuthResponse != null) {
                                 String accessToken = oauthAuthResponse.getAccessToken();
                                 String refreshToken = oauthAuthResponse.getRefreshToken();
+                                int expiresIn = oauthAuthResponse.getExpiresIn();
                                 getInstance().tokenUtils.setOauthAccessToken(accessToken);
                                 getInstance().tokenUtils.setOauthRefreshToken(refreshToken);
+                                getInstance().tokenUtils.setOauthExpireTimeUnixSec(System.currentTimeMillis() / 1000 + expiresIn);
                                 callback.onSuccess();
                             } else {
                                 callback.onError(null, "Empty response");
@@ -369,13 +373,17 @@ public class XLogin {
         getInstance().tokenUtils.setJwtToken(null);
         getInstance().tokenUtils.setOauthRefreshToken(null);
         getInstance().tokenUtils.setOauthAccessToken(null);
+        getInstance().tokenUtils.setOauthExpireTimeUnixSec(0);
     }
 
-    //TODO
     public static boolean isTokenExpired() {
-        JWT jwt = getInstance().tokenUtils.getJwt();
-        if (jwt == null) return true;
-        return jwt.isExpired(0);
+        if (getInstance().useOauth) {
+            return getInstance().tokenUtils.getOauthExpireTimeUnixSec() <= System.currentTimeMillis() / 1000;
+        } else {
+            JWT jwt = getInstance().tokenUtils.getJwt();
+            if (jwt == null) return true;
+            return jwt.isExpired(0);
+        }
     }
 
     /**

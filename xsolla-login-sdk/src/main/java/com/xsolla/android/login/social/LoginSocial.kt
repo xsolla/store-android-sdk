@@ -138,10 +138,11 @@ object LoginSocial {
             when (status) {
                 ActivityAuthWebView.Status.SUCCESS -> {
                     if (useOauth) {
-                        getOauthTokensFromCode(code!!) { throwable, errorMessage, accessToken, refreshToken ->
+                        getOauthTokensFromCode(code!!) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
                             if (throwable == null && errorMessage == null) {
                                 tokenUtils.oauthAccessToken = accessToken
                                 tokenUtils.oauthRefreshToken = refreshToken
+                                tokenUtils.oauthExpireTimeUnixSec = System.currentTimeMillis() / 1000 + expiresIn!!
                                 callback.onAuthSuccess()
                             } else {
                                 callback.onAuthError(throwable, errorMessage)
@@ -360,10 +361,11 @@ object LoginSocial {
                                     callback.invoke(null, "Code not found url")
                                     return
                                 }
-                                getOauthTokensFromCode(code) { throwable, errorMessage, accessToken, refreshToken ->
+                                getOauthTokensFromCode(code) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
                                     if (throwable == null && errorMessage == null) {
                                         tokenUtils.oauthAccessToken = accessToken
                                         tokenUtils.oauthRefreshToken = refreshToken
+                                        tokenUtils.oauthExpireTimeUnixSec = System.currentTimeMillis() / 1000 + expiresIn!!
                                     }
                                     callback.invoke(throwable, errorMessage)
                                 }
@@ -379,7 +381,7 @@ object LoginSocial {
         }
     }
 
-    private fun getOauthTokensFromCode(code: String, callback: (Throwable?, String?, String?, String?) -> Unit) {
+    private fun getOauthTokensFromCode(code: String, callback: (Throwable?, String?, String?, String?, Int?) -> Unit) {
         loginApi
                 .oauthGetTokenByCode(code, "authorization_code", 59, callbackUrl)
                 .enqueue(object : Callback<OauthAuthResponse> {
@@ -389,17 +391,18 @@ object LoginSocial {
                             if (oauthAuthResponse != null) {
                                 val accessToken = oauthAuthResponse.accessToken
                                 val refreshToken = oauthAuthResponse.refreshToken
-                                callback.invoke(null, null, accessToken, refreshToken)
+                                val expiresIn = oauthAuthResponse.expiresIn
+                                callback.invoke(null, null, accessToken, refreshToken, expiresIn)
                             } else {
-                                callback.invoke(null, "Empty response", null, null)
+                                callback.invoke(null, "Empty response", null, null, null)
                             }
                         } else {
-                            callback.invoke(null, getErrorMessage(response.errorBody()), null, null)
+                            callback.invoke(null, getErrorMessage(response.errorBody()), null, null, null)
                         }
                     }
 
                     override fun onFailure(call: Call<OauthAuthResponse>, t: Throwable) {
-                        callback.invoke(t, null, null, null)
+                        callback.invoke(t, null, null, null, null)
                     }
                 })
     }

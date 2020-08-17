@@ -4,6 +4,7 @@ import android.widget.TextView;
 
 import com.xsolla.android.login.XLogin;
 import com.xsolla.android.login.jwt.JWT;
+import com.xsolla.android.storesdkexample.BuildConfig;
 import com.xsolla.android.storesdkexample.R;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;
 
@@ -24,15 +25,19 @@ public class ProfileFragment extends BaseFragment {
         TextView expiresAt = rootView.findViewById(R.id.expires_at);
         TextView issuer = rootView.findViewById(R.id.issuer);
 
-        JWT jwt = XLogin.getJwt();
+        if (!BuildConfig.USE_OAUTH) {
 
-        username.setText(jwt.getClaim("username").asString());
-        email.setText(jwt.getClaim("email").asString());
-        tokenType.setText(jwt.getClaim("type").asString());
-        publisherId.setText(jwt.getClaim("publisher_id").asString());
-        issuedAt.setText(jwt.getIssuedAt().toString());
-        expiresAt.setText(jwt.getExpiresAt().toString());
-        issuer.setText(jwt.getIssuer());
+            JWT jwt = XLogin.getJwt();
+
+            username.setText(jwt.getClaim("username").asString());
+            email.setText(jwt.getClaim("email").asString());
+            tokenType.setText(jwt.getClaim("type").asString());
+            publisherId.setText(jwt.getClaim("publisher_id").asString());
+            issuedAt.setText(jwt.getIssuedAt().toString());
+            expiresAt.setText(jwt.getExpiresAt().toString());
+            issuer.setText(jwt.getIssuer());
+
+        }
 
         rootView.findViewById(R.id.logout_button).setOnClickListener(v -> {
             XLogin.logout();

@@ -36,6 +36,13 @@ class TokenUtils(context: Context) {
                 .putString("oauthRefreshToken", value)
                 .apply()
 
+    var oauthExpireTimeUnixSec: Long
+        get() = preferences.getLong("oauthExpire", 0)
+        set(value) = preferences
+                .edit()
+                .putLong("oauthExpire", value)
+                .apply()
+
     companion object {
 
         private const val PREFS_FILE_NAME = "XSOLLA_LOGIN"
