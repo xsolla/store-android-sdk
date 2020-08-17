@@ -155,7 +155,8 @@ public class XLogin {
      * @param email    new user's email
      * @param password new user's password
      * @param callback status callback
-     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-register">Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/methods/jwt/jwt-register-a-new-user">JWT Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-register-a-new-user">OAuth 2.0 Login API Reference</a>
      */
     public static void register(String username, String email, String password, final RegisterCallback callback) {
         Callback<Void> retrofitCallback = new Callback<Void>() {
@@ -192,7 +193,8 @@ public class XLogin {
      * @param username user's username
      * @param password user's email
      * @param callback status callback
-     * @see <a href="https://developers.xsolla.com/login-api/jwt/auth-by-username-and-password">Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/methods/jwt/auth-by-username-and-password">JWT Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/methods/oauth-20/jwt-auth-by-username-and-password">OAuth 2.0 Login API Reference</a>
      */
     public static void authenticate(String username, String password, final AuthCallback callback) {
         if (!getInstance().useOauth) {
@@ -252,6 +254,12 @@ public class XLogin {
         }
     }
 
+    /**
+     * Refresh OAuth 2.0 access token
+     *
+     * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/login-api/methods/oauth-20/generate-jwt">OAuth 2.0 Login API Reference</a>
+     */
     public static void refreshToken(final RefreshTokenCallback callback) {
         if (!getInstance().useOauth) {
             throw new IllegalArgumentException("Impossible to refresh JWT token. Use OAuth 2.0 instead");
@@ -290,8 +298,8 @@ public class XLogin {
      * @param fragment      current fragment
      * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
      * @param callback      status callback
-     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
-     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/methods/jwt/jwt-get-link-for-social-auth">JWT Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-get-link-for-social-auth">OAuth 2.0 Login API Reference</a>
      */
     public static void startSocialAuth(Fragment fragment, SocialNetwork socialNetwork, StartSocialCallback callback) {
         loginSocial.startSocialAuth(null, fragment, socialNetwork, callback);
@@ -303,8 +311,8 @@ public class XLogin {
      * @param activity      current activity
      * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
      * @param callback      status callback
-     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
-     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/methods/jwt/jwt-get-link-for-social-auth">JWT Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-get-link-for-social-auth">OAuth 2.0 Login API Reference</a>
      */
     public static void startSocialAuth(Activity activity, SocialNetwork socialNetwork, StartSocialCallback callback) {
         loginSocial.startSocialAuth(activity, null, socialNetwork, callback);
@@ -319,8 +327,8 @@ public class XLogin {
      * @param activityResultCode        result code from onActivityResult
      * @param activityResultData        data from onActivityResult
      * @param callback                  status callback
-     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
-     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/methods/jwt/jwt-get-link-for-social-auth">JWT Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-get-link-for-social-auth">OAuth 2.0 Login API Reference</a>
      */
     public static void finishSocialAuth(Context context, SocialNetwork socialNetwork, int activityResultRequestCode, int activityResultCode, Intent activityResultData, FinishSocialCallback callback) {
         loginSocial.finishSocialAuth(context, socialNetwork, activityResultRequestCode, activityResultCode, activityResultData, callback);
@@ -331,7 +339,7 @@ public class XLogin {
      *
      * @param username user's username
      * @param callback status callback
-     * @see <a href="https://developers.xsolla.com/login-api/general/reset-password">Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/methods/general/reset-password">Login API Reference</a>
      */
     public static void resetPassword(String username, final ResetPasswordCallback callback) {
         ResetPasswordBody resetPasswordBody = new ResetPasswordBody(username);
@@ -359,6 +367,8 @@ public class XLogin {
      */
     public static void logout() {
         getInstance().tokenUtils.setJwtToken(null);
+        getInstance().tokenUtils.setOauthRefreshToken(null);
+        getInstance().tokenUtils.setOauthAccessToken(null);
     }
 
     //TODO
@@ -374,6 +384,9 @@ public class XLogin {
      * @return parsed JWT content
      */
     public static JWT getJwt() {
+        if (getInstance().useOauth) {
+            throw new IllegalArgumentException("Unavailable when OAuth 2.0 is used");
+        }
         return getInstance().tokenUtils.getJwt();
     }
 
