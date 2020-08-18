@@ -24,12 +24,12 @@
     </style>
 
     <style name="TextAppearance.Xsolla.Input.Hint" parent="">
-        <item name="fontFamily">@font/brutal_type</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">@dimen/input_text_hint_size</item>
     </style>
 
     <style name="TextAppearance.Xsolla.Input.Text" parent="">
-        <item name="fontFamily">@font/brutal_type</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">@dimen/input_text_size</item>
     </style>
 

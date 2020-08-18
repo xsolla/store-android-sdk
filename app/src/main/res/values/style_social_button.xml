@@ -12,7 +12,7 @@
         <item name="android:layout_marginBottom">@dimen/social_button_big_bottom_margin</item>
         <item name="iconEndPadding">@dimen/social_button_big_icon_end_padding</item>
         <item name="iconTint">@color/white_color</item>
-        <item name="fontFamily">@font/brutal_type_bold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textSize">@dimen/social_button_big_text_size</item>
         <item name="android:letterSpacing">-0.03</item>
     </style>

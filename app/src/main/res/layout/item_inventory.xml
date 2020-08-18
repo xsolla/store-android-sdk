@@ -42,7 +42,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:fontFamily="@font/roboto"
+                android:fontFamily="sans-serif"
                 android:textColor="@color/white_color"
                 android:textSize="@dimen/catalog_item_quantity_text_size"
                 tools:text="1" />

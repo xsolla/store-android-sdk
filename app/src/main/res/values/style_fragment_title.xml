@@ -3,7 +3,7 @@
 
     <style name="Widget.Xsolla.Fragment.Title" parent="">
         <item name="android:height">@dimen/catalog_fragment_title_height</item>
-        <item name="fontFamily">@font/brutal_type</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">@dimen/catalog_fragment_title_text_size</item>
         <item name="textAllCaps">true</item>
         <item name="android:textColor">@color/white_color</item>

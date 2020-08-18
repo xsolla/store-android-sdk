@@ -4,7 +4,7 @@
     <style name="Widget.Xsolla.Balance.Text" parent="">
         <item name="android:textColor">@color/secondary_color</item>
         <item name="android:textSize">@dimen/appbar_balance_item_text_size</item>
-        <item name="fontFamily">@font/brutal_type</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:layout_marginLeft">@dimen/appbar_balance_item_text_left_margin</item>
         <item name="android:layout_marginRight">@dimen/appbar_balance_item_text_right_margin</item>
     </style>

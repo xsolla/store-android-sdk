@@ -10,7 +10,7 @@
     </style>
 
     <style name="TextAppearance.Xsolla.TabLayout" parent="@android:style/TextAppearance.Small">
-        <item name="android:fontFamily">@font/brutal_type</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:letterSpacing">-0.03</item>
         <item name="android:textSize">@dimen/tabs_text_size</item>
         <item name="textAllCaps">true</item>

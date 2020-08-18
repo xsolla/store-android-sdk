@@ -25,7 +25,7 @@
         android:background="@drawable/badge_background"
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:fontFamily="@font/brutal_type"
+        android:fontFamily="sans-serif"
         android:visibility="gone"
         android:text="0"
         android:textSize="12sp" />
