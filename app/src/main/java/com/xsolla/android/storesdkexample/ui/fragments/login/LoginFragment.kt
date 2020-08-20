@@ -12,6 +12,7 @@ import com.xsolla.android.login.callback.FinishSocialCallback
 import com.xsolla.android.login.callback.StartSocialCallback
 import com.xsolla.android.login.entity.response.AuthResponse
 import com.xsolla.android.login.social.SocialNetwork
+import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.util.ViewUtils
@@ -43,7 +44,7 @@ class LoginFragment : BaseFragment() {
             val username = usernameInput.text.toString()
             val password = passwordInput.text.toString()
 
-            XLogin.login(username, password, object : XLoginCallback<AuthResponse?>() {
+            XLogin.login(username, password, BuildConfig.WITH_LOGOUT, object : XLoginCallback<AuthResponse?>() {
                 override fun onSuccess(response: AuthResponse?) {
                     activity?.setResult(Activity.RESULT_OK)
                     activity?.finish()
@@ -59,27 +60,27 @@ class LoginFragment : BaseFragment() {
 
         rootView.googleButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.GOOGLE
-            XLogin.startSocialAuth(this, SocialNetwork.GOOGLE, startSocialCallback)
+            XLogin.startSocialAuth(this, SocialNetwork.GOOGLE, BuildConfig.WITH_LOGOUT, startSocialCallback)
         }
 
         rootView.facebookButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.FACEBOOK
-            XLogin.startSocialAuth(this, SocialNetwork.FACEBOOK, startSocialCallback)
+            XLogin.startSocialAuth(this, SocialNetwork.FACEBOOK, BuildConfig.WITH_LOGOUT, startSocialCallback)
         }
 
         rootView.twitterButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.TWITTER
-            XLogin.startSocialAuth(this, SocialNetwork.TWITTER, startSocialCallback)
+            XLogin.startSocialAuth(this, SocialNetwork.TWITTER, BuildConfig.WITH_LOGOUT, startSocialCallback)
         }
 
         rootView.baiduButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.BAIDU
-            XLogin.startSocialAuth(this, SocialNetwork.BAIDU, startSocialCallback)
+            XLogin.startSocialAuth(this, SocialNetwork.BAIDU, BuildConfig.WITH_LOGOUT, startSocialCallback)
         }
 
         rootView.naverButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.NAVER
-            XLogin.startSocialAuth(this, SocialNetwork.NAVER, startSocialCallback)
+            XLogin.startSocialAuth(this, SocialNetwork.NAVER, BuildConfig.WITH_LOGOUT, startSocialCallback)
         }
 
         rootView.resetPasswordButton.setOnClickListener { resetPassword() }
@@ -146,7 +147,7 @@ class LoginFragment : BaseFragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        XLogin.finishSocialAuth(context, selectedSocialNetwork, requestCode, resultCode, data, finishSocialCallback)
+        XLogin.finishSocialAuth(context, selectedSocialNetwork, requestCode, resultCode, data, BuildConfig.WITH_LOGOUT, finishSocialCallback)
         super.onActivityResult(requestCode, resultCode, data)
     }
 
