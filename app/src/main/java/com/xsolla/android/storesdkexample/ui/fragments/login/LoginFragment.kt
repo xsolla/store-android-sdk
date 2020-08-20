@@ -2,6 +2,7 @@ package com.xsolla.android.storesdkexample.ui.fragments.login
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,11 +18,13 @@ import com.xsolla.android.storesdkexample.util.ViewUtils
 import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
+import java.util.*
 
 class LoginFragment : BaseFragment() {
 
     companion object {
         private const val MIN_PASSWORD_LENGTH = 6
+        private val POLICY_LANGUAGES = listOf("de", "ko", "zh", "ja", "ru")
     }
 
     private var selectedSocialNetwork: SocialNetwork? = null
@@ -80,6 +83,8 @@ class LoginFragment : BaseFragment() {
         }
 
         rootView.resetPasswordButton.setOnClickListener { resetPassword() }
+
+        rootView.privacyPolicyButton.setOnClickListener { showPrivacyPolicy() }
     }
 
     private fun initLoginButtonEnabling() {
@@ -124,6 +129,20 @@ class LoginFragment : BaseFragment() {
                 .add(R.id.rootFragmentContainer, ResetPasswordFragment())
                 .addToBackStack(null)
                 .commit()
+    }
+
+    private fun showPrivacyPolicy() {
+        val lang = Locale.getDefault().language
+        val url = if (POLICY_LANGUAGES.contains(lang)) {
+            "https://xsolla.com/$lang/privacypolicy"
+        } else {
+            "https://xsolla.com/privacypolicy"
+        }
+        val intent = Intent().apply {
+            action = Intent.ACTION_VIEW
+            data = Uri.parse(url)
+        }
+        startActivity(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
