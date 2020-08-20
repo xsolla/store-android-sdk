@@ -154,8 +154,21 @@ public class XLogin {
      * @see <a href="https://developers.xsolla.com/login-api/jwt/auth-by-username-and-password">Login API Reference</a>
      */
     public static void login(String username, String password, XLoginCallback<AuthResponse> callback) {
+        login(username, password, false, callback);
+    }
+
+    /**
+     * Authenticate via username and password
+     *
+     * @param username   user's username
+     * @param password   user's email
+     * @param withLogout whether to deactivate another user's tokens
+     * @param callback   status callback
+     * @see <a href="https://developers.xsolla.com/login-api/jwt/auth-by-username-and-password">Login API Reference</a>
+     */
+    public static void login(String username, String password, boolean withLogout, XLoginCallback<AuthResponse> callback) {
         AuthUserBody authUserBody = new AuthUserBody(username, password);
-        getInstance().loginApi.login(getInstance().projectId, authUserBody).enqueue(callback);
+        getInstance().loginApi.login(getInstance().projectId, withLogout ? "1" : "0", authUserBody).enqueue(callback);
     }
 
     /**
@@ -168,7 +181,21 @@ public class XLogin {
      * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
      */
     public static void startSocialAuth(Fragment fragment, SocialNetwork socialNetwork, StartSocialCallback callback) {
-        loginSocial.startSocialAuth(null, fragment, socialNetwork, callback);
+        startSocialAuth(fragment, socialNetwork, false, callback);
+    }
+
+    /**
+     * Start authentication via a social network
+     *
+     * @param fragment      current fragment
+     * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
+     * @param withLogout    whether to deactivate another user's tokens
+     * @param callback      status callback
+     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
+     */
+    public static void startSocialAuth(Fragment fragment, SocialNetwork socialNetwork, boolean withLogout, StartSocialCallback callback) {
+        loginSocial.startSocialAuth(null, fragment, socialNetwork, withLogout, callback);
     }
 
     /**
@@ -181,7 +208,21 @@ public class XLogin {
      * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
      */
     public static void startSocialAuth(Activity activity, SocialNetwork socialNetwork, StartSocialCallback callback) {
-        loginSocial.startSocialAuth(activity, null, socialNetwork, callback);
+        startSocialAuth(activity, socialNetwork, false, callback);
+    }
+
+    /**
+     * Start authentication via a social network
+     *
+     * @param activity      current activity
+     * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
+     * @param withLogout    whether to deactivate another user's tokens
+     * @param callback      status callback
+     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
+     */
+    public static void startSocialAuth(Activity activity, SocialNetwork socialNetwork, boolean withLogout, StartSocialCallback callback) {
+        loginSocial.startSocialAuth(activity, null, socialNetwork, withLogout, callback);
     }
 
     /**
@@ -197,8 +238,26 @@ public class XLogin {
      * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
      */
     public static void finishSocialAuth(Context context, SocialNetwork socialNetwork, int activityResultRequestCode, int activityResultCode, Intent activityResultData, FinishSocialCallback callback) {
-        loginSocial.finishSocialAuth(context, socialNetwork, activityResultRequestCode, activityResultCode, activityResultData, callback);
+        finishSocialAuth(context, socialNetwork, activityResultRequestCode, activityResultCode, activityResultData, false, callback);
     }
+
+    /**
+     * Finish authentication via a social network
+     *
+     * @param context                   application context
+     * @param socialNetwork             social network to authenticate with, must be connected to Login in Publisher Account
+     * @param activityResultRequestCode request code from onActivityResult
+     * @param activityResultCode        result code from onActivityResult
+     * @param activityResultData        data from onActivityResult
+     * @param withLogout                whether to deactivate another user's tokens
+     * @param callback                  status callback
+     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth">Login API Reference</a>
+     */
+    public static void finishSocialAuth(Context context, SocialNetwork socialNetwork, int activityResultRequestCode, int activityResultCode, Intent activityResultData, boolean withLogout, FinishSocialCallback callback) {
+        loginSocial.finishSocialAuth(context, socialNetwork, activityResultRequestCode, activityResultCode, activityResultData, withLogout, callback);
+    }
+
 
     /**
      * Reset user's password
@@ -266,9 +325,10 @@ public class XLogin {
     }
 
     public static class Unity {
-        public static void authSocial(Activity activity, SocialNetwork socialNetwork) {
+        public static void authSocial(Activity activity, SocialNetwork socialNetwork, boolean withLogout) {
             Intent intent = new Intent(activity, UnityProxyActivity.class);
             intent.putExtra(UnityProxyActivity.ARG_SOCIAL_NETWORK, socialNetwork.name());
+            intent.putExtra(UnityProxyActivity.ARG_WITH_LOGOUT, withLogout);
             activity.startActivity(intent);
         }
     }

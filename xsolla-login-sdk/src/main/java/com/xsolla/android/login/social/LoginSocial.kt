@@ -48,12 +48,13 @@ object LoginSocial {
     private lateinit var fbCallbackManager: CallbackManager
     private lateinit var fbCallback: FacebookCallback<LoginResult>
 
-    var facebookAppId: String? = null
-    var googleServerId: String? = null
+    private var facebookAppId: String? = null
+    private var googleServerId: String? = null
 
     private var googleAvailable = false
 
     private var finishSocialCallback: FinishSocialCallback? = null
+    private var withLogout = false
 
     fun init(context: Context, loginApi: LoginApi, projectId: String, callbackUrl: String, socialConfig: XLogin.SocialConfig?) {
         this.loginApi = loginApi
@@ -73,35 +74,39 @@ object LoginSocial {
             fbCallback = object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
                     val facebookToken = loginResult.accessToken.token
-                    getJwtFromSocial(SocialNetwork.FACEBOOK, facebookToken) { error ->
+                    getJwtFromSocial(SocialNetwork.FACEBOOK, facebookToken, withLogout) { error ->
                         if (error == null) {
                             finishSocialCallback?.onAuthSuccess()
                         } else {
                             finishSocialCallback?.onAuthError(error)
                         }
                         finishSocialCallback = null
+                        withLogout = false
                     }
                 }
 
                 override fun onCancel() {
                     if (AccessToken.isCurrentAccessTokenActive()) {
-                        getJwtFromSocial(SocialNetwork.FACEBOOK, AccessToken.getCurrentAccessToken()!!.token) { error ->
+                        getJwtFromSocial(SocialNetwork.FACEBOOK, AccessToken.getCurrentAccessToken()!!.token, withLogout) { error ->
                             if (error == null) {
                                 finishSocialCallback?.onAuthSuccess()
                             } else {
                                 finishSocialCallback?.onAuthError(error)
                             }
                             finishSocialCallback = null
+                            withLogout = false
                         }
                     } else {
                         finishSocialCallback?.onAuthCancelled()
                         finishSocialCallback = null
+                        withLogout = false
                     }
                 }
 
                 override fun onError(error: FacebookException) {
                     finishSocialCallback?.onAuthError(error.message ?: error.javaClass.name)
                     finishSocialCallback = null
+                    withLogout = false
                 }
             }
             LoginManager.getInstance().registerCallback(fbCallbackManager, fbCallback)
@@ -119,17 +124,17 @@ object LoginSocial {
         }
     }
 
-    fun startSocialAuth(activity: Activity?, fragment: Fragment?, socialNetwork: SocialNetwork, callback: StartSocialCallback) {
-        tryNativeSocialAuth(activity, fragment, socialNetwork) { nativeResult ->
+    fun startSocialAuth(activity: Activity?, fragment: Fragment?, socialNetwork: SocialNetwork, withLogout: Boolean, callback: StartSocialCallback) {
+        tryNativeSocialAuth(activity, fragment, socialNetwork, withLogout) { nativeResult ->
             if (nativeResult) {
                 callback.onAuthStarted()
             } else {
-                tryWebviewBasedSocialAuth(activity, fragment, socialNetwork, callback)
+                tryWebviewBasedSocialAuth(activity, fragment, socialNetwork, withLogout, callback)
             }
         }
     }
 
-    fun finishSocialAuth(context: Context, socialNetwork: SocialNetwork, activityResultRequestCode: Int, activityResultCode: Int, activityResultData: Intent?, callback: FinishSocialCallback) {
+    fun finishSocialAuth(context: Context, socialNetwork: SocialNetwork, activityResultRequestCode: Int, activityResultCode: Int, activityResultData: Intent?, withLogout: Boolean, callback: FinishSocialCallback) {
         if (activityResultRequestCode == RC_AUTH_WEBVIEW) {
             val (status, token, error) = fromResultIntent(activityResultData)
             when (status) {
@@ -144,6 +149,7 @@ object LoginSocial {
         }
         if (socialNetwork == SocialNetwork.FACEBOOK && ::fbCallbackManager.isInitialized) {
             finishSocialCallback = callback
+            this.withLogout = withLogout
             fbCallbackManager.onActivityResult(activityResultRequestCode, activityResultCode, activityResultData)
             return
         }
@@ -164,13 +170,15 @@ object LoginSocial {
                             }
                         }
                         finishSocialCallback = callback
-                        getJwtFromSocial(SocialNetwork.GOOGLE, oauthToken) { error ->
+                        this.withLogout = withLogout
+                        getJwtFromSocial(SocialNetwork.GOOGLE, oauthToken, withLogout) { error ->
                             if (error == null) {
                                 finishSocialCallback?.onAuthSuccess()
                             } else {
                                 finishSocialCallback?.onAuthError(error)
                             }
                             finishSocialCallback = null
+                            this.withLogout = false
                         }
                     }).start()
                 }
@@ -184,7 +192,7 @@ object LoginSocial {
         }
     }
 
-    private fun tryNativeSocialAuth(activity: Activity?, fragment: Fragment?, socialNetwork: SocialNetwork, callback: (Boolean) -> Unit) {
+    private fun tryNativeSocialAuth(activity: Activity?, fragment: Fragment?, socialNetwork: SocialNetwork, withLogout: Boolean, callback: (Boolean) -> Unit) {
         if (socialNetwork == SocialNetwork.FACEBOOK && ::fbCallbackManager.isInitialized) {
             if (activity != null) {
                 LoginManager.getInstance().logIn(activity, ArrayList())
@@ -230,8 +238,8 @@ object LoginSocial {
         callback.invoke(false)
     }
 
-    private fun tryWebviewBasedSocialAuth(activity: Activity?, fragment: Fragment?, socialNetwork: SocialNetwork, callback: StartSocialCallback) {
-        loginApi.getLinkForSocialAuth(socialNetwork.providerName, projectId).enqueue(object : Callback<LinkForSocialAuthResponse> {
+    private fun tryWebviewBasedSocialAuth(activity: Activity?, fragment: Fragment?, socialNetwork: SocialNetwork, withLogout: Boolean, callback: StartSocialCallback) {
+        loginApi.getLinkForSocialAuth(socialNetwork.providerName, projectId, if (withLogout) "1" else "0").enqueue(object : Callback<LinkForSocialAuthResponse> {
             override fun onResponse(call: Call<LinkForSocialAuthResponse>, response: Response<LinkForSocialAuthResponse>) {
                 if (response.isSuccessful) {
                     val url = response.body()?.url
@@ -284,9 +292,9 @@ object LoginSocial {
         return "Unknown Error"
     }
 
-    private fun getJwtFromSocial(socialNetwork: SocialNetwork, socialToken: String, callback: (String?) -> Unit) {
+    private fun getJwtFromSocial(socialNetwork: SocialNetwork, socialToken: String, withLogout: Boolean, callback: (String?) -> Unit) {
         val authUserSocialBody = AuthUserSocialBody(socialToken)
-        loginApi.loginSocial(socialNetwork.providerName, projectId, authUserSocialBody).enqueue(
+        loginApi.loginSocial(socialNetwork.providerName, projectId, if (withLogout) "1" else "0", authUserSocialBody).enqueue(
                 object : Callback<AuthSocialResponse> {
                     override fun onResponse(call: Call<AuthSocialResponse>, response: Response<AuthSocialResponse>) {
                         if (response.isSuccessful) {
