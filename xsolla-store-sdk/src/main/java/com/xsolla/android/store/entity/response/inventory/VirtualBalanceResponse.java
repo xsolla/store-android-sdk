@@ -16,7 +16,7 @@ public class VirtualBalanceResponse {
         private String sku;
         private String type;
         private String name;
-        private int amount;
+        private long amount;
         private String description;
         @SerializedName("image_url")
         private String imageUrl;
@@ -33,7 +33,7 @@ public class VirtualBalanceResponse {
             return name;
         }
 
-        public int getAmount() {
+        public long getAmount() {
             return amount;
         }
 

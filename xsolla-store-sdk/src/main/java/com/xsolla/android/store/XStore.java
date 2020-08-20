@@ -253,7 +253,7 @@ public class XStore {
      * @param callback status callback
      * @see <a href="https://developers.xsolla.com/store-api/cart/put-item-by-cart-id">Store API Reference</a>
      */
-    public static void updateItemFromCartByCartId(String cartId, String itemSku, int quantity, XStoreCallback<Void> callback) {
+    public static void updateItemFromCartByCartId(String cartId, String itemSku, long quantity, XStoreCallback<Void> callback) {
         getRequestExecutor().updateItemFromCartByCartId(cartId, itemSku, quantity, callback);
     }
 
@@ -265,7 +265,7 @@ public class XStore {
      * @param callback status callback
      * @see <a href="https://developers.xsolla.com/store-api/cart/put-item">Store API Reference</a>
      */
-    public static void updateItemFromCurrentCart(String itemSku, int quantity, XStoreCallback<Void> callback) {
+    public static void updateItemFromCurrentCart(String itemSku, long quantity, XStoreCallback<Void> callback) {
         getRequestExecutor().updateItemFromCurrentCart(itemSku, quantity, callback);
     }
 
@@ -331,7 +331,7 @@ public class XStore {
      * @param callback   status callback
      * @see <a href="https://developers.xsolla.com/store-api/inventory-client/consume-item">Store API Reference</a>
      */
-    public static void consumeItem(String sku, int quantity, String instanceId, XStoreCallback<Void> callback) {
+    public static void consumeItem(String sku, long quantity, String instanceId, XStoreCallback<Void> callback) {
         getRequestExecutor().consumeItem(sku, quantity, instanceId, callback);
     }
 

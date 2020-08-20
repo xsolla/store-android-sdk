@@ -1,67 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Xsolla.CatalogItem"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/item_icon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:padding="16dp"
+        android:id="@+id/itemIcon"
+        android:layout_width="@dimen/catalog_item_icon_width"
+        android:layout_height="@dimen/catalog_item_icon_height"
+        android:layout_marginRight="@dimen/catalog_item_icon_right_margin"
         tools:srcCompat="@tools:sample/avatars[0]" />
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/item_name"
+            android:id="@+id/itemName"
+            style="@style/Widget.Xsolla.CatalogItem.Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textSize="20sp"
             tools:text="Some item" />
 
         <TextView
-            android:id="@+id/item_expiration"
+            android:id="@+id/itemExpiration"
+            style="@style/Widget.Xsolla.CatalogItem.AdditionalInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:fontFamily="@font/roboto"
-            android:textSize="18sp"
-            tools:text="Expire in 10 days" />
+            tools:text="10 days" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="16dp">
-
-        <TextView
-            android:id="@+id/quantity_label"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:textSize="30sp"
-            tools:text="2" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/consume_button"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:background="@drawable/ic_quad_button_bg"
-            android:textColor="@android:color/white"
-            android:fontFamily="@font/roboto_medium"
-            android:text="consume" />
+            <TextView
+                android:id="@+id/itemQuantity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/white_color"
+                android:textSize="@dimen/catalog_item_quantity_text_size"
+                tools:text="1" />
+
+            <Button
+                android:id="@+id/consumeButton"
+                style="@style/Widget.Xsolla.ConsumeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

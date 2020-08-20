@@ -40,7 +40,7 @@ public class CartResponse {
         private List<Object> attribites;
         private String type;
         private String description;
-        private int quantity;
+        private long quantity;
 
         @SerializedName("image_url")
         private String imageUrl;
@@ -79,7 +79,7 @@ public class CartResponse {
             return description;
         }
 
-        public int getQuantity() {
+        public long getQuantity() {
             return quantity;
         }
 

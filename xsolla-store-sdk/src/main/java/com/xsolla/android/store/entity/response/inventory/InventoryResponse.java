@@ -1,5 +1,8 @@
 package com.xsolla.android.store.entity.response.inventory;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 import com.xsolla.android.store.entity.response.common.Group;
 
@@ -13,23 +16,45 @@ public class InventoryResponse {
         return items;
     }
 
-    public static class Item {
+    public static class Item implements Parcelable {
 
         @SerializedName("instance_id")
         private String instanceId;
         private String sku;
         private Type type;
         private String name;
-        private int quantity;
+        private long quantity;
         private String description;
         @SerializedName("image_url")
         String imageUrl;
         private List<Group> groups;
         private Object attributes;
         @SerializedName("remaining_uses")
-        private int remainingUses;
+        private long remainingUses;
         @SerializedName("virtual_item_type")
         private VirtualItemType virtualItemType;
+
+        protected Item(Parcel in) {
+            instanceId = in.readString();
+            sku = in.readString();
+            name = in.readString();
+            quantity = in.readInt();
+            description = in.readString();
+            imageUrl = in.readString();
+            remainingUses = in.readInt();
+        }
+
+        public static final Creator<Item> CREATOR = new Creator<Item>() {
+            @Override
+            public Item createFromParcel(Parcel in) {
+                return new Item(in);
+            }
+
+            @Override
+            public Item[] newArray(int size) {
+                return new Item[size];
+            }
+        };
 
         public String getInstanceId() {
             return instanceId;
@@ -47,7 +72,7 @@ public class InventoryResponse {
             return name;
         }
 
-        public int getQuantity() {
+        public long getQuantity() {
             return quantity;
         }
 
@@ -67,12 +92,28 @@ public class InventoryResponse {
             return attributes;
         }
 
-        public int getRemainingUses() {
+        public long getRemainingUses() {
             return remainingUses;
         }
 
         public VirtualItemType getVirtualItemType() {
             return virtualItemType;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(instanceId);
+            dest.writeString(sku);
+            dest.writeString(name);
+            dest.writeLong(quantity);
+            dest.writeString(description);
+            dest.writeString(imageUrl);
+            dest.writeLong(remainingUses);
         }
 
         public enum Type {
