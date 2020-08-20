@@ -15,18 +15,36 @@ import com.xsolla.android.login.callback.StartSocialCallback;
 import com.xsolla.android.login.entity.request.AuthUserBody;
 import com.xsolla.android.login.entity.request.RegisterUserBody;
 import com.xsolla.android.login.entity.request.ResetPasswordBody;
+import com.xsolla.android.login.entity.request.UpdateUserDetailsBody;
+import com.xsolla.android.login.entity.request.UpdateUserFriendsRequest;
+import com.xsolla.android.login.entity.request.UpdateUserFriendsRequestAction;
+import com.xsolla.android.login.entity.request.UpdateUserPhoneBody;
+import com.xsolla.android.login.entity.request.UserFriendsRequest;
+import com.xsolla.android.login.entity.request.UserFriendsRequestSortBy;
+import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder;
+import com.xsolla.android.login.entity.request.UserFriendsRequestType;
 import com.xsolla.android.login.entity.response.AuthResponse;
+import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse;
+import com.xsolla.android.login.entity.response.SocialFriendsResponse;
+import com.xsolla.android.login.entity.response.UserDetailsResponse;
+import com.xsolla.android.login.entity.response.UserFriendsResponse;
+import com.xsolla.android.login.entity.response.UserPublicInfoResponse;
 import com.xsolla.android.login.jwt.JWT;
+import com.xsolla.android.login.social.FriendsPlatform;
 import com.xsolla.android.login.social.LoginSocial;
 import com.xsolla.android.login.social.SocialNetwork;
 import com.xsolla.android.login.token.TokenUtils;
 import com.xsolla.android.login.unity.UnityProxyActivity;
 
+import java.io.File;
 import java.io.IOException;
 
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -276,6 +294,86 @@ public class XLogin {
      */
     public static void logout() {
         getInstance().tokenUtils.clearToken();
+    }
+
+    public static void getSocialFriends(
+            FriendsPlatform platform,
+            int offset,
+            int limit,
+            boolean fromGameOnly,
+            XLoginCallback<SocialFriendsResponse> callback
+    ) {
+        getInstance().loginApi.getSocialFriends("Bearer " + getToken(), platform.name().toLowerCase(), offset, limit, fromGameOnly).enqueue(callback);
+    }
+
+    public static void searchUsersByNickname(
+            String nickname,
+            int offset,
+            int limit,
+            XLoginCallback<SearchUsersByNicknameResponse> callback
+    ) {
+        getInstance().loginApi.searchUsersByNickname("Bearer " + getToken(), nickname, offset, limit).enqueue(callback);
+    }
+
+    public static void getUserPublicInfo(
+            String userId,
+            XLoginCallback<UserPublicInfoResponse> callback
+    ) {
+        getInstance().loginApi.getUserPublicInfo("Bearer " + getToken(), userId).enqueue(callback);
+    }
+
+    public static void getCurrentUserDetails(XLoginCallback<UserDetailsResponse> callback) {
+        getInstance().loginApi.getCurrentUserDetails("Bearer " + getToken()).enqueue(callback);
+    }
+
+    public static void updateCurrentUserDetails(
+            String birthday,
+            String firstName,
+            String gender,
+            String lastName,
+            String nickname,
+            XLoginCallback<Void> callback
+    ) {
+        UpdateUserDetailsBody updateUserDetailsBody = new UpdateUserDetailsBody(birthday, firstName, gender, lastName, nickname);
+        getInstance().loginApi.updateCurrentUserDetails("Bearer " + getToken(), updateUserDetailsBody).enqueue(callback);
+    }
+
+    public static void deleteCurrentUserAvatar(XLoginCallback<Void> callback) {
+        getInstance().loginApi.deleteUserPicture("Bearer " + getToken());
+    }
+
+    public static void uploadCurrentUserAvatar(File file, XLoginCallback<Void> callback) {
+        MultipartBody.Part part =
+                MultipartBody.Part.createFormData("picture", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
+        getInstance().loginApi.uploadUserPicture("Bearer " + getToken(), part);
+    }
+
+    public static void updateCurrentUserPhone(String phone, XLoginCallback<Void> callback) {
+        UpdateUserPhoneBody updateUserPhoneBody = new UpdateUserPhoneBody(phone);
+        getInstance().loginApi.updateUserPhone("Bearer " + getToken(), updateUserPhoneBody).enqueue(callback);
+    }
+
+    public static void deleteCurrentUserPhone(String phone, XLoginCallback<Void> callback) {
+        getInstance().loginApi.deleteUserPhone("Bearer " + getToken(), phone);
+    }
+
+    public static void getCurrentUserFriends(
+            UserFriendsRequestType type,
+            UserFriendsRequestSortBy sortBy,
+            UserFriendsRequestSortOrder sortOrder,
+            XLoginCallback<UserFriendsResponse> callback
+    ) {
+        UserFriendsRequest userFriendsRequest = new UserFriendsRequest(type.name().toLowerCase(), sortBy.name().toLowerCase(), sortOrder.name().toLowerCase());
+        getInstance().loginApi.getUserFriends("Bearer " + getToken(), userFriendsRequest).enqueue(callback);
+    }
+
+    public static void updateCurrentUserFriends(
+            String friendXsollaUserId,
+            UpdateUserFriendsRequestAction action,
+            XLoginCallback<Void> callback
+    ) {
+        UpdateUserFriendsRequest updateUserFriendsRequest = new UpdateUserFriendsRequest(action.name().toLowerCase(), friendXsollaUserId);
+        getInstance().loginApi.updateFriends("Bearer " + getToken(), updateUserFriendsRequest).enqueue(callback);
     }
 
     public static boolean isTokenExpired(long leewaySec) {
