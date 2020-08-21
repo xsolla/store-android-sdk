@@ -23,6 +23,8 @@ import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.login.XLogin
+import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
+import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
@@ -174,8 +176,16 @@ class StoreActivity : AppCompatActivity() {
     }
 
     private fun setDrawerData() {
-        textEmail.text = XLogin.getJwt()?.getClaim("email")?.asString()
-        textUsername.text = XLogin.getJwt()?.getClaim("username")?.asString()
+        XLogin.getCurrentUserDetails(object : GetCurrentUserDetailsCallback {
+            override fun onSuccess(data: UserDetailsResponse) {
+                textEmail.text = data.email
+                textUsername.text = data.nickname ?: data.name
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+            }
+
+        })
     }
 
     private fun startLogin() {
@@ -183,7 +193,7 @@ class StoreActivity : AppCompatActivity() {
         startActivityForResult(intent, RC_LOGIN)
     }
 
-    fun showSnack(message: String) {
+    private fun showSnack(message: String) {
         val rootView: View = findViewById(android.R.id.content)
         Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show()
     }
