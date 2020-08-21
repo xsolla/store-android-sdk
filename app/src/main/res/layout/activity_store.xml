@@ -27,4 +27,13 @@
 
     </com.google.android.material.navigation.NavigationView>
 
+    <View
+        android:id="@+id/lock"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/lock_color"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"/>
+
 </androidx.drawerlayout.widget.DrawerLayout>

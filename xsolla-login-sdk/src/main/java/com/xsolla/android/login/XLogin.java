@@ -756,6 +756,10 @@ public class XLogin {
         }
     }
 
+    public static boolean canRefreshToken() {
+        return getInstance().useOauth && getInstance().tokenUtils.getOauthRefreshToken() != null;
+    }
+
     /**
      * Get current user's token metadata
      *

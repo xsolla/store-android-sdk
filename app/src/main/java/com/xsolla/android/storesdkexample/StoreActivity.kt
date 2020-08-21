@@ -24,12 +24,14 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
+import com.xsolla.android.login.callback.RefreshTokenCallback
 import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import com.xsolla.android.storesdkexample.util.sumByLong
+import kotlinx.android.synthetic.main.activity_store.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.item_balance.view.*
 import kotlinx.android.synthetic.main.layout_drawer.*
@@ -64,14 +66,34 @@ class StoreActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (XLogin.isTokenExpired(60)) {
-            startLogin()
+            if (XLogin.canRefreshToken()) {
+                lock.visibility = View.VISIBLE
+                XLogin.refreshToken(object : RefreshTokenCallback {
+                    override fun onSuccess() {
+                        lock.visibility = View.GONE
+                        XStore.init(BuildConfig.PROJECT_ID, XLogin.getToken())
+                        vmCart.updateCart()
+                        vmBalance.updateVirtualBalance()
+                        setDrawerData()
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                    }
+
+                    override fun onError(throwable: Throwable?, errorMessage: String?) {
+                        lock.visibility = View.GONE
+                        startLogin()
+                    }
+
+                })
+            } else {
+                startLogin()
+            }
         } else {
             XStore.init(BuildConfig.PROJECT_ID, XLogin.getToken())
+            vmCart.updateCart()
+            vmBalance.updateVirtualBalance()
+            setDrawerData()
+            drawerLayout.closeDrawer(GravityCompat.START)
         }
-        vmCart.updateCart()
-        vmBalance.updateVirtualBalance()
-        setDrawerData()
-        drawerLayout.closeDrawer(GravityCompat.START)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
