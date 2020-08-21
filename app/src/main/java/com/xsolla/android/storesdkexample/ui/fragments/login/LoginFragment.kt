@@ -7,10 +7,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import com.xsolla.android.login.XLogin
-import com.xsolla.android.login.api.XLoginCallback
+import com.xsolla.android.login.callback.AuthCallback
 import com.xsolla.android.login.callback.FinishSocialCallback
 import com.xsolla.android.login.callback.StartSocialCallback
-import com.xsolla.android.login.entity.response.AuthResponse
 import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
@@ -44,17 +43,18 @@ class LoginFragment : BaseFragment() {
             val username = usernameInput.text.toString()
             val password = passwordInput.text.toString()
 
-            XLogin.login(username, password, BuildConfig.WITH_LOGOUT, object : XLoginCallback<AuthResponse?>() {
-                override fun onSuccess(response: AuthResponse?) {
+            XLogin.authenticate(username, password, BuildConfig.WITH_LOGOUT, object : AuthCallback {
+                override fun onSuccess() {
                     activity?.setResult(Activity.RESULT_OK)
                     activity?.finish()
                     ViewUtils.enable(v)
                 }
 
-                override fun onFailure(errorMessage: String) {
-                    showSnack(errorMessage)
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
                     ViewUtils.enable(v)
                 }
+
             })
         }
 
@@ -156,8 +156,8 @@ class LoginFragment : BaseFragment() {
             // auth successfully started
         }
 
-        override fun onError(errorMessage: String) {
-            showSnack(errorMessage)
+        override fun onError(throwable: Throwable?, errorMessage: String?) {
+            showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
         }
     }
 
@@ -171,8 +171,8 @@ class LoginFragment : BaseFragment() {
             showSnack("Auth cancelled")
         }
 
-        override fun onAuthError(errorMessage: String) {
-            showSnack(errorMessage)
+        override fun onAuthError(throwable: Throwable?, errorMessage: String?) {
+            showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
         }
     }
 

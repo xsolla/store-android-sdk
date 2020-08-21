@@ -3,7 +3,7 @@ package com.xsolla.android.storesdkexample.ui.fragments.login
 import android.text.Editable
 import android.text.TextWatcher
 import com.xsolla.android.login.XLogin
-import com.xsolla.android.login.api.XLoginCallback
+import com.xsolla.android.login.callback.RegisterCallback
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.util.ViewUtils
@@ -32,8 +32,8 @@ class SignUpFragment : BaseFragment() {
             val email = emailInput.text.toString()
             val password = passwordInput.text.toString()
 
-            XLogin.register(username, email, password, object : XLoginCallback<Void?>() {
-                override fun onSuccess(response: Void?) {
+            XLogin.register(username, email, password, object : RegisterCallback {
+                override fun onSuccess() {
                     showSnack("Registration success. Please check your email")
                     parentFragmentManager
                             .beginTransaction()
@@ -43,9 +43,10 @@ class SignUpFragment : BaseFragment() {
                     ViewUtils.enable(v)
                 }
 
-                override fun onFailure(errorMessage: String) {
-                    showSnack(errorMessage)
-                    ViewUtils.enable(v)                }
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
+                    ViewUtils.enable(v)
+                }
             })
         }
     }

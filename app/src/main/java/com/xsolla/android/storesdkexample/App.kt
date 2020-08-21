@@ -7,6 +7,6 @@ class App: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        XLogin.init(BuildConfig.LOGIN_ID, this, null)
+        XLogin.init(this, BuildConfig.LOGIN_ID, BuildConfig.USE_OAUTH, null)
     }
 }

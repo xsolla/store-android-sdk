@@ -24,8 +24,9 @@ class UnityProxyActivity : Activity() {
         XLogin.startSocialAuth(this, socialNetwork, withLogout, object : StartSocialCallback {
             override fun onAuthStarted() {
             }
-            override fun onError(errorMessage: String) {
-                UnityUtils.sendMessage(socialNetwork.providerName, "ERROR", errorMessage)
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                UnityUtils.sendMessage(socialNetwork.providerName, "ERROR", throwable?.javaClass?.name ?: errorMessage)
                 finish()
             }
         })
@@ -47,8 +48,8 @@ class UnityProxyActivity : Activity() {
                 finish()
             }
 
-            override fun onAuthError(errorMessage: String) {
-                UnityUtils.sendMessage(socialNetwork.providerName, "ERROR", errorMessage)
+            override fun onAuthError(throwable: Throwable?, errorMessage: String?) {
+                UnityUtils.sendMessage(socialNetwork.providerName, "ERROR", throwable?.javaClass?.name ?: errorMessage)
                 finish()
             }
         })

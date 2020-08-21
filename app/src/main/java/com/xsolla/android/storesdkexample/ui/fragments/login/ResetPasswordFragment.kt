@@ -3,7 +3,7 @@ package com.xsolla.android.storesdkexample.ui.fragments.login
 import android.text.Editable
 import android.text.TextWatcher
 import com.xsolla.android.login.XLogin
-import com.xsolla.android.login.api.XLoginCallback
+import com.xsolla.android.login.callback.ResetPasswordCallback
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.util.ViewUtils
@@ -40,17 +40,18 @@ class ResetPasswordFragment : BaseFragment() {
             ViewUtils.disable(v)
             hideKeyboard()
             val username = rootView.usernameInput.text.toString()
-            XLogin.resetPassword(username, object : XLoginCallback<Void?>() {
-                override fun onSuccess(response: Void?) {
+            XLogin.resetPassword(username, object : ResetPasswordCallback {
+                override fun onSuccess() {
                     showSnack("Password reset success. Check your email")
                     openLoginFragment()
                     ViewUtils.enable(v)
                 }
 
-                override fun onFailure(errorMessage: String) {
-                    showSnack(errorMessage)
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
                     ViewUtils.enable(v)
                 }
+
             })
         }
     }
