@@ -11,11 +11,22 @@ import androidx.fragment.app.Fragment;
 
 import com.xsolla.android.login.api.LoginApi;
 import com.xsolla.android.login.callback.AuthCallback;
+import com.xsolla.android.login.callback.DeleteCurrentUserAvatarCallback;
+import com.xsolla.android.login.callback.DeleteCurrentUserPhoneCallback;
 import com.xsolla.android.login.callback.FinishSocialCallback;
+import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback;
+import com.xsolla.android.login.callback.GetCurrentUserFriendsCallback;
+import com.xsolla.android.login.callback.GetSocialFriendsCallback;
+import com.xsolla.android.login.callback.GetUserPublicInfoCallback;
 import com.xsolla.android.login.callback.RefreshTokenCallback;
 import com.xsolla.android.login.callback.RegisterCallback;
 import com.xsolla.android.login.callback.ResetPasswordCallback;
+import com.xsolla.android.login.callback.SearchUsersByNicknameCallback;
 import com.xsolla.android.login.callback.StartSocialCallback;
+import com.xsolla.android.login.callback.UpdateCurrentUserDetailsCallback;
+import com.xsolla.android.login.callback.UpdateCurrentUserFriendsCallback;
+import com.xsolla.android.login.callback.UpdateCurrentUserPhoneCallback;
+import com.xsolla.android.login.callback.UploadCurrentUserAvatarCallback;
 import com.xsolla.android.login.entity.request.AuthUserBody;
 import com.xsolla.android.login.entity.request.OauthAuthUserBody;
 import com.xsolla.android.login.entity.request.OauthRegisterUserBody;
@@ -459,29 +470,113 @@ public class XLogin {
             int offset,
             int limit,
             boolean fromGameOnly,
-            XLoginCallback<SocialFriendsResponse> callback
+            final GetSocialFriendsCallback callback
     ) {
-        getInstance().loginApi.getSocialFriends("Bearer " + getToken(), platform.name().toLowerCase(), offset, limit, fromGameOnly).enqueue(callback);
+        getInstance().loginApi
+                .getSocialFriends("Bearer " + getToken(), platform.name().toLowerCase(), offset, limit, fromGameOnly)
+                .enqueue(new Callback<SocialFriendsResponse>() {
+                    @Override
+                    public void onResponse(Call<SocialFriendsResponse> call, Response<SocialFriendsResponse> response) {
+                        if (response.isSuccessful()) {
+                            SocialFriendsResponse socialFriendsResponse = response.body();
+                            if (socialFriendsResponse != null) {
+                                callback.onSuccess(socialFriendsResponse);
+                            } else {
+                                callback.onError(null, "Empty response");
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<SocialFriendsResponse> call, Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
     }
 
     public static void searchUsersByNickname(
             String nickname,
             int offset,
             int limit,
-            XLoginCallback<SearchUsersByNicknameResponse> callback
+            final SearchUsersByNicknameCallback callback
     ) {
-        getInstance().loginApi.searchUsersByNickname("Bearer " + getToken(), nickname, offset, limit).enqueue(callback);
+        getInstance().loginApi
+                .searchUsersByNickname("Bearer " + getToken(), nickname, offset, limit)
+                .enqueue(new Callback<SearchUsersByNicknameResponse>() {
+                    @Override
+                    public void onResponse(Call<SearchUsersByNicknameResponse> call, Response<SearchUsersByNicknameResponse> response) {
+                        if (response.isSuccessful()) {
+                            SearchUsersByNicknameResponse searchUsersByNicknameResponse = response.body();
+                            if (searchUsersByNicknameResponse != null) {
+                                callback.onSuccess(searchUsersByNicknameResponse);
+                            } else {
+                                callback.onError(null, "Empty response");
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<SearchUsersByNicknameResponse> call, Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
     }
 
     public static void getUserPublicInfo(
             String userId,
-            XLoginCallback<UserPublicInfoResponse> callback
+            final GetUserPublicInfoCallback callback
     ) {
-        getInstance().loginApi.getUserPublicInfo("Bearer " + getToken(), userId).enqueue(callback);
+        getInstance().loginApi
+                .getUserPublicInfo("Bearer " + getToken(), userId)
+                .enqueue(new Callback<UserPublicInfoResponse>() {
+                    @Override
+                    public void onResponse(Call<UserPublicInfoResponse> call, Response<UserPublicInfoResponse> response) {
+                        if (response.isSuccessful()) {
+                            UserPublicInfoResponse userPublicInfoResponse = response.body();
+                            if (userPublicInfoResponse != null) {
+                                callback.onSuccess(userPublicInfoResponse);
+                            } else {
+                                callback.onError(null, "Empty response");
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserPublicInfoResponse> call, Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
     }
 
-    public static void getCurrentUserDetails(XLoginCallback<UserDetailsResponse> callback) {
-        getInstance().loginApi.getCurrentUserDetails("Bearer " + getToken()).enqueue(callback);
+    public static void getCurrentUserDetails(final GetCurrentUserDetailsCallback callback) {
+        getInstance().loginApi
+                .getCurrentUserDetails("Bearer " + getToken())
+                .enqueue(new Callback<UserDetailsResponse>() {
+                    @Override
+                    public void onResponse(Call<UserDetailsResponse> call, Response<UserDetailsResponse> response) {
+                        if (response.isSuccessful()) {
+                            UserDetailsResponse userDetailsResponse = response.body();
+                            if (userDetailsResponse != null) {
+                                callback.onSuccess(userDetailsResponse);
+                            } else {
+                                callback.onError(null, "Empty response");
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserDetailsResponse> call, Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
     }
 
     public static void updateCurrentUserDetails(
@@ -490,48 +585,165 @@ public class XLogin {
             String gender,
             String lastName,
             String nickname,
-            XLoginCallback<Void> callback
+            final UpdateCurrentUserDetailsCallback callback
     ) {
         UpdateUserDetailsBody updateUserDetailsBody = new UpdateUserDetailsBody(birthday, firstName, gender, lastName, nickname);
-        getInstance().loginApi.updateCurrentUserDetails("Bearer " + getToken(), updateUserDetailsBody).enqueue(callback);
+        getInstance().loginApi
+                .updateCurrentUserDetails("Bearer " + getToken(), updateUserDetailsBody)
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            callback.onSuccess();
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
     }
 
-    public static void deleteCurrentUserAvatar(XLoginCallback<Void> callback) {
-        getInstance().loginApi.deleteUserPicture("Bearer " + getToken());
+    public static void deleteCurrentUserAvatar(final DeleteCurrentUserAvatarCallback callback) {
+        getInstance().loginApi
+                .deleteUserPicture("Bearer " + getToken())
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            callback.onSuccess();
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
     }
 
-    public static void uploadCurrentUserAvatar(File file, XLoginCallback<Void> callback) {
+    public static void uploadCurrentUserAvatar(File file, final UploadCurrentUserAvatarCallback callback) {
         MultipartBody.Part part =
                 MultipartBody.Part.createFormData("picture", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
-        getInstance().loginApi.uploadUserPicture("Bearer " + getToken(), part);
+        getInstance().loginApi
+                .uploadUserPicture("Bearer " + getToken(), part)
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            callback.onSuccess();
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
     }
 
-    public static void updateCurrentUserPhone(String phone, XLoginCallback<Void> callback) {
+    public static void updateCurrentUserPhone(String phone, final UpdateCurrentUserPhoneCallback callback) {
         UpdateUserPhoneBody updateUserPhoneBody = new UpdateUserPhoneBody(phone);
-        getInstance().loginApi.updateUserPhone("Bearer " + getToken(), updateUserPhoneBody).enqueue(callback);
+        getInstance().loginApi
+                .updateUserPhone("Bearer " + getToken(), updateUserPhoneBody)
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            callback.onSuccess();
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
     }
 
-    public static void deleteCurrentUserPhone(String phone, XLoginCallback<Void> callback) {
-        getInstance().loginApi.deleteUserPhone("Bearer " + getToken(), phone);
+    public static void deleteCurrentUserPhone(String phone, final DeleteCurrentUserPhoneCallback callback) {
+        getInstance().loginApi
+                .deleteUserPhone("Bearer " + getToken(), phone)
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            callback.onSuccess();
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
     }
 
     public static void getCurrentUserFriends(
             UserFriendsRequestType type,
             UserFriendsRequestSortBy sortBy,
             UserFriendsRequestSortOrder sortOrder,
-            XLoginCallback<UserFriendsResponse> callback
+            final GetCurrentUserFriendsCallback callback
     ) {
         UserFriendsRequest userFriendsRequest = new UserFriendsRequest(type.name().toLowerCase(), sortBy.name().toLowerCase(), sortOrder.name().toLowerCase());
-        getInstance().loginApi.getUserFriends("Bearer " + getToken(), userFriendsRequest).enqueue(callback);
+        getInstance().loginApi
+                .getUserFriends("Bearer " + getToken(), userFriendsRequest)
+                .enqueue(new Callback<UserFriendsResponse>() {
+                    @Override
+                    public void onResponse(Call<UserFriendsResponse> call, Response<UserFriendsResponse> response) {
+                        if (response.isSuccessful()) {
+                            UserFriendsResponse userFriendsResponse = response.body();
+                            if (userFriendsResponse != null) {
+                                callback.onSuccess(userFriendsResponse);
+                            } else {
+                                callback.onError(null, "Empty response");
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserFriendsResponse> call, Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
     }
 
     public static void updateCurrentUserFriends(
             String friendXsollaUserId,
             UpdateUserFriendsRequestAction action,
-            XLoginCallback<Void> callback
+            final UpdateCurrentUserFriendsCallback callback
     ) {
         UpdateUserFriendsRequest updateUserFriendsRequest = new UpdateUserFriendsRequest(action.name().toLowerCase(), friendXsollaUserId);
-        getInstance().loginApi.updateFriends("Bearer " + getToken(), updateUserFriendsRequest).enqueue(callback);
+        getInstance().loginApi
+                .updateFriends("Bearer " + getToken(), updateUserFriendsRequest)
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            callback.onSuccess();
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
     }
 
     public static boolean isTokenExpired(long leewaySec) {
