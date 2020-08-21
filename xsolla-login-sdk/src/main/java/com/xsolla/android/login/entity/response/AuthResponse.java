@@ -9,7 +9,7 @@ public class AuthResponse {
     private String loginUrl;
 
     public String getToken() {
-        return TokenUtils.getTokenFromUrl(loginUrl);
+        return TokenUtils.Companion.getTokenFromUrl(loginUrl);
     }
 
 }

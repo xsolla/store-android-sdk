@@ -1,6 +1,6 @@
 package com.xsolla.android.login.callback
 
-interface StartSocialCallback {
-    fun onAuthStarted()
+interface RefreshTokenCallback {
+    fun onSuccess()
     fun onError(throwable: Throwable?, errorMessage: String?)
 }
