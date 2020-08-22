@@ -5,10 +5,9 @@ import com.google.gson.annotations.SerializedName
 data class OrderResponse(
     @SerializedName("order_id")
     val orderId: Int,
-    val status: Status,
-    val content: Content
+    val status: Status? = null,
+    val content: Content? = null
 ) {
-
     enum class Status {
         @SerializedName("new")
         NEW,
@@ -21,33 +20,33 @@ data class OrderResponse(
     }
 
     data class Content(
-        val price: Price,
+        val price: Price? = null,
         @SerializedName("virtual_price")
         val virtualPrice: VirtualPrice? = null,
         @SerializedName("is_free")
         val isFree: Boolean,
-        val items: List<Item>
+        val items: List<Item> = emptyList()
     )
 
     data class Item(
-        val sku: String,
+        val sku: String? = null,
         val quantity: Int,
         @SerializedName("is_free")
         val isFree: Boolean,
-        val price: Price
+        val price: Price? = null
     )
 
     data class Price(
-        val amount: String,
+        val amount: String? = null,
         @SerializedName("amount_without_discount")
-        val amountWithoutDiscount: String,
-        val currency: String
+        val amountWithoutDiscount: String? = null,
+        val currency: String? = null
     )
 
     data class VirtualPrice(
         val amount: Int,
         @SerializedName("amount_without_discount")
-        val amountWithoutDiscount: String,
-        val currency: String
+        val amountWithoutDiscount: String? = null,
+        val currency: String? = null
     )
 }
