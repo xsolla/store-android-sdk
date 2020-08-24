@@ -165,14 +165,14 @@ class RequestExecutor {
         storeApi.createOrderFromCartById(
                 projectId,
                 cartId,
-                CreateOrderRequestBody.create(options)
+                new CreateOrderRequestBody(options)
         ).enqueue(callback);
     }
 
     public void createOrderFromCurrentCart(PaymentOptions options, XStoreCallback<CreateOrderResponse> callback) {
         storeApi.createOrderFromCurrentCart(
                 projectId,
-                CreateOrderRequestBody.create(options)
+                new CreateOrderRequestBody(options)
         ).enqueue(callback);
     }
 
@@ -180,7 +180,7 @@ class RequestExecutor {
         storeApi.createOrderByItemSku(
                 projectId,
                 itemSku,
-                CreateOrderRequestBody.create(options)
+                new CreateOrderRequestBody(options)
         ).enqueue(callback);
     }
 

@@ -1,15 +1,13 @@
 package com.xsolla.android.store.entity.request.payment
 
-class CreateOrderRequestBody private constructor(
-    val currency: String,
-    val locale: String,
-    val sandbox: Boolean
+data class CreateOrderRequestBody(
+    val currency: String = "USD",
+    val locale: String = "en",
+    val sandbox: Boolean = true
 ) {
-    companion object {
-        @JvmStatic
-        fun create(options: PaymentOptions?): CreateOrderRequestBody {
-            val requestOptions = options ?: PaymentOptions().create().build()
-            return CreateOrderRequestBody(requestOptions.currency, requestOptions.locale, requestOptions.isSandbox)
-        }
-    }
+    constructor(options: PaymentOptions?) : this(
+        options?.currency ?: "USD",
+        options?.locale ?: "en",
+        options?.isSandbox ?: true
+    )
 }

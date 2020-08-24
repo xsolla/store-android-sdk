@@ -93,9 +93,7 @@ public class DetailFragment extends BaseFragment {
         checkoutButton.setText(buttonText);
         checkoutButton.setOnClickListener(v -> {
             ViewUtils.disable(v);
-            PaymentOptions options = new PaymentOptions().create()
-                    .setSandbox(BuildConfig.IS_SANDBOX)
-                    .build();
+            PaymentOptions options = new PaymentOptions("USD", "en", BuildConfig.IS_SANDBOX);
 
             XStore.createOrderByItemSku(item.getSku(), options, new XStoreCallback<CreateOrderResponse>() {
                 @Override

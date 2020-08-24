@@ -70,9 +70,7 @@ public class CartFragment extends BaseFragment implements UpdateCartListener {
         TextView checkoutButton = rootView.findViewById(R.id.checkout_button);
         checkoutButton.setOnClickListener(v -> {
             ViewUtils.disable(v);
-            PaymentOptions paymentOptions = new PaymentOptions().create()
-                    .setSandbox(BuildConfig.IS_SANDBOX)
-                    .build();
+            PaymentOptions paymentOptions = new PaymentOptions("USD", "en", BuildConfig.IS_SANDBOX);
 
             XStore.createOrderFromCurrentCart(paymentOptions, new XStoreCallback<CreateOrderResponse>() {
                 @Override
