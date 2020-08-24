@@ -16,7 +16,7 @@ data class VirtualItemsResponse(val items: List<Item> = emptyList()) {
         val sku: String? = null,
         val name: String? = null,
         val groups: List<Group> = emptyList(),
-        val attribites: @RawValue List<Any> = emptyList(),
+        val attributes: @RawValue List<Any> = emptyList(),
         val type: String? = null,
         val description: String? = null,
         @SerializedName("image_url")

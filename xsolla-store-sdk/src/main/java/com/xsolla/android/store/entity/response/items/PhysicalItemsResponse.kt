@@ -10,7 +10,7 @@ data class PhysicalItemsResponse(val items: List<Item> = emptyList()) {
         val sku: String,
         val name: String,
         val groups: List<Group> = emptyList(),
-        val attribites: List<Any> = emptyList(),
+        val attributes: List<Any> = emptyList(),
         val type: String,
         val description: String,
         @SerializedName("image_url")

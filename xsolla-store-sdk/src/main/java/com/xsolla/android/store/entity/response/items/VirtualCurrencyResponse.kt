@@ -10,7 +10,7 @@ data class VirtualCurrencyResponse(val items: List<Item> = emptyList()) {
         val sku: String? = null,
         val name: String? = null,
         val groups: List<Group> = emptyList(),
-        val attribites: List<Any> = emptyList(),
+        val attributes: List<Any> = emptyList(),
         val type: String? = null,
         val description: String? = null,
         @SerializedName("image_url")
