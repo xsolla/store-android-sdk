@@ -24,5 +24,5 @@ class PaymentOptions {
         }
 
         fun build() = this@PaymentOptions
-     }
+    }
 }

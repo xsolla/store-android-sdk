@@ -1,10 +1,10 @@
 package com.xsolla.android.store.entity.request.cart
 
 class CartRequestOptions {
-    var currency: String? = null
-    var locale: String? = null
+    var currency = "USD"
+    var locale = "en"
 
-    fun create() = CartRequestOptions().Builder()
+    fun create() = Builder()
 
     inner class Builder {
         fun setCurrency(currency: String): Builder {
