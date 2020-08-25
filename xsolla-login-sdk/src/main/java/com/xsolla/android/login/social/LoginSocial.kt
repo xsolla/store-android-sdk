@@ -45,6 +45,7 @@ object LoginSocial {
     private lateinit var callbackUrl: String
     private lateinit var tokenUtils: TokenUtils
     private var useOauth = false
+    private var oauthClientId = 0
 
     private lateinit var fbCallbackManager: CallbackManager
     private lateinit var fbCallback: FacebookCallback<LoginResult>
@@ -57,12 +58,13 @@ object LoginSocial {
     private var finishSocialCallback: FinishSocialCallback? = null
     private var withLogout = false
 
-    fun init(context: Context, loginApi: LoginApi, projectId: String, callbackUrl: String, tokenUtils: TokenUtils, useOauth: Boolean, socialConfig: XLogin.SocialConfig?) {
+    fun init(context: Context, loginApi: LoginApi, projectId: String, callbackUrl: String, tokenUtils: TokenUtils, useOauth: Boolean, oauthClientId: Int, socialConfig: XLogin.SocialConfig?) {
         this.loginApi = loginApi
         this.projectId = projectId
         this.callbackUrl = callbackUrl
         this.tokenUtils = tokenUtils
         this.useOauth = useOauth
+        this.oauthClientId = oauthClientId
         facebookAppId = socialConfig?.facebookAppId
         googleServerId = socialConfig?.googleServerId
         initFacebook(context)
@@ -277,7 +279,7 @@ object LoginSocial {
                         }
                     })
         } else {
-            loginApi.oauthGetLinkForSocialAuth(socialNetwork.providerName, 59, UUID.randomUUID().toString(), callbackUrl, "code", "offline")
+            loginApi.oauthGetLinkForSocialAuth(socialNetwork.providerName, oauthClientId, UUID.randomUUID().toString(), callbackUrl, "code", "offline")
                     .enqueue(object : Callback<OauthLinkForSocialAuthResponse> {
                         override fun onResponse(call: Call<OauthLinkForSocialAuthResponse>, response: Response<OauthLinkForSocialAuthResponse>) {
                             if (response.isSuccessful) {
@@ -355,7 +357,7 @@ object LoginSocial {
                     })
         } else {
             val oauthGetCodeBySocialTokenBody = OauthGetCodeBySocialTokenBody(socialToken, null)
-            loginApi.oauthGetCodeBySocialToken(socialNetwork.providerName, 59, UUID.randomUUID().toString(), callbackUrl, "code", "offline", oauthGetCodeBySocialTokenBody)
+            loginApi.oauthGetCodeBySocialToken(socialNetwork.providerName, oauthClientId, UUID.randomUUID().toString(), callbackUrl, "code", "offline", oauthGetCodeBySocialTokenBody)
                     .enqueue(object : Callback<OauthGetCodeBySocialTokenResponse> {
                         override fun onResponse(call: Call<OauthGetCodeBySocialTokenResponse>, response: Response<OauthGetCodeBySocialTokenResponse>) {
                             if (response.isSuccessful) {
@@ -391,7 +393,7 @@ object LoginSocial {
 
     private fun getOauthTokensFromCode(code: String, callback: (Throwable?, String?, String?, String?, Int?) -> Unit) {
         loginApi
-                .oauthGetTokenByCode(code, "authorization_code", 59, callbackUrl)
+                .oauthGetTokenByCode(code, "authorization_code", oauthClientId, callbackUrl)
                 .enqueue(object : Callback<OauthAuthResponse> {
                     override fun onResponse(call: Call<OauthAuthResponse>, response: Response<OauthAuthResponse>) {
                         if (response.isSuccessful) {

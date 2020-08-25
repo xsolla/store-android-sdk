@@ -18,6 +18,7 @@ android {
         buildConfigField 'String', 'LOGIN_ID', '"026201e3-7e40-11ea-a85b-42010aa80004"' // Replace to your project's Login ID
         buildConfigField 'boolean', 'WITH_LOGOUT', 'false'
         buildConfigField 'boolean', 'USE_OAUTH', 'true'
+        buildConfigField 'int', 'OAUTH_CLIENT_ID', '57'
     }
     buildTypes {
         release {

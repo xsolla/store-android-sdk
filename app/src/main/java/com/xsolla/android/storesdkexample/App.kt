@@ -7,6 +7,10 @@ class App: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        XLogin.init(this, BuildConfig.LOGIN_ID, BuildConfig.USE_OAUTH, null)
+        if (BuildConfig.USE_OAUTH) {
+            XLogin.initOauth(this, BuildConfig.LOGIN_ID, BuildConfig.OAUTH_CLIENT_ID, null)
+        } else {
+            XLogin.initJwt(this, BuildConfig.LOGIN_ID, null)
+        }
     }
 }
