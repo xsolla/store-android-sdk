@@ -21,7 +21,7 @@ data class CartResponse(
         val attributes: List<Any> = emptyList(),
         val type: String? = null,
         val description: String? = null,
-        val quantity: Int,
+        val quantity: Long,
         @SerializedName("image_url")
         val imageUrl: String? = null,
         @SerializedName("is_free")

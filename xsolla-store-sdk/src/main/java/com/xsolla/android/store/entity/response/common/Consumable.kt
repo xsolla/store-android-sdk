@@ -7,5 +7,5 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Consumable(
     @SerializedName("usages_count")
-    val usagesCount: Int
+    val usagesCount: Long
 ) : Parcelable

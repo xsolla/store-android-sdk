@@ -32,13 +32,13 @@ class VcRealPriceViewHolder(
 
     private fun bindItemPrice(item: VirtualCurrencyPackageResponse.Item) {
         val price = item.price
-        if (price.amountDecimal == price.amountWithoutDiscountDecimal) {
-            itemView.itemPrice.text = AmountUtils.prettyPrint(price.amountDecimal, price.currency)
+        if (price!!.getAmountDecimal() == price.getAmountWithoutDiscountDecimal()) {
+            itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
             itemView.itemOldPrice.visibility = View.INVISIBLE
             itemView.itemSaleLabel.visibility = View.INVISIBLE
         } else {
-            itemView.itemPrice.text = AmountUtils.prettyPrint(price.amountDecimal, price.currency)
-            itemView.itemOldPrice.text = AmountUtils.prettyPrint(price.amountWithoutDiscountDecimal)
+            itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
+            itemView.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal())
             itemView.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             itemView.itemOldPrice.visibility = View.VISIBLE
             itemView.itemSaleLabel.visibility = View.VISIBLE

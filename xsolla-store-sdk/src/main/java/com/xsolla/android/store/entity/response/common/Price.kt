@@ -4,7 +4,6 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
-import java.math.RoundingMode
 
 @Parcelize
 data class Price(
@@ -13,15 +12,6 @@ data class Price(
     private val amountWithoutDiscount: BigDecimal? = null,
     val currency: String? = null
 ) : Parcelable, IPrice {
-
-    @Deprecated("")
-    fun getAmount() = amount?.toPlainString()
-
-    @Deprecated("")
-    fun getAmountWithoutDiscount() = amountWithoutDiscount?.toPlainString()
-
-    @Deprecated("")
-    fun getPrettyPrintAmount() = getAmountDecimal()?.setScale(2, RoundingMode.HALF_UP)?.toPlainString() + " " + currency
 
     override fun getCurrencyId() = currency
 

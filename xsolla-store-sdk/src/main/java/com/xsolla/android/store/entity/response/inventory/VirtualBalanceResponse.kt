@@ -7,7 +7,7 @@ data class VirtualBalanceResponse(val items: List<Item> = emptyList()) {
         val sku: String? = null,
         val type: String? = null,
         val name: String? = null,
-        val amount: Int,
+        val amount: Long,
         val description: String? = null,
         @SerializedName("image_url")
         val imageUrl: String? = null

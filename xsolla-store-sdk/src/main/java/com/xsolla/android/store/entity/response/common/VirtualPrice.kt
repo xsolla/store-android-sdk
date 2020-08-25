@@ -8,9 +8,9 @@ import java.math.BigDecimal
 
 @Parcelize
 data class VirtualPrice(
-    private val amount: Int? = null,
+    private val amount: Long? = null,
     @SerializedName("amount_without_discount")
-    private val amountWithoutDiscount: Int? = null,
+    private val amountWithoutDiscount: Long? = null,
     @SerializedName("calculated_price")
     val calculatedPrice: CalculatedPrice? = null,
     val sku: String? = null,
@@ -22,15 +22,6 @@ data class VirtualPrice(
     val type: String? = null,
     val description: String? = null
 ) : Parcelable, IPrice {
-
-    @Deprecated("")
-    fun getAmount() = amount
-
-    @Deprecated("")
-    fun getAmountWithoutDiscount() = amountWithoutDiscount
-
-    @Deprecated("")
-    fun getPrettyPrintAmount() = "${getAmountDecimal()?.stripTrailingZeros()?.toPlainString()} $name"
 
     override fun getAmountRaw() = calculatedPrice?.amount?.toPlainString()
 
