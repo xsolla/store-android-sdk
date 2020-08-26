@@ -61,13 +61,13 @@ class CartFragment : Fragment(), CartChangeListener {
             cartAdapter.notifyDataSetChanged()
             checkoutButton.isEnabled = items.isNotEmpty()
 
-            val currency = items[0].price.currency
+            val currency = items[0].price!!.currency
 
-            val sumWithoutDiscount = items.map { item -> item.price.amountWithoutDiscountDecimal * item.quantity.toBigDecimal() }.fold(BigDecimal.ZERO, BigDecimal::add)
-            val sumWithDiscount = items.map { item -> item.price.amountDecimal * item.quantity.toBigDecimal() }.fold(BigDecimal.ZERO, BigDecimal::add)
+            val sumWithoutDiscount = items.map { item -> item.price!!.getAmountWithoutDiscountDecimal()!! * item.quantity.toBigDecimal() }.fold(BigDecimal.ZERO, BigDecimal::add)
+            val sumWithDiscount = items.map { item -> item.price!!.getAmountDecimal()!! * item.quantity.toBigDecimal() }.fold(BigDecimal.ZERO, BigDecimal::add)
             val discount = sumWithoutDiscount.minus(sumWithDiscount)
 
-            subtotalValue.text = AmountUtils.prettyPrint(sumWithoutDiscount, currency)
+            subtotalValue.text = AmountUtils.prettyPrint(sumWithoutDiscount, currency!!)
             discountValue.text = "- ${AmountUtils.prettyPrint(discount, currency)}"
             totalValue.text = AmountUtils.prettyPrint(sumWithDiscount, currency)
         })

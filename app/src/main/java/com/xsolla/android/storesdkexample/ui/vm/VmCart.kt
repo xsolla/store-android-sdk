@@ -55,9 +55,9 @@ class VmCart(application: Application) : AndroidViewModel(application) {
     }
 
     fun createOrder(onCreateOrder: (String) -> Unit) {
-        val paymentOptions = PaymentOptions().create()
-                .setSandbox(BuildConfig.IS_SANDBOX)
-                .build()
+        val paymentOptions = PaymentOptions(
+                isSandbox = BuildConfig.IS_SANDBOX
+        )
         XStore.createOrderFromCurrentCart(paymentOptions, object : XStoreCallback<CreateOrderResponse>() {
             override fun onSuccess(response: CreateOrderResponse) {
                 orderId.value = response.orderId

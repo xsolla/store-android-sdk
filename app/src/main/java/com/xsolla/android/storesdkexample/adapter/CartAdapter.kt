@@ -55,13 +55,13 @@ class CartAdapter(
 
         private fun bindItemPrice(item: CartResponse.Item) {
             val price = item.price
-            if (price.amountDecimal == price.amountWithoutDiscountDecimal) {
-                itemView.itemPrice.text = AmountUtils.prettyPrint(price.amountDecimal, price.currency)
+            if (price!!.getAmountDecimal() == price.getAmountWithoutDiscountDecimal()) {
+                itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!, price.currency!!)
                 itemView.itemOldPrice.visibility = View.INVISIBLE
                 itemView.itemSaleLabel.visibility = View.INVISIBLE
             } else {
-                itemView.itemPrice.text = AmountUtils.prettyPrint(price.amountDecimal, price.currency)
-                itemView.itemOldPrice.text = AmountUtils.prettyPrint(price.amountWithoutDiscountDecimal)
+                itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!, price.currency!!)
+                itemView.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal()!!)
                 itemView.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                 itemView.itemOldPrice.visibility = View.VISIBLE
                 itemView.itemSaleLabel.visibility = View.VISIBLE
@@ -73,13 +73,13 @@ class CartAdapter(
 
             itemView.itemVirtualPriceIcon.visibility = View.VISIBLE
             Glide.with(itemView.context).load(price.imageUrl).into(itemView.itemVirtualPriceIcon)
-            if (price.amountDecimal == price.amountWithoutDiscountDecimal) {
-                itemView.itemPrice.text = AmountUtils.prettyPrint(price.amountDecimal)
+            if (price.getAmountDecimal() == price.getAmountWithoutDiscountDecimal()) {
+                itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!)
                 itemView.itemOldPrice.visibility = View.INVISIBLE
                 itemView.itemSaleLabel.visibility = View.INVISIBLE
             } else {
-                itemView.itemPrice.text = AmountUtils.prettyPrint(price.amountDecimal)
-                itemView.itemOldPrice.text = AmountUtils.prettyPrint(price.amountWithoutDiscountDecimal)
+                itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!)
+                itemView.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal()!!)
                 itemView.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                 itemView.itemOldPrice.visibility = View.VISIBLE
                 itemView.itemSaleLabel.visibility = View.VISIBLE

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.1] - 2020-08-25
+
+### Fixed
+
+- Fieds visibility in API response classes.
+
+
 ## [0.13.0] - 2020-07-23
 
 ### Added

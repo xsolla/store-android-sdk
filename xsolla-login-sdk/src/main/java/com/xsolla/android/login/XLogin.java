@@ -81,6 +81,7 @@ public class XLogin {
     private String projectId;
     private String callbackUrl;
     private boolean useOauth;
+    private int oauthClientId;
 
     private TokenUtils tokenUtils;
     private LoginApi loginApi;
@@ -89,13 +90,14 @@ public class XLogin {
 
     private static LoginSocial loginSocial = LoginSocial.INSTANCE;
 
-    private XLogin(Context context, String projectId, String callbackUrl, boolean useOauth, TokenUtils tokenUtils, LoginApi loginApi, SocialConfig socialConfig) {
+    private XLogin(Context context, String projectId, String callbackUrl, boolean useOauth, int oauthClientId, TokenUtils tokenUtils, LoginApi loginApi, SocialConfig socialConfig) {
         this.projectId = projectId;
         this.callbackUrl = callbackUrl;
         this.useOauth = useOauth;
         this.tokenUtils = tokenUtils;
         this.loginApi = loginApi;
-        loginSocial.init(context.getApplicationContext(), loginApi, projectId, callbackUrl, tokenUtils, useOauth, socialConfig);
+        this.oauthClientId = oauthClientId;
+        loginSocial.init(context.getApplicationContext(), loginApi, projectId, callbackUrl, tokenUtils, useOauth, oauthClientId, socialConfig);
     }
 
     public static XLogin getInstance() {
@@ -119,27 +121,54 @@ public class XLogin {
     }
 
     /**
-     * Initialize SDK
+     * Initialize SDK for JWT
      *
      * @param context      application context
      * @param projectId    login ID from Publisher Account &gt; Login settings
-     * @param useOauth     use OAuth 2.0 instead of JWT
      * @param socialConfig configuration for native social auth
      */
-    public static void init(Context context, String projectId, boolean useOauth, @Nullable SocialConfig socialConfig) {
-        init(context, projectId, "https://login.xsolla.com/api/blank", useOauth, socialConfig);
+    public static void initJwt(Context context, String projectId, @Nullable SocialConfig socialConfig) {
+        init(context, projectId, "https://login.xsolla.com/api/blank", false, 0, socialConfig);
     }
 
     /**
-     * Initialize SDK
+     * Initialize SDK for JWT
      *
      * @param context      application context
      * @param projectId    login ID from Publisher Account &gt; Login settings
      * @param callbackUrl  callback URL specified in Publisher Account &gt; Login settings
-     * @param useOauth     use OAuth 2.0 instead of JWT
      * @param socialConfig configuration for native social auth
      */
-    public static void init(Context context, String projectId, String callbackUrl, boolean useOauth, @Nullable SocialConfig socialConfig) {
+    public static void initJwt(Context context, String projectId, String callbackUrl, @Nullable SocialConfig socialConfig) {
+        init(context, projectId, callbackUrl, false, 0, socialConfig);
+    }
+
+    /**
+     * Initialize SDK for OAuth 2.0
+     *
+     * @param context       application context
+     * @param projectId     login ID from Publisher Account &gt; Login settings
+     * @param oauthClientId OAuth 2.0 client ID
+     * @param socialConfig  configuration for native social auth
+     */
+    public static void initOauth(Context context, String projectId, int oauthClientId, @Nullable SocialConfig socialConfig) {
+        init(context, projectId, "https://login.xsolla.com/api/blank", true, oauthClientId, socialConfig);
+    }
+
+    /**
+     * Initialize SDK for OAuth 2.0
+     *
+     * @param context       application context
+     * @param projectId     login ID from Publisher Account &gt; Login settings
+     * @param oauthClientId OAuth 2.0 client ID
+     * @param callbackUrl   callback URL specified in Publisher Account &gt; Login settings
+     * @param socialConfig  configuration for native social auth
+     */
+    public static void initOauth(Context context, String projectId, int oauthClientId, String callbackUrl, @Nullable SocialConfig socialConfig) {
+        init(context, projectId, callbackUrl, true, oauthClientId, socialConfig);
+    }
+
+    private static void init(Context context, String projectId, String callbackUrl, boolean useOauth, int oauthClientId, @Nullable SocialConfig socialConfig) {
         Interceptor interceptor = new Interceptor() {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
@@ -174,7 +203,7 @@ public class XLogin {
         LoginApi loginApi = retrofit.create(LoginApi.class);
         TokenUtils tokenUtils = new TokenUtils(context);
 
-        instance = new XLogin(context, projectId, callbackUrl, useOauth, tokenUtils, loginApi, socialConfig);
+        instance = new XLogin(context, projectId, callbackUrl, useOauth, oauthClientId, tokenUtils, loginApi, socialConfig);
     }
 
     /**
@@ -211,7 +240,7 @@ public class XLogin {
         } else {
             OauthRegisterUserBody oauthRegisterUserBody = new OauthRegisterUserBody(username, email, password);
             getInstance().loginApi
-                    .oauthRegisterUser("code", 59, "offline", UUID.randomUUID().toString(), getInstance().callbackUrl, oauthRegisterUserBody)
+                    .oauthRegisterUser("code", getInstance().oauthClientId, "offline", UUID.randomUUID().toString(), getInstance().callbackUrl, oauthRegisterUserBody)
                     .enqueue(retrofitCallback);
         }
     }
@@ -269,7 +298,7 @@ public class XLogin {
         } else {
             OauthAuthUserBody oauthAuthUserBody = new OauthAuthUserBody(username, password);
             getInstance().loginApi
-                    .oauthLogin(59, "offline", oauthAuthUserBody)
+                    .oauthLogin(getInstance().oauthClientId, "offline", oauthAuthUserBody)
                     .enqueue(new Callback<OauthAuthResponse>() {
                         @Override
                         public void onResponse(@NonNull Call<OauthAuthResponse> call, @NonNull Response<OauthAuthResponse> response) {
@@ -310,7 +339,7 @@ public class XLogin {
             throw new IllegalArgumentException("Impossible to refresh JWT token. Use OAuth 2.0 instead");
         }
         getInstance().loginApi
-                .oauthRefreshToken(getInstance().tokenUtils.getOauthRefreshToken(), "refresh_token", 59, getInstance().callbackUrl)
+                .oauthRefreshToken(getInstance().tokenUtils.getOauthRefreshToken(), "refresh_token", getInstance().oauthClientId, getInstance().callbackUrl)
                 .enqueue(new Callback<OauthAuthResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<OauthAuthResponse> call, @NonNull Response<OauthAuthResponse> response) {

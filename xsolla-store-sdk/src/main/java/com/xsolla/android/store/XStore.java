@@ -170,7 +170,6 @@ public class XStore {
         getRequestExecutor().getItemsBySpecifiedGroup(options, callback);
     }
 
-    // Physical items
     public static void getPhysicalItems(XStoreCallback<PhysicalItemsResponse> callback) {
         getRequestExecutor().getPhysicalItems(null, callback);
     }
