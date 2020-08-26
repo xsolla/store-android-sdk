@@ -39,5 +39,5 @@ data class RevokeItemsResponse(val count: Int, val operations: List<Operation> =
 
     }
 
-    data class Item(val sku: String? = null, val quantity: Int)
+    data class Item(val sku: String? = null, val quantity: Long)
 }

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg_color"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/Widget.Xsolla.Fragment.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/drawer_item_inventory" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/fragment_consume_left_padding"
+        android:paddingRight="@dimen/fragment_consume_right_padding">
+
+        <ImageView
+            android:id="@+id/itemIcon"
+            android:layout_width="@dimen/fragment_consume_icon_width"
+            android:layout_height="@dimen/fragment_consume_item_icon_height"
+            android:layout_marginTop="@dimen/fragment_consume_item_icon_top_margin"
+            android:layout_gravity="center_horizontal"
+            tools:srcCompat="@tools:sample/avatars[3]" />
+
+        <TextView
+            android:id="@+id/itemName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/fragment_consume_item_name_top_margin"
+            android:fontFamily="sans-serif"
+            android:textSize="@dimen/fragment_consume_item_name_text_size"
+            android:textColor="@color/white_color"
+            android:layout_marginBottom="@dimen/fragment_consume_item_name_bottom_margin"
+            tools:text="Xsolla Lootbox" />
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginBottom="24dp"
+            android:orientation="horizontal">
+            
+            <EditText
+                android:id="@+id/quantityInput"
+                android:layout_width="@dimen/fragment_consume_quantity_input_width"
+                android:layout_height="@dimen/fragment_consume_quantity_input_height"
+                android:paddingLeft="@dimen/fragment_consume_quantity_input_left_padding"
+                android:textSize="@dimen/catalog_item_quantity_text_size"
+                android:text="1"
+                android:inputType="number"
+                android:textColor="@color/secondary_color"
+                android:background="@drawable/input_consume_bg"/>
+
+            <TextView
+                android:id="@+id/quantityLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:textSize="@dimen/fragment_consume_quantity_label_text_size"
+                android:textColor="@color/white_color"
+                android:layout_marginLeft="@dimen/fragment_consume_quantity_label_left_margin"
+                tools:text="of 1200 available" />
+            
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/consumeButton"
+            style="@style/Widget.Xsolla.ActionButton.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Consume"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/goToStoreButton"
+            style="@style/Widget.Xsolla.ActionButton.Small.Secondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/fragment_consume_quantity_store_button_bottom_margin"
+            android:text="@string/go_to_store"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_vi">
+
+    <fragment
+        android:id="@+id/nav_vi"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.store.ViFragment"
+        android:label=""
+        tools:layout="@layout/fragment_vi" />
+
+    <fragment
+        android:id="@+id/nav_vc"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.store.VcFragment"
+        android:label=""
+        tools:layout="@layout/fragment_vc" />
+
+    <fragment
+        android:id="@+id/nav_inventory"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.store.InventoryFragment"
+        android:label=""
+        tools:layout="@layout/fragment_inventory" />
+
+    <fragment
+        android:id="@+id/nav_cart"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.store.CartFragment"
+        android:label=""
+        tools:layout="@layout/fragment_cart" />
+
+    <fragment
+        android:id="@+id/fragment_consume"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.store.ConsumeFragment"
+        android:label=""
+        tools:layout="@layout/fragment_consume">
+    </fragment>
+
+</navigation>

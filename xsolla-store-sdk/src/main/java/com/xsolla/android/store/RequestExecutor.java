@@ -109,7 +109,7 @@ class RequestExecutor {
         storeApi.clearCurrentCart(projectId).enqueue(callback);
     }
 
-    public void updateItemFromCartByCartId(String cartId, String itemSku, int quantity, XStoreCallback<Void> callback) {
+    public void updateItemFromCartByCartId(String cartId, String itemSku, long quantity, XStoreCallback<Void> callback) {
         storeApi.updateItemFromCartByCartId(
                 projectId,
                 cartId,
@@ -118,7 +118,7 @@ class RequestExecutor {
         ).enqueue(callback);
     }
 
-    public void updateItemFromCurrentCart(String itemSku, int quantity, XStoreCallback<Void> callback) {
+    public void updateItemFromCurrentCart(String itemSku, long quantity, XStoreCallback<Void> callback) {
         storeApi.updateItemFromCurrentCart(
                 projectId,
                 itemSku,
@@ -146,7 +146,7 @@ class RequestExecutor {
         storeApi.getVirtualBalance(projectId).enqueue(callback);
     }
 
-    public void consumeItem(String sku, int quantity, String instanceId, XStoreCallback<Void> callback) {
+    public void consumeItem(String sku, long quantity, String instanceId, XStoreCallback<Void> callback) {
         storeApi.consumeItem(
                 projectId,
                 new ConsumeItemBody(sku, quantity, instanceId)

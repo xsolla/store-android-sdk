@@ -12,7 +12,7 @@ data class GrantItemsResponse(val count: Int, val operations: List<Operation> = 
 
     data class Item(
         val sku: String? = null,
-        val quantity: Int
+        val quantity: Long
     )
 
     enum class Platform {

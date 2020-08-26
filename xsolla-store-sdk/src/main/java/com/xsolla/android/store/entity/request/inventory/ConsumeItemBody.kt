@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class ConsumeItemBody(
     val sku: String,
-    val quantity: Int? = null,
+    val quantity: Long? = null,
     @SerializedName("instance_id")
     val instanceId: String? = null
 )

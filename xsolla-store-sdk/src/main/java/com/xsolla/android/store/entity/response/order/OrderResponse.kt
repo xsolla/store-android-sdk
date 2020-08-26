@@ -30,7 +30,7 @@ data class OrderResponse(
 
     data class Item(
         val sku: String? = null,
-        val quantity: Int,
+        val quantity: Long,
         @SerializedName("is_free")
         val isFree: Boolean,
         val price: Price? = null
@@ -44,7 +44,7 @@ data class OrderResponse(
     )
 
     data class VirtualPrice(
-        val amount: Int,
+        val amount: Long,
         @SerializedName("amount_without_discount")
         val amountWithoutDiscount: String? = null,
         val currency: String? = null
