@@ -25,7 +25,7 @@ class FriendsAdapter(private val currentTab: FriendsTab) : ListAdapter<FriendUiE
     }
 
     override fun onBindViewHolder(holder: FriendsViewHolder, position: Int) {
-        holder.bind(getItem(position), currentTab)
+        holder.bind(getItem(position), currentTab, itemCount)
     }
 
     enum class ViewType(val value: Int) {

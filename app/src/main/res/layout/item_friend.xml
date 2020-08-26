@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingTop="12dp"
     android:background="@color/main_bg_color">
 
     <ImageView
@@ -41,5 +42,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_more_horiz_24"
         tools:ignore="ContentDescription" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        app:layout_constraintStart_toStartOf="@id/friendAvatar"
+        app:layout_constraintTop_toBottomOf="@id/friendAvatar"
+        android:background="@color/secondary_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_height="1dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

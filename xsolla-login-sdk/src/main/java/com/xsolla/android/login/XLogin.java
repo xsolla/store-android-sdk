@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -36,7 +37,6 @@ import com.xsolla.android.login.entity.request.UpdateUserDetailsBody;
 import com.xsolla.android.login.entity.request.UpdateUserFriendsRequest;
 import com.xsolla.android.login.entity.request.UpdateUserFriendsRequestAction;
 import com.xsolla.android.login.entity.request.UpdateUserPhoneBody;
-import com.xsolla.android.login.entity.request.UserFriendsRequest;
 import com.xsolla.android.login.entity.request.UserFriendsRequestSortBy;
 import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder;
 import com.xsolla.android.login.entity.request.UserFriendsRequestType;
@@ -54,6 +54,7 @@ import com.xsolla.android.login.social.SocialNetwork;
 import com.xsolla.android.login.token.TokenUtils;
 import com.xsolla.android.login.unity.UnityProxyActivity;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -720,17 +721,18 @@ public class XLogin {
     }
 
     public static void getCurrentUserFriends(
+            String afterUrl,
+            @IntRange(from = 1, to = 50) int limit,
             UserFriendsRequestType type,
             UserFriendsRequestSortBy sortBy,
             UserFriendsRequestSortOrder sortOrder,
             final GetCurrentUserFriendsCallback callback
     ) {
-        UserFriendsRequest userFriendsRequest = new UserFriendsRequest(type.name().toLowerCase(), sortBy.name().toLowerCase(), sortOrder.name().toLowerCase());
         getInstance().loginApi
-                .getUserFriends("Bearer " + getToken(), userFriendsRequest)
+                .getUserFriends("Bearer " + getToken(), afterUrl, limit, type.name().toLowerCase(), sortBy.name().toLowerCase(), sortOrder.name().toLowerCase())
                 .enqueue(new Callback<UserFriendsResponse>() {
                     @Override
-                    public void onResponse(Call<UserFriendsResponse> call, Response<UserFriendsResponse> response) {
+                    public void onResponse(@NotNull Call<UserFriendsResponse> call, @NotNull Response<UserFriendsResponse> response) {
                         if (response.isSuccessful()) {
                             UserFriendsResponse userFriendsResponse = response.body();
                             if (userFriendsResponse != null) {
@@ -744,7 +746,7 @@ public class XLogin {
                     }
 
                     @Override
-                    public void onFailure(Call<UserFriendsResponse> call, Throwable t) {
+                    public void onFailure(@NotNull Call<UserFriendsResponse> call, @NotNull Throwable t) {
                         callback.onError(t, null);
                     }
                 });
