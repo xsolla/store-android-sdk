@@ -4,7 +4,7 @@
 
 ### Changed
 
-- Demo maps UI.
+- Sample app UI.
 
 ### Added
 
