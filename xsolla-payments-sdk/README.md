@@ -6,7 +6,7 @@
 The library is available in JCenter. To start using it, add the following line to the dependencies section of your `build.gradle` file:
 
 ```groovy
-implementation 'com.xsolla.android:payments:0.13.1'
+implementation 'com.xsolla.android:payments:0.14.0'
 ```
 
 # Usage
