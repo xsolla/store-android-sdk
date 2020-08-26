@@ -26,6 +26,7 @@
     <string name="drawer_title_store">Store</string>
     <string name="drawer_item_logout">Log out</string>
     <string name="drawer_item_cart">Cart</string>
+    <string name="drawer_item_friends">My friends</string>
 
     <string name="cart_fragment_checkout_button">Go to Checkout</string>
     <string name="cart_fragment_continue_button">Continue Shopping</string>
@@ -34,5 +35,7 @@
     <string name="cart_subtotal">Subtotal</string>
     <string name="cart_discount">Discount</string>
     <string name="cart_total">Total</string>
+
+    <string name="add_friends_button_text">+ ADD FRIENDS</string>
 
 </resources>

@@ -164,6 +164,10 @@ class StoreActivity : AppCompatActivity() {
             navController.navigate(R.id.nav_inventory)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
+        textFriends.setOnClickListener {
+            navController.navigate(R.id.nav_friends)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
         textVirtualItems.setOnClickListener {
             navController.navigate(R.id.nav_vi)
             drawerLayout.closeDrawer(GravityCompat.START)
