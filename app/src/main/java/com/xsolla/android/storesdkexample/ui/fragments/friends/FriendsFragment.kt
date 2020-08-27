@@ -1,5 +1,10 @@
 package com.xsolla.android.storesdkexample.ui.fragments.friends
 
+import android.text.SpannableStringBuilder
+import androidx.core.content.ContextCompat
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
+import androidx.core.text.color
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
@@ -38,8 +43,13 @@ class FriendsFragment : BaseFragment() {
     private fun countItemsByTabs() {
         val groupedItems = viewModel.getItemsCountByTab().values.toIntArray()
         for (i in 0 until tabs.tabCount) {
+            val spannableString = buildSpannedString {
+                append(FriendsTab.getBy(i).title)
+                color(ContextCompat.getColor(requireContext(), R.color.secondary_color)) { append("   ${groupedItems[i]}") }
+            }
+
             val tab = tabs.getTabAt(i)!!
-            tab.text = "${FriendsTab.getBy(i).title} ${groupedItems[i]}"
+            tab.text = spannableString
         }
     }
 }
