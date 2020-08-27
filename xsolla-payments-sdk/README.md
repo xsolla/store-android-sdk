@@ -1,50 +1,30 @@
-# Xsolla Payments Android SDK
 
-**Xsolla Payments Android SDK** allows partners to monetize their product by providing users with a convenient UI to pay for in-game purchases in the game store Create a  [Publisher Account](https://publisher.xsolla.com/signup?store_type=sdk) with Xsolla to get started.
+## Overview
 
-## Install
-The library is available in JCenter. To start using it, add the following line to the dependencies section of your `build.gradle` file:
+Xsolla Payments SDK is used to integrate Xsolla Pay Station into Android apps. Xsolla Pay Station allows partners to monetize their product by providing users with a convenient UI to pay for in-game purchases in the game store.
 
-```groovy
-implementation 'com.xsolla.android:payments:0.14.0'
-```
+The following integration options are available:
 
-# Usage
+*   Integration with **your server side** is suitable for partners who want to use Xsolla Pay Station with their own authentication method, in-game store, and player’s inventory.
+*   Integration with **third-party service servers** is suitable for partners who already use third-party solutions to implement the server side, but want to use Xsolla Pay Station.
 
-## Configure Return URL
-Add the following strings to project's strings resources file to specify Return URL configured in Publisher Account 
-```xml
-<string name="xsolla_payments_redirect_scheme">https</string>
-<string name="xsolla_payments_redirect_host">example.com</string>
-<string name="xsolla_payments_redirect_path_prefix">/payment</string>
-```
-There you should set Return URL split into 3 parts. (The example is for `https://example.com/payment`)
+    **Info:** Currently, Xsolla provides integration with PlayFab services.
 
-## Create Pay Station intent
+*   Serverless or **simplified integration** is suitable for partners who want to use Xsolla Pay Station for in-game purchases, but their games have no server part and game logic is implemented on the client side.
 
-```java
-Intent intent = XPayments.createIntentBuilder(getContext())
-            .accessToken(new AccessToken(token))
-            .isSandbox(BuildConfig.IS_SANDBOX)
-            .build();
-```
+See the [wikis](https://github.com/xsolla/store-android-sdk/wiki) to learn how to integrate Xsolla products using Payments Android SDK.
 
-## Start activity using created intent
 
-```java
-startActivityForResult(intent, RC_PAYSTATION);
-```
+## System Requirements
 
-## Parse activity result
+*   Android OS 5.0 or higher
+*   Internet сonnection is essential for Android SDKs
 
-```java
-@Override
-public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    if (requestCode == RC_PAYSTATION) {
-        XPayments.Result result = XPayments.Result.fromResultIntent(data);
-    }
-}
-```
 
-See example in [DetailFragment](https://github.com/xsolla/store-android-sdk/blob/master/app/src/main/java/com/xsolla/android/storesdkexample/fragments/DetailFragment.java) from Sample App.
+## Prerequisites
+
+1. [Download](https://developer.android.com/studio) and [install](https://developer.android.com/studio/install) Android Studio.
+2. Create a new project.
+3. Register an [Xsolla Publisher Account](https://publisher.xsolla.com/signup?store_type=sdk).
+
+See more instructions n the [wikis](https://github.com/xsolla/store-android-sdk/wiki) and at the [Xsolla Developers portal](https://developers.xsolla.com/sdk/game-engines/android/).
