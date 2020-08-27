@@ -762,7 +762,7 @@ public class XLogin {
                 .updateFriends("Bearer " + getToken(), updateUserFriendsRequest)
                 .enqueue(new Callback<Void>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    public void onResponse(@NotNull Call<Void> call, @NotNull Response<Void> response) {
                         if (response.isSuccessful()) {
                             callback.onSuccess();
                         } else {
@@ -771,7 +771,7 @@ public class XLogin {
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
+                    public void onFailure(@NotNull Call<Void> call, @NotNull Throwable t) {
                         callback.onError(t, null);
                     }
                 });

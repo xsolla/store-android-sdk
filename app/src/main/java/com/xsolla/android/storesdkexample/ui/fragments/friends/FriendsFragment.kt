@@ -1,7 +1,6 @@
 package com.xsolla.android.storesdkexample.ui.fragments.friends
 
 import androidx.fragment.app.activityViewModels
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xsolla.android.storesdkexample.R
@@ -20,7 +19,9 @@ class FriendsFragment : BaseFragment() {
     override fun getLayout() = R.layout.fragment_friends
 
     override fun initUI() {
-        viewModel.loadAllFriends()
+        if (viewModel.getItems().isEmpty()) {
+            viewModel.loadAllFriends()
+        }
 
         pagerAdapter = FriendsPagerAdapter(this)
         viewPager.adapter = pagerAdapter
@@ -29,11 +30,16 @@ class FriendsFragment : BaseFragment() {
             tab.text = FriendsTab.getBy(position).title
         }.attach()
 
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                viewModel.updateTab(FriendsTab.getBy(position))
-            }
-        })
+        viewModel.items.observe(viewLifecycleOwner) {
+            countItemsByTabs()
+        }
+    }
+    
+    private fun countItemsByTabs() {
+        val groupedItems = viewModel.getItemsCountByTab().values.toIntArray()
+        for (i in 0 until tabs.tabCount) {
+            val tab = tabs.getTabAt(i)!!
+            tab.text = "${FriendsTab.getBy(i).title} ${groupedItems[i]}"
+        }
     }
 }

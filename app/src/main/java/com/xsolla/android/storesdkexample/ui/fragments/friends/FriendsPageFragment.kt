@@ -3,7 +3,6 @@ package com.xsolla.android.storesdkexample.ui.fragments.friends
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.FriendsAdapter
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
@@ -32,7 +31,12 @@ class FriendsPageFragment : BaseFragment() {
     override fun initUI() {
         val tab = FriendsTab.getBy(requireArguments().getInt(EXTRA_TAB))
 
-        adapter = FriendsAdapter(tab)
+        adapter = FriendsAdapter(
+            currentTab = tab,
+            onDeleteOptionClick = { viewModel.updateFriend(it, VmFriends.UpdateFriendStrategy.DeleteStrategy) },
+            onBlockOptionClick = { viewModel.updateFriend(it, VmFriends.UpdateFriendStrategy.BlockStrategy) },
+            onUnblockOptionClick = { viewModel.updateFriend(it, VmFriends.UpdateFriendStrategy.UnblockStrategy) }
+        )
         friendsRecycler.adapter = adapter
 
         viewModel.items.observe(viewLifecycleOwner) {

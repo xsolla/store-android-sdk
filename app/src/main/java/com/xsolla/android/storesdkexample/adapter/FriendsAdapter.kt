@@ -9,7 +9,12 @@ import com.xsolla.android.storesdkexample.adapter.holder.FriendsViewHolder
 import com.xsolla.android.storesdkexample.ui.vm.FriendUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.FriendsTab
 
-class FriendsAdapter(private val currentTab: FriendsTab) : ListAdapter<FriendUiEntity, FriendsViewHolder>(FriendsDiffUtilCallback()) {
+class FriendsAdapter(
+    private val currentTab: FriendsTab,
+    private val onDeleteOptionClick: (user: FriendUiEntity) -> Unit,
+    private val onBlockOptionClick: (user: FriendUiEntity) -> Unit,
+    private val onUnblockOptionClick: (user: FriendUiEntity) -> Unit
+) : ListAdapter<FriendUiEntity, FriendsViewHolder>(FriendsDiffUtilCallback()) {
     override fun getItemViewType(position: Int): Int {
         if (currentTab != FriendsTab.FRIENDS) return ViewType.ITEM.value
         return if (position == 0) ViewType.ADD_FRIEND_BUTTON.value else ViewType.ITEM.value
@@ -25,7 +30,7 @@ class FriendsAdapter(private val currentTab: FriendsTab) : ListAdapter<FriendUiE
     }
 
     override fun onBindViewHolder(holder: FriendsViewHolder, position: Int) {
-        holder.bind(getItem(position), currentTab, itemCount)
+        holder.bind(getItem(position), currentTab, itemCount, onDeleteOptionClick, onBlockOptionClick, onUnblockOptionClick)
     }
 
     enum class ViewType(val value: Int) {

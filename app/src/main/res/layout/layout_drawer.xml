@@ -45,14 +45,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textUsername" />
 
-    <!-- TODO: drawer redesign -->
     <TextView
         android:id="@+id/textFriends"
         style="@style/Widget.Xsolla.Drawer.Text.Item"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/drawer_item_friends"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textInventory" />
 
     <View
