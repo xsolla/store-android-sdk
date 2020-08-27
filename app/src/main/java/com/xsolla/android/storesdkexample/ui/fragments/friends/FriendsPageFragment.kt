@@ -43,6 +43,7 @@ class FriendsPageFragment : BaseFragment() {
             adapter.submitList(viewModel.getItemsByTab(tab))
         }
 
+        // ViewState logic will may be REMOVED or FULLY REFACTORED, don't watch it:)
         viewModel.viewState.observe(viewLifecycleOwner) { viewState ->
             if (viewState == VmFriends.ViewState.EMPTY) {
                 friendsRecycler.isVisible = false
