@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="12dp"
-    android:background="@color/main_bg_color">
+    android:background="@color/main_bg_color"
+    android:paddingTop="12dp">
 
     <ImageView
         android:id="@+id/friendAvatar"
@@ -17,6 +17,25 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription"
         tools:srcCompat="@drawable/ic_xsolla_logo" />
+
+    <ImageView
+        android:id="@+id/icOnline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/friendAvatar"
+        app:layout_constraintEnd_toEndOf="@id/friendAvatar"
+        app:srcCompat="@drawable/ic_online"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/icOffline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/friendAvatar"
+        app:layout_constraintEnd_toEndOf="@id/friendAvatar"
+        app:srcCompat="@drawable/ic_offline"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/friendNickname"
@@ -46,12 +65,12 @@
     <View
         android:id="@+id/divider"
         android:layout_width="0dp"
-        app:layout_constraintStart_toStartOf="@id/friendAvatar"
-        app:layout_constraintTop_toBottomOf="@id/friendAvatar"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="20dp"
         android:background="@color/secondary_color"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="12dp"
-        android:layout_height="1dp"/>
+        app:layout_constraintStart_toStartOf="@id/friendAvatar"
+        app:layout_constraintTop_toBottomOf="@id/friendAvatar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

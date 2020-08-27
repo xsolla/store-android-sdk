@@ -30,7 +30,7 @@ class FriendsAdapter(
     }
 
     override fun onBindViewHolder(holder: FriendsViewHolder, position: Int) {
-        holder.bind(getItem(position), currentTab, itemCount, onDeleteOptionClick, onBlockOptionClick, onUnblockOptionClick)
+        holder.bind(getItem(position), itemCount, onDeleteOptionClick, onBlockOptionClick, onUnblockOptionClick)
     }
 
     enum class ViewType(val value: Int) {

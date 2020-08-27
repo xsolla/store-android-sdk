@@ -1,12 +1,9 @@
 package com.xsolla.android.storesdkexample.ui.fragments.friends
 
-import android.text.SpannableStringBuilder
 import androidx.core.content.ContextCompat
-import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.fragment.app.activityViewModels
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.FriendsPagerAdapter

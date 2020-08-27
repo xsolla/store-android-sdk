@@ -79,9 +79,7 @@ class VmFriends : ViewModel() {
             override fun update(friend: FriendUiEntity, items: MutableLiveData<List<FriendUiEntity>>, onFailure: () -> Unit) {
                 XLogin.updateCurrentUserFriends(friend.id, UpdateUserFriendsRequestAction.UNBLOCK, object : UpdateCurrentUserFriendsCallback {
                     override fun onSuccess() {
-                        val updatedFriend = friend.copy(relationship = FriendsRelationship.NONE)
-                        val index = items.value!!.indexOf(friend)
-                        items.value = items.value!!.toMutableList().apply { set(index, updatedFriend) }
+                        items.value = items.value!!.toMutableList().apply { remove(friend) }
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
@@ -149,8 +147,7 @@ enum class FriendsRelationship {
     STANDARD,
     PENDING,
     REQUESTED,
-    BLOCKED,
-    NONE
+    BLOCKED
 }
 
 @Parcelize
