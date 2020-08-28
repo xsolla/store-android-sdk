@@ -50,7 +50,7 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         when (item.relationship) {
             FriendsRelationship.STANDARD -> {
                 itemView.friendsOptionsButton.setOnClickListener {
-                    AlertDialog.Builder(itemView.context) // TODO: Styling
+                    AlertDialog.Builder(itemView.context)
                         .setTitle("${itemView.friendNickname.text} options")
                         .setItems(arrayOf("Delete friend", "Block user")) { _, which ->
                             if (which == 0) {
