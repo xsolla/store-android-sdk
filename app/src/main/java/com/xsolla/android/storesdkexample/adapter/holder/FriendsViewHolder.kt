@@ -46,7 +46,6 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         itemView.icOnline.isVisible = item.isOnline
         itemView.icOffline.isGone = item.isOnline
 
-        // TODO: refactoring
         when (item.relationship) {
             FriendsRelationship.STANDARD -> {
                 itemView.friendsOptionsButton.setOnClickListener {
@@ -54,47 +53,67 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                         .setTitle("${itemView.friendNickname.text} options")
                         .setItems(arrayOf("Delete friend", "Block user")) { _, which ->
                             if (which == 0) {
-                                AlertDialog.Builder(itemView.context)
-                                    .setTitle("Remove ${itemView.friendNickname.text} from the friends list?")
-                                    .setPositiveButton("Remove") { _, _ ->
-                                        onDeleteOptionClick(item)
-                                    }
-                                    .setNegativeButton("Cancel") { dialog, _ ->
-                                        dialog.dismiss()
-                                    }
-                                    .show()
+                                configureDelete(item, onDeleteOptionClick)
                             }
                             else {
-                                AlertDialog.Builder(itemView.context)
-                                    .setTitle("Block ${itemView.friendNickname.text}?")
-                                    .setPositiveButton("Block") { _, _ ->
-                                        onBlockOptionClick(item)
-                                    }
-                                    .setNegativeButton("Cancel") { dialog, _ ->
-                                        dialog.dismiss()
-                                    }
-                                    .show()
+                                configureBlock(item, onBlockOptionClick)
                             }
                         }
                         .show()
                 }
             }
             FriendsRelationship.PENDING -> {
-                // Кнопки принять отклонить
+                configureBlock(item, onUnblockOptionsClick)
             }
             FriendsRelationship.REQUESTED -> {
-                // Кнопка отзыва
+                configureBlock(item, onUnblockOptionsClick)
             }
             FriendsRelationship.BLOCKED -> {
-                itemView.friendsOptionsButton.setOnClickListener {
+                configureUnblock(item, onUnblockOptionsClick)
+            }
+        }
+    }
+
+    private fun configureDelete(item: FriendUiEntity, onDeleteOptionClick: (user: FriendUiEntity) -> Unit) {
+        AlertDialog.Builder(itemView.context)
+            .setTitle("Remove ${itemView.friendNickname.text} from the friends list?")
+            .setPositiveButton("Remove") { _, _ ->
+                onDeleteOptionClick(item)
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun configureBlock(item: FriendUiEntity, onBlockOptionClick: (user: FriendUiEntity) -> Unit) {
+        AlertDialog.Builder(itemView.context)
+            .setTitle("Block ${itemView.friendNickname.text}?")
+            .setPositiveButton("Block") { _, _ ->
+                onBlockOptionClick(item)
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun configureUnblock(item: FriendUiEntity, onUnblockOptionsClick: (user: FriendUiEntity) -> Unit) {
+        itemView.friendsOptionsButton.setOnClickListener {
+            AlertDialog.Builder(itemView.context)
+                .setTitle("${itemView.friendNickname.text} options")
+                .setItems(arrayOf("Unblock user")) { _, _ ->
                     AlertDialog.Builder(itemView.context)
-                        .setTitle("${itemView.friendNickname.text} options")
-                        .setItems(arrayOf("Unblock user")) { _, _ ->
+                        .setTitle("Unblock ${item.nickname}?")
+                        .setPositiveButton("Unblock") { _, _ ->
                             onUnblockOptionsClick(item)
+                        }
+                        .setNegativeButton("Cancel") { dialog, _ ->
+                            dialog.dismiss()
                         }
                         .show()
                 }
-            }
+                .show()
         }
     }
 }
