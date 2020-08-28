@@ -8,32 +8,16 @@
     android:background="@color/main_bg_color"
     tools:context=".ui.fragments.friends.FriendsFragment">
 
-    <TextView
-        android:id="@+id/title"
-        style="@style/Widget.Xsolla.Fragment.Title"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/friendsToolbar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:alpha="0.8"
-        android:text="@string/drawer_item_friends"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/secondary_color_10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- TODO: Search with Toolbar -->
-    <ImageView
-        android:id="@+id/searchButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:backgroundTint="@color/secondary_color"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tabs"
-        app:srcCompat="@drawable/ic_baseline_search_24"
-        tools:ignore="ContentDescription" />
+        app:title="@string/drawer_item_friends"
+        tools:menu="@menu/friends_menu" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
@@ -43,7 +27,7 @@
         android:backgroundTint="@color/secondary_color_10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@id/friendsToolbar"
         app:tabMode="scrollable" />
 
     <androidx.viewpager2.widget.ViewPager2

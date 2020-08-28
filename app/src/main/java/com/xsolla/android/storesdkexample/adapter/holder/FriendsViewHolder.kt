@@ -32,9 +32,7 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             return
         }
 
-        if (adapterPosition == itemsCount - 1) {
-            itemView.divider.isGone = true
-        }
+        itemView.divider.isGone = (adapterPosition == itemsCount - 1)
 
         Glide.with(itemView)
             .load(item.imageUrl)

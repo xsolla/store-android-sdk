@@ -18,8 +18,16 @@ class VmFriends : ViewModel() {
 
     val viewState = MutableLiveData(ViewState.LOADING)
     val items = MutableLiveData<List<FriendUiEntity>>(listOf())
+    val tab = MutableLiveData(FriendsTab.FRIENDS)
+
+    val isSearch = MutableLiveData(false)
+    val searchQuery = MutableLiveData("")
 
     fun getItems() = items.value!!
+
+    fun updateTab(tab: FriendsTab) {
+        this.tab.value = tab
+    }
 
     fun loadAllFriends() {
         loadItemsByTab(FriendsTab.FRIENDS)
@@ -115,6 +123,15 @@ class VmFriends : ViewModel() {
                 }
             }
         )
+    }
+
+    fun handleSearchMode(isSearch: Boolean) {
+        this.isSearch.value = isSearch
+    }
+
+    fun handleSearch(query: String?) {
+        query ?: return
+        searchQuery.value = query
     }
 
     enum class ViewState {

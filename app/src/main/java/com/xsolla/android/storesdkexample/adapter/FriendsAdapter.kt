@@ -7,17 +7,32 @@ import androidx.recyclerview.widget.ListAdapter
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.holder.FriendsViewHolder
 import com.xsolla.android.storesdkexample.ui.vm.FriendUiEntity
+import com.xsolla.android.storesdkexample.ui.vm.FriendsRelationship
 import com.xsolla.android.storesdkexample.ui.vm.FriendsTab
 
 class FriendsAdapter(
+    var isSearch: Boolean = false,
     private val currentTab: FriendsTab,
     private val onDeleteOptionClick: (user: FriendUiEntity) -> Unit,
     private val onBlockOptionClick: (user: FriendUiEntity) -> Unit,
     private val onUnblockOptionClick: (user: FriendUiEntity) -> Unit
 ) : ListAdapter<FriendUiEntity, FriendsViewHolder>(FriendsDiffUtilCallback()) {
+    private companion object {
+        private const val ADD_BUTTON_ID = "AddButtonId"
+    }
+
     override fun getItemViewType(position: Int): Int {
-        if (currentTab != FriendsTab.FRIENDS) return ViewType.ITEM.value
-        return if (position == 0) ViewType.ADD_FRIEND_BUTTON.value else ViewType.ITEM.value
+        /*if (isSearch) {
+            return ViewType.ITEM.value
+        }*/
+        if (currentTab != FriendsTab.FRIENDS) {
+            return ViewType.ITEM.value
+        }
+        return if (getItem(position).id == ADD_BUTTON_ID) {
+            ViewType.ADD_FRIEND_BUTTON.value
+        } else {
+            ViewType.ITEM.value
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendsViewHolder {
@@ -41,6 +56,17 @@ class FriendsAdapter(
             fun getBy(value: Int): ViewType {
                 return values().find { it.value == value } ?: throw IllegalArgumentException()
             }
+        }
+    }
+
+    fun updateList(list: List<FriendUiEntity>) {
+        if (currentTab == FriendsTab.FRIENDS) {
+            val listWithButton = list.toMutableList().apply {
+                add(0, FriendUiEntity(ADD_BUTTON_ID, null, false, "", FriendsRelationship.STANDARD))
+            }
+            submitList(listWithButton)
+        } else {
+            submitList(list)
         }
     }
 }

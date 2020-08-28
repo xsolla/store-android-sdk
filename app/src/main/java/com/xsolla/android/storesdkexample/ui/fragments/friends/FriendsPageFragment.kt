@@ -40,7 +40,24 @@ class FriendsPageFragment : BaseFragment() {
         friendsRecycler.adapter = adapter
 
         viewModel.items.observe(viewLifecycleOwner) {
-            adapter.submitList(viewModel.getItemsByTab(tab))
+            adapter.updateList(viewModel.getItemsByTab(tab))
+        }
+
+        viewModel.isSearch.observe(viewLifecycleOwner) { isSearch ->
+            adapter.isSearch = isSearch
+            if (!isSearch) {
+                adapter.updateList(viewModel.getItemsByTab(tab))
+            }
+        }
+
+        viewModel.searchQuery.observe(viewLifecycleOwner) { query ->
+            if (viewModel.isSearch.value == false) {
+                return@observe
+            }
+
+            // Needs optimizations?
+            val filteredItems = viewModel.getItemsByTab(viewModel.tab.value!!).filter { it.nickname.startsWith(query, ignoreCase = true) }
+            adapter.updateList(filteredItems)
         }
 
         // ViewState logic will may be REMOVED or FULLY REFACTORED, don't watch it:)
