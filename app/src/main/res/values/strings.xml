@@ -37,5 +37,9 @@
     <string name="cart_total">Total</string>
 
     <string name="add_friends_button_text">+ ADD FRIENDS</string>
+    <string name="friends_tab_placeholder">Your friends appear here</string>
+    <string name="pending_tab_placeholder">No pending friend requests</string>
+    <string name="requested_tab_placeholder">All sent requests appear here</string>
+    <string name="blocked_tab_placeholder">All blocked players appear here</string>
 
 </resources>

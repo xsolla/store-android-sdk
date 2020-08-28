@@ -6,6 +6,7 @@ import androidx.fragment.app.activityViewModels
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.FriendsAdapter
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
+import com.xsolla.android.storesdkexample.ui.vm.FriendUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.FriendsTab
 import com.xsolla.android.storesdkexample.ui.vm.VmFriends
 import kotlinx.android.synthetic.main.fragment_friends_page.friendsRecycler
@@ -30,6 +31,7 @@ class FriendsPageFragment : BaseFragment() {
 
     override fun initUI() {
         val tab = FriendsTab.getBy(requireArguments().getInt(EXTRA_TAB))
+        noItemsPlaceholder.setText(tab.placeholderText)
 
         adapter = FriendsAdapter(
             currentTab = tab,
@@ -40,7 +42,15 @@ class FriendsPageFragment : BaseFragment() {
         friendsRecycler.adapter = adapter
 
         viewModel.items.observe(viewLifecycleOwner) {
-            adapter.updateList(viewModel.getItemsByTab(tab))
+            val itemsForTab = viewModel.getItemsByTab(tab)
+            setupPlaceholder(itemsForTab)
+            adapter.updateList(itemsForTab)
+        }
+
+        viewModel.hasError.observe(viewLifecycleOwner) { hasError ->
+            if (hasError) {
+                showSnack("Failure")
+            }
         }
 
         viewModel.isSearch.observe(viewLifecycleOwner) { isSearch ->
@@ -59,17 +69,15 @@ class FriendsPageFragment : BaseFragment() {
             val filteredItems = viewModel.getItemsByTab(viewModel.tab.value!!).filter { it.nickname.startsWith(query, ignoreCase = true) }
             adapter.updateList(filteredItems)
         }
+    }
 
-        // ViewState logic will may be REMOVED or FULLY REFACTORED, don't watch it:)
-        viewModel.viewState.observe(viewLifecycleOwner) { viewState ->
-            if (viewState == VmFriends.ViewState.EMPTY) {
-                friendsRecycler.isVisible = false
-                noItemsPlaceholder.isVisible = true
-            } else if (viewState == VmFriends.ViewState.SUCCESS) {
-                noItemsPlaceholder.isVisible = false
-                friendsRecycler.isVisible = true
-            }
+    private fun setupPlaceholder(itemsForTab: List<FriendUiEntity>) {
+        if (itemsForTab.isEmpty()) {
+            friendsRecycler.isVisible = false
+            noItemsPlaceholder.isVisible = true
+        } else {
+            noItemsPlaceholder.isVisible = false
+            friendsRecycler.isVisible = true
         }
-
     }
 }

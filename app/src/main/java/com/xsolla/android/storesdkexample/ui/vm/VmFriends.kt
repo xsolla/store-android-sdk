@@ -1,6 +1,7 @@
 package com.xsolla.android.storesdkexample.ui.vm
 
 import android.os.Parcelable
+import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.xsolla.android.login.XLogin
@@ -12,16 +13,23 @@ import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder
 import com.xsolla.android.login.entity.request.UserFriendsRequestType
 import com.xsolla.android.login.entity.response.Presence
 import com.xsolla.android.login.entity.response.UserFriendsResponse
+import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.util.SingleLiveEvent
 import kotlinx.android.parcel.Parcelize
 
 class VmFriends : ViewModel() {
 
-    val viewState = MutableLiveData(ViewState.LOADING)
     val items = MutableLiveData<List<FriendUiEntity>>(listOf())
     val tab = MutableLiveData(FriendsTab.FRIENDS)
 
     val isSearch = MutableLiveData(false)
     val searchQuery = MutableLiveData("")
+
+    val hasError = SingleLiveEvent<Boolean>()
+
+    init {
+        hasError.value = false
+    }
 
     fun getItems() = items.value!!
 
@@ -51,7 +59,7 @@ class VmFriends : ViewModel() {
     }
 
     fun updateFriend(friend: FriendUiEntity, strategy: UpdateFriendStrategy) {
-        strategy.update(friend, items) { viewState.value = ViewState.FAILURE }
+        strategy.update(friend, items) { hasError.value = true }
     }
 
     enum class UpdateFriendStrategy {
@@ -109,17 +117,14 @@ class VmFriends : ViewModel() {
             UserFriendsRequestSortOrder.ASC,
             object : GetCurrentUserFriendsCallback {
                 override fun onSuccess(data: UserFriendsResponse) {
-                    if (data.relationships.isEmpty()) {
-                        viewState.value = ViewState.EMPTY
-                    } else {
-                        viewState.value = ViewState.SUCCESS
+                    if (data.relationships.isNotEmpty()) {
                         val uiEntities = data.toUiEntities(tab)
                         items.value = getItems().toMutableList().apply { addAll(uiEntities) }
                     }
                 }
 
                 override fun onError(throwable: Throwable?, errorMessage: String?) {
-                    viewState.value = ViewState.FAILURE
+                    hasError.value = true
                 }
             }
         )
@@ -133,25 +138,19 @@ class VmFriends : ViewModel() {
         query ?: return
         searchQuery.value = query
     }
-
-    enum class ViewState {
-        SUCCESS,
-        EMPTY,
-        FAILURE,
-        LOADING
-    }
 }
 
 enum class FriendsTab(
     val position: Int,
     val title: String,
     val requestType: UserFriendsRequestType,
-    val relationship: FriendsRelationship
+    val relationship: FriendsRelationship,
+    @StringRes val placeholderText: Int
 ) {
-    FRIENDS(0, "FRIENDS", UserFriendsRequestType.FRIENDS, FriendsRelationship.STANDARD),
-    PENDING(1, "PENDING", UserFriendsRequestType.FRIEND_REQUESTED_BY, FriendsRelationship.PENDING),
-    REQUESTED(2, "MY REQUESTS", UserFriendsRequestType.FRIEND_REQUESTED, FriendsRelationship.REQUESTED),
-    BLOCKED(3, "BLOCKED", UserFriendsRequestType.BLOCKED, FriendsRelationship.BLOCKED);
+    FRIENDS(0, "FRIENDS", UserFriendsRequestType.FRIENDS, FriendsRelationship.STANDARD, R.string.friends_tab_placeholder),
+    PENDING(1, "PENDING", UserFriendsRequestType.FRIEND_REQUESTED_BY, FriendsRelationship.PENDING, R.string.pending_tab_placeholder),
+    REQUESTED(2, "MY REQUESTS", UserFriendsRequestType.FRIEND_REQUESTED, FriendsRelationship.REQUESTED, R.string.requested_tab_placeholder),
+    BLOCKED(3, "BLOCKED", UserFriendsRequestType.BLOCKED, FriendsRelationship.BLOCKED, R.string.blocked_tab_placeholder);
 
     companion object {
         fun getBy(position: Int): FriendsTab {
