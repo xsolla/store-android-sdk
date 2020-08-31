@@ -17,6 +17,8 @@ class FriendsAdapter(
     private val onUnblockOptionClick: (user: FriendUiEntity) -> Unit,
     private val onAcceptButtonClick: (user: FriendUiEntity) -> Unit,
     private val onDeclineButtonClick: (user: FriendUiEntity) -> Unit,
+    private val onCancelRequestButtonClick: (user: FriendUiEntity) -> Unit,
+    private val onAddFriendButtonClick: (user: FriendUiEntity) -> Unit
 ) : ListAdapter<FriendUiEntity, FriendsViewHolder>(FriendsDiffUtilCallback()) {
     private companion object {
         private const val ADD_BUTTON_ID = "AddButtonId"
@@ -43,7 +45,7 @@ class FriendsAdapter(
     }
 
     override fun onBindViewHolder(holder: FriendsViewHolder, position: Int) {
-        holder.bind(getItem(position), itemCount, onDeleteOptionClick, onBlockOptionClick, onUnblockOptionClick, onAcceptButtonClick, onDeclineButtonClick)
+        holder.bind(getItem(position), itemCount, onDeleteOptionClick, onBlockOptionClick, onUnblockOptionClick, onAcceptButtonClick, onDeclineButtonClick, onCancelRequestButtonClick, onAddFriendButtonClick)
     }
 
     enum class ViewType(val value: Int) {

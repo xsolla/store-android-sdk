@@ -12,6 +12,8 @@ import com.xsolla.android.storesdkexample.adapter.FriendsAdapter
 import com.xsolla.android.storesdkexample.ui.vm.FriendUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.FriendsRelationship
 import com.xsolla.android.storesdkexample.ui.vm.TemporaryFriendRelationship
+import kotlinx.android.synthetic.main.item_friend.view.addFriendButton
+import kotlinx.android.synthetic.main.item_friend.view.cancelRequestButton
 import kotlinx.android.synthetic.main.item_friend.view.divider
 import kotlinx.android.synthetic.main.item_friend.view.friendAcceptedText
 import kotlinx.android.synthetic.main.item_friend.view.friendAvatar
@@ -33,7 +35,9 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         onBlockOptionClick: (user: FriendUiEntity) -> Unit,
         onUnblockOptionsClick: (user: FriendUiEntity) -> Unit,
         onAcceptButtonClick: (user: FriendUiEntity) -> Unit,
-        onDeclineButtonClick: (user: FriendUiEntity) -> Unit
+        onDeclineButtonClick: (user: FriendUiEntity) -> Unit,
+        onCancelRequestButtonClick: (user: FriendUiEntity) -> Unit,
+        onAddFriendButtonClick: (user: FriendUiEntity) -> Unit
     ) {
         if (itemViewType == FriendsAdapter.ViewType.ADD_FRIEND_BUTTON.value) {
             itemView.setOnClickListener {  } // TODO: go to add friend flow
@@ -103,7 +107,18 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                     .show()
             }
         }
-        if (item.relationship == FriendsRelationship.REQUESTED) {
+        if (item.relationship == FriendsRelationship.REQUESTED || item.temporaryRelationship == TemporaryFriendRelationship.CANCEL_MY_OWN_REQUEST) {
+
+            itemView.cancelRequestButton.isGone = (item.temporaryRelationship == TemporaryFriendRelationship.CANCEL_MY_OWN_REQUEST)
+            itemView.addFriendButton.isVisible = (item.temporaryRelationship == TemporaryFriendRelationship.CANCEL_MY_OWN_REQUEST)
+
+            itemView.cancelRequestButton.setOnClickListener {
+                onCancelRequestButtonClick(item)
+            }
+            itemView.addFriendButton.setOnClickListener {
+                onAddFriendButtonClick(item)
+            }
+
             itemView.friendsOptionsButton.setOnClickListener {
                 AlertDialog.Builder(itemView.context)
                     .setTitle("${item.nickname} options")

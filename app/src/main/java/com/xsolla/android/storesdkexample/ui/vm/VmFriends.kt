@@ -149,7 +149,9 @@ class VmFriends : ViewModel() {
             override fun update(friend: FriendUiEntity, items: MutableLiveData<List<FriendUiEntity>>, onFailure: () -> Unit) {
                 XLogin.updateCurrentUserFriends(friend.id, UpdateUserFriendsRequestAction.FRIEND_REQUEST_CANCEL, object : UpdateCurrentUserFriendsCallback {
                     override fun onSuccess() {
-                        TODO("Not yet implemented")
+                        val updatedFriend = friend.copy(relationship = FriendsRelationship.NONE, temporaryRelationship = TemporaryFriendRelationship.CANCEL_MY_OWN_REQUEST)
+                        val index = items.value!!.indexOf(friend)
+                        items.value = items.value!!.toMutableList().apply { set(index, updatedFriend) }
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
@@ -162,7 +164,9 @@ class VmFriends : ViewModel() {
             override fun update(friend: FriendUiEntity, items: MutableLiveData<List<FriendUiEntity>>, onFailure: () -> Unit) {
                 XLogin.updateCurrentUserFriends(friend.id, UpdateUserFriendsRequestAction.FRIEND_REQUEST_ADD, object : UpdateCurrentUserFriendsCallback {
                     override fun onSuccess() {
-                        TODO("Not yet implemented")
+                        val updatedFriend = friend.copy(relationship = FriendsRelationship.REQUESTED, temporaryRelationship = null)
+                        val index = items.value!!.indexOf(friend)
+                        items.value = items.value!!.toMutableList().apply { set(index, updatedFriend) }
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
