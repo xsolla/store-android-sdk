@@ -187,6 +187,15 @@ class VmFriends : ViewModel() {
         }
     }
 
+    fun handleSearchMode(isSearch: Boolean) {
+        this.isSearch.value = isSearch
+    }
+
+    fun handleSearch(query: String?) {
+        query ?: return
+        searchQuery.value = query
+    }
+
     private fun loadItemsByTab(tab: FriendsTab) {
         XLogin.getCurrentUserFriends(
             null,
@@ -207,15 +216,6 @@ class VmFriends : ViewModel() {
                 }
             }
         )
-    }
-
-    fun handleSearchMode(isSearch: Boolean) {
-        this.isSearch.value = isSearch
-    }
-
-    fun handleSearch(query: String?) {
-        query ?: return
-        searchQuery.value = query
     }
 }
 

@@ -29,7 +29,6 @@ import kotlinx.android.synthetic.main.layout_accept_decline_friends.view.friendA
 import kotlinx.android.synthetic.main.layout_accept_decline_friends.view.friendDeclineButton
 
 class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    // TODO: Refactoring
     fun bind(
         item: FriendUiEntity,
         itemsCount: Int,
@@ -42,26 +41,84 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         onCancelRequestButtonClick: (user: FriendUiEntity, from: FriendsTab) -> Unit,
         onAddFriendButtonClick: (user: FriendUiEntity, from: FriendsTab) -> Unit
     ) {
+        setupAddFriendViewType()
+
+        itemView.divider.isGone = (adapterPosition == itemsCount - 1)
+        itemView.friendNickname.text = item.nickname
+        setupOnline(item)
+        setupAvatar(item)
+
+        configureButtonsOnTabsAndOptions(currentTab, item, onDeleteOptionClick, onBlockOptionClick, onUnblockOptionsClick, onAcceptButtonClick, onDeclineButtonClick, onCancelRequestButtonClick, onAddFriendButtonClick)
+    }
+
+    private fun setupAddFriendViewType() {
         if (itemViewType == FriendsAdapter.ViewType.ADD_FRIEND_BUTTON.value) {
             itemView.setOnClickListener {  } // TODO: go to add friend flow
             return
         }
+    }
 
-        itemView.divider.isGone = (adapterPosition == itemsCount - 1)
-
+    private fun setupAvatar(item: FriendUiEntity) {
         Glide.with(itemView)
             .load(item.imageUrl)
             .apply(circleCropTransform())
             .placeholder(R.drawable.ic_xsolla_logo)
             .error(R.drawable.ic_xsolla_logo)
             .into(itemView.friendAvatar)
+    }
 
-        itemView.friendNickname.text = item.nickname
-
+    private fun setupOnline(item: FriendUiEntity) {
         itemView.icOnline.isVisible = item.isOnline
         itemView.icOffline.isGone = item.isOnline
+    }
 
-        if (item.relationship == FriendsRelationship.STANDARD) {
+    private fun configureOptionsWithBlock(item: FriendUiEntity, onBlockOptionClick: (user: FriendUiEntity) -> Unit) {
+        itemView.friendsOptionsButton.setOnClickListener {
+            AlertDialog.Builder(itemView.context)
+                .setTitle("${item.nickname} options")
+                .setItems(arrayOf("Block user")) { _, _  ->
+                    configureBlock(item, onBlockOptionClick)
+                }
+                .show()
+        }
+    }
+
+    private fun configureDelete(item: FriendUiEntity, onDeleteOptionClick: (user: FriendUiEntity) -> Unit) {
+        AlertDialog.Builder(itemView.context)
+            .setTitle("Remove ${itemView.friendNickname.text} from the friends list?")
+            .setPositiveButton("Remove") { _, _ ->
+                onDeleteOptionClick(item)
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun configureBlock(item: FriendUiEntity, onBlockOptionClick: (user: FriendUiEntity) -> Unit) {
+        AlertDialog.Builder(itemView.context)
+            .setTitle("Block ${itemView.friendNickname.text}?")
+            .setPositiveButton("Block") { _, _ ->
+                onBlockOptionClick(item)
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun configureButtonsOnTabsAndOptions(
+        currentTab: FriendsTab,
+        item: FriendUiEntity,
+        onDeleteOptionClick: (user: FriendUiEntity) -> Unit,
+        onBlockOptionClick: (user: FriendUiEntity) -> Unit,
+        onUnblockOptionsClick: (user: FriendUiEntity) -> Unit,
+        onAcceptButtonClick: (user: FriendUiEntity) -> Unit,
+        onDeclineButtonClick: (user: FriendUiEntity) -> Unit,
+        onCancelRequestButtonClick: (user: FriendUiEntity, from: FriendsTab) -> Unit,
+        onAddFriendButtonClick: (user: FriendUiEntity, from: FriendsTab) -> Unit
+    ) {
+        if (currentTab == FriendsTab.FRIENDS || item.temporaryRelationship in FriendsTab.FRIENDS.temporaryRelationships) {
             itemView.friendsOptionsButton.setOnClickListener {
                 AlertDialog.Builder(itemView.context)
                     .setTitle("${itemView.friendNickname.text} options")
@@ -76,7 +133,7 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                     .show()
             }
         }
-        if (item.relationship == FriendsRelationship.PENDING || item.temporaryRelationship == TemporaryFriendRelationship.REQUEST_ACCEPTED || item.temporaryRelationship == TemporaryFriendRelationship.REQUEST_DENIED) {
+        if (currentTab == FriendsTab.PENDING || item.temporaryRelationship in FriendsTab.PENDING.temporaryRelationships) {
 
             when (item.temporaryRelationship) {
                 TemporaryFriendRelationship.REQUEST_ACCEPTED -> {
@@ -101,16 +158,9 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                 onDeclineButtonClick(item)
             }
 
-            itemView.friendsOptionsButton.setOnClickListener {
-                AlertDialog.Builder(itemView.context)
-                    .setTitle("${item.nickname} options")
-                    .setItems(arrayOf("Block user")) { _, _ ->
-                        configureBlock(item, onBlockOptionClick)
-                    }
-                    .show()
-            }
+            configureOptionsWithBlock(item, onBlockOptionClick)
         }
-        if (item.relationship == FriendsRelationship.REQUESTED || item.temporaryRelationship == TemporaryFriendRelationship.CANCEL_MY_OWN_REQUEST) {
+        if (currentTab == FriendsTab.REQUESTED || item.temporaryRelationship in FriendsTab.REQUESTED.temporaryRelationships) {
 
             itemView.cancelRequestButton.isGone = (item.temporaryRelationship == TemporaryFriendRelationship.CANCEL_MY_OWN_REQUEST)
             itemView.addFriendButton.isVisible = (item.temporaryRelationship == TemporaryFriendRelationship.CANCEL_MY_OWN_REQUEST)
@@ -122,16 +172,9 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                 onAddFriendButtonClick(item, currentTab)
             }
 
-            itemView.friendsOptionsButton.setOnClickListener {
-                AlertDialog.Builder(itemView.context)
-                    .setTitle("${item.nickname} options")
-                    .setItems(arrayOf("Block user")) { _, _ ->
-                        configureBlock(item, onBlockOptionClick)
-                    }
-                    .show()
-            }
+            configureOptionsWithBlock(item, onBlockOptionClick)
         }
-        if (item.relationship == FriendsRelationship.BLOCKED || item.temporaryRelationship == TemporaryFriendRelationship.UNBLOCKED || item.temporaryRelationship == TemporaryFriendRelationship.UNBLOCKED_AND_REQUEST_FRIEND) {
+        if (currentTab == FriendsTab.BLOCKED || item.temporaryRelationship in FriendsTab.BLOCKED.temporaryRelationships) {
 
             when (item.temporaryRelationship) {
                 null -> {
@@ -169,40 +212,7 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                 }
             }
 
-            if (itemView.friendsOptionsButton.isVisible) {
-                itemView.friendsOptionsButton.setOnClickListener {
-                    AlertDialog.Builder(itemView.context)
-                        .setTitle("${item.nickname} options")
-                        .setItems(arrayOf("Block user")) { _, _  ->
-                            configureBlock(item, onBlockOptionClick)
-                        }
-                        .show()
-                }
-            }
+            configureOptionsWithBlock(item, onBlockOptionClick)
         }
-    }
-
-    private fun configureDelete(item: FriendUiEntity, onDeleteOptionClick: (user: FriendUiEntity) -> Unit) {
-        AlertDialog.Builder(itemView.context)
-            .setTitle("Remove ${itemView.friendNickname.text} from the friends list?")
-            .setPositiveButton("Remove") { _, _ ->
-                onDeleteOptionClick(item)
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
-    }
-
-    private fun configureBlock(item: FriendUiEntity, onBlockOptionClick: (user: FriendUiEntity) -> Unit) {
-        AlertDialog.Builder(itemView.context)
-            .setTitle("Block ${itemView.friendNickname.text}?")
-            .setPositiveButton("Block") { _, _ ->
-                onBlockOptionClick(item)
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
     }
 }

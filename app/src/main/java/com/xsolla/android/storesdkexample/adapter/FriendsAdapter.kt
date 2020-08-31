@@ -60,7 +60,7 @@ class FriendsAdapter(
     }
 
     fun updateList(list: List<FriendUiEntity>) {
-        if (currentTab == FriendsTab.FRIENDS) { // It seems hard, but it was easiest solution
+        if (currentTab == FriendsTab.FRIENDS) {
             val listWithButton = list.toMutableList().apply {
                 add(0, FriendUiEntity(ADD_BUTTON_ID, null, false, "", FriendsRelationship.STANDARD))
             }

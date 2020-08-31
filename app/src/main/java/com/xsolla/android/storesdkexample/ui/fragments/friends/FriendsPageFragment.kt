@@ -68,7 +68,6 @@ class FriendsPageFragment : BaseFragment() {
                 return@observe
             }
 
-            // Needs optimizations?
             val filteredItems = viewModel.getItemsByTab(viewModel.tab.value!!).filter { it.nickname.startsWith(query, ignoreCase = true) }
             adapter.updateList(filteredItems)
         }
