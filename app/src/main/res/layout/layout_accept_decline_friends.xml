@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/friendAcceptButton"
+        style="@style/Widget.Xsolla.ActionButton.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/accept_friend_button" />
+
+    <Button
+        android:id="@+id/friendDeclineButton"
+        style="@style/Widget.Xsolla.ActionButton.Small.Secondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:text="@string/decline_friend_button" />
+
+</LinearLayout>

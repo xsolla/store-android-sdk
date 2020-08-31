@@ -42,6 +42,7 @@ class FriendsFragment : BaseFragment() {
             countItemsByTabs()
         }
         viewModel.tab.observe(viewLifecycleOwner) {
+            viewModel.clearTemporaryRelationship()
             friendsToolbar.menu?.findItem(R.id.search)?.collapseActionView()
         }
 

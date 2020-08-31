@@ -13,6 +13,8 @@
         android:layout_width="52dp"
         android:layout_height="52dp"
         android:layout_marginStart="20dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@id/divider"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription"
@@ -49,6 +51,64 @@
         app:layout_constraintTop_toTopOf="@id/friendAvatar"
         tools:text="Nickname" />
 
+    <TextView
+        android:id="@+id/friendAcceptedText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/request_accepted_text"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/friendNickname"
+        app:layout_constraintTop_toBottomOf="@id/friendNickname" />
+
+    <TextView
+        android:id="@+id/friendDeclinedText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/request_declined_text"
+        android:textColor="#EB002F"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/friendNickname"
+        app:layout_constraintTop_toBottomOf="@id/friendNickname" />
+
+    <include
+        android:id="@+id/friendsAcceptDeclineButtons"
+        layout="@layout/layout_accept_decline_friends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/friendNickname"
+        app:layout_constraintTop_toBottomOf="@id/friendNickname"
+        tools:visibility="gone" />
+
+    <Button
+        android:id="@+id/cancelRequestButton"
+        style="@style/Widget.Xsolla.ActionButton.Small.Secondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/cancel_friend_button"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/friendNickname"
+        app:layout_constraintTop_toBottomOf="@id/friendNickname"
+        tools:visibility="gone" />
+
+    <Button
+        android:id="@+id/addFriendButton"
+        style="@style/Widget.Xsolla.ActionButton.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:text="@string/add_friend_button"
+        android:textColor="@color/black_color"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/divider"
+        app:layout_constraintStart_toStartOf="@id/friendNickname"
+        app:layout_constraintTop_toBottomOf="@id/friendNickname"
+        tools:visibility="gone" />
+
     <ImageView
         android:id="@+id/friendsOptionsButton"
         android:layout_width="wrap_content"
@@ -69,8 +129,8 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="20dp"
         android:background="@color/secondary_color"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/friendAvatar"
-        app:layout_constraintTop_toBottomOf="@id/friendAvatar" />
+        app:layout_constraintStart_toStartOf="@id/friendAvatar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

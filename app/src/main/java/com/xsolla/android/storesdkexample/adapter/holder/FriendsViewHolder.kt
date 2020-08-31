@@ -11,12 +11,18 @@ import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.FriendsAdapter
 import com.xsolla.android.storesdkexample.ui.vm.FriendUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.FriendsRelationship
+import com.xsolla.android.storesdkexample.ui.vm.TemporaryFriendRelationship
 import kotlinx.android.synthetic.main.item_friend.view.divider
+import kotlinx.android.synthetic.main.item_friend.view.friendAcceptedText
 import kotlinx.android.synthetic.main.item_friend.view.friendAvatar
+import kotlinx.android.synthetic.main.item_friend.view.friendDeclinedText
 import kotlinx.android.synthetic.main.item_friend.view.friendNickname
+import kotlinx.android.synthetic.main.item_friend.view.friendsAcceptDeclineButtons
 import kotlinx.android.synthetic.main.item_friend.view.friendsOptionsButton
 import kotlinx.android.synthetic.main.item_friend.view.icOffline
 import kotlinx.android.synthetic.main.item_friend.view.icOnline
+import kotlinx.android.synthetic.main.layout_accept_decline_friends.view.friendAcceptButton
+import kotlinx.android.synthetic.main.layout_accept_decline_friends.view.friendDeclineButton
 
 class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     // TODO: Refactoring
@@ -25,7 +31,9 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         itemsCount: Int,
         onDeleteOptionClick: (user: FriendUiEntity) -> Unit,
         onBlockOptionClick: (user: FriendUiEntity) -> Unit,
-        onUnblockOptionsClick: (user: FriendUiEntity) -> Unit
+        onUnblockOptionsClick: (user: FriendUiEntity) -> Unit,
+        onAcceptButtonClick: (user: FriendUiEntity) -> Unit,
+        onDeclineButtonClick: (user: FriendUiEntity) -> Unit
     ) {
         if (itemViewType == FriendsAdapter.ViewType.ADD_FRIEND_BUTTON.value) {
             itemView.setOnClickListener {  } // TODO: go to add friend flow
@@ -46,30 +54,73 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         itemView.icOnline.isVisible = item.isOnline
         itemView.icOffline.isGone = item.isOnline
 
-        when (item.relationship) {
-            FriendsRelationship.STANDARD -> {
-                itemView.friendsOptionsButton.setOnClickListener {
-                    AlertDialog.Builder(itemView.context)
-                        .setTitle("${itemView.friendNickname.text} options")
-                        .setItems(arrayOf("Delete friend", "Block user")) { _, which ->
-                            if (which == 0) {
-                                configureDelete(item, onDeleteOptionClick)
-                            }
-                            else {
-                                configureBlock(item, onBlockOptionClick)
-                            }
+        if (item.relationship == FriendsRelationship.STANDARD) {
+            itemView.friendsOptionsButton.setOnClickListener {
+                AlertDialog.Builder(itemView.context)
+                    .setTitle("${itemView.friendNickname.text} options")
+                    .setItems(arrayOf("Delete friend", "Block user")) { _, which ->
+                        if (which == 0) {
+                            configureDelete(item, onDeleteOptionClick)
                         }
-                        .show()
+                        else {
+                            configureBlock(item, onBlockOptionClick)
+                        }
+                    }
+                    .show()
+            }
+        }
+        if (item.relationship == FriendsRelationship.PENDING || item.temporaryRelationship == TemporaryFriendRelationship.REQUEST_ACCEPTED || item.temporaryRelationship == TemporaryFriendRelationship.REQUEST_CANCELED) {
+
+            when (item.temporaryRelationship) {
+                TemporaryFriendRelationship.REQUEST_ACCEPTED -> {
+                    itemView.friendAcceptedText.isVisible = true
+                    itemView.friendsAcceptDeclineButtons.isVisible = false
+                }
+                TemporaryFriendRelationship.REQUEST_CANCELED -> {
+                    itemView.friendDeclinedText.isVisible = true
+                    itemView.friendsAcceptDeclineButtons.isVisible = false
+                }
+                else -> {
+                    itemView.friendsAcceptDeclineButtons.isVisible = true
+                    itemView.friendAcceptedText.isVisible = false
+                    itemView.friendDeclinedText.isVisible = false
                 }
             }
-            FriendsRelationship.PENDING -> {
-                configureBlock(item, onUnblockOptionsClick)
+
+            itemView.friendsAcceptDeclineButtons.friendAcceptButton.setOnClickListener {
+                onAcceptButtonClick(item)
             }
-            FriendsRelationship.REQUESTED -> {
-                configureBlock(item, onUnblockOptionsClick)
+            itemView.friendsAcceptDeclineButtons.friendDeclineButton.setOnClickListener {
+                onDeclineButtonClick(item)
             }
-            FriendsRelationship.BLOCKED -> {
-                configureUnblock(item, onUnblockOptionsClick)
+
+            itemView.friendsOptionsButton.setOnClickListener {
+                AlertDialog.Builder(itemView.context)
+                    .setTitle("${item.nickname} options")
+                    .setItems(arrayOf("Block user")) { _, _ ->
+                        configureBlock(item, onBlockOptionClick)
+                    }
+                    .show()
+            }
+        }
+        if (item.relationship == FriendsRelationship.REQUESTED) {
+            itemView.friendsOptionsButton.setOnClickListener {
+                AlertDialog.Builder(itemView.context)
+                    .setTitle("${item.nickname} options")
+                    .setItems(arrayOf("Block user")) { _, _ ->
+                        configureBlock(item, onBlockOptionClick)
+                    }
+                    .show()
+            }
+        }
+        if (item.relationship == FriendsRelationship.BLOCKED) {
+            itemView.friendsOptionsButton.setOnClickListener {
+                AlertDialog.Builder(itemView.context)
+                    .setTitle("${item.nickname} options")
+                    .setItems(arrayOf("Block user")) { _, _ ->
+                        configureBlock(item, onBlockOptionClick)
+                    }
+                    .show()
             }
         }
     }

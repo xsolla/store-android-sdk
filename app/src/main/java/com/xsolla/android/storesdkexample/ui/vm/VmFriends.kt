@@ -37,6 +37,15 @@ class VmFriends : ViewModel() {
         this.tab.value = tab
     }
 
+    fun clearTemporaryRelationship() {
+        val updatedItems = getItems().apply {
+            forEach {
+                it.temporaryRelationship = null
+            }
+        }
+        items.value = updatedItems
+    }
+
     fun loadAllFriends() {
         loadItemsByTab(FriendsTab.FRIENDS)
         loadItemsByTab(FriendsTab.PENDING)
@@ -55,7 +64,9 @@ class VmFriends : ViewModel() {
     }
 
     fun getItemsByTab(tab: FriendsTab): List<FriendUiEntity> {
-        return getItems().filter { it.relationship == tab.relationship }
+        return getItems().filter {
+            it.relationship == tab.relationship || it.temporaryRelationship in tab.temporaryRelationships
+        }
     }
 
     fun updateFriend(friend: FriendUiEntity, strategy: UpdateFriendStrategy) {
@@ -94,8 +105,64 @@ class VmFriends : ViewModel() {
         UnblockStrategy {
             override fun update(friend: FriendUiEntity, items: MutableLiveData<List<FriendUiEntity>>, onFailure: () -> Unit) {
                 XLogin.updateCurrentUserFriends(friend.id, UpdateUserFriendsRequestAction.UNBLOCK, object : UpdateCurrentUserFriendsCallback {
-                    override fun onSuccess() {
+                    override fun onSuccess() { // TODO
                         items.value = items.value!!.toMutableList().apply { remove(friend) }
+                    }
+
+                    override fun onError(throwable: Throwable?, errorMessage: String?) {
+                        onFailure()
+                    }
+                })
+            }
+        },
+        AcceptStrategy {
+            override fun update(friend: FriendUiEntity, items: MutableLiveData<List<FriendUiEntity>>, onFailure: () -> Unit) {
+                XLogin.updateCurrentUserFriends(friend.id, UpdateUserFriendsRequestAction.FRIEND_REQUEST_APPROVE, object : UpdateCurrentUserFriendsCallback {
+                    override fun onSuccess() {
+                        val updatedFriend = friend.copy(relationship = FriendsRelationship.STANDARD, temporaryRelationship = TemporaryFriendRelationship.REQUEST_ACCEPTED)
+                        val index = items.value!!.indexOf(friend)
+                        items.value = items.value!!.toMutableList().apply { set(index, updatedFriend) }
+                    }
+
+                    override fun onError(throwable: Throwable?, errorMessage: String?) {
+                        onFailure()
+                    }
+                })
+            }
+        },
+        DeclineStrategy {
+            override fun update(friend: FriendUiEntity, items: MutableLiveData<List<FriendUiEntity>>, onFailure: () -> Unit) {
+                XLogin.updateCurrentUserFriends(friend.id, UpdateUserFriendsRequestAction.FRIEND_REQUEST_DENY, object : UpdateCurrentUserFriendsCallback {
+                    override fun onSuccess() {
+                        val updatedFriend = friend.copy(relationship = FriendsRelationship.NONE, temporaryRelationship = TemporaryFriendRelationship.REQUEST_CANCELED)
+                        val index = items.value!!.indexOf(friend)
+                        items.value = items.value!!.toMutableList().apply { set(index, updatedFriend) }
+                    }
+
+                    override fun onError(throwable: Throwable?, errorMessage: String?) {
+                        onFailure()
+                    }
+                })
+            }
+        },
+        CancelStrategy {
+            override fun update(friend: FriendUiEntity, items: MutableLiveData<List<FriendUiEntity>>, onFailure: () -> Unit) {
+                XLogin.updateCurrentUserFriends(friend.id, UpdateUserFriendsRequestAction.FRIEND_REQUEST_CANCEL, object : UpdateCurrentUserFriendsCallback {
+                    override fun onSuccess() {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onError(throwable: Throwable?, errorMessage: String?) {
+                        onFailure()
+                    }
+                })
+            }
+        },
+        AddStrategy {
+            override fun update(friend: FriendUiEntity, items: MutableLiveData<List<FriendUiEntity>>, onFailure: () -> Unit) {
+                XLogin.updateCurrentUserFriends(friend.id, UpdateUserFriendsRequestAction.FRIEND_REQUEST_ADD, object : UpdateCurrentUserFriendsCallback {
+                    override fun onSuccess() {
+                        TODO("Not yet implemented")
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
@@ -145,12 +212,41 @@ enum class FriendsTab(
     val title: String,
     val requestType: UserFriendsRequestType,
     val relationship: FriendsRelationship,
+    val temporaryRelationships: List<TemporaryFriendRelationship>,
     @StringRes val placeholderText: Int
 ) {
-    FRIENDS(0, "FRIENDS", UserFriendsRequestType.FRIENDS, FriendsRelationship.STANDARD, R.string.friends_tab_placeholder),
-    PENDING(1, "PENDING", UserFriendsRequestType.FRIEND_REQUESTED_BY, FriendsRelationship.PENDING, R.string.pending_tab_placeholder),
-    REQUESTED(2, "MY REQUESTS", UserFriendsRequestType.FRIEND_REQUESTED, FriendsRelationship.REQUESTED, R.string.requested_tab_placeholder),
-    BLOCKED(3, "BLOCKED", UserFriendsRequestType.BLOCKED, FriendsRelationship.BLOCKED, R.string.blocked_tab_placeholder);
+    FRIENDS(
+        0,
+        "FRIENDS",
+        UserFriendsRequestType.FRIENDS,
+        FriendsRelationship.STANDARD,
+        listOf(),
+        R.string.friends_tab_placeholder
+    ),
+    PENDING(
+        1,
+        "PENDING",
+        UserFriendsRequestType.FRIEND_REQUESTED_BY,
+        FriendsRelationship.PENDING,
+        listOf(TemporaryFriendRelationship.REQUEST_ACCEPTED, TemporaryFriendRelationship.REQUEST_CANCELED),
+        R.string.pending_tab_placeholder
+    ),
+    REQUESTED(
+        2,
+        "MY REQUESTS",
+        UserFriendsRequestType.FRIEND_REQUESTED,
+        FriendsRelationship.REQUESTED,
+        listOf(TemporaryFriendRelationship.CANCEL_MY_OWN_REQUEST),
+        R.string.requested_tab_placeholder
+    ),
+    BLOCKED(
+        3,
+        "BLOCKED",
+        UserFriendsRequestType.BLOCKED,
+        FriendsRelationship.BLOCKED,
+        listOf(TemporaryFriendRelationship.UNBLOCKED),
+        R.string.blocked_tab_placeholder
+    );
 
     companion object {
         fun getBy(position: Int): FriendsTab {
@@ -163,17 +259,25 @@ enum class FriendsRelationship {
     STANDARD,
     PENDING,
     REQUESTED,
-    BLOCKED
+    BLOCKED,
+    NONE
 }
 
-@Parcelize
+enum class TemporaryFriendRelationship {
+    REQUEST_ACCEPTED,
+    REQUEST_CANCELED,
+    CANCEL_MY_OWN_REQUEST,
+    UNBLOCKED
+}
+
 data class FriendUiEntity(
     val id: String,
     val imageUrl: String?,
     val isOnline: Boolean,
     val nickname: String,
-    val relationship: FriendsRelationship
-) : Parcelable
+    val relationship: FriendsRelationship,
+    var temporaryRelationship: TemporaryFriendRelationship? = null
+)
 
 fun UserFriendsResponse.toUiEntities(tab: FriendsTab): List<FriendUiEntity> {
     val list = mutableListOf<FriendUiEntity>()

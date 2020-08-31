@@ -11,20 +11,18 @@ import com.xsolla.android.storesdkexample.ui.vm.FriendsRelationship
 import com.xsolla.android.storesdkexample.ui.vm.FriendsTab
 
 class FriendsAdapter(
-    var isSearch: Boolean = false,
     private val currentTab: FriendsTab,
     private val onDeleteOptionClick: (user: FriendUiEntity) -> Unit,
     private val onBlockOptionClick: (user: FriendUiEntity) -> Unit,
-    private val onUnblockOptionClick: (user: FriendUiEntity) -> Unit
+    private val onUnblockOptionClick: (user: FriendUiEntity) -> Unit,
+    private val onAcceptButtonClick: (user: FriendUiEntity) -> Unit,
+    private val onDeclineButtonClick: (user: FriendUiEntity) -> Unit,
 ) : ListAdapter<FriendUiEntity, FriendsViewHolder>(FriendsDiffUtilCallback()) {
     private companion object {
         private const val ADD_BUTTON_ID = "AddButtonId"
     }
 
     override fun getItemViewType(position: Int): Int {
-        /*if (isSearch) {
-            return ViewType.ITEM.value
-        }*/
         if (currentTab != FriendsTab.FRIENDS) {
             return ViewType.ITEM.value
         }
@@ -45,7 +43,7 @@ class FriendsAdapter(
     }
 
     override fun onBindViewHolder(holder: FriendsViewHolder, position: Int) {
-        holder.bind(getItem(position), itemCount, onDeleteOptionClick, onBlockOptionClick, onUnblockOptionClick)
+        holder.bind(getItem(position), itemCount, onDeleteOptionClick, onBlockOptionClick, onUnblockOptionClick, onAcceptButtonClick, onDeclineButtonClick)
     }
 
     enum class ViewType(val value: Int) {
@@ -60,7 +58,7 @@ class FriendsAdapter(
     }
 
     fun updateList(list: List<FriendUiEntity>) {
-        if (currentTab == FriendsTab.FRIENDS) {
+        if (currentTab == FriendsTab.FRIENDS) { // It seems hard, but it was easiest solution
             val listWithButton = list.toMutableList().apply {
                 add(0, FriendUiEntity(ADD_BUTTON_ID, null, false, "", FriendsRelationship.STANDARD))
             }

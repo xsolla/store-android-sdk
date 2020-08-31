@@ -37,7 +37,9 @@ class FriendsPageFragment : BaseFragment() {
             currentTab = tab,
             onDeleteOptionClick = { viewModel.updateFriend(it, VmFriends.UpdateFriendStrategy.DeleteStrategy) },
             onBlockOptionClick = { viewModel.updateFriend(it, VmFriends.UpdateFriendStrategy.BlockStrategy) },
-            onUnblockOptionClick = { viewModel.updateFriend(it, VmFriends.UpdateFriendStrategy.UnblockStrategy) }
+            onUnblockOptionClick = { viewModel.updateFriend(it, VmFriends.UpdateFriendStrategy.UnblockStrategy) },
+            onAcceptButtonClick = { viewModel.updateFriend(it, VmFriends.UpdateFriendStrategy.AcceptStrategy) },
+            onDeclineButtonClick = { viewModel.updateFriend(it, VmFriends.UpdateFriendStrategy.DeclineStrategy) }
         )
         friendsRecycler.adapter = adapter
 
@@ -54,7 +56,6 @@ class FriendsPageFragment : BaseFragment() {
         }
 
         viewModel.isSearch.observe(viewLifecycleOwner) { isSearch ->
-            adapter.isSearch = isSearch
             if (!isSearch) {
                 adapter.updateList(viewModel.getItemsByTab(tab))
             }
