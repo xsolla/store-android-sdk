@@ -40,6 +40,7 @@
     <string name="accept_friend_button">Accept</string>
     <string name="decline_friend_button">Decline</string>
     <string name="add_friend_button">Add friend</string>
+    <string name="unblock_friend_button">Unblock</string>
     <string name="cancel_friend_button">Cancel request</string>
     <string name="request_accepted_text">✓ Request accepted</string>
     <string name="request_declined_text">× Request declined</string>

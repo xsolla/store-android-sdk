@@ -40,8 +40,8 @@ class FriendsPageFragment : BaseFragment() {
             onUnblockOptionClick = { viewModel.updateFriend(it, VmFriends.UpdateFriendStrategy.UnblockStrategy) },
             onAcceptButtonClick = { viewModel.updateFriend(it, VmFriends.UpdateFriendStrategy.AcceptStrategy) },
             onDeclineButtonClick = { viewModel.updateFriend(it, VmFriends.UpdateFriendStrategy.DeclineStrategy) },
-            onCancelRequestButtonClick = { viewModel.updateFriend(it, VmFriends.UpdateFriendStrategy.CancelStrategy) },
-            onAddFriendButtonClick = { viewModel.updateFriend(it, VmFriends.UpdateFriendStrategy.AddStrategy) }
+            onCancelRequestButtonClick = { item, from -> viewModel.updateFriend(item, VmFriends.UpdateFriendStrategy.CancelStrategy(from)) },
+            onAddFriendButtonClick = { item, from -> viewModel.updateFriend(item, VmFriends.UpdateFriendStrategy.AddStrategy(from)) }
         )
         friendsRecycler.adapter = adapter
 

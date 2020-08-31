@@ -106,6 +106,18 @@
         app:layout_constraintTop_toBottomOf="@id/friendNickname"
         tools:visibility="gone" />
 
+    <Button
+        android:id="@+id/unblockButton"
+        style="@style/Widget.Xsolla.ActionButton.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/unblock_friend_button"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/friendNickname"
+        app:layout_constraintTop_toBottomOf="@id/friendNickname"
+        tools:visibility="gone" />
+
     <ImageView
         android:id="@+id/friendsOptionsButton"
         android:layout_width="wrap_content"
