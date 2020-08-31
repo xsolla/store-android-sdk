@@ -41,21 +41,16 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         onCancelRequestButtonClick: (user: FriendUiEntity, from: FriendsTab) -> Unit,
         onAddFriendButtonClick: (user: FriendUiEntity, from: FriendsTab) -> Unit
     ) {
-        setupAddFriendViewType()
+        if (itemViewType == FriendsAdapter.ViewType.ADD_FRIEND_BUTTON.value) {
+            itemView.setOnClickListener {  } // TODO: go to add friend flow
+            return
+        }
 
-        itemView.divider.isGone = (adapterPosition == itemsCount - 1)
         itemView.friendNickname.text = item.nickname
         setupOnline(item)
         setupAvatar(item)
 
         configureButtonsOnTabsAndOptions(currentTab, item, onDeleteOptionClick, onBlockOptionClick, onUnblockOptionsClick, onAcceptButtonClick, onDeclineButtonClick, onCancelRequestButtonClick, onAddFriendButtonClick)
-    }
-
-    private fun setupAddFriendViewType() {
-        if (itemViewType == FriendsAdapter.ViewType.ADD_FRIEND_BUTTON.value) {
-            itemView.setOnClickListener {  } // TODO: go to add friend flow
-            return
-        }
     }
 
     private fun setupAvatar(item: FriendUiEntity) {
