@@ -54,7 +54,6 @@ import com.xsolla.android.login.social.SocialNetwork;
 import com.xsolla.android.login.token.TokenUtils;
 import com.xsolla.android.login.unity.UnityProxyActivity;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -720,19 +719,30 @@ public class XLogin {
                 });
     }
 
+    /**
+     * Get user's friends
+     *
+     * @param afterUrl                  parameter that is used for API pagination
+     * @param limit                     maximum number of users that are returned at a time
+     * @param type                      friends type
+     * @param sortBy                    condition for sorting the users
+     * @param sortOrder                 condition for sorting the list of the users
+     * @param callback                  callback with friends' relationships and pagination params
+     * @see <a href="https://developers.xsolla.com/user-account-api/user-friends/get-friends">User Account API Reference</a>
+     */
     public static void getCurrentUserFriends(
-            String afterUrl,
+            @Nullable String afterUrl,
             @IntRange(from = 1, to = 50) int limit,
-            UserFriendsRequestType type,
-            UserFriendsRequestSortBy sortBy,
-            UserFriendsRequestSortOrder sortOrder,
-            final GetCurrentUserFriendsCallback callback
+            @NonNull UserFriendsRequestType type,
+            @NonNull UserFriendsRequestSortBy sortBy,
+            @NonNull UserFriendsRequestSortOrder sortOrder,
+            @NonNull final GetCurrentUserFriendsCallback callback
     ) {
         getInstance().loginApi
                 .getUserFriends("Bearer " + getToken(), afterUrl, limit, type.name().toLowerCase(), sortBy.name().toLowerCase(), sortOrder.name().toLowerCase())
                 .enqueue(new Callback<UserFriendsResponse>() {
                     @Override
-                    public void onResponse(@NotNull Call<UserFriendsResponse> call, @NotNull Response<UserFriendsResponse> response) {
+                    public void onResponse(@NonNull Call<UserFriendsResponse> call, @NonNull Response<UserFriendsResponse> response) {
                         if (response.isSuccessful()) {
                             UserFriendsResponse userFriendsResponse = response.body();
                             if (userFriendsResponse != null) {
@@ -746,23 +756,31 @@ public class XLogin {
                     }
 
                     @Override
-                    public void onFailure(@NotNull Call<UserFriendsResponse> call, @NotNull Throwable t) {
+                    public void onFailure(@NonNull Call<UserFriendsResponse> call, @NonNull Throwable t) {
                         callback.onError(t, null);
                     }
                 });
     }
 
-    public static void updateCurrentUserFriends(
-            String friendXsollaUserId,
-            UpdateUserFriendsRequestAction action,
-            final UpdateCurrentUserFriendsCallback callback
+    /**
+     * Update the friend list of the authenticated user
+     *
+     * @param friendXsollaUserId        id of the user to change relationship with
+     * @param action                    type of the action
+     * @param callback                  callback that indicates the success of failure of an action
+     * @see <a href="https://developers.xsolla.com/user-account-api/user-friends/postusersmerelationships">User Account API Reference</a>
+     */
+    public static void updateCurrentUserFriend(
+            @NonNull String friendXsollaUserId,
+            @NonNull UpdateUserFriendsRequestAction action,
+            @NonNull final UpdateCurrentUserFriendsCallback callback
     ) {
         UpdateUserFriendsRequest updateUserFriendsRequest = new UpdateUserFriendsRequest(action.name().toLowerCase(), friendXsollaUserId);
         getInstance().loginApi
                 .updateFriends("Bearer " + getToken(), updateUserFriendsRequest)
                 .enqueue(new Callback<Void>() {
                     @Override
-                    public void onResponse(@NotNull Call<Void> call, @NotNull Response<Void> response) {
+                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                         if (response.isSuccessful()) {
                             callback.onSuccess();
                         } else {
@@ -771,7 +789,7 @@ public class XLogin {
                     }
 
                     @Override
-                    public void onFailure(@NotNull Call<Void> call, @NotNull Throwable t) {
+                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                         callback.onError(t, null);
                     }
                 });

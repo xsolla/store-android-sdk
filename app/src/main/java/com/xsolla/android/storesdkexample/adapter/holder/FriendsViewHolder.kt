@@ -10,12 +10,10 @@ import com.bumptech.glide.request.RequestOptions.circleCropTransform
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.FriendsAdapter
 import com.xsolla.android.storesdkexample.ui.vm.FriendUiEntity
-import com.xsolla.android.storesdkexample.ui.vm.FriendsRelationship
 import com.xsolla.android.storesdkexample.ui.vm.FriendsTab
 import com.xsolla.android.storesdkexample.ui.vm.TemporaryFriendRelationship
 import kotlinx.android.synthetic.main.item_friend.view.addFriendButton
 import kotlinx.android.synthetic.main.item_friend.view.cancelRequestButton
-import kotlinx.android.synthetic.main.item_friend.view.divider
 import kotlinx.android.synthetic.main.item_friend.view.friendAcceptedText
 import kotlinx.android.synthetic.main.item_friend.view.friendAvatar
 import kotlinx.android.synthetic.main.item_friend.view.friendDeclinedText
@@ -31,7 +29,6 @@ import kotlinx.android.synthetic.main.layout_accept_decline_friends.view.friendD
 class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun bind(
         item: FriendUiEntity,
-        itemsCount: Int,
         currentTab: FriendsTab,
         onDeleteOptionClick: (user: FriendUiEntity) -> Unit,
         onBlockOptionClick: (user: FriendUiEntity) -> Unit,
@@ -70,8 +67,8 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private fun configureOptionsWithBlock(item: FriendUiEntity, onBlockOptionClick: (user: FriendUiEntity) -> Unit) {
         itemView.friendsOptionsButton.setOnClickListener {
             AlertDialog.Builder(itemView.context)
-                .setTitle("${item.nickname} options")
-                .setItems(arrayOf("Block user")) { _, _  ->
+                .setTitle(itemView.context.getString(R.string.friends_options_dialog_title, item.nickname))
+                .setItems(arrayOf(itemView.context.getString(R.string.friends_option_block))) { _, _  ->
                     configureBlock(item, onBlockOptionClick)
                 }
                 .show()
@@ -80,11 +77,11 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     private fun configureDelete(item: FriendUiEntity, onDeleteOptionClick: (user: FriendUiEntity) -> Unit) {
         AlertDialog.Builder(itemView.context)
-            .setTitle("Remove ${itemView.friendNickname.text} from the friends list?")
-            .setPositiveButton("Remove") { _, _ ->
+            .setTitle(itemView.context.getString(R.string.friends_option_delete_title, itemView.friendNickname.text))
+            .setPositiveButton(R.string.friends_options_delete_button) { _, _ ->
                 onDeleteOptionClick(item)
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
                 dialog.dismiss()
             }
             .show()
@@ -92,11 +89,11 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     private fun configureBlock(item: FriendUiEntity, onBlockOptionClick: (user: FriendUiEntity) -> Unit) {
         AlertDialog.Builder(itemView.context)
-            .setTitle("Block ${itemView.friendNickname.text}?")
-            .setPositiveButton("Block") { _, _ ->
+            .setTitle(itemView.context.getString(R.string.friends_option_block_title, itemView.friendNickname.text))
+            .setPositiveButton(R.string.friends_options_block_button) { _, _ ->
                 onBlockOptionClick(item)
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
                 dialog.dismiss()
             }
             .show()
@@ -116,8 +113,8 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         if (currentTab == FriendsTab.FRIENDS || item.temporaryRelationship in FriendsTab.FRIENDS.temporaryRelationships) {
             itemView.friendsOptionsButton.setOnClickListener {
                 AlertDialog.Builder(itemView.context)
-                    .setTitle("${itemView.friendNickname.text} options")
-                    .setItems(arrayOf("Delete friend", "Block user")) { _, which ->
+                    .setTitle(itemView.context.getString(R.string.friends_options_dialog_title, item.nickname))
+                    .setItems(arrayOf(itemView.context.getString(R.string.friends_option_delete), itemView.context.getString(R.string.friends_option_block))) { _, which ->
                         if (which == 0) {
                             configureDelete(item, onDeleteOptionClick)
                         }

@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/accept_friend_button" />
+        android:text="@string/friends_accept_friend_button" />
 
     <Button
         android:id="@+id/friendDeclineButton"
@@ -20,6 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="8dp"
-        android:text="@string/decline_friend_button" />
+        android:text="@string/friends_decline_friend_button" />
 
 </LinearLayout>

@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Xsolla Sample App</string>
 
+    <string name="cancel">Cancel</string>
+
     <string name="xsolla_payments_redirect_scheme">https</string>
     <string name="xsolla_payments_redirect_host">example.com</string>
     <string name="xsolla_payments_redirect_path_prefix">/payment</string>
@@ -36,17 +38,25 @@
     <string name="cart_discount">Discount</string>
     <string name="cart_total">Total</string>
 
-    <string name="add_friends_button_text">+ ADD FRIENDS</string>
-    <string name="accept_friend_button">Accept</string>
-    <string name="decline_friend_button">Decline</string>
-    <string name="add_friend_button">Add friend</string>
-    <string name="unblock_friend_button">Unblock</string>
-    <string name="cancel_friend_button">Cancel request</string>
-    <string name="request_accepted_text">✓ Request accepted</string>
-    <string name="request_declined_text">× Request declined</string>
+    <string name="friends_add_friends_button_text">+ ADD FRIENDS</string>
+    <string name="friends_accept_friend_button">Accept</string>
+    <string name="friends_decline_friend_button">Decline</string>
+    <string name="friends_add_friend_button">Add friend</string>
+    <string name="friends_unblock_friend_button">Unblock</string>
+    <string name="friends_cancel_friend_button">Cancel request</string>
+    <string name="friends_request_accepted_text">✓ Request accepted</string>
+    <string name="friends_request_declined_text">× Request declined</string>
     <string name="friends_tab_placeholder">Your friends appear here</string>
-    <string name="pending_tab_placeholder">No pending friend requests</string>
-    <string name="requested_tab_placeholder">All sent requests appear here</string>
-    <string name="blocked_tab_placeholder">All blocked players appear here</string>
+    <string name="friends_pending_tab_placeholder">No pending friend requests</string>
+    <string name="friends_requested_tab_placeholder">All sent requests appear here</string>
+    <string name="friends_blocked_tab_placeholder">All blocked players appear here</string>
+
+    <string name="friends_options_dialog_title">%s options</string>
+    <string name="friends_option_block">Block user</string>
+    <string name="friends_options_block_button">Block</string>
+    <string name="friends_option_block_title">Block %s?</string>
+    <string name="friends_option_delete">Delete friend</string>
+    <string name="friends_options_delete_button">Remove</string>
+    <string name="friends_option_delete_title">Remove %s from the friends list?</string>
 
 </resources>
