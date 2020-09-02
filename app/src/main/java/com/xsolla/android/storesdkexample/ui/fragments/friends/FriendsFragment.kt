@@ -27,9 +27,8 @@ class FriendsFragment : BaseFragment() {
     override fun getLayout() = R.layout.fragment_friends
 
     override fun initUI() {
-        if (viewModel.getItems().isEmpty()) {
-            viewModel.loadAllFriends()
-        }
+        viewModel.clearAllFriends()
+        viewModel.loadAllFriends()
 
         pagerAdapter = FriendsPagerAdapter(this)
         viewPager.adapter = pagerAdapter

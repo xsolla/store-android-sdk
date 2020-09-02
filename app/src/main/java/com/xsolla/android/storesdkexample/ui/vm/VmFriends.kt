@@ -55,6 +55,10 @@ class VmFriends : ViewModel() {
         loadItemsByTab(FriendsTab.BLOCKED)
     }
 
+    fun clearAllFriends() {
+        items.value = getItems().toMutableList().apply { clear() }
+    }
+
     fun getItemsCountByTab(): Map<FriendsTab, Int> {
         val groupedItems = getItems().groupBy { it.relationship }
         return mutableMapOf<FriendsTab, Int>().apply { // Is there better way?
