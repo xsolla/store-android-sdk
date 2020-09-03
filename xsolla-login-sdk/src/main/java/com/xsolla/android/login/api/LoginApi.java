@@ -1,7 +1,9 @@
 package com.xsolla.android.login.api;
 
+import com.xsolla.android.login.entity.common.UserAttribute;
 import com.xsolla.android.login.entity.request.AuthUserBody;
 import com.xsolla.android.login.entity.request.AuthUserSocialBody;
+import com.xsolla.android.login.entity.request.GetUsersAttributesFromClientRequest;
 import com.xsolla.android.login.entity.request.OauthAuthUserBody;
 import com.xsolla.android.login.entity.request.OauthGetCodeBySocialTokenBody;
 import com.xsolla.android.login.entity.request.OauthRegisterUserBody;
@@ -10,6 +12,8 @@ import com.xsolla.android.login.entity.request.ResetPasswordBody;
 import com.xsolla.android.login.entity.request.UpdateUserDetailsBody;
 import com.xsolla.android.login.entity.request.UpdateUserFriendsRequest;
 import com.xsolla.android.login.entity.request.UpdateUserPhoneBody;
+import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromClientRequest;
+import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromServerRequest;
 import com.xsolla.android.login.entity.request.UserFriendsRequest;
 import com.xsolla.android.login.entity.response.AuthResponse;
 import com.xsolla.android.login.entity.response.AuthSocialResponse;
@@ -22,6 +26,8 @@ import com.xsolla.android.login.entity.response.SocialFriendsResponse;
 import com.xsolla.android.login.entity.response.UserDetailsResponse;
 import com.xsolla.android.login.entity.response.UserFriendsResponse;
 import com.xsolla.android.login.entity.response.UserPublicInfoResponse;
+
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -141,6 +147,36 @@ public interface LoginApi {
     Call<Void> updateFriends(
             @Header("authorization") String authHeader,
             @Body UpdateUserFriendsRequest updateUserFriendsRequest
+    );
+
+    @POST("api/attributes/users/me/get")
+    Call<List<UserAttribute>> getUsersAttributesFromClient(
+            @Header("authorization") String authHeader,
+            @Body GetUsersAttributesFromClientRequest getUsersAttributesFromClientRequest
+    );
+
+    @POST("api/attributes/users/me/get_read_only")
+    Call<List<UserAttribute>> getUsersReadOnlyAttributesFromClient(
+            @Header("authorization") String authHeader,
+            @Body GetUsersAttributesFromClientRequest getUsersAttributesFromClientRequest
+    );
+
+    @POST("api/attributes/users/me/update")
+    Call<Void> updateUsersAttributesFromClient(
+            @Header("authorization") String authHeader,
+            @Body UpdateUsersAttributesFromClientRequest updateUsersAttributesFromClientRequest
+    );
+
+    @POST("api/attributes/users/{userId}/update")
+    Call<Void> updateUsersAttributesFromServer(
+            @Path("userId") String userId,
+            @Body UpdateUsersAttributesFromServerRequest updateUsersAttributesFromServerRequest
+    );
+
+    @POST("api/attributes/users/{userId}/update_read_only")
+    Call<Void> updateUsersReadOnlyAttributesFromServer(
+            @Path("userId") String userId,
+            @Body UpdateUsersAttributesFromServerRequest updateUsersAttributesFromServerRequest
     );
 
 

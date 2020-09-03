@@ -18,6 +18,7 @@ import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback;
 import com.xsolla.android.login.callback.GetCurrentUserFriendsCallback;
 import com.xsolla.android.login.callback.GetSocialFriendsCallback;
 import com.xsolla.android.login.callback.GetUserPublicInfoCallback;
+import com.xsolla.android.login.callback.GetUsersAttributesCallback;
 import com.xsolla.android.login.callback.RefreshTokenCallback;
 import com.xsolla.android.login.callback.RegisterCallback;
 import com.xsolla.android.login.callback.ResetPasswordCallback;
@@ -26,8 +27,11 @@ import com.xsolla.android.login.callback.StartSocialCallback;
 import com.xsolla.android.login.callback.UpdateCurrentUserDetailsCallback;
 import com.xsolla.android.login.callback.UpdateCurrentUserFriendsCallback;
 import com.xsolla.android.login.callback.UpdateCurrentUserPhoneCallback;
+import com.xsolla.android.login.callback.UpdateUsersAttributesCallback;
 import com.xsolla.android.login.callback.UploadCurrentUserAvatarCallback;
+import com.xsolla.android.login.entity.common.UserAttribute;
 import com.xsolla.android.login.entity.request.AuthUserBody;
+import com.xsolla.android.login.entity.request.GetUsersAttributesFromClientRequest;
 import com.xsolla.android.login.entity.request.OauthAuthUserBody;
 import com.xsolla.android.login.entity.request.OauthRegisterUserBody;
 import com.xsolla.android.login.entity.request.RegisterUserBody;
@@ -36,6 +40,9 @@ import com.xsolla.android.login.entity.request.UpdateUserDetailsBody;
 import com.xsolla.android.login.entity.request.UpdateUserFriendsRequest;
 import com.xsolla.android.login.entity.request.UpdateUserFriendsRequestAction;
 import com.xsolla.android.login.entity.request.UpdateUserPhoneBody;
+import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromClientRequest;
+import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromServerRequest;
+import com.xsolla.android.login.entity.request.UserAttributeServer;
 import com.xsolla.android.login.entity.request.UserFriendsRequest;
 import com.xsolla.android.login.entity.request.UserFriendsRequestSortBy;
 import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder;
@@ -58,6 +65,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import okhttp3.Interceptor;
@@ -787,6 +796,121 @@ public class XLogin {
 
     public static boolean canRefreshToken() {
         return getInstance().useOauth && getInstance().tokenUtils.getOauthRefreshToken() != null;
+    }
+
+    // https://developers.xsolla.com/login-api/methods/attributes/get-users-attributes-from-client
+    // https://developers.xsolla.com/login-api/methods/attributes/get-users-read-only-attributes-from-client
+    public static void getUsersAttributesFromClient(
+            @NonNull List<String> keys,
+            int publisherProjectId,
+            @Nullable String userId,
+            boolean getReadOnlyAttributes,
+            @NonNull final GetUsersAttributesCallback callback
+    ) {
+        Call<List<UserAttribute>> call;
+        if (getReadOnlyAttributes) {
+            call = getInstance().loginApi
+                    .getUsersReadOnlyAttributesFromClient("Bearer " + getToken(), new GetUsersAttributesFromClientRequest(keys, publisherProjectId, userId));
+        } else {
+            call = getInstance().loginApi
+                    .getUsersAttributesFromClient("Bearer " + getToken(), new GetUsersAttributesFromClientRequest(keys, publisherProjectId, userId));
+        }
+        call.enqueue(new Callback<List<UserAttribute>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<UserAttribute>> call, @NonNull Response<List<UserAttribute>> response) {
+                        if (response.isSuccessful()) {
+                            List<UserAttribute> attributes = response.body();
+                            if (attributes != null) {
+                                callback.onSuccess(attributes);
+                            } else {
+                                callback.onError(null, "Empty response");
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<UserAttribute>> call, @NonNull Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
+    }
+
+    // https://developers.xsolla.com/login-api/methods/attributes/update-users-attributes-from-client
+    public static void updateUsersAttributesFromClient(
+            @Nullable List<UserAttribute> attributes,
+            int publisherProjectId,
+            @Nullable List<String> removingKeys,
+            final UpdateUsersAttributesCallback callback
+    ) {
+        if (attributes == null) {
+            attributes = Collections.emptyList();
+        }
+        if (removingKeys == null) {
+            removingKeys = Collections.emptyList();
+        }
+        getInstance().loginApi
+                .updateUsersAttributesFromClient("", new UpdateUsersAttributesFromClientRequest(attributes, publisherProjectId, removingKeys))
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            callback.onSuccess();
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
+    }
+
+    // https://developers.xsolla.com/login-api/methods/attributes/update-users-attributes-from-server
+    // https://developers.xsolla.com/login-api/methods/attributes/update-users-read-only-attributes-from-server
+    public static void updateUsersAttributesFromServer(
+            @Nullable List<UserAttributeServer> attributes,
+            int publisherId,
+            @Nullable Integer publisherProjectId,
+            @Nullable List<String> removingKeys,
+            @NonNull String userId, // Publisher Account -> Login Setting -> Users -> Username/ID
+            boolean readOnlyAttributes,
+            final UpdateUsersAttributesCallback callback
+    ) {
+        if (attributes == null) {
+            attributes = Collections.emptyList();
+        }
+        if (removingKeys == null) {
+            removingKeys = Collections.emptyList();
+        }
+
+        Call<Void> call;
+        if (readOnlyAttributes) {
+            call = getInstance().loginApi
+                    .updateUsersReadOnlyAttributesFromServer(userId, new UpdateUsersAttributesFromServerRequest(attributes, publisherId, publisherProjectId, removingKeys));
+        } else {
+            call = getInstance().loginApi
+                    .updateUsersAttributesFromServer(userId, new UpdateUsersAttributesFromServerRequest(attributes, publisherId, publisherProjectId, removingKeys));
+        }
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess();
+                } else {
+                    callback.onError(null, getErrorMessage(response.errorBody()));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                callback.onError(t, null);
+            }
+        });
     }
 
     /**
