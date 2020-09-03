@@ -36,4 +36,11 @@
         tools:layout="@layout/fragment_consume">
     </fragment>
 
+    <fragment
+        android:id="@+id/fragment_add_friends"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.friends.AddFriendsFragment"
+        android:label=""
+        tools:layout="@layout/fragment_add_friends">
+    </fragment>
+
 </navigation>

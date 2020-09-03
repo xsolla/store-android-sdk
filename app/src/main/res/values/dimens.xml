@@ -129,6 +129,13 @@
     <dimen name="drawer_margin_cart_between_horizontal">4dp</dimen>
     <dimen name="drawer_cart_counter_text_size">12sp</dimen>
 
+    <dimen name="add_friends_search_corner_radius">4dp</dimen>
+    <dimen name="add_friends_search_height">40dp</dimen>
+    <dimen name="add_friends_search_vertical_padding">10dp</dimen>
+    <dimen name="add_friends_search_horizontal_padding">16dp</dimen>
+    <dimen name="add_friends_search_text_size">16sp</dimen>
+    <dimen name="add_friends_search_icon_padding">4dp</dimen>
+
 
     <!-- Auto-generated -->
     <dimen name="activity_horizontal_margin">16dp</dimen>

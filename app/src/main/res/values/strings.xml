@@ -35,4 +35,7 @@
     <string name="cart_discount">Discount</string>
     <string name="cart_total">Total</string>
 
+    <string name="add_friends_title">Add friends</string>
+    <string name="add_friends_search_hint">Find by nickname</string>
+
 </resources>
