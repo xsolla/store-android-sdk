@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="textInputStyle">@style/Widget.Xsolla.TextInputLayout</item>
+        <item name="alertDialogTheme">@style/ThemeOverlay.MaterialComponents.Dialog.Alert.Xsolla</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -15,5 +16,9 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="ThemeOverlay.MaterialComponents.Dialog.Alert.Xsolla">
+        <item name="android:background">@color/alert_dialog_color</item>
+    </style>
 
 </resources>
