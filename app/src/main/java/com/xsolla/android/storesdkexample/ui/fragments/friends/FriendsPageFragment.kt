@@ -1,5 +1,6 @@
 package com.xsolla.android.storesdkexample.ui.fragments.friends
 
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -9,6 +10,7 @@ import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.FriendUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.FriendsTab
 import com.xsolla.android.storesdkexample.ui.vm.VmFriends
+import kotlinx.android.synthetic.main.fragment_friends_page.addFriendFlowButton
 import kotlinx.android.synthetic.main.fragment_friends_page.friendsRecycler
 import kotlinx.android.synthetic.main.fragment_friends_page.noItemsPlaceholder
 
@@ -32,6 +34,11 @@ class FriendsPageFragment : BaseFragment() {
     override fun initUI() {
         val tab = FriendsTab.getBy(requireArguments().getInt(EXTRA_TAB))
         noItemsPlaceholder.setText(tab.placeholderText)
+
+        // TODO: go to add friend flow
+        addFriendFlowButton.setOnClickListener {
+            Toast.makeText(context, "Soon...", Toast.LENGTH_LONG).show()
+        }
 
         adapter = FriendsAdapter(
             currentTab = tab,
@@ -77,9 +84,11 @@ class FriendsPageFragment : BaseFragment() {
         if (itemsForTab.isEmpty()) {
             friendsRecycler.isVisible = false
             noItemsPlaceholder.isVisible = true
+            addFriendFlowButton.isVisible = (viewModel.tab.value == FriendsTab.FRIENDS)
         } else {
             noItemsPlaceholder.isVisible = false
             friendsRecycler.isVisible = true
+            addFriendFlowButton.isVisible = false
         }
     }
 }

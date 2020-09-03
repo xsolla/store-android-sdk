@@ -1,6 +1,7 @@
 package com.xsolla.android.storesdkexample.adapter.holder
 
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -39,7 +40,10 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         onAddFriendButtonClick: (user: FriendUiEntity, from: FriendsTab) -> Unit
     ) {
         if (itemViewType == FriendsAdapter.ViewType.ADD_FRIEND_BUTTON.value) {
-            itemView.setOnClickListener {  } // TODO: go to add friend flow
+            // TODO: go to add friend flow
+            itemView.setOnClickListener {
+                Toast.makeText(itemView.context, "Soon...", Toast.LENGTH_LONG).show()
+            }
             return
         }
 
