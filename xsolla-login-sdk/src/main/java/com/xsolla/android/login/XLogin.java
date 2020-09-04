@@ -801,12 +801,16 @@ public class XLogin {
     // https://developers.xsolla.com/login-api/methods/attributes/get-users-attributes-from-client
     // https://developers.xsolla.com/login-api/methods/attributes/get-users-read-only-attributes-from-client
     public static void getUsersAttributesFromClient(
-            @NonNull List<String> keys,
-            int publisherProjectId,
+            @Nullable List<String> keys,
+            @Nullable Integer publisherProjectId,
             @Nullable String userId,
             boolean getReadOnlyAttributes,
             @NonNull final GetUsersAttributesCallback callback
     ) {
+        if (keys == null) {
+            keys = Collections.emptyList();
+        }
+
         Call<List<UserAttribute>> call;
         if (getReadOnlyAttributes) {
             call = getInstance().loginApi
@@ -840,9 +844,9 @@ public class XLogin {
     // https://developers.xsolla.com/login-api/methods/attributes/update-users-attributes-from-client
     public static void updateUsersAttributesFromClient(
             @Nullable List<UserAttribute> attributes,
-            int publisherProjectId,
+            @Nullable Integer publisherProjectId,
             @Nullable List<String> removingKeys,
-            final UpdateUsersAttributesCallback callback
+            @NonNull final UpdateUsersAttributesCallback callback
     ) {
         if (attributes == null) {
             attributes = Collections.emptyList();
@@ -851,7 +855,7 @@ public class XLogin {
             removingKeys = Collections.emptyList();
         }
         getInstance().loginApi
-                .updateUsersAttributesFromClient("", new UpdateUsersAttributesFromClientRequest(attributes, publisherProjectId, removingKeys))
+                .updateUsersAttributesFromClient("Bearer " + getToken(), new UpdateUsersAttributesFromClientRequest(attributes, publisherProjectId, removingKeys))
                 .enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
@@ -867,50 +871,6 @@ public class XLogin {
                         callback.onError(t, null);
                     }
                 });
-    }
-
-    // https://developers.xsolla.com/login-api/methods/attributes/update-users-attributes-from-server
-    // https://developers.xsolla.com/login-api/methods/attributes/update-users-read-only-attributes-from-server
-    public static void updateUsersAttributesFromServer(
-            @Nullable List<UserAttributeServer> attributes,
-            int publisherId,
-            @Nullable Integer publisherProjectId,
-            @Nullable List<String> removingKeys,
-            @NonNull String userId, // Publisher Account -> Login Setting -> Users -> Username/ID
-            boolean readOnlyAttributes,
-            final UpdateUsersAttributesCallback callback
-    ) {
-        if (attributes == null) {
-            attributes = Collections.emptyList();
-        }
-        if (removingKeys == null) {
-            removingKeys = Collections.emptyList();
-        }
-
-        Call<Void> call;
-        if (readOnlyAttributes) {
-            call = getInstance().loginApi
-                    .updateUsersReadOnlyAttributesFromServer(userId, new UpdateUsersAttributesFromServerRequest(attributes, publisherId, publisherProjectId, removingKeys));
-        } else {
-            call = getInstance().loginApi
-                    .updateUsersAttributesFromServer(userId, new UpdateUsersAttributesFromServerRequest(attributes, publisherId, publisherProjectId, removingKeys));
-        }
-
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-                if (response.isSuccessful()) {
-                    callback.onSuccess();
-                } else {
-                    callback.onError(null, getErrorMessage(response.errorBody()));
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                callback.onError(t, null);
-            }
-        });
     }
 
     /**

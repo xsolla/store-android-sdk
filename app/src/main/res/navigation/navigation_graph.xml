@@ -35,5 +35,9 @@
         android:label=""
         tools:layout="@layout/fragment_consume">
     </fragment>
+    <fragment
+        android:id="@+id/nav_character"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.login.character.CharacterFragment"
+        tools:layout="@layout/fragment_character" />
 
 </navigation>

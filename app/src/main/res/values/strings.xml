@@ -35,4 +35,10 @@
     <string name="cart_discount">Discount</string>
     <string name="cart_total">Total</string>
 
+    <string name="character_">.</string>
+    <string name="character_title">Character</string>
+    <string name="character_tab1">Read-only attributes</string>
+    <string name="character_tab2">User-editable attributes</string>
+    <string name="character_lvl_up">Lvl up</string>
+
 </resources>

@@ -24,7 +24,9 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
+import com.xsolla.android.login.callback.GetUsersAttributesCallback
 import com.xsolla.android.login.callback.RefreshTokenCallback
+import com.xsolla.android.login.entity.common.UserAttribute
 import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
@@ -162,6 +164,10 @@ class StoreActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         textInventory.setOnClickListener {
             navController.navigate(R.id.nav_inventory)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        textCharacter.setOnClickListener {
+            navController.navigate(R.id.nav_character)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
         textVirtualItems.setOnClickListener {

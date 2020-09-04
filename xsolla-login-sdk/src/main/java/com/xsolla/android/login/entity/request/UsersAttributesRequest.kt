@@ -5,9 +5,9 @@ import com.xsolla.android.login.entity.common.UserAttribute
 import com.xsolla.android.login.entity.common.UserAttributePermission
 
 data class GetUsersAttributesFromClientRequest(
-    val keys: List<String>,
+    val keys: List<String> = emptyList(),
     @SerializedName("publisher_project_id")
-    val publisherProjectId: Int,
+    val publisherProjectId: Int? = null,
     @SerializedName("user_id")
     val userId: String? = null
 )
@@ -15,7 +15,7 @@ data class GetUsersAttributesFromClientRequest(
 data class UpdateUsersAttributesFromClientRequest(
     val attributes: List<UserAttribute> = emptyList(),
     @SerializedName("publisher_project_id")
-    val publisherProjectId: Int,
+    val publisherProjectId: Int? = null,
     @SerializedName("removing_keys")
     val removingKeys: List<String> = emptyList()
 )
