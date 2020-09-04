@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.xsolla.android.login.XLogin
+import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.ui.vm.VmAddFriends
+import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import kotlinx.android.synthetic.main.fragment_add_friends.*
 
 class AddFriendsFragment : Fragment() {
@@ -26,5 +29,8 @@ class AddFriendsFragment : Fragment() {
             vmAddFriends.currentSearchQuery.value = it?.toString() ?: ""
         }
         vmAddFriends.loadAllSocialFriends()
+        iconLinkingFacebook.setRateLimitedClickListener {
+            XLogin.startSocialAccountLinking(this, SocialNetwork.FACEBOOK)
+        }
     }
 }

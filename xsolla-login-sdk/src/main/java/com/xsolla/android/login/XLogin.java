@@ -52,6 +52,7 @@ import com.xsolla.android.login.social.FriendsPlatform;
 import com.xsolla.android.login.social.LoginSocial;
 import com.xsolla.android.login.social.SocialNetwork;
 import com.xsolla.android.login.token.TokenUtils;
+import com.xsolla.android.login.ui.ActivityAuthWebView;
 import com.xsolla.android.login.unity.UnityProxyActivity;
 
 import org.json.JSONObject;
@@ -77,6 +78,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Entry point for Xsolla Login SDK
  */
 public class XLogin {
+
+    private static final String LOGIN_HOST = "https://login.xsolla.com";
 
     private String projectId;
     private String callbackUrl;
@@ -195,7 +198,7 @@ public class XLogin {
         httpClient.addInterceptor(interceptor);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://login.xsolla.com")
+                .baseUrl(LOGIN_HOST)
                 .client(httpClient.build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -793,6 +796,16 @@ public class XLogin {
                         callback.onError(t, null);
                     }
                 });
+    }
+
+    private static final int RC_LINKING = 3;
+
+    public static void startSocialAccountLinking(Fragment fragment, SocialNetwork socialNetwork) {
+        Intent intent = new Intent(fragment.getContext(), ActivityAuthWebView.class);
+        intent.putExtra(ActivityAuthWebView.ARG_AUTH_URL, LOGIN_HOST + "/api/users/me/social_providers/" + socialNetwork.providerName + "/login_redirect");
+        intent.putExtra(ActivityAuthWebView.ARG_CALLBACK_URL, getInstance().callbackUrl);
+        intent.putExtra(ActivityAuthWebView.ARG_TOKEN, getToken());
+        fragment.startActivityForResult(intent, RC_LINKING);
     }
 
     public static boolean isTokenExpired(long leewaySec) {

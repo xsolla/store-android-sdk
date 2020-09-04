@@ -36,12 +36,42 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/labelSocialAccounts"
+        style="@style/Widget.Xsolla.AddFriends.BlockTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/add_friends_social_accounts"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchInputLayout" />
+
+    <ImageView
+        android:id="@+id/iconLinkingFacebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/add_friends_block_title_margin_bottom"
+        app:layout_constraintStart_toStartOf="@id/labelSocialAccounts"
+        app:layout_constraintTop_toBottomOf="@id/labelSocialAccounts"
+        app:srcCompat="@drawable/ic_linking_facebook_add" />
+
+    <TextView
+        android:id="@+id/labelListTitle"
+        style="@style/Widget.Xsolla.AddFriends.BlockTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/add_friends_recommended"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iconLinkingFacebook" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/add_friends_block_title_margin_bottom"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchInputLayout" />
+        app:layout_constraintTop_toBottomOf="@id/labelListTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -135,6 +135,11 @@
     <dimen name="add_friends_search_horizontal_padding">16dp</dimen>
     <dimen name="add_friends_search_text_size">16sp</dimen>
     <dimen name="add_friends_search_icon_padding">4dp</dimen>
+    <dimen name="add_friends_block_title_text_size">16sp</dimen>
+    <dimen name="add_friends_block_title_margin_left">20dp</dimen>
+    <dimen name="add_friends_block_title_margin_right">20dp</dimen>
+    <dimen name="add_friends_block_title_margin_top">20dp</dimen>
+    <dimen name="add_friends_block_title_margin_bottom">10dp</dimen>
 
 
     <!-- Auto-generated -->

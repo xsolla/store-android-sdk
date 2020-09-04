@@ -61,5 +61,7 @@
 
     <string name="add_friends_title">Add friends</string>
     <string name="add_friends_search_hint">Find by nickname</string>
+    <string name="add_friends_social_accounts">Social accounts</string>
+    <string name="add_friends_recommended">Recommended</string>
 
 </resources>

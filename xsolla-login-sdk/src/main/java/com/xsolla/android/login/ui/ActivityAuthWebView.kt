@@ -18,6 +18,7 @@ class ActivityAuthWebView : AppCompatActivity() {
     companion object {
         const val ARG_AUTH_URL = "auth_url"
         const val ARG_CALLBACK_URL = "callback_url"
+        const val ARG_TOKEN = "token" // for linking
 
         const val RESULT = "result"
 
@@ -33,6 +34,8 @@ class ActivityAuthWebView : AppCompatActivity() {
         val url = intent.getStringExtra(ARG_AUTH_URL)!!
         callbackUrl = intent.getStringExtra(ARG_CALLBACK_URL)!!
 
+        val token = intent.getStringExtra(ARG_TOKEN)
+
         close_icon.setOnClickListener {
             finishWithResult(
                     Activity.RESULT_CANCELED,
@@ -41,7 +44,11 @@ class ActivityAuthWebView : AppCompatActivity() {
         }
 
         configureWebView()
-        webview.loadUrl(url)
+        if (token == null) {
+            webview.loadUrl(url)
+        } else {
+            webview.loadUrl(url, mapOf("Authorization" to "Bearer $token"))
+        }
     }
 
     override fun onBackPressed() {
@@ -69,6 +76,7 @@ class ActivityAuthWebView : AppCompatActivity() {
             }
 
             override fun doUpdateVisitedHistory(view: WebView, url: String, isReload: Boolean) {
+                println("!!! $url") //TODO
                 if (url.startsWith(callbackUrl)) {
                     handleCallbackUrlRedirect(url)
                 }
