@@ -251,7 +251,7 @@ enum class FriendsTab(
     ),
     REQUESTED(
         2,
-        "MY REQUESTS",
+        "REQUESTS",
         UserFriendsRequestType.FRIEND_REQUESTED,
         FriendsRelationship.REQUESTED,
         listOf(TemporaryFriendRelationship.CANCEL_MY_OWN_REQUEST),

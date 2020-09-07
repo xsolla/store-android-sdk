@@ -29,6 +29,7 @@ import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
+import com.xsolla.android.storesdkexample.ui.vm.VmFriends
 import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import com.xsolla.android.storesdkexample.util.sumByLong
 import kotlinx.android.synthetic.main.activity_store.*
@@ -44,6 +45,7 @@ class StoreActivity : AppCompatActivity() {
 
     private val vmCart: VmCart by viewModels()
     private val vmBalance: VmBalance by viewModels()
+    private val vmFriends: VmFriends by viewModels()
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var drawerLayout: DrawerLayout
@@ -91,6 +93,10 @@ class StoreActivity : AppCompatActivity() {
             XStore.init(BuildConfig.PROJECT_ID, XLogin.getToken())
             vmCart.updateCart()
             vmBalance.updateVirtualBalance()
+
+            vmFriends.clearAllFriends()
+            vmFriends.loadAllFriends()
+
             setDrawerData()
             drawerLayout.closeDrawer(GravityCompat.START)
         }
