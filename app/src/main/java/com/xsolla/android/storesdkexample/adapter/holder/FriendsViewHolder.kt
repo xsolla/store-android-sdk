@@ -115,6 +115,9 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         onAddFriendButtonClick: (user: FriendUiEntity, from: FriendsTab) -> Unit
     ) {
         if (currentTab == FriendsTab.FRIENDS || item.temporaryRelationship in FriendsTab.FRIENDS.temporaryRelationships) {
+            itemView.friendAcceptedText.isVisible = false
+            itemView.friendDeclinedText.isVisible = false
+
             itemView.friendsOptionsButton.setOnClickListener {
                 AlertDialog.Builder(itemView.context)
                     .setTitle(itemView.context.getString(R.string.friends_options_dialog_title, item.nickname))
