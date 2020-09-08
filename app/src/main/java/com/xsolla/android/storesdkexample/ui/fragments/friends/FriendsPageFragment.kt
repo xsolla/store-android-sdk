@@ -27,12 +27,14 @@ class FriendsPageFragment : BaseFragment() {
 
     private lateinit var adapter: FriendsAdapter
 
+    private lateinit var tab: FriendsTab
+
     private val viewModel: VmFriends by activityViewModels()
 
     override fun getLayout() = R.layout.fragment_friends_page
 
     override fun initUI() {
-        val tab = FriendsTab.getBy(requireArguments().getInt(EXTRA_TAB))
+        tab = FriendsTab.getBy(requireArguments().getInt(EXTRA_TAB))
         noItemsPlaceholder.setText(tab.placeholderText)
 
         // TODO: go to add friend flow
@@ -53,7 +55,7 @@ class FriendsPageFragment : BaseFragment() {
         friendsRecycler.adapter = adapter
 
         viewModel.items.observe(viewLifecycleOwner) {
-            val itemsForTab = viewModel.getItemsByTab(tab)
+            val itemsForTab = viewModel.getItemsByTab(viewModel.tab.value!!)
             setupPlaceholder(itemsForTab)
             adapter.updateList(itemsForTab)
         }
@@ -66,7 +68,7 @@ class FriendsPageFragment : BaseFragment() {
 
         viewModel.isSearch.observe(viewLifecycleOwner) { isSearch ->
             if (!isSearch) {
-                adapter.updateList(viewModel.getItemsByTab(tab))
+                adapter.updateList(viewModel.getItemsByTab(viewModel.tab.value!!))
             }
         }
 

@@ -61,7 +61,7 @@ class VmFriends : ViewModel() {
 
     fun getItemsCountByTab(): Map<FriendsTab, Int> {
         val groupedItems = getItems().groupBy { it.relationship }
-        return mutableMapOf<FriendsTab, Int>().apply { // Is there better way?
+        return mutableMapOf<FriendsTab, Int>().apply {
             put(FriendsTab.FRIENDS, groupedItems[FriendsTab.FRIENDS.relationship]?.size ?: 0)
             put(FriendsTab.PENDING, groupedItems[FriendsTab.PENDING.relationship]?.size ?: 0)
             put(FriendsTab.REQUESTED, groupedItems[FriendsTab.REQUESTED.relationship]?.size ?: 0)
@@ -98,8 +98,7 @@ class VmFriends : ViewModel() {
                 XLogin.updateCurrentUserFriend(friend.id, UpdateUserFriendsRequestAction.BLOCK, object : UpdateCurrentUserFriendsCallback {
                     override fun onSuccess() {
                         val updatedFriend = friend.copy(relationship = FriendsRelationship.BLOCKED, temporaryRelationship = null)
-                        val index = items.value!!.indexOf(friend)
-                        items.value = items.value!!.toMutableList().apply { set(index, updatedFriend) }
+                        updateItem(items, updatedFriend)
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
@@ -113,8 +112,7 @@ class VmFriends : ViewModel() {
                 XLogin.updateCurrentUserFriend(friend.id, UpdateUserFriendsRequestAction.UNBLOCK, object : UpdateCurrentUserFriendsCallback {
                     override fun onSuccess() {
                         val updatedFriend = friend.copy(relationship = FriendsRelationship.NONE, temporaryRelationship = TemporaryFriendRelationship.UNBLOCKED)
-                        val index = items.value!!.indexOf(friend)
-                        items.value = items.value!!.toMutableList().apply { set(index, updatedFriend) }
+                        updateItem(items, updatedFriend)
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
@@ -128,8 +126,7 @@ class VmFriends : ViewModel() {
                 XLogin.updateCurrentUserFriend(friend.id, UpdateUserFriendsRequestAction.FRIEND_REQUEST_APPROVE, object : UpdateCurrentUserFriendsCallback {
                     override fun onSuccess() {
                         val updatedFriend = friend.copy(relationship = FriendsRelationship.STANDARD, temporaryRelationship = TemporaryFriendRelationship.REQUEST_ACCEPTED)
-                        val index = items.value!!.indexOf(friend)
-                        items.value = items.value!!.toMutableList().apply { set(index, updatedFriend) }
+                        updateItem(items, updatedFriend)
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
@@ -143,8 +140,7 @@ class VmFriends : ViewModel() {
                 XLogin.updateCurrentUserFriend(friend.id, UpdateUserFriendsRequestAction.FRIEND_REQUEST_DENY, object : UpdateCurrentUserFriendsCallback {
                     override fun onSuccess() {
                         val updatedFriend = friend.copy(relationship = FriendsRelationship.NONE, temporaryRelationship = TemporaryFriendRelationship.REQUEST_DENIED)
-                        val index = items.value!!.indexOf(friend)
-                        items.value = items.value!!.toMutableList().apply { set(index, updatedFriend) }
+                        updateItem(items, updatedFriend)
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
@@ -162,8 +158,7 @@ class VmFriends : ViewModel() {
                         } else {
                             friend.copy(relationship = FriendsRelationship.NONE, temporaryRelationship = TemporaryFriendRelationship.CANCEL_MY_OWN_REQUEST)
                         }
-                        val index = items.value!!.indexOf(friend)
-                        items.value = items.value!!.toMutableList().apply { set(index, updatedFriend) }
+                        updateItem(items, updatedFriend)
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
@@ -181,14 +176,22 @@ class VmFriends : ViewModel() {
                         } else {
                             friend.copy(relationship = FriendsRelationship.REQUESTED, temporaryRelationship = null)
                         }
-                        val index = items.value!!.indexOf(friend)
-                        items.value = items.value!!.toMutableList().apply { set(index, updatedFriend) }
+                        updateItem(items, updatedFriend)
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
                         onFailure()
                     }
                 })
+            }
+        }
+
+        private companion object {
+            private fun updateItem(items: MutableLiveData<List<FriendUiEntity>>, newItem: FriendUiEntity) {
+                val index = items.value!!.indexOfFirst { it.id == newItem.id }
+                if (index != -1) {
+                    items.value = items.value!!.toMutableList().apply { set(index, newItem) }
+                }
             }
         }
     }
