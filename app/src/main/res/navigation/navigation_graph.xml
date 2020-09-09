@@ -39,5 +39,13 @@
         android:id="@+id/nav_character"
         android:name="com.xsolla.android.storesdkexample.ui.fragments.login.character.CharacterFragment"
         tools:layout="@layout/fragment_character" />
+    <fragment
+        android:id="@+id/fragment_edit_attribute"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.login.character.EditAttributeFragment"
+        tools:layout="@layout/fragment_edit_attribute" >
+        <argument
+            android:name="isEdit"
+            app:argType="boolean" />
+    </fragment>
 
 </navigation>
