@@ -10,6 +10,7 @@ import com.xsolla.android.storesdkexample.adapter.UserAttributesAdapter
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmCharacterPage
+import kotlinx.android.synthetic.main.fragment_character_page.attributesRecycler
 
 class CharacterPageFragment : BaseFragment() {
     companion object {
@@ -36,30 +37,22 @@ class CharacterPageFragment : BaseFragment() {
     }
 
     override fun initUI() {
-        val footer = UserAttributeItem.Footer(readOnly) // TODO: move to adapter
-        
         adapter = UserAttributesAdapter()
+        attributesRecycler.adapter = adapter
 
         if (readOnly) {
             viewModel.readOnlyItems.observe(viewLifecycleOwner) {
-                adapter.submitList(toAdapterEntities(it, footer))
+                adapter.submitList(adapter.toAdapterEntitiesWithFooter(it, readOnly)) {
+                    attributesRecycler.scrollToPosition(0)
+                }
             }
         } else {
             viewModel.editableItems.observe(viewLifecycleOwner) {
-                adapter.submitList(toAdapterEntities(it, footer))
+                adapter.submitList(adapter.toAdapterEntitiesWithFooter(it, readOnly)) {
+                    attributesRecycler.scrollToPosition(0)
+                }
             }
         }
-
-        viewModel.error.observe(viewLifecycleOwner) {
-            showSnack(it.message)
-        }
     }
 
-    // TODO: move to adapter
-    private fun toAdapterEntities(items: List<UserAttributeUiEntity>, footer: UserAttributeItem.Footer): List<UserAttributeItem> {
-        val list = mutableListOf<UserAttributeItem>()
-        items.forEach { list.add(UserAttributeItem.Item(it)) }
-        list.add(footer)
-        return list
-    }
 }

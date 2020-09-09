@@ -33,15 +33,24 @@ class UserAttributesAdapter : ListAdapter<UserAttributeItem, UserAttributeViewHo
     override fun onBindViewHolder(holder: UserAttributeViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
+
+    fun toAdapterEntitiesWithFooter(items: List<UserAttributeUiEntity>, readOnly: Boolean): List<UserAttributeItem> {
+        val footer = UserAttributeItem.Footer(readOnly)
+
+        val list = mutableListOf<UserAttributeItem>()
+        items.forEach { list.add(UserAttributeItem.Item(it, readOnly)) }
+        list.add(footer)
+        return list
+    }
 }
 
-sealed class UserAttributeItem(val id: String) {
+sealed class UserAttributeItem(val id: String, open val readOnly: Boolean) {
     abstract val viewType: Int
 
-    data class Item(val item: UserAttributeUiEntity) : UserAttributeItem(item.key) {
+    data class Item(val item: UserAttributeUiEntity, override val readOnly: Boolean) : UserAttributeItem(item.key, readOnly) {
         override val viewType = ITEM_VIEW_TYPE
     }
-    data class Footer(val readOnly: Boolean) : UserAttributeItem("FooterId") {
+    data class Footer(override val readOnly: Boolean) : UserAttributeItem("FooterId", readOnly) {
         override val viewType = FOOTER_VIEW_TYPE
     }
 }

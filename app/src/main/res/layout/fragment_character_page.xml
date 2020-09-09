@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,66 +8,14 @@
     android:background="@color/main_bg_color"
     tools:context=".ui.fragments.login.character.CharacterPageFragment">
 
-    <ImageView
-        android:id="@+id/avatar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="16sp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/nickname"
-        style="@style/TextAppearance.MaterialComponents.Headline6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintStart_toEndOf="@id/avatar"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Kawaiistacie" />
-
-    <TextView
-        android:id="@+id/level"
-        style="@style/TextAppearance.MaterialComponents.Headline6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="1 lvl (soon)"
-        app:layout_constraintStart_toStartOf="@id/nickname"
-        app:layout_constraintTop_toBottomOf="@id/nickname" />
-
-    <!--  drawableStart does not work. TODO: redesign  -->
-    <Button
-        android:id="@+id/levelUpButton"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:drawableLeft="@drawable/ic_level_up"
-        android:drawablePadding="8dp"
-        android:text="@string/character_lvl_up"
-        android:textColor="@color/magenta_color"
-        app:layout_constraintStart_toEndOf="@id/avatar"
-        app:layout_constraintTop_toBottomOf="@id/level"
-        tools:ignore="RtlHardcoded" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/attributesRecycler"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/avatar"
         tools:ignore="RtlSymmetry"
         tools:itemCount="5"
         tools:listitem="@layout/item_user_attribute" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

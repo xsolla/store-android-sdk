@@ -21,6 +21,7 @@
         tools:visibility="visible" />
 
     <Button
+        android:id="@+id/editableFooter"
         style="@style/Widget.Xsolla.ActionButton.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

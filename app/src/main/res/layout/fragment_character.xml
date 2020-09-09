@@ -1,44 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="@color/main_bg_color"
     tools:context=".ui.fragments.login.character.CharacterFragment">
 
     <TextView
         android:id="@+id/title"
         style="@style/Widget.Xsolla.Fragment.Title"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/character_title" />
+        android:text="@string/character_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
         style="@style/Widget.Xsolla.TabLayout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"
         app:tabBackground="@color/secondary_color_10"
-        app:tabIndicatorFullWidth="false"
-        app:tabMode="scrollable">
+        app:tabIndicatorFullWidth="false">
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/firstTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/character_tab1" />
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/secondTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/character_tab2" />
 
     </com.google.android.material.tabs.TabLayout>
 
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="16sp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tabs"
+        tools:ignore="ContentDescription"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/nickname"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        app:layout_constraintTop_toBottomOf="@id/tabs"
+        tools:text="Kawaiistacie" />
+
+    <TextView
+        android:id="@+id/level"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="1 lvl"
+        app:layout_constraintStart_toStartOf="@id/nickname"
+        app:layout_constraintTop_toBottomOf="@id/nickname" />
+
+    <Button
+        android:id="@+id/levelUpButton"
+        style="@style/Widget.Xsolla.ActionButton.Small.Secondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:drawableLeft="@drawable/ic_level_up"
+        android:drawableRight="@drawable/gold_icon"
+        android:text="@string/character_lvl_up"
+        app:cornerRadius="0dp"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        app:layout_constraintTop_toBottomOf="@id/level"
+        tools:ignore="RtlHardcoded" />
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/avatar" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
