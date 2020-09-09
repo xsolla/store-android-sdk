@@ -37,7 +37,10 @@ class CharacterPageFragment : BaseFragment() {
     }
 
     override fun initUI() {
-        adapter = UserAttributesAdapter()
+        adapter = UserAttributesAdapter(
+            onEditOptionClick = {},
+            onDeleteOptionClick = viewModel::deleteAttribute
+        )
         attributesRecycler.adapter = adapter
 
         if (readOnly) {

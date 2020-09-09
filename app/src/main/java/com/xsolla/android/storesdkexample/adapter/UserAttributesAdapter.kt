@@ -10,7 +10,10 @@ import com.xsolla.android.storesdkexample.adapter.UserAttributesAdapter.Companio
 import com.xsolla.android.storesdkexample.adapter.holder.UserAttributeViewHolder
 import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity
 
-class UserAttributesAdapter : ListAdapter<UserAttributeItem, UserAttributeViewHolder>(UserAttributeDiffUtilCallback()) {
+class UserAttributesAdapter(
+    private val onEditOptionClick: (item: UserAttributeItem.Item) -> Unit,
+    private val onDeleteOptionClick: (item: UserAttributeItem.Item) -> Unit
+) : ListAdapter<UserAttributeItem, UserAttributeViewHolder>(UserAttributeDiffUtilCallback()) {
     companion object {
         const val ITEM_VIEW_TYPE = 1
         const val FOOTER_VIEW_TYPE = 2
@@ -27,7 +30,7 @@ class UserAttributesAdapter : ListAdapter<UserAttributeItem, UserAttributeViewHo
             LayoutInflater.from(parent.context).inflate(R.layout.item_user_attribute_footer, parent, false)
         }
 
-        return UserAttributeViewHolder(view)
+        return UserAttributeViewHolder(view, onEditOptionClick, onDeleteOptionClick)
     }
 
     override fun onBindViewHolder(holder: UserAttributeViewHolder, position: Int) {

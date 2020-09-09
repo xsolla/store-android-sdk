@@ -6,9 +6,11 @@ import androidx.lifecycle.ViewModel
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
 import com.xsolla.android.login.callback.GetUsersAttributesCallback
+import com.xsolla.android.login.callback.UpdateUsersAttributesCallback
 import com.xsolla.android.login.entity.common.UserAttribute
 import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.storesdkexample.BuildConfig
+import com.xsolla.android.storesdkexample.adapter.UserAttributeItem
 import com.xsolla.android.storesdkexample.util.SingleLiveEvent
 import com.xsolla.android.storesdkexample.util.toUiEntity
 
@@ -55,6 +57,20 @@ class VmCharacterPage : ViewModel() {
         XLogin.getUsersAttributesFromClient(null, BuildConfig.PROJECT_ID, userId, false, object : GetUsersAttributesCallback {
             override fun onSuccess(data: List<UserAttribute>) {
                 _editableItems.value = data.toUiEntity()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                val message = throwable?.message ?: errorMessage ?: "Failure"
+                error.value = UserAttributeError(message)
+            }
+        })
+    }
+
+    fun deleteAttribute(attribute: UserAttributeItem.Item) {
+        XLogin.updateUsersAttributesFromClient(null, BuildConfig.PROJECT_ID, listOf(attribute.item.key), object : UpdateUsersAttributesCallback {
+            override fun onSuccess() {
+                val updatedList = _editableItems.value!!.toMutableList().apply { remove(attribute.item) }
+                _editableItems.value = updatedList
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
