@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="16dp"
+    android:paddingTop="24dp"
+    android:paddingBottom="16dp"
+    tools:ignore="RtlSymmetry">
+
+    <TextView
+        android:id="@+id/readOnlyFooter"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/character_read_only_attributes_footer"
+        android:textColor="@color/secondary_color"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <Button
+        style="@style/Widget.Xsolla.ActionButton.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/character_editable_attributes_footer"
+        android:visibility="gone" />
+
+</FrameLayout>

@@ -14,6 +14,7 @@
     </style>
     
     <style name="Widget.Xsolla.ActionButton.Small" parent="Widget.Xsolla.ActionButton">
+        <item name="cornerRadius">@dimen/secondary_action_button_corner_radius</item>
         <item name="android:height">@dimen/small_action_button_height</item>
         <item name="android:textColor">@color/main_bg_color</item>
     </style>
