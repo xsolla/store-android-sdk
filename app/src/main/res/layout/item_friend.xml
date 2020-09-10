@@ -133,6 +133,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_more_horiz_24"
+            app:tint="@color/secondary_color"
             tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -142,8 +143,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_gravity="bottom"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="20dp"
-        android:background="@color/secondary_color" />
+        android:background="@drawable/item_divider" />
 </LinearLayout>

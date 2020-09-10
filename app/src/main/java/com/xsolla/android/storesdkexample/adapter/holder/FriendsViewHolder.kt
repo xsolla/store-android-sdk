@@ -1,6 +1,7 @@
 package com.xsolla.android.storesdkexample.adapter.holder
 
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -39,7 +40,10 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         onAddFriendButtonClick: (user: FriendUiEntity, from: FriendsTab) -> Unit
     ) {
         if (itemViewType == FriendsAdapter.ViewType.ADD_FRIEND_BUTTON.value) {
-            itemView.setOnClickListener {  } // TODO: go to add friend flow
+            // TODO: go to add friend flow
+            itemView.setOnClickListener {
+                Toast.makeText(itemView.context, "Soon...", Toast.LENGTH_LONG).show()
+            }
             return
         }
 
@@ -47,7 +51,23 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         setupOnline(item)
         setupAvatar(item)
 
-        configureButtonsOnTabsAndOptions(currentTab, item, onDeleteOptionClick, onBlockOptionClick, onUnblockOptionsClick, onAcceptButtonClick, onDeclineButtonClick, onCancelRequestButtonClick, onAddFriendButtonClick)
+        itemView.friendsAcceptDeclineButtons.friendAcceptButton.setOnClickListener {
+            onAcceptButtonClick(item)
+        }
+        itemView.friendsAcceptDeclineButtons.friendDeclineButton.setOnClickListener {
+            onDeclineButtonClick(item)
+        }
+        itemView.unblockButton.setOnClickListener {
+            onUnblockOptionsClick(item)
+        }
+        itemView.addFriendButton.setOnClickListener {
+            onAddFriendButtonClick(item, currentTab)
+        }
+        itemView.cancelRequestButton.setOnClickListener {
+            onCancelRequestButtonClick(item, currentTab)
+        }
+
+        configureViewVisibilityAndOptionsButton(currentTab, item, onDeleteOptionClick, onBlockOptionClick)
     }
 
     private fun setupAvatar(item: FriendUiEntity) {
@@ -99,18 +119,16 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             .show()
     }
 
-    private fun configureButtonsOnTabsAndOptions(
+    private fun configureViewVisibilityAndOptionsButton(
         currentTab: FriendsTab,
         item: FriendUiEntity,
         onDeleteOptionClick: (user: FriendUiEntity) -> Unit,
-        onBlockOptionClick: (user: FriendUiEntity) -> Unit,
-        onUnblockOptionsClick: (user: FriendUiEntity) -> Unit,
-        onAcceptButtonClick: (user: FriendUiEntity) -> Unit,
-        onDeclineButtonClick: (user: FriendUiEntity) -> Unit,
-        onCancelRequestButtonClick: (user: FriendUiEntity, from: FriendsTab) -> Unit,
-        onAddFriendButtonClick: (user: FriendUiEntity, from: FriendsTab) -> Unit
+        onBlockOptionClick: (user: FriendUiEntity) -> Unit
     ) {
         if (currentTab == FriendsTab.FRIENDS || item.temporaryRelationship in FriendsTab.FRIENDS.temporaryRelationships) {
+            itemView.friendAcceptedText.isVisible = false
+            itemView.friendDeclinedText.isVisible = false
+
             itemView.friendsOptionsButton.setOnClickListener {
                 AlertDialog.Builder(itemView.context)
                     .setTitle(itemView.context.getString(R.string.friends_options_dialog_title, item.nickname))
@@ -143,26 +161,12 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                 }
             }
 
-            itemView.friendsAcceptDeclineButtons.friendAcceptButton.setOnClickListener {
-                onAcceptButtonClick(item)
-            }
-            itemView.friendsAcceptDeclineButtons.friendDeclineButton.setOnClickListener {
-                onDeclineButtonClick(item)
-            }
-
             configureOptionsWithBlock(item, onBlockOptionClick)
         }
         if (currentTab == FriendsTab.REQUESTED || item.temporaryRelationship in FriendsTab.REQUESTED.temporaryRelationships) {
 
             itemView.cancelRequestButton.isGone = (item.temporaryRelationship == TemporaryFriendRelationship.CANCEL_MY_OWN_REQUEST)
             itemView.addFriendButton.isVisible = (item.temporaryRelationship == TemporaryFriendRelationship.CANCEL_MY_OWN_REQUEST)
-
-            itemView.cancelRequestButton.setOnClickListener {
-                onCancelRequestButtonClick(item, currentTab)
-            }
-            itemView.addFriendButton.setOnClickListener {
-                onAddFriendButtonClick(item, currentTab)
-            }
 
             configureOptionsWithBlock(item, onBlockOptionClick)
         }
@@ -174,30 +178,18 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                     itemView.unblockButton.isVisible = true
                     itemView.addFriendButton.isVisible = false
                     itemView.cancelRequestButton.isVisible = false
-
-                    itemView.unblockButton.setOnClickListener {
-                        onUnblockOptionsClick(item)
-                    }
                 }
                 TemporaryFriendRelationship.UNBLOCKED -> {
                     itemView.friendsOptionsButton.isVisible = true
                     itemView.unblockButton.isVisible = false
                     itemView.addFriendButton.isVisible = true
                     itemView.cancelRequestButton.isVisible = false
-
-                    itemView.addFriendButton.setOnClickListener {
-                        onAddFriendButtonClick(item, currentTab)
-                    }
                 }
                 TemporaryFriendRelationship.UNBLOCKED_AND_REQUEST_FRIEND -> {
                     itemView.friendsOptionsButton.isVisible = true
                     itemView.unblockButton.isVisible = false
                     itemView.addFriendButton.isVisible = false
                     itemView.cancelRequestButton.isVisible = true
-
-                    itemView.cancelRequestButton.setOnClickListener {
-                        onCancelRequestButtonClick(item, currentTab)
-                    }
                 }
                 else -> {
                     throw IllegalArgumentException("${currentTab.name} available only this temporary relationships: ${currentTab.temporaryRelationships}")
