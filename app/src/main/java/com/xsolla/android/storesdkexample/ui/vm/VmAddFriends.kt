@@ -6,11 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.GetSocialFriendsCallback
+import com.xsolla.android.login.callback.LinkedSocialNetworksCallback
 import com.xsolla.android.login.callback.SearchUsersByNicknameCallback
-import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse
-import com.xsolla.android.login.entity.response.SocialFriend
-import com.xsolla.android.login.entity.response.SocialFriendsResponse
-import com.xsolla.android.login.entity.response.UserFromSearch
+import com.xsolla.android.login.entity.response.*
 import com.xsolla.android.login.social.FriendsPlatform
 import kotlinx.coroutines.*
 
@@ -23,11 +21,12 @@ class VmAddFriends(application: Application) : AndroidViewModel(application) {
         const val REQUEST_LIMIT = 100
     }
 
-    val currentSearchQuery = MutableLiveData<String>("")
+    val currentSearchQuery = MutableLiveData("")
 
     val searchResultList = MutableLiveData<List<UserFromSearch>>(listOf())
-    var searchJob: Job? = null
+    private var searchJob: Job? = null
 
+    val linkedSocialNetworksList = MutableLiveData<List<LinkedSocialNetworkResponse>>(mutableListOf())
     val socialFriendsList = MutableLiveData<MutableList<SocialFriend>>(mutableListOf())
 
     private val searchObserver = Observer<String> {
@@ -82,8 +81,23 @@ class VmAddFriends(application: Application) : AndroidViewModel(application) {
             override fun onSuccess(data: SocialFriendsResponse) {
                 socialFriendsList.value?.addAll(data.friendsList)
                 socialFriendsList.value = socialFriendsList.value
-                println("!!! ${socialFriendsList.value}")
+                println("!!! ${socialFriendsList.value}") // TODO
                 callback?.invoke()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                throwable?.printStackTrace()
+                println("!!! $errorMessage") // TODO
+            }
+
+        })
+    }
+
+    fun loadLinkedSocialAccounts() {
+        XLogin.getLinkedSocialNetworks(object : LinkedSocialNetworksCallback {
+            override fun onSuccess(data: List<LinkedSocialNetworkResponse>) {
+                linkedSocialNetworksList.value = data
+                println("!!! linked socials $data")
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {

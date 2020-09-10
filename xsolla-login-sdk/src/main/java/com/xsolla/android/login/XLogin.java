@@ -19,6 +19,7 @@ import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback;
 import com.xsolla.android.login.callback.GetCurrentUserFriendsCallback;
 import com.xsolla.android.login.callback.GetSocialFriendsCallback;
 import com.xsolla.android.login.callback.GetUserPublicInfoCallback;
+import com.xsolla.android.login.callback.LinkedSocialNetworksCallback;
 import com.xsolla.android.login.callback.RefreshTokenCallback;
 import com.xsolla.android.login.callback.RegisterCallback;
 import com.xsolla.android.login.callback.ResetPasswordCallback;
@@ -41,6 +42,7 @@ import com.xsolla.android.login.entity.request.UserFriendsRequestSortBy;
 import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder;
 import com.xsolla.android.login.entity.request.UserFriendsRequestType;
 import com.xsolla.android.login.entity.response.AuthResponse;
+import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse;
 import com.xsolla.android.login.entity.response.OauthAuthResponse;
 import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse;
 import com.xsolla.android.login.entity.response.SocialFriendsResponse;
@@ -59,6 +61,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import okhttp3.Interceptor;
@@ -725,12 +728,12 @@ public class XLogin {
     /**
      * Get user's friends
      *
-     * @param afterUrl                  parameter that is used for API pagination
-     * @param limit                     maximum number of users that are returned at a time
-     * @param type                      friends type
-     * @param sortBy                    condition for sorting the users
-     * @param sortOrder                 condition for sorting the list of the users
-     * @param callback                  callback with friends' relationships and pagination params
+     * @param afterUrl  parameter that is used for API pagination
+     * @param limit     maximum number of users that are returned at a time
+     * @param type      friends type
+     * @param sortBy    condition for sorting the users
+     * @param sortOrder condition for sorting the list of the users
+     * @param callback  callback with friends' relationships and pagination params
      * @see <a href="https://developers.xsolla.com/user-account-api/user-friends/get-friends">User Account API Reference</a>
      */
     public static void getCurrentUserFriends(
@@ -768,9 +771,9 @@ public class XLogin {
     /**
      * Update the friend list of the authenticated user
      *
-     * @param friendXsollaUserId        id of the user to change relationship with
-     * @param action                    type of the action
-     * @param callback                  callback that indicates the success of failure of an action
+     * @param friendXsollaUserId id of the user to change relationship with
+     * @param action             type of the action
+     * @param callback           callback that indicates the success of failure of an action
      * @see <a href="https://developers.xsolla.com/user-account-api/user-friends/postusersmerelationships">User Account API Reference</a>
      */
     public static void updateCurrentUserFriend(
@@ -798,7 +801,34 @@ public class XLogin {
                 });
     }
 
-    private static final int RC_LINKING = 3;
+    public static void getLinkedSocialNetworks(
+            @NonNull final LinkedSocialNetworksCallback callback
+    ) {
+        getInstance().loginApi
+                .getLinkedSocialNetworks("Bearer " + getToken())
+                .enqueue(new Callback<List<LinkedSocialNetworkResponse>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<LinkedSocialNetworkResponse>> call, @NonNull Response<List<LinkedSocialNetworkResponse>> response) {
+                        if (response.isSuccessful()) {
+                            List<LinkedSocialNetworkResponse> linkedSocialNetworkResponses = response.body();
+                            if (linkedSocialNetworkResponses != null) {
+                                callback.onSuccess(linkedSocialNetworkResponses);
+                            } else {
+                                callback.onError(null, "Empty response");
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<LinkedSocialNetworkResponse>> call, @NonNull Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
+    }
+
+    private static final int RC_LINKING = 33;
 
     public static void startSocialAccountLinking(Fragment fragment, SocialNetwork socialNetwork) {
         Intent intent = new Intent(fragment.getContext(), ActivityAuthWebView.class);

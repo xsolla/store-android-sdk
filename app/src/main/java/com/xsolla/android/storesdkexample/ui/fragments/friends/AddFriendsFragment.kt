@@ -28,9 +28,11 @@ class AddFriendsFragment : Fragment() {
         searchInput.addTextChangedListener {
             vmAddFriends.currentSearchQuery.value = it?.toString() ?: ""
         }
+        vmAddFriends.loadLinkedSocialAccounts()
         vmAddFriends.loadAllSocialFriends()
         iconLinkingFacebook.setRateLimitedClickListener {
             XLogin.startSocialAccountLinking(this, SocialNetwork.FACEBOOK)
         }
     }
+
 }

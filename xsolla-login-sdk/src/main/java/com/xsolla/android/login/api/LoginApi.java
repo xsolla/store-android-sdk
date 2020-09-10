@@ -10,12 +10,10 @@ import com.xsolla.android.login.entity.request.ResetPasswordBody;
 import com.xsolla.android.login.entity.request.UpdateUserDetailsBody;
 import com.xsolla.android.login.entity.request.UpdateUserFriendsRequest;
 import com.xsolla.android.login.entity.request.UpdateUserPhoneBody;
-import com.xsolla.android.login.entity.request.UserFriendsRequestSortBy;
-import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder;
-import com.xsolla.android.login.entity.request.UserFriendsRequestType;
 import com.xsolla.android.login.entity.response.AuthResponse;
 import com.xsolla.android.login.entity.response.AuthSocialResponse;
 import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse;
+import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse;
 import com.xsolla.android.login.entity.response.OauthAuthResponse;
 import com.xsolla.android.login.entity.response.OauthGetCodeBySocialTokenResponse;
 import com.xsolla.android.login.entity.response.OauthLinkForSocialAuthResponse;
@@ -24,6 +22,8 @@ import com.xsolla.android.login.entity.response.SocialFriendsResponse;
 import com.xsolla.android.login.entity.response.UserDetailsResponse;
 import com.xsolla.android.login.entity.response.UserFriendsResponse;
 import com.xsolla.android.login.entity.response.UserPublicInfoResponse;
+
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -147,6 +147,11 @@ public interface LoginApi {
     Call<Void> updateFriends(
             @Header("authorization") String authHeader,
             @Body UpdateUserFriendsRequest updateUserFriendsRequest
+    );
+
+    @GET("api/users/me/social_providers")
+    Call<List<LinkedSocialNetworkResponse>> getLinkedSocialNetworks(
+            @Header("authorization") String authHeader
     );
 
 
