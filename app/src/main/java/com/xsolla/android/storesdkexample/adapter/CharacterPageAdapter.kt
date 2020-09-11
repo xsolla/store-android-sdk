@@ -2,7 +2,7 @@ package com.xsolla.android.storesdkexample.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.xsolla.android.storesdkexample.ui.fragments.login.character.CharacterPageFragment
+import com.xsolla.android.storesdkexample.ui.fragments.character.CharacterPageFragment
 
 class CharacterPageAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     private companion object {

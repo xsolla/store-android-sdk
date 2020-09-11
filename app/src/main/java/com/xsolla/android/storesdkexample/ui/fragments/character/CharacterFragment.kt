@@ -1,4 +1,4 @@
-package com.xsolla.android.storesdkexample.ui.fragments.login.character
+package com.xsolla.android.storesdkexample.ui.fragments.character
 
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe

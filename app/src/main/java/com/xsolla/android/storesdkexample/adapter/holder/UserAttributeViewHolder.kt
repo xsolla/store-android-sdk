@@ -15,7 +15,8 @@ import kotlinx.android.synthetic.main.item_user_attribute_footer.view.readOnlyFo
 class UserAttributeViewHolder(
     view: View,
     private val onEditOptionClick: (item: UserAttributeItem.Item) -> Unit,
-    private val onDeleteOptionClick: (item: UserAttributeItem.Item) -> Unit
+    private val onDeleteOptionClick: (item: UserAttributeItem.Item) -> Unit,
+    private val onAddAttributeButtonClick: () -> Unit
 ) : RecyclerView.ViewHolder(view) {
     fun bind(item: UserAttributeItem) =
         when (item) {
@@ -44,5 +45,9 @@ class UserAttributeViewHolder(
     private fun bindFooter(footer: UserAttributeItem.Footer) {
         itemView.readOnlyFooter.isVisible = footer.readOnly
         itemView.editableFooter.isGone = footer.readOnly
+
+        itemView.editableFooter.setOnClickListener {
+            onAddAttributeButtonClick()
+        }
     }
 }

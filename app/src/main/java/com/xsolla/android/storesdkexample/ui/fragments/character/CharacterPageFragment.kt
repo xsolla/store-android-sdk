@@ -1,20 +1,19 @@
-package com.xsolla.android.storesdkexample.ui.fragments.login.character
+package com.xsolla.android.storesdkexample.ui.fragments.character
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.adapter.UserAttributeItem
 import com.xsolla.android.storesdkexample.adapter.UserAttributesAdapter
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
-import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmCharacterPage
 import kotlinx.android.synthetic.main.fragment_character_page.attributesRecycler
 
 class CharacterPageFragment : BaseFragment() {
     companion object {
         private const val EXTRA_READ_ONLY = "ExtraReadOnly"
+        private const val ARG_IS_EDIT = "isEdit"
 
         fun newInstance(readOnly: Boolean): CharacterPageFragment {
             return CharacterPageFragment().apply {
@@ -38,8 +37,13 @@ class CharacterPageFragment : BaseFragment() {
 
     override fun initUI() {
         adapter = UserAttributesAdapter(
-            onEditOptionClick = {},
-            onDeleteOptionClick = viewModel::deleteAttribute
+            onEditOptionClick = {
+                findNavController().navigate(R.id.fragment_edit_attribute, EditAttributeFragmentArgs(true, it.item).toBundle())
+            },
+            onDeleteOptionClick = { viewModel.deleteAttribute(it.item) },
+            onAddAttributeButtonClick = {
+                findNavController().navigate(R.id.fragment_edit_attribute, EditAttributeFragmentArgs(false, null).toBundle())
+            }
         )
         attributesRecycler.adapter = adapter
 

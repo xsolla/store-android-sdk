@@ -37,15 +37,19 @@
     </fragment>
     <fragment
         android:id="@+id/nav_character"
-        android:name="com.xsolla.android.storesdkexample.ui.fragments.login.character.CharacterFragment"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.character.CharacterFragment"
         tools:layout="@layout/fragment_character" />
     <fragment
         android:id="@+id/fragment_edit_attribute"
-        android:name="com.xsolla.android.storesdkexample.ui.fragments.login.character.EditAttributeFragment"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.character.EditAttributeFragment"
         tools:layout="@layout/fragment_edit_attribute" >
         <argument
             android:name="isEdit"
             app:argType="boolean" />
+        <argument
+            android:name="attribute"
+            app:argType="com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/nav_friends"
