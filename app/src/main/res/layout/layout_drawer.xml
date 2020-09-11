@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_profile" />
+        app:srcCompat="@drawable/ic_profile"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/textEmail"
@@ -47,30 +48,30 @@
         app:layout_constraintTop_toBottomOf="@+id/textUsername" />
 
     <TextView
-        android:id="@+id/textCharacter"
-        style="@style/Widget.Xsolla.Drawer.Text.Item"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/character_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textInventory" />
-
-    <TextView
         android:id="@+id/textFriends"
         style="@style/Widget.Xsolla.Drawer.Text.Item"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/drawer_item_friends"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textInventory" />
+
+    <TextView
+        android:id="@+id/textCharacter"
+        style="@style/Widget.Xsolla.Drawer.Text.Item"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/character_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textFriends" />
 
     <View
         android:id="@+id/viewLine1"
         style="@style/Widget.Xsolla.Drawer.View.Line"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textCharacter" />
-        app:layout_constraintTop_toBottomOf="@+id/textFriends" />
 
     <TextView
         android:id="@+id/textStore"
