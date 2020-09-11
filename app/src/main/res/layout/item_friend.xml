@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/main_bg_color">
+
+        <ImageView
+            android:id="@+id/friendAvatar"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/icOnline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/friendAvatar"
+            app:layout_constraintEnd_toEndOf="@id/friendAvatar"
+            app:srcCompat="@drawable/ic_online"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/icOffline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/friendAvatar"
+            app:layout_constraintEnd_toEndOf="@id/friendAvatar"
+            app:srcCompat="@drawable/ic_offline"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/friendNickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/friendAvatar"
+            app:layout_constraintTop_toTopOf="@id/friendAvatar"
+            tools:text="Nickname" />
+
+        <TextView
+            android:id="@+id/friendAcceptedText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/friends_request_accepted_text"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/friendNickname"
+            app:layout_constraintTop_toBottomOf="@id/friendNickname" />
+
+        <TextView
+            android:id="@+id/friendDeclinedText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/friends_request_declined_text"
+            android:textColor="#EB002F"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/friendNickname"
+            app:layout_constraintTop_toBottomOf="@id/friendNickname" />
+
+        <include
+            android:id="@+id/friendsAcceptDeclineButtons"
+            layout="@layout/layout_accept_decline_friends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/friendNickname"
+            app:layout_constraintTop_toBottomOf="@id/friendNickname"
+            tools:visibility="gone" />
+
+        <Button
+            android:id="@+id/cancelRequestButton"
+            style="@style/Widget.Xsolla.ActionButton.Small.Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/friends_cancel_friend_button"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/friendNickname"
+            app:layout_constraintTop_toBottomOf="@id/friendNickname"
+            tools:visibility="gone" />
+
+        <Button
+            android:id="@+id/addFriendButton"
+            style="@style/Widget.Xsolla.ActionButton.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/friends_add_friend_button"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/friendNickname"
+            app:layout_constraintTop_toBottomOf="@id/friendNickname"
+            tools:visibility="gone" />
+
+        <Button
+            android:id="@+id/unblockButton"
+            style="@style/Widget.Xsolla.ActionButton.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/friends_unblock_friend_button"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/friendNickname"
+            app:layout_constraintTop_toBottomOf="@id/friendNickname"
+            tools:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/friendsOptionsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="34dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_more_horiz_24"
+            app:tint="@color/secondary_color"
+            tools:ignore="ContentDescription" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/item_divider" />
+</LinearLayout>

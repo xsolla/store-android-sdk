@@ -15,6 +15,9 @@ import com.xsolla.android.login.entity.request.UpdateUserPhoneBody;
 import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromClientRequest;
 import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromServerRequest;
 import com.xsolla.android.login.entity.request.UserFriendsRequest;
+import com.xsolla.android.login.entity.request.UserFriendsRequestSortBy;
+import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder;
+import com.xsolla.android.login.entity.request.UserFriendsRequestType;
 import com.xsolla.android.login.entity.response.AuthResponse;
 import com.xsolla.android.login.entity.response.AuthSocialResponse;
 import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse;
@@ -140,7 +143,11 @@ public interface LoginApi {
     @GET("api/users/me/relationships")
     Call<UserFriendsResponse> getUserFriends(
             @Header("authorization") String authHeader,
-            @Body UserFriendsRequest userFriendsRequest
+            @Query("after") String after,
+            @Query("limit") int limit,
+            @Query("type") String userFriendsRequestType,
+            @Query("sort_by") String userFriendsRequestSortBy,
+            @Query("sort_order") String userFriendsRequestSortOrder
     );
 
     @POST("api/users/me/relationships")

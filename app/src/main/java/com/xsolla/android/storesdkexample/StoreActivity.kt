@@ -31,6 +31,7 @@ import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
+import com.xsolla.android.storesdkexample.ui.vm.VmFriends
 import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import com.xsolla.android.storesdkexample.util.sumByLong
 import kotlinx.android.synthetic.main.activity_store.*
@@ -46,6 +47,7 @@ class StoreActivity : AppCompatActivity() {
 
     private val vmCart: VmCart by viewModels()
     private val vmBalance: VmBalance by viewModels()
+    private val vmFriends: VmFriends by viewModels()
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var drawerLayout: DrawerLayout
@@ -93,6 +95,10 @@ class StoreActivity : AppCompatActivity() {
             XStore.init(BuildConfig.PROJECT_ID, XLogin.getToken())
             vmCart.updateCart()
             vmBalance.updateVirtualBalance()
+
+            vmFriends.clearAllFriends()
+            vmFriends.loadAllFriends()
+
             setDrawerData()
             drawerLayout.closeDrawer(GravityCompat.START)
         }
@@ -148,8 +154,7 @@ class StoreActivity : AppCompatActivity() {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
-        appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.nav_vi, R.id.nav_vc, R.id.nav_inventory), drawerLayout)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_vi, R.id.nav_vc, R.id.nav_inventory, R.id.nav_friends), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
@@ -168,6 +173,10 @@ class StoreActivity : AppCompatActivity() {
         }
         textCharacter.setOnClickListener {
             navController.navigate(R.id.nav_character)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        textFriends.setOnClickListener {
+            navController.navigate(R.id.nav_friends)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
         textVirtualItems.setOnClickListener {

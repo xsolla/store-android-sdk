@@ -47,5 +47,9 @@
             android:name="isEdit"
             app:argType="boolean" />
     </fragment>
+    <fragment
+        android:id="@+id/nav_friends"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.friends.FriendsFragment"
+        tools:layout="@layout/fragment_friends" />
 
 </navigation>
