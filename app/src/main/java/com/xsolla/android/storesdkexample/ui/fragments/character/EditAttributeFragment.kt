@@ -46,34 +46,24 @@ class EditAttributeFragment : BaseFragment() {
                 val value = attributeValueInput.text?.toString() ?: return@setOnClickListener
 
                 if (attribute.key == key) {
-                    viewModel.saveAttribute(attribute.copy(value = value), true) {
-                        navigateUp()
-                    }
+                    viewModel.saveAttribute(attribute.copy(value = value), true, ::navigateUp)
                 } else {
-                    viewModel.renameAndUpdateAttribute(attribute, attribute.copy(key = key, value = value)) {
-                        navigateUp()
-                    }
+                    viewModel.renameAndUpdateAttribute(attribute, attribute.copy(key = key, value = value), ::navigateUp)
                 }
             }
 
             removeDiscardButton.setOnClickListener {
-                viewModel.deleteAttribute(attribute) {
-                    navigateUp()
-                }
+                viewModel.deleteAttribute(attribute, ::navigateUp)
             }
         } else {
             removeDiscardButton.setText(R.string.character_edit_attribute_discard_button)
-            removeDiscardButton.setOnClickListener {
-                navigateUp()
-            }
+            removeDiscardButton.setOnClickListener { navigateUp() }
             saveButton.setOnClickListener {
                 val key = attributeKeyInput.text?.toString()
                 val value = attributeValueInput.text?.toString()
 
                 if (!key.isNullOrBlank() && !value.isNullOrBlank()) {
-                    viewModel.saveAttribute(UserAttributeUiEntity(key, UserAttributePermission.PUBLIC, value), false) {
-                        navigateUp()
-                    }
+                    viewModel.saveAttribute(UserAttributeUiEntity(key, UserAttributePermission.PUBLIC, value), false, ::navigateUp)
                 }
             }
         }

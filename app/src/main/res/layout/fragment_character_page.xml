@@ -12,11 +12,25 @@
         android:id="@+id/attributesRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
         android:fadeScrollbars="false"
+        android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:ignore="RtlSymmetry"
         tools:itemCount="5"
         tools:listitem="@layout/item_user_attribute" />
+
+    <TextView
+        android:id="@+id/noItemsPlaceholder"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/character_read_only_attributes_footer"
+        android:textAlignment="center"
+        android:textColor="@color/secondary_color"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
 </FrameLayout>

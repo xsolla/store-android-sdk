@@ -40,6 +40,8 @@ class UserAttributesAdapter(
     }
 
     fun toAdapterEntitiesWithFooter(items: List<UserAttributeUiEntity>, readOnly: Boolean): List<UserAttributeItem> {
+        if (items.isEmpty()) return emptyList()
+
         val footer = UserAttributeItem.Footer(readOnly)
 
         val list = mutableListOf<UserAttributeItem>()

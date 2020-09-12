@@ -3,14 +3,19 @@ package com.xsolla.android.storesdkexample.ui.fragments.character
 import android.os.Bundle
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.UserAttributesAdapter
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
+import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmCharacterPage
 import com.xsolla.android.storesdkexample.util.extensions.openInBrowser
+import com.xsolla.android.storesdkexample.util.extensions.setClickableSpan
 import kotlinx.android.synthetic.main.fragment_character_page.attributesRecycler
+import kotlinx.android.synthetic.main.fragment_character_page.noItemsPlaceholder
+import kotlinx.android.synthetic.main.item_user_attribute_footer.view.readOnlyFooter
 
 class CharacterPageFragment : BaseFragment() {
     companion object {
@@ -46,23 +51,38 @@ class CharacterPageFragment : BaseFragment() {
             onAddAttributeButtonClick = {
                 findNavController().navigate(R.id.fragment_edit_attribute, EditAttributeFragmentArgs(false, null).toBundle())
             },
-            onDocumentationClick = { "https://google.com".toUri().openInBrowser(requireContext()) }
+            onDocumentationClick = { openHowToForAttributes() }
         )
         attributesRecycler.adapter = adapter
 
         if (readOnly) {
             viewModel.readOnlyItems.observe(viewLifecycleOwner) {
-                adapter.submitList(adapter.toAdapterEntitiesWithFooter(it, readOnly)) {
-                    attributesRecycler.scrollToPosition(0)
-                }
+                adapter.submitList(adapter.toAdapterEntitiesWithFooter(it, readOnly))
+                configurePlaceholderAndVisibilities(it, readOnly)
             }
         } else {
             viewModel.editableItems.observe(viewLifecycleOwner) {
-                adapter.submitList(adapter.toAdapterEntitiesWithFooter(it, readOnly)) {
-                    attributesRecycler.scrollToPosition(0)
-                }
+                adapter.submitList(adapter.toAdapterEntitiesWithFooter(it, readOnly))
+                configurePlaceholderAndVisibilities(it, readOnly)
             }
         }
     }
+
+    private fun configurePlaceholderAndVisibilities(items: List<UserAttributeUiEntity>, readOnly: Boolean) {
+        attributesRecycler.isVisible = items.isNotEmpty()
+        noItemsPlaceholder.isVisible = items.isEmpty()
+        noItemsPlaceholder.setText(if (readOnly) R.string.character_read_only_attributes_placeholder else R.string.character_editable_attributes_placeholder)
+
+        if (readOnly) {
+            noItemsPlaceholder.setClickableSpan(
+                isUnderlineText = true,
+                startIndex = noItemsPlaceholder.text.indexOf("see"),
+                endIndex = noItemsPlaceholder.text.lastIndex,
+                onClick = { openHowToForAttributes() }
+            )
+        }
+    }
+
+    private fun openHowToForAttributes() = "https://developers.xsolla.com/login-api/methods/attributes".toUri().openInBrowser(requireContext())
 
 }

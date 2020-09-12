@@ -65,6 +65,8 @@
     <string name="character_tab2">User-editable attributes</string>
     <string name="character_lvl_up">\tLvl up for 200</string>
     <string name="character_read_only_attributes_footer">To learn more about read-only attributes, please, see the documentation</string>
+    <string name="character_read_only_attributes_placeholder">No attributes set for this user. To learn more about read-only attributes, see the documentation.</string>
+    <string name="character_editable_attributes_placeholder">No attributes set for this usern</string>
     <string name="character_editable_attributes_footer">Add attribute</string>
     <string name="character_edit_attribute_title">Custom attribute</string>
     <string name="character_edit_attribute_save_button">Save changes</string>
