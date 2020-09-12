@@ -1,4 +1,4 @@
-package com.xsolla.android.storesdkexample.util
+package com.xsolla.android.storesdkexample.util.extensions
 
 import com.xsolla.android.login.entity.common.UserAttribute
 import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity

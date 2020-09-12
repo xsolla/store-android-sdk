@@ -25,7 +25,7 @@ class EditAttributeFragment : BaseFragment() {
     override fun getLayout() = R.layout.fragment_edit_attribute
 
     override fun initUI() {
-        close.setOnClickListener { findNavController().navigateUp() }
+        close.setOnClickListener { navigateUp() }
 
         saveButton.isEnabled = !attributeKeyInput.text.isNullOrBlank() && !attributeValueInput.text.isNullOrBlank()
         attributeKeyInput.addTextChangedListener { text ->
@@ -57,8 +57,9 @@ class EditAttributeFragment : BaseFragment() {
             }
 
             removeDiscardButton.setOnClickListener {
-                navigateUp()
-                viewModel.deleteAttribute(attribute)
+                viewModel.deleteAttribute(attribute) {
+                    navigateUp()
+                }
             }
         } else {
             removeDiscardButton.setText(R.string.character_edit_attribute_discard_button)
@@ -70,8 +71,9 @@ class EditAttributeFragment : BaseFragment() {
                 val value = attributeValueInput.text?.toString()
 
                 if (!key.isNullOrBlank() && !value.isNullOrBlank()) {
-                    findNavController().navigateUp()
-                    viewModel.saveAttribute(UserAttributeUiEntity(key, UserAttributePermission.PUBLIC, value), false)
+                    viewModel.saveAttribute(UserAttributeUiEntity(key, UserAttributePermission.PUBLIC, value), false) {
+                        navigateUp()
+                    }
                 }
             }
         }

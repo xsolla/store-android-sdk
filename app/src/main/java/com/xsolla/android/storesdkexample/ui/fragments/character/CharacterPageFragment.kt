@@ -1,6 +1,7 @@
 package com.xsolla.android.storesdkexample.ui.fragments.character
 
 import android.os.Bundle
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -8,6 +9,7 @@ import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.UserAttributesAdapter
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmCharacterPage
+import com.xsolla.android.storesdkexample.util.extensions.openInBrowser
 import kotlinx.android.synthetic.main.fragment_character_page.attributesRecycler
 
 class CharacterPageFragment : BaseFragment() {
@@ -43,7 +45,8 @@ class CharacterPageFragment : BaseFragment() {
             onDeleteOptionClick = { viewModel.deleteAttribute(it.item) },
             onAddAttributeButtonClick = {
                 findNavController().navigate(R.id.fragment_edit_attribute, EditAttributeFragmentArgs(false, null).toBundle())
-            }
+            },
+            onDocumentationClick = { "https://google.com".toUri().openInBrowser(requireContext()) }
         )
         attributesRecycler.adapter = adapter
 

@@ -6,6 +6,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.xsolla.android.storesdkexample.adapter.UserAttributeItem
+import com.xsolla.android.storesdkexample.util.extensions.setClickableSpan
 import kotlinx.android.synthetic.main.item_user_attribute.view.editButton
 import kotlinx.android.synthetic.main.item_user_attribute.view.key
 import kotlinx.android.synthetic.main.item_user_attribute.view.value
@@ -16,7 +17,8 @@ class UserAttributeViewHolder(
     view: View,
     private val onEditOptionClick: (item: UserAttributeItem.Item) -> Unit,
     private val onDeleteOptionClick: (item: UserAttributeItem.Item) -> Unit,
-    private val onAddAttributeButtonClick: () -> Unit
+    private val onAddAttributeButtonClick: () -> Unit,
+    private val onDocumentationClick: () -> Unit
 ) : RecyclerView.ViewHolder(view) {
     fun bind(item: UserAttributeItem) =
         when (item) {
@@ -46,6 +48,12 @@ class UserAttributeViewHolder(
         itemView.readOnlyFooter.isVisible = footer.readOnly
         itemView.editableFooter.isGone = footer.readOnly
 
+        itemView.readOnlyFooter.setClickableSpan(
+            isUnderlineText = true,
+            startIndex = itemView.readOnlyFooter.text.indexOf("see"),
+            endIndex = itemView.readOnlyFooter.text.lastIndex,
+            onClick = { onDocumentationClick() }
+        )
         itemView.editableFooter.setOnClickListener {
             onAddAttributeButtonClick()
         }

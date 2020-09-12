@@ -12,9 +12,8 @@ import com.xsolla.android.login.entity.common.UserAttribute
 import com.xsolla.android.login.entity.common.UserAttributePermission
 import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.storesdkexample.BuildConfig
-import com.xsolla.android.storesdkexample.adapter.UserAttributeItem
 import com.xsolla.android.storesdkexample.util.SingleLiveEvent
-import com.xsolla.android.storesdkexample.util.toUiEntity
+import com.xsolla.android.storesdkexample.util.extensions.toUiEntity
 import kotlinx.android.parcel.Parcelize
 
 class VmCharacterPage : ViewModel() {
