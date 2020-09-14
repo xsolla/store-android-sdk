@@ -18,7 +18,8 @@ class UserAttributeViewHolder(
     private val onEditOptionClick: (item: UserAttributeItem.Item) -> Unit,
     private val onDeleteOptionClick: (item: UserAttributeItem.Item) -> Unit,
     private val onAddAttributeButtonClick: () -> Unit,
-    private val onDocumentationClick: () -> Unit
+    private val onDocumentationClick: () -> Unit,
+    val onDeleteOptionClickByPosition: (position: Int) -> Unit
 ) : RecyclerView.ViewHolder(view) {
     fun bind(item: UserAttributeItem) =
         when (item) {

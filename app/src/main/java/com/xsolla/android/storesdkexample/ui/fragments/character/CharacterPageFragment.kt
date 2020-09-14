@@ -1,11 +1,15 @@
 package com.xsolla.android.storesdkexample.ui.fragments.character
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import com.xsolla.android.storesdkexample.DeleteSwipeCallback
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.UserAttributesAdapter
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
@@ -15,7 +19,6 @@ import com.xsolla.android.storesdkexample.util.extensions.openInBrowser
 import com.xsolla.android.storesdkexample.util.extensions.setClickableSpan
 import kotlinx.android.synthetic.main.fragment_character_page.attributesRecycler
 import kotlinx.android.synthetic.main.fragment_character_page.noItemsPlaceholder
-import kotlinx.android.synthetic.main.item_user_attribute_footer.view.readOnlyFooter
 
 class CharacterPageFragment : BaseFragment() {
     companion object {
@@ -48,12 +51,23 @@ class CharacterPageFragment : BaseFragment() {
                 findNavController().navigate(R.id.fragment_edit_attribute, EditAttributeFragmentArgs(true, it.item).toBundle())
             },
             onDeleteOptionClick = { viewModel.deleteAttribute(it.item) },
+            onDeleteOptionClickByPosition = { viewModel.deleteAttributeBySwipe(it) },
             onAddAttributeButtonClick = {
                 findNavController().navigate(R.id.fragment_edit_attribute, EditAttributeFragmentArgs(false, null).toBundle())
             },
             onDocumentationClick = { openHowToForAttributes() }
         )
         attributesRecycler.adapter = adapter
+
+        if (!readOnly) {
+            val itemTouch = ItemTouchHelper(
+                DeleteSwipeCallback(
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_cart_delete)!!,
+                    ColorDrawable(ContextCompat.getColor(requireContext(), R.color.red_color))
+                )
+            )
+            itemTouch.attachToRecyclerView(attributesRecycler)
+        }
 
         if (readOnly) {
             viewModel.readOnlyItems.observe(viewLifecycleOwner) {

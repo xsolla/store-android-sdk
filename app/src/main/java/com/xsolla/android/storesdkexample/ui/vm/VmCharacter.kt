@@ -114,6 +114,26 @@ class VmCharacterPage : ViewModel() {
         val message = throwable?.message ?: errorMessage ?: "Failure"
         error.value = UserAttributeError(message)
     }
+
+    fun deleteAttributeBySwipe(position: Int) {
+        val item = _editableItems.value!![position]
+        _editableItems.value = _editableItems.value!!.toMutableList().apply {
+            removeAt(position)
+        }
+        
+        XLogin.updateUsersAttributesFromClient(null, BuildConfig.PROJECT_ID, listOf(item.key), object : UpdateUsersAttributesCallback {
+            override fun onSuccess() {
+
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                updateError(throwable, errorMessage)
+                _editableItems.value = _editableItems.value!!.toMutableList().apply {
+                    add(position, item)
+                }
+            }
+        })
+    }
 }
 
 // duplicate due to Parcelable implementation

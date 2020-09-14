@@ -10,13 +10,17 @@
 
     <TextView
         android:id="@+id/title"
-        style="@style/Widget.Xsolla.Fragment.Title"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
+        android:background="@color/secondary_color_10"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
         android:text="@string/character_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlSymmetry" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
@@ -27,7 +31,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:tabBackground="@color/secondary_color_10"
-        app:tabIndicatorFullWidth="false">
+        app:tabIndicatorFullWidth="false"
+        app:tabMode="scrollable">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/firstTab"

@@ -15,6 +15,7 @@ class UserAttributesAdapter(
     private val onDeleteOptionClick: (item: UserAttributeItem.Item) -> Unit,
     private val onAddAttributeButtonClick: () -> Unit,
     private val onDocumentationClick: () -> Unit,
+    private val onDeleteOptionClickByPosition: (position: Int) -> Unit
 ) : ListAdapter<UserAttributeItem, UserAttributeViewHolder>(UserAttributeDiffUtilCallback()) {
     companion object {
         const val ITEM_VIEW_TYPE = 1
@@ -32,7 +33,7 @@ class UserAttributesAdapter(
             LayoutInflater.from(parent.context).inflate(R.layout.item_user_attribute_footer, parent, false)
         }
 
-        return UserAttributeViewHolder(view, onEditOptionClick, onDeleteOptionClick, onAddAttributeButtonClick, onDocumentationClick)
+        return UserAttributeViewHolder(view, onEditOptionClick, onDeleteOptionClick, onAddAttributeButtonClick, onDocumentationClick, onDeleteOptionClickByPosition)
     }
 
     override fun onBindViewHolder(holder: UserAttributeViewHolder, position: Int) {
