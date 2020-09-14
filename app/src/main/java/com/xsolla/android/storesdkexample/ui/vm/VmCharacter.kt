@@ -20,6 +20,11 @@ import com.xsolla.android.storesdkexample.util.extensions.toUiEntity
 import kotlinx.android.parcel.Parcelize
 
 class VmCharacterPage : ViewModel() {
+    private companion object {
+        private const val SKU_GOLD = "gld"
+        private const val GOLD_QUANTITY = 200L
+    }
+
     private val _editableItems = MutableLiveData<List<UserAttributeUiEntity>>(listOf())
     private val _readOnlyItems = MutableLiveData<List<UserAttributeUiEntity>>(listOf())
     val editableItems: LiveData<List<UserAttributeUiEntity>> = _editableItems
@@ -32,7 +37,6 @@ class VmCharacterPage : ViewModel() {
         userInformation.value = UserInformation(id = "", nickname = "Nickname", avatar = null)
     }
 
-    // TODO: Database?
     fun getUserDetailsAndAttributes() {
         XLogin.getCurrentUserDetails(object : GetCurrentUserDetailsCallback {
             override fun onSuccess(data: UserDetailsResponse) {
@@ -134,7 +138,7 @@ class VmCharacterPage : ViewModel() {
     }
 
     fun levelUp(onSuccessConsume: () -> Unit) {
-        XStore.consumeItem("gld", 200, null, object : XStoreCallback<Void>() {
+        XStore.consumeItem(SKU_GOLD, GOLD_QUANTITY, null, object : XStoreCallback<Void>() {
             override fun onSuccess(response: Void?) {
                 val userId = userInformation.value!!.id
                 PrefManager.setUserLevel(userId, PrefManager.getUserLevel(userId) + 1)

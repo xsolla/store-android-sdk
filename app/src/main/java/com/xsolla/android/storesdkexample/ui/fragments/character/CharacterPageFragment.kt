@@ -9,8 +9,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.xsolla.android.storesdkexample.DeleteSwipeCallback
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.adapter.DeleteSwipeCallback
 import com.xsolla.android.storesdkexample.adapter.UserAttributesAdapter
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity
@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_character_page.noItemsPlaceholder
 class CharacterPageFragment : BaseFragment() {
     companion object {
         private const val EXTRA_READ_ONLY = "ExtraReadOnly"
-        private const val ARG_IS_EDIT = "isEdit"
 
         fun newInstance(readOnly: Boolean): CharacterPageFragment {
             return CharacterPageFragment().apply {
