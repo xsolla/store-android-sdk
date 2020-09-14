@@ -11,7 +11,10 @@ import com.xsolla.android.login.callback.UpdateUsersAttributesCallback
 import com.xsolla.android.login.entity.common.UserAttribute
 import com.xsolla.android.login.entity.common.UserAttributePermission
 import com.xsolla.android.login.entity.response.UserDetailsResponse
+import com.xsolla.android.store.XStore
+import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.storesdkexample.BuildConfig
+import com.xsolla.android.storesdkexample.data.local.PrefManager
 import com.xsolla.android.storesdkexample.util.SingleLiveEvent
 import com.xsolla.android.storesdkexample.util.extensions.toUiEntity
 import kotlinx.android.parcel.Parcelize
@@ -26,7 +29,7 @@ class VmCharacterPage : ViewModel() {
     val userInformation = SingleLiveEvent<UserInformation>()
 
     init {
-        userInformation.value = UserInformation(nickname = "Nickname", avatar = null)
+        userInformation.value = UserInformation(id = "", nickname = "Nickname", avatar = null)
     }
 
     // TODO: Database?
@@ -34,7 +37,7 @@ class VmCharacterPage : ViewModel() {
         XLogin.getCurrentUserDetails(object : GetCurrentUserDetailsCallback {
             override fun onSuccess(data: UserDetailsResponse) {
                 val nickname = data.nickname ?: data.name ?: data.firstName ?: data.lastName ?: "Nickname"
-                userInformation.value = userInformation.value!!.copy(nickname = nickname, avatar = data.picture)
+                userInformation.value = userInformation.value!!.copy(id = data.id, nickname = nickname, avatar = data.picture)
                 loadAllAttributes(data.id)
             }
 
@@ -90,12 +93,12 @@ class VmCharacterPage : ViewModel() {
                             set(index, attribute)
                         }
                     }
-                    onSuccess()
                 } else {
                     _editableItems.value = _editableItems.value!!.toMutableList().apply {
                         add(attribute)
                     }
                 }
+                onSuccess()
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
@@ -110,17 +113,12 @@ class VmCharacterPage : ViewModel() {
         }
     }
 
-    private fun updateError(throwable: Throwable?, errorMessage: String?) {
-        val message = throwable?.message ?: errorMessage ?: "Failure"
-        error.value = UserAttributeError(message)
-    }
-
     fun deleteAttributeBySwipe(position: Int) {
         val item = _editableItems.value!![position]
         _editableItems.value = _editableItems.value!!.toMutableList().apply {
             removeAt(position)
         }
-        
+
         XLogin.updateUsersAttributesFromClient(null, BuildConfig.PROJECT_ID, listOf(item.key), object : UpdateUsersAttributesCallback {
             override fun onSuccess() {
 
@@ -134,6 +132,25 @@ class VmCharacterPage : ViewModel() {
             }
         })
     }
+
+    fun levelUp(onSuccessConsume: () -> Unit) {
+        XStore.consumeItem("gld", 200, null, object : XStoreCallback<Void>() {
+            override fun onSuccess(response: Void?) {
+                val userId = userInformation.value!!.id
+                PrefManager.setUserLevel(userId, PrefManager.getUserLevel(userId) + 1)
+                onSuccessConsume()
+            }
+
+            override fun onFailure(errorMessage: String?) {
+                updateError(null, errorMessage)
+            }
+        })
+    }
+
+    private fun updateError(throwable: Throwable?, errorMessage: String?) {
+        val message = throwable?.message ?: errorMessage ?: "Failure"
+        error.value = UserAttributeError(message)
+    }
 }
 
 // duplicate due to Parcelable implementation
@@ -144,6 +161,6 @@ data class UserAttributeUiEntity(
     val value: String
 ) : Parcelable
 
-data class UserInformation(val avatar: String?, val nickname: String)
+data class UserInformation(val id: String, val avatar: String?, val nickname: String)
 
 data class UserAttributeError(val message: String)

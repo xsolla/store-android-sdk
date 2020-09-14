@@ -11,11 +11,9 @@ import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmCharacterPage
-import com.xsolla.android.storesdkexample.util.extensions.hideKeyboard
 import kotlinx.android.synthetic.main.activity_store.appbar
 import kotlinx.android.synthetic.main.app_bar_main.view.toolbar
 import kotlinx.android.synthetic.main.fragment_edit_attribute.attributeKeyInput
-import kotlinx.android.synthetic.main.fragment_edit_attribute.attributeKeyLayout
 import kotlinx.android.synthetic.main.fragment_edit_attribute.attributeValueInput
 import kotlinx.android.synthetic.main.fragment_edit_attribute.close
 import kotlinx.android.synthetic.main.fragment_edit_attribute.removeDiscardButton
@@ -77,9 +75,11 @@ class EditAttributeFragment : BaseFragment() {
 
     override fun onDestroyView() {
         requireActivity().appbar.toolbar.isVisible = true
-        rootView.hideKeyboard()
         super.onDestroyView()
     }
 
-    private fun navigateUp() = findNavController().navigateUp()
+    private fun navigateUp() {
+        hideKeyboard()
+        findNavController().navigateUp()
+    }
 }

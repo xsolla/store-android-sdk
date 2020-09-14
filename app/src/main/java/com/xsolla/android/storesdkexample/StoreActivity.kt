@@ -1,6 +1,5 @@
 package com.xsolla.android.storesdkexample
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,14 +23,11 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
-import com.xsolla.android.login.callback.GetUsersAttributesCallback
 import com.xsolla.android.login.callback.RefreshTokenCallback
-import com.xsolla.android.login.entity.common.UserAttribute
 import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
-import com.xsolla.android.storesdkexample.ui.vm.VmFriends
 import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import com.xsolla.android.storesdkexample.util.sumByLong
 import kotlinx.android.synthetic.main.activity_store.*
@@ -40,14 +36,8 @@ import kotlinx.android.synthetic.main.item_balance.view.*
 import kotlinx.android.synthetic.main.layout_drawer.*
 
 class StoreActivity : AppCompatActivity() {
-
-    companion object {
-        const val RC_LOGIN = 1
-    }
-
     private val vmCart: VmCart by viewModels()
     private val vmBalance: VmBalance by viewModels()
-    private val vmFriends: VmFriends by viewModels()
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var drawerLayout: DrawerLayout
@@ -56,11 +46,16 @@ class StoreActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_store)
 
+        if (XLogin.isTokenExpired(60)) {
+            if (!XLogin.canRefreshToken()) {
+                startLogin()
+            }
+        }
+
         XStore.init(BuildConfig.PROJECT_ID, XLogin.getToken() ?: "")
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
 
         initNavController()
         initDrawer()
@@ -96,18 +91,8 @@ class StoreActivity : AppCompatActivity() {
             vmCart.updateCart()
             vmBalance.updateVirtualBalance()
 
-            vmFriends.clearAllFriends()
-            vmFriends.loadAllFriends()
-
             setDrawerData()
             drawerLayout.closeDrawer(GravityCompat.START)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_LOGIN && resultCode != Activity.RESULT_OK) {
-            finish()
         }
     }
 
@@ -227,7 +212,8 @@ class StoreActivity : AppCompatActivity() {
 
     private fun startLogin() {
         val intent = Intent(this, LoginActivity::class.java)
-        startActivityForResult(intent, RC_LOGIN)
+        startActivity(intent)
+        finish()
     }
 
     private fun showSnack(message: String) {

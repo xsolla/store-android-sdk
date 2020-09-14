@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- TODO: FIGMA COLORS   -->
-    <item android:alpha="0.16" android:color="#383F5E" android:state_hovered="true"/>
-    <item android:alpha="0.12" android:color="#383F5E" android:state_focused="true"/>
-    <item android:alpha="0.04" android:color="#1b1d26" android:state_enabled="false"/>
-    <item android:alpha="0.12" android:color="#1b1d26"/>
+    <item android:alpha="0.16" android:color="#4B4B63" android:state_hovered="true"/>
+    <item android:alpha="0.12" android:color="#4B4B63" android:state_focused="true"/>
+    <item android:alpha="0.04" android:color="#32323C" android:state_enabled="false"/>
+    <item android:alpha="0.12" android:color="#32323C"/>
 </selector>
