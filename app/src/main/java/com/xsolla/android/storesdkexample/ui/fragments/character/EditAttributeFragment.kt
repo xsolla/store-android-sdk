@@ -1,15 +1,19 @@
 package com.xsolla.android.storesdkexample.ui.fragments.character
 
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.NavigationUI
 import com.xsolla.android.login.entity.common.UserAttributePermission
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmCharacterPage
+import com.xsolla.android.storesdkexample.util.extensions.hideKeyboard
+import kotlinx.android.synthetic.main.activity_store.appbar
+import kotlinx.android.synthetic.main.app_bar_main.view.toolbar
 import kotlinx.android.synthetic.main.fragment_edit_attribute.attributeKeyInput
 import kotlinx.android.synthetic.main.fragment_edit_attribute.attributeKeyLayout
 import kotlinx.android.synthetic.main.fragment_edit_attribute.attributeValueInput
@@ -25,6 +29,8 @@ class EditAttributeFragment : BaseFragment() {
     override fun getLayout() = R.layout.fragment_edit_attribute
 
     override fun initUI() {
+        requireActivity().appbar.toolbar.isGone = true
+
         close.setOnClickListener { navigateUp() }
 
         saveButton.isEnabled = !attributeKeyInput.text.isNullOrBlank() && !attributeValueInput.text.isNullOrBlank()
@@ -67,6 +73,12 @@ class EditAttributeFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        requireActivity().appbar.toolbar.isVisible = true
+        rootView.hideKeyboard()
+        super.onDestroyView()
     }
 
     private fun navigateUp() = findNavController().navigateUp()

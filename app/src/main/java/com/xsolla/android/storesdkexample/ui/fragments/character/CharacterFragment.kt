@@ -1,7 +1,8 @@
 package com.xsolla.android.storesdkexample.ui.fragments.character
 
+import android.view.Menu
+import android.view.MenuInflater
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.observe
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions.circleCropTransform
 import com.google.android.material.tabs.TabLayoutMediator
@@ -40,6 +41,18 @@ class CharacterFragment : BaseFragment() {
         viewModel.error.observe(viewLifecycleOwner) {
             showSnack(it.message)
         }
+
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
+    }
+
+    override fun onDestroyView() {
+        requireActivity().invalidateOptionsMenu()
+        super.onDestroyView()
     }
 
     private fun setupUserInformation(user: UserInformation) {
