@@ -31,8 +31,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:tabBackground="@color/secondary_color_10"
-        app:tabIndicatorFullWidth="false"
-        app:tabMode="scrollable">
+        app:tabIndicatorFullWidth="false">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/firstTab"
