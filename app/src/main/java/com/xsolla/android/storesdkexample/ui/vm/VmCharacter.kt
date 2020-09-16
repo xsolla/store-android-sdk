@@ -13,6 +13,7 @@ import com.xsolla.android.login.entity.common.UserAttributePermission
 import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
+import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse
 import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.data.local.PrefManager
 import com.xsolla.android.storesdkexample.util.SingleLiveEvent
@@ -21,8 +22,7 @@ import kotlinx.android.parcel.Parcelize
 
 class VmCharacterPage : ViewModel() {
     private companion object {
-        private const val SKU_GOLD = "gld"
-        private const val GOLD_QUANTITY = 200L
+        private const val QUANTITY = 200L
     }
 
     private val _editableItems = MutableLiveData<List<UserAttributeUiEntity>>(listOf())
@@ -32,6 +32,8 @@ class VmCharacterPage : ViewModel() {
 
     val error = SingleLiveEvent<UserAttributeError>()
     val userInformation = SingleLiveEvent<UserInformation>()
+
+    var virtualCurrency: VirtualBalanceResponse.Item? = null
 
     init {
         userInformation.value = UserInformation(id = "", nickname = "Nickname", avatar = null)
@@ -138,7 +140,12 @@ class VmCharacterPage : ViewModel() {
     }
 
     fun levelUp(onSuccessConsume: () -> Unit) {
-        XStore.consumeItem(SKU_GOLD, GOLD_QUANTITY, null, object : XStoreCallback<Void>() {
+        if (virtualCurrency == null) {
+            error.value = UserAttributeError("You have no virtual currencies")
+            return
+        }
+
+        XStore.consumeItem(virtualCurrency!!.sku, QUANTITY, null, object : XStoreCallback<Void>() {
             override fun onSuccess(response: Void?) {
                 val userId = userInformation.value!!.id
                 PrefManager.setUserLevel(userId, PrefManager.getUserLevel(userId) + 1)

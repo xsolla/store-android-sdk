@@ -86,7 +86,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:drawableLeft="@drawable/ic_level_up"
-        android:drawableRight="@drawable/gold_icon"
         android:text="@string/character_lvl_up"
         app:cornerRadius="0dp"
         app:layout_constraintStart_toEndOf="@id/avatar"
