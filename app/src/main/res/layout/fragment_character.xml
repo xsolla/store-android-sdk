@@ -75,10 +75,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="1 lvl"
         app:layout_constraintStart_toStartOf="@id/nickname"
         app:layout_constraintTop_toBottomOf="@id/nickname"
-        tools:ignore="HardcodedText" />
+        tools:text="1 lvl" />
 
     <Button
         android:id="@+id/levelUpButton"

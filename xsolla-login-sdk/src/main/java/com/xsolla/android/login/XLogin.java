@@ -774,7 +774,7 @@ public class XLogin {
      *
      * @param friendXsollaUserId        id of the user to change relationship with
      * @param action                    type of the action
-     * @param callback                  callback that indicates the success of failure of an action
+     * @param callback                  callback that indicates the success or failure of an action
      * @see <a href="https://developers.xsolla.com/user-account-api/user-friends/postusersmerelationships">User Account API Reference</a>
      */
     public static void updateCurrentUserFriend(
@@ -816,8 +816,17 @@ public class XLogin {
         return getInstance().useOauth && getInstance().tokenUtils.getOauthRefreshToken() != null;
     }
 
-    // https://developers.xsolla.com/login-api/methods/attributes/get-users-attributes-from-client
-    // https://developers.xsolla.com/login-api/methods/attributes/get-users-read-only-attributes-from-client
+    /**
+     * Gets a list of particular user’s attributes. Returns only <b>client</b> attributes.
+     *
+     * @param keys                      List of attributes’ keys which you want to get. If you do not specify them, it returns all user’s attributes.
+     * @param publisherProjectId        Project ID from Publisher Account which you want to get attributes for. If you do not specify it, it returns attributes without the value of this parameter.
+     * @param userId                    User ID which attributes you want to get. Returns only attributes with the <code>public</code> value of the <code>permission</code> parameter. If you do not specify it or put your user ID there, it returns only your attributes with any value for the <code>permission</code> parameter.
+     * @param getReadOnlyAttributes     true for getting read only attributes, false for editable attributes
+     * @param callback                  callback with operation response
+     * @see <a href="https://developers.xsolla.com/login-api/methods/attributes/get-users-read-only-attributes-from-client">Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/methods/attributes/get-users-attributes-from-client">Login API Reference</a>
+     */
     public static void getUsersAttributesFromClient(
             @Nullable List<String> keys,
             @Nullable Integer publisherProjectId,
@@ -859,7 +868,15 @@ public class XLogin {
                 });
     }
 
-    // https://developers.xsolla.com/login-api/methods/attributes/update-users-attributes-from-client
+    /**
+     * Updates and creates particular user’s attributes.
+     *
+     * @param attributes                List of attributes of the specified game. To add attribute which does not exist, set this attribute to the <code>key</code> parameter. To update <code>value</code> of the attribute, specify its <code>key</code> parameter and set the new <code>value</code>. You can change several attributes at a time.
+     * @param publisherProjectId        Project ID from Publisher Account which you want to update the value of specified attributes for. If you do not specify it, it updates attributes that are general to all games only.
+     * @param removingKeys              List of attributes which you want to delete. If you specify the same attribute in <code>attributes</code> parameter, it will not be deleted.
+     * @param callback                  callback that indicates the success or failure of an action
+     * @see <a href="https://developers.xsolla.com/login-api/methods/attributes/update-users-attributes-from-client">Login API Reference</a>
+     */
     public static void updateUsersAttributesFromClient(
             @Nullable List<UserAttribute> attributes,
             @Nullable Integer publisherProjectId,

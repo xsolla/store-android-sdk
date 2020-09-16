@@ -13,7 +13,6 @@ import com.xsolla.android.login.entity.request.UpdateUserDetailsBody;
 import com.xsolla.android.login.entity.request.UpdateUserFriendsRequest;
 import com.xsolla.android.login.entity.request.UpdateUserPhoneBody;
 import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromClientRequest;
-import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromServerRequest;
 import com.xsolla.android.login.entity.response.AuthResponse;
 import com.xsolla.android.login.entity.response.AuthSocialResponse;
 import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse;
@@ -169,19 +168,6 @@ public interface LoginApi {
             @Header("authorization") String authHeader,
             @Body UpdateUsersAttributesFromClientRequest updateUsersAttributesFromClientRequest
     );
-
-    @POST("api/attributes/users/{userId}/update")
-    Call<Void> updateUsersAttributesFromServer(
-            @Path("userId") String userId,
-            @Body UpdateUsersAttributesFromServerRequest updateUsersAttributesFromServerRequest
-    );
-
-    @POST("api/attributes/users/{userId}/update_read_only")
-    Call<Void> updateUsersReadOnlyAttributesFromServer(
-            @Path("userId") String userId,
-            @Body UpdateUsersAttributesFromServerRequest updateUsersAttributesFromServerRequest
-    );
-
 
     // OAuth 2.0
 

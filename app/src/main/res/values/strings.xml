@@ -59,7 +59,6 @@
     <string name="friends_options_delete_button">Remove</string>
     <string name="friends_option_delete_title">Remove %s from the friends list?</string>
 
-    <string name="character_">.</string>
     <string name="character_title">Character</string>
     <string name="character_tab1">Read-only attributes</string>
     <string name="character_tab2">User-editable attributes</string>
