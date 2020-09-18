@@ -4,5 +4,6 @@ enum class FriendsPlatform {
     STEAM,
     XBOX,
     TWITTER,
-    FACEBOOK
+    FACEBOOK,
+    VK
 }

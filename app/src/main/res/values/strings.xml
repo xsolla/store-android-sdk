@@ -63,5 +63,7 @@
     <string name="add_friends_search_hint">Find by nickname</string>
     <string name="add_friends_social_accounts">Social accounts</string>
     <string name="add_friends_recommended">Recommended</string>
+    <string name="add_friends_linking_error">Linking error</string>
+    <string name="add_friends_recent_search">Recent search</string>
 
 </resources>

@@ -5,11 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.xsolla.android.login.XLogin
-import com.xsolla.android.login.callback.GetSocialFriendsCallback
-import com.xsolla.android.login.callback.LinkedSocialNetworksCallback
 import com.xsolla.android.login.callback.SearchUsersByNicknameCallback
-import com.xsolla.android.login.entity.response.*
-import com.xsolla.android.login.social.FriendsPlatform
+import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse
+import com.xsolla.android.login.entity.response.UserFromSearch
 import kotlinx.coroutines.*
 
 class VmAddFriends(application: Application) : AndroidViewModel(application) {
@@ -25,9 +23,6 @@ class VmAddFriends(application: Application) : AndroidViewModel(application) {
 
     val searchResultList = MutableLiveData<List<UserFromSearch>>(listOf())
     private var searchJob: Job? = null
-
-    val linkedSocialNetworksList = MutableLiveData<List<LinkedSocialNetworkResponse>>(mutableListOf())
-    val socialFriendsList = MutableLiveData<MutableList<SocialFriend>>(mutableListOf())
 
     private val searchObserver = Observer<String> {
         searchJob?.cancel()
@@ -57,50 +52,6 @@ class VmAddFriends(application: Application) : AndroidViewModel(application) {
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
                 searchResultList.value = listOf()
-                throwable?.printStackTrace()
-                println("!!! $errorMessage") // TODO
-            }
-
-        })
-    }
-
-    fun loadAllSocialFriends() {
-        socialFriendsList.value?.clear()
-        socialFriendsList.value = socialFriendsList.value
-        loadSocialFriends(FriendsPlatform.FACEBOOK) {
-            loadSocialFriends(FriendsPlatform.TWITTER) {
-                loadSocialFriends(FriendsPlatform.XBOX) {
-                    loadSocialFriends(FriendsPlatform.STEAM)
-                }
-            }
-        }
-    }
-
-    private fun loadSocialFriends(friendsPlatform: FriendsPlatform, callback: (() -> Unit)? = null) {
-        XLogin.getSocialFriends(friendsPlatform, REQUEST_OFFSET, REQUEST_LIMIT, false, object : GetSocialFriendsCallback {
-            override fun onSuccess(data: SocialFriendsResponse) {
-                socialFriendsList.value?.addAll(data.friendsList)
-                socialFriendsList.value = socialFriendsList.value
-                println("!!! ${socialFriendsList.value}") // TODO
-                callback?.invoke()
-            }
-
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                throwable?.printStackTrace()
-                println("!!! $errorMessage") // TODO
-            }
-
-        })
-    }
-
-    fun loadLinkedSocialAccounts() {
-        XLogin.getLinkedSocialNetworks(object : LinkedSocialNetworksCallback {
-            override fun onSuccess(data: List<LinkedSocialNetworkResponse>) {
-                linkedSocialNetworksList.value = data
-                println("!!! linked socials $data")
-            }
-
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
                 throwable?.printStackTrace()
                 println("!!! $errorMessage") // TODO
             }

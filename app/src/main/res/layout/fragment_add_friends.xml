@@ -41,29 +41,71 @@
         style="@style/Widget.Xsolla.AddFriends.BlockTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/add_friends_social_accounts"
+        tools:text="@string/add_friends_social_accounts"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/searchInputLayout" />
 
-    <ImageView
-        android:id="@+id/iconLinkingFacebook"
-        android:layout_width="wrap_content"
+    <HorizontalScrollView
+        android:id="@+id/socialButtonsScroll"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/add_friends_block_title_margin_bottom"
-        app:layout_constraintStart_toStartOf="@id/labelSocialAccounts"
-        app:layout_constraintTop_toBottomOf="@id/labelSocialAccounts"
-        app:srcCompat="@drawable/ic_linking_facebook_add" />
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/labelSocialAccounts">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="15dp"
+                android:layout_height="0dp" />
+
+            <ImageView
+                android:id="@+id/iconFacebook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                tools:srcCompat="@drawable/ic_linking_facebook_added" />
+
+            <ImageView
+                android:id="@+id/iconVk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                tools:srcCompat="@drawable/ic_linking_vk_added" />
+
+            <ImageView
+                android:id="@+id/iconTwitter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                tools:srcCompat="@drawable/ic_linking_twitch_added" />
+
+            <View
+                android:layout_width="15dp"
+                android:layout_height="0dp" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
 
     <TextView
         android:id="@+id/labelListTitle"
         style="@style/Widget.Xsolla.AddFriends.BlockTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/add_friends_recommended"
+        tools:text="@string/add_friends_recommended"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iconLinkingFacebook" />
+        app:layout_constraintTop_toBottomOf="@id/socialButtonsScroll" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"

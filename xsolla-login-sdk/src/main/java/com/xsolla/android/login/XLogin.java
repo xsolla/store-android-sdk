@@ -53,6 +53,7 @@ import com.xsolla.android.login.jwt.JWT;
 import com.xsolla.android.login.social.FriendsPlatform;
 import com.xsolla.android.login.social.LoginSocial;
 import com.xsolla.android.login.social.SocialNetwork;
+import com.xsolla.android.login.social.SocialNetworkForLinking;
 import com.xsolla.android.login.token.TokenUtils;
 import com.xsolla.android.login.ui.ActivityAuthWebView;
 import com.xsolla.android.login.unity.UnityProxyActivity;
@@ -828,14 +829,12 @@ public class XLogin {
                 });
     }
 
-    private static final int RC_LINKING = 33;
-
-    public static void startSocialAccountLinking(Fragment fragment, SocialNetwork socialNetwork) {
-        Intent intent = new Intent(fragment.getContext(), ActivityAuthWebView.class);
-        intent.putExtra(ActivityAuthWebView.ARG_AUTH_URL, LOGIN_HOST + "/api/users/me/social_providers/" + socialNetwork.providerName + "/login_redirect");
+    public static Intent createSocialAccountLinkingIntent(Context context, SocialNetworkForLinking socialNetwork) {
+        Intent intent = new Intent(context, ActivityAuthWebView.class);
+        intent.putExtra(ActivityAuthWebView.ARG_AUTH_URL, LOGIN_HOST + "/api/users/me/social_providers/" + socialNetwork.name().toLowerCase() + "/login_redirect");
         intent.putExtra(ActivityAuthWebView.ARG_CALLBACK_URL, getInstance().callbackUrl);
         intent.putExtra(ActivityAuthWebView.ARG_TOKEN, getToken());
-        fragment.startActivityForResult(intent, RC_LINKING);
+        return intent;
     }
 
     public static boolean isTokenExpired(long leewaySec) {
