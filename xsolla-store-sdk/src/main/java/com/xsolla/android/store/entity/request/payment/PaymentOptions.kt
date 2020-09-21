@@ -1,13 +1,26 @@
 package com.xsolla.android.store.entity.request.payment
 
 import com.google.gson.JsonObject
+import com.google.gson.annotations.SerializedName
 
 data class PaymentOptions(
     val currency: String = "USD",
     val locale: String = "en",
     val isSandbox: Boolean = true,
+    val settings: PaymentProjectSettings? = null,
     val customParameters: CustomParameters? = null
 )
+
+data class PaymentProjectSettings(val ui: UiProjectSetting)
+
+data class UiProjectSetting(val theme: PaymentUiThemes = PaymentUiThemes.DEFAULT)
+
+enum class PaymentUiThemes {
+    @SerializedName("default")
+    DEFAULT,
+    @SerializedName("dark")
+    DARK
+}
 
 class CustomParameters private constructor(private val parameters: Map<String, Value>) {
     class Builder {
@@ -15,7 +28,7 @@ class CustomParameters private constructor(private val parameters: Map<String, V
 
         fun addParam(key: String, value: Value): Builder {
             if (key.length !in 1..255) {
-                throw CustomParametersException("Custom parameter key length must be from 1 to 255")
+                throw IllegalArgumentException("Custom parameter key length must be from 1 to 255")
             }
 
             parameters[key] = value
@@ -24,7 +37,7 @@ class CustomParameters private constructor(private val parameters: Map<String, V
 
         fun build(): CustomParameters {
             if (parameters.size !in 1..200) {
-                throw CustomParametersException("Custom parameters must be from 1 to 200")
+                throw IllegalArgumentException("Custom parameters must be from 1 to 200")
             }
 
             return CustomParameters(parameters)
@@ -40,22 +53,20 @@ class CustomParameters private constructor(private val parameters: Map<String, V
     fun toJsonObject() =
         JsonObject().apply {
             parameters.forEach { (key, value) ->
-                addProperty(key, value, this)
+                this.addProperty(key, value)
             }
         }
 
-    private fun addProperty(key: String, value: Value, jsonObject: JsonObject) =
+    private fun JsonObject.addProperty(key: String, value: Value) =
         when (value) {
             is Value.String -> {
-                jsonObject.addProperty(key, value.value)
+                addProperty(key, value.value)
             }
             is Value.Boolean -> {
-                jsonObject.addProperty(key, value.value)
+                addProperty(key, value.value)
             }
             is Value.Number -> {
-                jsonObject.addProperty(key, value.value)
+                addProperty(key, value.value)
             }
         }
-
-    private class CustomParametersException(message: String) : RuntimeException(message)
 }
