@@ -59,4 +59,15 @@
     <string name="friends_options_delete_button">Remove</string>
     <string name="friends_option_delete_title">Remove %s from the friends list?</string>
 
+    <string name="profile_">...</string>
+    <string name="profile_title">Account</string>
+    <string name="profile_email_hint">Email</string>
+    <string name="profile_username_hint">Username</string>
+    <string name="profile_nickname_hint">Nickname</string>
+    <string name="profile_phone_hint">Phone number</string>
+    <string name="profile_firstname_hint">First name</string>
+    <string name="profile_lastname_hint">Last name</string>
+    <string name="profile_birthday_hint">Date of birth</string>
+    <string name="profile_gender_hint">Gender</string>
+
 </resources>
