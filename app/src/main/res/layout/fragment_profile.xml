@@ -57,6 +57,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailLayout"
+                style="@style/Widget.Xsolla.TextInputLayoutFilled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -71,6 +72,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/usernameLayout"
+                style="@style/Widget.Xsolla.TextInputLayoutFilled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -85,6 +87,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/nicknameLayout"
+                style="@style/Widget.Xsolla.TextInputLayoutFilled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -99,6 +102,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/phoneLayout"
+                style="@style/Widget.Xsolla.TextInputLayoutFilled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -113,6 +117,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/firstnameLayout"
+                style="@style/Widget.Xsolla.TextInputLayoutFilled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -127,6 +132,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/lastnameLayout"
+                style="@style/Widget.Xsolla.TextInputLayoutFilled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -141,29 +147,39 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/birthdayLayout"
+                style="@style/Widget.Xsolla.TextInputLayoutFilled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+
                 android:hint="@string/profile_birthday_hint">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/birthdayInput"
                     android:layout_width="match_parent"
+
+                    android:inputType="none"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:longClickable="false"
+
                     android:layout_height="match_parent" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/genderLayout"
+                style="@style/Widget.Xsolla.TextInputLayoutDropdownFilled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:hint="@string/profile_gender_hint">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <AutoCompleteTextView
                     android:id="@+id/genderInput"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

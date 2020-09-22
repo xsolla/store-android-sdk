@@ -152,7 +152,7 @@ class StoreActivity : AppCompatActivity() {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_vi, R.id.nav_vc, R.id.nav_inventory, R.id.nav_friends), drawerLayout)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_vi, R.id.nav_vc, R.id.nav_inventory, R.id.nav_friends, R.id.nav_profile), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
@@ -165,6 +165,10 @@ class StoreActivity : AppCompatActivity() {
     private fun initDrawer() {
         drawerLayout = findViewById(R.id.drawer_layout)
         val navController = findNavController(R.id.nav_host_fragment)
+        textAccount.setOnClickListener {
+            navController.navigate(R.id.nav_profile)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
         textInventory.setOnClickListener {
             navController.navigate(R.id.nav_inventory)
             drawerLayout.closeDrawer(GravityCompat.START)

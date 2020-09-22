@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -36,6 +37,16 @@
         tools:text="usikpusik" />
 
     <TextView
+        android:id="@+id/textAccount"
+        style="@style/Widget.Xsolla.Drawer.Text.Item"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/profile_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textUsername" />
+
+    <TextView
         android:id="@+id/textInventory"
         style="@style/Widget.Xsolla.Drawer.Text.Item"
         android:layout_width="0dp"
@@ -43,7 +54,7 @@
         android:text="@string/drawer_item_inventory"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textUsername" />
+        app:layout_constraintTop_toBottomOf="@+id/textAccount" />
 
     <TextView
         android:id="@+id/textFriends"
@@ -51,8 +62,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/drawer_item_friends"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textInventory" />
 
     <View
