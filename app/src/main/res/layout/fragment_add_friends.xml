@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                tools:srcCompat="@drawable/ic_linking_twitch_added" />
+                tools:srcCompat="@drawable/ic_linking_twitter_added" />
 
             <View
                 android:layout_width="15dp"

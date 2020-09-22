@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.ui.vm.FriendUiEntity
+import com.xsolla.android.storesdkexample.ui.vm.FriendsRelationship
 import kotlinx.android.synthetic.main.item_friend.view.*
 import kotlinx.android.synthetic.main.layout_accept_decline_friends.view.*
 
@@ -101,78 +102,40 @@ class AddFriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             onDeleteOptionClick: (user: FriendUiEntity) -> Unit,
             onBlockOptionClick: (user: FriendUiEntity) -> Unit
     ) {
-//        if (currentTab == FriendsTab.FRIENDS || item.temporaryRelationship in FriendsTab.FRIENDS.temporaryRelationships) {
-//            itemView.friendAcceptedText.isVisible = false
-//            itemView.friendDeclinedText.isVisible = false
-//
-//            itemView.friendsOptionsButton.setOnClickListener {
-//                AlertDialog.Builder(itemView.context)
-//                        .setTitle(itemView.context.getString(R.string.friends_options_dialog_title, item.nickname))
-//                        .setItems(arrayOf(itemView.context.getString(R.string.friends_option_delete), itemView.context.getString(R.string.friends_option_block))) { _, which ->
-//                            if (which == 0) {
-//                                configureDelete(item, onDeleteOptionClick)
-//                            }
-//                            else {
-//                                configureBlock(item, onBlockOptionClick)
-//                            }
-//                        }
-//                        .show()
-//            }
-//        }
-//        if (currentTab == FriendsTab.PENDING || item.temporaryRelationship in FriendsTab.PENDING.temporaryRelationships) {
-//
-//            when (item.temporaryRelationship) {
-//                TemporaryFriendRelationship.REQUEST_ACCEPTED -> {
-//                    itemView.friendAcceptedText.isVisible = true
-//                    itemView.friendsAcceptDeclineButtons.isVisible = false
-//                }
-//                TemporaryFriendRelationship.REQUEST_DENIED -> {
-//                    itemView.friendDeclinedText.isVisible = true
-//                    itemView.friendsAcceptDeclineButtons.isVisible = false
-//                }
-//                else -> {
-//                    itemView.friendsAcceptDeclineButtons.isVisible = true
-//                    itemView.friendAcceptedText.isVisible = false
-//                    itemView.friendDeclinedText.isVisible = false
-//                }
-//            }
-//
-//            configureOptionsWithBlock(item, onBlockOptionClick)
-//        }
-//        if (currentTab == FriendsTab.REQUESTED || item.temporaryRelationship in FriendsTab.REQUESTED.temporaryRelationships) {
-//
-//            itemView.cancelRequestButton.isGone = (item.temporaryRelationship == TemporaryFriendRelationship.CANCEL_MY_OWN_REQUEST)
-//            itemView.addFriendButton.isVisible = (item.temporaryRelationship == TemporaryFriendRelationship.CANCEL_MY_OWN_REQUEST)
-//
-//            configureOptionsWithBlock(item, onBlockOptionClick)
-//        }
-//        if (currentTab == FriendsTab.BLOCKED || item.temporaryRelationship in FriendsTab.BLOCKED.temporaryRelationships) {
-//
-//            when (item.temporaryRelationship) {
-//                null -> {
-//                    itemView.friendsOptionsButton.isVisible = false
-//                    itemView.unblockButton.isVisible = true
-//                    itemView.addFriendButton.isVisible = false
-//                    itemView.cancelRequestButton.isVisible = false
-//                }
-//                TemporaryFriendRelationship.UNBLOCKED -> {
-//                    itemView.friendsOptionsButton.isVisible = true
-//                    itemView.unblockButton.isVisible = false
-//                    itemView.addFriendButton.isVisible = true
-//                    itemView.cancelRequestButton.isVisible = false
-//                }
-//                TemporaryFriendRelationship.UNBLOCKED_AND_REQUEST_FRIEND -> {
-//                    itemView.friendsOptionsButton.isVisible = true
-//                    itemView.unblockButton.isVisible = false
-//                    itemView.addFriendButton.isVisible = false
-//                    itemView.cancelRequestButton.isVisible = true
-//                }
-//                else -> {
-//                    throw IllegalArgumentException("${currentTab.name} available only this temporary relationships: ${currentTab.temporaryRelationships}")
-//                }
-//            }
-//
-//            configureOptionsWithBlock(item, onBlockOptionClick)
-//        }
+
+        if (item.relationship == FriendsRelationship.NONE) {
+            itemView.friendAcceptedText.isVisible = false
+            itemView.friendDeclinedText.isVisible = false
+            itemView.addFriendButton.isVisible = true
+            configureOptionsWithBlock(item, onBlockOptionClick)
+        }
+        if (item.relationship == FriendsRelationship.REQUESTED) {
+            itemView.friendAcceptedText.isVisible = false
+            itemView.friendDeclinedText.isVisible = false
+            itemView.cancelRequestButton.isVisible = true
+            configureOptionsWithBlock(item, onBlockOptionClick)
+        }
+        if (item.relationship == FriendsRelationship.PENDING) {
+            itemView.friendAcceptedText.isVisible = false
+            itemView.friendDeclinedText.isVisible = false
+            itemView.friendsAcceptDeclineButtons.isVisible = true
+            configureOptionsWithBlock(item, onBlockOptionClick)
+        }
+        if (item.relationship == FriendsRelationship.STANDARD) {
+            itemView.friendAcceptedText.isVisible = false
+            itemView.friendDeclinedText.isVisible = false
+            itemView.friendsOptionsButton.setOnClickListener {
+                AlertDialog.Builder(itemView.context)
+                        .setTitle(itemView.context.getString(R.string.friends_options_dialog_title, item.nickname))
+                        .setItems(arrayOf(itemView.context.getString(R.string.friends_option_delete), itemView.context.getString(R.string.friends_option_block))) { _, which ->
+                            if (which == 0) {
+                                configureDelete(item, onDeleteOptionClick)
+                            } else {
+                                configureBlock(item, onBlockOptionClick)
+                            }
+                        }
+                        .show()
+            }
+        }
     }
 }

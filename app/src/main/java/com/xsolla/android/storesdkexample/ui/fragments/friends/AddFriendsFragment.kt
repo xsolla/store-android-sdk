@@ -8,6 +8,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xsolla.android.login.XLogin
+import com.xsolla.android.login.entity.request.UpdateUserFriendsRequestAction
 import com.xsolla.android.login.social.SocialNetworkForLinking
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.AddFriendsAdapter
@@ -40,10 +41,16 @@ class AddFriendsFragment : BaseFragment() {
         socialNetworksIcons = mapOf(
                 SocialNetworkForLinking.FACEBOOK to Triple(R.drawable.ic_linking_facebook_add, R.drawable.ic_linking_facebook_added, iconFacebook),
                 SocialNetworkForLinking.VK to Triple(R.drawable.ic_linking_vk_add, R.drawable.ic_linking_vk_added, iconVk),
-                SocialNetworkForLinking.TWITTER to Triple(R.drawable.ic_linking_twitch_add, R.drawable.ic_linking_twitch_added, iconTwitter)
+                SocialNetworkForLinking.TWITTER to Triple(R.drawable.ic_linking_twitter_add, R.drawable.ic_linking_twitter_added, iconTwitter)
         )
         searchAdapter = AddFriendsAdapter(
-                {}, {}, {}, {}, {}, {}, {}
+                { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.FRIEND_REMOVE) },
+                { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.BLOCK) },
+                {},
+                { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.FRIEND_REQUEST_APPROVE) },
+                { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.FRIEND_REQUEST_DENY) },
+                { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.FRIEND_REQUEST_CANCEL) },
+                { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.FRIEND_REQUEST_ADD) }
         )
         socialFriendsAdapter = SocialFriendsAdapter(
                 {}, {}, {}, {}, {}, {}, {}
@@ -57,10 +64,10 @@ class AddFriendsFragment : BaseFragment() {
         vmSocialFriends.linkedSocialNetworks.observe(viewLifecycleOwner) {
             initSocialButtons(it)
         }
-        vmAddFriends.searchResultList.observe(viewLifecycleOwner) {list ->
-            searchAdapter.submitList(list.map { FriendUiEntity(it.xsollaUserId, it.avatar, false, it.nickname, FriendsRelationship.NONE) })
+        vmAddFriends.searchResultList.observe(viewLifecycleOwner) { list ->
+            searchAdapter.submitList(list)
         }
-        vmSocialFriends.socialFriendsList.observe(viewLifecycleOwner) {list ->
+        vmSocialFriends.socialFriendsList.observe(viewLifecycleOwner) { list ->
             socialFriendsAdapter.submitList(list.map { FriendUiEntity(it.socialNetworkUserId, it.avatar, false, it.name, FriendsRelationship.NONE) })
         }
         searchInput.setOnFocusChangeListener { _, hasFocus ->
@@ -70,7 +77,7 @@ class AddFriendsFragment : BaseFragment() {
                 initSocialScreen()
             }
         }
-        vmAddFriends.currentSearchQuery.observe(viewLifecycleOwner) {query ->
+        vmAddFriends.currentSearchQuery.observe(viewLifecycleOwner) { query ->
             query?.let {
                 if (it.isNotEmpty()) {
                     initSearchScreen()
@@ -84,6 +91,12 @@ class AddFriendsFragment : BaseFragment() {
             }
         }
         initSocialScreen()
+        vmAddFriends.hasError.observe(viewLifecycleOwner) { hasError ->
+            if (hasError) {
+                showSnack("Failure")
+            }
+        }
+        vmAddFriends.loadAllFriends()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
