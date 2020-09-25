@@ -19,6 +19,7 @@ import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse;
 import com.xsolla.android.login.entity.response.OauthAuthResponse;
 import com.xsolla.android.login.entity.response.OauthGetCodeBySocialTokenResponse;
 import com.xsolla.android.login.entity.response.OauthLinkForSocialAuthResponse;
+import com.xsolla.android.login.entity.response.PhoneResponse;
 import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse;
 import com.xsolla.android.login.entity.response.SocialFriendsResponse;
 import com.xsolla.android.login.entity.response.UserDetailsResponse;
@@ -120,6 +121,9 @@ public interface LoginApi {
             @Header("authorization") String authHeader,
             @Part MultipartBody.Part filePart
     );
+
+    @GET("api/users/me/phone")
+    Call<PhoneResponse> getUserPhone(@Header("authorization") String authHeader);
 
     @POST("api/users/me/phone")
     Call<Void> updateUserPhone(

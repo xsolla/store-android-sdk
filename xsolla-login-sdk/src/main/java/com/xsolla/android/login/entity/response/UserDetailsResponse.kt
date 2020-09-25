@@ -51,3 +51,5 @@ enum class GenderResponse {
     @SerializedName("m")
     M
 }
+
+data class PhoneResponse(val phone: String?)

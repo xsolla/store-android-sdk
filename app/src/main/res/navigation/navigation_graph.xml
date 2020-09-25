@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
@@ -33,8 +34,7 @@
         android:id="@+id/fragment_consume"
         android:name="com.xsolla.android.storesdkexample.ui.fragments.store.ConsumeFragment"
         android:label=""
-        tools:layout="@layout/fragment_consume">
-    </fragment>
+        tools:layout="@layout/fragment_consume" />
     <fragment
         android:id="@+id/nav_friends"
         android:name="com.xsolla.android.storesdkexample.ui.fragments.friends.FriendsFragment"
@@ -43,5 +43,13 @@
         android:id="@+id/nav_profile"
         android:name="com.xsolla.android.storesdkexample.ui.fragments.profile.ProfileFragment"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/fragment_reset_password"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.login.ResetPasswordFragment"
+        tools:layout="@layout/fragmen_reset_password" />
+
+    <action
+        android:id="@+id/to_reset_password_fragment"
+        app:destination="@id/fragment_reset_password" />
 
 </navigation>

@@ -15,15 +15,6 @@
 
     </style>
 
-    <style name="DatePicker" parent="AppTheme">
-        <item name="colorAccent">@color/magenta_color</item>                  <!--header background-->
-        <item name="android:background">@color/main_bg_color</item>     <!--calendar background-->
-        <item name="android:colorControlActivated">@color/colorAccent</item>  <!--selected day-->
-        <item name="android:textColorPrimary">@android:color/white</item>     <!--days of the month-->
-        <item name="buttonBarPositiveButtonStyle">@style/AlertDialogPositiveButton</item>
-        <item name="buttonBarNegativeButtonStyle">@style/AlertDialogNegativeButton</item>
-    </style>
-
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

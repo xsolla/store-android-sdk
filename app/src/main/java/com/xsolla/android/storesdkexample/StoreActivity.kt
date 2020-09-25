@@ -56,7 +56,7 @@ class StoreActivity : AppCompatActivity() {
 
         XStore.init(BuildConfig.PROJECT_ID, XLogin.getToken() ?: "")
 
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        val toolbar: Toolbar = findViewById(R.id.mainToolbar)
         setSupportActionBar(toolbar)
 
 

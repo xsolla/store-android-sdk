@@ -17,6 +17,7 @@ import com.xsolla.android.login.callback.DeleteCurrentUserPhoneCallback;
 import com.xsolla.android.login.callback.FinishSocialCallback;
 import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback;
 import com.xsolla.android.login.callback.GetCurrentUserFriendsCallback;
+import com.xsolla.android.login.callback.GetCurrentUserPhoneCallback;
 import com.xsolla.android.login.callback.GetSocialFriendsCallback;
 import com.xsolla.android.login.callback.GetUserPublicInfoCallback;
 import com.xsolla.android.login.callback.RefreshTokenCallback;
@@ -42,6 +43,7 @@ import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder;
 import com.xsolla.android.login.entity.request.UserFriendsRequestType;
 import com.xsolla.android.login.entity.response.AuthResponse;
 import com.xsolla.android.login.entity.response.OauthAuthResponse;
+import com.xsolla.android.login.entity.response.PhoneResponse;
 import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse;
 import com.xsolla.android.login.entity.response.SocialFriendsResponse;
 import com.xsolla.android.login.entity.response.UserDetailsResponse;
@@ -583,6 +585,7 @@ public class XLogin {
                 });
     }
 
+    // https://developers.xsolla.com/user-account-api/all-user-details/get-user-details
     public static void getCurrentUserDetails(final GetCurrentUserDetailsCallback callback) {
         getInstance().loginApi
                 .getCurrentUserDetails("Bearer " + getToken())
@@ -608,6 +611,7 @@ public class XLogin {
                 });
     }
 
+    // https://developers.xsolla.com/user-account-api/all-user-details/patchusersme/
     public static void updateCurrentUserDetails(
             String birthday,
             String firstName,
@@ -636,6 +640,7 @@ public class XLogin {
                 });
     }
 
+    // https://developers.xsolla.com/user-account-api/user-picture/deleteusersmepicture
     public static void deleteCurrentUserAvatar(final DeleteCurrentUserAvatarCallback callback) {
         getInstance().loginApi
                 .deleteUserPicture("Bearer " + getToken())
@@ -656,6 +661,7 @@ public class XLogin {
                 });
     }
 
+    // https://developers.xsolla.com/user-account-api/user-picture/postusersmepicture
     public static void uploadCurrentUserAvatar(File file, final UploadCurrentUserAvatarCallback callback) {
         MultipartBody.Part part =
                 MultipartBody.Part.createFormData("picture", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
@@ -673,6 +679,30 @@ public class XLogin {
 
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
+    }
+
+    public static void getCurrentUserPhone(final GetCurrentUserPhoneCallback callback) {
+        getInstance().loginApi
+                .getUserPhone("Bearer " + getToken())
+                .enqueue(new Callback<PhoneResponse>() {
+                    @Override
+                    public void onResponse(Call<PhoneResponse> call, Response<PhoneResponse> response) {
+                        if (response.isSuccessful()) {
+                            if (response.body() == null) {
+                                callback.onSuccess(new PhoneResponse(null));
+                            } else {
+                                callback.onSuccess(response.body());
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<PhoneResponse> call, Throwable t) {
                         callback.onError(t, null);
                     }
                 });

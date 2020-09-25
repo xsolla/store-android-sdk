@@ -6,6 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_bg_color"
+    android:clickable="true"
+    android:focusable="true"
     tools:context=".ui.fragments.profile.ProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -61,6 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:enabled="false"
                 android:hint="@string/profile_email_hint">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -76,6 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:enabled="false"
                 android:hint="@string/profile_username_hint">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -96,7 +100,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nicknameInput"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -111,7 +116,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/phoneInput"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:inputType="phone" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -126,7 +132,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/firstnameInput"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -158,12 +165,12 @@
                     android:id="@+id/birthdayInput"
                     android:layout_width="match_parent"
 
-                    android:inputType="none"
+                    android:layout_height="match_parent"
                     android:clickable="false"
                     android:focusable="false"
-                    android:longClickable="false"
+                    android:inputType="none"
 
-                    android:layout_height="match_parent" />
+                    android:longClickable="false" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -173,7 +180,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:hint="@string/profile_gender_hint">
+                android:hint="@string/profile_gender_hint"
+                app:endIconTint="@color/white_60">
 
                 <AutoCompleteTextView
                     android:id="@+id/genderInput"
