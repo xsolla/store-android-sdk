@@ -11,12 +11,19 @@ import com.xsolla.android.login.entity.response.SocialFriend
 import com.xsolla.android.login.entity.response.SocialFriendsResponse
 import com.xsolla.android.login.social.FriendsPlatform
 import com.xsolla.android.login.social.SocialNetworkForLinking
+import com.xsolla.android.storesdkexample.util.SingleLiveEvent
 
 class VmSocialFriends(application: Application) : AndroidViewModel(application) {
 
     val linkedSocialNetworks = MutableLiveData<List<SocialNetworkForLinking?>>(listOf())
 
     val socialFriendsList = MutableLiveData<MutableList<SocialFriend>>(mutableListOf())
+
+    val hasError = SingleLiveEvent<Boolean>()
+
+    init {
+        hasError.value = false
+    }
 
     fun loadAllSocialFriends() {
         socialFriendsList.value?.clear()
@@ -32,15 +39,13 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
         XLogin.getSocialFriends(friendsPlatform, VmAddFriends.REQUEST_OFFSET, VmAddFriends.REQUEST_LIMIT, false, object : GetSocialFriendsCallback {
             override fun onSuccess(data: SocialFriendsResponse) {
                 socialFriendsList.value?.addAll(data.friendsList)
-                socialFriendsList.value?.add(SocialFriend(null, "Friend", SocialNetworkForLinking.FACEBOOK, "111", "123")) //TODO remove
                 socialFriendsList.value = socialFriendsList.value
-                println("!!! ${socialFriendsList.value}") // TODO
                 callback?.invoke()
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
                 throwable?.printStackTrace()
-                println("!!! $errorMessage") // TODO
+                hasError.value = true
             }
 
         })
@@ -56,5 +61,12 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
             }
         })
     }
+
+    data class SocialFriendUiEntity(
+            val xsollaId: String?,
+            val socialId: String,
+            val imageUrl: String?,
+            val nickname: String
+    )
 
 }

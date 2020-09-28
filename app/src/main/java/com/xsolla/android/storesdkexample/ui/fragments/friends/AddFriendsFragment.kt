@@ -52,9 +52,11 @@ class AddFriendsFragment : BaseFragment() {
                 { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.FRIEND_REQUEST_CANCEL) },
                 { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.FRIEND_REQUEST_ADD) }
         )
-        socialFriendsAdapter = SocialFriendsAdapter(
-                {}, {}, {}, {}, {}, {}, {}
-        )
+        socialFriendsAdapter = SocialFriendsAdapter {
+            if (it.xsollaId != null) {
+                vmAddFriends.updateFriendship(FriendUiEntity(it.xsollaId, it.imageUrl, false, it.nickname, FriendsRelationship.NONE), UpdateUserFriendsRequestAction.FRIEND_REQUEST_ADD)
+            }
+        }
         recycler.layoutManager = LinearLayoutManager(context)
         searchInput.addTextChangedListener {
             vmAddFriends.currentSearchQuery.value = it?.toString() ?: ""
@@ -68,30 +70,22 @@ class AddFriendsFragment : BaseFragment() {
             searchAdapter.submitList(list)
         }
         vmSocialFriends.socialFriendsList.observe(viewLifecycleOwner) { list ->
-            socialFriendsAdapter.submitList(list.map { FriendUiEntity(it.socialNetworkUserId, it.avatar, false, it.name, FriendsRelationship.NONE) })
-        }
-        searchInput.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                initRecentSearchScreen()
-            } else {
-                initSocialScreen()
-            }
+            socialFriendsAdapter.submitList(list.map { VmSocialFriends.SocialFriendUiEntity(it.xsollaUserId, it.socialNetworkUserId, it.avatar, it.name) })
         }
         vmAddFriends.currentSearchQuery.observe(viewLifecycleOwner) { query ->
-            query?.let {
-                if (it.isNotEmpty()) {
-                    initSearchScreen()
-                } else {
-                    if (searchInput.hasFocus()) {
-                        initRecentSearchScreen()
-                    } else {
-                        initSocialScreen()
-                    }
-                }
+            if (query.isNullOrBlank()) {
+                initSocialScreen()
+            } else {
+                initSearchScreen()
             }
         }
         initSocialScreen()
         vmAddFriends.hasError.observe(viewLifecycleOwner) { hasError ->
+            if (hasError) {
+                showSnack("Failure")
+            }
+        }
+        vmSocialFriends.hasError.observe(viewLifecycleOwner) { hasError ->
             if (hasError) {
                 showSnack("Failure")
             }
@@ -135,14 +129,6 @@ class AddFriendsFragment : BaseFragment() {
         labelListTitle.text = getString(R.string.add_friends_recommended)
         labelListTitle.visibility = View.VISIBLE
         recycler.adapter = socialFriendsAdapter
-    }
-
-    private fun initRecentSearchScreen() {
-        labelSocialAccounts.text = getString(R.string.add_friends_recent_search)
-        labelSocialAccounts.visibility = View.VISIBLE
-        socialButtonsScroll.visibility = View.GONE
-        labelListTitle.visibility = View.GONE
-        recycler.adapter = searchAdapter
     }
 
     private fun initSearchScreen() {
