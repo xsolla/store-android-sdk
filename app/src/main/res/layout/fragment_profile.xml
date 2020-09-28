@@ -103,7 +103,8 @@
                     android:id="@+id/nicknameInput"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:imeOptions="actionNext" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -119,7 +120,8 @@
                     android:id="@+id/phoneInput"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="phone" />
+                    android:inputType="phone"
+                    android:imeOptions="actionNext" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -135,7 +137,8 @@
                     android:id="@+id/firstnameInput"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:imeOptions="actionNext" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -150,7 +153,9 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/lastnameInput"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:inputType="text"
+                    android:imeOptions="actionDone" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

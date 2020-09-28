@@ -3,6 +3,7 @@ package com.xsolla.android.storesdkexample.ui.fragments.profile
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
@@ -116,18 +117,29 @@ class ProfileFragment : BaseFragment() {
 
     private fun configureFields() {
         firstnameInput.setOnFocusChangeListener { v, hasFocus -> focusListener(v, hasFocus, firstnameLayout, FieldsForChanging.FIRST_NAME) }
-        lastnameInput.setOnFocusChangeListener { v, hasFocus -> focusListener(v, hasFocus, lastnameLayout, FieldsForChanging.LAST_NAME) }
         nicknameInput.setOnFocusChangeListener { v, hasFocus -> focusListener(v, hasFocus, nicknameLayout, FieldsForChanging.NICKNAME) }
         phoneInput.setOnFocusChangeListener { v, hasFocus -> focusListener(v, hasFocus, phoneLayout, FieldsForChanging.PHONE) }
+        lastnameInput.setOnFocusChangeListener { v, hasFocus -> focusListener(v, hasFocus, lastnameLayout, FieldsForChanging.LAST_NAME) }
+        lastnameInput.setOnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                validateAndUpdate(lastnameLayout, FieldsForChanging.LAST_NAME, (v as? EditText)?.text?.toString())
+                true
+            }
+            false
+        }
     }
 
     private fun focusListener(view: View, hasFocus: Boolean, layout: TextInputLayout, field: FieldsForChanging) {
         if (hasFocus) return
         view as EditText
 
-        val validateResult = viewModel.validateField(field, view.text?.toString())
+        validateAndUpdate(layout, field, view.text?.toString())
+    }
+
+    private fun validateAndUpdate(layout: TextInputLayout, field: FieldsForChanging, value: String?) {
+        val validateResult = viewModel.validateField(field, value)
         if (validateResult.isSuccess) {
-            viewModel.updateField(field, view.text.toString())
+            viewModel.updateField(field, value!!)
             layout.isErrorEnabled = false
         } else {
             layout.error = validateResult.errorMessage
