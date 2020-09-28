@@ -13,6 +13,7 @@ import com.xsolla.android.login.callback.StartSocialCallback
 import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.StoreActivity
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.util.ViewUtils
 import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
@@ -45,7 +46,8 @@ class LoginFragment : BaseFragment() {
 
             XLogin.authenticate(username, password, BuildConfig.WITH_LOGOUT, object : AuthCallback {
                 override fun onSuccess() {
-                    activity?.setResult(Activity.RESULT_OK)
+                    val intent = Intent(requireActivity(), StoreActivity::class.java)
+                    startActivity(intent)
                     activity?.finish()
                     ViewUtils.enable(v)
                 }
@@ -163,7 +165,8 @@ class LoginFragment : BaseFragment() {
 
     private val finishSocialCallback: FinishSocialCallback = object : FinishSocialCallback {
         override fun onAuthSuccess() {
-            activity?.setResult(Activity.RESULT_OK)
+            val intent = Intent(requireActivity(), StoreActivity::class.java)
+            startActivity(intent)
             activity?.finish()
         }
 

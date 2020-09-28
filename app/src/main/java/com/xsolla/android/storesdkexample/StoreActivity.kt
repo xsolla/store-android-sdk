@@ -32,10 +32,21 @@ import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.ui.vm.VmFriends
 import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import com.xsolla.android.storesdkexample.util.sumByLong
-import kotlinx.android.synthetic.main.activity_store.*
-import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.item_balance.view.*
-import kotlinx.android.synthetic.main.layout_drawer.*
+import kotlinx.android.synthetic.main.activity_store.lock
+import kotlinx.android.synthetic.main.app_bar_main.chargeBalanceButton
+import kotlinx.android.synthetic.main.item_balance.view.balanceAmount
+import kotlinx.android.synthetic.main.item_balance.view.balanceIcon
+import kotlinx.android.synthetic.main.layout_drawer.bgCartCounter
+import kotlinx.android.synthetic.main.layout_drawer.textAccount
+import kotlinx.android.synthetic.main.layout_drawer.textCart
+import kotlinx.android.synthetic.main.layout_drawer.textCartCounter
+import kotlinx.android.synthetic.main.layout_drawer.textEmail
+import kotlinx.android.synthetic.main.layout_drawer.textFriends
+import kotlinx.android.synthetic.main.layout_drawer.textInventory
+import kotlinx.android.synthetic.main.layout_drawer.textLogout
+import kotlinx.android.synthetic.main.layout_drawer.textUsername
+import kotlinx.android.synthetic.main.layout_drawer.textVirtualCurrency
+import kotlinx.android.synthetic.main.layout_drawer.textVirtualItems
 
 class StoreActivity : AppCompatActivity() {
 
@@ -225,7 +236,8 @@ class StoreActivity : AppCompatActivity() {
 
     private fun startLogin() {
         val intent = Intent(this, LoginActivity::class.java)
-        startActivityForResult(intent, RC_LOGIN)
+        startActivity(intent)
+        finish()
     }
 
     private fun showSnack(message: String) {
