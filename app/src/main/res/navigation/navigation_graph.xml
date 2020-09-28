@@ -60,6 +60,9 @@
         android:name="com.xsolla.android.storesdkexample.ui.fragments.profile.ChooseAvatarFragment"
         tools:layout="@layout/fragment_choose_avatar" >
         <argument
+            android:name="id"
+            app:argType="string" />
+        <argument
             android:name="currentAvatar"
             app:argType="string"
             app:nullable="true" />

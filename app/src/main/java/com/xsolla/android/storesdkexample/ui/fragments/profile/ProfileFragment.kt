@@ -1,14 +1,17 @@
 package com.xsolla.android.storesdkexample.ui.fragments.profile
 
 import android.app.DatePickerDialog
+import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.textfield.TextInputLayout
 import com.xsolla.android.login.entity.response.GenderResponse
 import com.xsolla.android.storesdkexample.R
@@ -35,7 +38,7 @@ import kotlinx.android.synthetic.main.fragment_profile.usernameInput
 import kotlinx.android.synthetic.main.fragment_profile.usernameLayout
 
 class ProfileFragment : BaseFragment() {
-    private val viewModel: VmProfile by viewModels()
+    private val viewModel: VmProfile by activityViewModels()
 
     override fun getLayout() = R.layout.fragment_profile
 
@@ -49,13 +52,13 @@ class ProfileFragment : BaseFragment() {
             // avatar
             Glide.with(this)
                 .load(userData.avatar)
-                .placeholder(R.drawable.ic_xsolla_logo)
-                .error(R.drawable.ic_xsolla_logo)
-                .circleCrop()
+                .apply(RequestOptions.circleCropTransform())
+                .placeholder(R.drawable.ic_default_avatar)
+                .error(R.drawable.ic_default_avatar)
                 .into(avatar)
 
             avatar.setOnClickListener {
-                findNavController().navigate(ProfileFragmentDirections.actionNavProfileToFragmentChooseAvatar(userData.avatar))
+                findNavController().navigate(ProfileFragmentDirections.actionNavProfileToFragmentChooseAvatar(userData.id, userData.avatar))
             }
 
             // Nickname
@@ -99,6 +102,16 @@ class ProfileFragment : BaseFragment() {
         configureBirthday()
         configureGender()
         configureFields()
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        Glide.with(this)
+            .load(viewModel.state.value?.avatar)
+            .apply(RequestOptions.circleCropTransform())
+            .placeholder(R.drawable.ic_default_avatar)
+            .error(R.drawable.ic_default_avatar)
+            .into(avatar)
     }
 
     private fun configureFields() {

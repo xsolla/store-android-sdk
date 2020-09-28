@@ -33,6 +33,7 @@ class VmProfile : ViewModel() {
         XLogin.getCurrentUserDetails(object : GetCurrentUserDetailsCallback {
             override fun onSuccess(data: UserDetailsResponse) {
                 _state.value = UserDetailsUi(
+                    id = data.id,
                     email = data.email,
                     username = "", // TODO
                     nickname = data.nickname,
@@ -127,12 +128,13 @@ class VmProfile : ViewModel() {
         throw IllegalArgumentException()
     }
 
-    fun updateAvatar(avatar: String) {
+    fun updateAvatar(avatar: String?) {
         _state.value = _state.value?.copy(avatar = avatar)
     }
 }
 
 data class UserDetailsUi(
+    val id: String,
     val email: String?,
     val username: String?,
     val nickname: String?,

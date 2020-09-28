@@ -4,15 +4,18 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.AvatarItem
 import com.xsolla.android.storesdkexample.adapter.AvatarsItemDecoration
 import com.xsolla.android.storesdkexample.adapter.ChooseAvatarAdapter
+import com.xsolla.android.storesdkexample.data.local.PrefManager
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmChooseAvatar
 import com.xsolla.android.storesdkexample.ui.vm.VmProfile
@@ -29,7 +32,7 @@ import java.io.File
 class ChooseAvatarFragment : BaseFragment() {
     private val args: ChooseAvatarFragmentArgs by navArgs()
     private val viewModel: VmChooseAvatar by viewModels()
-    private val profileViewModel: VmProfile by viewModels()
+    private val profileViewModel: VmProfile by activityViewModels()
 
     private val avatars = listOf(
         AvatarItem(R.drawable.avatar_1),
@@ -47,18 +50,23 @@ class ChooseAvatarFragment : BaseFragment() {
         close.setOnClickListener { findNavController().navigateUp() }
         Glide.with(this)
             .load(args.currentAvatar)
-            .error(R.drawable.ic_xsolla_logo)
-            .circleCrop()
+            .apply(RequestOptions.circleCropTransform())
+            .error(R.drawable.ic_default_avatar)
             .into(mainAvatar)
 
         removeAvatarButton.setOnClickListener {
-            viewModel.removeAvatar { Glide.with(this).load(R.drawable.ic_xsolla_logo).circleCrop().into(mainAvatar) }
+            viewModel.removeAvatar {
+                Glide.with(this).load(R.drawable.ic_default_avatar).circleCrop().into(mainAvatar)
+                PrefManager.setAvatar(args.id, -1)
+                avatarsRecycler.adapter?.notifyDataSetChanged()
+                profileViewModel.updateAvatar(null)
+            }
         }
 
         viewModel.uploadingResult.observe(viewLifecycleOwner) { showSnack(it) }
         viewModel.loading.observe(viewLifecycleOwner) { requireActivity().lock.isVisible = it }
 
-        val adapter = ChooseAvatarAdapter(avatars, onAvatarClickListener = { avatarRes ->
+        val adapter = ChooseAvatarAdapter(avatars, args.id, onAvatarClickListener = { avatarRes ->
             viewModel.loading.value = true
 
             val bitmap = BitmapFactory.decodeResource(resources, avatarRes)
@@ -74,7 +82,10 @@ class ChooseAvatarFragment : BaseFragment() {
 
             viewModel.uploadAvatar(file) {
                 profileViewModel.updateAvatar(it)
-                Glide.with(this).load(avatarRes).circleCrop().into(mainAvatar)
+                Glide.with(this).load(avatarRes).apply(RequestOptions.circleCropTransform()).into(mainAvatar)
+
+                PrefManager.setAvatar(args.id, avatarRes)
+                avatarsRecycler.adapter?.notifyDataSetChanged()
             }
         })
         val layoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
