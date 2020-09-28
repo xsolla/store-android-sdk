@@ -13,14 +13,7 @@ data class PaymentOptions(
 
 data class PaymentProjectSettings(val ui: UiProjectSetting)
 
-data class UiProjectSetting(val theme: PaymentUiThemes = PaymentUiThemes.DEFAULT)
-
-enum class PaymentUiThemes {
-    @SerializedName("default")
-    DEFAULT,
-    @SerializedName("dark")
-    DARK
-}
+data class UiProjectSetting(val theme: String = "default")
 
 class CustomParameters private constructor(private val parameters: Map<String, Value>) {
     class Builder {
