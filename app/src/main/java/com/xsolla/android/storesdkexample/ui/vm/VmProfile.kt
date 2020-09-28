@@ -126,6 +126,10 @@ class VmProfile : ViewModel() {
 
         throw IllegalArgumentException()
     }
+
+    fun updateAvatar(avatar: String) {
+        _state.value = _state.value?.copy(avatar = avatar)
+    }
 }
 
 data class UserDetailsUi(

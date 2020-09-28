@@ -44,6 +44,7 @@ import com.xsolla.android.login.entity.request.UserFriendsRequestType;
 import com.xsolla.android.login.entity.response.AuthResponse;
 import com.xsolla.android.login.entity.response.OauthAuthResponse;
 import com.xsolla.android.login.entity.response.PhoneResponse;
+import com.xsolla.android.login.entity.response.PictureResponse;
 import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse;
 import com.xsolla.android.login.entity.response.SocialFriendsResponse;
 import com.xsolla.android.login.entity.response.UserDetailsResponse;
@@ -667,18 +668,22 @@ public class XLogin {
                 MultipartBody.Part.createFormData("picture", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
         getInstance().loginApi
                 .uploadUserPicture("Bearer " + getToken(), part)
-                .enqueue(new Callback<Void>() {
+                .enqueue(new Callback<PictureResponse>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    public void onResponse(Call<PictureResponse> call, Response<PictureResponse> response) {
                         if (response.isSuccessful()) {
-                            callback.onSuccess();
+                            if (response.body() == null) {
+                                callback.onError(null, "Empty response");
+                            } else {
+                                callback.onSuccess(response.body());
+                            }
                         } else {
                             callback.onError(null, getErrorMessage(response.errorBody()));
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
+                    public void onFailure(Call<PictureResponse> call, Throwable t) {
                         callback.onError(t, null);
                     }
                 });

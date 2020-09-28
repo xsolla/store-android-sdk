@@ -53,3 +53,5 @@ enum class GenderResponse {
 }
 
 data class PhoneResponse(val phone: String?)
+
+data class PictureResponse(val picture: String)

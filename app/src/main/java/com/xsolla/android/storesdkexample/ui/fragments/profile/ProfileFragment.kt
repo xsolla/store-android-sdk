@@ -3,7 +3,6 @@ package com.xsolla.android.storesdkexample.ui.fragments.profile
 import android.app.DatePickerDialog
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -24,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_profile.emailLayout
 import kotlinx.android.synthetic.main.fragment_profile.firstnameInput
 import kotlinx.android.synthetic.main.fragment_profile.firstnameLayout
 import kotlinx.android.synthetic.main.fragment_profile.genderInput
-import kotlinx.android.synthetic.main.fragment_profile.genderLayout
 import kotlinx.android.synthetic.main.fragment_profile.lastnameInput
 import kotlinx.android.synthetic.main.fragment_profile.lastnameLayout
 import kotlinx.android.synthetic.main.fragment_profile.nickname
@@ -35,13 +33,8 @@ import kotlinx.android.synthetic.main.fragment_profile.phoneLayout
 import kotlinx.android.synthetic.main.fragment_profile.resetPasswordButton
 import kotlinx.android.synthetic.main.fragment_profile.usernameInput
 import kotlinx.android.synthetic.main.fragment_profile.usernameLayout
-import java.util.regex.Pattern
 
 class ProfileFragment : BaseFragment() {
-    private companion object {
-        private val PHONE_PATTERN = Pattern.compile("^\\+(\\d){5,25}\$")
-    }
-
     private val viewModel: VmProfile by viewModels()
 
     override fun getLayout() = R.layout.fragment_profile
@@ -60,6 +53,10 @@ class ProfileFragment : BaseFragment() {
                 .error(R.drawable.ic_xsolla_logo)
                 .circleCrop()
                 .into(avatar)
+
+            avatar.setOnClickListener {
+                findNavController().navigate(ProfileFragmentDirections.actionNavProfileToFragmentChooseAvatar(userData.avatar))
+            }
 
             // Nickname
             nickname.text = userData.nickname ?: userData.firstName ?: userData.lastName ?: "Nickname"
@@ -147,8 +144,8 @@ class ProfileFragment : BaseFragment() {
     private fun configureGender() {
         val items = GenderResponse.values()
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, items)
-        (genderLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
-        (genderLayout.editText as? AutoCompleteTextView)?.setOnItemClickListener { _, _, position, _ ->
+        genderInput.setAdapter(adapter)
+        genderInput.setOnItemClickListener { _, _, position, _ ->
             viewModel.updateField(FieldsForChanging.GENDER, adapter.getItem(position)!!.name)
         }
     }

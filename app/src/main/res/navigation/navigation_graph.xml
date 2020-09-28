@@ -42,7 +42,11 @@
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.xsolla.android.storesdkexample.ui.fragments.profile.ProfileFragment"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_nav_profile_to_fragment_choose_avatar"
+            app:destination="@id/fragment_choose_avatar" />
+    </fragment>
     <fragment
         android:id="@+id/fragment_reset_password"
         android:name="com.xsolla.android.storesdkexample.ui.fragments.login.ResetPasswordFragment"
@@ -51,5 +55,14 @@
     <action
         android:id="@+id/to_reset_password_fragment"
         app:destination="@id/fragment_reset_password" />
+    <fragment
+        android:id="@+id/fragment_choose_avatar"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.profile.ChooseAvatarFragment"
+        tools:layout="@layout/fragment_choose_avatar" >
+        <argument
+            android:name="currentAvatar"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 
 </navigation>
