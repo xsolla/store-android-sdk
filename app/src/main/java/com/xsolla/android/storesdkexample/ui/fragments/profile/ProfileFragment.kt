@@ -1,6 +1,7 @@
 package com.xsolla.android.storesdkexample.ui.fragments.profile
 
 import android.app.DatePickerDialog
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -8,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -21,6 +23,9 @@ import com.xsolla.android.storesdkexample.ui.fragments.login.ResetPasswordFragme
 import com.xsolla.android.storesdkexample.ui.vm.FieldsForChanging
 import com.xsolla.android.storesdkexample.ui.vm.Gender
 import com.xsolla.android.storesdkexample.ui.vm.VmProfile
+import kotlinx.android.synthetic.main.activity_store.appbar
+import kotlinx.android.synthetic.main.app_bar_main.view.balanceLayout
+import kotlinx.android.synthetic.main.app_bar_main.view.mainToolbar
 import kotlinx.android.synthetic.main.fragment_profile.avatar
 import kotlinx.android.synthetic.main.fragment_profile.birthdayInput
 import kotlinx.android.synthetic.main.fragment_profile.emailInput
@@ -46,6 +51,9 @@ class ProfileFragment : BaseFragment() {
     override fun getLayout() = R.layout.fragment_profile
 
     override fun initUI() {
+        requireActivity().appbar.balanceLayout.isVisible = false
+        requireActivity().appbar.mainToolbar.menu.clear()
+
         viewModel.error.observe(viewLifecycleOwner) {
             showSnack(it)
         }
@@ -55,9 +63,9 @@ class ProfileFragment : BaseFragment() {
             // avatar
             Glide.with(this)
                 .load(userData.avatar)
-                .apply(RequestOptions.circleCropTransform())
                 .placeholder(R.drawable.ic_default_avatar)
                 .error(R.drawable.ic_default_avatar)
+                .circleCrop()
                 .into(avatar)
 
             avatar.setOnClickListener {
@@ -88,7 +96,8 @@ class ProfileFragment : BaseFragment() {
             if (userData.birthday != null) birthdayInput.isEnabled = false
 
             // Gender
-            genderInput.setText(userData.gender?.name)
+            // https://stackoverflow.com/questions/28184543/android-autocompletetextview-not-showing-after-settext-is-called
+            genderInput.setText(userData.gender?.name, false)
 
             // Button
             resetPasswordButton.isVisible = userData.email != null
@@ -107,13 +116,19 @@ class ProfileFragment : BaseFragment() {
         configureFields()
     }
 
+    override fun onDestroyView() {
+        requireActivity().appbar.balanceLayout.isVisible = true
+        requireActivity().invalidateOptionsMenu()
+        super.onDestroyView()
+    }
+
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         Glide.with(this)
             .load(viewModel.state.value?.avatar)
-            .apply(RequestOptions.circleCropTransform())
             .placeholder(R.drawable.ic_default_avatar)
             .error(R.drawable.ic_default_avatar)
+            .circleCrop()
             .into(avatar)
     }
 
@@ -154,7 +169,7 @@ class ProfileFragment : BaseFragment() {
                 requireContext(),
                 0,
                 { _, year, calendarMonth, dayOfMonth ->
-                    val month = if (calendarMonth + 1 < 10) "0$calendarMonth" else "$calendarMonth"
+                    val month = if (calendarMonth + 1 < 10) "0${calendarMonth + 1}" else "${calendarMonth + 1}"
                     val day = if (dayOfMonth < 10) "0$dayOfMonth" else "$dayOfMonth"
                     val result = "$year-$month-$day"
                     birthdayInput.setText(result)
@@ -162,19 +177,22 @@ class ProfileFragment : BaseFragment() {
                     viewModel.updateField(FieldsForChanging.BIRTHDAY, result)
                 },
                 1990,
-                1,
+                0,
                 1
             )
 
             dialog.datePicker.maxDate = System.currentTimeMillis()
+            dialog.show()
         }
     }
 
     private fun configureGender() {
+        genderInput.setDropDownBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.main_bg_color)))
+
         val items = Gender.values().map { it.name }
         val adapter = ArrayAdapter(requireContext(), R.layout.item_gender, items)
-        (genderLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
-        (genderLayout.editText as? AutoCompleteTextView)?.setOnItemClickListener { _, _, position, _ ->
+        genderInput.setAdapter(adapter)
+        genderInput.setOnItemClickListener { _, _, position, _ ->
             viewModel.updateField(FieldsForChanging.GENDER, adapter.getItem(position)!!)
         }
     }

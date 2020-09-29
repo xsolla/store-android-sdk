@@ -50,8 +50,8 @@ class ChooseAvatarFragment : BaseFragment() {
         close.setOnClickListener { findNavController().navigateUp() }
         Glide.with(this)
             .load(args.currentAvatar)
-            .apply(RequestOptions.circleCropTransform())
             .error(R.drawable.ic_default_avatar)
+            .circleCrop()
             .into(mainAvatar)
 
         removeAvatarButton.setOnClickListener {
