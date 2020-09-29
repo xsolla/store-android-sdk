@@ -65,6 +65,12 @@ class StoreActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_store)
 
+        if (XLogin.isTokenExpired(60)) {
+            if (!XLogin.canRefreshToken()) {
+                startLogin()
+            }
+        }
+
         XStore.init(BuildConfig.PROJECT_ID, XLogin.getToken() ?: "")
 
         val toolbar: Toolbar = findViewById(R.id.mainToolbar)

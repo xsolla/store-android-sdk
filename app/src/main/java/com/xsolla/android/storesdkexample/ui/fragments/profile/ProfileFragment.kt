@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -19,6 +19,7 @@ import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.fragments.login.ResetPasswordFragmentDirections
 import com.xsolla.android.storesdkexample.ui.vm.FieldsForChanging
+import com.xsolla.android.storesdkexample.ui.vm.Gender
 import com.xsolla.android.storesdkexample.ui.vm.VmProfile
 import kotlinx.android.synthetic.main.fragment_profile.avatar
 import kotlinx.android.synthetic.main.fragment_profile.birthdayInput
@@ -27,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_profile.emailLayout
 import kotlinx.android.synthetic.main.fragment_profile.firstnameInput
 import kotlinx.android.synthetic.main.fragment_profile.firstnameLayout
 import kotlinx.android.synthetic.main.fragment_profile.genderInput
+import kotlinx.android.synthetic.main.fragment_profile.genderLayout
 import kotlinx.android.synthetic.main.fragment_profile.lastnameInput
 import kotlinx.android.synthetic.main.fragment_profile.lastnameLayout
 import kotlinx.android.synthetic.main.fragment_profile.nickname
@@ -148,7 +150,7 @@ class ProfileFragment : BaseFragment() {
 
     private fun configureBirthday() {
         birthdayInput.setOnClickListener {
-            DatePickerDialog(
+            val dialog = DatePickerDialog(
                 requireContext(),
                 0,
                 { _, year, calendarMonth, dayOfMonth ->
@@ -160,18 +162,20 @@ class ProfileFragment : BaseFragment() {
                     viewModel.updateField(FieldsForChanging.BIRTHDAY, result)
                 },
                 1990,
-                -1,
-                -1
-            ).show()
+                1,
+                1
+            )
+
+            dialog.datePicker.maxDate = System.currentTimeMillis()
         }
     }
 
     private fun configureGender() {
-        val items = GenderResponse.values()
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, items)
-        genderInput.setAdapter(adapter)
-        genderInput.setOnItemClickListener { _, _, position, _ ->
-            viewModel.updateField(FieldsForChanging.GENDER, adapter.getItem(position)!!.name)
+        val items = Gender.values().map { it.name }
+        val adapter = ArrayAdapter(requireContext(), R.layout.item_gender, items)
+        (genderLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+        (genderLayout.editText as? AutoCompleteTextView)?.setOnItemClickListener { _, _, position, _ ->
+            viewModel.updateField(FieldsForChanging.GENDER, adapter.getItem(position)!!)
         }
     }
 }

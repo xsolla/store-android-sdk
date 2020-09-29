@@ -41,7 +41,7 @@ class VmProfile : ViewModel() {
                     lastName = data.lastName,
                     birthday = data.birthday,
                     phone = data.phone,
-                    gender = data.gender,
+                    gender = Gender.getBy(data.gender),
                     avatar = data.picture
                 )
             }
@@ -70,7 +70,7 @@ class VmProfile : ViewModel() {
                 state = state.copy(lastName = value)
             }
             FieldsForChanging.GENDER -> {
-                state = state.copy(gender = if (value.startsWith("M", ignoreCase = true)) GenderResponse.M else GenderResponse.F)
+                state = state.copy(gender = if (value.startsWith("M", ignoreCase = true)) Gender.Male else Gender.Female)
             }
             FieldsForChanging.BIRTHDAY -> {
                 state = state.copy(birthday = value)
@@ -93,7 +93,8 @@ class VmProfile : ViewModel() {
                 }
             })
         } else {
-            XLogin.updateCurrentUserDetails(state.birthday, state.firstName, state.gender?.name?.toLowerCase(Locale.getDefault()), state.lastName, state.nickname, object : UpdateCurrentUserDetailsCallback {
+            val gender = state.gender?.name?.toLowerCase(Locale.getDefault())?.first()?.toString()
+            XLogin.updateCurrentUserDetails(state.birthday, state.firstName, gender, state.lastName, state.nickname, object : UpdateCurrentUserDetailsCallback {
                 override fun onSuccess() {
                     val result = FieldChangeResult(field, "${field.name} was successfully changed")
                     fieldChangeResult.value = result
@@ -142,7 +143,7 @@ data class UserDetailsUi(
     val lastName: String?,
     val birthday: String?,
     val phone: String?,
-    val gender: GenderResponse?,
+    val gender: Gender?,
     val avatar: String?
 )
 
@@ -158,6 +159,21 @@ enum class FieldsForChanging {
 
     companion object {
         val textFields = arrayOf(NICKNAME, FIRST_NAME, LAST_NAME)
+    }
+}
+
+enum class Gender(val response: GenderResponse) {
+    Female(GenderResponse.F),
+    Male(GenderResponse.M);
+
+    companion object {
+        fun getBy(response: GenderResponse?): Gender? {
+            return when (response) {
+                GenderResponse.F -> Female
+                GenderResponse.M -> Male
+                null -> null
+            }
+        }
     }
 }
 

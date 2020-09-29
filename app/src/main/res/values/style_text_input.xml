@@ -46,8 +46,7 @@
         <item name="android:textColorHint">#61FFFFFF</item>
         <item name="boxCornerRadiusTopStart">4dp</item>
         <item name="boxCornerRadiusTopEnd">4dp</item>
-        <item name="android:textCursorDrawable">@drawable/input_cursor</item>
-        <item name="endIconTint">@color/filledbox_stroke_color</item>
+        <item name="endIconTint">@color/white_60</item>
     </style>
 
     <style name="TextAppearance.Xsolla.Input.Hint" parent="">
