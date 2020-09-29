@@ -586,7 +586,12 @@ public class XLogin {
                 });
     }
 
-    // https://developers.xsolla.com/user-account-api/all-user-details/get-user-details
+    /**
+     * Gets details of the user authenticated
+     *
+     * @param callback    callback with data
+     * @see <a href="https://developers.xsolla.com/user-account-api/all-user-details/get-user-details">User Account API Reference</a>
+     */
     public static void getCurrentUserDetails(final GetCurrentUserDetailsCallback callback) {
         getInstance().loginApi
                 .getCurrentUserDetails("Bearer " + getToken())
@@ -612,7 +617,17 @@ public class XLogin {
                 });
     }
 
-    // https://developers.xsolla.com/user-account-api/all-user-details/patchusersme/
+    /**
+     * Updates the details of the authenticated user
+     *
+     * @param birthday    birthday in the format "yyyy-MM-dd"
+     * @param firstName   first name
+     * @param gender      gender ("m" or "f")
+     * @param lastName    last name
+     * @param nickname    nickname
+     * @param callback    status callback
+     * @see <a href="https://developers.xsolla.com/user-account-api/all-user-details/patchusersme/">User Account API Reference</a>
+     */
     public static void updateCurrentUserDetails(
             String birthday,
             String firstName,
@@ -641,7 +656,12 @@ public class XLogin {
                 });
     }
 
-    // https://developers.xsolla.com/user-account-api/user-picture/deleteusersmepicture
+    /**
+     * Deletes avatar of the authenticated user
+     *
+     * @param callback    status callback
+     * @see <a href="https://developers.xsolla.com/user-account-api/user-picture/deleteusersmepicture/">User Account API Reference</a>
+     */
     public static void deleteCurrentUserAvatar(final DeleteCurrentUserAvatarCallback callback) {
         getInstance().loginApi
                 .deleteUserPicture("Bearer " + getToken())
@@ -662,7 +682,13 @@ public class XLogin {
                 });
     }
 
-    // https://developers.xsolla.com/user-account-api/user-picture/postusersmepicture
+    /**
+     * Uploads avatar for the authenticated user
+     *
+     * @param file        file that stores the avatar for uploading
+     * @param callback    callback with url of new avatar
+     * @see <a href="https://developers.xsolla.com/user-account-api/user-picture/postusersmepicture">User Account API Reference</a>
+     */
     public static void uploadCurrentUserAvatar(File file, final UploadCurrentUserAvatarCallback callback) {
         MultipartBody.Part part =
                 MultipartBody.Part.createFormData("picture", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
@@ -689,6 +715,12 @@ public class XLogin {
                 });
     }
 
+    /**
+     * Gets the phone number of the authenticated user
+     *
+     * @param callback    callback with data
+     * @see <a href="https://developers.xsolla.com/user-account-api/user-phone-number/getusersmephone">User Account API Reference</a>
+     */
     public static void getCurrentUserPhone(final GetCurrentUserPhoneCallback callback) {
         getInstance().loginApi
                 .getUserPhone("Bearer " + getToken())
@@ -713,6 +745,13 @@ public class XLogin {
                 });
     }
 
+    /**
+     * Updates the phone number of the authenticated user
+     *
+     * @param phone       new phone value
+     * @param callback    status callback
+     * @see <a href="https://developers.xsolla.com/user-account-api/user-phone-number/postusersmephone">User Account API Reference</a>
+     */
     public static void updateCurrentUserPhone(String phone, final UpdateCurrentUserPhoneCallback callback) {
         UpdateUserPhoneBody updateUserPhoneBody = new UpdateUserPhoneBody(phone);
         getInstance().loginApi
@@ -734,6 +773,13 @@ public class XLogin {
                 });
     }
 
+    /**
+     * Deletes the phone number of the authenticated user
+     *
+     * @param phone       current user's phone
+     * @param callback    status callback
+     * @see <a href="https://developers.xsolla.com/user-account-api/user-phone-number/deleteusersmephonephonenumber">User Account API Reference</a>
+     */
     public static void deleteCurrentUserPhone(String phone, final DeleteCurrentUserPhoneCallback callback) {
         getInstance().loginApi
                 .deleteUserPhone("Bearer " + getToken(), phone)
