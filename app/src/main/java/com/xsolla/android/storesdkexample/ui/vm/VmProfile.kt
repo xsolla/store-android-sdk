@@ -23,7 +23,7 @@ class VmProfile : ViewModel() {
 
     val error = SingleLiveEvent<String>()
 
-    val fieldChangeResult: SingleLiveEvent<FieldChangeResult> = SingleLiveEvent()
+    val fieldChangeResult = SingleLiveEvent<FieldChangeResult>()
 
     init {
         load()
