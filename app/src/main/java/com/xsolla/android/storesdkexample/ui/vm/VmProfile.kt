@@ -85,6 +85,7 @@ class VmProfile : ViewModel() {
                 override fun onSuccess() {
                     val result = FieldChangeResult(field, "${field.name} was successfully changed")
                     fieldChangeResult.value = result
+                    _state.value = state
                 }
 
                 override fun onError(throwable: Throwable?, errorMessage: String?) {

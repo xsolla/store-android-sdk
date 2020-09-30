@@ -1,22 +1,17 @@
 package com.xsolla.android.storesdkexample.ui.fragments.profile
 
 import android.app.DatePickerDialog
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.textfield.TextInputLayout
-import com.xsolla.android.login.entity.response.GenderResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.fragments.login.ResetPasswordFragmentDirections
@@ -33,7 +28,6 @@ import kotlinx.android.synthetic.main.fragment_profile.emailLayout
 import kotlinx.android.synthetic.main.fragment_profile.firstnameInput
 import kotlinx.android.synthetic.main.fragment_profile.firstnameLayout
 import kotlinx.android.synthetic.main.fragment_profile.genderInput
-import kotlinx.android.synthetic.main.fragment_profile.genderLayout
 import kotlinx.android.synthetic.main.fragment_profile.lastnameInput
 import kotlinx.android.synthetic.main.fragment_profile.lastnameLayout
 import kotlinx.android.synthetic.main.fragment_profile.nickname
@@ -68,10 +62,6 @@ class ProfileFragment : BaseFragment() {
                 .circleCrop()
                 .into(avatar)
 
-            avatar.setOnClickListener {
-                findNavController().navigate(ProfileFragmentDirections.actionNavProfileToFragmentChooseAvatar(userData.id, userData.avatar))
-            }
-
             // Nickname
             nickname.text = userData.nickname ?: userData.firstName ?: userData.lastName ?: "Nickname"
             userData.nickname?.let { nicknameInput.setText(it) }
@@ -85,7 +75,7 @@ class ProfileFragment : BaseFragment() {
             usernameInput.setText(userData.username)
 
             // Phone
-            userData.phone?.let { phoneInput.setText(it) }
+            phoneInput.setText(userData.phone)
 
             // Names
             firstnameInput.setText(userData.firstName)
@@ -111,8 +101,12 @@ class ProfileFragment : BaseFragment() {
             findNavController().navigate(ResetPasswordFragmentDirections.toResetPasswordFragment())
         }
 
+        avatar.setOnClickListener {
+            val id = viewModel.state.value?.id ?: return@setOnClickListener
+            findNavController().navigate(ProfileFragmentDirections.actionNavProfileToFragmentChooseAvatar(id, viewModel.state.value?.avatar))
+        }
+
         configureBirthday()
-        configureGender()
         configureFields()
     }
 
@@ -120,6 +114,11 @@ class ProfileFragment : BaseFragment() {
         requireActivity().appbar.balanceLayout.isVisible = true
         requireActivity().invalidateOptionsMenu()
         super.onDestroyView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        configureGender()
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -187,8 +186,6 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun configureGender() {
-        genderInput.setDropDownBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.main_bg_color)))
-
         val items = Gender.values().map { it.name }
         val adapter = ArrayAdapter(requireContext(), R.layout.item_gender, items)
         genderInput.setAdapter(adapter)
