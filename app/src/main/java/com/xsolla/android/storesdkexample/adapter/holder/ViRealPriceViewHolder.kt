@@ -52,6 +52,7 @@ class ViRealPriceViewHolder(
             XStore.updateItemFromCurrentCart(item.sku, quantity + 1, object : XStoreCallback<Void>() {
                 override fun onSuccess(response: Void?) {
                     vmCart.updateCart()
+                    purchaseListener.onSuccess()
                     ViewUtils.enable(v)
                 }
 
