@@ -43,61 +43,61 @@ class ChooseAvatarFragment : BaseFragment() {
         AvatarItem(R.drawable.avatar_6),
     )
 
+    private lateinit var adapter: ChooseAvatarAdapter
+
     override fun getLayout() = R.layout.fragment_choose_avatar
 
     override fun initUI() {
         requireActivity().appbar.mainToolbar.isGone = true
         close.setOnClickListener { findNavController().navigateUp() }
-        Glide.with(this)
-            .load(args.currentAvatar)
-            .error(R.drawable.ic_default_avatar)
-            .circleCrop()
-            .into(mainAvatar)
+        Glide.with(this).load(args.currentAvatar).error(R.drawable.ic_default_avatar).circleCrop().into(mainAvatar)
+
+        viewModel.uploadingResult.observe(viewLifecycleOwner) { showSnack(it) }
+        viewModel.loading.observe(viewLifecycleOwner) { requireActivity().lock.isVisible = it }
+
+        adapter = ChooseAvatarAdapter(avatars, args.id, onAvatarClickListener = { avatarRes ->
+            viewModel.loading.value = true
+
+            val file = prepareFile(avatarRes)
+            viewModel.uploadAvatar(file) {
+                profileViewModel.updateAvatar(it)
+                Glide.with(this).load(avatarRes).circleCrop().into(mainAvatar)
+
+                PrefManager.setAvatar(args.id, avatarRes)
+                adapter.notifyDataSetChanged()
+            }
+        })
+        avatarsRecycler.adapter = adapter
+        avatarsRecycler.layoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
+        avatarsRecycler.addItemDecoration(AvatarsItemDecoration())
+        avatarsRecycler.setHasFixedSize(true)
 
         removeAvatarButton.setOnClickListener {
             viewModel.removeAvatar {
                 Glide.with(this).load(R.drawable.ic_default_avatar).circleCrop().into(mainAvatar)
                 PrefManager.setAvatar(args.id, -1)
-                avatarsRecycler.adapter?.notifyDataSetChanged()
+                adapter.notifyDataSetChanged()
                 profileViewModel.updateAvatar(null)
             }
         }
-
-        viewModel.uploadingResult.observe(viewLifecycleOwner) { showSnack(it) }
-        viewModel.loading.observe(viewLifecycleOwner) { requireActivity().lock.isVisible = it }
-
-        val adapter = ChooseAvatarAdapter(avatars, args.id, onAvatarClickListener = { avatarRes ->
-            viewModel.loading.value = true
-
-            val bitmap = BitmapFactory.decodeResource(resources, avatarRes)
-            val bos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, bos)
-
-            val bytes = bos.toByteArray()
-            val file = File(requireContext().cacheDir, "avatar.jpeg")
-            file.outputStream().use {
-                it.write(bytes)
-                it.flush()
-            }
-
-            viewModel.uploadAvatar(file) {
-                profileViewModel.updateAvatar(it)
-                Glide.with(this).load(avatarRes).apply(RequestOptions.circleCropTransform()).into(mainAvatar)
-
-                PrefManager.setAvatar(args.id, avatarRes)
-                avatarsRecycler.adapter?.notifyDataSetChanged()
-            }
-        })
-        val layoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
-        val decoration = AvatarsItemDecoration()
-        avatarsRecycler.adapter = adapter
-        avatarsRecycler.layoutManager = layoutManager
-        avatarsRecycler.addItemDecoration(decoration)
-        avatarsRecycler.setHasFixedSize(true)
     }
 
     override fun onDestroyView() {
         requireActivity().appbar.mainToolbar.isVisible = true
         super.onDestroyView()
+    }
+
+    private fun prepareFile(resourceId: Int): File {
+        val bitmap = BitmapFactory.decodeResource(resources, resourceId)
+        val bos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, bos)
+
+        val bytes = bos.toByteArray()
+        val file = File(requireContext().cacheDir, "avatar.jpeg")
+        file.outputStream().use {
+            it.write(bytes)
+            it.flush()
+        }
+        return file
     }
 }
