@@ -35,7 +35,7 @@ class VmProfile : ViewModel() {
                 _state.value = UserDetailsUi(
                     id = data.id,
                     email = data.email,
-                    username = "", // TODO
+                    username = data.username,
                     nickname = data.nickname,
                     firstName = data.firstName,
                     lastName = data.lastName,
