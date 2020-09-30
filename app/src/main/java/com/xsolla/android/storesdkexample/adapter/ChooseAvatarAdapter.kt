@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.data.local.PrefManager
+import com.xsolla.android.storesdkexample.util.extensions.dpToPx
 import kotlinx.android.synthetic.main.item_avatar.view.avatarForChoosing
 import kotlinx.android.synthetic.main.item_avatar.view.avatarOverlay
 import kotlinx.android.synthetic.main.item_avatar.view.icCheck
@@ -53,11 +54,11 @@ class AvatarsItemDecoration : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         super.getItemOffsets(outRect, view, parent, state)
 
-        outRect.left = 14 // TODO
+        outRect.left = 8.dpToPx()
 
         val position = parent.getChildAdapterPosition(view)
         if (position >= 3) {
-            outRect.top = 14
+            outRect.top = 8.dpToPx()
         }
     }
 }
