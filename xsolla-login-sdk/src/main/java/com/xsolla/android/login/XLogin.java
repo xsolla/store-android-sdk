@@ -125,6 +125,16 @@ public class XLogin {
      *
      * @param context      application context
      * @param projectId    login ID from Publisher Account &gt; Login settings
+     */
+    public static void initJwt(Context context, String projectId) {
+        initJwt(context, projectId, null);
+    }
+
+    /**
+     * Initialize SDK for JWT
+     *
+     * @param context      application context
+     * @param projectId    login ID from Publisher Account &gt; Login settings
      * @param socialConfig configuration for native social auth
      */
     public static void initJwt(Context context, String projectId, @Nullable SocialConfig socialConfig) {
@@ -141,6 +151,17 @@ public class XLogin {
      */
     public static void initJwt(Context context, String projectId, String callbackUrl, @Nullable SocialConfig socialConfig) {
         init(context, projectId, callbackUrl, false, 0, socialConfig);
+    }
+
+    /**
+     * Initialize SDK for OAuth 2.0
+     *
+     * @param context       application context
+     * @param projectId     login ID from Publisher Account &gt; Login settings
+     * @param oauthClientId OAuth 2.0 client ID
+     */
+    public static void initOauth(Context context, String projectId, int oauthClientId) {
+        initOauth(context, projectId, oauthClientId, null);
     }
 
     /**

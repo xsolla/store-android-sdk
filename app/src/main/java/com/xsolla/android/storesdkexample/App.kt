@@ -8,9 +8,9 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.USE_OAUTH) {
-            XLogin.initOauth(this, BuildConfig.LOGIN_ID, BuildConfig.OAUTH_CLIENT_ID, null)
+            XLogin.initOauth(this, BuildConfig.LOGIN_ID, BuildConfig.OAUTH_CLIENT_ID)
         } else {
-            XLogin.initJwt(this, BuildConfig.LOGIN_ID, null)
+            XLogin.initJwt(this, BuildConfig.LOGIN_ID)
         }
     }
 }
