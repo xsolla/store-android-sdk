@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -66,6 +68,12 @@ class CartFragment : Fragment(), CartChangeListener {
             val sumWithoutDiscount = items.map { item -> item.price!!.getAmountWithoutDiscountDecimal()!! * item.quantity.toBigDecimal() }.fold(BigDecimal.ZERO, BigDecimal::add)
             val sumWithDiscount = items.map { item -> item.price!!.getAmountDecimal()!! * item.quantity.toBigDecimal() }.fold(BigDecimal.ZERO, BigDecimal::add)
             val discount = sumWithoutDiscount.minus(sumWithDiscount)
+
+            val intDiscount = discount.toInt()
+            subtotalLabel.isGone = intDiscount == 0
+            subtotalValue.isGone = intDiscount == 0
+            discountLabel.isGone = intDiscount == 0
+            discountValue.isGone = intDiscount == 0
 
             subtotalValue.text = AmountUtils.prettyPrint(sumWithoutDiscount, currency!!)
             discountValue.text = "- ${AmountUtils.prettyPrint(discount, currency)}"

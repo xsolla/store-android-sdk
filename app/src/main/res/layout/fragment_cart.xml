@@ -17,36 +17,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/checkoutButton"
-        style="@style/Widget.Xsolla.ActionButton.Small"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/cart_fragment_action_button_right_margin"
-        android:layout_marginEnd="@dimen/cart_fragment_action_button_left_margin"
-        android:text="@string/cart_fragment_checkout_button"
-        app:layout_constraintBottom_toTopOf="@id/continueButton"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/continueButton"
-        style="@style/Widget.Xsolla.ActionButton.Small.Secondary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/cart_fragment_action_button_right_margin"
-        android:layout_marginEnd="@dimen/cart_fragment_action_button_left_margin"
-        android:layout_marginBottom="8dp"
-        android:text="@string/cart_fragment_continue_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fadeScrollbars="false"
+        android:scrollbarSize="6dp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@id/subtotalLabel"
+        app:layout_constraintBottom_toTopOf="@id/pricesAndButtonsLayout"
         app:layout_constraintTop_toBottomOf="@id/textFragmentTitle"
         tools:listitem="@layout/item_vi_real_price" />
 
@@ -60,74 +38,108 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textFragmentTitle" />
 
-    <TextView
-        android:id="@+id/subtotalLabel"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pricesAndButtonsLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="70dp"
-        android:fontFamily="sans-serif"
-        android:text="@string/cart_subtotal"
-        android:textAllCaps="true"
-        android:textColor="@color/white_color"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/checkoutButton"
-        app:layout_constraintStart_toStartOf="@+id/checkoutButton" />
+        android:background="@color/secondary_color_10"
+        android:paddingTop="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <TextView
-        android:id="@+id/discountLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:text="@string/cart_discount"
-        android:textColor="@color/secondary_color"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="@+id/checkoutButton"
-        app:layout_constraintTop_toBottomOf="@id/subtotalLabel" />
+        <Button
+            android:id="@+id/continueButton"
+            style="@style/Widget.Xsolla.ActionButton.Small.Secondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/cart_fragment_action_button_right_margin"
+            android:layout_marginEnd="@dimen/cart_fragment_action_button_left_margin"
+            android:layout_marginBottom="8dp"
+            android:text="@string/cart_fragment_continue_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/totalLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:fontFamily="sans-serif"
-        android:text="@string/cart_total"
-        android:textAllCaps="true"
-        android:textColor="@color/white_color"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@+id/checkoutButton"
-        app:layout_constraintTop_toBottomOf="@id/discountLabel" />
+        <Button
+            android:id="@+id/checkoutButton"
+            style="@style/Widget.Xsolla.ActionButton.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/cart_fragment_action_button_right_margin"
+            android:layout_marginEnd="@dimen/cart_fragment_action_button_left_margin"
+            android:text="@string/cart_fragment_checkout_button"
+            app:layout_constraintBottom_toTopOf="@id/continueButton"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/subtotalValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:textColor="@color/white_color"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/subtotalLabel"
-        app:layout_constraintEnd_toEndOf="@+id/checkoutButton"
-        tools:text="12800" />
+        <TextView
+            android:id="@+id/subtotalLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="70dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/cart_subtotal"
+            android:textAllCaps="true"
+            android:textColor="@color/white_color"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/checkoutButton"
+            app:layout_constraintStart_toStartOf="@+id/checkoutButton" />
 
-    <TextView
-        android:id="@+id/discountValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:textColor="@color/secondary_color"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="@+id/checkoutButton"
-        app:layout_constraintTop_toBottomOf="@id/subtotalValue"
-        tools:text="12800" />
+        <TextView
+            android:id="@+id/discountLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="@string/cart_discount"
+            android:textColor="@color/secondary_color"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="@+id/checkoutButton"
+            app:layout_constraintTop_toBottomOf="@id/subtotalLabel" />
 
-    <TextView
-        android:id="@+id/totalValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:textColor="@color/white_color"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="@+id/checkoutButton"
-        app:layout_constraintTop_toTopOf="@id/totalLabel"
-        tools:text="12800" />
+        <TextView
+            android:id="@+id/subtotalValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/white_color"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/subtotalLabel"
+            app:layout_constraintEnd_toEndOf="@+id/checkoutButton"
+            tools:text="12800" />
+
+        <TextView
+            android:id="@+id/discountValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/secondary_color"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="@+id/checkoutButton"
+            app:layout_constraintTop_toBottomOf="@id/subtotalValue"
+            tools:text="12800" />
+
+        <TextView
+            android:id="@+id/totalLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/cart_total"
+            android:textAllCaps="true"
+            android:textColor="@color/white_color"
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="@+id/checkoutButton"
+            app:layout_constraintTop_toBottomOf="@id/discountLabel" />
+
+        <TextView
+            android:id="@+id/totalValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/white_color"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toEndOf="@+id/checkoutButton"
+            app:layout_constraintTop_toTopOf="@id/totalLabel"
+            tools:text="12800" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
