@@ -73,7 +73,7 @@ class CartAdapter(
 
             itemView.itemVirtualPriceIcon.visibility = View.VISIBLE
             Glide.with(itemView.context).load(price.imageUrl).into(itemView.itemVirtualPriceIcon)
-            if (price.getAmountDecimal() == price.getAmountWithoutDiscountDecimal()) {
+            if (price.getAmountDecimal() == price.getAmountWithoutDiscountDecimal() || price.calculatedPrice?.amountWithoutDiscount == null) {
                 itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!)
                 itemView.itemOldPrice.visibility = View.INVISIBLE
                 itemView.itemSaleLabel.visibility = View.INVISIBLE
