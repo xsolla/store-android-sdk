@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.14.0] - 2020-08-26
+
+### Changed
+
+- Sample app UI.
+
+### Added
+
+- The support for OAuth 2.0 authorization.
+- The ability to invalidate JWT.
+
+
 ## [0.13.1] - 2020-08-25
 
 ### Fixed
