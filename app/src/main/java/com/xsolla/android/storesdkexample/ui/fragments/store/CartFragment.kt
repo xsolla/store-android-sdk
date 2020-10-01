@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -25,7 +24,15 @@ import com.xsolla.android.storesdkexample.adapter.CartAdapter
 import com.xsolla.android.storesdkexample.listener.CartChangeListener
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.util.AmountUtils
-import kotlinx.android.synthetic.main.fragment_cart.*
+import kotlinx.android.synthetic.main.fragment_cart.checkoutButton
+import kotlinx.android.synthetic.main.fragment_cart.clearButton
+import kotlinx.android.synthetic.main.fragment_cart.continueButton
+import kotlinx.android.synthetic.main.fragment_cart.discountLabel
+import kotlinx.android.synthetic.main.fragment_cart.discountValue
+import kotlinx.android.synthetic.main.fragment_cart.recycler
+import kotlinx.android.synthetic.main.fragment_cart.subtotalLabel
+import kotlinx.android.synthetic.main.fragment_cart.subtotalValue
+import kotlinx.android.synthetic.main.fragment_cart.totalValue
 import java.math.BigDecimal
 
 class CartFragment : Fragment(), CartChangeListener {
@@ -143,14 +150,7 @@ class CartFragment : Fragment(), CartChangeListener {
         Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show()
     }
 
-    companion object {
-        const val RC_PAYSTATION = 1
-
-        @JvmStatic
-        fun newInstance() =
-                CartFragment().apply {
-                    arguments = Bundle().apply {
-                    }
-                }
+    private companion object {
+        private const val RC_PAYSTATION = 1
     }
 }
