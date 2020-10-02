@@ -4,35 +4,61 @@ import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.common.ExpirationPeriod
 import com.xsolla.android.store.entity.response.common.VirtualPrice
-import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
+import com.xsolla.android.storesdkexample.ui.fragments.store.VirtualItemUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.util.AmountUtils
 import com.xsolla.android.storesdkexample.util.ViewUtils
 import kotlinx.android.synthetic.main.item_vi_virtual_price.view.*
 
 class ViVirtualPriceViewHolder(
-        inflater: LayoutInflater,
-        parent: ViewGroup,
-        private val vmBalance: VmBalance,
-        private val purchaseListener: PurchaseListener
+    inflater: LayoutInflater,
+    parent: ViewGroup,
+    private val vmBalance: VmBalance,
+    private val purchaseListener: PurchaseListener
 ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_vi_virtual_price, parent, false)) {
 
-    fun bind(item: VirtualItemsResponse.Item) {
+    fun bind(item: VirtualItemUiEntity) {
         val price = item.virtualPrices[0]
         Glide.with(itemView).load(item.imageUrl).into(itemView.itemIcon)
         itemView.itemName.text = item.name
+        bindPurchasedPlaceholderIfNeed(item)
         bindItemPrice(price)
         bindExpirationPeriod(item.inventoryOption?.expirationPeriod)
         initBuyButton(item, price)
+    }
+
+    private fun bindPurchasedPlaceholderIfNeed(item: VirtualItemUiEntity) {
+        if (item.hasInInventory) {
+            if (item.inventoryOption?.consumable == null && item.inventoryOption?.expirationPeriod == null) {
+                itemView.purchasedPlaceholder.isVisible = true
+                itemView.buyButton?.isVisible = false
+                itemView.itemPrice.isVisible = false
+                itemView.itemOldPrice.isVisible = false
+                itemView.itemSaleLabel.isVisible = false
+            } else {
+                itemView.purchasedPlaceholder.isVisible = false
+                itemView.buyButton?.isVisible = true
+                itemView.itemPrice.isVisible = true
+                itemView.itemOldPrice.isVisible = true
+                itemView.itemSaleLabel.isVisible = true
+            }
+        } else {
+            itemView.purchasedPlaceholder.isVisible = false
+            itemView.buyButton?.isVisible = true
+            itemView.itemPrice.isVisible = true
+            itemView.itemOldPrice.isVisible = true
+            itemView.itemSaleLabel.isVisible = true
+        }
     }
 
     private fun bindItemPrice(price: VirtualPrice) {
@@ -68,7 +94,7 @@ class ViVirtualPriceViewHolder(
         }
     }
 
-    private fun initBuyButton(item: VirtualItemsResponse.Item, virtualPrice: VirtualPrice) {
+    private fun initBuyButton(item: VirtualItemUiEntity, virtualPrice: VirtualPrice) {
         itemView.buyButton.setOnClickListener { v ->
             ViewUtils.disable(v)
             XStore.createOrderByVirtualCurrency(item.sku, virtualPrice.sku, object : XStoreCallback<CreateOrderByVirtualCurrencyResponse?>() {
@@ -85,5 +111,4 @@ class ViVirtualPriceViewHolder(
             })
         }
     }
-
 }
