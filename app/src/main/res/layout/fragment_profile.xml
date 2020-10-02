@@ -69,7 +69,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailInput"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:textColor="@color/filledbox_text_color" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -85,7 +86,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/usernameInput"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:textColor="@color/filledbox_text_color" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -102,7 +104,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:imeOptions="actionNext"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:textColor="@color/filledbox_text_color" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -119,7 +122,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:imeOptions="actionNext"
-                    android:inputType="phone" />
+                    android:inputType="phone"
+                    android:textColor="@color/filledbox_text_color" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -136,7 +140,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:imeOptions="actionNext"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:textColor="@color/filledbox_text_color" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -153,7 +158,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:imeOptions="actionDone"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:textColor="@color/filledbox_text_color" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -163,19 +169,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-
                 android:hint="@string/profile_birthday_hint">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/birthdayInput"
                     android:layout_width="match_parent"
-
                     android:layout_height="match_parent"
                     android:clickable="false"
                     android:focusable="false"
                     android:inputType="none"
-
-                    android:longClickable="false" />
+                    android:longClickable="false"
+                    android:textColor="@color/filledbox_text_color" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -191,7 +195,8 @@
                     android:id="@+id/genderInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none" />
+                    android:inputType="none"
+                    android:textColor="@color/filledbox_text_color" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
