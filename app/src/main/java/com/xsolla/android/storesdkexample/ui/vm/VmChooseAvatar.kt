@@ -12,6 +12,10 @@ class VmChooseAvatar : ViewModel() {
     val uploadingResult = SingleLiveEvent<String>()
     val loading = SingleLiveEvent<Boolean>()
 
+    init {
+        loading.value = false
+    }
+
     fun uploadAvatar(file: File, onSuccess: (picture: String) -> Unit) {
         loading.value = true
 

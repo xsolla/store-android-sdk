@@ -3,6 +3,7 @@ package com.xsolla.android.storesdkexample.ui.fragments.profile
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.core.view.isGone
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -10,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.AvatarItem
 import com.xsolla.android.storesdkexample.adapter.AvatarsItemDecoration
@@ -24,7 +24,9 @@ import kotlinx.android.synthetic.main.activity_store.lock
 import kotlinx.android.synthetic.main.app_bar_main.view.mainToolbar
 import kotlinx.android.synthetic.main.fragment_choose_avatar.avatarsRecycler
 import kotlinx.android.synthetic.main.fragment_choose_avatar.close
+import kotlinx.android.synthetic.main.fragment_choose_avatar.lockForeground
 import kotlinx.android.synthetic.main.fragment_choose_avatar.mainAvatar
+import kotlinx.android.synthetic.main.fragment_choose_avatar.progress
 import kotlinx.android.synthetic.main.fragment_choose_avatar.removeAvatarButton
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -53,7 +55,10 @@ class ChooseAvatarFragment : BaseFragment() {
         Glide.with(this).load(args.currentAvatar).error(R.drawable.ic_default_avatar).circleCrop().into(mainAvatar)
 
         viewModel.uploadingResult.observe(viewLifecycleOwner) { showSnack(it) }
-        viewModel.loading.observe(viewLifecycleOwner) { requireActivity().lock.isVisible = it }
+        viewModel.loading.observe(viewLifecycleOwner) {
+            lockForeground.isVisible = it
+            progress.isInvisible = !it
+        }
 
         adapter = ChooseAvatarAdapter(avatars, args.id, onAvatarClickListener = { avatarRes ->
             viewModel.loading.value = true
@@ -75,6 +80,7 @@ class ChooseAvatarFragment : BaseFragment() {
         removeAvatarButton.setOnClickListener {
             viewModel.removeAvatar {
                 Glide.with(this).load(R.drawable.ic_default_avatar).circleCrop().into(mainAvatar)
+
                 PrefManager.setAvatar(args.id, -1)
                 adapter.notifyDataSetChanged()
                 profileViewModel.updateAvatar(null)

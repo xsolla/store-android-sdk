@@ -26,8 +26,6 @@ class VmProfile : ViewModel() {
 
     val message = SingleLiveEvent<String>()
 
-    val fieldChangeResult = SingleLiveEvent<FieldChangeResult>()
-
     init {
         load()
     }
@@ -37,15 +35,15 @@ class VmProfile : ViewModel() {
             override fun onSuccess(data: UserDetailsResponse) {
                 val uiEntity = UserDetailsUi(
                     id = data.id,
-                    email = data.email,
-                    username = data.username,
-                    nickname = data.nickname,
-                    firstName = data.firstName,
-                    lastName = data.lastName,
-                    birthday = data.birthday,
-                    phone = data.phone,
+                    email = data.email ?: "",
+                    username = data.username ?: "",
+                    nickname = data.nickname ?: "",
+                    firstName = data.firstName ?: "",
+                    lastName = data.lastName ?: "",
+                    birthday = data.birthday ?: "",
+                    phone = data.phone ?: "",
                     gender = Gender.getBy(data.gender),
-                    avatar = data.picture
+                    avatar = data.picture ?: ""
                 )
                 _state.value = uiEntity
                 stateForChanging.value = uiEntity
@@ -61,11 +59,11 @@ class VmProfile : ViewModel() {
         val gender = newState.gender?.name?.toLowerCase(Locale.getDefault())?.first()?.toString()
         XLogin.updateCurrentUserDetails(newState.birthday, newState.firstName, gender, newState.lastName, newState.nickname, object : UpdateCurrentUserDetailsCallback {
             override fun onSuccess() {
-                message.value = "Fields were successfuly changed"
-                _state.value = newState.copy(phone = _state.value!!.phone)
+                message.value = "Fields were successfully changed"
+                _state.value = newState
 
                 if (newState.phone != state.value!!.phone) {
-                    updatePhone(newState.phone!!)
+                    updatePhone(newState.phone)
                 }
             }
 
@@ -78,7 +76,6 @@ class VmProfile : ViewModel() {
     fun updatePhone(newPhone: String) {
         XLogin.updateCurrentUserPhone(newPhone, object : UpdateCurrentUserPhoneCallback {
             override fun onSuccess() {
-                message.value = "Fields were successfuly changed"
                 _state.value = state.value!!.copy(phone = newPhone)
             }
 
@@ -101,20 +98,22 @@ class VmProfile : ViewModel() {
             return if (PHONE_PATTERN.matcher(text).matches()) {
                 ValidateFieldResult(true, null)
             } else {
-                ValidateFieldResult(false, "Phone must start with "+" and contains 5..25 digits")
+                ValidateFieldResult(false, "Phone must start with '+' and contains 5..25 digits")
             }
         }
 
-        throw IllegalArgumentException()
+        return ValidateFieldResult(true, null)
     }
 
     fun updateAvatar(avatar: String?) {
         _state.value = _state.value?.copy(avatar = avatar)
+        stateForChanging.value = stateForChanging.value!!.copy(avatar = avatar)
     }
 
     fun resetPassword() {
-        val username = state.value!!.username ?: return
-        val email = state.value!!.email ?: return
+        val username = state.value!!.username
+        val email = state.value!!.email
+        if (username.isBlank() || email.isBlank()) return
         XLogin.resetPassword(username, object : ResetPasswordCallback {
             override fun onSuccess() {
                 message.value = "A letter has been sent to the $email. Follow the link in the letter — and you can create a new password"
@@ -129,26 +128,56 @@ class VmProfile : ViewModel() {
 
 data class UserDetailsUi(
     val id: String = "",
-    val email: String? = null,
-    val username: String? = null,
-    val nickname: String? = null,
-    val firstName: String? = null,
-    val lastName: String? = null,
-    val birthday: String? = null,
-    val phone: String? = null,
+    val email: String = "",
+    val username: String = "",
+    val nickname: String = "",
+    val firstName: String = "",
+    val lastName: String = "",
+    val birthday: String = "",
+    val phone: String = "",
     val gender: Gender? = null,
     val avatar: String? = null
 )
 
-data class FieldChangeResult(val field: FieldsForChanging, val message: String)
-
 enum class FieldsForChanging {
-    NICKNAME,
-    PHONE,
-    FIRST_NAME,
-    LAST_NAME,
-    BIRTHDAY,
-    GENDER;
+    NICKNAME {
+        override fun updateStateForChanging(value: String, state: MutableLiveData<UserDetailsUi>) {
+            val nonNullState = state.value ?: return
+            state.value = nonNullState.copy(nickname = value)
+        }
+    },
+    PHONE {
+        override fun updateStateForChanging(value: String, state: MutableLiveData<UserDetailsUi>) {
+            val nonNullState = state.value ?: return
+            state.value = nonNullState.copy(phone = value)
+        }
+    },
+    FIRST_NAME {
+        override fun updateStateForChanging(value: String, state: MutableLiveData<UserDetailsUi>) {
+            val nonNullState = state.value ?: return
+            state.value = nonNullState.copy(firstName = value)
+        }
+    },
+    LAST_NAME {
+        override fun updateStateForChanging(value: String, state: MutableLiveData<UserDetailsUi>) {
+            val nonNullState = state.value ?: return
+            state.value = nonNullState.copy(lastName = value)
+        }
+    },
+    BIRTHDAY {
+        override fun updateStateForChanging(value: String, state: MutableLiveData<UserDetailsUi>) {
+            val nonNullState = state.value ?: return
+            state.value = nonNullState.copy(birthday = value)
+        }
+    },
+    GENDER {
+        override fun updateStateForChanging(value: String, state: MutableLiveData<UserDetailsUi>) {
+            val nonNullState = state.value ?: return
+            state.value = nonNullState.copy(gender = Gender.valueOf(value))
+        }
+    };
+
+    abstract fun updateStateForChanging(value: String, state: MutableLiveData<UserDetailsUi>)
 
     companion object {
         val textFields = arrayOf(NICKNAME, FIRST_NAME, LAST_NAME)

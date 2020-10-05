@@ -2,11 +2,7 @@ package com.xsolla.android.storesdkexample.ui.fragments.profile
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
@@ -39,13 +35,17 @@ import kotlinx.android.synthetic.main.fragment_profile.nicknameLayout
 import kotlinx.android.synthetic.main.fragment_profile.phoneInput
 import kotlinx.android.synthetic.main.fragment_profile.phoneLayout
 import kotlinx.android.synthetic.main.fragment_profile.resetPasswordButton
+import kotlinx.android.synthetic.main.fragment_profile.saveChangesButton
 import kotlinx.android.synthetic.main.fragment_profile.usernameInput
 import kotlinx.android.synthetic.main.fragment_profile.usernameLayout
 import java.util.Calendar
-import java.util.Date
 
 class ProfileFragment : BaseFragment() {
     private val viewModel: VmProfile by activityViewModels()
+
+    private val fieldsWithPossibleError by lazy {
+        arrayOf(nicknameLayout, phoneLayout, firstnameLayout, lastnameLayout)
+    }
 
     override fun getLayout() = R.layout.fragment_profile
 
@@ -68,15 +68,20 @@ class ProfileFragment : BaseFragment() {
                 .into(avatar)
 
             // Nickname
-            nickname.text = userData.nickname ?: userData.firstName ?: userData.lastName ?: "Nickname"
+            nickname.text = when {
+                userData.nickname.isNotBlank() -> { userData.nickname }
+                userData.firstName.isNotBlank() -> { userData.firstName }
+                userData.lastName.isNotBlank() -> { userData.lastName }
+                else -> { "Nickname" }
+            }
             nicknameInput.setText(userData.nickname)
 
             // Email
-            emailLayout.isVisible = userData.email != null
+            emailLayout.isVisible = userData.email.isNotBlank()
             emailInput.setText(userData.email)
 
             // Username
-            usernameLayout.isVisible = userData.email != null
+            usernameLayout.isVisible = userData.email.isNotBlank()
             usernameInput.setText(userData.username)
 
             // Phone
@@ -88,30 +93,25 @@ class ProfileFragment : BaseFragment() {
 
             // Birthday
             birthdayInput.setText(userData.birthday)
-            if (userData.birthday != null) birthdayLayout.isEnabled = false
+            if (userData.birthday.isNotBlank()) birthdayLayout.isEnabled = false
 
             // Gender
             // https://stackoverflow.com/questions/28184543/android-autocompletetextview-not-showing-after-settext-is-called
             genderInput.setText(userData.gender?.name, false)
 
             // Button
-            resetPasswordButton.isVisible = userData.email != null
+            resetPasswordButton.isVisible = userData.email.isNotBlank()
         }
         viewModel.stateForChanging.observe(viewLifecycleOwner) {
-            if (it == null) {
-                // block button
+            if (it == null || it == viewModel.state.value) {
+                saveChangesButton.isVisible = false
+                clearValidations()
                 return@observe
             }
-            if (it == viewModel.state.value) {
-                // block button
-                return@observe
-            }
-            // unblock button
+            saveChangesButton.isVisible = true
         }
 
-        viewModel.fieldChangeResult.observe(viewLifecycleOwner) {
-            Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
-        }
+        saveChangesButton.setOnClickListener { updateFields(viewModel.stateForChanging.value) }
 
         resetPasswordButton.setOnClickListener { viewModel.resetPassword() }
 
@@ -126,24 +126,28 @@ class ProfileFragment : BaseFragment() {
 
     private fun configureFields() {
         nicknameInput.addTextChangedListener {
-            viewModel.stateForChanging.value = viewModel.stateForChanging.value!!.copy(nickname = it?.toString())
+            textChangedListener(FieldsForChanging.NICKNAME, it?.toString())
         }
         phoneInput.addTextChangedListener {
-            viewModel.stateForChanging.value = viewModel.stateForChanging.value!!.copy(phone = it?.toString())
+            textChangedListener(FieldsForChanging.PHONE, it?.toString())
         }
         firstnameInput.addTextChangedListener {
-            viewModel.stateForChanging.value = viewModel.stateForChanging.value!!.copy(firstName = it?.toString())
+            textChangedListener(FieldsForChanging.FIRST_NAME, it?.toString())
         }
         lastnameInput.addTextChangedListener {
-            viewModel.stateForChanging.value = viewModel.stateForChanging.value!!.copy(lastName = it?.toString())
+            textChangedListener(FieldsForChanging.LAST_NAME, it?.toString())
         }
         birthdayInput.addTextChangedListener {
-            viewModel.stateForChanging.value = viewModel.stateForChanging.value!!.copy(birthday = it?.toString())
+            textChangedListener(FieldsForChanging.BIRTHDAY, it?.toString())
         }
         genderInput.addTextChangedListener {
-            val text = it?.toString() ?: return@addTextChangedListener
-            viewModel.stateForChanging.value = viewModel.stateForChanging.value!!.copy(gender = Gender.valueOf(text))
+            textChangedListener(FieldsForChanging.GENDER, it?.toString())
         }
+    }
+
+    private fun textChangedListener(field: FieldsForChanging, value: String?) {
+        if (field == FieldsForChanging.GENDER && value.isNullOrBlank()) return
+        field.updateStateForChanging(value ?: "", viewModel.stateForChanging)
     }
 
     override fun onDestroyView() {
@@ -167,8 +171,12 @@ class ProfileFragment : BaseFragment() {
             .into(avatar)
     }
 
-    private fun updateFields(newState: UserDetailsUi) {
+    private fun updateFields(newState: UserDetailsUi?) {
         hideKeyboard()
+
+        if (newState == null) {
+            return
+        }
 
         val firstnameValidation = if (newState.firstName == viewModel.state.value!!.firstName) {
             ValidateFieldResult(true)
@@ -215,6 +223,10 @@ class ProfileFragment : BaseFragment() {
         }
     }
 
+    private fun clearValidations() {
+        fieldsWithPossibleError.forEach { it?.isErrorEnabled = false }
+    }
+
     private fun configureBirthday() {
         birthdayInput.setOnClickListener {
             val dialog = DatePickerDialog(
@@ -241,8 +253,5 @@ class ProfileFragment : BaseFragment() {
         val items = Gender.values()
         val adapter = ArrayAdapter(requireContext(), R.layout.item_gender, items)
         genderInput.setAdapter(adapter)
-        /*genderInput.setOnItemClickListener { _, _, position, _ ->
-
-        }*/
     }
 }

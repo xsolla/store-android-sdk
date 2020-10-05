@@ -6,11 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_bg_color"
+    android:fillViewport="true"
     tools:context=".ui.fragments.profile.ChooseAvatarFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/close"
@@ -40,10 +41,10 @@
             android:id="@+id/mainAvatar"
             android:layout_width="280dp"
             android:layout_height="280dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title"
+            app:layout_constraintTop_toBottomOf="@id/progress"
             tools:ignore="ContentDescription"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -69,10 +70,28 @@
             android:layout_marginTop="26dp"
             android:layout_marginBottom="16dp"
             android:text="@string/avatar_remove_button"
-            android:textColor="@color/magenta_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/avatarsRecycler"
-            app:strokeColor="@color/white_color_12" />
+            app:layout_constraintTop_toBottomOf="@id/avatarsRecycler" />
+
+        <View
+            android:id="@+id/lockForeground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#B2000000"
+            android:visibility="gone" />
+
+        <com.google.android.material.progressindicator.ProgressIndicator
+            android:id="@+id/progress"
+            style="@style/Widget.MaterialComponents.ProgressIndicator.Linear.Indeterminate"
+            android:layout_width="0dp"
+            android:layout_height="6dp"
+            android:layout_marginTop="16dp"
+            android:visibility="invisible"
+            app:indicatorColor="@color/magenta_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            app:trackColor="#2D2F47" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
