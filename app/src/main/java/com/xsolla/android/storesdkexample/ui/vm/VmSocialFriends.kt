@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.GetSocialFriendsCallback
 import com.xsolla.android.login.callback.LinkedSocialNetworksCallback
+import com.xsolla.android.login.callback.UpdateSocialFriendsCallback
 import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
 import com.xsolla.android.login.entity.response.SocialFriend
 import com.xsolla.android.login.entity.response.SocialFriendsResponse
@@ -47,7 +48,6 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
                 throwable?.printStackTrace()
                 hasError.value = true
             }
-
         })
     }
 
@@ -56,6 +56,19 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
             override fun onSuccess(data: List<LinkedSocialNetworkResponse>) {
                 linkedSocialNetworks.value = data.map { it.provider }
             }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                throwable?.printStackTrace()
+            }
+        })
+    }
+
+    fun updateSocialFriends() {
+        XLogin.updateSocialFriends(FriendsPlatform.VK, object : UpdateSocialFriendsCallback {
+            override fun onSuccess() {
+                loadAllSocialFriends()
+            }
+
             override fun onError(throwable: Throwable?, errorMessage: String?) {
                 throwable?.printStackTrace()
             }
@@ -63,10 +76,10 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
     }
 
     data class SocialFriendUiEntity(
-            val xsollaId: String?,
-            val socialId: String,
-            val imageUrl: String?,
-            val nickname: String
+        val xsollaId: String?,
+        val socialId: String,
+        val imageUrl: String?,
+        val nickname: String,
+        val fromPlatform: SocialNetworkForLinking
     )
-
 }

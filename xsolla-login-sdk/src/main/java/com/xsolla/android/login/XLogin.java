@@ -28,6 +28,7 @@ import com.xsolla.android.login.callback.StartSocialCallback;
 import com.xsolla.android.login.callback.UpdateCurrentUserDetailsCallback;
 import com.xsolla.android.login.callback.UpdateCurrentUserFriendsCallback;
 import com.xsolla.android.login.callback.UpdateCurrentUserPhoneCallback;
+import com.xsolla.android.login.callback.UpdateSocialFriendsCallback;
 import com.xsolla.android.login.callback.UploadCurrentUserAvatarCallback;
 import com.xsolla.android.login.entity.request.AuthUserBody;
 import com.xsolla.android.login.entity.request.OauthAuthUserBody;
@@ -501,67 +502,6 @@ public class XLogin {
         getInstance().tokenUtils.setOauthExpireTimeUnixSec(0);
     }
 
-    public static void getSocialFriends(
-            FriendsPlatform platform,
-            int offset,
-            int limit,
-            boolean fromGameOnly,
-            final GetSocialFriendsCallback callback
-    ) {
-        getInstance().loginApi
-                .getSocialFriends("Bearer " + getToken(), platform.name().toLowerCase(), offset, limit, fromGameOnly)
-                .enqueue(new Callback<SocialFriendsResponse>() {
-                    @Override
-                    public void onResponse(Call<SocialFriendsResponse> call, Response<SocialFriendsResponse> response) {
-                        if (response.isSuccessful()) {
-                            SocialFriendsResponse socialFriendsResponse = response.body();
-                            if (socialFriendsResponse != null) {
-                                callback.onSuccess(socialFriendsResponse);
-                            } else {
-                                callback.onError(null, "Empty response");
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()));
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<SocialFriendsResponse> call, Throwable t) {
-                        callback.onError(t, null);
-                    }
-                });
-    }
-
-    public static void searchUsersByNickname(
-            String nickname,
-            int offset,
-            int limit,
-            final SearchUsersByNicknameCallback callback
-    ) {
-        getInstance().loginApi
-                .searchUsersByNickname("Bearer " + getToken(), nickname, offset, limit)
-                .enqueue(new Callback<SearchUsersByNicknameResponse>() {
-                    @Override
-                    public void onResponse(Call<SearchUsersByNicknameResponse> call, Response<SearchUsersByNicknameResponse> response) {
-                        if (response.isSuccessful()) {
-                            SearchUsersByNicknameResponse searchUsersByNicknameResponse = response.body();
-                            if (searchUsersByNicknameResponse != null) {
-                                callback.onSuccess(searchUsersByNicknameResponse);
-                            } else {
-                                callback.onError(null, "Empty response");
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()));
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<SearchUsersByNicknameResponse> call, Throwable t) {
-                        callback.onError(t, null);
-                    }
-                });
-    }
-
     public static void getUserPublicInfo(
             String userId,
             final GetUserPublicInfoCallback callback
@@ -802,6 +742,93 @@ public class XLogin {
                 });
     }
 
+    /**
+     * Gets a list of user’s friends from a social provider.
+     *
+     * @param platform           chosen social provider. If you do not specify it, the method gets friends from all social providers
+     * @param offset             number of the elements from which the list is generated
+     * @param limit              maximum number of friends that are returned at a time
+     * @param fromGameOnly       shows whether the social friends are from your game
+     * @param callback           callback with social friends
+     * @see <a href="https://developers.xsolla.com/login-api/methods/users/get-users-friends">Login API Reference</a>
+     */
+    public static void getSocialFriends(
+            @Nullable FriendsPlatform platform,
+            int offset,
+            int limit,
+            boolean fromGameOnly,
+            final GetSocialFriendsCallback callback
+    ) {
+        getInstance().loginApi
+                .getSocialFriends("Bearer " + getToken(), platform != null ? platform.name().toLowerCase() : null, offset, limit, fromGameOnly)
+                .enqueue(new Callback<SocialFriendsResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<SocialFriendsResponse> call, @NonNull Response<SocialFriendsResponse> response) {
+                        if (response.isSuccessful()) {
+                            SocialFriendsResponse socialFriendsResponse = response.body();
+                            if (socialFriendsResponse != null) {
+                                callback.onSuccess(socialFriendsResponse);
+                            } else {
+                                callback.onError(null, "Empty response");
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<SocialFriendsResponse> call, @NonNull Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
+    }
+
+    /**
+     * Searches users by nickname and gets a list of them. Search is performed by substring if it is in the beginning of the string.
+     * The current user can call this method only one time per second.
+     *
+     * @param nickname           user nickname
+     * @param offset             number of the elements from which the list is generated
+     * @param limit              maximum number of users that are returned at a time
+     * @param callback           callback with users
+     * @see <a href="https://developers.xsolla.com/login-api/methods/users/search-users-by-nickname">Login API Reference</a>
+     */
+    public static void searchUsersByNickname(
+            String nickname,
+            int offset,
+            int limit,
+            final SearchUsersByNicknameCallback callback
+    ) {
+        getInstance().loginApi
+                .searchUsersByNickname("Bearer " + getToken(), nickname, offset, limit)
+                .enqueue(new Callback<SearchUsersByNicknameResponse>() {
+                    @Override
+                    public void onResponse(Call<SearchUsersByNicknameResponse> call, Response<SearchUsersByNicknameResponse> response) {
+                        if (response.isSuccessful()) {
+                            SearchUsersByNicknameResponse searchUsersByNicknameResponse = response.body();
+                            if (searchUsersByNicknameResponse != null) {
+                                callback.onSuccess(searchUsersByNicknameResponse);
+                            } else {
+                                callback.onError(null, "Empty response");
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<SearchUsersByNicknameResponse> call, Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
+    }
+
+    /**
+     * Gets a list of the social networks linked to the user account.
+     *
+     * @param callback           callback with social networks linked to the user account
+     * @see <a href="https://developers.xsolla.com/user-account-api/social-networks/get-linked-networks/">Login API Reference</a>
+     */
     public static void getLinkedSocialNetworks(
             @NonNull final LinkedSocialNetworksCallback callback
     ) {
@@ -829,12 +856,44 @@ public class XLogin {
                 });
     }
 
+    /**
+     * Links the social network, which is used by the player for authentication, to the user account.
+     *
+     * @param context                activity/fragment or any view context
+     * @param socialNetwork          social network for linking
+     * @return                       intent that you can use
+     * @see <a href="https://developers.xsolla.com/user-account-api/social-networks/link-social-network-to-account">User Account API Reference</a>
+     */
     public static Intent createSocialAccountLinkingIntent(Context context, SocialNetworkForLinking socialNetwork) {
         Intent intent = new Intent(context, ActivityAuthWebView.class);
         intent.putExtra(ActivityAuthWebView.ARG_AUTH_URL, LOGIN_HOST + "/api/users/me/social_providers/" + socialNetwork.name().toLowerCase() + "/login_redirect");
         intent.putExtra(ActivityAuthWebView.ARG_CALLBACK_URL, getInstance().callbackUrl);
         intent.putExtra(ActivityAuthWebView.ARG_TOKEN, getToken());
         return intent;
+    }
+
+    // https://developers.xsolla.com/login-api/methods/users/update-users-friends/
+    public static void updateSocialFriends(
+            @Nullable FriendsPlatform platform,
+            @NonNull final UpdateSocialFriendsCallback callback
+    ) {
+        getInstance().loginApi
+                .updateSocialFriends("Bearer " + getToken(), platform != null ? platform.name().toLowerCase() : null)
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            callback.onSuccess();
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
     }
 
     public static boolean isTokenExpired(long leewaySec) {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -41,10 +42,10 @@
         style="@style/Widget.Xsolla.AddFriends.BlockTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        tools:text="@string/add_friends_social_accounts"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchInputLayout" />
+        app:layout_constraintTop_toBottomOf="@id/searchInputLayout"
+        tools:text="@string/add_friends_social_accounts" />
 
     <HorizontalScrollView
         android:id="@+id/socialButtonsScroll"
@@ -100,12 +101,22 @@
     <TextView
         android:id="@+id/labelListTitle"
         style="@style/Widget.Xsolla.AddFriends.BlockTitle"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="@string/add_friends_recommended"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/socialButtonsScroll" />
+        app:layout_constraintTop_toBottomOf="@id/socialButtonsScroll"
+        tools:text="@string/add_friends_recommended" />
+
+    <Button
+        android:id="@+id/updateFriendsButton"
+        style="@style/Widget.Xsolla.ActionButton.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="22dp"
+        android:text="@string/update"
+        app:layout_constraintBottom_toBottomOf="@id/labelListTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/labelListTitle" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
@@ -114,6 +125,7 @@
         android:layout_marginTop="@dimen/add_friends_block_title_margin_bottom"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/labelListTitle" />
+        app:layout_constraintTop_toBottomOf="@id/labelListTitle"
+        tools:listitem="@layout/item_friend" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

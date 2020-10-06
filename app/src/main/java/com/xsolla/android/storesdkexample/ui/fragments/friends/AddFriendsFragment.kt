@@ -2,8 +2,9 @@ package com.xsolla.android.storesdkexample.ui.fragments.friends
 
 import android.app.Activity
 import android.content.Intent
-import android.view.View
 import android.widget.ImageView
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -70,7 +71,7 @@ class AddFriendsFragment : BaseFragment() {
             searchAdapter.submitList(list)
         }
         vmSocialFriends.socialFriendsList.observe(viewLifecycleOwner) { list ->
-            socialFriendsAdapter.submitList(list.map { VmSocialFriends.SocialFriendUiEntity(it.xsollaUserId, it.socialNetworkUserId, it.avatar, it.name) })
+            socialFriendsAdapter.submitList(list.map { VmSocialFriends.SocialFriendUiEntity(it.xsollaUserId, it.socialNetworkUserId, it.avatar, it.name, it.platform) })
         }
         vmAddFriends.currentSearchQuery.observe(viewLifecycleOwner) { query ->
             if (query.isNullOrBlank()) {
@@ -91,6 +92,8 @@ class AddFriendsFragment : BaseFragment() {
             }
         }
         vmAddFriends.loadAllFriends()
+
+        updateFriendsButton.setOnClickListener { vmSocialFriends.updateSocialFriends() }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -98,6 +101,7 @@ class AddFriendsFragment : BaseFragment() {
         if (requestCode == RC_LINKING) {
             if (resultCode == Activity.RESULT_OK) {
                 vmSocialFriends.loadLinkedSocialAccounts()
+                vmSocialFriends.updateSocialFriends()
             } else {
                 showSnack(getString(R.string.add_friends_linking_error))
             }
@@ -124,17 +128,19 @@ class AddFriendsFragment : BaseFragment() {
 
     private fun initSocialScreen() {
         labelSocialAccounts.text = getString(R.string.add_friends_social_accounts)
-        labelSocialAccounts.visibility = View.VISIBLE
-        socialButtonsScroll.visibility = View.VISIBLE
+        labelSocialAccounts.isVisible = true
+        socialButtonsScroll.isVisible = true
         labelListTitle.text = getString(R.string.add_friends_recommended)
-        labelListTitle.visibility = View.VISIBLE
+        labelListTitle.isVisible = true
+        updateFriendsButton.isVisible = true
         recycler.adapter = socialFriendsAdapter
     }
 
     private fun initSearchScreen() {
-        labelSocialAccounts.visibility = View.GONE
-        socialButtonsScroll.visibility = View.GONE
-        labelListTitle.visibility = View.GONE
+        labelSocialAccounts.isGone = true
+        socialButtonsScroll.isGone = true
+        labelListTitle.isGone = true
+        updateFriendsButton.isGone = true
         recycler.adapter = searchAdapter
     }
 

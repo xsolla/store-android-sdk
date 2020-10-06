@@ -56,14 +56,28 @@
             tools:text="Nickname" />
 
         <TextView
+            android:id="@+id/friendsInPlaceholder"
+            style="@style/TextAppearance.MaterialComponents.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="6dp"
+            android:textColor="@color/secondary_color"
+            android:visibility="gone"
+            android:text="@string/add_friends_friends_in_placeholder"
+            app:layout_constraintStart_toStartOf="@id/friendNickname"
+            app:layout_constraintTop_toBottomOf="@id/friendNickname"
+            tools:drawableEndCompat="@drawable/ic_vk_small"
+            tools:text="Friends in" />
+
+        <TextView
             android:id="@+id/friendAcceptedText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="@string/friends_request_accepted_text"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@id/friendNickname"
-            app:layout_constraintTop_toBottomOf="@id/friendNickname" />
+            app:layout_constraintStart_toStartOf="@id/friendsInPlaceholder"
+            app:layout_constraintTop_toBottomOf="@id/friendsInPlaceholder" />
 
         <TextView
             android:id="@+id/friendDeclinedText"
@@ -73,8 +87,8 @@
             android:text="@string/friends_request_declined_text"
             android:textColor="#EB002F"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@id/friendNickname"
-            app:layout_constraintTop_toBottomOf="@id/friendNickname" />
+            app:layout_constraintStart_toStartOf="@id/friendsInPlaceholder"
+            app:layout_constraintTop_toBottomOf="@id/friendsInPlaceholder" />
 
         <include
             android:id="@+id/friendsAcceptDeclineButtons"
@@ -82,9 +96,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@id/friendNickname"
-            app:layout_constraintTop_toBottomOf="@id/friendNickname"
-            tools:visibility="gone" />
+            app:layout_constraintStart_toStartOf="@id/friendsInPlaceholder"
+            app:layout_constraintTop_toBottomOf="@id/friendsInPlaceholder" />
 
         <Button
             android:id="@+id/cancelRequestButton"
@@ -94,8 +107,8 @@
             android:layout_marginTop="12dp"
             android:text="@string/friends_cancel_friend_button"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@id/friendNickname"
-            app:layout_constraintTop_toBottomOf="@id/friendNickname"
+            app:layout_constraintStart_toStartOf="@id/friendsInPlaceholder"
+            app:layout_constraintTop_toBottomOf="@id/friendsInPlaceholder"
             tools:visibility="gone" />
 
         <Button
@@ -106,8 +119,8 @@
             android:layout_marginTop="12dp"
             android:text="@string/friends_add_friend_button"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@id/friendNickname"
-            app:layout_constraintTop_toBottomOf="@id/friendNickname"
+            app:layout_constraintStart_toStartOf="@id/friendsInPlaceholder"
+            app:layout_constraintTop_toBottomOf="@id/friendsInPlaceholder"
             tools:visibility="gone" />
 
         <Button
@@ -118,8 +131,8 @@
             android:layout_marginTop="12dp"
             android:text="@string/friends_unblock_friend_button"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@id/friendNickname"
-            app:layout_constraintTop_toBottomOf="@id/friendNickname"
+            app:layout_constraintStart_toStartOf="@id/friendsInPlaceholder"
+            app:layout_constraintTop_toBottomOf="@id/friendsInPlaceholder"
             tools:visibility="gone" />
 
         <ImageView

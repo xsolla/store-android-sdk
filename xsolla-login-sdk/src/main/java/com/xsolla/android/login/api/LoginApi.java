@@ -92,6 +92,12 @@ public interface LoginApi {
             @Query("limit") int limit
     );
 
+    @POST("api/users/me/social_friends/update")
+    Call<Void> updateSocialFriends(
+            @Header("authorization") String authHeader,
+            @Query("platform") String platform
+    );
+
     @GET("api/users/{userId}/public")
     Call<UserPublicInfoResponse> getUserPublicInfo(
             @Header("authorization") String authHeader,
