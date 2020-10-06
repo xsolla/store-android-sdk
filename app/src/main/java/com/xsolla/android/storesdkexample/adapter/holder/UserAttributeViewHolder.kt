@@ -54,8 +54,8 @@ class UserAttributeViewHolder(
 
         itemView.readOnlyFooter.setClickableSpan(
             isUnderlineText = true,
-            startIndex = itemView.readOnlyFooter.text.indexOf("see"),
-            endIndex = itemView.readOnlyFooter.text.length,
+            startIndex = itemView.readOnlyFooter.text.indexOf("See"),
+            endIndex = itemView.readOnlyFooter.text.lastIndexOf("documentation"),
             onClick = { onDocumentationClick() }
         )
         itemView.editableFooter.setOnClickListener {

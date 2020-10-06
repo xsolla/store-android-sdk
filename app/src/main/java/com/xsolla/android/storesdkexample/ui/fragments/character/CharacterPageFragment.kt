@@ -95,8 +95,8 @@ class CharacterPageFragment : BaseFragment() {
         if (readOnly) {
             noItemsPlaceholder.setClickableSpan(
                 isUnderlineText = true,
-                startIndex = noItemsPlaceholder.text.indexOf("see"),
-                endIndex = noItemsPlaceholder.text.length,
+                startIndex = noItemsPlaceholder.text.indexOf("See"),
+                endIndex = noItemsPlaceholder.text.lastIndexOf("documentation") + "documentation".length,
                 onClick = { openHowToForAttributes() }
             )
         }
