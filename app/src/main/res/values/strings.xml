@@ -62,7 +62,7 @@
     <string name="character_title">Character</string>
     <string name="character_tab1">Read-only attributes</string>
     <string name="character_tab2">User-editable attributes</string>
-    <string name="character_lvl_up">\tLvl up for 200</string>
+    <string name="character_lvl_up">\tLevel up for 200</string>
     <string name="character_lvl">%d lvl</string>
     <string name="character_1lvl">1 lvl</string>
     <string name="character_read_only_attributes_footer">To learn more about read-only attributes, please, see the documentation.</string>

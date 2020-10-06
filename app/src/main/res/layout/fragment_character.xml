@@ -31,7 +31,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:tabBackground="@color/secondary_color_10"
-        app:tabIndicatorFullWidth="false">
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorHeight="1dp">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/firstTab"
@@ -61,10 +62,13 @@
     <TextView
         android:id="@+id/nickname"
         style="@style/TextAppearance.MaterialComponents.Headline6"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="24dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/avatar"
         app:layout_constraintTop_toBottomOf="@id/tabs"
         tools:text="Kawaiistacie" />
@@ -87,7 +91,6 @@
         android:layout_marginStart="8dp"
         android:drawableLeft="@drawable/ic_level_up"
         android:text="@string/character_lvl_up"
-        app:cornerRadius="0dp"
         app:layout_constraintStart_toEndOf="@id/avatar"
         app:layout_constraintTop_toBottomOf="@id/level"
         tools:ignore="RtlHardcoded" />

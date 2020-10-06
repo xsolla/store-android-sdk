@@ -17,7 +17,9 @@ import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmCharacterPage
 import com.xsolla.android.storesdkexample.util.extensions.openInBrowser
 import com.xsolla.android.storesdkexample.util.extensions.setClickableSpan
+import kotlinx.android.synthetic.main.fragment_character_page.addAttributeButton
 import kotlinx.android.synthetic.main.fragment_character_page.attributesRecycler
+import kotlinx.android.synthetic.main.fragment_character_page.noItemsLayout
 import kotlinx.android.synthetic.main.fragment_character_page.noItemsPlaceholder
 
 class CharacterPageFragment : BaseFragment() {
@@ -83,8 +85,12 @@ class CharacterPageFragment : BaseFragment() {
 
     private fun configurePlaceholderAndVisibilities(items: List<UserAttributeUiEntity>, readOnly: Boolean) {
         attributesRecycler.isVisible = items.isNotEmpty()
-        noItemsPlaceholder.isVisible = items.isEmpty()
+        noItemsLayout.isVisible = items.isEmpty()
         noItemsPlaceholder.setText(if (readOnly) R.string.character_read_only_attributes_placeholder else R.string.character_editable_attributes_placeholder)
+        addAttributeButton.isVisible = items.isEmpty() && !readOnly
+        addAttributeButton.setOnClickListener {
+            findNavController().navigate(R.id.fragment_edit_attribute, EditAttributeFragmentArgs(false, null).toBundle())
+        }
 
         if (readOnly) {
             noItemsPlaceholder.setClickableSpan(

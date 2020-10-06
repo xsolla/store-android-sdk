@@ -9,11 +9,15 @@
     <TextView
         android:id="@+id/key"
         style="@style/TextAppearance.MaterialComponents.Overline"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/secondary_color"
+        app:layout_constraintEnd_toStartOf="@id/editButton"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="attribute key" />
@@ -21,8 +25,12 @@
     <TextView
         android:id="@+id/value"
         style="@style/TextAppearance.MaterialComponents.Subtitle1"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintEnd_toStartOf="@id/editButton"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/key"
         app:layout_constraintTop_toBottomOf="@id/key"
         tools:text="attribute value" />
@@ -46,9 +54,9 @@
         android:id="@+id/divider"
         android:layout_width="wrap_content"
         android:layout_height="1dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/item_divider_full_width"
-        android:layout_marginStart="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/value" />
