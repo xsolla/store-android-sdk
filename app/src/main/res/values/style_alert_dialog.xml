@@ -19,7 +19,6 @@
     <style name="DatePickerTheme" parent="Theme.MaterialComponents.Dialog">
         <item name="android:datePickerStyle">@style/DatePickerStyle</item>
         <item name="android:windowBackground">#252632</item>
-        <item name="android:headerBackground">@color/appbar_bg</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/AlertDialogPositiveButton</item>
         <item name="android:buttonBarNegativeButtonStyle">@style/AlertDialogNegativeButton</item>
         <item name="colorControlActivated">@color/cart_badge_color</item>
@@ -27,6 +26,7 @@
 
     <style name="DatePickerStyle" parent="@android:style/Widget.Material.Light.DatePicker">
         <item name="android:headerBackground">@color/appbar_bg</item>
+        <item name="android:background">#252632</item>
         <item name="android:headerMonthTextAppearance">@style/TextAppearance.MaterialComponents.Headline6</item>
         <item name="android:headerDayOfMonthTextAppearance">@style/TextAppearance.MaterialComponents.Headline6</item>
         <item name="android:headerYearTextAppearance">@style/TextAppearance.MaterialComponents.Subtitle1</item>
