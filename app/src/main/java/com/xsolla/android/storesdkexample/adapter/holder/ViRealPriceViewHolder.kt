@@ -70,16 +70,16 @@ class ViRealPriceViewHolder(
 
     private fun bindItemPrice(item: VirtualItemUiEntity) {
         val price = item.price
-        if (price!!.getAmountDecimal() == price.getAmountWithoutDiscountDecimal()) {
+        if (price!!.getAmountDecimal() == price.getAmountWithoutDiscountDecimal() || price.getAmountWithoutDiscountDecimal() == null) {
             itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
             itemView.itemOldPrice.visibility = View.INVISIBLE
             itemView.itemSaleLabel.visibility = View.INVISIBLE
         } else {
-            itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
-            itemView.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal())
-            itemView.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-            itemView.itemOldPrice.visibility = View.VISIBLE
-            itemView.itemSaleLabel.visibility = View.VISIBLE
+            if (itemView.itemOldPrice.isVisible && itemView.itemSaleLabel.isVisible) {
+                itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
+                itemView.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal())
+                itemView.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+            }
         }
 
         itemView.addToCartButton.setOnClickListener { v ->

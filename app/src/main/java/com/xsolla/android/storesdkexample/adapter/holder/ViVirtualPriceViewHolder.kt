@@ -45,12 +45,14 @@ class ViVirtualPriceViewHolder(
                 itemView.itemPrice.isVisible = false
                 itemView.itemOldPrice.isVisible = false
                 itemView.itemSaleLabel.isVisible = false
+                itemView.itemVirtualPriceIcon.isVisible = false
             } else {
                 itemView.purchasedPlaceholder.isVisible = false
                 itemView.buyButton?.isVisible = true
                 itemView.itemPrice.isVisible = true
                 itemView.itemOldPrice.isVisible = true
                 itemView.itemSaleLabel.isVisible = true
+                itemView.itemVirtualPriceIcon.isVisible = true
             }
         } else {
             itemView.purchasedPlaceholder.isVisible = false
@@ -58,6 +60,7 @@ class ViVirtualPriceViewHolder(
             itemView.itemPrice.isVisible = true
             itemView.itemOldPrice.isVisible = true
             itemView.itemSaleLabel.isVisible = true
+            itemView.itemVirtualPriceIcon.isVisible = true
         }
     }
 
