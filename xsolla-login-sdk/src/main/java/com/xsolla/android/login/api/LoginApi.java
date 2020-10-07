@@ -227,4 +227,11 @@ public interface LoginApi {
             @Query("projectId") String projectId,
             @Body ResetPasswordBody resetPasswordBody
     );
+
+    @GET("/api/users/me/social_providers/{providerName}/login_url")
+    Call<String> getUrlToLinkSocialNetworkToAccount(
+            @Header("authorization") String authHeader,
+            @Path("providerName") String providerName,
+            @Query("login_url") String urlRedirect
+    );
 }

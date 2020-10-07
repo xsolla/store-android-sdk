@@ -18,6 +18,7 @@ import com.xsolla.android.login.callback.FinishSocialCallback;
 import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback;
 import com.xsolla.android.login.callback.GetCurrentUserFriendsCallback;
 import com.xsolla.android.login.callback.GetSocialFriendsCallback;
+import com.xsolla.android.login.callback.GetUrlToLinkSocialAccountCallback;
 import com.xsolla.android.login.callback.GetUserPublicInfoCallback;
 import com.xsolla.android.login.callback.LinkedSocialNetworksCallback;
 import com.xsolla.android.login.callback.RefreshTokenCallback;
@@ -861,10 +862,14 @@ public class XLogin {
      *
      * @param context                activity/fragment or any view context
      * @param socialNetwork          social network for linking
-     * @return                       intent that you can use
+     * @return                       intent that you can use for open activity for result
      * @see <a href="https://developers.xsolla.com/user-account-api/social-networks/link-social-network-to-account">User Account API Reference</a>
      */
-    public static Intent createSocialAccountLinkingIntent(Context context, SocialNetworkForLinking socialNetwork) {
+    @NonNull
+    public static Intent createSocialAccountLinkingIntent(
+            @NonNull Context context,
+            @NonNull SocialNetworkForLinking socialNetwork
+    ) {
         Intent intent = new Intent(context, ActivityAuthWebView.class);
         intent.putExtra(ActivityAuthWebView.ARG_AUTH_URL, LOGIN_HOST + "/api/users/me/social_providers/" + socialNetwork.name().toLowerCase() + "/login_redirect");
         intent.putExtra(ActivityAuthWebView.ARG_CALLBACK_URL, getInstance().callbackUrl);
@@ -872,7 +877,47 @@ public class XLogin {
         return intent;
     }
 
-    // https://developers.xsolla.com/login-api/methods/users/update-users-friends/
+    // TODO: Обсудить с Артемом, Леонидом и Димой
+    /**
+     * Links the social network, which is used by the player for authentication, to the user account.
+     * <b>We recommend using above method that returns Intent that you can use for open activity for result</b>
+     * @see XLogin#createSocialAccountLinkingIntent(android.content.Context, com.xsolla.android.login.social.SocialNetworkForLinking)
+     *
+     * @param socialNetwork          social network for linking
+     * @param callback               callback with url to authenticate the user via the social network
+     * @see <a href="https://developers.xsolla.com/user-account-api/social-networks/get-url-to-link-social-network-to-account/">User Account API Reference</a>
+     */
+    public static void getUrlToLinkSocialAccount(
+            @NonNull SocialNetworkForLinking socialNetwork,
+            @NonNull final GetUrlToLinkSocialAccountCallback callback
+    ) {
+        getInstance().loginApi
+                .getUrlToLinkSocialNetworkToAccount("Bearer " + getToken(), socialNetwork.name().toLowerCase(), getInstance().callbackUrl)
+                .enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                        if (response.isSuccessful()) {
+                            callback.onSuccess(response.body());
+                        } else {
+                            callback.onFailure(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                        callback.onFailure(t, null);
+                    }
+                });
+    }
+
+    /**
+     * Begins processing to update a list of user’s friends from a social provider.
+     * Please note that there may be a delay in data processing because of the Xsolla Login server or provider server high loads.
+     *
+     * @param platform               chosen social provider. If you do not specify it, the method updates friends in all social providers
+     * @param callback               callback that indicates the success of failure of an action
+     * @see <a href="https://developers.xsolla.com/login-api/methods/users/update-users-friends/">Login API Reference</a>
+     */
     public static void updateSocialFriends(
             @Nullable FriendsPlatform platform,
             @NonNull final UpdateSocialFriendsCallback callback
