@@ -102,6 +102,8 @@ class CharacterPageFragment : BaseFragment() {
         }
     }
 
-    private fun openHowToForAttributes() = "https://developers.xsolla.com/login-api/methods/attributes".toUri().openInBrowser(requireContext())
+    private fun openHowToForAttributes() = "https://developers.xsolla.com/sdk/game-engines/android/#sdk_use_xsolla_servers_how_to_use_user_attributes"
+        .toUri()
+        .openInBrowser(requireContext())
 
 }

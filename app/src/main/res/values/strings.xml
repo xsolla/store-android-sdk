@@ -67,7 +67,7 @@
     <string name="character_1lvl">1 lvl</string>
     <string name="character_read_only_attributes_footer">See the documentation to learn more about read-only attributes.</string>
     <string name="character_read_only_attributes_placeholder">No attributes set. See the documentation to learn more about read-only attributes.</string>
-    <string name="character_editable_attributes_placeholder">No attributes set for this user</string>
+    <string name="character_editable_attributes_placeholder">No attributes set</string>
     <string name="character_editable_attributes_footer">Add attribute</string>
     <string name="character_edit_attribute_title">Custom attribute</string>
     <string name="character_edit_attribute_save_button">Save changes</string>
