@@ -36,11 +36,10 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private fun loadSocialFriends(friendsPlatform: FriendsPlatform, callback: (() -> Unit)? = null) {
+    private fun loadSocialFriends(friendsPlatform: FriendsPlatform?, callback: (() -> Unit)? = null) {
         XLogin.getSocialFriends(friendsPlatform, VmAddFriends.REQUEST_OFFSET, VmAddFriends.REQUEST_LIMIT, false, object : GetSocialFriendsCallback {
             override fun onSuccess(data: SocialFriendsResponse) {
-                socialFriendsList.value?.addAll(data.friendsList)
-                socialFriendsList.value = socialFriendsList.value
+                socialFriendsList.value = socialFriendsList.value?.apply { addAll(data.friendsList) }
                 callback?.invoke()
             }
 
@@ -80,6 +79,6 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
         val socialId: String,
         val imageUrl: String?,
         val nickname: String,
-        val fromPlatform: SocialNetworkForLinking
+        val fromPlatform: List<SocialNetworkForLinking>
     )
 }

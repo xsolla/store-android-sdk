@@ -24,8 +24,8 @@ import kotlinx.android.synthetic.main.fragment_add_friends.*
 
 class AddFriendsFragment : BaseFragment() {
 
-    companion object {
-        const val RC_LINKING = 33
+    private companion object {
+        private const val RC_LINKING = 33
     }
 
     private lateinit var socialNetworksIcons: Map<SocialNetworkForLinking, Triple<Int, Int, ImageView>>
@@ -71,7 +71,16 @@ class AddFriendsFragment : BaseFragment() {
             searchAdapter.submitList(list)
         }
         vmSocialFriends.socialFriendsList.observe(viewLifecycleOwner) { list ->
-            socialFriendsAdapter.submitList(list.map { VmSocialFriends.SocialFriendUiEntity(it.xsollaUserId, it.socialNetworkUserId, it.avatar, it.name, it.platform) })
+            val uiEntitiesList = list.map {
+                VmSocialFriends.SocialFriendUiEntity(
+                    it.xsollaUserId,
+                    it.socialNetworkUserId,
+                    it.avatar,
+                    it.name,
+                    listOf(it.platform)
+                )
+            }
+            socialFriendsAdapter.submitList(uiEntitiesList)
         }
         vmAddFriends.currentSearchQuery.observe(viewLifecycleOwner) { query ->
             if (query.isNullOrBlank()) {
@@ -117,7 +126,7 @@ class AddFriendsFragment : BaseFragment() {
             } else {
                 info.third.setRateLimitedClickListener {
                     startActivityForResult(
-                            XLogin.createSocialAccountLinkingIntent(context, socialNetwork),
+                            XLogin.createSocialAccountLinkingIntent(requireContext(), socialNetwork),
                             RC_LINKING
                     )
                 }
