@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Widget.Xsolla.Balance.Text" parent="">
-        <item name="android:textColor">@color/secondary_color</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="android:textSize">@dimen/appbar_balance_item_text_size</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:layout_marginLeft">@dimen/appbar_balance_item_text_left_margin</item>
@@ -18,7 +18,7 @@
         <item name="android:paddingLeft">0dp</item>
         <item name="android:paddingRight">0dp</item>
         <item name="icon">@drawable/ic_charge_button_icon</item>
-        <item name="iconTint">@color/appbar_bg</item>
+        <item name="iconTint">@color/dark_state_blue_color</item>
     </style>
 
 </resources>

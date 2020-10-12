@@ -10,8 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/main_bg_color">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/friendAvatar"
@@ -133,7 +132,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_more_horiz_24"
-            app:tint="@color/secondary_color"
+            app:tint="?attr/colorOnSurface"
             tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

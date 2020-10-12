@@ -8,7 +8,7 @@
         <item name="boxCornerRadiusTopEnd">@dimen/input_corner_radius</item>
         <item name="boxCornerRadiusBottomStart">@dimen/input_corner_radius</item>
         <item name="boxCornerRadiusBottomEnd">@dimen/input_corner_radius</item>
-        <item name="android:textColorHint">@color/secondary_color</item>
+        <item name="android:textColorHint">?attr/colorOnSurface</item>
         <item name="boxStrokeColor">@color/input_outline_color</item>
         <item name="materialThemeOverlay">@style/ThemeOverlay.Xsolla.TextInputLayout</item>
     </style>

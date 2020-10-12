@@ -24,13 +24,13 @@
     <style name="Widget.Xsolla.CatalogItem.OldPrice" parent="">
         <item name="android:textSize">@dimen/catalog_item_old_price_text_size</item>
         <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textColor">@color/secondary_color</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
     <style name="Widget.Xsolla.CatalogItem.AdditionalInfo" parent="">
         <item name="android:textSize">@dimen/catalog_item_additional_info_text_size</item>
         <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textColor">@color/secondary_color</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
     <style name="Widget.Xsolla.CatalogItem.AddToCartButton" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">

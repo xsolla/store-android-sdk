@@ -122,7 +122,7 @@ class FriendsFragment : BaseFragment() {
         for (i in 0 until tabs.tabCount) {
             val spannableString = buildSpannedString {
                 append(FriendsTab.getBy(i).title)
-                color(ContextCompat.getColor(requireContext(), R.color.secondary_color)) { append("   ${groupedItems[i]}") }
+                color(ContextCompat.getColor(requireContext(), R.color.light_state_gray_color)) { append("   ${groupedItems[i]}") }
             }
 
             val tab = tabs.getTabAt(i)!!

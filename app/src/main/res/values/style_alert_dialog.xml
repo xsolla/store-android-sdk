@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="ThemeOverlay.MaterialComponents.Dialog.Alert.Xsolla">
-        <item name="android:background">@color/alert_dialog_color</item>
+        <item name="android:background">?attr/colorSurface</item>
     </style>
 
     <style name="MaterialAlertDialog.MaterialComponents.Body.Text.Xsolla">
-        <item name="android:textColor">@color/secondary_color</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
     <style name="AlertDialogPositiveButton" parent="Widget.MaterialComponents.Button.TextButton">
@@ -13,6 +13,6 @@
     </style>
 
     <style name="AlertDialogNegativeButton" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">@color/secondary_color</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 </resources>

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg_color"
     tools:context=".ui.fragments.store.CartFragment">
 
     <TextView
@@ -76,7 +75,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:text="@string/cart_discount"
-        android:textColor="@color/secondary_color"
+        android:textColor="@color/light_state_gray_color"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@+id/checkoutButton"
         app:layout_constraintTop_toBottomOf="@id/subtotalLabel" />
@@ -110,7 +109,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
-        android:textColor="@color/secondary_color"
+        android:textColor="@color/light_state_gray_color"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="@+id/checkoutButton"
         app:layout_constraintTop_toBottomOf="@id/subtotalValue"

@@ -1,17 +1,30 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="textInputStyle">@style/Widget.Xsolla.TextInputLayout</item>
+        <item name="colorPrimary">@color/magenta_color</item>
+        <item name="colorPrimaryVariant">@color/dark_magenta_color</item>
+        <item name="colorOnPrimary">@color/black_color</item>
+        <item name="colorSecondary">@color/magenta_color</item>
+        <item name="colorSecondaryVariant">@color/dark_magenta_color</item>
+        <item name="colorOnSecondary">@color/black_color</item>
+        <item name="colorSurface">@color/night_blue_color</item>
+        <item name="colorOnSurface">@color/light_state_gray_color</item>
+        <item name="colorPrimarySurface">@color/dark_state_blue_color</item>
+        <item name="colorOnPrimarySurface">@color/white_color</item>
+        <item name="colorError">@color/magenta_color</item>
+        <item name="android:colorBackground">@color/black_color</item>
 
         <!-- AlertDialog -->
         <item name="alertDialogTheme">@style/ThemeOverlay.MaterialComponents.Dialog.Alert.Xsolla</item>
-        <item name="textColorAlertDialogListItem">@color/secondary_color</item>
+        <item name="textColorAlertDialogListItem">@color/light_state_gray_color</item>
         <item name="buttonBarPositiveButtonStyle">@style/AlertDialogPositiveButton</item>
         <item name="buttonBarNegativeButtonStyle">@style/AlertDialogNegativeButton</item>
+
+        <!-- Snackbar -->
+        <item name="snackbarStyle">@style/SnackbarTheme</item>
+        <item name="snackbarTextViewStyle">@style/SnackbarTextViewTheme</item>
+
+        <item name="textInputStyle">@style/Widget.Xsolla.TextInputLayout</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

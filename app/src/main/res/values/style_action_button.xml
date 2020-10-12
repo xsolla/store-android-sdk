@@ -15,7 +15,7 @@
     
     <style name="Widget.Xsolla.ActionButton.Small" parent="Widget.Xsolla.ActionButton">
         <item name="android:height">@dimen/small_action_button_height</item>
-        <item name="android:textColor">@color/main_bg_color</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="cornerRadius">@dimen/secondary_action_button_corner_radius</item>
     </style>
 
@@ -38,7 +38,7 @@
         <item name="cornerRadius">@dimen/inventory_fragment_consume_button_corner_radius</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="backgroundTint">@color/action_button_color</item>
-        <item name="android:textColor">@color/main_bg_color</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textSize">@dimen/inventory_fragment_consume_button_text_size</item>
         <item name="android:text">Consume</item>
         <item name="android:textAllCaps">true</item>
