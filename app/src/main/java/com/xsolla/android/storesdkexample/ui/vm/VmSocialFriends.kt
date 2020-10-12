@@ -28,17 +28,37 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
 
     fun loadAllSocialFriends() {
         socialFriendsList.value?.clear()
-        socialFriendsList.value = socialFriendsList.value
-        loadSocialFriends(FriendsPlatform.FACEBOOK) {
-            loadSocialFriends(FriendsPlatform.TWITTER) {
-                loadSocialFriends(FriendsPlatform.VK)
-            }
-        }
+        loadSocialFriends(null)
     }
 
     private fun loadSocialFriends(friendsPlatform: FriendsPlatform?, callback: (() -> Unit)? = null) {
         XLogin.getSocialFriends(friendsPlatform, VmAddFriends.REQUEST_OFFSET, VmAddFriends.REQUEST_LIMIT, false, object : GetSocialFriendsCallback {
             override fun onSuccess(data: SocialFriendsResponse) {
+
+                // TODO
+                /*val groupByXsollaId = data.friendsList.groupBy { it.xsollaUserId }
+                val socialFriends = mutableListOf<SocialFriend>()
+                groupByXsollaId.forEach { (xsollaId, friends) ->
+                    if (xsollaId == null) {
+                        socialFriends.addAll(friends)
+                    } else {
+                        val oneFriend = friends.first()
+                        socialFriends.add(
+                            SocialFriend(
+                                avatar = oneFriend.avatar,
+                                name = oneFriend.name,
+                                platform = oneFriend.platform, // !!!
+                                socialNetworkUserId = oneFriend.socialNetworkUserId,
+                                xsollaUserId = ""
+                            )
+                        )
+                    }
+                }*/
+
+
+
+
+
                 socialFriendsList.value = socialFriendsList.value?.apply { addAll(data.friendsList) }
                 callback?.invoke()
             }

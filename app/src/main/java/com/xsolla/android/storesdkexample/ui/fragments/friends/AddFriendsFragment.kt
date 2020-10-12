@@ -77,7 +77,7 @@ class AddFriendsFragment : BaseFragment() {
                     it.socialNetworkUserId,
                     it.avatar,
                     it.name,
-                    listOf(it.platform)
+                    listOf(it.platform) // TODO
                 )
             }
             socialFriendsAdapter.submitList(uiEntitiesList)
