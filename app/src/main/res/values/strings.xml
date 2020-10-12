@@ -22,13 +22,17 @@
     <string name="go_to_store">Go to store</string>
     <string name="privacy_policy">By continuing, you agree to be bound by our\n<u>Privacy Policy</u></string>
 
+    <string name="drawer_item_character">Character</string>
+    <string name="drawer_item_inventory">My inventory</string>
+    <string name="drawer_item_friends">My friends</string>
+    <string name="drawer_item_store">Store</string>
     <string name="drawer_item_vi">Virtual items</string>
     <string name="drawer_item_vc">Virtual currency</string>
-    <string name="drawer_item_inventory">My inventory</string>
-    <string name="drawer_title_store">Store</string>
-    <string name="drawer_item_logout">Log out</string>
+    <string name="drawer_item_merchandise">Merchandise</string>
+    <string name="drawer_item_coupon">Redeem a coupon</string>
     <string name="drawer_item_cart">Cart</string>
-    <string name="drawer_item_friends">My friends</string>
+    <string name="drawer_item_account">Account</string>
+    <string name="drawer_item_logout">Log out</string>
 
     <string name="cart_fragment_checkout_button">Go to Checkout</string>
     <string name="cart_fragment_continue_button">Continue Shopping</string>

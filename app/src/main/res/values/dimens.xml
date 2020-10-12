@@ -127,6 +127,12 @@
     <dimen name="drawer_email_margin_top">1dp</dimen>
     <dimen name="drawer_line_height">1dp</dimen>
 
+    <dimen name="drawer_item_height">48dp</dimen>
+    <dimen name="drawer_item_icon_margin_start">16dp</dimen>
+    <dimen name="drawer_item_icon_margin_end">32dp</dimen>
+    <dimen name="drawer_item_title_text_size">14sp</dimen>
+    <dimen name="drawer_item_title_letter_spacing">0.09</dimen>
+
     <dimen name="drawer_margin_profile_between_horizontal">10dp</dimen>
     <dimen name="drawer_margin_between_vertical">21dp</dimen>
     <dimen name="drawer_margin_username_top">31dp</dimen>
