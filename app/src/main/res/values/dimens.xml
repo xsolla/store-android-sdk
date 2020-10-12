@@ -132,6 +132,7 @@
     <dimen name="drawer_item_icon_margin_end">32dp</dimen>
     <dimen name="drawer_item_title_text_size">14sp</dimen>
     <dimen name="drawer_item_title_letter_spacing">0.09</dimen>
+    <dimen name="drawer_inner_item_text_margin_left">88dp</dimen>
 
     <dimen name="drawer_margin_profile_between_horizontal">10dp</dimen>
     <dimen name="drawer_margin_between_vertical">21dp</dimen>

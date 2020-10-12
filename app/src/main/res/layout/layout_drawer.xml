@@ -54,37 +54,33 @@
         app:layout_constraintTop_toBottomOf="@+id/iconProfile" />
 
 
-    <com.xsolla.android.storesdkexample.ui.DrawerItemView
+    <com.xsolla.android.storesdkexample.ui.view.DrawerItem
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:item_icon="@drawable/ic_character"
         app:item_text="@string/drawer_item_character" />
 
-    <com.xsolla.android.storesdkexample.ui.DrawerItemView
+    <com.xsolla.android.storesdkexample.ui.view.DrawerItem
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:item_icon="@drawable/ic_inventory"
         app:item_text="@string/drawer_item_inventory" />
 
-    <com.xsolla.android.storesdkexample.ui.DrawerItemView
+    <com.xsolla.android.storesdkexample.ui.view.DrawerItem
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:item_icon="@drawable/ic_friends"
         app:item_text="@string/drawer_item_friends" />
 
-    <com.xsolla.android.storesdkexample.ui.DrawerItemView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:item_icon="@drawable/ic_store"
-        app:item_text="@string/drawer_item_store" />
+    <include layout="@layout/store_expandable_drawer" />
 
-    <com.xsolla.android.storesdkexample.ui.DrawerItemView
+    <com.xsolla.android.storesdkexample.ui.view.DrawerItem
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:item_icon="@drawable/ic_account"
         app:item_text="@string/drawer_item_account" />
 
-    <com.xsolla.android.storesdkexample.ui.DrawerItemView
+    <com.xsolla.android.storesdkexample.ui.view.DrawerItem
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:item_icon="@drawable/ic_logout"

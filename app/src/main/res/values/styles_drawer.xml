@@ -55,6 +55,10 @@
         <item name="android:letterSpacing">@dimen/drawer_item_title_letter_spacing</item>
     </style>
 
+    <style name="Widget.Xsolla.Drawer.Inner.Item.Title" parent="Widget.Xsolla.Drawer.Item.Title">
+        <item name="android:layout_marginStart">@dimen/drawer_inner_item_text_margin_left</item>
+    </style>
+
 
     <!-- <style name="Widget.Xsolla.Drawer.Text.Main" parent="Widget.Xsolla.Drawer.Text">
          <item name="android:layout_marginStart">@dimen/drawer_margin_horizontal</item>
