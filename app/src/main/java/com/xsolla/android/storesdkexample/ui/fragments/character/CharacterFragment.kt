@@ -34,15 +34,17 @@ class CharacterFragment : BaseFragment() {
     override fun getLayout() = R.layout.fragment_character
 
     override fun initUI() {
-        if (balanceViewModel.virtualBalance.value!!.isNotEmpty()) {
-            viewModel.virtualCurrency = balanceViewModel.virtualBalance.value!!.first()
-            configureLevelUpButton()
+        balanceViewModel.virtualBalance.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                viewModel.virtualCurrency = balanceViewModel.virtualBalance.value!!.first()
+                configureLevelUpButton()
+            }
         }
 
         viewModel.getUserDetailsAndAttributes()
 
-        viewPager.isUserInputEnabled = false
         viewPager.adapter = CharacterPageAdapter(this)
+        viewPager.isUserInputEnabled = false
 
         TabLayoutMediator(tabs, viewPager) { tab, position ->
             if (position == 0) {
