@@ -16,6 +16,16 @@
                 motion:attributeName="backgroundColor"
                 motion:customColorValue="@color/color_transparent" />
         </Constraint>
+        <Constraint android:id="@+id/item_text">
+            <CustomAttribute
+                motion:attributeName="textColor"
+                motion:customColorValue="@color/white_color" />
+        </Constraint>
+        <Constraint android:id="@+id/item_icon">
+            <CustomAttribute
+                motion:attributeName="ColorFilter"
+                motion:customColorValue="@color/white_color" />
+        </Constraint>
         <Constraint
             android:id="@+id/content"
             android:layout_width="match_parent"
@@ -30,6 +40,16 @@
             <CustomAttribute
                 motion:attributeName="backgroundColor"
                 motion:customColorValue="@color/magenta_color_8" />
+        </Constraint>
+        <Constraint android:id="@+id/item_text">
+            <CustomAttribute
+                motion:attributeName="textColor"
+                motion:customColorValue="@color/magenta_color" />
+        </Constraint>
+        <Constraint android:id="@+id/item_icon">
+            <CustomAttribute
+                motion:attributeName="ColorFilter"
+                motion:customColorValue="@color/magenta_color" />
         </Constraint>
     </ConstraintSet>
 
