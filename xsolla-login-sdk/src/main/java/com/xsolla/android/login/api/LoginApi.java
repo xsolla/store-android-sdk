@@ -234,4 +234,10 @@ public interface LoginApi {
             @Path("providerName") String providerName,
             @Query("login_url") String urlRedirect
     );
+
+    @DELETE("/api/users/me/social_providers/{providerName}")
+    Call<Void> unlinkSocialNetwork(
+            @Header("authorization") String authHeader,
+            @Path("providerName") String providerName
+    );
 }

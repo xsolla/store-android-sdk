@@ -26,6 +26,7 @@ import com.xsolla.android.login.callback.RegisterCallback;
 import com.xsolla.android.login.callback.ResetPasswordCallback;
 import com.xsolla.android.login.callback.SearchUsersByNicknameCallback;
 import com.xsolla.android.login.callback.StartSocialCallback;
+import com.xsolla.android.login.callback.UnlinkSocialNetworkCallback;
 import com.xsolla.android.login.callback.UpdateCurrentUserDetailsCallback;
 import com.xsolla.android.login.callback.UpdateCurrentUserFriendsCallback;
 import com.xsolla.android.login.callback.UpdateCurrentUserPhoneCallback;
@@ -853,6 +854,35 @@ public class XLogin {
                     @Override
                     public void onFailure(@NonNull Call<List<LinkedSocialNetworkResponse>> call, @NonNull Throwable t) {
                         callback.onError(t, null);
+                    }
+                });
+    }
+
+    /**
+     * Unlink social network from current user account
+     *
+     * @param platform       social network for decoupling
+     * @param callback       callback that indicates the success of failure of an action
+     */
+    public static void unlinkSocialNetwork(
+            @NonNull SocialNetworkForLinking platform,
+            @NonNull final UnlinkSocialNetworkCallback callback
+    ) {
+        getInstance().loginApi
+                .unlinkSocialNetwork("Bearer " + getToken(), platform.name().toLowerCase())
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            callback.onSuccess();
+                        } else {
+                            callback.onFailure(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                        callback.onFailure(t, null);
                     }
                 });
     }
