@@ -1,8 +1,9 @@
 package com.xsolla.android.storesdkexample.ui.fragments.profile
 
-import android.app.DatePickerDialog
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
@@ -35,9 +36,14 @@ import kotlinx.android.synthetic.main.fragment_profile.nicknameLayout
 import kotlinx.android.synthetic.main.fragment_profile.phoneInput
 import kotlinx.android.synthetic.main.fragment_profile.phoneLayout
 import kotlinx.android.synthetic.main.fragment_profile.resetPasswordButton
+import kotlinx.android.synthetic.main.fragment_profile.root
 import kotlinx.android.synthetic.main.fragment_profile.saveChangesButton
 import kotlinx.android.synthetic.main.fragment_profile.usernameInput
 import kotlinx.android.synthetic.main.fragment_profile.usernameLayout
+import kotlinx.android.synthetic.main.item_datepicker.view.cancelButton
+import kotlinx.android.synthetic.main.item_datepicker.view.clearButton
+import kotlinx.android.synthetic.main.item_datepicker.view.datePicker
+import kotlinx.android.synthetic.main.item_datepicker.view.okButton
 import java.util.Calendar
 
 class ProfileFragment : BaseFragment() {
@@ -70,6 +76,7 @@ class ProfileFragment : BaseFragment() {
             // Nickname
             nickname.text = when {
                 userData.nickname.isNotBlank() -> { userData.nickname }
+                userData.username.isNotBlank() -> { userData.nickname }
                 userData.firstName.isNotBlank() -> { userData.firstName }
                 userData.lastName.isNotBlank() -> { userData.lastName }
                 else -> { "Nickname" }
@@ -227,25 +234,34 @@ class ProfileFragment : BaseFragment() {
         fieldsWithPossibleError.forEach { it?.isErrorEnabled = false }
     }
 
+    // Not DatePickerDialog from Android SDK due to colors problems
     private fun configureBirthday() {
         birthdayInput.setOnClickListener {
-            val dialog = DatePickerDialog(
-                requireContext(),
-                0,
-                { _, year, calendarMonth, dayOfMonth ->
-                    val month = if (calendarMonth + 1 < 10) "0${calendarMonth + 1}" else "${calendarMonth + 1}"
-                    val day = if (dayOfMonth < 10) "0$dayOfMonth" else "$dayOfMonth"
-                    val result = "$year-$month-$day"
-                    birthdayInput.setText(result)
-                },
-                1990,
-                0,
-                1
-            )
+            val pickerDialog = LayoutInflater.from(context).inflate(R.layout.item_datepicker, root, false)
+            val picker = pickerDialog.datePicker
+            picker.init(1990, 0, 1, null)
+            picker.minDate = Calendar.getInstance().apply { set(1950, 0, 1) }.timeInMillis
+            picker.maxDate = System.currentTimeMillis()
 
-            dialog.datePicker.maxDate = System.currentTimeMillis()
-            dialog.datePicker.minDate = Calendar.getInstance().apply { set(1950, 0, 1) }.timeInMillis
-            dialog.show()
+            val alertDialog = AlertDialog.Builder(requireContext())
+                .setView(pickerDialog)
+                .setCancelable(true)
+                .create()
+
+            pickerDialog.okButton.setOnClickListener {
+                val month = if (picker.month + 1 < 10) "0${picker.month + 1}" else "${picker.month + 1}"
+                val day = if (picker.dayOfMonth < 10) "0${picker.dayOfMonth}" else "${picker.dayOfMonth}"
+                val result = "$day/$month/${picker.year}"
+                birthdayInput.setText(result)
+                alertDialog.dismiss()
+            }
+            pickerDialog.clearButton.setOnClickListener {
+                birthdayInput.setText("")
+                alertDialog.dismiss()
+            }
+            pickerDialog.cancelButton.setOnClickListener { alertDialog.dismiss() }
+
+            alertDialog.show()
         }
     }
 

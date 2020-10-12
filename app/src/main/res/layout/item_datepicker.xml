@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/datePickerDialog"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/alert_dialog_color">
+
+    <DatePicker
+        android:id="@+id/datePicker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/alert_dialog_color"
+        android:calendarViewShown="false"
+        android:headerBackground="@color/appbar_bg"
+        android:headerDayOfMonthTextAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        android:headerMonthTextAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        android:headerYearTextAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:spinnersShown="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/okButton"
+        style="@style/Widget.Xsolla.ActionButton.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp"
+        android:text="@string/ok"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/datePicker" />
+
+    <Button
+        android:id="@+id/cancelButton"
+        style="@style/Widget.Xsolla.ActionButton.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        android:textColor="@color/white_38"
+        app:layout_constraintBottom_toBottomOf="@id/okButton"
+        app:layout_constraintEnd_toStartOf="@id/okButton"
+        app:layout_constraintTop_toTopOf="@id/okButton" />
+
+    <Button
+        android:id="@+id/clearButton"
+        style="@style/Widget.Xsolla.ActionButton.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/clear"
+        android:textColor="@color/white_38"
+        app:layout_constraintBottom_toBottomOf="@id/cancelButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cancelButton" />
+</androidx.constraintlayout.widget.ConstraintLayout>

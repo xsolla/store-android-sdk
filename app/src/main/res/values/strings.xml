@@ -2,6 +2,8 @@
     <string name="app_name">Xsolla Sample App</string>
 
     <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="clear">Clear</string>
     <string name="save_changes">Save changes</string>
 
     <string name="xsolla_payments_redirect_scheme">https</string>

@@ -57,10 +57,11 @@ class VmProfile : ViewModel() {
 
     fun updateFields(newState: UserDetailsUi) {
         val gender = newState.gender?.name?.toLowerCase(Locale.getDefault())?.first()?.toString()
-        XLogin.updateCurrentUserDetails(newState.birthday, newState.firstName, gender, newState.lastName, newState.nickname, object : UpdateCurrentUserDetailsCallback {
+        val birthday = newState.birthday.toBackendFormattedBirthday()
+        XLogin.updateCurrentUserDetails(birthday, newState.firstName, gender, newState.lastName, newState.nickname, object : UpdateCurrentUserDetailsCallback {
             override fun onSuccess() {
                 message.value = "Fields were successfully changed"
-                _state.value = newState
+                _state.value = newState.copy(phone = state.value!!.phone)
 
                 if (newState.phone != state.value!!.phone) {
                     updatePhone(newState.phone)
@@ -85,14 +86,12 @@ class VmProfile : ViewModel() {
         })
     }
 
-    fun validateField(field: FieldsForChanging, text: String?): ValidateFieldResult {
-        if (text.isNullOrBlank()) return ValidateFieldResult(false, "field is blank")
-
+    fun validateField(field: FieldsForChanging, text: String): ValidateFieldResult {
         if (field in FieldsForChanging.textFields) {
-            return if (text.length in 1..255) {
-                ValidateFieldResult(true, null)
+            return if (text.length < 255) {
+                ValidateFieldResult(true)
             } else {
-                ValidateFieldResult(false, "${field.name} length must be in 1..255")
+                ValidateFieldResult(false, "${field.name} length must be less than 255 symbols")
             }
         } else if (field == FieldsForChanging.PHONE) {
             return if (PHONE_PATTERN.matcher(text).matches()) {
@@ -123,6 +122,11 @@ class VmProfile : ViewModel() {
                 message.value = throwable?.message ?: errorMessage ?: "Failure"
             }
         })
+    }
+
+    private fun String.toBackendFormattedBirthday(): String {
+        val split = this.split("/")
+        return "${split.last()}-${split[1]}-${split.first()}"
     }
 }
 

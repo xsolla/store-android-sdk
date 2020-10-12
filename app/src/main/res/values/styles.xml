@@ -12,7 +12,7 @@
         <item name="textColorAlertDialogListItem">@color/secondary_color</item>
         <item name="buttonBarPositiveButtonStyle">@style/AlertDialogPositiveButton</item>
         <item name="buttonBarNegativeButtonStyle">@style/AlertDialogNegativeButton</item>
-        <item name="android:datePickerDialogTheme">@style/DatePickerTheme</item>
+        <item name="buttonBarNeutralButtonStyle">@style/AlertDialogNegativeButton</item>
 
     </style>
 
