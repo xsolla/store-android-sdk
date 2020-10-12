@@ -15,25 +15,30 @@
         app:srcCompat="@drawable/ic_profile" />
 
     <TextView
-        android:id="@+id/textEmail"
-        style="@style/Widget.Xsolla.Drawer.Text.Email"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/iconProfile"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iconProfile"
-        app:layout_constraintTop_toTopOf="@+id/iconProfile"
-        tools:text="a.nikonova@xsolla.com" />
-
-    <TextView
         android:id="@+id/textUsername"
         style="@style/Widget.Xsolla.Drawer.Text.Username"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/drawer_name_line_height"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iconProfile"
+        app:layout_constraintTop_toTopOf="@+id/iconProfile"
+        tools:text="Usikpusik" />
+
+    <TextView
+        android:id="@+id/textEmail"
+        style="@style/Widget.Xsolla.Drawer.Text.Email"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/drawer_email_line_height"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iconProfile"
+        app:layout_constraintTop_toBottomOf="@+id/textUsername"
+        tools:text="a.nikonova@xsolla.com" />
+
+    <View
+        android:id="@+id/profileLine"
+        style="@style/Widget.Xsolla.Drawer.View.Line"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iconProfile"
-        tools:text="usikpusik" />
+        app:layout_constraintTop_toBottomOf="@+id/iconProfile" />
 
     <TextView
         android:id="@+id/textInventory"
@@ -43,7 +48,7 @@
         android:text="@string/drawer_item_inventory"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textUsername" />
+        app:layout_constraintTop_toBottomOf="@+id/profileLine" />
 
     <TextView
         android:id="@+id/textFriends"
