@@ -8,6 +8,25 @@
         motion:duration="400"
         motion:motionInterpolator="easeInOut">
         <OnClick motion:targetId="@+id/title" />
+
+        <KeyFrameSet>
+            <KeyAttribute
+            android:alpha="0"
+            motion:framePosition="5"
+            motion:motionTarget="@+id/bgCartCounter"/>
+            <KeyAttribute
+                android:alpha="0"
+                motion:framePosition="95"
+                motion:motionTarget="@+id/bgCartCounter"/>
+            <KeyAttribute
+                android:alpha="0"
+                motion:framePosition="5"
+                motion:motionTarget="@+id/textCartCounter"/>
+            <KeyAttribute
+                android:alpha="0"
+                motion:framePosition="95"
+                motion:motionTarget="@+id/textCartCounter"/>
+        </KeyFrameSet>
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
@@ -51,6 +70,14 @@
                 motion:attributeName="ColorFilter"
                 motion:customColorValue="@color/magenta_color" />
         </Constraint>
+        <Constraint
+            android:id="@+id/bgCartCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="136dp"
+            android:layout_marginBottom="14dp"
+            motion:layout_constraintBottom_toBottomOf="@id/content"
+            motion:layout_constraintStart_toStartOf="@id/content" />
     </ConstraintSet>
 
 </MotionScene>
