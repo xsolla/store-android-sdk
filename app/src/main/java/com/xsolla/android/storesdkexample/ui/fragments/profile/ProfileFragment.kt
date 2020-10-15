@@ -7,16 +7,19 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.data.local.ResourceProvider
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.FieldsForChanging
 import com.xsolla.android.storesdkexample.ui.vm.Gender
 import com.xsolla.android.storesdkexample.ui.vm.UserDetailsUi
 import com.xsolla.android.storesdkexample.ui.vm.ValidateFieldResult
 import com.xsolla.android.storesdkexample.ui.vm.VmProfile
+import com.xsolla.android.storesdkexample.ui.vm.base.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_store.appbar
 import kotlinx.android.synthetic.main.app_bar_main.view.balanceLayout
 import kotlinx.android.synthetic.main.app_bar_main.view.mainToolbar
@@ -47,7 +50,9 @@ import kotlinx.android.synthetic.main.item_datepicker.view.okButton
 import java.util.Calendar
 
 class ProfileFragment : BaseFragment() {
-    private val viewModel: VmProfile by activityViewModels()
+    private val viewModel: VmProfile by activityViewModels {
+        ViewModelFactory(ResourceProvider(requireContext()))
+    }
 
     private val fieldsWithPossibleError by lazy {
         arrayOf(nicknameLayout, phoneLayout, firstnameLayout, lastnameLayout)

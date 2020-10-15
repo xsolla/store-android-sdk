@@ -10,11 +10,13 @@ import com.xsolla.android.login.callback.UpdateCurrentUserDetailsCallback
 import com.xsolla.android.login.callback.UpdateCurrentUserPhoneCallback
 import com.xsolla.android.login.entity.response.GenderResponse
 import com.xsolla.android.login.entity.response.UserDetailsResponse
+import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.data.local.IResourceProvider
 import com.xsolla.android.storesdkexample.util.SingleLiveEvent
 import java.util.Locale
 import java.util.regex.Pattern
 
-class VmProfile : ViewModel() {
+class VmProfile(private val resourceProvider: IResourceProvider) : ViewModel() {
     private companion object {
         private val PHONE_PATTERN = Pattern.compile("^\\+(\\d){5,25}\$")
     }
@@ -50,7 +52,7 @@ class VmProfile : ViewModel() {
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
-                message.value = throwable?.message ?: errorMessage ?: "Failure"
+                message.value = throwable?.message ?: errorMessage ?: resourceProvider.getString(R.string.failure)
             }
         })
     }
@@ -60,7 +62,7 @@ class VmProfile : ViewModel() {
         val birthday = newState.birthday.toBackendFormattedBirthday()
         XLogin.updateCurrentUserDetails(birthday, newState.firstName, gender, newState.lastName, newState.nickname, object : UpdateCurrentUserDetailsCallback {
             override fun onSuccess() {
-                message.value = "Fields were successfully changed"
+                message.value = resourceProvider.getString(R.string.profile_fields_were_changed)
                 _state.value = newState.copy(phone = state.value!!.phone)
 
                 if (newState.phone != state.value!!.phone) {
@@ -69,7 +71,7 @@ class VmProfile : ViewModel() {
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
-                message.value = throwable?.message ?: errorMessage ?: "Failure"
+                message.value = throwable?.message ?: errorMessage ?: resourceProvider.getString(R.string.failure)
             }
         })
     }
@@ -81,7 +83,7 @@ class VmProfile : ViewModel() {
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
-                message.value = throwable?.message ?: errorMessage ?: "Failure"
+                message.value = throwable?.message ?: errorMessage ?: resourceProvider.getString(R.string.failure)
             }
         })
     }
@@ -91,13 +93,13 @@ class VmProfile : ViewModel() {
             return if (text.length < 255) {
                 ValidateFieldResult(true)
             } else {
-                ValidateFieldResult(false, "${field.name} length must be less than 255 symbols")
+                ValidateFieldResult(false, resourceProvider.getString(R.string.profile_text_field_validation, field.name))
             }
         } else if (field == FieldsForChanging.PHONE) {
             return if (PHONE_PATTERN.matcher(text).matches()) {
                 ValidateFieldResult(true, null)
             } else {
-                ValidateFieldResult(false, "Phone must start with '+' and contains 5..25 digits")
+                ValidateFieldResult(false, resourceProvider.getString(R.string.profile_phone_validation))
             }
         }
 
@@ -115,11 +117,11 @@ class VmProfile : ViewModel() {
         if (username.isBlank() || email.isBlank()) return
         XLogin.resetPassword(username, object : ResetPasswordCallback {
             override fun onSuccess() {
-                message.value = "A letter has been sent to the $email. Follow the link in the letter — and you can create a new password"
+                message.value = resourceProvider.getString(R.string.profile_letter_was_sent, email)
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
-                message.value = throwable?.message ?: errorMessage ?: "Failure"
+                message.value = throwable?.message ?: errorMessage ?: resourceProvider.getString(R.string.failure)
             }
         })
     }

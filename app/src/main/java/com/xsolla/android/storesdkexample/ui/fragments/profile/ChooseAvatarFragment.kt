@@ -7,6 +7,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,11 +17,12 @@ import com.xsolla.android.storesdkexample.adapter.AvatarItem
 import com.xsolla.android.storesdkexample.adapter.AvatarsItemDecoration
 import com.xsolla.android.storesdkexample.adapter.ChooseAvatarAdapter
 import com.xsolla.android.storesdkexample.data.local.PrefManager
+import com.xsolla.android.storesdkexample.data.local.ResourceProvider
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmChooseAvatar
 import com.xsolla.android.storesdkexample.ui.vm.VmProfile
+import com.xsolla.android.storesdkexample.ui.vm.base.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_store.appbar
-import kotlinx.android.synthetic.main.activity_store.lock
 import kotlinx.android.synthetic.main.app_bar_main.view.mainToolbar
 import kotlinx.android.synthetic.main.fragment_choose_avatar.avatarsRecycler
 import kotlinx.android.synthetic.main.fragment_choose_avatar.close
@@ -34,7 +36,9 @@ import java.io.File
 class ChooseAvatarFragment : BaseFragment() {
     private val args: ChooseAvatarFragmentArgs by navArgs()
     private val viewModel: VmChooseAvatar by viewModels()
-    private val profileViewModel: VmProfile by activityViewModels()
+    private val profileViewModel: VmProfile by activityViewModels {
+        ViewModelFactory(ResourceProvider(requireContext()))
+    }
 
     private val avatars = listOf(
         AvatarItem(R.drawable.avatar_1),
