@@ -125,6 +125,8 @@ class VmProfile : ViewModel() {
     }
 
     private fun String.toBackendFormattedBirthday(): String {
+        if (this.isBlank()) return this
+
         val split = this.split("/")
         return "${split.last()}-${split[1]}-${split.first()}"
     }
