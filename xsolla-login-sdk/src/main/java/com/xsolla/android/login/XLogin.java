@@ -19,6 +19,7 @@ import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback;
 import com.xsolla.android.login.callback.GetCurrentUserFriendsCallback;
 import com.xsolla.android.login.callback.GetSocialFriendsCallback;
 import com.xsolla.android.login.callback.GetUserPublicInfoCallback;
+import com.xsolla.android.login.callback.GetUsersAttributesCallback;
 import com.xsolla.android.login.callback.RefreshTokenCallback;
 import com.xsolla.android.login.callback.RegisterCallback;
 import com.xsolla.android.login.callback.ResetPasswordCallback;
@@ -27,8 +28,11 @@ import com.xsolla.android.login.callback.StartSocialCallback;
 import com.xsolla.android.login.callback.UpdateCurrentUserDetailsCallback;
 import com.xsolla.android.login.callback.UpdateCurrentUserFriendsCallback;
 import com.xsolla.android.login.callback.UpdateCurrentUserPhoneCallback;
+import com.xsolla.android.login.callback.UpdateUsersAttributesCallback;
 import com.xsolla.android.login.callback.UploadCurrentUserAvatarCallback;
+import com.xsolla.android.login.entity.common.UserAttribute;
 import com.xsolla.android.login.entity.request.AuthUserBody;
+import com.xsolla.android.login.entity.request.GetUsersAttributesFromClientRequest;
 import com.xsolla.android.login.entity.request.OauthAuthUserBody;
 import com.xsolla.android.login.entity.request.OauthRegisterUserBody;
 import com.xsolla.android.login.entity.request.RegisterUserBody;
@@ -37,6 +41,7 @@ import com.xsolla.android.login.entity.request.UpdateUserDetailsBody;
 import com.xsolla.android.login.entity.request.UpdateUserFriendsRequest;
 import com.xsolla.android.login.entity.request.UpdateUserFriendsRequestAction;
 import com.xsolla.android.login.entity.request.UpdateUserPhoneBody;
+import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromClientRequest;
 import com.xsolla.android.login.entity.request.UserFriendsRequestSortBy;
 import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder;
 import com.xsolla.android.login.entity.request.UserFriendsRequestType;
@@ -58,6 +63,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import okhttp3.Interceptor;
@@ -788,7 +795,7 @@ public class XLogin {
      *
      * @param friendXsollaUserId        id of the user to change relationship with
      * @param action                    type of the action
-     * @param callback                  callback that indicates the success of failure of an action
+     * @param callback                  callback that indicates the success or failure of an action
      * @see <a href="https://developers.xsolla.com/user-account-api/user-friends/postusersmerelationships">User Account API Reference</a>
      */
     public static void updateCurrentUserFriend(
@@ -828,6 +835,98 @@ public class XLogin {
 
     public static boolean canRefreshToken() {
         return getInstance().useOauth && getInstance().tokenUtils.getOauthRefreshToken() != null;
+    }
+
+    /**
+     * Gets a list of particular user’s attributes. Returns only <b>client</b> attributes.
+     *
+     * @param keys                      List of attributes’ keys which you want to get. If you do not specify them, it returns all user’s attributes.
+     * @param publisherProjectId        Project ID from Publisher Account which you want to get attributes for. If you do not specify it, it returns attributes without the value of this parameter.
+     * @param userId                    User ID which attributes you want to get. Returns only attributes with the <code>public</code> value of the <code>permission</code> parameter. If you do not specify it or put your user ID there, it returns only your attributes with any value for the <code>permission</code> parameter.
+     * @param getReadOnlyAttributes     true for getting read only attributes, false for editable attributes
+     * @param callback                  callback with operation response
+     * @see <a href="https://developers.xsolla.com/login-api/methods/attributes/get-users-read-only-attributes-from-client">Login API Reference</a>
+     * @see <a href="https://developers.xsolla.com/login-api/methods/attributes/get-users-attributes-from-client">Login API Reference</a>
+     */
+    public static void getUsersAttributesFromClient(
+            @Nullable List<String> keys,
+            @Nullable Integer publisherProjectId,
+            @Nullable String userId,
+            boolean getReadOnlyAttributes,
+            @NonNull final GetUsersAttributesCallback callback
+    ) {
+        if (keys == null) {
+            keys = Collections.emptyList();
+        }
+
+        Call<List<UserAttribute>> call;
+        if (getReadOnlyAttributes) {
+            call = getInstance().loginApi
+                    .getUsersReadOnlyAttributesFromClient("Bearer " + getToken(), new GetUsersAttributesFromClientRequest(keys, publisherProjectId, userId));
+        } else {
+            call = getInstance().loginApi
+                    .getUsersAttributesFromClient("Bearer " + getToken(), new GetUsersAttributesFromClientRequest(keys, publisherProjectId, userId));
+        }
+        call.enqueue(new Callback<List<UserAttribute>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<UserAttribute>> call, @NonNull Response<List<UserAttribute>> response) {
+                        if (response.isSuccessful()) {
+                            List<UserAttribute> attributes = response.body();
+                            if (attributes != null) {
+                                callback.onSuccess(attributes);
+                            } else {
+                                callback.onError(null, "Empty response");
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<UserAttribute>> call, @NonNull Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
+    }
+
+    /**
+     * Updates and creates particular user’s attributes.
+     *
+     * @param attributes                List of attributes of the specified game. To add attribute which does not exist, set this attribute to the <code>key</code> parameter. To update <code>value</code> of the attribute, specify its <code>key</code> parameter and set the new <code>value</code>. You can change several attributes at a time.
+     * @param publisherProjectId        Project ID from Publisher Account which you want to update the value of specified attributes for. If you do not specify it, it updates attributes that are general to all games only.
+     * @param removingKeys              List of attributes which you want to delete. If you specify the same attribute in <code>attributes</code> parameter, it will not be deleted.
+     * @param callback                  callback that indicates the success or failure of an action
+     * @see <a href="https://developers.xsolla.com/login-api/methods/attributes/update-users-attributes-from-client">Login API Reference</a>
+     */
+    public static void updateUsersAttributesFromClient(
+            @Nullable List<UserAttribute> attributes,
+            @Nullable Integer publisherProjectId,
+            @Nullable List<String> removingKeys,
+            @NonNull final UpdateUsersAttributesCallback callback
+    ) {
+        if (attributes == null) {
+            attributes = Collections.emptyList();
+        }
+        if (removingKeys == null) {
+            removingKeys = Collections.emptyList();
+        }
+        getInstance().loginApi
+                .updateUsersAttributesFromClient("Bearer " + getToken(), new UpdateUsersAttributesFromClientRequest(attributes, publisherProjectId, removingKeys))
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            callback.onSuccess();
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
     }
 
     /**

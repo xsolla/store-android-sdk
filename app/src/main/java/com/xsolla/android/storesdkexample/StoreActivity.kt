@@ -1,6 +1,5 @@
 package com.xsolla.android.storesdkexample
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,7 +28,6 @@ import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
-import com.xsolla.android.storesdkexample.ui.vm.VmFriends
 import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import com.xsolla.android.storesdkexample.util.sumByLong
 import kotlinx.android.synthetic.main.activity_store.*
@@ -38,14 +36,8 @@ import kotlinx.android.synthetic.main.item_balance.view.*
 import kotlinx.android.synthetic.main.layout_drawer.*
 
 class StoreActivity : AppCompatActivity() {
-
-    companion object {
-        const val RC_LOGIN = 1
-    }
-
     private val vmCart: VmCart by viewModels()
     private val vmBalance: VmBalance by viewModels()
-    private val vmFriends: VmFriends by viewModels()
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var drawerLayout: DrawerLayout
@@ -54,11 +46,16 @@ class StoreActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_store)
 
+        if (XLogin.isTokenExpired(60)) {
+            if (!XLogin.canRefreshToken()) {
+                startLogin()
+            }
+        }
+
         XStore.init(BuildConfig.PROJECT_ID, XLogin.getToken() ?: "")
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
 
         initNavController()
         initDrawer()
@@ -94,18 +91,8 @@ class StoreActivity : AppCompatActivity() {
             vmCart.updateCart()
             vmBalance.updateVirtualBalance()
 
-            vmFriends.clearAllFriends()
-            vmFriends.loadAllFriends()
-
             setDrawerData()
             drawerLayout.closeDrawer(GravityCompat.START)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_LOGIN && resultCode != Activity.RESULT_OK) {
-            finish()
         }
     }
 
@@ -152,7 +139,7 @@ class StoreActivity : AppCompatActivity() {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_vi, R.id.nav_vc, R.id.nav_inventory, R.id.nav_friends), drawerLayout)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_vi, R.id.nav_vc, R.id.nav_inventory, R.id.nav_friends, R.id.nav_character), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
@@ -167,6 +154,10 @@ class StoreActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         textInventory.setOnClickListener {
             navController.navigate(R.id.nav_inventory)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        textCharacter.setOnClickListener {
+            navController.navigate(R.id.nav_character)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
         textFriends.setOnClickListener {
@@ -221,7 +212,8 @@ class StoreActivity : AppCompatActivity() {
 
     private fun startLogin() {
         val intent = Intent(this, LoginActivity::class.java)
-        startActivityForResult(intent, RC_LOGIN)
+        startActivity(intent)
+        finish()
     }
 
     private fun showSnack(message: String) {

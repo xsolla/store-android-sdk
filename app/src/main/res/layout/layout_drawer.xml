@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,7 +13,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_profile" />
+        app:srcCompat="@drawable/ic_profile"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/textEmail"
@@ -51,15 +53,25 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/drawer_item_friends"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textInventory" />
+
+    <TextView
+        android:id="@+id/textCharacter"
+        style="@style/Widget.Xsolla.Drawer.Text.Item"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/character_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textFriends" />
 
     <View
         android:id="@+id/viewLine1"
         style="@style/Widget.Xsolla.Drawer.View.Line"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textFriends" />
+        app:layout_constraintTop_toBottomOf="@+id/textCharacter" />
 
     <TextView
         android:id="@+id/textStore"
