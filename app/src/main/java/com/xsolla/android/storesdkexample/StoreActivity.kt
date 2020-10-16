@@ -34,6 +34,7 @@ import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import com.xsolla.android.storesdkexample.util.sumByLong
 import kotlinx.android.synthetic.main.activity_store.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.drawer_expandable_item.*
 import kotlinx.android.synthetic.main.item_balance.view.*
 import kotlinx.android.synthetic.main.layout_drawer.*
 
@@ -165,23 +166,33 @@ class StoreActivity : AppCompatActivity() {
     private fun initDrawer() {
         drawerLayout = findViewById(R.id.drawer_layout)
         val navController = findNavController(R.id.nav_host_fragment)
-        textInventory.setOnClickListener {
+
+        itemCharacter.setOnClickListener {
+
+        }
+        itemInventory.setOnClickListener {
             navController.navigate(R.id.nav_inventory)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-        textFriends.setOnClickListener {
+        itemFriends.setOnClickListener {
             navController.navigate(R.id.nav_friends)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-        textVirtualItems.setOnClickListener {
+        itemVirtualItems.setOnClickListener {
             navController.navigate(R.id.nav_vi)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-        textVirtualCurrency.setOnClickListener {
+        itemVirtualCurrency.setOnClickListener {
             navController.navigate(R.id.nav_vc)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-        textCart.setOnClickListener {
+        itemMerchandise.setOnClickListener {
+
+        }
+        itemCoupon.setOnClickListener {
+
+        }
+        itemCart.setOnClickListener {
             if (vmCart.cartContent.value.isNullOrEmpty()) {
                 showSnack(getString(R.string.cart_message_empty))
             } else {
@@ -189,7 +200,10 @@ class StoreActivity : AppCompatActivity() {
                 drawerLayout.closeDrawer(GravityCompat.START)
             }
         }
-        textLogout.setOnClickListener {
+        itemAccount.setOnClickListener {
+
+        }
+        itemLogout.setOnClickListener {
             XLogin.logout()
             startLogin()
         }
