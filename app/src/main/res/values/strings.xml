@@ -2,6 +2,7 @@
     <string name="app_name">Xsolla Sample App</string>
 
     <string name="cancel">Cancel</string>
+    <string name="success">Success</string>
 
     <string name="xsolla_payments_redirect_scheme">https</string>
     <string name="xsolla_payments_redirect_host">example.com</string>
@@ -80,5 +81,7 @@
     <string name="coupon_hint">Enter your coupon code</string>
     <string name="coupon_redeem_button">Redeem</string>
     <string name="coupon_example">\tfor example, WINTER2021</string>
+    <string name="coupon_received_items_placeholder">You received the following items:</string>
+    <string name="coupon_redeem_another_button">Redeem another coupon</string>
 
 </resources>

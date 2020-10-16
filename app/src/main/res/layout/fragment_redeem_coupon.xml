@@ -19,11 +19,17 @@
         app:title="@string/coupon_title" />
 
     <androidx.constraintlayout.widget.Group
+        android:id="@+id/receivedItemsGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="successPlaceholder,itemsPlaceholder,receivedItemsRecycler,redeemAnotherLayout" />
+
+    <androidx.constraintlayout.widget.Group
         android:id="@+id/couponGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="couponLayout,redeemButton,cancelButton"
-        tools:visibility="gone" />
+        app:constraint_referenced_ids="couponLayout,redeemButton,cancelButton" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/couponLayout"
@@ -69,13 +75,60 @@
 
     <TextView
         android:id="@+id/successPlaceholder"
-        style="@style/TextAppearance.MaterialComponents.Headline2"
+        style="@style/Headline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Success"
+        android:text="@string/success"
+        android:textColor="@color/white_color"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <TextView
+        android:id="@+id/itemsPlaceholder"
+        style="@style/Body2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/coupon_received_items_placeholder"
+        android:textColor="@color/secondary_color"
+        app:layout_constraintStart_toStartOf="@id/successPlaceholder"
+        app:layout_constraintTop_toBottomOf="@id/successPlaceholder" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/receivedItemsRecycler"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:fadeScrollbars="false"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@id/redeemAnotherLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemsPlaceholder"
+        tools:listitem="@layout/item_inventory" />
+
+    <FrameLayout
+        android:id="@+id/redeemAnotherLayout"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:background="@color/secondary_color_10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/redeemAnotherButton"
+            style="@style/Widget.Xsolla.ActionButton.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:text="@string/coupon_redeem_another_button" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
