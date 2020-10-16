@@ -20,6 +20,8 @@ import com.xsolla.android.storesdkexample.ui.vm.UserDetailsUi
 import com.xsolla.android.storesdkexample.ui.vm.ValidateFieldResult
 import com.xsolla.android.storesdkexample.ui.vm.VmProfile
 import com.xsolla.android.storesdkexample.ui.vm.base.ViewModelFactory
+import com.xsolla.android.storesdkexample.util.extensions.BirthdayFormat
+import com.xsolla.android.storesdkexample.util.extensions.formatBirthday
 import kotlinx.android.synthetic.main.activity_store.appbar
 import kotlinx.android.synthetic.main.app_bar_main.view.balanceLayout
 import kotlinx.android.synthetic.main.app_bar_main.view.mainToolbar
@@ -68,8 +70,6 @@ class ProfileFragment : BaseFragment() {
             showSnack(it)
         }
         viewModel.state.observe(viewLifecycleOwner) { userData ->
-            if (userData == null) return@observe
-
             // avatar
             Glide.with(this)
                 .load(userData.avatar)
@@ -104,7 +104,7 @@ class ProfileFragment : BaseFragment() {
             lastnameInput.setText(userData.lastName)
 
             // Birthday
-            birthdayInput.setText(userData.birthday)
+            birthdayInput.setText(userData.birthday.formatBirthday(BirthdayFormat.FROM_BACKEND_TO_UI))
             if (userData.birthday.isNotBlank()) birthdayLayout.isEnabled = false
 
             // Gender

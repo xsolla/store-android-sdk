@@ -13,6 +13,8 @@ import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.data.local.IResourceProvider
 import com.xsolla.android.storesdkexample.util.SingleLiveEvent
+import com.xsolla.android.storesdkexample.util.extensions.BirthdayFormat
+import com.xsolla.android.storesdkexample.util.extensions.formatBirthday
 import java.util.Locale
 import java.util.regex.Pattern
 
@@ -59,7 +61,7 @@ class VmProfile(private val resourceProvider: IResourceProvider) : ViewModel() {
 
     fun updateFields(newState: UserDetailsUi) {
         val gender = newState.gender?.name?.toLowerCase(Locale.getDefault())?.first()?.toString()
-        val birthday = newState.birthday.toBackendFormattedBirthday()
+        val birthday = newState.birthday.formatBirthday(BirthdayFormat.FROM_UI_TO_BACKEND)
         XLogin.updateCurrentUserDetails(birthday, newState.firstName, gender, newState.lastName, newState.nickname, object : UpdateCurrentUserDetailsCallback {
             override fun onSuccess() {
                 message.value = resourceProvider.getString(R.string.profile_fields_were_changed)
@@ -124,13 +126,6 @@ class VmProfile(private val resourceProvider: IResourceProvider) : ViewModel() {
                 message.value = throwable?.message ?: errorMessage ?: resourceProvider.getString(R.string.failure)
             }
         })
-    }
-
-    private fun String.toBackendFormattedBirthday(): String {
-        if (this.isBlank()) return this
-
-        val split = this.split("/")
-        return "${split.last()}-${split[1]}-${split.first()}"
     }
 }
 
