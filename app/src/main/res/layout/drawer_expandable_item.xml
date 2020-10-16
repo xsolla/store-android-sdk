@@ -46,13 +46,12 @@
 
         <ImageView
             android:id="@+id/bgCartCounter"
-            android:layout_width="17dp"
-            android:layout_height="17dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@id/item_text"
             app:layout_constraintStart_toEndOf="@id/item_text"
             app:layout_constraintTop_toTopOf="@id/item_text"
             android:layout_marginStart="@dimen/drawer_cart_counter_margin_start_collapsed"
-            android:visibility="visible"
             app:srcCompat="@drawable/bg_cart_counter" />
 
         <TextView
@@ -63,8 +62,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/bgCartCounter"
             app:layout_constraintEnd_toEndOf="@+id/bgCartCounter"
             app:layout_constraintStart_toStartOf="@+id/bgCartCounter"
-            app:layout_constraintTop_toTopOf="@+id/bgCartCounter"
-            android:text="3"/>
+            app:layout_constraintTop_toTopOf="@+id/bgCartCounter" />
 
     <LinearLayout
         android:id="@+id/content"

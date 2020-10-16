@@ -134,7 +134,8 @@
     <dimen name="drawer_item_title_letter_spacing">0.09</dimen>
     <dimen name="drawer_inner_item_text_margin_left">88dp</dimen>
     <dimen name="drawer_cart_counter_margin_start_collapsed">5dp</dimen>
-    <dimen name="drawer_cart_counter_margin_start_expanded">13dp</dimen>
+    <dimen name="drawer_cart_counter_margin_start_expanded">136dp</dimen>
+    <dimen name="drawer_cart_counter_margin_bottom_expanded">14dp</dimen>
     <dimen name="drawer_cart_counter_text_size">12sp</dimen>
 
 

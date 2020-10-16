@@ -11,21 +11,21 @@
 
         <KeyFrameSet>
             <KeyAttribute
-            android:alpha="0"
-            motion:framePosition="5"
-            motion:motionTarget="@+id/bgCartCounter"/>
+                android:alpha="0"
+                motion:framePosition="5"
+                motion:motionTarget="@+id/bgCartCounter" />
             <KeyAttribute
                 android:alpha="0"
                 motion:framePosition="95"
-                motion:motionTarget="@+id/bgCartCounter"/>
+                motion:motionTarget="@+id/bgCartCounter" />
             <KeyAttribute
                 android:alpha="0"
                 motion:framePosition="5"
-                motion:motionTarget="@+id/textCartCounter"/>
+                motion:motionTarget="@+id/textCartCounter" />
             <KeyAttribute
                 android:alpha="0"
                 motion:framePosition="95"
-                motion:motionTarget="@+id/textCartCounter"/>
+                motion:motionTarget="@+id/textCartCounter" />
         </KeyFrameSet>
     </Transition>
 
@@ -52,6 +52,24 @@
             motion:layout_constraintEnd_toEndOf="@id/title"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toBottomOf="parent" />
+        <Constraint
+            android:id="@+id/bgCartCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/drawer_cart_counter_margin_start_collapsed"
+            motion:layout_constraintBottom_toBottomOf="@id/item_text"
+            motion:layout_constraintStart_toEndOf="@id/item_text"
+            motion:layout_constraintTop_toTopOf="@id/item_text"
+            motion:visibilityMode="ignore" />
+        <Constraint
+            android:id="@+id/textCartCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="@id/bgCartCounter"
+            motion:layout_constraintEnd_toEndOf="@id/bgCartCounter"
+            motion:layout_constraintStart_toStartOf="@id/bgCartCounter"
+            motion:layout_constraintTop_toTopOf="@id/bgCartCounter"
+            motion:visibilityMode="ignore" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
@@ -74,10 +92,20 @@
             android:id="@+id/bgCartCounter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="136dp"
-            android:layout_marginBottom="14dp"
+            android:layout_marginStart="@dimen/drawer_cart_counter_margin_start_expanded"
+            android:layout_marginBottom="@dimen/drawer_cart_counter_margin_bottom_expanded"
             motion:layout_constraintBottom_toBottomOf="@id/content"
-            motion:layout_constraintStart_toStartOf="@id/content" />
+            motion:layout_constraintStart_toStartOf="@id/content"
+            motion:visibilityMode="ignore" />
+        <Constraint
+            android:id="@+id/textCartCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="@id/bgCartCounter"
+            motion:layout_constraintEnd_toEndOf="@id/bgCartCounter"
+            motion:layout_constraintStart_toStartOf="@id/bgCartCounter"
+            motion:layout_constraintTop_toTopOf="@id/bgCartCounter"
+            motion:visibilityMode="ignore" />
     </ConstraintSet>
 
 </MotionScene>
