@@ -103,11 +103,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textVirtualItems" />
 
+    <TextView
+        android:id="@+id/textRedeemCoupon"
+        style="@style/Widget.Xsolla.Drawer.Text.Item"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/coupon_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textVirtualCurrency" />
+
     <View
         android:id="@+id/viewLine2"
         style="@style/Widget.Xsolla.Drawer.View.Line"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textVirtualCurrency" />
+        app:layout_constraintTop_toBottomOf="@+id/textRedeemCoupon" />
 
     <ImageView
         android:id="@+id/iconCart"

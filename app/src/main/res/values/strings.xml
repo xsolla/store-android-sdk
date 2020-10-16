@@ -76,4 +76,9 @@
     <string name="character_edit_attribute_key_hint">Attribute key</string>
     <string name="character_edit_attribute_value_hint">Attribute value</string>
 
+    <string name="coupon_title">Redeem coupon</string>
+    <string name="coupon_hint">Enter your coupon code</string>
+    <string name="coupon_redeem_button">Redeem</string>
+    <string name="coupon_example">\tfor example, WINTER2021</string>
+
 </resources>
