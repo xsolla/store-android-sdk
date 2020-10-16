@@ -45,16 +45,15 @@ android {
 }
 
 dependencies {
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    implementation "androidx.preference:preference-ktx:1.1.1"
-
     implementation project(":app-core")
+
     implementation project(":xsolla-login-sdk")
     // Uncomment to implement native auth
 //    implementation project(":xsolla-login-sdk-facebook")
 //    implementation project(":xsolla-login-sdk-google")
     implementation project(":xsolla-store-sdk")
     implementation project(":xsolla-payments-sdk")
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'

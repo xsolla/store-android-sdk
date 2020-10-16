@@ -15,6 +15,7 @@ import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
 import com.xsolla.android.login.callback.GetCurrentUserFriendsCallback
 import com.xsolla.android.login.callback.GetSocialFriendsCallback
 import com.xsolla.android.login.callback.GetUserPublicInfoCallback
+import com.xsolla.android.login.callback.GetUsersAttributesCallback
 import com.xsolla.android.login.callback.RefreshTokenCallback
 import com.xsolla.android.login.callback.RegisterCallback
 import com.xsolla.android.login.callback.ResetPasswordCallback
@@ -23,8 +24,11 @@ import com.xsolla.android.login.callback.StartSocialCallback
 import com.xsolla.android.login.callback.UpdateCurrentUserDetailsCallback
 import com.xsolla.android.login.callback.UpdateCurrentUserFriendsCallback
 import com.xsolla.android.login.callback.UpdateCurrentUserPhoneCallback
+import com.xsolla.android.login.callback.UpdateUsersAttributesCallback
 import com.xsolla.android.login.callback.UploadCurrentUserAvatarCallback
+import com.xsolla.android.login.entity.common.UserAttribute
 import com.xsolla.android.login.entity.request.AuthUserBody
+import com.xsolla.android.login.entity.request.GetUsersAttributesFromClientRequest
 import com.xsolla.android.login.entity.request.OauthAuthUserBody
 import com.xsolla.android.login.entity.request.OauthRegisterUserBody
 import com.xsolla.android.login.entity.request.RegisterUserBody
@@ -33,6 +37,7 @@ import com.xsolla.android.login.entity.request.UpdateUserDetailsBody
 import com.xsolla.android.login.entity.request.UpdateUserFriendsRequest
 import com.xsolla.android.login.entity.request.UpdateUserFriendsRequestAction
 import com.xsolla.android.login.entity.request.UpdateUserPhoneBody
+import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromClientRequest
 import com.xsolla.android.login.entity.request.UserFriendsRequestSortBy
 import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder
 import com.xsolla.android.login.entity.request.UserFriendsRequestType
@@ -62,6 +67,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
+import java.util.Collections
 import java.util.UUID
 
 /**
@@ -770,6 +776,88 @@ class XLogin private constructor(
             val updateUserFriendsRequest = UpdateUserFriendsRequest(action.name.toLowerCase(), friendXsollaUserId)
             getInstance().loginApi
                 .updateFriends("Bearer $token", updateUserFriendsRequest)
+                .enqueue(object : Callback<Void?> {
+                    override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                        if (response.isSuccessful) {
+                            callback.onSuccess()
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Void?>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
+         * Gets a list of particular user’s attributes. Returns only **client** attributes.
+         *
+         * @param keys                      List of attributes’ keys which you want to get. If you do not specify them, it returns all user’s attributes.
+         * @param publisherProjectId        Project ID from Publisher Account which you want to get attributes for. If you do not specify it, it returns attributes without the value of this parameter.
+         * @param userId                    User ID which attributes you want to get. Returns only attributes with the `public` value of the `permission` parameter. If you do not specify it or put your user ID there, it returns only your attributes with any value for the `permission` parameter.
+         * @param getReadOnlyAttributes     true for getting read only attributes, false for editable attributes
+         * @param callback                  callback with operation response
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/attributes/get-users-read-only-attributes-from-client)
+         *
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/attributes/get-users-attributes-from-client)
+         */
+        fun getUsersAttributesFromClient(
+            keys: List<String>?,
+            publisherProjectId: Int?,
+            userId: String?,
+            getReadOnlyAttributes: Boolean,
+            callback: GetUsersAttributesCallback
+        ) {
+            val nonNullKeys: List<String> = keys ?: listOf()
+            val call: Call<List<UserAttribute>> = if (getReadOnlyAttributes) {
+                getInstance().loginApi
+                    .getUsersReadOnlyAttributesFromClient("Bearer $token", GetUsersAttributesFromClientRequest(nonNullKeys, publisherProjectId, userId))
+            } else {
+                getInstance().loginApi
+                    .getUsersAttributesFromClient("Bearer $token", GetUsersAttributesFromClientRequest(nonNullKeys, publisherProjectId, userId))
+            }
+            call.enqueue(object : Callback<List<UserAttribute>> {
+                override fun onResponse(call: Call<List<UserAttribute>>, response: Response<List<UserAttribute>>) {
+                    if (response.isSuccessful) {
+                        val attributes = response.body()
+                        if (attributes != null) {
+                            callback.onSuccess(attributes)
+                        } else {
+                            callback.onError(null, "Empty response")
+                        }
+                    } else {
+                        callback.onError(null, getErrorMessage(response.errorBody()))
+                    }
+                }
+
+                override fun onFailure(call: Call<List<UserAttribute>>, t: Throwable) {
+                    callback.onError(t, null)
+                }
+            })
+        }
+
+        /**
+         * Updates and creates particular user’s attributes.
+         *
+         * @param attributes                List of attributes of the specified game. To add attribute which does not exist, set this attribute to the `key` parameter. To update `value` of the attribute, specify its `key` parameter and set the new `value`. You can change several attributes at a time.
+         * @param publisherProjectId        Project ID from Publisher Account which you want to update the value of specified attributes for. If you do not specify it, it updates attributes that are general to all games only.
+         * @param removingKeys              List of attributes which you want to delete. If you specify the same attribute in `attributes` parameter, it will not be deleted.
+         * @param callback                  callback that indicates the success or failure of an action
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/attributes/update-users-attributes-from-client)
+         */
+        fun updateUsersAttributesFromClient(
+            attributes: List<UserAttribute>?,
+            publisherProjectId: Int?,
+            removingKeys: List<String>?,
+            callback: UpdateUsersAttributesCallback
+        ) {
+            val nonNullAttributes = attributes ?: listOf()
+            val nonNullRemovingKeys = removingKeys ?: listOf()
+
+            getInstance().loginApi
+                .updateUsersAttributesFromClient("Bearer $token", UpdateUsersAttributesFromClientRequest(nonNullAttributes, publisherProjectId, nonNullRemovingKeys))
                 .enqueue(object : Callback<Void?> {
                     override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
                         if (response.isSuccessful) {

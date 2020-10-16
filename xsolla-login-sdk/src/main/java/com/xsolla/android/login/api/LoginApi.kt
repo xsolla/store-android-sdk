@@ -1,7 +1,9 @@
 package com.xsolla.android.login.api
 
+import com.xsolla.android.login.entity.common.UserAttribute
 import com.xsolla.android.login.entity.request.AuthUserBody
 import com.xsolla.android.login.entity.request.AuthUserSocialBody
+import com.xsolla.android.login.entity.request.GetUsersAttributesFromClientRequest
 import com.xsolla.android.login.entity.request.OauthAuthUserBody
 import com.xsolla.android.login.entity.request.OauthGetCodeBySocialTokenBody
 import com.xsolla.android.login.entity.request.OauthRegisterUserBody
@@ -10,6 +12,7 @@ import com.xsolla.android.login.entity.request.ResetPasswordBody
 import com.xsolla.android.login.entity.request.UpdateUserDetailsBody
 import com.xsolla.android.login.entity.request.UpdateUserFriendsRequest
 import com.xsolla.android.login.entity.request.UpdateUserPhoneBody
+import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromClientRequest
 import com.xsolla.android.login.entity.response.AuthResponse
 import com.xsolla.android.login.entity.response.AuthSocialResponse
 import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse
@@ -137,6 +140,24 @@ interface LoginApi {
     fun updateFriends(
         @Header("authorization") authHeader: String,
         @Body updateUserFriendsRequest: UpdateUserFriendsRequest
+    ): Call<Void>
+
+    @POST("api/attributes/users/me/get")
+    fun getUsersAttributesFromClient(
+        @Header("authorization") authHeader: String,
+        @Body getUsersAttributesFromClientRequest: GetUsersAttributesFromClientRequest
+    ): Call<List<UserAttribute>>
+
+    @POST("api/attributes/users/me/get_read_only")
+    fun getUsersReadOnlyAttributesFromClient(
+        @Header("authorization") authHeader: String,
+        @Body getUsersAttributesFromClientRequest: GetUsersAttributesFromClientRequest
+    ): Call<List<UserAttribute>>
+
+    @POST("api/attributes/users/me/update")
+    fun updateUsersAttributesFromClient(
+        @Header("authorization") authHeader: String,
+        @Body updateUsersAttributesFromClientRequest: UpdateUsersAttributesFromClientRequest
     ): Call<Void>
 
     // OAuth 2.0
