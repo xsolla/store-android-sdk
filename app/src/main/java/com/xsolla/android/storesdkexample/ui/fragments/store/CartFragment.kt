@@ -76,7 +76,7 @@ class CartFragment : Fragment(), CartChangeListener {
             val sumWithDiscount = items.map { item -> item.price!!.getAmountDecimal()!! * item.quantity.toBigDecimal() }.fold(BigDecimal.ZERO, BigDecimal::add)
             val discount = sumWithoutDiscount.minus(sumWithDiscount)
 
-            val hasDiscount = discount.toInt() != 0
+            val hasDiscount = discount.toDouble() != 0.0
             subtotalLabel.isVisible = hasDiscount
             subtotalValue.isVisible = hasDiscount
             discountLabel.isVisible = hasDiscount
