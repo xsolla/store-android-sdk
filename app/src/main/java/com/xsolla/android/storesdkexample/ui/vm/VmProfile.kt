@@ -119,7 +119,7 @@ class VmProfile(private val resourceProvider: IResourceProvider) : ViewModel() {
         if (username.isBlank() || email.isBlank()) return
         XLogin.resetPassword(username, object : ResetPasswordCallback {
             override fun onSuccess() {
-                message.value = resourceProvider.getString(R.string.profile_letter_was_sent, email)
+                message.value = "A letter has been sent to the $email. Follow the link in the letter — and you can create a new password"
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
