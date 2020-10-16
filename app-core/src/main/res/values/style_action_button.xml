@@ -19,6 +19,12 @@
         <item name="cornerRadius">@dimen/secondary_action_button_corner_radius</item>
     </style>
 
+    <style name="Widget.Xsolla.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="cornerRadius">@dimen/secondary_action_button_corner_radius</item>
+        <item name="android:textColor">@color/secondary_color</item>
+        <item name="android:letterSpacing">-0.03</item>
+    </style>
+
     <style name="Widget.Xsolla.ActionButton.Small.Secondary" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:height">@dimen/secondary_action_button_height</item>
         <item name="strokeColor">@color/magenta_color</item>
