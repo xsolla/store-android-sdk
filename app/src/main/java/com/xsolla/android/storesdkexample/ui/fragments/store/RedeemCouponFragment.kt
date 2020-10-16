@@ -28,6 +28,8 @@ class RedeemCouponFragment : BaseFragment() {
 
 
         }
+
+        redeemButton.setOnClickListener { viewModel.redeemCoupon(couponInput.text.toString()) }
     }
 
     override fun onDestroyView() {

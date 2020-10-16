@@ -4,6 +4,7 @@ import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
+import com.xsolla.android.store.entity.request.coupon.RedeemCouponRequestBody;
 import com.xsolla.android.store.entity.request.inventory.ConsumeItemBody;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
 import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
@@ -14,12 +15,18 @@ import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
 import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse;
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
+import com.xsolla.android.store.entity.response.items.RedeemCouponResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.store.entity.response.order.OrderResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import kotlin.Pair;
 
 class RequestExecutor {
 
@@ -190,6 +197,17 @@ class RequestExecutor {
                 itemSku,
                 virtualCurrencySku,
                 "android_standalone" // TODO another android platforms
+        ).enqueue(callback);
+    }
+
+    public void redeemCoupon(
+            @NotNull String couponCode,
+            @Nullable Pair<String, String> selectedUnitItems,
+            @NotNull XStoreCallback<RedeemCouponResponse> callback
+    ) {
+        storeApi.redeemCoupon(
+                projectId,
+                new RedeemCouponRequestBody(couponCode, selectedUnitItems)
         ).enqueue(callback);
     }
 

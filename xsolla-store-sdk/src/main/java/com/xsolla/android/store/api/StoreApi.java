@@ -1,6 +1,7 @@
 package com.xsolla.android.store.api;
 
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
+import com.xsolla.android.store.entity.request.coupon.RedeemCouponRequestBody;
 import com.xsolla.android.store.entity.request.inventory.ConsumeItemBody;
 import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
@@ -9,6 +10,7 @@ import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
 import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse;
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
+import com.xsolla.android.store.entity.response.items.RedeemCouponResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
@@ -22,6 +24,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -176,6 +179,12 @@ public interface StoreApi {
             @Path("item_sku") String itemSku,
             @Path("virtual_currency_sku") String virtualCurrencySku,
             @Query("platform") String platform
+    );
+
+    @POST("api/v2/project/{project_id}/coupon/redeem")
+    Call<RedeemCouponResponse> redeemCoupon(
+            @Path("project_id") int projectId,
+            @Body RedeemCouponRequestBody body
     );
 
 }

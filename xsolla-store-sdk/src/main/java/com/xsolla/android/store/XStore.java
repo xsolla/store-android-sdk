@@ -14,6 +14,7 @@ import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
 import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse;
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
+import com.xsolla.android.store.entity.response.items.RedeemCouponResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
@@ -21,8 +22,12 @@ import com.xsolla.android.store.entity.response.order.OrderResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 
+import kotlin.Pair;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
@@ -432,6 +437,36 @@ public class XStore {
      */
     public static void createOrderByVirtualCurrency(String itemSku, String virtualCurrencySku, XStoreCallback<CreateOrderByVirtualCurrencyResponse> callback) {
         getRequestExecutor().createOrderByVirtualCurrency(itemSku, virtualCurrencySku, callback);
+    }
+
+    /**
+     * Redeems a coupon code. The user gets a bonus after a coupon is redeemed.
+     *
+     * @param couponCode            unique coupon code. Contains letters and numbers
+     * @param callback              callback with received items
+     * @see <a href="https://developers.xsolla.com/store-api/promotions/coupons/redeem-coupon">Store API Reference</a>
+     */
+    public static void redeemCoupon(
+            @NotNull String couponCode,
+            @NotNull XStoreCallback<RedeemCouponResponse> callback
+    ) {
+        redeemCoupon(couponCode, null, callback);
+    }
+
+    /**
+     * Redeems a coupon code. The user gets a bonus after a coupon is redeemed.
+     *
+     * @param couponCode            unique coupon code. Contains letters and numbers
+     * @param selectedUnitItems     the reward that is selected by a user. Object key is an SKU of a unit, and value is an SKU of one of the items in a unit.
+     * @param callback              callback with received items
+     * @see <a href="https://developers.xsolla.com/store-api/promotions/coupons/redeem-coupon">Store API Reference</a>
+     */
+    public static void redeemCoupon(
+            @NotNull String couponCode,
+            @Nullable Pair<String, String> selectedUnitItems,
+            @NotNull XStoreCallback<RedeemCouponResponse> callback
+    ) {
+        getRequestExecutor().redeemCoupon(couponCode, selectedUnitItems, callback);
     }
 
 }
