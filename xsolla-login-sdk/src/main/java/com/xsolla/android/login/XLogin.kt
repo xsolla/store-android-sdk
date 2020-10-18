@@ -88,31 +88,10 @@ class XLogin private constructor(
         loginSocial.init(context.applicationContext, loginApi, projectId, callbackUrl, tokenUtils, useOauth, oauthClientId, socialConfig)
     }
 
-    class SocialConfig {
-        var facebookAppId: String? = null
-        var googleServerId: String? = null
-
-        class Builder {
-            private var facebookAppId: String? = null
-            private var googleServerId: String? = null
-            fun facebookAppId(facebookAppId: String?): Builder {
-                this.facebookAppId = facebookAppId
-                return this
-            }
-
-            fun googleServerId(googleServerId: String?): Builder {
-                this.googleServerId = googleServerId
-                return this
-            }
-
-            fun build(): SocialConfig {
-                val socialConfig = SocialConfig()
-                socialConfig.facebookAppId = facebookAppId
-                socialConfig.googleServerId = googleServerId
-                return socialConfig
-            }
-        }
-    }
+    data class SocialConfig(
+        val facebookAppId: String? = null,
+        val googleServerId: String? = null
+    )
 
     object Unity {
         fun authSocial(activity: Activity, socialNetwork: SocialNetwork, withLogout: Boolean) {
