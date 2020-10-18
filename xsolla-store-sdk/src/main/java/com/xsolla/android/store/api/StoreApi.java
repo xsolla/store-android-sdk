@@ -1,5 +1,6 @@
 package com.xsolla.android.store.api;
 
+import com.google.gson.JsonObject;
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
 import com.xsolla.android.store.entity.request.inventory.ConsumeItemBody;
 import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
@@ -18,6 +19,7 @@ import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 
 import java.util.List;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -141,7 +143,7 @@ public interface StoreApi {
     @POST("api/v2/project/{project_id}/user/inventory/item/consume")
     Call<Void> consumeItem(
             @Path("project_id") int projectId,
-            @Body ConsumeItemBody body
+            @Body RequestBody body
     );
 
     @GET("api/v2/project/{project_id}/items/groups")

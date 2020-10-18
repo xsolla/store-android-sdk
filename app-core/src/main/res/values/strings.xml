@@ -21,6 +21,7 @@
     <string name="forgot_your_password">Forgot your password?</string>
     <string name="go_to_store">Go to store</string>
     <string name="privacy_policy">By continuing, you agree to be bound by our\n<u>Privacy Policy</u></string>
+    <string name="purchased_placeholder">Purchased</string>
 
     <string name="drawer_item_vi">Virtual items</string>
     <string name="drawer_item_vc">Virtual currency</string>

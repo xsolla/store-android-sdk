@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.Xsolla.CatalogItem"
@@ -85,6 +86,16 @@
         style="@style/Widget.Xsolla.CatalogItem.AddToCartButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:icon="@drawable/ic_buy_button_icon" />
+        app:icon="@drawable/ic_buy_button_icon"
+        app:rippleColor="@color/white_color" />
+
+    <TextView
+        android:id="@+id/purchasedPlaceholder"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/purchased_placeholder"
+        android:textColor="@color/secondary_color"
+        android:visibility="gone" />
 
 </LinearLayout>
