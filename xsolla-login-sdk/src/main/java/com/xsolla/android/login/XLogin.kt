@@ -126,55 +126,12 @@ class XLogin private constructor(
             }
 
         /**
-         * Initialize SDK for JWT
+         * Initialize SDK
          *
          * @param context      application context
-         * @param projectId    login ID from Publisher Account &gt; Login settings
-         * @param socialConfig configuration for native social auth
+         * @param loginConfig  config for initializing. Use LoginConfig.OauthBuilder or LoginConfig.JwtBuilder
          */
-        @JvmOverloads
-        fun initJwt(context: Context, projectId: String, socialConfig: SocialConfig? = null) {
-            init(context, projectId, "https://login.xsolla.com/api/blank", false, 0, socialConfig)
-        }
-
-        /**
-         * Initialize SDK for JWT
-         *
-         * @param context      application context
-         * @param projectId    login ID from Publisher Account &gt; Login settings
-         * @param callbackUrl  callback URL specified in Publisher Account &gt; Login settings
-         * @param socialConfig configuration for native social auth
-         */
-        fun initJwt(context: Context, projectId: String, callbackUrl: String, socialConfig: SocialConfig?) {
-            init(context, projectId, callbackUrl, false, 0, socialConfig)
-        }
-
-        /**
-         * Initialize SDK for OAuth 2.0
-         *
-         * @param context       application context
-         * @param projectId     login ID from Publisher Account &gt; Login settings
-         * @param oauthClientId OAuth 2.0 client ID
-         */
-        @JvmOverloads
-        fun initOauth(context: Context, projectId: String, oauthClientId: Int, socialConfig: SocialConfig? = null) {
-            init(context, projectId, "https://login.xsolla.com/api/blank", true, oauthClientId, socialConfig)
-        }
-
-        /**
-         * Initialize SDK for OAuth 2.0
-         *
-         * @param context       application context
-         * @param projectId     login ID from Publisher Account &gt; Login settings
-         * @param oauthClientId OAuth 2.0 client ID
-         * @param callbackUrl   callback URL specified in Publisher Account &gt; Login settings
-         * @param socialConfig  configuration for native social auth
-         */
-        fun initOauth(context: Context, projectId: String, oauthClientId: Int, callbackUrl: String, socialConfig: SocialConfig?) {
-            init(context, projectId, callbackUrl, true, oauthClientId, socialConfig)
-        }
-
-        private fun init(context: Context, projectId: String, callbackUrl: String, useOauth: Boolean, oauthClientId: Int, socialConfig: SocialConfig?) {
+        fun init(context: Context, loginConfig: LoginConfig) {
             val interceptor = Interceptor { chain ->
                 val originalRequest = chain.request()
                 val builder = originalRequest.newBuilder()
@@ -205,7 +162,16 @@ class XLogin private constructor(
             val loginApi = retrofit.create(LoginApi::class.java)
             val tokenUtils = TokenUtils(context)
 
-            instance = XLogin(context, projectId, callbackUrl, useOauth, oauthClientId, tokenUtils, loginApi, socialConfig)
+            instance = XLogin(
+                context,
+                loginConfig.projectId,
+                loginConfig.callbackUrl,
+                loginConfig.useOauth,
+                loginConfig.oauthClientId,
+                tokenUtils,
+                loginApi,
+                loginConfig.socialConfig
+            )
         }
 
         /**
