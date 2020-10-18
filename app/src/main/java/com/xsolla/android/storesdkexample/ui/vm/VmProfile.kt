@@ -1,5 +1,6 @@
 package com.xsolla.android.storesdkexample.ui.vm
 
+import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,14 +12,13 @@ import com.xsolla.android.login.callback.UpdateCurrentUserPhoneCallback
 import com.xsolla.android.login.entity.response.GenderResponse
 import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.data.local.IResourceProvider
 import com.xsolla.android.storesdkexample.util.SingleLiveEvent
 import com.xsolla.android.storesdkexample.util.extensions.BirthdayFormat
 import com.xsolla.android.storesdkexample.util.extensions.formatBirthday
 import java.util.Locale
 import java.util.regex.Pattern
 
-class VmProfile(private val resourceProvider: IResourceProvider) : ViewModel() {
+class VmProfile(private val resources: Resources) : ViewModel() {
     private companion object {
         private val PHONE_PATTERN = Pattern.compile("^\\+(\\d){5,25}\$")
     }
@@ -54,7 +54,7 @@ class VmProfile(private val resourceProvider: IResourceProvider) : ViewModel() {
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
-                message.value = throwable?.message ?: errorMessage ?: resourceProvider.getString(R.string.failure)
+                message.value = throwable?.message ?: errorMessage ?: resources.getString(R.string.failure)
             }
         })
     }
@@ -64,7 +64,7 @@ class VmProfile(private val resourceProvider: IResourceProvider) : ViewModel() {
         val birthday = newState.birthday.formatBirthday(BirthdayFormat.FROM_UI_TO_BACKEND)
         XLogin.updateCurrentUserDetails(birthday, newState.firstName, gender, newState.lastName, newState.nickname, object : UpdateCurrentUserDetailsCallback {
             override fun onSuccess() {
-                message.value = resourceProvider.getString(R.string.profile_fields_were_changed)
+                message.value = resources.getString(R.string.profile_fields_were_changed)
                 _state.value = newState.copy(phone = state.value!!.phone)
 
                 if (newState.phone != state.value!!.phone) {
@@ -73,7 +73,7 @@ class VmProfile(private val resourceProvider: IResourceProvider) : ViewModel() {
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
-                message.value = throwable?.message ?: errorMessage ?: resourceProvider.getString(R.string.failure)
+                message.value = throwable?.message ?: errorMessage ?: resources.getString(R.string.failure)
             }
         })
     }
@@ -85,7 +85,7 @@ class VmProfile(private val resourceProvider: IResourceProvider) : ViewModel() {
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
-                message.value = throwable?.message ?: errorMessage ?: resourceProvider.getString(R.string.failure)
+                message.value = throwable?.message ?: errorMessage ?: resources.getString(R.string.failure)
             }
         })
     }
@@ -95,13 +95,13 @@ class VmProfile(private val resourceProvider: IResourceProvider) : ViewModel() {
             return if (text.length < 255) {
                 ValidateFieldResult(true)
             } else {
-                ValidateFieldResult(false, resourceProvider.getString(R.string.profile_text_field_validation, field.name))
+                ValidateFieldResult(false, resources.getString(R.string.profile_text_field_validation, field.name))
             }
         } else if (field == FieldsForChanging.PHONE) {
             return if (PHONE_PATTERN.matcher(text).matches()) {
                 ValidateFieldResult(true, null)
             } else {
-                ValidateFieldResult(false, resourceProvider.getString(R.string.profile_phone_validation))
+                ValidateFieldResult(false, resources.getString(R.string.profile_phone_validation))
             }
         }
 
@@ -119,11 +119,11 @@ class VmProfile(private val resourceProvider: IResourceProvider) : ViewModel() {
         if (username.isBlank() || email.isBlank()) return
         XLogin.resetPassword(username, object : ResetPasswordCallback {
             override fun onSuccess() {
-                message.value = "Follow the instruction we sent to $email to create a new password"
+                message.value = resources.getString(R.string.profile_letter_was_sent, email)
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
-                message.value = throwable?.message ?: errorMessage ?: resourceProvider.getString(R.string.failure)
+                message.value = throwable?.message ?: errorMessage ?: resources.getString(R.string.failure)
             }
         })
     }

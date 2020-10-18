@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.data.local.ResourceProvider
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.FieldsForChanging
 import com.xsolla.android.storesdkexample.ui.vm.Gender
@@ -53,7 +52,7 @@ import java.util.Calendar
 
 class ProfileFragment : BaseFragment() {
     private val viewModel: VmProfile by activityViewModels {
-        ViewModelFactory(ResourceProvider(requireContext()))
+        ViewModelFactory(resources)
     }
 
     private val fieldsWithPossibleError by lazy {
