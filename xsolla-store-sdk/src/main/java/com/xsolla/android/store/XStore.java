@@ -91,7 +91,7 @@ public class XStore {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://store.xsolla.com")
                 .client(httpClient.build())
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().serializeNulls().create()))
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
 
