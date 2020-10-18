@@ -1,5 +1,8 @@
 package com.xsolla.android.store;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
@@ -20,6 +23,9 @@ import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.store.entity.response.order.OrderResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 class RequestExecutor {
 
@@ -147,10 +153,11 @@ class RequestExecutor {
     }
 
     public void consumeItem(String sku, long quantity, String instanceId, XStoreCallback<Void> callback) {
-        storeApi.consumeItem(
-                projectId,
-                new ConsumeItemBody(sku, quantity, instanceId)
-        ).enqueue(callback);
+        ConsumeItemBody consumeItemBody = new ConsumeItemBody(sku, quantity, instanceId);
+        String jsonString = new GsonBuilder().serializeNulls().create().toJson(consumeItemBody);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
+
+        storeApi.consumeItem(projectId, requestBody).enqueue(callback);
     }
 
     public void getItemsGroups(XStoreCallback<ItemsGroupsResponse> callback) {
