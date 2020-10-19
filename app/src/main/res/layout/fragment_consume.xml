@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg_color"
     android:orientation="vertical">
 
     <TextView
@@ -54,7 +53,7 @@
                 android:textSize="@dimen/catalog_item_quantity_text_size"
                 android:text="1"
                 android:inputType="number"
-                android:textColor="@color/secondary_color"
+                android:textColor="?attr/colorOnSurface"
                 android:background="@drawable/input_consume_bg"/>
 
             <TextView

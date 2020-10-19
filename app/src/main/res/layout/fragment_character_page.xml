@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg_color"
     tools:context=".ui.fragments.character.CharacterPageFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -30,7 +29,7 @@
 
         <TextView
             android:id="@+id/noItemsPlaceholder"
-            style="@style/TextAppearance.MaterialComponents.Body1"
+            style="?attr/textAppearanceBody1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -38,7 +37,7 @@
             android:layout_marginEnd="32dp"
             android:text="@string/character_read_only_attributes_footer"
             android:textAlignment="center"
-            android:textColor="@color/secondary_color" />
+            android:textColor="?attr/colorOnSurface" />
 
         <Button
             android:id="@+id/addAttributeButton"

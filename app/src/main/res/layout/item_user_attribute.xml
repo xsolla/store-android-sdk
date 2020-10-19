@@ -15,7 +15,7 @@
         android:layout_marginTop="12dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/secondary_color"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintEnd_toStartOf="@id/editButton"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_edit_24"
-        app:tint="@color/secondary_color"
+        app:tint="?attr/colorOnSurface"
         tools:ignore="ContentDescription" />
 
     <View

@@ -39,7 +39,7 @@ class UnityProxyActivity : Activity() {
         val withLogout = intent.getBooleanExtra(ARG_WITH_LOGOUT, false)
         XLogin.finishSocialAuth(this, socialNetwork, requestCode, resultCode, data, withLogout, object : FinishSocialCallback {
             override fun onAuthSuccess() {
-                UnityUtils.sendMessage(socialNetwork.providerName, "SUCCESS", XLogin.getToken())
+                UnityUtils.sendMessage(socialNetwork.providerName, "SUCCESS", XLogin.token)
                 finish()
             }
 

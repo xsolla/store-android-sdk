@@ -58,7 +58,7 @@ class StoreActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_store)
 
-        XStore.init(BuildConfig.PROJECT_ID, XLogin.getToken() ?: "")
+        XStore.init(BuildConfig.PROJECT_ID, XLogin.token ?: "")
 
         if (XLogin.isTokenExpired(60)) {
             if (!XLogin.canRefreshToken()) {
@@ -82,7 +82,7 @@ class StoreActivity : AppCompatActivity() {
                 XLogin.refreshToken(object : RefreshTokenCallback {
                     override fun onSuccess() {
                         lock.visibility = View.GONE
-                        XStore.init(BuildConfig.PROJECT_ID, XLogin.getToken())
+                        XStore.init(BuildConfig.PROJECT_ID, XLogin.token)
                         vmCart.updateCart()
                         vmBalance.updateVirtualBalance()
                         setDrawerData()
@@ -99,7 +99,7 @@ class StoreActivity : AppCompatActivity() {
                 startLogin()
             }
         } else {
-            XStore.init(BuildConfig.PROJECT_ID, XLogin.getToken())
+            XStore.init(BuildConfig.PROJECT_ID, XLogin.token)
             vmCart.updateCart()
             vmBalance.updateVirtualBalance()
 

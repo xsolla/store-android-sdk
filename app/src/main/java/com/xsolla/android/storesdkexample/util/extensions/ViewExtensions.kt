@@ -12,7 +12,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.xsolla.android.storesdkexample.R
 
 fun TextView.setClickableSpan(
-    textColor: Int = R.color.secondary_color,
+    textColor: Int = R.color.light_state_gray_color,
     highlightColor: Int = Color.TRANSPARENT,
     isUnderlineText: Boolean = false,
     startIndex: Int,

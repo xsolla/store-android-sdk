@@ -8,6 +8,6 @@
         android:icon="@drawable/ic_baseline_search_24"
         android:title="Search"
         app:actionLayout="@layout/search_view_layout"
-        app:iconTint="@color/secondary_color"
+        app:iconTint="?attr/colorOnSurface"
         app:showAsAction="always|collapseActionView" />
 </menu>

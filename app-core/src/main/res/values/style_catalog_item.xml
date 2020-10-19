@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Xsolla.CatalogItem" parent="">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingLeft">@dimen/catalog_item_left_padding</item>
+        <item name="android:paddingRight">@dimen/catalog_item_right_padding</item>
+        <item name="android:paddingTop">@dimen/catalog_item_top_padding</item>
+        <item name="android:paddingBottom">@dimen/catalog_item_bottom_padding</item>
+    </style>
+
+    <style name="Widget.Xsolla.CatalogItem.Name" parent="">
+        <item name="android:textSize">@dimen/catalog_item_name_text_size</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/white_color</item>
+    </style>
+
+    <style name="Widget.Xsolla.CatalogItem.Price" parent="">
+        <item name="android:textSize">@dimen/catalog_item_price_text_size</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/white_color</item>
+    </style>
+
+    <style name="Widget.Xsolla.CatalogItem.OldPrice" parent="">
+        <item name="android:textSize">@dimen/catalog_item_old_price_text_size</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="Widget.Xsolla.CatalogItem.AdditionalInfo" parent="">
+        <item name="android:textSize">@dimen/catalog_item_additional_info_text_size</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="Widget.Xsolla.CatalogItem.AddToCartButton" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
+        <item name="android:minHeight">@dimen/catalog_item_add_to_cart_button_size</item>
+        <item name="android:minWidth">@dimen/catalog_item_add_to_cart_button_size</item>
+        <item name="cornerRadius">@dimen/catalog_item_add_to_cart_button_corner_radius</item>
+        <item name="strokeWidth">@dimen/catalog_item_add_to_cart_button_stroke_width</item>
+        <item name="strokeColor">@color/magenta_color</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="iconPadding">0dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="iconTint">@color/white_color</item>
+    </style>
+
+</resources>

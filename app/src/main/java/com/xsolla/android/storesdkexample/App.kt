@@ -2,6 +2,7 @@ package com.xsolla.android.storesdkexample
 
 import android.app.Application
 import android.content.Context
+import com.xsolla.android.login.LoginConfig
 import com.xsolla.android.login.XLogin
 
 class App: Application() {
@@ -21,9 +22,18 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.USE_OAUTH) {
-            XLogin.initOauth(this, BuildConfig.LOGIN_ID, BuildConfig.OAUTH_CLIENT_ID)
+            val loginConfig = LoginConfig.OauthBuilder()
+                .setProjectId(BuildConfig.LOGIN_ID)
+                .setOauthClientId(BuildConfig.OAUTH_CLIENT_ID)
+                .build()
+
+            XLogin.init(this, loginConfig)
         } else {
-            XLogin.initJwt(this, BuildConfig.LOGIN_ID)
+            val loginConfig = LoginConfig.JwtBuilder()
+                .setProjectId(BuildConfig.LOGIN_ID)
+                .build()
+
+            XLogin.init(this, loginConfig)
         }
     }
 }
