@@ -23,9 +23,13 @@
     <color name="black_color">#000000</color>
     <color name="white_color">#FFFFFF</color>
     <color name="white_color_20">#33FFFFFF</color>
+    <color name="white_color_12">#1FFFFFFF</color>
     <color name="appbar_bg">#2D2F47</color>
     <color name="cart_badge_color">#F8115D</color>
     <color name="drawer_bg">#2D2F47</color>
     <color name="lock_color">#80000000</color>
+
+    <color name="white_60">#99FFFFFF</color>
+    <color name="white_38">#61FFFFFF</color>
 
 </resources>

@@ -17,6 +17,7 @@ import com.xsolla.android.login.callback.DeleteCurrentUserPhoneCallback;
 import com.xsolla.android.login.callback.FinishSocialCallback;
 import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback;
 import com.xsolla.android.login.callback.GetCurrentUserFriendsCallback;
+import com.xsolla.android.login.callback.GetCurrentUserPhoneCallback;
 import com.xsolla.android.login.callback.GetSocialFriendsCallback;
 import com.xsolla.android.login.callback.GetUserPublicInfoCallback;
 import com.xsolla.android.login.callback.GetUsersAttributesCallback;
@@ -47,6 +48,8 @@ import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder;
 import com.xsolla.android.login.entity.request.UserFriendsRequestType;
 import com.xsolla.android.login.entity.response.AuthResponse;
 import com.xsolla.android.login.entity.response.OauthAuthResponse;
+import com.xsolla.android.login.entity.response.PhoneResponse;
+import com.xsolla.android.login.entity.response.PictureResponse;
 import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse;
 import com.xsolla.android.login.entity.response.SocialFriendsResponse;
 import com.xsolla.android.login.entity.response.UserDetailsResponse;
@@ -611,6 +614,12 @@ public class XLogin {
                 });
     }
 
+    /**
+     * Gets details of the user authenticated
+     *
+     * @param callback    callback with data
+     * @see <a href="https://developers.xsolla.com/user-account-api/all-user-details/get-user-details">User Account API Reference</a>
+     */
     public static void getCurrentUserDetails(final GetCurrentUserDetailsCallback callback) {
         getInstance().loginApi
                 .getCurrentUserDetails("Bearer " + getToken())
@@ -636,6 +645,17 @@ public class XLogin {
                 });
     }
 
+    /**
+     * Updates the details of the authenticated user
+     *
+     * @param birthday    birthday in the format "yyyy-MM-dd"
+     * @param firstName   first name
+     * @param gender      gender ("m" or "f")
+     * @param lastName    last name
+     * @param nickname    nickname
+     * @param callback    status callback
+     * @see <a href="https://developers.xsolla.com/user-account-api/all-user-details/patchusersme/">User Account API Reference</a>
+     */
     public static void updateCurrentUserDetails(
             String birthday,
             String firstName,
@@ -664,6 +684,12 @@ public class XLogin {
                 });
     }
 
+    /**
+     * Deletes avatar of the authenticated user
+     *
+     * @param callback    status callback
+     * @see <a href="https://developers.xsolla.com/user-account-api/user-picture/deleteusersmepicture/">User Account API Reference</a>
+     */
     public static void deleteCurrentUserAvatar(final DeleteCurrentUserAvatarCallback callback) {
         getInstance().loginApi
                 .deleteUserPicture("Bearer " + getToken())
@@ -684,28 +710,76 @@ public class XLogin {
                 });
     }
 
+    /**
+     * Uploads avatar for the authenticated user
+     *
+     * @param file        file that stores the avatar for uploading
+     * @param callback    callback with url of new avatar
+     * @see <a href="https://developers.xsolla.com/user-account-api/user-picture/postusersmepicture">User Account API Reference</a>
+     */
     public static void uploadCurrentUserAvatar(File file, final UploadCurrentUserAvatarCallback callback) {
         MultipartBody.Part part =
                 MultipartBody.Part.createFormData("picture", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
         getInstance().loginApi
                 .uploadUserPicture("Bearer " + getToken(), part)
-                .enqueue(new Callback<Void>() {
+                .enqueue(new Callback<PictureResponse>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    public void onResponse(Call<PictureResponse> call, Response<PictureResponse> response) {
                         if (response.isSuccessful()) {
-                            callback.onSuccess();
+                            if (response.body() == null) {
+                                callback.onError(null, "Empty response");
+                            } else {
+                                callback.onSuccess(response.body());
+                            }
                         } else {
                             callback.onError(null, getErrorMessage(response.errorBody()));
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
+                    public void onFailure(Call<PictureResponse> call, Throwable t) {
                         callback.onError(t, null);
                     }
                 });
     }
 
+    /**
+     * Gets the phone number of the authenticated user
+     *
+     * @param callback    callback with data
+     * @see <a href="https://developers.xsolla.com/user-account-api/user-phone-number/getusersmephone">User Account API Reference</a>
+     */
+    public static void getCurrentUserPhone(final GetCurrentUserPhoneCallback callback) {
+        getInstance().loginApi
+                .getUserPhone("Bearer " + getToken())
+                .enqueue(new Callback<PhoneResponse>() {
+                    @Override
+                    public void onResponse(Call<PhoneResponse> call, Response<PhoneResponse> response) {
+                        if (response.isSuccessful()) {
+                            if (response.body() == null) {
+                                callback.onSuccess(new PhoneResponse(null));
+                            } else {
+                                callback.onSuccess(response.body());
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<PhoneResponse> call, Throwable t) {
+                        callback.onError(t, null);
+                    }
+                });
+    }
+
+    /**
+     * Updates the phone number of the authenticated user
+     *
+     * @param phone       new phone value
+     * @param callback    status callback
+     * @see <a href="https://developers.xsolla.com/user-account-api/user-phone-number/postusersmephone">User Account API Reference</a>
+     */
     public static void updateCurrentUserPhone(String phone, final UpdateCurrentUserPhoneCallback callback) {
         UpdateUserPhoneBody updateUserPhoneBody = new UpdateUserPhoneBody(phone);
         getInstance().loginApi
@@ -727,6 +801,13 @@ public class XLogin {
                 });
     }
 
+    /**
+     * Deletes the phone number of the authenticated user
+     *
+     * @param phone       current user's phone
+     * @param callback    status callback
+     * @see <a href="https://developers.xsolla.com/user-account-api/user-phone-number/deleteusersmephonephonenumber">User Account API Reference</a>
+     */
     public static void deleteCurrentUserPhone(String phone, final DeleteCurrentUserPhoneCallback callback) {
         getInstance().loginApi
                 .deleteUserPhone("Bearer " + getToken(), phone)

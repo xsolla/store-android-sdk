@@ -9,10 +9,10 @@
     </style>
 
     <style name="AlertDialogPositiveButton" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">@color/magenta_color</item>
+        <item name="android:textColor">@color/cart_badge_color</item>
     </style>
 
     <style name="AlertDialogNegativeButton" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">@color/secondary_color</item>
+        <item name="android:textColor">@color/white_38</item>
     </style>
 </resources>

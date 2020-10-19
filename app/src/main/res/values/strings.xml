@@ -2,6 +2,10 @@
     <string name="app_name">Xsolla Sample App</string>
 
     <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="clear">Clear</string>
+    <string name="failure">Failure</string>
+    <string name="save_changes">Save changes</string>
 
     <string name="xsolla_payments_redirect_scheme">https</string>
     <string name="xsolla_payments_redirect_host">example.com</string>
@@ -59,6 +63,22 @@
     <string name="friends_option_delete">Delete friend</string>
     <string name="friends_options_delete_button">Remove</string>
     <string name="friends_option_delete_title">Remove %s from the friends list?</string>
+
+    <string name="profile_title">Account</string>
+    <string name="profile_email_hint">Email</string>
+    <string name="profile_username_hint">Username</string>
+    <string name="profile_nickname_hint">Nickname</string>
+    <string name="profile_phone_hint">Phone number</string>
+    <string name="profile_firstname_hint">First name</string>
+    <string name="profile_lastname_hint">Last name</string>
+    <string name="profile_birthday_hint">Date of birth</string>
+    <string name="profile_gender_hint">Gender</string>
+    <string name="profile_avatar">Avatar</string>
+    <string name="profile_fields_were_changed">Fields were successfully changed</string>
+    <string name="profile_phone_validation">Phone must start with "+" and contains 5..25 digits</string>
+    <string name="profile_text_field_validation">%s length must be less than 255 symbols</string>
+    <string name="profile_letter_was_sent">A letter has been sent to the %s. Follow the link in the letter — and you can create a new password</string>
+    <string name="avatar_remove_button">Remove avatar</string>
 
     <string name="character_title">Character</string>
     <string name="character_tab1">Read-only attributes</string>

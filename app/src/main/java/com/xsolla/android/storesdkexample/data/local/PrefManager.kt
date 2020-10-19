@@ -12,4 +12,7 @@ object PrefManager {
 
     fun setUserLevel(userId: String, level: Int) = preferences.edit { putInt("userLevel_$userId", level) }
     fun getUserLevel(userId: String) = preferences.getInt("userLevel_$userId", 1)
+
+    fun setAvatar(userId: String, resource: Int) = preferences.edit { putInt("avatar_$userId", resource) }
+    fun getAvatar(userId: String) = preferences.getInt("avatar_$userId", -1)
 }

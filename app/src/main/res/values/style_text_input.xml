@@ -33,6 +33,33 @@
         <item name="maxLines">1</item>
     </style>
 
+    <style name="Widget.Xsolla.TextInputLayoutFilled" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+        <item name="boxBackgroundColor">@color/filledbox_background_color</item>
+        <item name="boxStrokeColor">@color/filledbox_stroke_color</item>
+        <item name="hintTextColor">@color/white_38</item>
+        <item name="android:textColorHint">@color/white_38</item>
+        <item name="boxCornerRadiusTopStart">4dp</item>
+        <item name="boxCornerRadiusTopEnd">4dp</item>
+        <item name="materialThemeOverlay">@style/TextInputLayoutFilled</item>
+    </style>
+
+    <style name="TextInputLayoutFilled">
+        <item name="editTextStyle">@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense</item>
+        <item name="maxLines">1</item>
+        <item name="android:textCursorDrawable">@drawable/input_cursor</item>
+        <item name="android:textColor">@color/filledbox_text_color</item>
+    </style>
+
+    <style name="Widget.Xsolla.TextInputLayoutDropdownFilled" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu">
+        <item name="boxBackgroundColor">@color/filledbox_background_color</item>
+        <item name="boxStrokeColor">@color/filledbox_stroke_color</item>
+        <item name="hintTextColor">@color/white_38</item>
+        <item name="android:textColorHint">@color/white_38</item>
+        <item name="boxCornerRadiusTopStart">4dp</item>
+        <item name="boxCornerRadiusTopEnd">4dp</item>
+        <item name="endIconTint">@color/white_60</item>
+    </style>
+
     <style name="TextAppearance.Xsolla.Input.Hint" parent="">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">@dimen/input_text_hint_size</item>

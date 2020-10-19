@@ -30,10 +30,21 @@ import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import com.xsolla.android.storesdkexample.util.sumByLong
-import kotlinx.android.synthetic.main.activity_store.*
-import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.item_balance.view.*
-import kotlinx.android.synthetic.main.layout_drawer.*
+import kotlinx.android.synthetic.main.activity_store.lock
+import kotlinx.android.synthetic.main.app_bar_main.chargeBalanceButton
+import kotlinx.android.synthetic.main.item_balance.view.balanceAmount
+import kotlinx.android.synthetic.main.item_balance.view.balanceIcon
+import kotlinx.android.synthetic.main.layout_drawer.bgCartCounter
+import kotlinx.android.synthetic.main.layout_drawer.textAccount
+import kotlinx.android.synthetic.main.layout_drawer.textCart
+import kotlinx.android.synthetic.main.layout_drawer.textCartCounter
+import kotlinx.android.synthetic.main.layout_drawer.textEmail
+import kotlinx.android.synthetic.main.layout_drawer.textFriends
+import kotlinx.android.synthetic.main.layout_drawer.textInventory
+import kotlinx.android.synthetic.main.layout_drawer.textLogout
+import kotlinx.android.synthetic.main.layout_drawer.textUsername
+import kotlinx.android.synthetic.main.layout_drawer.textVirtualCurrency
+import kotlinx.android.synthetic.main.layout_drawer.textVirtualItems
 
 class StoreActivity : AppCompatActivity() {
     private val vmCart: VmCart by viewModels()
@@ -54,7 +65,7 @@ class StoreActivity : AppCompatActivity() {
 
         XStore.init(BuildConfig.PROJECT_ID, XLogin.getToken() ?: "")
 
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        val toolbar: Toolbar = findViewById(R.id.mainToolbar)
         setSupportActionBar(toolbar)
 
         initNavController()
@@ -139,7 +150,7 @@ class StoreActivity : AppCompatActivity() {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_vi, R.id.nav_vc, R.id.nav_inventory, R.id.nav_friends, R.id.nav_character), drawerLayout)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_vi, R.id.nav_vc, R.id.nav_inventory, R.id.nav_friends, R.id.nav_character, R.id.nav_profile), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
@@ -152,6 +163,10 @@ class StoreActivity : AppCompatActivity() {
     private fun initDrawer() {
         drawerLayout = findViewById(R.id.drawer_layout)
         val navController = findNavController(R.id.nav_host_fragment)
+        textAccount.setOnClickListener {
+            navController.navigate(R.id.nav_profile)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
         textInventory.setOnClickListener {
             navController.navigate(R.id.nav_inventory)
             drawerLayout.closeDrawer(GravityCompat.START)

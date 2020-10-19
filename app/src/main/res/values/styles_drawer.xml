@@ -37,6 +37,8 @@
         <item name="android:layout_marginEnd">@dimen/drawer_margin_horizontal</item>
         <item name="android:textColor">@color/secondary_color</item>
         <item name="android:textAllCaps">false</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 
     <style name="Widget.Xsolla.Drawer.Text.Main" parent="Widget.Xsolla.Drawer.Text">
