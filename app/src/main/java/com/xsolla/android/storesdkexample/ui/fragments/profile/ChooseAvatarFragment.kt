@@ -17,7 +17,6 @@ import com.xsolla.android.storesdkexample.adapter.AvatarItem
 import com.xsolla.android.storesdkexample.adapter.AvatarsItemDecoration
 import com.xsolla.android.storesdkexample.adapter.ChooseAvatarAdapter
 import com.xsolla.android.storesdkexample.data.local.PrefManager
-import com.xsolla.android.storesdkexample.data.local.ResourceProvider
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmChooseAvatar
 import com.xsolla.android.storesdkexample.ui.vm.VmProfile
@@ -37,7 +36,7 @@ class ChooseAvatarFragment : BaseFragment() {
     private val args: ChooseAvatarFragmentArgs by navArgs()
     private val viewModel: VmChooseAvatar by viewModels()
     private val profileViewModel: VmProfile by activityViewModels {
-        ViewModelFactory(ResourceProvider(requireContext()))
+        ViewModelFactory(resources)
     }
 
     private val avatars = listOf(

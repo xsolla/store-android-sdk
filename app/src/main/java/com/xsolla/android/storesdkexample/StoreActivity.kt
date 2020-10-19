@@ -38,6 +38,7 @@ import kotlinx.android.synthetic.main.layout_drawer.bgCartCounter
 import kotlinx.android.synthetic.main.layout_drawer.textAccount
 import kotlinx.android.synthetic.main.layout_drawer.textCart
 import kotlinx.android.synthetic.main.layout_drawer.textCartCounter
+import kotlinx.android.synthetic.main.layout_drawer.textCharacter
 import kotlinx.android.synthetic.main.layout_drawer.textEmail
 import kotlinx.android.synthetic.main.layout_drawer.textFriends
 import kotlinx.android.synthetic.main.layout_drawer.textInventory
@@ -57,13 +58,13 @@ class StoreActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_store)
 
+        XStore.init(BuildConfig.PROJECT_ID, XLogin.getToken() ?: "")
+
         if (XLogin.isTokenExpired(60)) {
             if (!XLogin.canRefreshToken()) {
                 startLogin()
             }
         }
-
-        XStore.init(BuildConfig.PROJECT_ID, XLogin.getToken() ?: "")
 
         val toolbar: Toolbar = findViewById(R.id.mainToolbar)
         setSupportActionBar(toolbar)
