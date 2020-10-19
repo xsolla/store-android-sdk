@@ -58,8 +58,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="@string/coupon_redeem_button"
         android:enabled="false"
+        android:text="@string/coupon_redeem_button"
         app:layout_constraintEnd_toEndOf="@id/couponLayout"
         app:layout_constraintTop_toBottomOf="@id/couponLayout" />
 
@@ -106,6 +106,7 @@
         android:layout_marginBottom="8dp"
         android:fadeScrollbars="false"
         android:scrollbars="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/redeemAnotherLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

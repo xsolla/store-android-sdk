@@ -1,29 +1,23 @@
 package com.xsolla.android.storesdkexample.ui.fragments.store
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.ViPagerAdapter
-import kotlinx.android.synthetic.main.fragment_vi.*
-import kotlinx.android.synthetic.main.fragment_vi.view.*
+import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
+import kotlinx.android.synthetic.main.fragment_vi.tabLayout
+import kotlinx.android.synthetic.main.fragment_vi.view.viewPager
+import kotlinx.android.synthetic.main.fragment_vi.viewPager
 
-class ViFragment : Fragment() {
+class ViFragment : BaseFragment() {
 
-    private lateinit var rootView: View
+    override fun getLayout() = R.layout.fragment_vi
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        rootView = inflater.inflate(R.layout.fragment_vi, container, false)
+    override fun initUI() {
         getVirtualItems()
-        return rootView
     }
-
 
     private fun getVirtualItems() {
         XStore.getVirtualItems(object : XStoreCallback<VirtualItemsResponse>() {

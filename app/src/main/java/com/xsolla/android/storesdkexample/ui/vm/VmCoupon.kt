@@ -23,6 +23,6 @@ class VmCoupon : ViewModel() {
 }
 
 sealed class RedeemCouponResult {
-    data class Success(val items: Any) : RedeemCouponResult()
+    data class Success(val items: List<RedeemCouponResponse.Item>) : RedeemCouponResult()
     data class Failure(val message: String) : RedeemCouponResult()
 }

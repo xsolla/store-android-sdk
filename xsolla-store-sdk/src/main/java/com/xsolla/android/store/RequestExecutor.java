@@ -212,9 +212,14 @@ class RequestExecutor {
             @Nullable Pair<String, String> selectedUnitItems,
             @NotNull XStoreCallback<RedeemCouponResponse> callback
     ) {
+        JsonObject unitItems = selectedUnitItems != null ? new JsonObject() : null;
+        if (unitItems != null) {
+            unitItems.addProperty(selectedUnitItems.getFirst(), selectedUnitItems.getSecond());
+        }
+
         storeApi.redeemCoupon(
                 projectId,
-                new RedeemCouponRequestBody(couponCode, selectedUnitItems)
+                new RedeemCouponRequestBody(couponCode, unitItems)
         ).enqueue(callback);
     }
 
