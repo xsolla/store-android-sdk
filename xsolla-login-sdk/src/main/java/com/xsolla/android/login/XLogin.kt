@@ -7,17 +7,62 @@ import android.os.Build
 import androidx.annotation.IntRange
 import androidx.fragment.app.Fragment
 import com.xsolla.android.login.api.LoginApi
-import com.xsolla.android.login.callback.*
+import com.xsolla.android.login.callback.AuthCallback
+import com.xsolla.android.login.callback.DeleteCurrentUserAvatarCallback
+import com.xsolla.android.login.callback.DeleteCurrentUserPhoneCallback
+import com.xsolla.android.login.callback.FinishSocialCallback
+import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
+import com.xsolla.android.login.callback.GetCurrentUserFriendsCallback
+import com.xsolla.android.login.callback.GetCurrentUserPhoneCallback
+import com.xsolla.android.login.callback.GetSocialFriendsCallback
+import com.xsolla.android.login.callback.GetUserPublicInfoCallback
+import com.xsolla.android.login.callback.GetUsersAttributesCallback
+import com.xsolla.android.login.callback.RefreshTokenCallback
+import com.xsolla.android.login.callback.RegisterCallback
+import com.xsolla.android.login.callback.ResetPasswordCallback
+import com.xsolla.android.login.callback.SearchUsersByNicknameCallback
+import com.xsolla.android.login.callback.StartSocialCallback
+import com.xsolla.android.login.callback.UpdateCurrentUserDetailsCallback
+import com.xsolla.android.login.callback.UpdateCurrentUserFriendsCallback
+import com.xsolla.android.login.callback.UpdateCurrentUserPhoneCallback
+import com.xsolla.android.login.callback.UpdateUsersAttributesCallback
+import com.xsolla.android.login.callback.UploadCurrentUserAvatarCallback
 import com.xsolla.android.login.entity.common.UserAttribute
-import com.xsolla.android.login.entity.request.*
-import com.xsolla.android.login.entity.response.*
+import com.xsolla.android.login.entity.request.AuthUserBody
+import com.xsolla.android.login.entity.request.GetUsersAttributesFromClientRequest
+import com.xsolla.android.login.entity.request.OauthAuthUserBody
+import com.xsolla.android.login.entity.request.OauthRegisterUserBody
+import com.xsolla.android.login.entity.request.RegisterUserBody
+import com.xsolla.android.login.entity.request.ResetPasswordBody
+import com.xsolla.android.login.entity.request.UpdateUserDetailsBody
+import com.xsolla.android.login.entity.request.UpdateUserFriendsRequest
+import com.xsolla.android.login.entity.request.UpdateUserFriendsRequestAction
+import com.xsolla.android.login.entity.request.UpdateUserPhoneBody
+import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromClientRequest
+import com.xsolla.android.login.entity.request.UserFriendsRequestSortBy
+import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder
+import com.xsolla.android.login.entity.request.UserFriendsRequestType
+import com.xsolla.android.login.entity.response.AuthResponse
+import com.xsolla.android.login.entity.response.OauthAuthResponse
+import com.xsolla.android.login.entity.response.PhoneResponse
+import com.xsolla.android.login.entity.response.PictureResponse
+import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse
+import com.xsolla.android.login.entity.response.SocialFriendsResponse
+import com.xsolla.android.login.entity.response.UserDetailsResponse
+import com.xsolla.android.login.entity.response.UserFriendsResponse
+import com.xsolla.android.login.entity.response.UserPublicInfoResponse
 import com.xsolla.android.login.jwt.JWT
 import com.xsolla.android.login.social.FriendsPlatform
 import com.xsolla.android.login.social.LoginSocial
 import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.login.token.TokenUtils
 import com.xsolla.android.login.unity.UnityProxyActivity
-import okhttp3.*
+import okhttp3.Interceptor
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,7 +70,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
-import java.util.*
+import java.util.UUID
 
 /**
  * Entry point for Xsolla Login SDK
@@ -498,6 +543,12 @@ class XLogin private constructor(
                 })
         }
 
+        /**
+         * Gets details of the user authenticated
+         *
+         * @param callback    callback with data
+         * @see <a href="https://developers.xsolla.com/user-account-api/all-user-details/get-user-details">User Account API Reference</a>
+         */
         fun getCurrentUserDetails(callback: GetCurrentUserDetailsCallback) {
             getInstance().loginApi
                 .getCurrentUserDetails("Bearer $token")
@@ -521,6 +572,17 @@ class XLogin private constructor(
                 })
         }
 
+        /**
+         * Updates the details of the authenticated user
+         *
+         * @param birthday    birthday in the format "yyyy-MM-dd"
+         * @param firstName   first name
+         * @param gender      gender ("m" or "f")
+         * @param lastName    last name
+         * @param nickname    nickname
+         * @param callback    status callback
+         * @see <a href="https://developers.xsolla.com/user-account-api/all-user-details/patchusersme/">User Account API Reference</a>
+         */
         fun updateCurrentUserDetails(
             birthday: String?,
             firstName: String?,
@@ -547,6 +609,12 @@ class XLogin private constructor(
                 })
         }
 
+        /**
+         * Deletes avatar of the authenticated user
+         *
+         * @param callback    status callback
+         * @see <a href="https://developers.xsolla.com/user-account-api/user-picture/deleteusersmepicture/">User Account API Reference</a>
+         */
         fun deleteCurrentUserAvatar(callback: DeleteCurrentUserAvatarCallback) {
             getInstance().loginApi
                 .deleteUserPicture("Bearer $token")
@@ -565,31 +633,77 @@ class XLogin private constructor(
                 })
         }
 
+        /**
+         * Uploads avatar for the authenticated user
+         *
+         * @param file        file that stores the avatar for uploading
+         * @param callback    callback with url of new avatar
+         * @see [User Account API Reference](https://developers.xsolla.com/user-account-api/user-picture/postusersmepicture)
+         */
         fun uploadCurrentUserAvatar(file: File, callback: UploadCurrentUserAvatarCallback) {
             val part = MultipartBody.Part.createFormData("picture", file.name, RequestBody.create(MediaType.parse("image/*"), file))
             getInstance().loginApi
                 .uploadUserPicture("Bearer $token", part)
-                .enqueue(object : Callback<Void?> {
-                    override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                .enqueue(object : Callback<PictureResponse> {
+                    override fun onResponse(call: Call<PictureResponse>, response: Response<PictureResponse>) {
                         if (response.isSuccessful) {
-                            callback.onSuccess()
+                            if (response.body() == null) {
+                                callback.onError(null, "Empty response")
+                            } else {
+                                callback.onSuccess(response.body()!!)
+                            }
                         } else {
                             callback.onError(null, getErrorMessage(response.errorBody()))
                         }
                     }
 
-                    override fun onFailure(call: Call<Void?>, t: Throwable) {
+                    override fun onFailure(call: Call<PictureResponse>, t: Throwable) {
                         callback.onError(t, null)
                     }
                 })
         }
 
+        /**
+         * Gets the phone number of the authenticated user
+         *
+         * @param callback    callback with data
+         * @see [User Account API Reference](https://developers.xsolla.com/user-account-api/user-phone-number/getusersmephone)
+         */
+        fun getCurrentUserPhone(callback: GetCurrentUserPhoneCallback) {
+            getInstance().loginApi
+                .getUserPhone("Bearer $token")
+                .enqueue(object : Callback<PhoneResponse> {
+                    override fun onResponse(call: Call<PhoneResponse>, response: Response<PhoneResponse>) {
+                        if (response.isSuccessful) {
+                            if (response.body() == null) {
+                                callback.onSuccess(PhoneResponse(null))
+                            } else {
+                                callback.onSuccess(response.body()!!)
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<PhoneResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
+         * Updates the phone number of the authenticated user
+         *
+         * @param phone       new phone value
+         * @param callback    status callback
+         * @see <a href="https://developers.xsolla.com/user-account-api/user-phone-number/postusersmephone">User Account API Reference</a>
+         */
         fun updateCurrentUserPhone(phone: String?, callback: UpdateCurrentUserPhoneCallback) {
             val updateUserPhoneBody = UpdateUserPhoneBody(phone!!)
             getInstance().loginApi
                 .updateUserPhone("Bearer $token", updateUserPhoneBody)
-                .enqueue(object : Callback<Void?> {
-                    override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                .enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if (response.isSuccessful) {
                             callback.onSuccess()
                         } else {
@@ -597,17 +711,24 @@ class XLogin private constructor(
                         }
                     }
 
-                    override fun onFailure(call: Call<Void?>, t: Throwable) {
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
                         callback.onError(t, null)
                     }
                 })
         }
 
-        fun deleteCurrentUserPhone(phone: String?, callback: DeleteCurrentUserPhoneCallback) {
+        /**
+         * Deletes the phone number of the authenticated user
+         *
+         * @param phone       current user's phone
+         * @param callback    status callback
+         * @see <a href="https://developers.xsolla.com/user-account-api/user-phone-number/deleteusersmephonephonenumber">User Account API Reference</a>
+         */
+        fun deleteCurrentUserPhone(phone: String, callback: DeleteCurrentUserPhoneCallback) {
             getInstance().loginApi
-                .deleteUserPhone("Bearer $token", phone!!)
-                .enqueue(object : Callback<Void?> {
-                    override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                .deleteUserPhone("Bearer $token", phone)
+                .enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if (response.isSuccessful) {
                             callback.onSuccess()
                         } else {
@@ -615,7 +736,7 @@ class XLogin private constructor(
                         }
                     }
 
-                    override fun onFailure(call: Call<Void?>, t: Throwable) {
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
                         callback.onError(t, null)
                     }
                 })
@@ -642,8 +763,8 @@ class XLogin private constructor(
         ) {
             getInstance().loginApi
                 .getUserFriends("Bearer $token", afterUrl, limit, type.name.toLowerCase(), sortBy.name.toLowerCase(), sortOrder.name.toLowerCase())
-                .enqueue(object : Callback<UserFriendsResponse?> {
-                    override fun onResponse(call: Call<UserFriendsResponse?>, response: Response<UserFriendsResponse?>) {
+                .enqueue(object : Callback<UserFriendsResponse> {
+                    override fun onResponse(call: Call<UserFriendsResponse>, response: Response<UserFriendsResponse>) {
                         if (response.isSuccessful) {
                             val userFriendsResponse = response.body()
                             if (userFriendsResponse != null) {
@@ -655,8 +776,7 @@ class XLogin private constructor(
                             callback.onError(null, getErrorMessage(response.errorBody()))
                         }
                     }
-
-                    override fun onFailure(call: Call<UserFriendsResponse?>, t: Throwable) {
+                    override fun onFailure(call: Call<UserFriendsResponse>, t: Throwable) {
                         callback.onError(t, null)
                     }
                 })
@@ -678,8 +798,8 @@ class XLogin private constructor(
             val updateUserFriendsRequest = UpdateUserFriendsRequest(action.name.toLowerCase(), friendXsollaUserId)
             getInstance().loginApi
                 .updateFriends("Bearer $token", updateUserFriendsRequest)
-                .enqueue(object : Callback<Void?> {
-                    override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                .enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if (response.isSuccessful) {
                             callback.onSuccess()
                         } else {
@@ -687,7 +807,7 @@ class XLogin private constructor(
                         }
                     }
 
-                    override fun onFailure(call: Call<Void?>, t: Throwable) {
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
                         callback.onError(t, null)
                     }
                 })
@@ -760,8 +880,8 @@ class XLogin private constructor(
 
             getInstance().loginApi
                 .updateUsersAttributesFromClient("Bearer $token", UpdateUsersAttributesFromClientRequest(nonNullAttributes, publisherProjectId, nonNullRemovingKeys))
-                .enqueue(object : Callback<Void?> {
-                    override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                .enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if (response.isSuccessful) {
                             callback.onSuccess()
                         } else {
@@ -769,7 +889,7 @@ class XLogin private constructor(
                         }
                     }
 
-                    override fun onFailure(call: Call<Void?>, t: Throwable) {
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
                         callback.onError(t, null)
                     }
                 })

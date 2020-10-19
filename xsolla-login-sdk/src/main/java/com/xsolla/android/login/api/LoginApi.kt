@@ -19,6 +19,8 @@ import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse
 import com.xsolla.android.login.entity.response.OauthAuthResponse
 import com.xsolla.android.login.entity.response.OauthGetCodeBySocialTokenResponse
 import com.xsolla.android.login.entity.response.OauthLinkForSocialAuthResponse
+import com.xsolla.android.login.entity.response.PhoneResponse
+import com.xsolla.android.login.entity.response.PictureResponse
 import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse
 import com.xsolla.android.login.entity.response.SocialFriendsResponse
 import com.xsolla.android.login.entity.response.UserDetailsResponse
@@ -111,8 +113,11 @@ interface LoginApi {
     @POST("api/users/me/picture")
     fun uploadUserPicture(
         @Header("authorization") authHeader: String,
-        @Part filePart: MultipartBody.Part
-    ): Call<Void>
+        @Part picture: MultipartBody.Part
+    ): Call<PictureResponse>
+
+    @GET("api/users/me/phone")
+    fun getUserPhone(@Header("authorization") authHeader: String): Call<PhoneResponse>
 
     @POST("api/users/me/phone")
     fun updateUserPhone(

@@ -26,8 +26,8 @@
     <style name="Widget.Xsolla.TextInputLayoutFilled" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
         <item name="boxBackgroundColor">@color/filledbox_background_color</item>
         <item name="boxStrokeColor">@color/filledbox_stroke_color</item>
-        <item name="hintTextColor">@color/white_38</item>
-        <item name="android:textColorHint">@color/white_38</item>
+        <item name="hintTextColor">@color/on_surface_disabled_color</item>
+        <item name="android:textColorHint">@color/on_surface_disabled_color</item>
         <item name="boxCornerRadiusTopStart">4dp</item>
         <item name="boxCornerRadiusTopEnd">4dp</item>
         <item name="materialThemeOverlay">@style/TextInputLayoutFilled</item>
@@ -43,11 +43,11 @@
     <style name="Widget.Xsolla.TextInputLayoutDropdownFilled" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu">
         <item name="boxBackgroundColor">@color/filledbox_background_color</item>
         <item name="boxStrokeColor">@color/filledbox_stroke_color</item>
-        <item name="hintTextColor">@color/white_38</item>
-        <item name="android:textColorHint">@color/white_38</item>
+        <item name="hintTextColor">@color/on_surface_disabled_color</item>
+        <item name="android:textColorHint">@color/on_surface_disabled_color</item>
         <item name="boxCornerRadiusTopStart">4dp</item>
         <item name="boxCornerRadiusTopEnd">4dp</item>
-        <item name="endIconTint">@color/white_60</item>
+        <item name="endIconTint">@color/on_surface_medium_color</item>
     </style>
 
     <style name="TextAppearance.Xsolla.Input.Hint" parent="">
