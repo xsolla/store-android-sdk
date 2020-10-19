@@ -46,7 +46,6 @@ android {
 
 dependencies {
     implementation project(":app-core")
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
 
     implementation project(":xsolla-login-sdk")
     // Uncomment to implement native auth

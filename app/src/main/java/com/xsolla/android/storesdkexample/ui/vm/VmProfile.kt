@@ -13,8 +13,6 @@ import com.xsolla.android.login.entity.response.GenderResponse
 import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.util.SingleLiveEvent
-import com.xsolla.android.storesdkexample.util.extensions.BirthdayFormat
-import com.xsolla.android.storesdkexample.util.extensions.formatBirthday
 import java.util.Locale
 import java.util.regex.Pattern
 
@@ -61,7 +59,7 @@ class VmProfile(private val resources: Resources) : ViewModel() {
 
     fun updateFields(newState: UserDetailsUi) {
         val gender = newState.gender?.name?.toLowerCase(Locale.getDefault())?.first()?.toString()
-        val birthday = newState.birthday.formatBirthday(BirthdayFormat.FROM_UI_TO_BACKEND)
+        val birthday = newState.birthday
         XLogin.updateCurrentUserDetails(birthday, newState.firstName, gender, newState.lastName, newState.nickname, object : UpdateCurrentUserDetailsCallback {
             override fun onSuccess() {
                 message.value = resources.getString(R.string.profile_fields_were_changed)

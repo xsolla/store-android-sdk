@@ -19,8 +19,6 @@ import com.xsolla.android.storesdkexample.ui.vm.UserDetailsUi
 import com.xsolla.android.storesdkexample.ui.vm.ValidateFieldResult
 import com.xsolla.android.storesdkexample.ui.vm.VmProfile
 import com.xsolla.android.storesdkexample.ui.vm.base.ViewModelFactory
-import com.xsolla.android.storesdkexample.util.extensions.BirthdayFormat
-import com.xsolla.android.storesdkexample.util.extensions.formatBirthday
 import kotlinx.android.synthetic.main.activity_store.appbar
 import kotlinx.android.synthetic.main.app_bar_main.view.balanceLayout
 import kotlinx.android.synthetic.main.app_bar_main.view.mainToolbar
@@ -103,7 +101,7 @@ class ProfileFragment : BaseFragment() {
             lastnameInput.setText(userData.lastName)
 
             // Birthday
-            birthdayInput.setText(userData.birthday.formatBirthday(BirthdayFormat.FROM_BACKEND_TO_UI))
+            birthdayInput.setText(userData.birthday)
             if (userData.birthday.isNotBlank()) birthdayLayout.isEnabled = false
 
             // Gender
@@ -255,7 +253,7 @@ class ProfileFragment : BaseFragment() {
             pickerDialog.okButton.setOnClickListener {
                 val month = if (picker.month + 1 < 10) "0${picker.month + 1}" else "${picker.month + 1}"
                 val day = if (picker.dayOfMonth < 10) "0${picker.dayOfMonth}" else "${picker.dayOfMonth}"
-                val result = "$day/$month/${picker.year}"
+                val result = "${picker.year}-$month-$day"
                 birthdayInput.setText(result)
                 alertDialog.dismiss()
             }

@@ -12,7 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -28,28 +30,34 @@ import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
+import com.xsolla.android.storesdkexample.ui.vm.VmProfile
+import com.xsolla.android.storesdkexample.ui.vm.base.ViewModelFactory
 import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import com.xsolla.android.storesdkexample.util.sumByLong
 import kotlinx.android.synthetic.main.activity_store.lock
 import kotlinx.android.synthetic.main.app_bar_main.chargeBalanceButton
+import kotlinx.android.synthetic.main.drawer_expandable_item.bgCartCounter
+import kotlinx.android.synthetic.main.drawer_expandable_item.itemCart
+import kotlinx.android.synthetic.main.drawer_expandable_item.itemVirtualCurrency
+import kotlinx.android.synthetic.main.drawer_expandable_item.itemVirtualItems
+import kotlinx.android.synthetic.main.drawer_expandable_item.textCartCounter
 import kotlinx.android.synthetic.main.item_balance.view.balanceAmount
 import kotlinx.android.synthetic.main.item_balance.view.balanceIcon
-import kotlinx.android.synthetic.main.layout_drawer.bgCartCounter
-import kotlinx.android.synthetic.main.layout_drawer.textAccount
-import kotlinx.android.synthetic.main.layout_drawer.textCart
-import kotlinx.android.synthetic.main.layout_drawer.textCartCounter
-import kotlinx.android.synthetic.main.layout_drawer.textCharacter
+import kotlinx.android.synthetic.main.layout_drawer.iconProfile
+import kotlinx.android.synthetic.main.layout_drawer.itemAccount
+import kotlinx.android.synthetic.main.layout_drawer.itemCharacter
+import kotlinx.android.synthetic.main.layout_drawer.itemFriends
+import kotlinx.android.synthetic.main.layout_drawer.itemInventory
+import kotlinx.android.synthetic.main.layout_drawer.itemLogout
 import kotlinx.android.synthetic.main.layout_drawer.textEmail
-import kotlinx.android.synthetic.main.layout_drawer.textFriends
-import kotlinx.android.synthetic.main.layout_drawer.textInventory
-import kotlinx.android.synthetic.main.layout_drawer.textLogout
 import kotlinx.android.synthetic.main.layout_drawer.textUsername
-import kotlinx.android.synthetic.main.layout_drawer.textVirtualCurrency
-import kotlinx.android.synthetic.main.layout_drawer.textVirtualItems
 
 class StoreActivity : AppCompatActivity() {
     private val vmCart: VmCart by viewModels()
     private val vmBalance: VmBalance by viewModels()
+    private val vmProfile: VmProfile by viewModels {
+        ViewModelFactory(resources)
+    }
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var drawerLayout: DrawerLayout
@@ -164,31 +172,31 @@ class StoreActivity : AppCompatActivity() {
     private fun initDrawer() {
         drawerLayout = findViewById(R.id.drawer_layout)
         val navController = findNavController(R.id.nav_host_fragment)
-        textAccount.setOnClickListener {
+        itemAccount.setOnClickListener {
             navController.navigate(R.id.nav_profile)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-        textInventory.setOnClickListener {
+        itemInventory.setOnClickListener {
             navController.navigate(R.id.nav_inventory)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-        textCharacter.setOnClickListener {
+        itemCharacter.setOnClickListener {
             navController.navigate(R.id.nav_character)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-        textFriends.setOnClickListener {
+        itemFriends.setOnClickListener {
             navController.navigate(R.id.nav_friends)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-        textVirtualItems.setOnClickListener {
+        itemVirtualItems.setOnClickListener {
             navController.navigate(R.id.nav_vi)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-        textVirtualCurrency.setOnClickListener {
+        itemVirtualCurrency.setOnClickListener {
             navController.navigate(R.id.nav_vc)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-        textCart.setOnClickListener {
+        itemCart.setOnClickListener {
             if (vmCart.cartContent.value.isNullOrEmpty()) {
                 showSnack(getString(R.string.cart_message_empty))
             } else {
@@ -196,7 +204,7 @@ class StoreActivity : AppCompatActivity() {
                 drawerLayout.closeDrawer(GravityCompat.START)
             }
         }
-        textLogout.setOnClickListener {
+        itemLogout.setOnClickListener {
             XLogin.logout()
             startLogin()
         }
@@ -214,16 +222,25 @@ class StoreActivity : AppCompatActivity() {
     }
 
     private fun setDrawerData() {
-        XLogin.getCurrentUserDetails(object : GetCurrentUserDetailsCallback {
-            override fun onSuccess(data: UserDetailsResponse) {
-                textEmail.text = data.email
-                textUsername.text = data.nickname ?: data.name
+        vmProfile.state.observe(this) { data ->
+            if (data.email.isNotBlank()) textEmail.text = data.email
+            else textEmail.visibility = View.GONE
+
+            textUsername.text = when {
+                data.nickname.isNotBlank() -> { data.nickname }
+                data.username.isNotBlank() -> { data.nickname }
+                data.firstName.isNotBlank() -> { data.firstName }
+                data.lastName.isNotBlank() -> { data.lastName }
+                else -> { "Nickname" }
             }
 
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-            }
-
-        })
+            Glide.with(this@StoreActivity)
+                .load(data.avatar)
+                .circleCrop()
+                .placeholder(R.drawable.ic_profile)
+                .error(R.drawable.ic_profile)
+                .into(iconProfile)
+        }
     }
 
     private fun startLogin() {

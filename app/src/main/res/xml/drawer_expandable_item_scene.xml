@@ -76,7 +76,7 @@
         <Constraint android:id="@+id/background">
             <CustomAttribute
                 motion:attributeName="backgroundColor"
-                motion:customColorValue="@color/magenta_color_8" />
+                motion:customColorValue="@color/transparent_magenta_color" />
         </Constraint>
         <Constraint android:id="@+id/item_text">
             <CustomAttribute
