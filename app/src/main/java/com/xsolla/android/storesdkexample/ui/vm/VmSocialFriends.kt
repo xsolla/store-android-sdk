@@ -8,7 +8,6 @@ import com.xsolla.android.login.callback.GetSocialFriendsCallback
 import com.xsolla.android.login.callback.LinkedSocialNetworksCallback
 import com.xsolla.android.login.callback.UpdateSocialFriendsCallback
 import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
-import com.xsolla.android.login.entity.response.SocialFriend
 import com.xsolla.android.login.entity.response.SocialFriendsResponse
 import com.xsolla.android.login.social.FriendsPlatform
 import com.xsolla.android.login.social.SocialNetworkForLinking
@@ -18,7 +17,7 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
 
     val linkedSocialNetworks = MutableLiveData<List<SocialNetworkForLinking?>>(listOf())
 
-    val socialFriendsList = MutableLiveData<MutableList<SocialFriend>>(mutableListOf())
+    val socialFriendsList = MutableLiveData<List<SocialFriendUiEntity>>(listOf())
 
     val hasError = SingleLiveEvent<Boolean>()
 
@@ -27,40 +26,36 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
     }
 
     fun loadAllSocialFriends() {
-        socialFriendsList.value?.clear()
-        loadSocialFriends(null)
-    }
-
-    private fun loadSocialFriends(friendsPlatform: FriendsPlatform?, callback: (() -> Unit)? = null) {
-        XLogin.getSocialFriends(friendsPlatform, VmAddFriends.REQUEST_OFFSET, VmAddFriends.REQUEST_LIMIT, false, object : GetSocialFriendsCallback {
+        XLogin.getSocialFriends(null, VmAddFriends.REQUEST_OFFSET, VmAddFriends.REQUEST_LIMIT, false, object : GetSocialFriendsCallback {
             override fun onSuccess(data: SocialFriendsResponse) {
 
-                // TODO
-                /*val groupByXsollaId = data.friendsList.groupBy { it.xsollaUserId }
-                val socialFriends = mutableListOf<SocialFriend>()
+                val groupByXsollaId = data.friendsList.groupBy { it.xsollaUserId }
+                val socialFriends = mutableListOf<SocialFriendUiEntity>()
                 groupByXsollaId.forEach { (xsollaId, friends) ->
                     if (xsollaId == null) {
-                        socialFriends.addAll(friends)
-                    } else {
-                        val oneFriend = friends.first()
-                        socialFriends.add(
-                            SocialFriend(
-                                avatar = oneFriend.avatar,
-                                name = oneFriend.name,
-                                platform = oneFriend.platform, // !!!
-                                socialNetworkUserId = oneFriend.socialNetworkUserId,
-                                xsollaUserId = ""
+                        socialFriends.addAll(friends.map {
+                            SocialFriendUiEntity(
+                                    null,
+                                    it.socialNetworkUserId,
+                                    it.avatar,
+                                    it.name,
+                                    listOf(it.platform)
                             )
+                        })
+                    } else {
+                        socialFriends.add(
+                                SocialFriendUiEntity(
+                                        friends.first().xsollaUserId,
+                                        null,
+                                        friends.find { !it.avatar.isNullOrEmpty() }?.avatar,
+                                        friends.find { !it.name.isBlank() }?.name ?: "",
+                                        friends.map { it.platform }
+                                )
                         )
                     }
-                }*/
+                }
 
-
-
-
-
-                socialFriendsList.value = socialFriendsList.value?.apply { addAll(data.friendsList) }
-                callback?.invoke()
+                socialFriendsList.value = socialFriends
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
@@ -95,10 +90,10 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
     }
 
     data class SocialFriendUiEntity(
-        val xsollaId: String?,
-        val socialId: String,
-        val imageUrl: String?,
-        val nickname: String,
-        val fromPlatform: List<SocialNetworkForLinking>
+            val xsollaId: String?,
+            val socialId: String?,
+            val imageUrl: String?,
+            val nickname: String,
+            val fromPlatform: List<SocialNetworkForLinking>
     )
 }

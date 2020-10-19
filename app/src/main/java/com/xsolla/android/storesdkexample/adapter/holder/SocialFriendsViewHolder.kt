@@ -56,11 +56,9 @@ class SocialFriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private fun configureFriendsInPlaceholder(item: VmSocialFriends.SocialFriendUiEntity) {
         itemView.friendsInPlaceholder.isVisible = true
 
-        val socialIcon = when (item.fromPlatform.first()) {
-            SocialNetworkForLinking.FACEBOOK -> R.drawable.ic_facebook
-            SocialNetworkForLinking.TWITTER -> R.drawable.ic_twitter
-            SocialNetworkForLinking.VK -> R.drawable.ic_vk_small
-        }
-        itemView.friendsInPlaceholder.setCompoundDrawablesWithIntrinsicBounds(0, 0, socialIcon, 0)
+        itemView.friendsInIconFacebook.isVisible = item.fromPlatform.contains(SocialNetworkForLinking.FACEBOOK)
+        itemView.friendsInIconTwitter.isVisible = item.fromPlatform.contains(SocialNetworkForLinking.TWITTER)
+        itemView.friendsInIconVk.isVisible = item.fromPlatform.contains(SocialNetworkForLinking.VK)
+
     }
 }

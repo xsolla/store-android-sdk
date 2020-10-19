@@ -65,9 +65,37 @@
             android:visibility="gone"
             android:text="@string/add_friends_friends_in_placeholder"
             app:layout_constraintStart_toStartOf="@id/friendNickname"
-            app:layout_constraintTop_toBottomOf="@id/friendNickname"
-            tools:drawableEndCompat="@drawable/ic_vk_small"
-            tools:text="Friends in" />
+            app:layout_constraintTop_toBottomOf="@id/friendNickname" />
+
+        <ImageView
+            android:id="@+id/friendsInIconFacebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/friendsInPlaceholder"
+            app:layout_constraintStart_toEndOf="@id/friendsInPlaceholder"
+            app:layout_constraintTop_toTopOf="@id/friendsInPlaceholder"
+            app:srcCompat="@drawable/ic_facebook" />
+
+        <ImageView
+            android:id="@+id/friendsInIconTwitter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/friendsInPlaceholder"
+            app:layout_constraintStart_toEndOf="@id/friendsInIconFacebook"
+            app:layout_constraintTop_toTopOf="@id/friendsInPlaceholder"
+            app:srcCompat="@drawable/ic_twitter" />
+
+        <ImageView
+            android:id="@+id/friendsInIconVk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/friendsInPlaceholder"
+            app:layout_constraintStart_toEndOf="@id/friendsInIconTwitter"
+            app:layout_constraintTop_toTopOf="@id/friendsInPlaceholder"
+            app:srcCompat="@drawable/ic_vk_small" />
 
         <TextView
             android:id="@+id/friendAcceptedText"

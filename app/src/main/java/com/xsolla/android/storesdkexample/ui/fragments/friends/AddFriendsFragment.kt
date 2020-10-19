@@ -71,16 +71,7 @@ class AddFriendsFragment : BaseFragment() {
             searchAdapter.submitList(list)
         }
         vmSocialFriends.socialFriendsList.observe(viewLifecycleOwner) { list ->
-            val uiEntitiesList = list.map {
-                VmSocialFriends.SocialFriendUiEntity(
-                    it.xsollaUserId,
-                    it.socialNetworkUserId,
-                    it.avatar,
-                    it.name,
-                    listOf(it.platform) // TODO
-                )
-            }
-            socialFriendsAdapter.submitList(uiEntitiesList)
+            socialFriendsAdapter.submitList(list)
         }
         vmAddFriends.currentSearchQuery.observe(viewLifecycleOwner) { query ->
             if (query.isNullOrBlank()) {
