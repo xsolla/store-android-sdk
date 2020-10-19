@@ -7,59 +7,17 @@ import android.os.Build
 import androidx.annotation.IntRange
 import androidx.fragment.app.Fragment
 import com.xsolla.android.login.api.LoginApi
-import com.xsolla.android.login.callback.AuthCallback
-import com.xsolla.android.login.callback.DeleteCurrentUserAvatarCallback
-import com.xsolla.android.login.callback.DeleteCurrentUserPhoneCallback
-import com.xsolla.android.login.callback.FinishSocialCallback
-import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
-import com.xsolla.android.login.callback.GetCurrentUserFriendsCallback
-import com.xsolla.android.login.callback.GetSocialFriendsCallback
-import com.xsolla.android.login.callback.GetUserPublicInfoCallback
-import com.xsolla.android.login.callback.GetUsersAttributesCallback
-import com.xsolla.android.login.callback.RefreshTokenCallback
-import com.xsolla.android.login.callback.RegisterCallback
-import com.xsolla.android.login.callback.ResetPasswordCallback
-import com.xsolla.android.login.callback.SearchUsersByNicknameCallback
-import com.xsolla.android.login.callback.StartSocialCallback
-import com.xsolla.android.login.callback.UpdateCurrentUserDetailsCallback
-import com.xsolla.android.login.callback.UpdateCurrentUserFriendsCallback
-import com.xsolla.android.login.callback.UpdateCurrentUserPhoneCallback
-import com.xsolla.android.login.callback.UpdateUsersAttributesCallback
-import com.xsolla.android.login.callback.UploadCurrentUserAvatarCallback
+import com.xsolla.android.login.callback.*
 import com.xsolla.android.login.entity.common.UserAttribute
-import com.xsolla.android.login.entity.request.AuthUserBody
-import com.xsolla.android.login.entity.request.GetUsersAttributesFromClientRequest
-import com.xsolla.android.login.entity.request.OauthAuthUserBody
-import com.xsolla.android.login.entity.request.OauthRegisterUserBody
-import com.xsolla.android.login.entity.request.RegisterUserBody
-import com.xsolla.android.login.entity.request.ResetPasswordBody
-import com.xsolla.android.login.entity.request.UpdateUserDetailsBody
-import com.xsolla.android.login.entity.request.UpdateUserFriendsRequest
-import com.xsolla.android.login.entity.request.UpdateUserFriendsRequestAction
-import com.xsolla.android.login.entity.request.UpdateUserPhoneBody
-import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromClientRequest
-import com.xsolla.android.login.entity.request.UserFriendsRequestSortBy
-import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder
-import com.xsolla.android.login.entity.request.UserFriendsRequestType
-import com.xsolla.android.login.entity.response.AuthResponse
-import com.xsolla.android.login.entity.response.OauthAuthResponse
-import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse
-import com.xsolla.android.login.entity.response.SocialFriendsResponse
-import com.xsolla.android.login.entity.response.UserDetailsResponse
-import com.xsolla.android.login.entity.response.UserFriendsResponse
-import com.xsolla.android.login.entity.response.UserPublicInfoResponse
+import com.xsolla.android.login.entity.request.*
+import com.xsolla.android.login.entity.response.*
 import com.xsolla.android.login.jwt.JWT
 import com.xsolla.android.login.social.FriendsPlatform
 import com.xsolla.android.login.social.LoginSocial
 import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.login.token.TokenUtils
 import com.xsolla.android.login.unity.UnityProxyActivity
-import okhttp3.Interceptor
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
-import okhttp3.RequestBody
-import okhttp3.ResponseBody
+import okhttp3.*
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -67,8 +25,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
-import java.util.Collections
-import java.util.UUID
+import java.util.*
 
 /**
  * Entry point for Xsolla Login SDK
@@ -106,7 +63,7 @@ class XLogin private constructor(
         private var instance: XLogin? = null
         private val loginSocial = LoginSocial
 
-        fun getInstance(): XLogin {
+        private fun getInstance(): XLogin {
             if (instance == null) {
                 throw IllegalStateException("XLogin SDK not initialized. Call \"XLogin.init()\" in MainActivity.onCreate()")
             }
