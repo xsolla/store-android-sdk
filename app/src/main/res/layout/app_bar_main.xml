@@ -12,10 +12,10 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/mainToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/appbar_bg"
+            android:background="?attr/colorPrimarySurface"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <LinearLayout

@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toStartOf="@+id/baiduButton"
             app:layout_constraintStart_toEndOf="@+id/facebookButton"
-            app:layout_constraintTop_toBottomOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/baiduButton"

@@ -2,12 +2,19 @@ package com.xsolla.android.storesdkexample.ui.fragments.login
 
 import android.text.Editable
 import android.text.TextWatcher
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.ResetPasswordCallback
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.util.ViewUtils
-import kotlinx.android.synthetic.main.fragmen_reset_password.view.*
+import kotlinx.android.synthetic.main.activity_store.appbar
+import kotlinx.android.synthetic.main.app_bar_main.view.mainToolbar
+import kotlinx.android.synthetic.main.fragmen_reset_password.view.resetPasswordButton
+import kotlinx.android.synthetic.main.fragmen_reset_password.view.toolbar
+import kotlinx.android.synthetic.main.fragmen_reset_password.view.usernameInput
 
 class ResetPasswordFragment : BaseFragment() {
 
@@ -16,9 +23,11 @@ class ResetPasswordFragment : BaseFragment() {
     }
 
     override fun initUI() {
+        requireActivity().appbar?.mainToolbar?.isGone = true
+
         rootView.toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
         rootView.toolbar.setNavigationOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            openLoginFragment()
         }
 
         rootView.usernameInput.addTextChangedListener(object : TextWatcher{
@@ -56,9 +65,16 @@ class ResetPasswordFragment : BaseFragment() {
         }
     }
 
+    override fun onDestroyView() {
+        requireActivity().appbar?.mainToolbar?.isVisible = true
+        super.onDestroyView()
+    }
+
     private fun openLoginFragment() {
-        activity?.let {
-            it.supportFragmentManager.popBackStack()
+        try {
+            findNavController().navigateUp()
+        } catch (e: IllegalStateException) {
+            activity?.supportFragmentManager?.popBackStack()
         }
     }
 }
