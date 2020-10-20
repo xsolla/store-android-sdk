@@ -83,5 +83,6 @@
     <string name="coupon_example">\tfor example, WINTER2021</string>
     <string name="coupon_received_items_placeholder">You received the following items:</string>
     <string name="coupon_redeem_another_button">Redeem another coupon</string>
+    <string name="coupon_received_item_exp_period">Expiration in: %d %ss</string>
 
 </resources>

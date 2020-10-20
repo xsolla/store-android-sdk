@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.store.entity.response.items.RedeemCouponResponse
@@ -34,8 +35,13 @@ class RedeemCouponItemsAdapter(
             Glide.with(itemView.context).load(item.imageUrl).into(itemView.itemIcon)
             itemView.itemName.text = item.name
             itemView.itemQuantity.text = item.quantity.toString()
-            item.inventoryOption?.expirationPeriod?.value?.let { itemView.itemExpiration.text = it.toString() } ?: run {
-                itemView.itemExpiration.isGone
+
+            val expirationPeriod = item.inventoryOption?.expirationPeriod
+            if (expirationPeriod != null) {
+                itemView.itemExpiration.isVisible = true
+                itemView.itemExpiration.text = itemView.context.getString(R.string.coupon_received_item_exp_period, expirationPeriod.value, expirationPeriod.type.name.toLowerCase())
+            } else {
+                itemView.itemExpiration.isGone = true
             }
 
             itemView.consumeButton.isGone = true

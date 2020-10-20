@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="sucessLayout,receivedItemsRecycler,redeemAnotherLayout" />
+        app:constraint_referenced_ids="successLayout,receivedItemsRecycler,redeemAnotherLayout" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/couponGroup"
@@ -75,15 +75,15 @@
         app:layout_constraintTop_toTopOf="@id/redeemButton" />
 
     <LinearLayout
-        android:id="@+id/sucessLayout"
+        android:id="@+id/successLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/secondary_color_10"
         android:orientation="vertical"
+        android:paddingBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@id/receivedItemsRecycler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:paddingBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@id/receivedItemsRecycler"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <TextView
@@ -119,7 +119,7 @@
         app:layout_constraintBottom_toTopOf="@id/redeemAnotherLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sucessLayout"
+        app:layout_constraintTop_toBottomOf="@id/successLayout"
         tools:listitem="@layout/item_inventory" />
 
     <FrameLayout
