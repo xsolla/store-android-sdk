@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="successPlaceholder,itemsPlaceholder,receivedItemsRecycler,redeemAnotherLayout" />
+        app:constraint_referenced_ids="sucessLayout,receivedItemsRecycler,redeemAnotherLayout" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/couponGroup"
@@ -74,35 +74,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/redeemButton" />
 
-    <TextView
-        android:id="@+id/successPlaceholder"
-        style="@style/Headline2"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/sucessLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/success"
-        android:textColor="@color/white_color"
-        android:textStyle="bold"
+        android:background="@color/secondary_color_10"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        android:paddingBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@id/receivedItemsRecycler"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-    <TextView
-        android:id="@+id/itemsPlaceholder"
-        style="@style/Body2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="@string/coupon_received_items_placeholder"
-        android:textColor="@color/secondary_color"
-        app:layout_constraintStart_toStartOf="@id/successPlaceholder"
-        app:layout_constraintTop_toBottomOf="@id/successPlaceholder" />
+        <TextView
+            android:id="@+id/successPlaceholder"
+            style="@style/Headline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/success"
+            android:textColor="@color/white_color"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/itemsPlaceholder"
+            style="@style/Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="6dp"
+            android:text="@string/coupon_received_items_placeholder"
+            android:textColor="@color/secondary_color" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/receivedItemsRecycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         android:fadeScrollbars="false"
         android:scrollbars="vertical"
@@ -110,7 +119,7 @@
         app:layout_constraintBottom_toTopOf="@id/redeemAnotherLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/itemsPlaceholder"
+        app:layout_constraintTop_toBottomOf="@id/sucessLayout"
         tools:listitem="@layout/item_inventory" />
 
     <FrameLayout
