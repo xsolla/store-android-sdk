@@ -76,7 +76,6 @@ class ActivityAuthWebView : AppCompatActivity() {
             }
 
             override fun doUpdateVisitedHistory(view: WebView, url: String, isReload: Boolean) {
-                println("!!! $url") //TODO
                 if (url.startsWith(callbackUrl)) {
                     handleCallbackUrlRedirect(url)
                 }

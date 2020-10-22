@@ -1,10 +1,10 @@
 package com.xsolla.android.storesdkexample.ui.vm
 
 import android.app.Application
-import android.os.Handler
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.viewModelScope
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.GetCurrentUserFriendsCallback
 import com.xsolla.android.login.callback.SearchUsersByNicknameCallback
@@ -16,7 +16,10 @@ import com.xsolla.android.login.entity.request.UserFriendsRequestType
 import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse
 import com.xsolla.android.login.entity.response.UserFriendsResponse
 import com.xsolla.android.storesdkexample.util.SingleLiveEvent
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class VmAddFriends(application: Application) : AndroidViewModel(application) {
 
@@ -37,7 +40,7 @@ class VmAddFriends(application: Application) : AndroidViewModel(application) {
     private val searchObserver = Observer<String> {
         searchJob?.cancel()
         if (it.length >= SEARCH_MIN_LENGTH) {
-            searchJob = GlobalScope.launch(Dispatchers.Main) {
+            searchJob = viewModelScope.launch(Dispatchers.Main) {
                 delay(SEARCH_DELAY)
                 doSearch(it)
             }
@@ -50,11 +53,7 @@ class VmAddFriends(application: Application) : AndroidViewModel(application) {
     private val friendsBlocked = mutableListOf<FriendUiEntity>()
     private val friendsBlockedBy = mutableListOf<FriendUiEntity>()
 
-    val hasError = SingleLiveEvent<Boolean>()
-
-    init {
-        hasError.value = false
-    }
+    val hasError = SingleLiveEvent<String>()
 
 
     init {
@@ -132,7 +131,7 @@ class VmAddFriends(application: Application) : AndroidViewModel(application) {
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
-                        hasError.value = true
+                        hasError.value = errorMessage ?: throwable?.javaClass?.name ?: "Failure"
                     }
                 }
         )
@@ -140,11 +139,12 @@ class VmAddFriends(application: Application) : AndroidViewModel(application) {
 
     fun reloadAfterChange() {
         loadAllFriends()
-        Handler().postDelayed({
+        viewModelScope.launch {
+            delay(2000)
             currentSearchQuery.value?.let {
                 doSearch(it)
             }
-        }, 2000) // TODO better async
+        } // TODO better async
     }
 
     fun updateFriendship(user: FriendUiEntity, updateType: UpdateUserFriendsRequestAction) {
@@ -154,7 +154,7 @@ class VmAddFriends(application: Application) : AndroidViewModel(application) {
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
-                hasError.value = true
+                hasError.value = errorMessage ?: throwable?.javaClass?.name ?: "Failure"
             }
         })
     }

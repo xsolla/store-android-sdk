@@ -7,7 +7,6 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.entity.request.UpdateUserFriendsRequestAction
 import com.xsolla.android.login.social.SocialNetworkForLinking
@@ -58,7 +57,6 @@ class AddFriendsFragment : BaseFragment() {
                 vmAddFriends.updateFriendship(FriendUiEntity(it.xsollaId, it.imageUrl, false, it.nickname, FriendsRelationship.NONE), UpdateUserFriendsRequestAction.FRIEND_REQUEST_ADD)
             }
         }
-        recycler.layoutManager = LinearLayoutManager(context)
         searchInput.addTextChangedListener {
             vmAddFriends.currentSearchQuery.value = it?.toString() ?: ""
         }
@@ -81,16 +79,11 @@ class AddFriendsFragment : BaseFragment() {
             }
         }
         initSocialScreen()
-        vmAddFriends.hasError.observe(viewLifecycleOwner) { hasError ->
-            if (hasError) {
-                showSnack("Failure")
-            }
+        val errorObserver = { errorMessage: String ->
+            showSnack(errorMessage)
         }
-        vmSocialFriends.hasError.observe(viewLifecycleOwner) { hasError ->
-            if (hasError) {
-                showSnack("Failure")
-            }
-        }
+        vmAddFriends.hasError.observe(viewLifecycleOwner, errorObserver)
+        vmSocialFriends.hasError.observe(viewLifecycleOwner, errorObserver)
         vmAddFriends.loadAllFriends()
 
         updateFriendsButton.setOnClickListener { vmSocialFriends.updateSocialFriends() }

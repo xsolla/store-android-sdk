@@ -19,11 +19,7 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
 
     val socialFriendsList = MutableLiveData<List<SocialFriendUiEntity>>(listOf())
 
-    val hasError = SingleLiveEvent<Boolean>()
-
-    init {
-        hasError.value = false
-    }
+    val hasError = SingleLiveEvent<String>()
 
     fun loadAllSocialFriends() {
         XLogin.getSocialFriends(null, VmAddFriends.REQUEST_OFFSET, VmAddFriends.REQUEST_LIMIT, false, object : GetSocialFriendsCallback {
@@ -60,7 +56,7 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
                 throwable?.printStackTrace()
-                hasError.value = true
+                hasError.value = errorMessage ?: throwable?.javaClass?.name ?: "Failure"
             }
         })
     }
