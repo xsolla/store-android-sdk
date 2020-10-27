@@ -72,7 +72,8 @@ class ActivityAuthWebView : AppCompatActivity() {
         }
         webview.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(webView: WebView, url: String): Boolean {
-                return false
+                webView.loadUrl(url)
+                return true
             }
 
             override fun doUpdateVisitedHistory(view: WebView, url: String, isReload: Boolean) {

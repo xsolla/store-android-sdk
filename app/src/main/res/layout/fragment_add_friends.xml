@@ -129,4 +129,18 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_friend" />
 
+    <TextView
+        android:id="@+id/recyclerEmpty"
+        style="@style/TextAppearance.Xsolla.Input.Text"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:padding="30dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/recycler"
+        app:layout_constraintEnd_toEndOf="@id/recycler"
+        app:layout_constraintStart_toStartOf="@id/recycler"
+        app:layout_constraintTop_toTopOf="@id/recycler"
+        tools:text="You have no friends" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

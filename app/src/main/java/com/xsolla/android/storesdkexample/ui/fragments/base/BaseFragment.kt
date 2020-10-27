@@ -6,8 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import com.xsolla.android.storesdkexample.StoreActivity
+import kotlinx.android.synthetic.main.activity_store.*
+import kotlinx.android.synthetic.main.app_bar_main.view.*
 
 abstract class BaseFragment : Fragment() {
     lateinit var rootView: View
@@ -34,5 +38,11 @@ abstract class BaseFragment : Fragment() {
     fun hideKeyboard() {
         val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(rootView.windowToken, 0)
+    }
+
+    fun showOrHideToolbarViews(show: Boolean) {
+        requireActivity().appbar.balanceLayout.isVisible = show
+        (requireActivity() as StoreActivity).showCartMenu = show
+        requireActivity().invalidateOptionsMenu()
     }
 }

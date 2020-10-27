@@ -29,7 +29,7 @@ class VmAddFriends(application: Application) : AndroidViewModel(application) {
         const val REQUEST_OFFSET = 0
         const val REQUEST_LIMIT = 100
 
-        private const val MAX_LIMIT_FOR_LOADING_FRIENDS = 50
+        const val MAX_LIMIT_FOR_LOADING_FRIENDS = 50
     }
 
     val currentSearchQuery = MutableLiveData("")

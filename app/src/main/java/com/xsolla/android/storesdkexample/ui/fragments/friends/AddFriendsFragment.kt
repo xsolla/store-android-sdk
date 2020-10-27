@@ -14,8 +14,6 @@ import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.AddFriendsAdapter
 import com.xsolla.android.storesdkexample.adapter.SocialFriendsAdapter
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
-import com.xsolla.android.storesdkexample.ui.vm.FriendUiEntity
-import com.xsolla.android.storesdkexample.ui.vm.FriendsRelationship
 import com.xsolla.android.storesdkexample.ui.vm.VmAddFriends
 import com.xsolla.android.storesdkexample.ui.vm.VmSocialFriends
 import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
@@ -38,6 +36,7 @@ class AddFriendsFragment : BaseFragment() {
     override fun getLayout() = R.layout.fragment_add_friends
 
     override fun initUI() {
+        showOrHideToolbarViews(false)
         socialNetworksIcons = mapOf(
                 SocialNetworkForLinking.FACEBOOK to Triple(R.drawable.ic_linking_facebook_add, R.drawable.ic_linking_facebook_added, iconFacebook),
                 SocialNetworkForLinking.VK to Triple(R.drawable.ic_linking_vk_add, R.drawable.ic_linking_vk_added, iconVk),
@@ -52,11 +51,15 @@ class AddFriendsFragment : BaseFragment() {
                 { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.FRIEND_REQUEST_CANCEL) },
                 { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.FRIEND_REQUEST_ADD) }
         )
-        socialFriendsAdapter = SocialFriendsAdapter {
-            if (it.xsollaId != null) {
-                vmAddFriends.updateFriendship(FriendUiEntity(it.xsollaId, it.imageUrl, false, it.nickname, FriendsRelationship.NONE), UpdateUserFriendsRequestAction.FRIEND_REQUEST_ADD)
-            }
-        }
+        socialFriendsAdapter = SocialFriendsAdapter(
+                { vmSocialFriends.updateFriendship(it.toFriendUiEntity(), UpdateUserFriendsRequestAction.FRIEND_REMOVE) },
+                { vmSocialFriends.updateFriendship(it.toFriendUiEntity(), UpdateUserFriendsRequestAction.BLOCK) },
+                {},
+                { vmSocialFriends.updateFriendship(it.toFriendUiEntity(), UpdateUserFriendsRequestAction.FRIEND_REQUEST_APPROVE) },
+                { vmSocialFriends.updateFriendship(it.toFriendUiEntity(), UpdateUserFriendsRequestAction.FRIEND_REQUEST_DENY) },
+                { vmSocialFriends.updateFriendship(it.toFriendUiEntity(), UpdateUserFriendsRequestAction.FRIEND_REQUEST_CANCEL) },
+                { vmSocialFriends.updateFriendship(it.toFriendUiEntity(), UpdateUserFriendsRequestAction.FRIEND_REQUEST_ADD) }
+        )
         searchInput.addTextChangedListener {
             vmAddFriends.currentSearchQuery.value = it?.toString() ?: ""
         }
@@ -67,9 +70,11 @@ class AddFriendsFragment : BaseFragment() {
         }
         vmAddFriends.searchResultList.observe(viewLifecycleOwner) { list ->
             searchAdapter.submitList(list)
+            setEmptyTextVisibility()
         }
         vmSocialFriends.socialFriendsList.observe(viewLifecycleOwner) { list ->
             socialFriendsAdapter.submitList(list)
+            setEmptyTextVisibility()
         }
         vmAddFriends.currentSearchQuery.observe(viewLifecycleOwner) { query ->
             if (query.isNullOrBlank()) {
@@ -127,6 +132,8 @@ class AddFriendsFragment : BaseFragment() {
         labelListTitle.isVisible = true
         updateFriendsButton.isVisible = true
         recycler.adapter = socialFriendsAdapter
+        recyclerEmpty.text = getString(R.string.add_friends_social_empty)
+        setEmptyTextVisibility()
     }
 
     private fun initSearchScreen() {
@@ -135,6 +142,16 @@ class AddFriendsFragment : BaseFragment() {
         labelListTitle.isGone = true
         updateFriendsButton.isGone = true
         recycler.adapter = searchAdapter
+        recyclerEmpty.text = getString(R.string.add_friends_search_empty)
+        setEmptyTextVisibility()
+    }
+
+    private fun setEmptyTextVisibility() {
+        recyclerEmpty.isVisible =
+                vmAddFriends.currentSearchQuery.value.isNullOrBlank() &&
+                        vmSocialFriends.socialFriendsList.value.isNullOrEmpty() ||
+                        !vmAddFriends.currentSearchQuery.value.isNullOrBlank() &&
+                        vmAddFriends.searchResultList.value.isNullOrEmpty()
     }
 
 }

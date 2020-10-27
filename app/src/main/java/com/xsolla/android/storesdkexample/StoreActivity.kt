@@ -50,6 +50,8 @@ class StoreActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var drawerLayout: DrawerLayout
 
+    var showCartMenu = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_store)
@@ -63,6 +65,16 @@ class StoreActivity : AppCompatActivity() {
         initNavController()
         initDrawer()
         initVirtualBalance()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean("showCartMenu", showCartMenu)
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        showCartMenu = savedInstanceState.getBoolean("showCartMenu")
+        super.onRestoreInstanceState(savedInstanceState)
     }
 
     override fun onResume() {
@@ -124,26 +136,28 @@ class StoreActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
-        val cartView = menu.findItem(R.id.action_cart).actionView
-        vmCart.cartContent.observe(this, Observer { cartItems ->
-            val cartCounter = cartView.findViewById<TextView>(R.id.cart_badge)
-            val count = cartItems.sumByLong { item -> item.quantity }
-            cartCounter.text = count.toString()
-            if (count == 0L) {
-                cartCounter.visibility = View.GONE
-            } else {
-                cartCounter.visibility = View.VISIBLE
-            }
-
-            cartView.setOnClickListener {
-                if (cartItems.isNotEmpty()) {
-                    findNavController(R.id.nav_host_fragment).navigate(R.id.nav_cart)
+        if (showCartMenu) {
+            menuInflater.inflate(R.menu.main, menu)
+            val cartView = menu.findItem(R.id.action_cart).actionView
+            vmCart.cartContent.observe(this, Observer { cartItems ->
+                val cartCounter = cartView.findViewById<TextView>(R.id.cart_badge)
+                val count = cartItems.sumByLong { item -> item.quantity }
+                cartCounter.text = count.toString()
+                if (count == 0L) {
+                    cartCounter.visibility = View.GONE
                 } else {
-                    showSnack(getString(R.string.cart_message_empty))
+                    cartCounter.visibility = View.VISIBLE
                 }
-            }
-        })
+
+                cartView.setOnClickListener {
+                    if (cartItems.isNotEmpty()) {
+                        findNavController(R.id.nav_host_fragment).navigate(R.id.nav_cart)
+                    } else {
+                        showSnack(getString(R.string.cart_message_empty))
+                    }
+                }
+            })
+        }
 
         return true
     }
