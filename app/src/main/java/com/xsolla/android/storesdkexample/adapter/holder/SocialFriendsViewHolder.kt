@@ -105,34 +105,32 @@ class SocialFriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             onDeleteOptionClick: (user: VmSocialFriends.SocialFriendUiEntity) -> Unit,
             onBlockOptionClick: (user: VmSocialFriends.SocialFriendUiEntity) -> Unit
     ) {
+        itemView.friendsAcceptDeclineButtons.isVisible = false
+        itemView.cancelRequestButton.isVisible = false
+        itemView.addFriendButton.isVisible = false
+        itemView.unblockButton.isVisible = false
+        itemView.friendsOptionsButton.isVisible = false
+        itemView.friendAcceptedText.isVisible = false
+        itemView.friendDeclinedText.isVisible = false
         if (item.xsollaId == null) {
-            itemView.friendsOptionsButton.isVisible = false
             return
         }
         if (item.relationship == FriendsRelationship.NONE) {
-            itemView.friendAcceptedText.isVisible = false
-            itemView.friendDeclinedText.isVisible = false
             itemView.addFriendButton.isVisible = true
             itemView.friendsOptionsButton.isVisible = true
             configureOptionsWithBlock(item, onBlockOptionClick)
         }
         if (item.relationship == FriendsRelationship.REQUESTED) {
-            itemView.friendAcceptedText.isVisible = false
-            itemView.friendDeclinedText.isVisible = false
             itemView.cancelRequestButton.isVisible = true
             itemView.friendsOptionsButton.isVisible = true
             configureOptionsWithBlock(item, onBlockOptionClick)
         }
         if (item.relationship == FriendsRelationship.PENDING) {
-            itemView.friendAcceptedText.isVisible = false
-            itemView.friendDeclinedText.isVisible = false
             itemView.friendsAcceptDeclineButtons.isVisible = true
             itemView.friendsOptionsButton.isVisible = true
             configureOptionsWithBlock(item, onBlockOptionClick)
         }
         if (item.relationship == FriendsRelationship.STANDARD) {
-            itemView.friendAcceptedText.isVisible = false
-            itemView.friendDeclinedText.isVisible = false
             itemView.friendsOptionsButton.isVisible = true
             itemView.friendsOptionsButton.setOnClickListener {
                 AlertDialog.Builder(itemView.context)
