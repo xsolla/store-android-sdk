@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Xsolla.AddFriends.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">@dimen/add_friends_search_corner_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/add_friends_search_corner_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/add_friends_search_corner_radius</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/add_friends_search_corner_radius</item>
+        <item name="android:textColorHint">@color/secondary_color</item>
+        <item name="boxStrokeColor">@color/input_outline_color</item>
+        <item name="android:background">@color/secondary_color_10</item>
+        <item name="android:paddingTop">@dimen/add_friends_search_vertical_padding</item>
+        <item name="android:paddingBottom">@dimen/add_friends_search_vertical_padding</item>
+        <item name="android:paddingLeft">@dimen/add_friends_search_horizontal_padding</item>
+        <item name="android:paddingRight">@dimen/add_friends_search_horizontal_padding</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Xsolla.AddFriends.TextInputLayout</item>
+    </style>
+
+    <style name="ThemeOverlay.Xsolla.AddFriends.TextInputLayout" parent="">
+        <item name="android:height">@dimen/add_friends_search_height</item>
+        <item name="colorPrimary">@color/magenta_color</item>
+        <item name="editTextStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="android:textCursorDrawable">@drawable/input_cursor</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.Xsolla.AddFreinds.Input.Hint</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.Xsolla.AddFreinds.Input.Text</item>
+        <item name="maxLines">1</item>
+    </style>
+
+    <style name="TextAppearance.Xsolla.AddFreinds.Input.Hint" parent="">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">@dimen/add_friends_search_text_size</item>
+    </style>
+
+    <style name="TextAppearance.Xsolla.AddFreinds.Input.Text" parent="">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">@dimen/add_friends_search_text_size</item>
+    </style>
+    
+    <style name="Widget.Xsolla.AddFriends.BlockTitle" parent="">
+        <item name="android:textSize">@dimen/add_friends_block_title_text_size</item>
+        <item name="android:layout_marginStart">@dimen/add_friends_block_title_margin_left</item>
+        <item name="android:layout_marginEnd">@dimen/add_friends_block_title_margin_right</item>
+        <item name="android:layout_marginTop">@dimen/add_friends_block_title_margin_top</item>
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+</resources>

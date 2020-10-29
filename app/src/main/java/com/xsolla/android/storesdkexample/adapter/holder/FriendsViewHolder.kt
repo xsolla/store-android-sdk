@@ -1,10 +1,10 @@
 package com.xsolla.android.storesdkexample.adapter.holder
 
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions.circleCropTransform
@@ -13,19 +13,8 @@ import com.xsolla.android.storesdkexample.adapter.FriendsAdapter
 import com.xsolla.android.storesdkexample.ui.vm.FriendUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.FriendsTab
 import com.xsolla.android.storesdkexample.ui.vm.TemporaryFriendRelationship
-import kotlinx.android.synthetic.main.item_friend.view.addFriendButton
-import kotlinx.android.synthetic.main.item_friend.view.cancelRequestButton
-import kotlinx.android.synthetic.main.item_friend.view.friendAcceptedText
-import kotlinx.android.synthetic.main.item_friend.view.friendAvatar
-import kotlinx.android.synthetic.main.item_friend.view.friendDeclinedText
-import kotlinx.android.synthetic.main.item_friend.view.friendNickname
-import kotlinx.android.synthetic.main.item_friend.view.friendsAcceptDeclineButtons
-import kotlinx.android.synthetic.main.item_friend.view.friendsOptionsButton
-import kotlinx.android.synthetic.main.item_friend.view.icOffline
-import kotlinx.android.synthetic.main.item_friend.view.icOnline
-import kotlinx.android.synthetic.main.item_friend.view.unblockButton
-import kotlinx.android.synthetic.main.layout_accept_decline_friends.view.friendAcceptButton
-import kotlinx.android.synthetic.main.layout_accept_decline_friends.view.friendDeclineButton
+import kotlinx.android.synthetic.main.item_friend.view.*
+import kotlinx.android.synthetic.main.layout_accept_decline_friends.view.*
 
 class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun bind(
@@ -40,10 +29,7 @@ class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         onAddFriendButtonClick: (user: FriendUiEntity, from: FriendsTab) -> Unit
     ) {
         if (itemViewType == FriendsAdapter.ViewType.ADD_FRIEND_BUTTON.value) {
-            // TODO: go to add friend flow
-            itemView.setOnClickListener {
-                Toast.makeText(itemView.context, "Soon...", Toast.LENGTH_LONG).show()
-            }
+            itemView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragment_add_friends))
             return
         }
 

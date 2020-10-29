@@ -57,8 +57,8 @@
 
 
     <dimen name="catalog_fragment_title_height">56dp</dimen>
-    <dimen name="catalog_fragment_title_text_size">16sp</dimen>
-    <dimen name="catalog_fragment_title_left_margin">28dp</dimen>
+    <dimen name="catalog_fragment_title_text_size">20sp</dimen>
+    <dimen name="catalog_fragment_title_left_margin">16dp</dimen>
 
     <dimen name="catalog_item_left_padding">20dp</dimen>
     <dimen name="catalog_item_right_padding">20dp</dimen>
@@ -137,6 +137,18 @@
     <dimen name="drawer_cart_counter_margin_start_expanded">136dp</dimen>
     <dimen name="drawer_cart_counter_margin_bottom_expanded">14dp</dimen>
     <dimen name="drawer_cart_counter_text_size">12sp</dimen>
+
+    <dimen name="add_friends_search_corner_radius">4dp</dimen>
+    <dimen name="add_friends_search_height">40dp</dimen>
+    <dimen name="add_friends_search_vertical_padding">10dp</dimen>
+    <dimen name="add_friends_search_horizontal_padding">16dp</dimen>
+    <dimen name="add_friends_search_text_size">16sp</dimen>
+    <dimen name="add_friends_search_icon_padding">4dp</dimen>
+    <dimen name="add_friends_block_title_text_size">16sp</dimen>
+    <dimen name="add_friends_block_title_margin_left">20dp</dimen>
+    <dimen name="add_friends_block_title_margin_right">20dp</dimen>
+    <dimen name="add_friends_block_title_margin_top">20dp</dimen>
+    <dimen name="add_friends_block_title_margin_bottom">10dp</dimen>
 
 
     <!-- Auto-generated -->
