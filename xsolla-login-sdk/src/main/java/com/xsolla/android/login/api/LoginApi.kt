@@ -16,6 +16,7 @@ import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromClientRe
 import com.xsolla.android.login.entity.response.AuthResponse
 import com.xsolla.android.login.entity.response.AuthSocialResponse
 import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse
+import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
 import com.xsolla.android.login.entity.response.OauthAuthResponse
 import com.xsolla.android.login.entity.response.OauthGetCodeBySocialTokenResponse
 import com.xsolla.android.login.entity.response.OauthLinkForSocialAuthResponse
@@ -77,7 +78,7 @@ interface LoginApi {
     @GET("/api/users/me/social_friends")
     fun getSocialFriends(
         @Header("authorization") authHeader: String,
-        @Query("platform") platform: String,
+        @Query("platform") platform: String?,
         @Query("offset") offset: Int,
         @Query("limit") limit: Int,
         @Query("with_xl_uid") fromGameOnly: Boolean
@@ -145,6 +146,30 @@ interface LoginApi {
     fun updateFriends(
         @Header("authorization") authHeader: String,
         @Body updateUserFriendsRequest: UpdateUserFriendsRequest
+    ): Call<Void>
+
+    @POST("api/users/me/social_friends/update")
+    fun updateSocialFriends(
+        @Header("authorization") authHeader: String,
+        @Query("platform") platform: String?
+    ): Call<Void>
+
+    @GET("api/users/me/social_providers")
+    fun getLinkedSocialNetworks(
+        @Header("authorization") authHeader: String
+    ): Call<List<LinkedSocialNetworkResponse>>
+
+    @GET("/api/users/me/social_providers/{providerName}/login_url")
+    fun getUrlToLinkSocialNetworkToAccount(
+        @Header("authorization") authHeader: String,
+        @Path("providerName") providerName: String,
+        @Query("login_url") urlRedirect: String
+    ): Call<String>
+
+    @DELETE("/api/users/me/social_providers/{providerName}")
+    fun unlinkSocialNetwork(
+        @Header("authorization") authHeader: String,
+        @Path("providerName") providerName: String
     ): Call<Void>
 
     @POST("api/attributes/users/me/get")

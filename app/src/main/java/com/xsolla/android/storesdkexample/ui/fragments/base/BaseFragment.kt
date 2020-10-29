@@ -1,5 +1,6 @@
 package com.xsolla.android.storesdkexample.ui.fragments.base
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

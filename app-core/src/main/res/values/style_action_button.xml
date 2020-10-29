@@ -37,11 +37,6 @@
         <item name="android:textColor">@color/magenta_color</item>
     </style>
 
-    <style name="Widget.Xsolla.ActionButton.Text" parent="Widget.MaterialComponents.Button.TextButton" >
-        <item name="cornerRadius">@dimen/secondary_action_button_corner_radius</item>
-        <item name="android:textColor">@color/magenta_color</item>
-    </style>
-
     <style name="Widget.Xsolla.ConsumeButton" parent="">
         <item name="android:height">@dimen/inventory_fragment_consume_button_height</item>
         <item name="android:width">@dimen/inventory_fragment_consume_button_width</item>

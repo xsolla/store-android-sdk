@@ -57,7 +57,7 @@ class VcFragment : BaseFragment() {
         })
     }
 
-    private fun getVirtualItems() {
+    /*private fun getVirtualItems() {
         XStore.getVirtualItems(object : XStoreCallback<VirtualItemsResponse>() {
             override fun onSuccess(response: VirtualItemsResponse) {
                 val items = response.items
@@ -92,6 +92,6 @@ class VcFragment : BaseFragment() {
 
             }
         })
-    }
+    }*/
 
 }

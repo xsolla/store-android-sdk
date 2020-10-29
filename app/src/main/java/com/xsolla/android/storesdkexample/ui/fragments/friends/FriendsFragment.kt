@@ -26,8 +26,6 @@ class FriendsFragment : BaseFragment() {
     override fun getLayout() = R.layout.fragment_friends
 
     override fun initUI() {
-        showOrHideToolbarViews(false)
-
         viewModel.clearAllFriends()
         viewModel.loadAllFriends()
 
@@ -54,6 +52,16 @@ class FriendsFragment : BaseFragment() {
         })
 
         setHasOptionsMenu(true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showOrHideToolbarViews(false)
+    }
+
+    override fun onDestroyView() {
+        showOrHideToolbarViews(true)
+        super.onDestroyView()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

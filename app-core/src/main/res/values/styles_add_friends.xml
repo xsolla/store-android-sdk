@@ -6,7 +6,7 @@
         <item name="boxCornerRadiusTopEnd">@dimen/add_friends_search_corner_radius</item>
         <item name="boxCornerRadiusBottomStart">@dimen/add_friends_search_corner_radius</item>
         <item name="boxCornerRadiusBottomEnd">@dimen/add_friends_search_corner_radius</item>
-        <item name="android:textColorHint">@color/secondary_color</item>
+        <item name="android:textColorHint">@color/light_state_gray_color</item>
         <item name="boxStrokeColor">@color/input_outline_color</item>
         <item name="android:background">@color/secondary_color_10</item>
         <item name="android:paddingTop">@dimen/add_friends_search_vertical_padding</item>
@@ -41,7 +41,7 @@
         <item name="android:layout_marginStart">@dimen/add_friends_block_title_margin_left</item>
         <item name="android:layout_marginEnd">@dimen/add_friends_block_title_margin_right</item>
         <item name="android:layout_marginTop">@dimen/add_friends_block_title_margin_top</item>
-        <item name="android:textColor">@color/secondary_color</item>
+        <item name="android:textColor">@color/light_state_gray_color</item>
     </style>
 
 </resources>

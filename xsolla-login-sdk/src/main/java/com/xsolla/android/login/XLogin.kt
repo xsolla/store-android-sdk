@@ -17,14 +17,17 @@ import com.xsolla.android.login.callback.GetCurrentUserPhoneCallback
 import com.xsolla.android.login.callback.GetSocialFriendsCallback
 import com.xsolla.android.login.callback.GetUserPublicInfoCallback
 import com.xsolla.android.login.callback.GetUsersAttributesCallback
+import com.xsolla.android.login.callback.LinkedSocialNetworksCallback
 import com.xsolla.android.login.callback.RefreshTokenCallback
 import com.xsolla.android.login.callback.RegisterCallback
 import com.xsolla.android.login.callback.ResetPasswordCallback
 import com.xsolla.android.login.callback.SearchUsersByNicknameCallback
 import com.xsolla.android.login.callback.StartSocialCallback
+import com.xsolla.android.login.callback.UnlinkSocialNetworkCallback
 import com.xsolla.android.login.callback.UpdateCurrentUserDetailsCallback
 import com.xsolla.android.login.callback.UpdateCurrentUserFriendsCallback
 import com.xsolla.android.login.callback.UpdateCurrentUserPhoneCallback
+import com.xsolla.android.login.callback.UpdateSocialFriendsCallback
 import com.xsolla.android.login.callback.UpdateUsersAttributesCallback
 import com.xsolla.android.login.callback.UploadCurrentUserAvatarCallback
 import com.xsolla.android.login.entity.common.UserAttribute
@@ -43,6 +46,7 @@ import com.xsolla.android.login.entity.request.UserFriendsRequestSortBy
 import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder
 import com.xsolla.android.login.entity.request.UserFriendsRequestType
 import com.xsolla.android.login.entity.response.AuthResponse
+import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
 import com.xsolla.android.login.entity.response.OauthAuthResponse
 import com.xsolla.android.login.entity.response.PhoneResponse
 import com.xsolla.android.login.entity.response.PictureResponse
@@ -55,7 +59,9 @@ import com.xsolla.android.login.jwt.JWT
 import com.xsolla.android.login.social.FriendsPlatform
 import com.xsolla.android.login.social.LoginSocial
 import com.xsolla.android.login.social.SocialNetwork
+import com.xsolla.android.login.social.SocialNetworkForLinking
 import com.xsolla.android.login.token.TokenUtils
+import com.xsolla.android.login.ui.ActivityAuthWebView
 import com.xsolla.android.login.unity.UnityProxyActivity
 import okhttp3.Interceptor
 import okhttp3.MediaType
@@ -105,6 +111,8 @@ class XLogin private constructor(
     }
 
     companion object {
+        private const val LOGIN_HOST = "https://login.xsolla.com"
+
         private var instance: XLogin? = null
         private val loginSocial = LoginSocial
 
@@ -156,7 +164,7 @@ class XLogin private constructor(
             httpClient.addInterceptor(interceptor)
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://login.xsolla.com")
+                .baseUrl(LOGIN_HOST)
                 .client(httpClient.build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
@@ -460,15 +468,25 @@ class XLogin private constructor(
             getInstance().tokenUtils.oauthExpireTimeUnixSec = 0
         }
 
+        /**
+         * Gets a list of user’s friends from a social provider.
+         *
+         * @param platform           chosen social provider. If you do not specify it, the method gets friends from all social providers
+         * @param offset             number of the elements from which the list is generated
+         * @param limit              maximum number of friends that are returned at a time
+         * @param fromGameOnly       shows whether the social friends are from your game
+         * @param callback           callback with social friends
+         * @see <a href="https://developers.xsolla.com/login-api/methods/users/get-users-friends">Login API Reference</a>
+         */
         fun getSocialFriends(
-            platform: FriendsPlatform,
+            platform: FriendsPlatform?,
             offset: Int,
             limit: Int,
             fromGameOnly: Boolean,
             callback: GetSocialFriendsCallback
         ) {
             getInstance().loginApi
-                .getSocialFriends("Bearer $token", platform.name.toLowerCase(), offset, limit, fromGameOnly)
+                .getSocialFriends("Bearer $token", platform?.name?.toLowerCase(), offset, limit, fromGameOnly)
                 .enqueue(object : Callback<SocialFriendsResponse?> {
                     override fun onResponse(call: Call<SocialFriendsResponse?>, response: Response<SocialFriendsResponse?>) {
                         if (response.isSuccessful) {
@@ -489,6 +507,16 @@ class XLogin private constructor(
                 })
         }
 
+        /**
+         * Searches users by nickname and gets a list of them. Search is performed by substring if it is in the beginning of the string.
+         * The current user can call this method only one time per second.
+         *
+         * @param nickname           user nickname
+         * @param offset             number of the elements from which the list is generated
+         * @param limit              maximum number of users that are returned at a time
+         * @param callback           callback with users
+         * @see <a href="https://developers.xsolla.com/login-api/methods/users/search-users-by-nickname">Login API Reference</a>
+         */
         fun searchUsersByNickname(
             nickname: String?,
             offset: Int,
@@ -517,14 +545,106 @@ class XLogin private constructor(
                 })
         }
 
-        fun getUserPublicInfo(
-            userId: String?,
-            callback: GetUserPublicInfoCallback
-        ) {
+        /**
+         * Gets a list of the social networks linked to the user account.
+         *
+         * @param callback           callback with social networks linked to the user account
+         * @see [Login API Reference](https://developers.xsolla.com/user-account-api/social-networks/get-linked-networks/)
+         */
+        fun getLinkedSocialNetworks(callback: LinkedSocialNetworksCallback) {
             getInstance().loginApi
-                .getUserPublicInfo("Bearer $token", userId!!)
-                .enqueue(object : Callback<UserPublicInfoResponse?> {
-                    override fun onResponse(call: Call<UserPublicInfoResponse?>, response: Response<UserPublicInfoResponse?>) {
+                .getLinkedSocialNetworks("Bearer $token")
+                .enqueue(object : Callback<List<LinkedSocialNetworkResponse>> {
+                    override fun onResponse(call: Call<List<LinkedSocialNetworkResponse>>, response: Response<List<LinkedSocialNetworkResponse>>) {
+                        if (response.isSuccessful) {
+                            val linkedSocialNetworkResponses = response.body()
+                            if (linkedSocialNetworkResponses != null) {
+                                callback.onSuccess(linkedSocialNetworkResponses)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<List<LinkedSocialNetworkResponse>>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
+         * Unlink social network from current user account
+         *
+         * @param platform       social network for decoupling
+         * @param callback       callback that indicates the success of failure of an action
+         */
+        fun unlinkSocialNetwork(platform: SocialNetworkForLinking, callback: UnlinkSocialNetworkCallback) {
+            getInstance().loginApi
+                .unlinkSocialNetwork("Bearer $token", platform.name.toLowerCase())
+                .enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) {
+                            callback.onSuccess()
+                        } else {
+                            callback.onFailure(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        callback.onFailure(t, null)
+                    }
+                })
+        }
+
+        /**
+         * Begins processing to update a list of user’s friends from a social provider.
+         * Please note that there may be a delay in data processing because of the Xsolla Login server or provider server high loads.
+         *
+         * @param platform        chosen social provider. If you do not specify it, the method updates friends in all social providers
+         * @param callback        callback that indicates the success of failure of an action
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/users/update-users-friends/)
+         */
+        fun updateSocialFriends(platform: FriendsPlatform?, callback: UpdateSocialFriendsCallback) {
+            getInstance().loginApi
+                .updateSocialFriends("Bearer $token", platform?.name?.toLowerCase())
+                .enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) {
+                            callback.onSuccess()
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
+         * Links the social network, which is used by the player for authentication, to the user account.
+         *
+         * @param context                activity/fragment or any view context
+         * @param socialNetwork          social network for linking
+         * @return                       intent that you can use for open activity for result
+         * @see [User Account API Reference](https://developers.xsolla.com/user-account-api/social-networks/link-social-network-to-account)
+         */
+        fun createSocialAccountLinkingIntent(context: Context, socialNetwork: SocialNetworkForLinking): Intent {
+            val intent = Intent(context, ActivityAuthWebView::class.java)
+            intent.putExtra(ActivityAuthWebView.ARG_AUTH_URL, LOGIN_HOST + "/api/users/me/social_providers/" + socialNetwork.name.toLowerCase() + "/login_redirect")
+            intent.putExtra(ActivityAuthWebView.ARG_CALLBACK_URL, getInstance().callbackUrl)
+            intent.putExtra(ActivityAuthWebView.ARG_TOKEN, token)
+            return intent
+        }
+
+        fun getUserPublicInfo(userId: String, callback: GetUserPublicInfoCallback) {
+            getInstance().loginApi
+                .getUserPublicInfo("Bearer $token", userId)
+                .enqueue(object : Callback<UserPublicInfoResponse> {
+                    override fun onResponse(call: Call<UserPublicInfoResponse>, response: Response<UserPublicInfoResponse>) {
                         if (response.isSuccessful) {
                             val userPublicInfoResponse = response.body()
                             if (userPublicInfoResponse != null) {
@@ -537,7 +657,7 @@ class XLogin private constructor(
                         }
                     }
 
-                    override fun onFailure(call: Call<UserPublicInfoResponse?>, t: Throwable) {
+                    override fun onFailure(call: Call<UserPublicInfoResponse>, t: Throwable) {
                         callback.onError(t, null)
                     }
                 })
@@ -776,6 +896,7 @@ class XLogin private constructor(
                             callback.onError(null, getErrorMessage(response.errorBody()))
                         }
                     }
+
                     override fun onFailure(call: Call<UserFriendsResponse>, t: Throwable) {
                         callback.onError(t, null)
                     }
