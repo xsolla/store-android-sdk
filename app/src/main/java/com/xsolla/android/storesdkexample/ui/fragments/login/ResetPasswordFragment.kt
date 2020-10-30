@@ -23,8 +23,6 @@ class ResetPasswordFragment : BaseFragment() {
     }
 
     override fun initUI() {
-        requireActivity().appbar?.mainToolbar?.isGone = true
-
         rootView.toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
         rootView.toolbar.setNavigationOnClickListener {
             openLoginFragment()
@@ -65,16 +63,7 @@ class ResetPasswordFragment : BaseFragment() {
         }
     }
 
-    override fun onDestroyView() {
-        requireActivity().appbar?.mainToolbar?.isVisible = true
-        super.onDestroyView()
-    }
-
     private fun openLoginFragment() {
-        try {
-            findNavController().navigateUp()
-        } catch (e: IllegalStateException) {
-            activity?.supportFragmentManager?.popBackStack()
-        }
+        activity?.supportFragmentManager?.popBackStack()
     }
 }
