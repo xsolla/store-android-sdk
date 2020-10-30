@@ -1,8 +1,6 @@
 package com.xsolla.android.storesdkexample.ui.fragments.character
 
 import android.graphics.drawable.Drawable
-import android.view.Menu
-import android.view.MenuInflater
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
@@ -32,6 +30,8 @@ class CharacterFragment : BaseFragment() {
     private val balanceViewModel: VmBalance by activityViewModels()
 
     override fun getLayout() = R.layout.fragment_character
+
+    override val toolbarOption = ToolbarOptions(showBalance = true, showCart = false)
 
     override fun initUI() {
         balanceViewModel.virtualBalance.observe(viewLifecycleOwner) {
@@ -67,18 +67,6 @@ class CharacterFragment : BaseFragment() {
                 level.text = getString(R.string.character_lvl, PrefManager.getUserLevel(viewModel.userInformation.value!!.id))
             }
         }
-
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        menu.clear()
-    }
-
-    override fun onDestroyView() {
-        requireActivity().invalidateOptionsMenu()
-        super.onDestroyView()
     }
 
     private fun configureLevelUpButton() {

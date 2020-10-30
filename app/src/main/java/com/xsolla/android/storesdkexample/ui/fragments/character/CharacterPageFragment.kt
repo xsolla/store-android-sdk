@@ -41,6 +41,8 @@ class CharacterPageFragment : BaseFragment() {
 
     override fun getLayout() = R.layout.fragment_character_page
 
+    override val toolbarOption = ToolbarOptions(showBalance = true, showCart = false)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         readOnly = requireArguments().getBoolean(EXTRA_READ_ONLY)

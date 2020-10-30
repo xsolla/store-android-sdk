@@ -21,7 +21,6 @@ class ConsumeFragment : BaseFragment() {
     override fun getLayout() = R.layout.fragment_consume
 
     override fun initUI() {
-        showOrHideToolbarViews(true)
         arguments?.getParcelable<InventoryResponse.Item>(ITEM_ARG)?.let { item ->
             Glide.with(requireActivity()).load(item.imageUrl).into(itemIcon)
             itemName.text = item.name

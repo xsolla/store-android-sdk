@@ -19,9 +19,6 @@ import com.xsolla.android.storesdkexample.ui.vm.UserDetailsUi
 import com.xsolla.android.storesdkexample.ui.vm.ValidateFieldResult
 import com.xsolla.android.storesdkexample.ui.vm.VmProfile
 import com.xsolla.android.storesdkexample.ui.vm.base.ViewModelFactory
-import kotlinx.android.synthetic.main.activity_store.appbar
-import kotlinx.android.synthetic.main.app_bar_main.view.balanceLayout
-import kotlinx.android.synthetic.main.app_bar_main.view.mainToolbar
 import kotlinx.android.synthetic.main.fragment_profile.avatar
 import kotlinx.android.synthetic.main.fragment_profile.birthdayInput
 import kotlinx.android.synthetic.main.fragment_profile.birthdayLayout
@@ -59,10 +56,9 @@ class ProfileFragment : BaseFragment() {
 
     override fun getLayout() = R.layout.fragment_profile
 
-    override fun initUI() {
-        requireActivity().appbar.balanceLayout.isVisible = false
-        requireActivity().appbar.mainToolbar.menu.clear()
+    override val toolbarOption = ToolbarOptions(showBalance = false, showCart = false)
 
+    override fun initUI() {
         viewModel.message.observe(viewLifecycleOwner) {
             showSnack(it)
         }
@@ -157,12 +153,6 @@ class ProfileFragment : BaseFragment() {
     private fun textChangedListener(field: FieldsForChanging, value: String?) {
         if (field == FieldsForChanging.GENDER && value.isNullOrBlank()) return
         field.updateStateForChanging(value ?: "", viewModel.stateForChanging)
-    }
-
-    override fun onDestroyView() {
-        requireActivity().appbar.balanceLayout.isVisible = true
-        requireActivity().invalidateOptionsMenu()
-        super.onDestroyView()
     }
 
     override fun onResume() {

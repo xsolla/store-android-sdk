@@ -31,6 +31,8 @@ class FriendsPageFragment : BaseFragment() {
 
     override fun getLayout() = R.layout.fragment_friends_page
 
+    override val toolbarOption = ToolbarOptions(showBalance = false, showCart = false)
+
     override fun initUI() {
         tab = FriendsTab.getBy(requireArguments().getInt(EXTRA_TAB))
         noItemsPlaceholder.setText(tab.placeholderText)

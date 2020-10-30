@@ -41,7 +41,6 @@ class CartFragment : BaseFragment(), CartChangeListener {
     override fun getLayout() = R.layout.fragment_cart
 
     override fun initUI() {
-        showOrHideToolbarViews(true)
         val cartAdapter = CartAdapter(mutableListOf(), vmCart, this)
         with(recycler) {
             setHasFixedSize(true)

@@ -26,6 +26,8 @@ class EditAttributeFragment : BaseFragment() {
 
     override fun getLayout() = R.layout.fragment_edit_attribute
 
+    override val toolbarOption = ToolbarOptions(showBalance = true, showCart = false)
+
     override fun initUI() {
         requireActivity().appbar.mainToolbar.isGone = true
 

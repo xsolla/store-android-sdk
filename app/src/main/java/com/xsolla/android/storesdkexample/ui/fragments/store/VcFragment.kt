@@ -21,7 +21,6 @@ class VcFragment : BaseFragment() {
     }
 
     private fun getVirtualCurrency() {
-        showOrHideToolbarViews(true)
         XStore.getVirtualCurrencyPackage(object : XStoreCallback<VirtualCurrencyPackageResponse>() {
             override fun onSuccess(response: VirtualCurrencyPackageResponse) {
                 val items = response.items

@@ -2,7 +2,6 @@ package com.xsolla.android.storesdkexample.ui.fragments.friends
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Handler
 import android.widget.ImageView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -36,9 +35,9 @@ class AddFriendsFragment : BaseFragment() {
 
     override fun getLayout() = R.layout.fragment_add_friends
 
-    override fun initUI() {
-        Handler().postDelayed({ showOrHideToolbarViews(false) }, 500)
+    override val toolbarOption = ToolbarOptions(showBalance = false, showCart = false)
 
+    override fun initUI() {
         socialNetworksIcons = mapOf(
                 SocialNetworkForLinking.FACEBOOK to Triple(R.drawable.ic_linking_facebook_add, R.drawable.ic_linking_facebook_added, iconFacebook),
                 SocialNetworkForLinking.VK to Triple(R.drawable.ic_linking_vk_add, R.drawable.ic_linking_vk_added, iconVk),
