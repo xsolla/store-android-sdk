@@ -36,8 +36,9 @@ class CharacterFragment : BaseFragment() {
     override fun initUI() {
         balanceViewModel.virtualBalance.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
-                viewModel.virtualCurrency = balanceViewModel.virtualBalance.value!!.first()
-                configureLevelUpButton()
+                val vc = balanceViewModel.virtualBalance.value!!.first()
+                viewModel.virtualCurrency = vc
+                configureLevelUpButton(vc.imageUrl)
             }
         }
 
@@ -69,20 +70,21 @@ class CharacterFragment : BaseFragment() {
         }
     }
 
-    private fun configureLevelUpButton() {
+    private fun configureLevelUpButton(imageUrl: String?) {
         val sizeCurrency = 24.dpToPx()
+        val upIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_level_up)
+        levelUpButton.setText(R.string.character_lvl_up)
+
         Glide.with(this)
-            .load(viewModel.virtualCurrency!!.imageUrl)
+            .load(imageUrl)
             .override(sizeCurrency, sizeCurrency)
             .addListener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                    val upIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_level_up)
                     levelUpButton.setCompoundDrawablesWithIntrinsicBounds(upIcon, null, null, null)
                     return true
                 }
 
                 override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                    val upIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_level_up)
                     levelUpButton.setCompoundDrawablesWithIntrinsicBounds(upIcon, null, resource, null)
                     return true
                 }
@@ -101,7 +103,7 @@ class CharacterFragment : BaseFragment() {
 
         Glide.with(this)
             .load(user.avatar)
-            .apply(circleCropTransform())
+            .circleCrop()
             .placeholder(R.drawable.ic_default_avatar)
             .error(R.drawable.ic_default_avatar)
             .into(avatar)
