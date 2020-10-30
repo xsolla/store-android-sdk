@@ -114,8 +114,8 @@ class CharacterFragment : BaseFragment() {
         Glide.with(this)
             .load(user.avatar)
             .apply(circleCropTransform())
-            .placeholder(R.drawable.ic_xsolla_logo)
-            .error(R.drawable.ic_xsolla_logo)
+            .placeholder(R.drawable.ic_default_avatar)
+            .error(R.drawable.ic_default_avatar)
             .into(avatar)
     }
 
