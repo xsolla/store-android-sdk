@@ -19,6 +19,7 @@ import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse;
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.RedeemCouponResponse;
+import com.xsolla.android.store.entity.response.items.RewardsByCodeResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
@@ -221,6 +222,13 @@ class RequestExecutor {
                 projectId,
                 new RedeemCouponRequestBody(couponCode, unitItems)
         ).enqueue(callback);
+    }
+
+    public void getCouponRewardsByCode(
+            @NotNull String couponCode,
+            @NotNull XStoreCallback<RewardsByCodeResponse> callback
+    ) {
+        storeApi.getCouponRewardsByCode(projectId, couponCode).enqueue(callback);
     }
 
 }

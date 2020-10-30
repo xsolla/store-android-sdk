@@ -15,6 +15,7 @@ import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse;
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.RedeemCouponResponse;
+import com.xsolla.android.store.entity.response.items.RewardsByCodeResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
@@ -467,6 +468,21 @@ public class XStore {
             @NotNull XStoreCallback<RedeemCouponResponse> callback
     ) {
         getRequestExecutor().redeemCoupon(couponCode, selectedUnitItems, callback);
+    }
+
+    /**
+     * Gets coupons rewards by its code. Can be used to allow users to choose one of many items as a bonus.
+     * The usual case is choosing a DRM if the coupon contains a game as a bonus (type=unit).
+     *
+     * @param couponCode            unique coupon code. Contains letters and numbers
+     * @param callback              status callback
+     * @see <a href="https://developers.xsolla.com/store-api/promotions/coupons/redeem-coupon">Store API Reference</a>
+     */
+    public static void getCouponRewardsByCode(
+            @NotNull String couponCode,
+            @NotNull XStoreCallback<RewardsByCodeResponse> callback
+    ) {
+        getRequestExecutor().getCouponRewardsByCode(couponCode, callback);
     }
 
 }

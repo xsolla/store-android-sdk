@@ -12,6 +12,7 @@ import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse;
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.RedeemCouponResponse;
+import com.xsolla.android.store.entity.response.items.RewardsByCodeResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
@@ -187,6 +188,12 @@ public interface StoreApi {
     Call<RedeemCouponResponse> redeemCoupon(
             @Path("project_id") int projectId,
             @Body RedeemCouponRequestBody body
+    );
+
+    @GET("api/v2/project/{project_id}/coupon/code/{coupon_code}/rewards")
+    Call<RewardsByCodeResponse> getCouponRewardsByCode(
+            @Path("project_id") int projectId,
+            @Path("coupon_code") String couponCode
     );
 
 }
