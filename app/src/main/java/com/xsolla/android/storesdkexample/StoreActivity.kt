@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
@@ -24,9 +23,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.login.XLogin
-import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
 import com.xsolla.android.login.callback.RefreshTokenCallback
-import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
@@ -34,8 +31,10 @@ import com.xsolla.android.storesdkexample.ui.vm.VmProfile
 import com.xsolla.android.storesdkexample.ui.vm.base.ViewModelFactory
 import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import com.xsolla.android.storesdkexample.util.sumByLong
+import kotlinx.android.synthetic.main.activity_store.appbar
 import kotlinx.android.synthetic.main.activity_store.lock
 import kotlinx.android.synthetic.main.app_bar_main.chargeBalanceButton
+import kotlinx.android.synthetic.main.app_bar_main.view.mainToolbar
 import kotlinx.android.synthetic.main.drawer_expandable_item.bgCartCounter
 import kotlinx.android.synthetic.main.drawer_expandable_item.itemCart
 import kotlinx.android.synthetic.main.drawer_expandable_item.itemVirtualCurrency
@@ -113,7 +112,6 @@ class StoreActivity : AppCompatActivity() {
                         lock.visibility = View.GONE
                         startLogin()
                     }
-
                 })
             } else {
                 startLogin()
@@ -126,6 +124,8 @@ class StoreActivity : AppCompatActivity() {
             setDrawerData()
             drawerLayout.closeDrawer(GravityCompat.START)
         }
+
+        appbar?.mainToolbar?.title = ""
     }
 
     private fun initVirtualBalance() {
@@ -241,11 +241,21 @@ class StoreActivity : AppCompatActivity() {
             else textEmail.visibility = View.GONE
 
             textUsername.text = when {
-                data.nickname.isNotBlank() -> { data.nickname }
-                data.username.isNotBlank() -> { data.nickname }
-                data.firstName.isNotBlank() -> { data.firstName }
-                data.lastName.isNotBlank() -> { data.lastName }
-                else -> { "Nickname" }
+                data.nickname.isNotBlank() -> {
+                    data.nickname
+                }
+                data.username.isNotBlank() -> {
+                    data.nickname
+                }
+                data.firstName.isNotBlank() -> {
+                    data.firstName
+                }
+                data.lastName.isNotBlank() -> {
+                    data.lastName
+                }
+                else -> {
+                    "Nickname"
+                }
             }
 
             Glide.with(this@StoreActivity)
@@ -267,5 +277,4 @@ class StoreActivity : AppCompatActivity() {
         val rootView: View = findViewById(android.R.id.content)
         Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show()
     }
-
 }
