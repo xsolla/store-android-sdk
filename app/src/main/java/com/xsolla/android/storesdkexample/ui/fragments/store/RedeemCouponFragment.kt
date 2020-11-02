@@ -58,6 +58,7 @@ class RedeemCouponFragment : BaseFragment() {
             viewModel.redeemCoupon(couponInput.text.toString())
         }
         redeemAnotherButton.setOnClickListener {
+            couponInput.text?.clear()
             receivedItemsGroup.isVisible = false
             couponGroup.isVisible = true
         }
