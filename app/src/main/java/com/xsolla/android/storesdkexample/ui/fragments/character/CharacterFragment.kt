@@ -31,8 +31,6 @@ class CharacterFragment : BaseFragment() {
 
     override fun getLayout() = R.layout.fragment_character
 
-    override val toolbarOption = ToolbarOptions(showBalance = true, showCart = false)
-
     override fun initUI() {
         balanceViewModel.virtualBalance.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
