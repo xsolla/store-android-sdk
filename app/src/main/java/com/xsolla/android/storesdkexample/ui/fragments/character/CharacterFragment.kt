@@ -34,7 +34,7 @@ class CharacterFragment : BaseFragment() {
     override fun initUI() {
         balanceViewModel.virtualBalance.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
-                val vc = balanceViewModel.virtualBalance.value!!.first()
+                val vc = it.first()
                 viewModel.virtualCurrency = vc
                 configureLevelUpButton(vc.imageUrl)
             }

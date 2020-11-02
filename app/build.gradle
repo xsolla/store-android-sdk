@@ -20,6 +20,8 @@ android {
         buildConfigField 'boolean', 'WITH_LOGOUT', 'false'
         buildConfigField 'boolean', 'USE_OAUTH', 'true'
         buildConfigField 'int', 'OAUTH_CLIENT_ID', '57'
+
+        buildConfigField "String", "VERSION_NAME", "\"$versionName\""
     }
     buildTypes {
         release {

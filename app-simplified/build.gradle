@@ -16,6 +16,8 @@ android {
         vectorDrawables.useSupportLibrary true
 
         buildConfigField 'int', 'PROJECT_ID', '70097' // Replace to your project's ID
+
+        buildConfigField "String", "VERSION_NAME", "\"$versionName\""
     }
     buildTypes {
         release {

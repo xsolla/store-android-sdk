@@ -15,6 +15,8 @@ android {
         vectorDrawables.useSupportLibrary true
 
         buildConfigField 'String', 'PLAYFAB_ID', '"EC4C5"' // Replace to your project's Playfab Title ID
+
+        buildConfigField "String", "VERSION_NAME", "\"$versionName\""
     }
     buildTypes {
         release {
