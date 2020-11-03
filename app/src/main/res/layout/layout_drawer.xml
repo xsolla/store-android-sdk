@@ -1,146 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/iconProfile"
-        style="@style/Widget.Xsolla.Drawer.Icon.Profile"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_profile" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/textEmail"
-        style="@style/Widget.Xsolla.Drawer.Text.Email"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/iconProfile"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iconProfile"
-        app:layout_constraintTop_toTopOf="@+id/iconProfile"
-        tools:text="a.nikonova@xsolla.com" />
+        <ImageView
+            android:id="@+id/iconProfile"
+            style="@style/Widget.Xsolla.Drawer.Icon.Profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_profile" />
 
-    <TextView
-        android:id="@+id/textUsername"
-        style="@style/Widget.Xsolla.Drawer.Text.Username"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iconProfile"
-        tools:text="usikpusik" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/drawer_profile_icon_margin"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textInventory"
-        style="@style/Widget.Xsolla.Drawer.Text.Item"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/drawer_item_inventory"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textUsername" />
+            <TextView
+                android:id="@+id/textUsername"
+                style="@style/Widget.Xsolla.Drawer.Text.Username"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/drawer_name_line_height"
+                tools:text="Usikpusik" />
+
+            <TextView
+                android:id="@+id/textEmail"
+                style="@style/Widget.Xsolla.Drawer.Text.Email"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/drawer_email_line_height"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iconProfile"
+                app:layout_constraintTop_toBottomOf="@+id/textUsername"
+                tools:text="a.nikonova@xsolla.com" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <View
-        android:id="@+id/viewLine1"
+        android:id="@+id/profileLine"
         style="@style/Widget.Xsolla.Drawer.View.Line"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInventory" />
+        app:layout_constraintTop_toBottomOf="@+id/iconProfile" />
 
-    <TextView
-        android:id="@+id/textStore"
-        style="@style/Widget.Xsolla.Drawer.Text.Store"
-        android:layout_width="0dp"
+    <com.xsolla.android.storesdkexample.ui.view.DrawerItem
+        android:id="@+id/itemCharacter"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/drawer_title_store"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewLine1" />
+        app:item_icon="@drawable/ic_character"
+        app:item_text="@string/drawer_item_character" />
 
-    <TextView
-        android:id="@+id/textVirtualItems"
-        style="@style/Widget.Xsolla.Drawer.Text.Item"
-        android:layout_width="0dp"
+    <com.xsolla.android.storesdkexample.ui.view.DrawerItem
+        android:id="@+id/itemInventory"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/drawer_item_vi"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textStore" />
+        app:item_icon="@drawable/ic_inventory"
+        app:item_text="@string/drawer_item_inventory" />
 
-    <TextView
-        android:id="@+id/textVirtualCurrency"
-        style="@style/Widget.Xsolla.Drawer.Text.Item"
-        android:layout_width="0dp"
+    <com.xsolla.android.storesdkexample.ui.view.DrawerItem
+        android:id="@+id/itemFriends"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/drawer_item_vc"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textVirtualItems" />
+        app:item_icon="@drawable/ic_friends"
+        app:item_text="@string/drawer_item_friends" />
 
-    <View
-        android:id="@+id/viewLine2"
-        style="@style/Widget.Xsolla.Drawer.View.Line"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textVirtualCurrency" />
+    <include layout="@layout/drawer_expandable_item" />
 
-    <ImageView
-        android:id="@+id/iconCart"
-        style="@style/Widget.Xsolla.Drawer.Icon.Cart"
-        android:layout_width="wrap_content"
+    <com.xsolla.android.storesdkexample.ui.view.DrawerItem
+        android:id="@+id/itemAccount"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewLine2"
-        app:srcCompat="@drawable/ic_shopping_cart_24dp" />
+        app:item_icon="@drawable/ic_account"
+        app:item_text="@string/drawer_item_account" />
 
-    <TextView
-        android:id="@+id/textCart"
-        style="@style/Widget.Xsolla.Drawer.Text.Cart"
-        android:layout_width="0dp"
+    <com.xsolla.android.storesdkexample.ui.view.DrawerItem
+        android:id="@+id/itemLogout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/drawer_item_cart"
-        app:layout_constraintBottom_toBottomOf="@+id/iconCart"
-        app:layout_constraintStart_toEndOf="@+id/iconCart"
-        app:layout_constraintTop_toTopOf="@+id/iconCart" />
+        app:item_icon="@drawable/ic_logout"
+        app:item_text="@string/drawer_item_logout" />
 
-    <ImageView
-        android:id="@+id/bgCartCounter"
-        style="@style/Widget.Xsolla.Drawer.Icon.CartCounter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/iconCart"
-        app:layout_constraintStart_toEndOf="@+id/textCart"
-        app:layout_constraintTop_toTopOf="@+id/iconCart"
-        app:srcCompat="@drawable/bg_cart_counter" />
-
-    <TextView
-        android:id="@+id/textCartCounter"
-        style="@style/Widget.Xsolla.Drawer.Text.CartCounter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/bgCartCounter"
-        app:layout_constraintEnd_toEndOf="@+id/bgCartCounter"
-        app:layout_constraintStart_toStartOf="@+id/bgCartCounter"
-        app:layout_constraintTop_toTopOf="@+id/bgCartCounter"
-        tools:text="2" />
-
-    <View
-        android:id="@+id/viewLine3"
-        style="@style/Widget.Xsolla.Drawer.View.Line"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iconCart" />
-
-    <TextView
-        android:id="@+id/textLogout"
-        style="@style/Widget.Xsolla.Drawer.Text.Logout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/drawer_item_logout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewLine3" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

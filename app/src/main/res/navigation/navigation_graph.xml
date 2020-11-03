@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
@@ -33,7 +34,61 @@
         android:id="@+id/fragment_consume"
         android:name="com.xsolla.android.storesdkexample.ui.fragments.store.ConsumeFragment"
         android:label=""
-        tools:layout="@layout/fragment_consume">
+        tools:layout="@layout/fragment_consume" />
+    <fragment
+        android:id="@+id/nav_character"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.character.CharacterFragment"
+        tools:layout="@layout/fragment_character" />
+    <fragment
+        android:id="@+id/fragment_edit_attribute"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.character.EditAttributeFragment"
+        tools:layout="@layout/fragment_edit_attribute" >
+        <argument
+            android:name="isEdit"
+            app:argType="boolean" />
+        <argument
+            android:name="attribute"
+            app:argType="com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_friends"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.friends.FriendsFragment"
+        tools:layout="@layout/fragment_friends" />
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.profile.ProfileFragment"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_nav_profile_to_fragment_choose_avatar"
+            app:destination="@id/fragment_choose_avatar" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_reset_password"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.login.ResetPasswordFragment"
+        tools:layout="@layout/fragmen_reset_password" />
+
+    <action
+        android:id="@+id/to_reset_password_fragment"
+        app:destination="@id/fragment_reset_password" />
+    <fragment
+        android:id="@+id/fragment_choose_avatar"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.profile.ChooseAvatarFragment"
+        tools:layout="@layout/fragment_choose_avatar" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+        <argument
+            android:name="currentAvatar"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_add_friends"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.friends.AddFriendsFragment"
+        android:label=""
+        tools:layout="@layout/fragment_add_friends">
     </fragment>
 
 </navigation>

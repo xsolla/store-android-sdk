@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragments.friends.AddFriendsFragment">
+
+    <TextView
+        android:id="@+id/textFragmentTitle"
+        style="@style/Widget.Xsolla.Fragment.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_friends_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/searchInputLayout"
+        style="@style/Widget.Xsolla.AddFriends.TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:hintEnabled="false"
+        app:layout_constraintTop_toBottomOf="@id/textFragmentTitle">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/searchInput"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/add_friends_search_height"
+            android:drawableStart="@drawable/ic_search_24dp"
+            android:drawablePadding="@dimen/add_friends_search_icon_padding"
+            android:hint="@string/add_friends_search_hint"
+            android:inputType="text"
+            android:padding="0dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/labelSocialAccounts"
+        style="@style/Widget.Xsolla.AddFriends.BlockTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchInputLayout"
+        tools:text="@string/add_friends_social_accounts" />
+
+    <HorizontalScrollView
+        android:id="@+id/socialButtonsScroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/add_friends_block_title_margin_bottom"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/labelSocialAccounts">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="15dp"
+                android:layout_height="0dp" />
+
+            <ImageView
+                android:id="@+id/iconFacebook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                tools:srcCompat="@drawable/ic_linking_facebook_added" />
+
+            <ImageView
+                android:id="@+id/iconVk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                tools:srcCompat="@drawable/ic_linking_vk_added" />
+
+            <ImageView
+                android:id="@+id/iconTwitter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                tools:srcCompat="@drawable/ic_linking_twitter_added" />
+
+            <View
+                android:layout_width="15dp"
+                android:layout_height="0dp" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+
+    <TextView
+        android:id="@+id/labelListTitle"
+        style="@style/Widget.Xsolla.AddFriends.BlockTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/socialButtonsScroll"
+        tools:text="@string/add_friends_recommended" />
+
+    <Button
+        android:id="@+id/updateFriendsButton"
+        style="@style/Widget.Xsolla.ActionButton.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="22dp"
+        android:text="@string/update"
+        app:layout_constraintBottom_toBottomOf="@id/labelListTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/labelListTitle" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/add_friends_block_title_margin_bottom"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/labelListTitle"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_friend" />
+
+    <TextView
+        android:id="@+id/recyclerEmpty"
+        style="@style/TextAppearance.Xsolla.Input.Text"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:padding="30dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/recycler"
+        app:layout_constraintEnd_toEndOf="@id/recycler"
+        app:layout_constraintStart_toStartOf="@id/recycler"
+        app:layout_constraintTop_toTopOf="@id/recycler"
+        tools:text="You have no friends" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,18 +3,18 @@ package com.xsolla.android.storesdkexample.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.storesdkexample.adapter.holder.ViRealPriceViewHolder
 import com.xsolla.android.storesdkexample.adapter.holder.ViVirtualPriceViewHolder
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
+import com.xsolla.android.storesdkexample.ui.fragments.store.VirtualItemUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 
 class ViAdapter(
-        private val items: List<VirtualItemsResponse.Item>,
-        private val vmCart: VmCart,
-        private val vmBalance: VmBalance,
-        private val purchaseListener: PurchaseListener
+    private val items: List<VirtualItemUiEntity>,
+    private val vmCart: VmCart,
+    private val vmBalance: VmBalance,
+    private val purchaseListener: PurchaseListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -47,5 +47,4 @@ class ViAdapter(
     }
 
     override fun getItemCount() = items.size
-
 }

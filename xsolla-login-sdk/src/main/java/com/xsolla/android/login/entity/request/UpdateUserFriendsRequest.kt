@@ -3,9 +3,9 @@ package com.xsolla.android.login.entity.request
 import com.google.gson.annotations.SerializedName
 
 data class UpdateUserFriendsRequest(
-        val action: String,
-        @SerializedName("user")
-        val userId: String
+    val action: String,
+    @SerializedName("user")
+    val userId: String
 )
 
 enum class UpdateUserFriendsRequestAction {

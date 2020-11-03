@@ -65,10 +65,17 @@ object LoginSocial {
         this.tokenUtils = tokenUtils
         this.useOauth = useOauth
         this.oauthClientId = oauthClientId
-        facebookAppId = socialConfig?.facebookAppId
-        googleServerId = socialConfig?.googleServerId
-        initFacebook(context)
-        initGoogle()
+
+        if (socialConfig != null) {
+            if (!socialConfig.facebookAppId.isNullOrBlank()) {
+                this.facebookAppId = socialConfig.facebookAppId
+                initFacebook(context)
+            }
+            if (!socialConfig.googleServerId.isNullOrBlank()) {
+                this.googleServerId = socialConfig.googleServerId
+                initGoogle()
+            }
+        }
     }
 
     private fun initFacebook(context: Context) {

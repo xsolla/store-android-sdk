@@ -27,7 +27,7 @@ class ViPageFragment : Fragment(), PurchaseListener {
     companion object {
         const val ARG_ITEMS = "items"
 
-        fun getInstance(items: ArrayList<VirtualItemsResponse.Item>): ViPageFragment {
+        fun getInstance(items: ArrayList<VirtualItemUiEntity>): ViPageFragment {
             val catalogFragment = ViPageFragment()
             val bundle = Bundle()
             bundle.putParcelableArrayList(ARG_ITEMS, items)
@@ -42,7 +42,7 @@ class ViPageFragment : Fragment(), PurchaseListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val items = requireArguments().getParcelable<BaseParcelable>(ARG_ITEMS)?.value as? List<VirtualItemsResponse.Item>
+        val items = requireArguments().getParcelable<BaseParcelable>(ARG_ITEMS)?.value as? List<VirtualItemUiEntity>
         items?.let {
             with(view.catalogRecyclerView) {
                 val linearLayoutManager = LinearLayoutManager(context)

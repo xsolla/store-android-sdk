@@ -1,6 +1,26 @@
 # Changelog
 
-## [0.14.0] - 2020-08-26
+## [1.0.0] - Login SDK - 2020-11-03
+
+### Added
+
+- User account functionality.
+- Friends system functionality.
+
+
+## [0.15.0] - Store SDK - 2020-11-03
+
+### Added
+
+- Custom parameters.
+- The ability to consume virtual currency when purchasing a virtual item or according to in-game logic.
+
+### Fixed
+
+- Minor bugs.
+
+
+## [0.14.0] - Store SDK - 2020-08-26
 
 ### Changed
 
@@ -12,35 +32,35 @@
 - The ability to invalidate JWT.
 
 
-## [0.13.1] - 2020-08-25
+## [0.13.1] - Store SDK - 2020-08-25
 
 ### Fixed
 
 - Fieds visibility in API response classes.
 
 
-## [0.13.0] - 2020-07-23
+## [0.13.0] - Store SDK - 2020-07-23
 
 ### Added
 
 - The ability to integrate Xsolla Pay Station for processing purchases with apps that have no server part and game logic is implemented on the client side.
 
 
-## [0.12.0] - 2020-07-10
+## [0.12.0] - Store SDK - 2020-07-10
 
 ### Added
 
 - The module for Playfab scripts.
 
 
-## [0.11.0] - 2020-07-08
+## [0.11.0] - Store SDK - 2020-07-08
 
 ### Added
 
 - The ability of native authentication via social networks.
 
 
-## [0.10.0] - 2020-06-05
+## [0.10.0] - Store SDK - 2020-06-05
 
 ### Added
 
@@ -51,7 +71,7 @@
 - Minor bugs.
 
 
-## [0.9.0] - 2020-04-17
+## [0.9.0] - Store SDK - 2020-04-17
 
 ### Added
 

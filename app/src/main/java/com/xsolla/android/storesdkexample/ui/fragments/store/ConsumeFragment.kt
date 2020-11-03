@@ -1,36 +1,28 @@
 package com.xsolla.android.storesdkexample.ui.fragments.store
 
 import android.content.Context
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.inventory.InventoryResponse
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.util.ViewUtils
 import kotlinx.android.synthetic.main.fragment_consume.*
 
-class ConsumeFragment : Fragment() {
+class ConsumeFragment : BaseFragment() {
 
     companion object {
         const val ITEM_ARG = "item"
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_consume, container, false)
-    }
+    override fun getLayout() = R.layout.fragment_consume
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initUI() {
         arguments?.getParcelable<InventoryResponse.Item>(ITEM_ARG)?.let { item ->
-            Glide.with(view.context).load(item.imageUrl).into(itemIcon)
+            Glide.with(requireActivity()).load(item.imageUrl).into(itemIcon)
             itemName.text = item.name
             updateQuantity(item.quantity)
             goToStoreButton.setOnClickListener { findNavController().navigate(R.id.nav_vi) }
@@ -85,11 +77,6 @@ class ConsumeFragment : Fragment() {
     private fun updateQuantity(quantity: Long) {
         quantityLabel.text = String.format("of %s available", quantity)
         quantityInput.setText("1")
-    }
-
-    private fun showSnack(message: String) {
-        val rootView = requireActivity().findViewById<View>(android.R.id.content)
-        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show()
     }
 
 }
