@@ -41,6 +41,9 @@ class ActivityPaystationWebView : ActivityPaystation() {
         webview.settings.javaScriptEnabled = true
         webview.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(webView: WebView, url: String): Boolean {
+                val urlLower = url.toLowerCase()
+                if (!(urlLower.startsWith("https:") || urlLower.startsWith("http:")))
+                    return true
                 return false
             }
 
