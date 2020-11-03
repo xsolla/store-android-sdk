@@ -6,7 +6,6 @@
 
 - User account functionality.
 - Friends system functionality.
-- The ability to consume virtual currency when purchasing a virtual item or according to in-game logic.
 
 
 ## [0.15.0] - Store SDK - 2020-11-03
@@ -14,6 +13,7 @@
 ### Added
 
 - Custom parameters.
+- The ability to consume virtual currency when purchasing a virtual item or according to in-game logic.
 
 ### Fixed
 
