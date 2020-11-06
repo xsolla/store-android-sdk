@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Xsolla Sample App</string>
 
-    <string name="xsolla_payments_redirect_scheme">https</string>
+    <string name="xsolla_payments_redirect_scheme">xsollasdk</string>
     <string name="xsolla_payments_redirect_host">example.com</string>
-    <string name="xsolla_payments_redirect_path_prefix">/payment</string>
+    <string name="xsolla_payments_redirect_path_prefix">/standard</string>
 
     <string name="login_tab">log in</string>
     <string name="sign_up_tab">sign up</string>
