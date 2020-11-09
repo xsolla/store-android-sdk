@@ -20,7 +20,14 @@
         <item name="android:textColorHint">#61FFFFFF</item>
         <item name="boxCornerRadiusTopStart">4dp</item>
         <item name="boxCornerRadiusTopEnd">4dp</item>
+        <item name="materialThemeOverlay">@style/TextInputLayoutFilled</item>
+    </style>
+
+    <style name="TextInputLayoutFilled">
+        <item name="editTextStyle">@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense</item>
+        <item name="maxLines">1</item>
         <item name="android:textCursorDrawable">@drawable/input_cursor</item>
+        <item name="android:textColor">@color/filledbox_text_color</item>
     </style>
 
     <style name="ThemeOverlay.Xsolla.TextInputLayout" parent="">
