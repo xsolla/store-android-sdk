@@ -1,4 +1,4 @@
-package com.xsolla.android.storesdkexample.ui.view
+package com.xsolla.android.appcore.ui.custom
 
 import android.content.Context
 import android.util.AttributeSet

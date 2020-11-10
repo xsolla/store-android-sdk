@@ -1,3 +1,2 @@
-include ':app-core'
-include ':app', ':app-playfab', ':app-simplified', ':xsolla-login-sdk', ':xsolla-login-sdk-facebook', 'xsolla-login-sdk-google', ':xsolla-store-sdk', ':xsolla-payments-sdk', 'xsolla-payments-sdk-playfab'
+include ':app-core', ':app', ':app-playfab', ':app-simplified', ':app-customauth', ':xsolla-login-sdk', ':xsolla-login-sdk-facebook', 'xsolla-login-sdk-google', ':xsolla-store-sdk', ':xsolla-payments-sdk', 'xsolla-payments-sdk-playfab'
 rootProject.name='store-android-sdk'

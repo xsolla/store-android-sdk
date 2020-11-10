@@ -17,7 +17,7 @@
     <dimen name="input_text_hint_size">12sp</dimen>
     <dimen name="input_top_margin">3dp</dimen>
     <dimen name="input_bottom_margin">3dp</dimen>
-    <dimen name="input_corner_radius">2dp</dimen>
+    <dimen name="input_corner_radius">4dp</dimen>
     <dimen name="input_stroke_width">1dp</dimen>
     <dimen name="text_input_height">60dp</dimen>
 

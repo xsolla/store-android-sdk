@@ -1,0 +1,18 @@
+package com.xsolla.android.customauth.data.remote
+
+import com.xsolla.android.customauth.data.remote.dto.AuthRequest
+import com.xsolla.android.customauth.data.remote.dto.AuthResponse
+import retrofit2.http.Body
+import retrofit2.http.POST
+
+interface RestService {
+    @POST("/api/auth")
+    suspend fun auth(@Body request: AuthRequest) : AuthResponse
+}
+
+// TODO: delete
+class FakeRestService : RestService {
+    override suspend fun auth(request: AuthRequest): AuthResponse {
+        return AuthResponse("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOltdLCJlbWFpbCI6Inhzb2xsYXN0b3Jlc2RrLmFAZ21haWwuY29tIiwiZXhwIjoxNjA1MDg4NjI2LCJncm91cHMiOlt7ImlkIjo2NDgxLCJuYW1lIjoiZGVmYXVsdCIsImlzX2RlZmF1bHQiOnRydWV9XSwiaWF0IjoxNjA1MDAyMjI2LCJpc19tYXN0ZXIiOnRydWUsImlzcyI6Imh0dHBzOi8vbG9naW4ueHNvbGxhLmNvbSIsImp0aSI6IjViMzk0MmVmLTA5YjYtNGZhZi1hNzQ2LWRhNDY4NzA3NDJiNSIsInByb21vX2VtYWlsX2FncmVlbWVudCI6dHJ1ZSwicHVibGlzaGVyX2lkIjoxMzY1OTMsInNjcCI6WyJvZmZsaW5lIl0sInN1YiI6IjE0ZGNiMzQzLWFkMjUtNDZhOS05YjE2LWJjZWVjNWNmN2NjZiIsInR5cGUiOiJ4c29sbGFfbG9naW4iLCJ1c2VybmFtZSI6Inhzb2xsYSIsInhzb2xsYV9sb2dpbl9hY2Nlc3Nfa2V5Ijoialpta3dObUlsZ25IZVVCSE8xRURRUFhleHJhdjJYdEk4Y1FJeF90ajliZyIsInhzb2xsYV9sb2dpbl9wcm9qZWN0X2lkIjoiMDI2MjAxZTMtN2U0MC0xMWVhLWE4NWItNDIwMTBhYTgwMDA0In0.XfErbmWqX9sJvSnNTXYDOmZyjfbkg72E0MHZ1V0neLQ")
+    }
+}

@@ -1,15 +1,12 @@
 package com.xsolla.android.storesdkexample.adapter.holder
 
-import android.view.Gravity
 import android.view.View
-import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.xsolla.android.storesdkexample.adapter.UserAttributeItem
-import com.xsolla.android.storesdkexample.util.extensions.setClickableSpan
+import com.xsolla.android.appcore.ui.custom.extensions.setClickableSpan
 import kotlinx.android.synthetic.main.item_user_attribute.view.editButton
 import kotlinx.android.synthetic.main.item_user_attribute.view.key
 import kotlinx.android.synthetic.main.item_user_attribute.view.value

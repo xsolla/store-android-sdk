@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Xsolla Custom Auth</string>
+
+    <string name="login_description_1">You can find example of authentication system used in this demo here.</string>
+    <string name="login_description_2">See the documentation to learn more about authentication via access_token.</string>
+</resources>

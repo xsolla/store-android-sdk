@@ -1,4 +1,4 @@
-package com.xsolla.android.storesdkexample.util.extensions
+package com.xsolla.android.appcore.ui.custom.extensions
 
 import android.graphics.Color
 import android.text.SpannableString
@@ -8,11 +8,12 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.ColorRes
 import androidx.core.content.res.ResourcesCompat
-import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.appcore.R
 
 fun TextView.setClickableSpan(
-    textColor: Int = R.color.light_state_gray_color,
+    @ColorRes textColorRes: Int = R.color.light_state_gray_color,
     highlightColor: Int = Color.TRANSPARENT,
     isUnderlineText: Boolean = false,
     startIndex: Int,
@@ -27,7 +28,7 @@ fun TextView.setClickableSpan(
 
         override fun updateDrawState(ds: TextPaint) {
             super.updateDrawState(ds)
-            ds.color = ResourcesCompat.getColor(resources, textColor, null)
+            ds.color = ResourcesCompat.getColor(resources, textColorRes, null)
             ds.isUnderlineText = isUnderlineText
         }
     }
