@@ -96,7 +96,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
     private fun initNavController() {
         navController = findNavController(R.id.nav_host_fragment)
 
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_vi, R.id.nav_vc, R.id.nav_cart))
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_vi, R.id.nav_vc, R.id.nav_cart, R.id.nav_inventory))
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navView.setupWithNavController(navController)
     }
@@ -120,7 +120,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
         binding.drawer.findViewById<View>(R.id.itemAccount).isGone = true
 
         binding.drawer.findViewById<View>(R.id.itemInventory).setOnClickListener {
-            showSnack("Inventory")
+            navController.navigate(R.id.nav_inventory)
             binding.root.close()
         }
         binding.drawer.findViewById<View>(R.id.itemVirtualItems).setOnClickListener {

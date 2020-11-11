@@ -46,33 +46,8 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
             inventoryAdapter.setSubscriptions(it)
         }
 
-        getItems()
-        getSubscriptions()
-    }
-
-    private fun getItems() {
-        XStore.getInventory(object : XStoreCallback<InventoryResponse>() {
-            override fun onSuccess(response: InventoryResponse) {
-                val virtualItems = response.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
-                viewModel.inventory.value = virtualItems
-            }
-
-            override fun onFailure(errorMessage: String) {
-                showSnack(errorMessage)
-            }
-        })
-    }
-
-    private fun getSubscriptions() {
-        XStore.getSubscriptions(object : XStoreCallback<SubscriptionsResponse>() {
-            override fun onSuccess(response: SubscriptionsResponse) {
-                viewModel.subscriptions.value = response.items
-            }
-
-            override fun onFailure(errorMessage: String) {
-                showSnack(errorMessage)
-            }
-        })
+        viewModel.getItems { showSnack(it) }
+        viewModel.getSubscriptions { showSnack(it) }
     }
 
     override fun onConsume(item: InventoryResponse.Item) {

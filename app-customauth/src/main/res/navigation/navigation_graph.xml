@@ -22,4 +22,10 @@
         android:name="com.xsolla.android.customauth.ui.store.CartFragment"
         android:label=""
         tools:layout="@layout/fragment_cart" />
+
+    <fragment
+        android:id="@+id/nav_inventory"
+        android:name="com.xsolla.android.customauth.ui.store.InventoryFragment"
+        android:label=""
+        tools:layout="@layout/fragment_inventory" />
 </navigation>
