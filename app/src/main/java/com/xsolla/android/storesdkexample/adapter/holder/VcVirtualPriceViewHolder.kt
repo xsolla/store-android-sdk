@@ -13,17 +13,17 @@ import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResp
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
-import com.xsolla.android.storesdkexample.ui.vm.VmBalance
+import com.xsolla.android.appcore.viewmodels.VmBalance
 import com.xsolla.android.storesdkexample.util.AmountUtils
 import com.xsolla.android.storesdkexample.util.ViewUtils
 import kotlinx.android.synthetic.main.item_vi_virtual_price.view.*
 
 
 class VcVirtualPriceViewHolder(
-        inflater: LayoutInflater,
-        parent: ViewGroup,
-        private val vmBalance: VmBalance,
-        private val purchaseListener: PurchaseListener
+    inflater: LayoutInflater,
+    parent: ViewGroup,
+    private val vmBalance: VmBalance,
+    private val purchaseListener: PurchaseListener
 ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_vi_virtual_price, parent, false)) {
 
     fun bind(item: VirtualCurrencyPackageResponse.Item) {

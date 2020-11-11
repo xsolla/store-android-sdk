@@ -6,7 +6,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.xsolla.android.storesdkexample.adapter.UserAttributeItem
-import com.xsolla.android.appcore.ui.custom.extensions.setClickableSpan
+import com.xsolla.android.appcore.extensions.setClickableSpan
 import kotlinx.android.synthetic.main.item_user_attribute.view.editButton
 import kotlinx.android.synthetic.main.item_user_attribute.view.key
 import kotlinx.android.synthetic.main.item_user_attribute.view.value

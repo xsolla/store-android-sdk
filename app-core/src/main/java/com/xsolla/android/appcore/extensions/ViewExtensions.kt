@@ -1,6 +1,7 @@
-package com.xsolla.android.appcore.ui.custom.extensions
+package com.xsolla.android.appcore.extensions
 
 import android.graphics.Color
+import android.os.SystemClock
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
@@ -38,3 +39,21 @@ fun TextView.setClickableSpan(
     this.movementMethod = LinkMovementMethod.getInstance()
     this.highlightColor = highlightColor
 }
+
+class RateLimitedClickListener(private val onRateLimitedClick: (View) -> Unit) : View.OnClickListener {
+
+    private var lastClickTime = 0L
+
+    override fun onClick(v: View) {
+        if (SystemClock.elapsedRealtime() - lastClickTime < 1000) {
+            return
+        }
+        lastClickTime = SystemClock.elapsedRealtime()
+        onRateLimitedClick(v)
+    }
+}
+
+fun View.setRateLimitedClickListener(onRateLimitedClick: (View) -> Unit) =
+    setOnClickListener(RateLimitedClickListener {
+        onRateLimitedClick(it)
+    })

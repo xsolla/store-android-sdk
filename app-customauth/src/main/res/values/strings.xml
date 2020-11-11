@@ -3,4 +3,6 @@
 
     <string name="login_description_1">You can find example of authentication system used in this demo here.</string>
     <string name="login_description_2">See the documentation to learn more about authentication via access_token.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

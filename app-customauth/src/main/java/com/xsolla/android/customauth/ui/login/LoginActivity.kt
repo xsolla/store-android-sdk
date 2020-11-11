@@ -1,4 +1,4 @@
-package com.xsolla.android.customauth.ui
+package com.xsolla.android.customauth.ui.login
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,13 +7,14 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
-import com.xsolla.android.appcore.ui.custom.extensions.setClickableSpan
+import com.xsolla.android.appcore.extensions.setClickableSpan
 import com.xsolla.android.customauth.R
 import com.xsolla.android.customauth.data.local.PrefManager
 import com.xsolla.android.customauth.data.remote.NetworkManager
 import com.xsolla.android.customauth.data.remote.RestService
 import com.xsolla.android.customauth.data.remote.dto.AuthRequest
 import com.xsolla.android.customauth.databinding.ActivityLoginBinding
+import com.xsolla.android.customauth.ui.store.StoreActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -37,7 +38,10 @@ class LoginActivity : AppCompatActivity(R.layout.activity_login) {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val token = loginApi.auth(AuthRequest(email)).accessToken
+
                 preferences.setToken(token)
+                preferences.setEmail(email)
+
                 openStore()
             } catch (e: Exception) {
                 e.printStackTrace()

@@ -7,14 +7,14 @@ import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResp
 import com.xsolla.android.storesdkexample.adapter.holder.VcRealPriceViewHolder
 import com.xsolla.android.storesdkexample.adapter.holder.VcVirtualPriceViewHolder
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
-import com.xsolla.android.storesdkexample.ui.vm.VmBalance
+import com.xsolla.android.appcore.viewmodels.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 
 class VcAdapter(
-        private val items: List<VirtualCurrencyPackageResponse.Item>,
-        private val vmCart: VmCart,
-        private val vmBalance: VmBalance,
-        private val purchaseListener: PurchaseListener
+    private val items: List<VirtualCurrencyPackageResponse.Item>,
+    private val vmCart: VmCart,
+    private val vmBalance: VmBalance,
+    private val purchaseListener: PurchaseListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {

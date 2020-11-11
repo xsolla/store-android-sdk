@@ -15,12 +15,19 @@ android {
         versionName sample_app_version_name
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField 'int', 'PROJECT_ID', '58917' // Replace to your Project ID
         buildConfigField "String", "VERSION_NAME", "\"$versionName\""
     }
     buildTypes {
         release {
+            buildConfigField 'boolean', 'IS_SANDBOX', 'false'
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField 'boolean', 'IS_SANDBOX', 'true'
         }
     }
 
@@ -54,4 +61,5 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:4.8.1"
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }

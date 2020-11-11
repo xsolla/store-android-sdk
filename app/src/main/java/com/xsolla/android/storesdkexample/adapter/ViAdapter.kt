@@ -7,7 +7,7 @@ import com.xsolla.android.storesdkexample.adapter.holder.ViRealPriceViewHolder
 import com.xsolla.android.storesdkexample.adapter.holder.ViVirtualPriceViewHolder
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.fragments.store.VirtualItemUiEntity
-import com.xsolla.android.storesdkexample.ui.vm.VmBalance
+import com.xsolla.android.appcore.viewmodels.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 
 class ViAdapter(

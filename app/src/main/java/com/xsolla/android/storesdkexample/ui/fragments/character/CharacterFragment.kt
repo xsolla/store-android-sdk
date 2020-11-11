@@ -7,7 +7,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.RequestOptions.circleCropTransform
 import com.bumptech.glide.request.target.Target
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xsolla.android.storesdkexample.R
@@ -15,7 +14,7 @@ import com.xsolla.android.storesdkexample.adapter.CharacterPageAdapter
 import com.xsolla.android.storesdkexample.data.local.PrefManager
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.UserInformation
-import com.xsolla.android.storesdkexample.ui.vm.VmBalance
+import com.xsolla.android.appcore.viewmodels.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCharacterPage
 import com.xsolla.android.storesdkexample.util.extensions.dpToPx
 import kotlinx.android.synthetic.main.fragment_character.avatar

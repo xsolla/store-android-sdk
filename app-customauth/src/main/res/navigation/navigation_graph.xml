@@ -3,11 +3,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navigation_graph"
-    app:startDestination="@id/fragment_vi">
+    app:startDestination="@id/nav_vi">
 
     <fragment
-        android:id="@+id/fragment_vi"
-        android:name="com.xsolla.android.customauth.ui.ViFragment"
+        android:id="@+id/nav_vi"
+        android:name="com.xsolla.android.customauth.ui.store.ViFragment"
+        android:label=""
         tools:layout="@layout/fragment_vi" />
+
+    <fragment
+        android:id="@+id/nav_vc"
+        android:name="com.xsolla.android.customauth.ui.store.VcFragment"
+        android:label=""
+        tools:layout="@layout/fragment_vc" />
+
+    <fragment
+        android:id="@+id/nav_cart"
+        android:name="com.xsolla.android.customauth.ui.store.CartFragment"
+        android:label=""
+        tools:layout="@layout/fragment_cart" />
 </navigation>
