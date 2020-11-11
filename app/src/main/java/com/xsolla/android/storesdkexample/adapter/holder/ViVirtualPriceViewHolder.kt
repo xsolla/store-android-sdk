@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.xsolla.android.appcore.utils.AmountUtils
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.common.ExpirationPeriod
@@ -15,8 +16,7 @@ import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurr
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.fragments.store.VirtualItemUiEntity
-import com.xsolla.android.appcore.viewmodels.VmBalance
-import com.xsolla.android.storesdkexample.util.AmountUtils
+import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.util.ViewUtils
 import kotlinx.android.synthetic.main.item_vi_virtual_price.view.*
 

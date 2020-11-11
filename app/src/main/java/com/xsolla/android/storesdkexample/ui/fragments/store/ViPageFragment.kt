@@ -13,7 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.ViAdapter
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
-import com.xsolla.android.appcore.viewmodels.VmBalance
+import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.util.BaseParcelable
 import kotlinx.android.synthetic.main.fragment_catalog.view.*
