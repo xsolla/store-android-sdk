@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/main_bg_color">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/picture"
@@ -47,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:textColor="@color/secondary_color"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintStart_toStartOf="@id/quantity"
         app:layout_constraintTop_toBottomOf="@id/quantity"
         tools:text="Expiration in: 3 days" />

@@ -92,7 +92,6 @@
             android:id="@+id/itemCoupon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             app:text="@string/drawer_item_coupon" />
 
         <com.xsolla.android.storesdkexample.ui.view.DrawerInnerItem

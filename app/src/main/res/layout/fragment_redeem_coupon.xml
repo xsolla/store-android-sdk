@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg_color"
     tools:context=".ui.fragments.store.RedeemCouponFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -105,7 +104,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="6dp"
             android:text="@string/coupon_received_items_placeholder"
-            android:textColor="@color/secondary_color" />
+            android:textColor="?attr/colorOnSurface" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

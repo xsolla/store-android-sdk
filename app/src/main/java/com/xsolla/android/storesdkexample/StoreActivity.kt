@@ -37,6 +37,7 @@ import kotlinx.android.synthetic.main.app_bar_main.chargeBalanceButton
 import kotlinx.android.synthetic.main.app_bar_main.view.mainToolbar
 import kotlinx.android.synthetic.main.drawer_expandable_item.bgCartCounter
 import kotlinx.android.synthetic.main.drawer_expandable_item.itemCart
+import kotlinx.android.synthetic.main.drawer_expandable_item.itemCoupon
 import kotlinx.android.synthetic.main.drawer_expandable_item.itemVirtualCurrency
 import kotlinx.android.synthetic.main.drawer_expandable_item.itemVirtualItems
 import kotlinx.android.synthetic.main.drawer_expandable_item.textCartCounter
@@ -208,6 +209,10 @@ class StoreActivity : AppCompatActivity() {
         }
         itemVirtualCurrency.setOnClickListener {
             navController.navigate(R.id.nav_vc)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        itemCoupon.setOnClickListener {
+            navController.navigate(R.id.nav_redeem_coupon)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
         itemCart.setOnClickListener {

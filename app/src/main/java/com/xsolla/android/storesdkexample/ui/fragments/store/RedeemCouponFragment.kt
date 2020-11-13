@@ -12,7 +12,7 @@ import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.RedeemCouponResult
 import com.xsolla.android.storesdkexample.ui.vm.VmCoupon
 import kotlinx.android.synthetic.main.activity_store.appbar
-import kotlinx.android.synthetic.main.app_bar_main.view.toolbar
+import kotlinx.android.synthetic.main.app_bar_main.view.mainToolbar
 import kotlinx.android.synthetic.main.fragment_redeem_coupon.cancelButton
 import kotlinx.android.synthetic.main.fragment_redeem_coupon.couponGroup
 import kotlinx.android.synthetic.main.fragment_redeem_coupon.couponInput
@@ -30,7 +30,7 @@ class RedeemCouponFragment : BaseFragment() {
     override fun getLayout() = R.layout.fragment_redeem_coupon
 
     override fun initUI() {
-        requireActivity().appbar.toolbar.isGone = true
+        requireActivity().appbar.mainToolbar.isGone = true
         couponInput.addTextChangedListener {
             redeemButton.isEnabled = !it.isNullOrBlank()
             couponLayout.isErrorEnabled = false
@@ -70,7 +70,7 @@ class RedeemCouponFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
-        requireActivity().appbar.toolbar.isVisible = true
+        requireActivity().appbar.mainToolbar.isVisible = true
         super.onDestroyView()
     }
 }
