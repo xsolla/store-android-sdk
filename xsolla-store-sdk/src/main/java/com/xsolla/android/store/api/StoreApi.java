@@ -1,5 +1,6 @@
 package com.xsolla.android.store.api;
 
+import com.google.gson.JsonObject;
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
 import com.xsolla.android.store.entity.request.coupon.RedeemCouponRequestBody;
 import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;

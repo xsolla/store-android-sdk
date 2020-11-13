@@ -64,7 +64,7 @@ class CharacterPageFragment : BaseFragment() {
             val itemTouch = ItemTouchHelper(
                 DeleteSwipeCallback(
                     ContextCompat.getDrawable(requireContext(), R.drawable.ic_cart_delete)!!,
-                    ColorDrawable(ContextCompat.getColor(requireContext(), R.color.red_color))
+                    ColorDrawable(ContextCompat.getColor(requireContext(), R.color.magenta_color))
                 )
             )
             itemTouch.attachToRecyclerView(attributesRecycler)

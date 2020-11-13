@@ -281,6 +281,7 @@ enum class FriendsRelationship {
     PENDING,
     REQUESTED,
     BLOCKED,
+    BLOCKED_BY,
     NONE
 }
 
@@ -310,6 +311,18 @@ fun UserFriendsResponse.toUiEntities(tab: FriendsTab): List<FriendUiEntity> {
         val nickname = it.user.nickname ?: it.user.name ?: it.user.firstName ?: it.user.lastName ?: "Nickname is empty"
         val relationship = tab.relationship
         list.add(FriendUiEntity(id, imageUrl, isOnline, nickname, relationship))
+    }
+    return list
+}
+
+fun UserFriendsResponse.toUiEntities(setRelationship: FriendsRelationship): List<FriendUiEntity> {
+    val list = mutableListOf<FriendUiEntity>()
+    this.relationships.forEach {
+        val id = it.user.id
+        val imageUrl = it.user.picture
+        val isOnline = it.presence?.let { presence -> presence == Presence.ONLINE } ?: false
+        val nickname = it.user.nickname ?: it.user.name ?: it.user.firstName ?: it.user.lastName ?: "Nickname is empty"
+        list.add(FriendUiEntity(id, imageUrl, isOnline, nickname, setRelationship))
     }
     return list
 }

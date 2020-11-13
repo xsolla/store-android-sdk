@@ -9,6 +9,7 @@ data class UserDetailsResponse(
     val connectionInformation: String?, // For Korean users only
     val country: String?,
     val email: String?,
+    val username: String?,
     @SerializedName("external_id")
     val externalId: String?,
     @SerializedName("first_name")
@@ -51,3 +52,7 @@ enum class GenderResponse {
     @SerializedName("m")
     M
 }
+
+data class PhoneResponse(val phone: String?)
+
+data class PictureResponse(val picture: String)

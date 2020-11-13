@@ -10,12 +10,14 @@ android {
         applicationId "com.xsolla.android.simplifiedexample"
         minSdkVersion sdk_min
         targetSdkVersion sdk_target
-        versionCode sdk_version_code
-        versionName sdk_version_name
+        versionCode sample_app_version_code
+        versionName sample_app_version_name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary true
 
         buildConfigField 'int', 'PROJECT_ID', '70097' // Replace to your project's ID
+
+        buildConfigField "String", "VERSION_NAME", "\"$versionName\""
     }
     buildTypes {
         release {

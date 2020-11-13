@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Xsolla.Drawer" parent="">
+        <item name="android:background">@color/dark_state_blue_color</item>
+        <item name="android:maxWidth">@dimen/drawer_width</item>
+    </style>
+
+    <style name="Widget.Xsolla.Drawer.Icon.Profile" parent="">
+        <item name="android:layout_marginStart">@dimen/drawer_profile_icon_margin</item>
+        <item name="android:layout_marginEnd">@dimen/drawer_profile_icon_margin</item>
+        <item name="android:layout_marginTop">@dimen/drawer_profile_icon_margin</item>
+        <item name="android:layout_marginBottom">@dimen/drawer_profile_icon_margin_bottom</item>
+    </style>
+
+    <style name="Widget.Xsolla.Drawer.Text.Username" parent="">
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/on_surface_high_color</item>
+        <item name="android:textSize">@dimen/drawer_name_text_size</item>
+        <item name="height">@dimen/drawer_name_line_height</item>
+        <item name="maxLines">1</item>
+        <item name="android:letterSpacing">@dimen/drawer_name_letter_spacing</item>
+    </style>
+
+    <style name="Widget.Xsolla.Drawer.Text.Email" parent="">
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:layout_marginEnd">@dimen/drawer_margin_horizontal</item>
+        <item name="android:textColor">@color/light_state_gray_color</item>
+        <item name="android:textSize">@dimen/drawer_email_text_size</item>
+        <item name="android:letterSpacing">@dimen/drawer_email_letter_spacing</item>
+        <item name="android:layout_marginTop">@dimen/drawer_email_margin_top</item>
+    </style>
+
+    <style name="Widget.Xsolla.Drawer.View.Line" parent="">
+        <item name="android:background">@color/white_color</item>
+        <item name="android:alpha">0.12</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/drawer_line_height</item>
+    </style>
+
+    <style name="Widget.Xsolla.Drawer.Item.Icon" parent="">
+        <item name="android:layout_marginStart">@dimen/drawer_item_icon_margin_start</item>
+        <item name="android:layout_marginEnd">@dimen/drawer_item_icon_margin_end</item>
+    </style>
+
+    <style name="Widget.Xsolla.Drawer.Item.Title" parent="">
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:textColor">@color/white_color</item>
+        <item name="android:textSize">@dimen/drawer_item_title_text_size</item>
+        <item name="android:letterSpacing">@dimen/drawer_item_title_letter_spacing</item>
+    </style>
+
+    <style name="Widget.Xsolla.Drawer.Inner.Item.Title" parent="Widget.Xsolla.Drawer.Item.Title">
+        <item name="android:layout_marginStart">@dimen/drawer_inner_item_text_margin_left</item>
+    </style>
+
+    <style name="Widget.Xsolla.Drawer.Text.CartCounter" parent="">
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">@dimen/drawer_cart_counter_text_size</item>
+        <item name="android:textColor">@color/white_color</item>
+    </style>
+
+</resources>

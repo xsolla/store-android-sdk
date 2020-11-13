@@ -16,14 +16,14 @@ before_script:
 
 build:
   tags:
-    - devops
+    - sdk
   stage: build
   except:
     - branches
   script:
     - ./gradlew assembleDebug
   artifacts:
-    expire_in: 4 hours
+    expire_in: 2 hours
     paths:
       - app/build/outputs/
       - app-playfab/build/outputs/
@@ -35,7 +35,7 @@ build:
 
 test:
   tags:
-    - devops
+    - sdk
   stage: test
   except:
     - branches
@@ -48,7 +48,7 @@ test:
 
 generateDebugApp:
   tags:
-    - devops
+    - sdk
   stage: publish
   except:
     - branches
@@ -64,13 +64,13 @@ generateDebugApp:
     - mv app-playfab/build/outputs/apk/debug/app-playfab-debug.apk ./artifacts/SampleApp-Playfab.apk
     - mv app-simplified/build/outputs/apk/debug/app-simplified-debug.apk ./artifacts/SampleApp-Simplified.apk
   artifacts:
-    expire_in: 3 days
+    expire_in: 2 hours
     paths:
       - artifacts
 
-bintrayUpload:
+publishLogin:
   tags:
-    - devops
+    - sdk
   stage: publish
   when: manual
   only:
@@ -78,7 +78,42 @@ bintrayUpload:
   except:
     - branches
   script:
-    - ./gradlew bintrayUpload
+    - ./gradlew :xsolla-login-sdk:bintrayUpload
+    - ./gradlew :xsolla-login-sdk-facebook:bintrayUpload
+    - ./gradlew :xsolla-login-sdk-google:bintrayUpload
+  cache:
+    key: ${CI_PROJECT_ID}
+    paths:
+      - .gradle/*
+
+publishStore:
+  tags:
+    - sdk
+  stage: publish
+  when: manual
+  only:
+    - /^v.*/
+  except:
+    - branches
+  script:
+    - ./gradlew :xsolla-store-sdk:bintrayUpload
+  cache:
+    key: ${CI_PROJECT_ID}
+    paths:
+      - .gradle/*
+
+publishPayments:
+  tags:
+    - sdk
+  stage: publish
+  when: manual
+  only:
+    - /^v.*/
+  except:
+    - branches
+  script:
+    - ./gradlew :xsolla-payments-sdk:bintrayUpload
+    - ./gradlew :xsolla-payments-sdk-playfab:bintrayUpload
   cache:
     key: ${CI_PROJECT_ID}
     paths:

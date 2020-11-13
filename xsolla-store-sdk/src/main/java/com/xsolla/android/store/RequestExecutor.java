@@ -27,6 +27,9 @@ import com.xsolla.android.store.entity.response.order.OrderResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

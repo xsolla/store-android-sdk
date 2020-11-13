@@ -17,7 +17,7 @@ class VmBalance : ViewModel() {
             }
 
             override fun onFailure(errorMessage: String) {
-                virtualBalance.value = listOf()
+
             }
         })
     }

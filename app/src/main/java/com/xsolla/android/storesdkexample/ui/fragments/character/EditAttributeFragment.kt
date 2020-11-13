@@ -12,7 +12,7 @@ import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmCharacterPage
 import kotlinx.android.synthetic.main.activity_store.appbar
-import kotlinx.android.synthetic.main.app_bar_main.view.toolbar
+import kotlinx.android.synthetic.main.app_bar_main.view.mainToolbar
 import kotlinx.android.synthetic.main.fragment_edit_attribute.attributeKeyInput
 import kotlinx.android.synthetic.main.fragment_edit_attribute.attributeValueInput
 import kotlinx.android.synthetic.main.fragment_edit_attribute.close
@@ -26,8 +26,10 @@ class EditAttributeFragment : BaseFragment() {
 
     override fun getLayout() = R.layout.fragment_edit_attribute
 
+    override val toolbarOption = ToolbarOptions(showBalance = true, showCart = false)
+
     override fun initUI() {
-        requireActivity().appbar.toolbar.isGone = true
+        requireActivity().appbar.mainToolbar.isGone = true
 
         close.setOnClickListener { navigateUp() }
 
@@ -74,7 +76,7 @@ class EditAttributeFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
-        requireActivity().appbar.toolbar.isVisible = true
+        requireActivity().appbar.mainToolbar.isVisible = true
         super.onDestroyView()
     }
 

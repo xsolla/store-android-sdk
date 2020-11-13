@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.core.view.isEmpty
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
@@ -17,11 +16,7 @@ import com.xsolla.android.storesdkexample.adapter.FriendsPagerAdapter
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.FriendsTab
 import com.xsolla.android.storesdkexample.ui.vm.VmFriends
-import kotlinx.android.synthetic.main.activity_store.appbar
-import kotlinx.android.synthetic.main.app_bar_main.view.balanceLayout
-import kotlinx.android.synthetic.main.fragment_friends.friendsToolbar
-import kotlinx.android.synthetic.main.fragment_friends.tabs
-import kotlinx.android.synthetic.main.fragment_friends.viewPager
+import kotlinx.android.synthetic.main.fragment_friends.*
 
 class FriendsFragment : BaseFragment() {
     private lateinit var pagerAdapter: FriendsPagerAdapter
@@ -30,9 +25,9 @@ class FriendsFragment : BaseFragment() {
 
     override fun getLayout() = R.layout.fragment_friends
 
-    override fun initUI() {
-        showOrHideToolbarViews(false)
+    override val toolbarOption: ToolbarOptions = ToolbarOptions(showBalance = false, showCart = false)
 
+    override fun initUI() {
         viewModel.clearAllFriends()
         viewModel.loadAllFriends()
 
@@ -61,16 +56,8 @@ class FriendsFragment : BaseFragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onDestroyView() {
-        showOrHideToolbarViews(true)
-        super.onDestroyView()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-
-        menu.clear()
-
         if (friendsToolbar.menu.isEmpty()) {
             inflater.inflate(R.menu.friends_menu, friendsToolbar.menu)
         }
@@ -122,18 +109,11 @@ class FriendsFragment : BaseFragment() {
         for (i in 0 until tabs.tabCount) {
             val spannableString = buildSpannedString {
                 append(FriendsTab.getBy(i).title)
-                color(ContextCompat.getColor(requireContext(), R.color.secondary_color)) { append("   ${groupedItems[i]}") }
+                color(ContextCompat.getColor(requireContext(), R.color.light_state_gray_color)) { append("   ${groupedItems[i]}") }
             }
 
             val tab = tabs.getTabAt(i)!!
             tab.text = spannableString
-        }
-    }
-
-    private fun showOrHideToolbarViews(show: Boolean) {
-        requireActivity().appbar.balanceLayout.isVisible = show
-        if (!show) {
-            requireActivity().invalidateOptionsMenu()
         }
     }
 }
