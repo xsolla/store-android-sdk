@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.16.0] - Store SDK - 2020-11-16
+
+### Added
+
+- Coupons functionality.
+
+
+## [0.15.0] - Payments SDK - 2020-11-03
+
+### Fixed
+
+- Payment systems redirects.
+
+
 ## [1.0.0] - Login SDK - 2020-11-03
 
 ### Added
