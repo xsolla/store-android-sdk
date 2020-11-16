@@ -7,7 +7,7 @@
 - Coupons functionality.
 
 
-## [0.15.0] - Payments SDK - 2020-11-03
+## [0.15.0] - Payments SDK - 2020-11-16
 
 ### Fixed
 
