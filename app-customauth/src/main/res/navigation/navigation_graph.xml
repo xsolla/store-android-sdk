@@ -33,6 +33,6 @@
         android:id="@+id/fragment_vi_page"
         android:name="com.xsolla.android.customauth.ui.store.ViPageFragment"
         android:label=""
-        tools:layout="@layout/fragment_vi_page">
+        tools:layout="@layout/fragment_catalog">
     </fragment>
 </navigation>

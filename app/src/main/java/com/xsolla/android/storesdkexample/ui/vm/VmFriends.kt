@@ -3,6 +3,7 @@ package com.xsolla.android.storesdkexample.ui.vm
 import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.xsolla.android.appcore.SingleLiveEvent
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.GetCurrentUserFriendsCallback
 import com.xsolla.android.login.callback.UpdateCurrentUserFriendsCallback
@@ -13,7 +14,6 @@ import com.xsolla.android.login.entity.request.UserFriendsRequestType
 import com.xsolla.android.login.entity.response.Presence
 import com.xsolla.android.login.entity.response.UserFriendsResponse
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.util.SingleLiveEvent
 
 class VmFriends : ViewModel() {
 

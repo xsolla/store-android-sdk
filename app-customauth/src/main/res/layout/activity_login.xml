@@ -48,6 +48,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailInput"
+            android:text="email@email.com"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -61,7 +62,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
-        android:enabled="false"
+        android:enabled="true"
         android:text="@string/log_in_button" />
 
     <TextView

@@ -1,11 +1,11 @@
 package com.xsolla.android.storesdkexample.ui.vm
 
 import androidx.lifecycle.ViewModel
+import com.xsolla.android.appcore.SingleLiveEvent
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.DeleteCurrentUserAvatarCallback
 import com.xsolla.android.login.callback.UploadCurrentUserAvatarCallback
 import com.xsolla.android.login.entity.response.PictureResponse
-import com.xsolla.android.storesdkexample.util.SingleLiveEvent
 import java.io.File
 
 class VmChooseAvatar : ViewModel() {

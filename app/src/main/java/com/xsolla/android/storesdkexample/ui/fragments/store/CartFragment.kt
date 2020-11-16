@@ -5,12 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.xsolla.android.appcore.utils.AmountUtils
 import com.xsolla.android.payments.XPayments.Companion.createIntentBuilder
 import com.xsolla.android.payments.XPayments.Result.Companion.fromResultIntent
 import com.xsolla.android.payments.data.AccessToken
@@ -20,7 +20,6 @@ import com.xsolla.android.storesdkexample.adapter.CartAdapter
 import com.xsolla.android.storesdkexample.listener.CartChangeListener
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
-import com.xsolla.android.storesdkexample.util.AmountUtils
 import kotlinx.android.synthetic.main.fragment_cart.checkoutButton
 import kotlinx.android.synthetic.main.fragment_cart.clearButton
 import kotlinx.android.synthetic.main.fragment_cart.continueButton

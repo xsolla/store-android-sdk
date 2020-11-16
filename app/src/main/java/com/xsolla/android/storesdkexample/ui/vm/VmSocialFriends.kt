@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.xsolla.android.appcore.SingleLiveEvent
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.*
 import com.xsolla.android.login.entity.request.UpdateUserFriendsRequestAction
@@ -15,7 +16,6 @@ import com.xsolla.android.login.entity.response.SocialFriendsResponse
 import com.xsolla.android.login.entity.response.UserFriendsResponse
 import com.xsolla.android.login.social.FriendsPlatform
 import com.xsolla.android.login.social.SocialNetworkForLinking
-import com.xsolla.android.storesdkexample.util.SingleLiveEvent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume

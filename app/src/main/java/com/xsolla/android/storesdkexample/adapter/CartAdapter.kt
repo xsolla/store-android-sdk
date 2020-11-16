@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.xsolla.android.appcore.utils.AmountUtils
 import com.xsolla.android.store.entity.response.cart.CartResponse
 import com.xsolla.android.store.entity.response.common.ExpirationPeriod
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.CartChangeListener
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
-import com.xsolla.android.storesdkexample.util.AmountUtils
 import kotlinx.android.synthetic.main.item_cart.view.*
 
 class CartAdapter(

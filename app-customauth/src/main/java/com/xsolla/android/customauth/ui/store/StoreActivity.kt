@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isGone
 import androidx.lifecycle.observe
 import androidx.navigation.NavController
@@ -21,6 +22,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.appcore.extensions.setRateLimitedClickListener
+import com.xsolla.android.customauth.BuildConfig
 import com.xsolla.android.customauth.R
 import com.xsolla.android.customauth.data.local.PrefManager
 import com.xsolla.android.customauth.databinding.ActivityStoreBinding
@@ -43,29 +45,17 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        XStore.init(com.xsolla.android.customauth.BuildConfig.PROJECT_ID, preferences.token)
-        balanceViewModel.updateVirtualBalance()
-
         setSupportActionBar(binding.appbar.mainToolbar)
+
+        XStore.init(BuildConfig.PROJECT_ID, preferences.token)
+        balanceViewModel.updateVirtualBalance()
 
         initNavController()
         initVirtualBalance()
         initDrawer()
         setDrawerData()
 
-        cartViewModel.cartContent.observe(this) { cartItems ->
-            val count = cartItems.sumBy { item -> item.quantity.toInt() }
-
-            val cartView = binding.appbar.mainToolbar.menu?.findItem(R.id.action_cart)?.actionView
-            val cartCounter = cartView?.findViewById<TextView>(R.id.cart_badge)
-            cartCounter?.text = count.toString()
-            cartCounter?.isGone = count == 0
-
-            binding.drawer.findViewById<TextView>(R.id.textCartCounter).text = count.toString()
-            binding.drawer.findViewById<View>(R.id.textCartCounter).isGone = count == 0
-            binding.drawer.findViewById<View>(R.id.bgCartCounter).isGone = count == 0
-        }
+        cartViewModel.updateCart()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -74,8 +64,9 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         if (showCartMenu) {
-            menuInflater.inflate(R.menu.main, menu)
+            menuInflater.inflate(R.menu.main, binding.appbar.mainToolbar.menu)
         }
+        observeCart()
         return true
     }
 
@@ -111,7 +102,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
                 binding.appbar.balanceContainer.addView(balanceView, 0)
             }
         }
-        binding.appbar.chargeBalanceButton.setRateLimitedClickListener { findNavController(R.id.nav_host_fragment).navigate(R.id.nav_vc) }
+        binding.appbar.chargeBalanceButton.setRateLimitedClickListener { navController.navigate(R.id.nav_vc) }
     }
 
     private fun initDrawer() {
@@ -124,11 +115,11 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
             binding.root.close()
         }
         binding.drawer.findViewById<View>(R.id.itemVirtualItems).setOnClickListener {
-            showSnack("VI")
+            navController.navigate(R.id.nav_vi)
             binding.root.close()
         }
         binding.drawer.findViewById<View>(R.id.itemVirtualCurrency).setOnClickListener {
-            showSnack("VC")
+            navController.navigate(R.id.nav_vc)
             binding.root.close()
         }
         binding.drawer.findViewById<View>(R.id.itemCart).setOnClickListener {
@@ -137,6 +128,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
             } else {
                 navController.navigate(R.id.nav_cart)
             }
+            binding.root.close()
         }
         binding.drawer.findViewById<View>(R.id.itemLogout).setOnClickListener { logout() }
     }
@@ -144,6 +136,21 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
     private fun setDrawerData() {
         binding.drawer.findViewById<TextView>(R.id.textEmail).text = preferences.email
         binding.drawer.findViewById<TextView>(R.id.textUsername).isGone = true
+    }
+
+    private fun observeCart() {
+        cartViewModel.cartContent.observe(this) { cartItems ->
+            val count = cartItems.sumBy { item -> item.quantity.toInt() }
+
+            val cartView = binding.appbar.mainToolbar.menu?.findItem(R.id.action_cart)?.actionView
+            val cartCounter = cartView?.findViewById<TextView>(R.id.cart_badge)
+            cartCounter?.text = count.toString()
+            cartCounter?.isGone = count == 0
+
+            binding.drawer.findViewById<TextView>(R.id.textCartCounter).text = count.toString()
+            binding.drawer.findViewById<View>(R.id.textCartCounter).isGone = count == 0
+            binding.drawer.findViewById<View>(R.id.bgCartCounter).isGone = count == 0
+        }
     }
 
     private fun logout() {

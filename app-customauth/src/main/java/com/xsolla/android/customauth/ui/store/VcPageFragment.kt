@@ -8,16 +8,22 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.customauth.R
 import com.xsolla.android.customauth.databinding.FragmentCatalogBinding
 import com.xsolla.android.customauth.ui.BaseFragment
-import com.xsolla.android.customauth.ui.adapter.ViAdapter
+import com.xsolla.android.customauth.ui.adapter.VcAdapter
 import com.xsolla.android.customauth.viewmodels.VmBalance
 import com.xsolla.android.customauth.viewmodels.VmCart
+import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
 
-class ViPageFragment : BaseFragment(), PurchaseListener {
+class VcPageFragment : BaseFragment(), PurchaseListener {
+    private val binding: FragmentCatalogBinding by viewBinding()
+
+    private val vmCart: VmCart by activityViewModels()
+    private val vmBalance: VmBalance by activityViewModels()
+
     companion object {
         private const val ARG_ITEMS = "items"
 
-        fun getInstance(items: ArrayList<VirtualItemUiEntity>): ViPageFragment {
-            val catalogFragment = ViPageFragment()
+        fun getInstance(items: ArrayList<VirtualCurrencyPackageResponse.Item>): VcPageFragment {
+            val catalogFragment = VcPageFragment()
             val bundle = Bundle()
             bundle.putParcelableArrayList(ARG_ITEMS, items)
             catalogFragment.arguments = bundle
@@ -25,20 +31,16 @@ class ViPageFragment : BaseFragment(), PurchaseListener {
         }
     }
 
-    private val binding: FragmentCatalogBinding by viewBinding()
-    private val vmCart: VmCart by activityViewModels()
-    private val vmBalance: VmBalance by activityViewModels()
-
     override fun getLayout() = R.layout.fragment_catalog
 
     override fun initUI() {
-        val items = requireArguments().getParcelableArrayList<VirtualItemUiEntity>(ARG_ITEMS)
+        val items = requireArguments().getParcelableArrayList<VirtualCurrencyPackageResponse.Item>(ARG_ITEMS)
         items?.let {
             with(binding.catalogRecyclerView) {
                 addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
                     ContextCompat.getDrawable(context, R.drawable.item_divider)?.let { setDrawable(it) }
                 })
-                adapter = ViAdapter(it, vmCart, vmBalance, this@ViPageFragment)
+                adapter = VcAdapter(it, vmCart, vmBalance, this@VcPageFragment)
             }
         }
     }
@@ -54,10 +56,4 @@ class ViPageFragment : BaseFragment(), PurchaseListener {
     override fun showMessage(message: String) {
         showSnack(message)
     }
-}
-
-interface PurchaseListener {
-    fun onSuccess()
-    fun onFailure(errorMessage: String)
-    fun showMessage(message: String)
 }

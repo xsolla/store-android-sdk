@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.xsolla.android.appcore.SingleLiveEvent
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
 import com.xsolla.android.login.callback.GetUsersAttributesCallback
@@ -16,7 +17,6 @@ import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse
 import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.data.local.PrefManager
-import com.xsolla.android.storesdkexample.util.SingleLiveEvent
 import com.xsolla.android.storesdkexample.util.extensions.toUiEntity
 import kotlinx.android.parcel.Parcelize
 
