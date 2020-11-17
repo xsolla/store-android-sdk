@@ -1,8 +1,5 @@
 package com.xsolla.android.store;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
@@ -14,9 +11,6 @@ import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
-import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
-import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse;
-import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.RedeemCouponResponse;
 import com.xsolla.android.store.entity.response.items.RewardsByCodeResponse;
@@ -34,9 +28,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import kotlin.Pair;
-
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 
 class RequestExecutor {
 
@@ -149,26 +140,6 @@ class RequestExecutor {
 
     public void deleteItemFromCurrentCart(String itemSku, XStoreCallback<Void> callback) {
         storeApi.deleteItemFromCurrentCart(projectId, itemSku).enqueue(callback);
-    }
-
-    public void getInventory(XStoreCallback<InventoryResponse> callback) {
-        storeApi.getInventory(projectId).enqueue(callback);
-    }
-
-    public void getSubscriptions(XStoreCallback<SubscriptionsResponse> callback) {
-        storeApi.getSubscriptions(projectId).enqueue(callback);
-    }
-
-    public void getVirtualBalance(XStoreCallback<VirtualBalanceResponse> callback) {
-        storeApi.getVirtualBalance(projectId).enqueue(callback);
-    }
-
-    public void consumeItem(String sku, long quantity, String instanceId, XStoreCallback<Void> callback) {
-        ConsumeItemBody consumeItemBody = new ConsumeItemBody(sku, quantity, instanceId);
-        String jsonString = new GsonBuilder().serializeNulls().create().toJson(consumeItemBody);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
-
-        storeApi.consumeItem(projectId, requestBody).enqueue(callback);
     }
 
     public void getItemsGroups(XStoreCallback<ItemsGroupsResponse> callback) {

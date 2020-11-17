@@ -14,12 +14,12 @@ afterEvaluate {
                 artifact androidSourcesJar
 
                 groupId = 'com.xsolla.android'
-                artifactId = 'store'
+                artifactId = 'inventory'
                 version = android.defaultConfig.versionName
 
                 pom {
-                    name = 'Xsolla Store Android SDK'
-                    description = 'Xsolla Store Android SDK is used to integrate Xsolla Store, a comprehensive e-store solution for partners that supports various monetization options'
+                    name = 'Xsolla Inventory Android SDK'
+                    description = 'Xsolla Inventory Android SDK is used to integrate Xsolla Inventory'
                     url = 'https://github.com/xsolla/store-android-sdk'
                     organization {
                         name = 'Xsolla'
@@ -46,7 +46,7 @@ afterEvaluate {
         publications = ['release']
         pkg {
             repo = 'maven'
-            name = 'xsolla-store'
+            name = 'xsolla-inventory'
             vcsUrl = 'https://github.com/xsolla/store-android-sdk'
             licenses = ['Apache-2.0']
 

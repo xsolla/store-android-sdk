@@ -3,14 +3,17 @@ package com.xsolla.android.storesdkexample.ui.fragments.store
 import android.os.Parcelable
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayoutMediator
+import com.xsolla.android.inventory.XInventory
+import com.xsolla.android.inventory.callback.GetInventoryCallback
+import com.xsolla.android.inventory.callback.GetSubscriptionsCallback
+import com.xsolla.android.inventory.entity.response.InventoryResponse
+import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.common.Group
 import com.xsolla.android.store.entity.response.common.InventoryOption
 import com.xsolla.android.store.entity.response.common.Price
 import com.xsolla.android.store.entity.response.common.VirtualPrice
-import com.xsolla.android.store.entity.response.inventory.InventoryResponse
-import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.ViPagerAdapter
@@ -18,9 +21,8 @@ import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmInventory
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
-import kotlinx.android.synthetic.main.fragment_vi.tabLayout
-import kotlinx.android.synthetic.main.fragment_vi.view.viewPager
-import kotlinx.android.synthetic.main.fragment_vi.viewPager
+import kotlinx.android.synthetic.main.fragment_vi.*
+import kotlinx.android.synthetic.main.fragment_vi.view.*
 
 class ViFragment : BaseFragment() {
 
@@ -33,29 +35,30 @@ class ViFragment : BaseFragment() {
     }
 
     private fun getInventory() {
-        XStore.getInventory(object : XStoreCallback<InventoryResponse>() {
-            override fun onSuccess(response: InventoryResponse) {
-                val items = response.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
+        XInventory.getInventory(object : GetInventoryCallback {
+            override fun onSuccess(data: InventoryResponse) {
+                val items = data.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
                 inventoryViewModel.inventory.value = items
                 getVirtualItems(items)
                 getSubscriptions()
             }
 
-            override fun onFailure(errorMessage: String) {
-                showSnack(errorMessage)
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
         })
     }
 
     private fun getSubscriptions() {
-        XStore.getSubscriptions(object : XStoreCallback<SubscriptionsResponse>() {
-            override fun onSuccess(response: SubscriptionsResponse) {
-                inventoryViewModel.subscriptions.value = response.items
+        XInventory.getSubscriptions(object : GetSubscriptionsCallback {
+            override fun onSuccess(data: SubscriptionsResponse) {
+                inventoryViewModel.subscriptions.value = data.items
             }
 
-            override fun onFailure(errorMessage: String) {
-                showSnack(errorMessage)
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
+
         })
     }
 

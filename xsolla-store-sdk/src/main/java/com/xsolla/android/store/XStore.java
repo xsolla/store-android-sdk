@@ -2,7 +2,6 @@ package com.xsolla.android.store;
 
 import android.os.Build;
 
-import com.google.gson.GsonBuilder;
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
@@ -10,9 +9,6 @@ import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
-import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
-import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse;
-import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.RedeemCouponResponse;
 import com.xsolla.android.store.entity.response.items.RewardsByCodeResponse;
@@ -295,49 +291,6 @@ public class XStore {
      */
     public static void deleteItemFromCurrentCart(String itemSku, XStoreCallback<Void> callback) {
         getRequestExecutor().deleteItemFromCurrentCart(itemSku, callback);
-    }
-
-    /**
-     * Get a current user’s inventory
-     *
-     * @param callback status callback
-     * @see <a href="https://developers.xsolla.com/store-api/inventory-client/get-user-inventory">Store API Reference</a>
-     */
-    public static void getInventory(XStoreCallback<InventoryResponse> callback) {
-        getRequestExecutor().getInventory(callback);
-    }
-
-    /**
-     * Get a current user’s subscriptions
-     *
-     * @param callback status callback
-     * @see <a href="https://developers.xsolla.com/store-api/inventory-client/get-user-subscriptions">Store API Reference</a>
-     */
-    public static void getSubscriptions(XStoreCallback<SubscriptionsResponse> callback) {
-        getRequestExecutor().getSubscriptions(callback);
-    }
-
-    /**
-     * Get a current user’s virtual balance
-     *
-     * @param callback status callback
-     * @see <a href="https://developers.xsolla.com/store-api/inventory-client/get-user-virtual-balance">Store API Reference</a>
-     */
-    public static void getVirtualBalance(XStoreCallback<VirtualBalanceResponse> callback) {
-        getRequestExecutor().getVirtualBalance(callback);
-    }
-
-    /**
-     * Consume an item from a current user’s inventory
-     *
-     * @param sku        item SKU
-     * @param quantity   item quantity, if an item is uncountable, should be null
-     * @param instanceId instance item ID, if an item is countable, should be null
-     * @param callback   status callback
-     * @see <a href="https://developers.xsolla.com/store-api/inventory-client/consume-item">Store API Reference</a>
-     */
-    public static void consumeItem(String sku, long quantity, String instanceId, XStoreCallback<Void> callback) {
-        getRequestExecutor().consumeItem(sku, quantity, instanceId, callback);
     }
 
     /**

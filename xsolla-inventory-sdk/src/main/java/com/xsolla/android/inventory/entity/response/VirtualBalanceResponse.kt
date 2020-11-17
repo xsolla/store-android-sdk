@@ -1,4 +1,4 @@
-package com.xsolla.android.store.entity.response.inventory
+package com.xsolla.android.inventory.entity.response
 
 import com.google.gson.annotations.SerializedName
 

@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.xsolla.android.store.entity.response.inventory.InventoryResponse
-import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse
+import com.xsolla.android.inventory.entity.response.InventoryResponse
+import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.ConsumeListener
 import kotlinx.android.synthetic.main.item_inventory.view.*

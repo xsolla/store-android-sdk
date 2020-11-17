@@ -1,8 +1,7 @@
-package com.xsolla.android.store.entity.response.inventory
+package com.xsolla.android.inventory.entity.response
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.xsolla.android.store.entity.response.common.Group
 import kotlinx.android.parcel.Parcelize
 
 data class InventoryResponse(val items: List<Item> = emptyList()) {
@@ -41,3 +40,10 @@ data class InventoryResponse(val items: List<Item> = emptyList()) {
         }
     }
 }
+
+@Parcelize
+data class Group(
+        @SerializedName("external_id")
+        val externalId: String? = null,
+        val name: String? = null
+) : Parcelable

@@ -22,6 +22,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.RefreshTokenCallback
 import com.xsolla.android.store.XStore
@@ -31,26 +32,12 @@ import com.xsolla.android.storesdkexample.ui.vm.VmProfile
 import com.xsolla.android.storesdkexample.ui.vm.base.ViewModelFactory
 import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import com.xsolla.android.storesdkexample.util.sumByLong
-import kotlinx.android.synthetic.main.activity_store.appbar
-import kotlinx.android.synthetic.main.activity_store.lock
-import kotlinx.android.synthetic.main.app_bar_main.chargeBalanceButton
-import kotlinx.android.synthetic.main.app_bar_main.view.mainToolbar
-import kotlinx.android.synthetic.main.drawer_expandable_item.bgCartCounter
-import kotlinx.android.synthetic.main.drawer_expandable_item.itemCart
-import kotlinx.android.synthetic.main.drawer_expandable_item.itemCoupon
-import kotlinx.android.synthetic.main.drawer_expandable_item.itemVirtualCurrency
-import kotlinx.android.synthetic.main.drawer_expandable_item.itemVirtualItems
-import kotlinx.android.synthetic.main.drawer_expandable_item.textCartCounter
-import kotlinx.android.synthetic.main.item_balance.view.balanceAmount
-import kotlinx.android.synthetic.main.item_balance.view.balanceIcon
-import kotlinx.android.synthetic.main.layout_drawer.iconProfile
-import kotlinx.android.synthetic.main.layout_drawer.itemAccount
-import kotlinx.android.synthetic.main.layout_drawer.itemCharacter
-import kotlinx.android.synthetic.main.layout_drawer.itemFriends
-import kotlinx.android.synthetic.main.layout_drawer.itemInventory
-import kotlinx.android.synthetic.main.layout_drawer.itemLogout
-import kotlinx.android.synthetic.main.layout_drawer.textEmail
-import kotlinx.android.synthetic.main.layout_drawer.textUsername
+import kotlinx.android.synthetic.main.activity_store.*
+import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.app_bar_main.view.*
+import kotlinx.android.synthetic.main.drawer_expandable_item.*
+import kotlinx.android.synthetic.main.item_balance.view.*
+import kotlinx.android.synthetic.main.layout_drawer.*
 
 class StoreActivity : AppCompatActivity() {
     private val vmCart: VmCart by viewModels()
@@ -75,6 +62,7 @@ class StoreActivity : AppCompatActivity() {
         }
 
         XStore.init(BuildConfig.PROJECT_ID, XLogin.token ?: "")
+        XInventory.init(BuildConfig.PROJECT_ID, XLogin.token ?: "")
 
         val toolbar: Toolbar = findViewById(R.id.mainToolbar)
         setSupportActionBar(toolbar)
@@ -103,6 +91,7 @@ class StoreActivity : AppCompatActivity() {
                     override fun onSuccess() {
                         lock.visibility = View.GONE
                         XStore.init(BuildConfig.PROJECT_ID, XLogin.token)
+                        XInventory.init(BuildConfig.PROJECT_ID, XLogin.token!!)
                         vmCart.updateCart()
                         vmBalance.updateVirtualBalance()
                         setDrawerData()
@@ -119,6 +108,7 @@ class StoreActivity : AppCompatActivity() {
             }
         } else {
             XStore.init(BuildConfig.PROJECT_ID, XLogin.token)
+            XInventory.init(BuildConfig.PROJECT_ID, XLogin.token!!)
             vmCart.updateCart()
             vmBalance.updateVirtualBalance()
 

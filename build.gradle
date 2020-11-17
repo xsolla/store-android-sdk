@@ -8,6 +8,9 @@ buildscript {
     ext.store_sdk_version_name = '0.16.0'
     ext.store_sdk_version_code = 10
 
+    ext.inventory_sdk_version_name = '0.0.1'
+    ext.inventory_sdk_version_code = 1
+
     ext.login_sdk_version_name = '1.0.0'
     ext.login_sdk_version_code = 9
 
