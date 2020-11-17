@@ -1,12 +1,14 @@
 package com.xsolla.android.customauth.ui.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.xsolla.android.customauth.R
 import com.xsolla.android.customauth.databinding.ItemInventoryBinding
 import com.xsolla.android.store.entity.response.inventory.InventoryResponse
 import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse
@@ -16,8 +18,7 @@ class InventoryAdapter(
     private val consumeListener: ConsumeListener
 ) : ListAdapter<InventoryResponse.Item, InventoryViewHolder>(InventoryDiffUtilCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InventoryViewHolder {
-        val binding = ItemInventoryBinding.inflate(LayoutInflater.from(parent.context))
-        return InventoryViewHolder(binding)
+        return InventoryViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_inventory, parent, false))
     }
 
     override fun onBindViewHolder(holder: InventoryViewHolder, position: Int) {
@@ -30,7 +31,9 @@ class InventoryAdapter(
     }
 }
 
-class InventoryViewHolder(private val binding: ItemInventoryBinding) : RecyclerView.ViewHolder(binding.root) {
+class InventoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private val binding: ItemInventoryBinding = ItemInventoryBinding.bind(view)
+
     fun bind(subscriptions: List<SubscriptionsResponse.Item>?, item: InventoryResponse.Item, consumeListener: ConsumeListener) {
         Glide.with(binding.root).load(item.imageUrl).into(binding.itemIcon)
         binding.itemName.text = item.name

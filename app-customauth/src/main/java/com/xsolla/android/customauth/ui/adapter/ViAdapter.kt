@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.appcore.utils.AmountUtils
+import com.xsolla.android.customauth.R
 import com.xsolla.android.customauth.databinding.ItemViRealPriceBinding
 import com.xsolla.android.customauth.databinding.ItemViVirtualPriceBinding
 import com.xsolla.android.customauth.ui.store.PurchaseListener
@@ -43,8 +44,8 @@ class ViAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            REAL_PRICE -> ViRealPriceViewHolder(ItemViRealPriceBinding.inflate(inflater), vmCart, purchaseListener)
-            else -> ViVirtualPriceViewHolder(ItemViVirtualPriceBinding.inflate(inflater), vmBalance, purchaseListener)
+            REAL_PRICE -> ViRealPriceViewHolder(vmCart, purchaseListener, inflater.inflate(R.layout.item_vi_real_price, parent, false))
+            else -> ViVirtualPriceViewHolder(vmBalance, purchaseListener, inflater.inflate(R.layout.item_vi_virtual_price, parent, false))
         }
     }
 
@@ -60,10 +61,12 @@ class ViAdapter(
 }
 
 class ViRealPriceViewHolder(
-    private val binding: ItemViRealPriceBinding,
     private val vmCart: VmCart,
-    private val purchaseListener: PurchaseListener
-) : RecyclerView.ViewHolder(binding.root) {
+    private val purchaseListener: PurchaseListener,
+    view: View
+) : RecyclerView.ViewHolder(view) {
+
+    private val binding: ItemViRealPriceBinding = ItemViRealPriceBinding.bind(view)
 
     fun bind(item: VirtualItemUiEntity) {
         Glide.with(itemView).load(item.imageUrl).into(binding.itemIcon)
@@ -150,10 +153,12 @@ class ViRealPriceViewHolder(
 }
 
 class ViVirtualPriceViewHolder(
-    private val binding: ItemViVirtualPriceBinding,
     private val vmBalance: VmBalance,
-    private val purchaseListener: PurchaseListener
-) : RecyclerView.ViewHolder(binding.root) {
+    private val purchaseListener: PurchaseListener,
+    view: View
+) : RecyclerView.ViewHolder(view) {
+
+    private val binding: ItemViVirtualPriceBinding = ItemViVirtualPriceBinding.bind(view)
 
     fun bind(item: VirtualItemUiEntity) {
         val price = item.virtualPrices[0]

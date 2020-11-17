@@ -21,7 +21,7 @@ class CartAdapter(
 ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
-        return CartViewHolder(ItemCartBinding.inflate(LayoutInflater.from(parent.context)))
+        return CartViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_cart, parent, false))
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
@@ -31,7 +31,9 @@ class CartAdapter(
 
     override fun getItemCount() = items.size
 
-    inner class CartViewHolder(private val binding: ItemCartBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class CartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+        private val binding: ItemCartBinding = ItemCartBinding.bind(view)
 
         fun bind(item: CartResponse.Item) {
             Glide.with(itemView).load(item.imageUrl).into(binding.itemIcon)
