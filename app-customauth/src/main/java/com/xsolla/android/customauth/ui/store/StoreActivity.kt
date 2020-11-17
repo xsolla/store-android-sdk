@@ -5,18 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isGone
 import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
@@ -65,30 +63,25 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         if (showCartMenu) {
             menuInflater.inflate(R.menu.main, binding.appbar.mainToolbar.menu)
-        }
-        observeCart()
-        return true
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_cart -> {
+            val view = menu.findItem(R.id.action_cart).actionView
+            view.setOnClickListener {
                 if (cartViewModel.cartContent.value.isNullOrEmpty()) {
                     showSnack(getString(R.string.cart_message_empty))
                 } else {
                     navController.navigate(R.id.nav_cart)
                 }
-                true
             }
-            else -> super.onOptionsItemSelected(item)
         }
+        observeCart()
+        return true
     }
 
     private fun initNavController() {
         navController = findNavController(R.id.nav_host_fragment)
 
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_vi, R.id.nav_vc, R.id.nav_cart, R.id.nav_inventory))
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_vi, R.id.nav_vc, R.id.nav_inventory), binding.root)
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
         binding.navView.setupWithNavController(navController)
     }
 
