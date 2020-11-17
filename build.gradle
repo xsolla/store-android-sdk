@@ -17,6 +17,7 @@ buildscript {
     ext.sdk_min = 21
     ext.sdk_target = 29
     ext.sdk_compile = 29
+    ext.sdk_tools_version = '29.0.3'
 
     ext.kotlin_version = '1.4.10'
 
@@ -25,7 +26,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:4.1.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.1"
