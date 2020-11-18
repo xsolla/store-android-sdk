@@ -19,7 +19,6 @@ import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
-import com.xsolla.android.appcore.extensions.setRateLimitedClickListener
 import com.xsolla.android.customauth.BuildConfig
 import com.xsolla.android.customauth.R
 import com.xsolla.android.customauth.data.local.PrefManager
@@ -95,7 +94,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
                 binding.appbar.balanceContainer.addView(balanceView, 0)
             }
         }
-        binding.appbar.chargeBalanceButton.setRateLimitedClickListener { navController.navigate(R.id.nav_vc) }
+        binding.appbar.chargeBalanceButton.setOnClickListener { navController.navigate(R.id.nav_vc) }
     }
 
     private fun initDrawer() {
@@ -113,6 +112,10 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
         }
         binding.drawer.findViewById<View>(R.id.itemVirtualCurrency).setOnClickListener {
             navController.navigate(R.id.nav_vc)
+            binding.root.close()
+        }
+        binding.drawer.findViewById<View>(R.id.itemCoupon).setOnClickListener {
+            navController.navigate(R.id.nav_coupon)
             binding.root.close()
         }
         binding.drawer.findViewById<View>(R.id.itemCart).setOnClickListener {

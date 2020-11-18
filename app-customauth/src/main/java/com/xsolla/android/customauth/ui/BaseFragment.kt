@@ -17,7 +17,7 @@ abstract class BaseFragment : Fragment() {
 
     abstract fun getLayout(): Int
 
-    open val toolbarOption: ToolbarOptions = ToolbarOptions(true, true)
+    open val toolbarOption: ToolbarOptions = ToolbarOptions(true, true, true)
 
     abstract fun initUI()
 
@@ -30,6 +30,7 @@ abstract class BaseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initUI()
 
+        requireActivity().findViewById<View>(R.id.mainToolbar).isVisible = toolbarOption.showMainToolbar
         requireActivity().findViewById<View>(R.id.balanceLayout).isVisible = toolbarOption.showBalance
         (requireActivity() as? StoreActivity)?.showCartMenu = toolbarOption.showCart
         requireActivity().invalidateOptionsMenu()
@@ -45,5 +46,5 @@ abstract class BaseFragment : Fragment() {
         imm.hideSoftInputFromWindow(rootView.windowToken, 0)
     }
 
-    class ToolbarOptions(val showBalance: Boolean, val showCart: Boolean)
+    class ToolbarOptions(val showMainToolbar: Boolean = true, val showBalance: Boolean = true, val showCart: Boolean = true)
 }

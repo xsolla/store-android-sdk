@@ -30,9 +30,8 @@
         tools:layout="@layout/fragment_inventory" />
 
     <fragment
-        android:id="@+id/fragment_vi_page"
-        android:name="com.xsolla.android.customauth.ui.store.ViPageFragment"
+        android:id="@+id/nav_coupon"
+        android:name="com.xsolla.android.customauth.ui.store.RedeemCouponFragment"
         android:label=""
-        tools:layout="@layout/fragment_catalog">
-    </fragment>
+        tools:layout="@layout/fragment_redeem_coupon" />
 </navigation>

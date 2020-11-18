@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/nav_cart"
-        android:name="com.xsolla.android.customauth.ui.store.CartFragment"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.store.CartFragment"
         android:label=""
         tools:layout="@layout/fragment_cart" />
 
