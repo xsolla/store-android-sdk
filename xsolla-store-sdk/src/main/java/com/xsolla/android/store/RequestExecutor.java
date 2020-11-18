@@ -7,6 +7,7 @@ import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
+import com.xsolla.android.store.entity.request.coupon.RedeemCouponRequestBody;
 import com.xsolla.android.store.entity.request.inventory.ConsumeItemBody;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
 import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
@@ -17,12 +18,22 @@ import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
 import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse;
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
+import com.xsolla.android.store.entity.response.items.RedeemCouponResponse;
+import com.xsolla.android.store.entity.response.items.RewardsByCodeResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
 import com.xsolla.android.store.entity.response.order.OrderResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import kotlin.Pair;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -198,6 +209,29 @@ class RequestExecutor {
                 virtualCurrencySku,
                 "android_standalone" // TODO another android platforms
         ).enqueue(callback);
+    }
+
+    public void redeemCoupon(
+            @NotNull String couponCode,
+            @Nullable Pair<String, String> selectedUnitItems,
+            @NotNull XStoreCallback<RedeemCouponResponse> callback
+    ) {
+        JsonObject unitItems = selectedUnitItems != null ? new JsonObject() : null;
+        if (unitItems != null) {
+            unitItems.addProperty(selectedUnitItems.getFirst(), selectedUnitItems.getSecond());
+        }
+
+        storeApi.redeemCoupon(
+                projectId,
+                new RedeemCouponRequestBody(couponCode, unitItems)
+        ).enqueue(callback);
+    }
+
+    public void getCouponRewardsByCode(
+            @NotNull String couponCode,
+            @NotNull XStoreCallback<RewardsByCodeResponse> callback
+    ) {
+        storeApi.getCouponRewardsByCode(projectId, couponCode).enqueue(callback);
     }
 
 }

@@ -2,7 +2,7 @@ package com.xsolla.android.store.api;
 
 import com.google.gson.JsonObject;
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
-import com.xsolla.android.store.entity.request.inventory.ConsumeItemBody;
+import com.xsolla.android.store.entity.request.coupon.RedeemCouponRequestBody;
 import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
@@ -10,6 +10,8 @@ import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
 import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse;
 import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
+import com.xsolla.android.store.entity.response.items.RedeemCouponResponse;
+import com.xsolla.android.store.entity.response.items.RewardsByCodeResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
@@ -178,6 +180,18 @@ public interface StoreApi {
             @Path("item_sku") String itemSku,
             @Path("virtual_currency_sku") String virtualCurrencySku,
             @Query("platform") String platform
+    );
+
+    @POST("api/v2/project/{project_id}/coupon/redeem")
+    Call<RedeemCouponResponse> redeemCoupon(
+            @Path("project_id") int projectId,
+            @Body RedeemCouponRequestBody body
+    );
+
+    @GET("api/v2/project/{project_id}/coupon/code/{coupon_code}/rewards")
+    Call<RewardsByCodeResponse> getCouponRewardsByCode(
+            @Path("project_id") int projectId,
+            @Path("coupon_code") String couponCode
     );
 
 }

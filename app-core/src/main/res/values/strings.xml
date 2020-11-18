@@ -2,15 +2,16 @@
     <string name="app_name">Xsolla Sample App</string>
 
     <string name="cancel">Cancel</string>
+    <string name="success">Success</string>
     <string name="ok">OK</string>
     <string name="clear">Clear</string>
     <string name="failure">Failure</string>
     <string name="save_changes">Save changes</string>
     <string name="update">Update</string>
 
-    <string name="xsolla_payments_redirect_scheme">https</string>
+    <string name="xsolla_payments_redirect_scheme">xsollasdk</string>
     <string name="xsolla_payments_redirect_host">example.com</string>
-    <string name="xsolla_payments_redirect_path_prefix">/payment</string>
+    <string name="xsolla_payments_redirect_path_prefix">/standard</string>
 
     <string name="login_tab">log in</string>
     <string name="sign_up_tab">sign up</string>
@@ -111,5 +112,13 @@
     <string name="character_edit_attribute_discard_button">Discard changes</string>
     <string name="character_edit_attribute_key_hint">Attribute key</string>
     <string name="character_edit_attribute_value_hint">Attribute value</string>
+
+    <string name="coupon_title">Redeem coupon</string>
+    <string name="coupon_hint">Enter your coupon code</string>
+    <string name="coupon_redeem_button">Redeem</string>
+    <string name="coupon_example">\tfor example, WINTER2021</string>
+    <string name="coupon_received_items_placeholder">You received the following items:</string>
+    <string name="coupon_redeem_another_button">Redeem another coupon</string>
+    <string name="coupon_received_item_exp_period">Expiration in: %d %ss</string>
 
 </resources>

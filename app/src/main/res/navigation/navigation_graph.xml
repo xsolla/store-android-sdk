@@ -90,5 +90,9 @@
         android:label=""
         tools:layout="@layout/fragment_add_friends">
     </fragment>
+    <fragment
+        android:id="@+id/nav_redeem_coupon"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.store.RedeemCouponFragment"
+        tools:layout="@layout/fragment_redeem_coupon" />
 
 </navigation>
