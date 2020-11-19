@@ -5,7 +5,6 @@ import com.xsolla.android.store.entity.response.common.Group
 import com.xsolla.android.store.entity.response.common.InventoryOption
 import com.xsolla.android.store.entity.response.common.Price
 import com.xsolla.android.store.entity.response.common.VirtualPrice
-import com.xsolla.android.store.entity.response.inventory.InventoryResponse
 
 class RedeemCouponResponse(val items: List<Item> = emptyList()) {
     data class Item(
@@ -24,8 +23,16 @@ class RedeemCouponResponse(val items: List<Item> = emptyList()) {
         val sku: String,
         val type: String,
         @SerializedName("virtual_item_type")
-        val virtualItemType: InventoryResponse.Item.VirtualItemType? = null,
+        val virtualItemType: VirtualItemType? = null,
         @SerializedName("virtual_prices")
         val virtualPrices: List<VirtualPrice> = emptyList()
     )
+    enum class VirtualItemType {
+        @SerializedName("consumable")
+        CONSUMABLE,
+        @SerializedName("non_consumable")
+        NON_CONSUMABLE,
+        @SerializedName("non_renewing_subscription")
+        NON_RENEWING_SUBSCRIPTION
+    }
 }

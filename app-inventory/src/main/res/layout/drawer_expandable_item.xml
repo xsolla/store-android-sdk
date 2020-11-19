@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layoutDescription="@xml/drawer_expandable_item_scene">
+
+    <View
+        android:id="@+id/background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <View
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/drawer_item_height"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/item_icon"
+        style="@style/Widget.Xsolla.Drawer.Item.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_store"
+        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintTop_toTopOf="@id/title"
+        app:layout_constraintBottom_toBottomOf="@id/title"/>
+
+    <TextView
+        android:id="@+id/item_text"
+        style="@style/Widget.Xsolla.Drawer.Item.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/drawer_item_store"
+        app:layout_constraintStart_toEndOf="@id/item_icon"
+        app:layout_constraintTop_toTopOf="@id/item_icon"
+        app:layout_constraintBottom_toBottomOf="@id/item_icon"
+        android:layout_marginStart="@dimen/drawer_item_icon_margin_end"/>
+
+        <ImageView
+            android:id="@+id/bgCartCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/item_text"
+            app:layout_constraintStart_toEndOf="@id/item_text"
+            app:layout_constraintTop_toTopOf="@id/item_text"
+            android:layout_marginStart="@dimen/drawer_cart_counter_margin_start_collapsed"
+            app:srcCompat="@drawable/bg_cart_counter" />
+
+        <TextView
+            android:id="@+id/textCartCounter"
+            style="@style/Widget.Xsolla.Drawer.Text.CartCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/bgCartCounter"
+            app:layout_constraintEnd_toEndOf="@+id/bgCartCounter"
+            app:layout_constraintStart_toStartOf="@+id/bgCartCounter"
+            app:layout_constraintTop_toTopOf="@+id/bgCartCounter" />
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.xsolla.android.inventorysdkexample.ui.view.DrawerInnerItem
+            android:id="@+id/itemVirtualItems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:text="@string/drawer_item_vi" />
+
+        <com.xsolla.android.inventorysdkexample.ui.view.DrawerInnerItem
+            android:id="@+id/itemVirtualCurrency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:text="@string/drawer_item_vc" />
+
+        <com.xsolla.android.inventorysdkexample.ui.view.DrawerInnerItem
+            android:id="@+id/itemMerchandise"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:text="@string/drawer_item_merchandise" />
+
+        <com.xsolla.android.inventorysdkexample.ui.view.DrawerInnerItem
+            android:id="@+id/itemCoupon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:text="@string/drawer_item_coupon" />
+
+        <com.xsolla.android.inventorysdkexample.ui.view.DrawerInnerItem
+            android:id="@+id/itemCart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:text="@string/drawer_item_cart" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_inventory">
+
+    <fragment
+        android:id="@+id/nav_inventory"
+        android:name="com.xsolla.android.inventorysdkexample.ui.fragments.store.InventoryFragment"
+        android:label=""
+        tools:layout="@layout/fragment_inventory" />
+
+    <fragment
+        android:id="@+id/fragment_consume"
+        android:name="com.xsolla.android.inventorysdkexample.ui.fragments.store.ConsumeFragment"
+        android:label=""
+        tools:layout="@layout/fragment_consume" />
+
+    <fragment
+        android:id="@+id/fragment_reset_password"
+        android:name="com.xsolla.android.inventorysdkexample.ui.fragments.login.ResetPasswordFragment"
+        tools:layout="@layout/fragmen_reset_password" />
+
+    <action
+        android:id="@+id/to_reset_password_fragment"
+        app:destination="@id/fragment_reset_password" />
+
+    <fragment
+        android:id="@+id/nav_redeem_coupon"
+        android:name="com.xsolla.android.inventorysdkexample.ui.fragments.store.RedeemCouponFragment"
+        tools:layout="@layout/fragment_redeem_coupon" />
+
+</navigation>
