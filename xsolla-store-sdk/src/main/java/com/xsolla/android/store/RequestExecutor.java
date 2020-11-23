@@ -2,7 +2,6 @@ package com.xsolla.android.store;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
@@ -12,6 +11,8 @@ import com.xsolla.android.store.entity.request.inventory.ConsumeItemBody;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
 import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
+import com.xsolla.android.store.entity.response.bundle.BundleItem;
+import com.xsolla.android.store.entity.response.bundle.BundleListResponse;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
 import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
@@ -27,14 +28,10 @@ import com.xsolla.android.store.entity.response.order.OrderResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import kotlin.Pair;
-
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -232,6 +229,27 @@ class RequestExecutor {
             @NotNull XStoreCallback<RewardsByCodeResponse> callback
     ) {
         storeApi.getCouponRewardsByCode(projectId, couponCode).enqueue(callback);
+    }
+
+    public void getBundleList(
+            @Nullable String locale,
+            @Nullable Integer limit,
+            @Nullable Integer offset,
+            @NotNull XStoreCallback<BundleListResponse> callback
+    ) {
+        storeApi.getBundleList(
+                projectId,
+                locale != null ? locale : "en",
+                limit != null ? limit : 50,
+                offset != null ? offset : 0
+        ).enqueue(callback);
+    }
+
+    public void getBundle(
+            @NotNull String bundleSku,
+            @NotNull XStoreCallback<BundleItem> callback
+    ) {
+        storeApi.getBundle(projectId, bundleSku).enqueue(callback);
     }
 
 }

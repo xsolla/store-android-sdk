@@ -1,9 +1,10 @@
 package com.xsolla.android.store.api;
 
-import com.google.gson.JsonObject;
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
 import com.xsolla.android.store.entity.request.coupon.RedeemCouponRequestBody;
 import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
+import com.xsolla.android.store.entity.response.bundle.BundleItem;
+import com.xsolla.android.store.entity.response.bundle.BundleListResponse;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
 import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
@@ -192,6 +193,20 @@ public interface StoreApi {
     Call<RewardsByCodeResponse> getCouponRewardsByCode(
             @Path("project_id") int projectId,
             @Path("coupon_code") String couponCode
+    );
+
+    @GET("api/v2/project/{project_id}/items/bundle")
+    Call<BundleListResponse> getBundleList(
+            @Path("project_id") int projectId,
+            @Query("locale") String locale,
+            @Query("limit") int limit,
+            @Query("offset") int offset
+    );
+
+    @GET("api/v2/project/{project_id}/items/bundle/sku/{sku}")
+    Call<BundleItem> getBundle(
+            @Path("project_id") int projectId,
+            @Path("sku") String bundleSku
     );
 
 }

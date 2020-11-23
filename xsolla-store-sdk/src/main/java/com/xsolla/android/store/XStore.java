@@ -2,12 +2,13 @@ package com.xsolla.android.store;
 
 import android.os.Build;
 
-import com.google.gson.GsonBuilder;
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
+import com.xsolla.android.store.entity.response.bundle.BundleItem;
+import com.xsolla.android.store.entity.response.bundle.BundleListResponse;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
 import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
@@ -483,6 +484,54 @@ public class XStore {
             @NotNull XStoreCallback<RewardsByCodeResponse> callback
     ) {
         getRequestExecutor().getCouponRewardsByCode(couponCode, callback);
+    }
+
+    /**
+     * Gets a specified bundle
+     *
+     * @param bundleSku             bundle SKU
+     * @param callback              status callback
+     * @see <a href="https://developers.xsolla.com/store-api/bundles/catalog/get-bundle">Store API Reference</a>
+     */
+    public static void getBundle(
+            @NotNull String bundleSku,
+            @NotNull XStoreCallback<BundleItem> callback
+    ) {
+        getRequestExecutor().getBundle(bundleSku, callback);
+    }
+
+    /**
+     * Gets a list of bundles for building a catalog
+     *
+     * <b>Note</b>. Now all projects have the limitation to the number of items that you can get in the response.
+     * The default and maximum value is 50 items per response. To manage the limitation, use limit offset fields.
+     *
+     * @param callback              status callback
+     * @see <a href="https://developers.xsolla.com/store-api/bundles/catalog/get-bundle-list">Store API Reference</a>
+     */
+    public static void getBundleList(@NotNull XStoreCallback<BundleListResponse> callback) {
+        getBundleList(null, null, null, callback);
+    }
+
+    /**
+     * Gets a list of bundles for building a catalog
+     *
+     * <b>Note</b>. Now all projects have the limitation to the number of items that you can get in the response.
+     * The default and maximum value is 50 items per response. To manage the limitation, use limit offset fields.
+     *
+     * @param locale                response language. Two-letter lowercase language code per ISO 639-1. Default: "en"
+     * @param limit                 field to manage the limitation. The default and maximum value is 50
+     * @param offset                field to manage the limitation. The default value is 0
+     * @param callback              status callback
+     * @see <a href="https://developers.xsolla.com/store-api/bundles/catalog/get-bundle-list">Store API Reference</a>
+     */
+    public static void getBundleList(
+            @Nullable String locale,
+            @Nullable Integer limit,
+            @Nullable Integer offset,
+            @NotNull XStoreCallback<BundleListResponse> callback
+    ) {
+        getRequestExecutor().getBundleList(locale, limit, offset, callback);
     }
 
 }
