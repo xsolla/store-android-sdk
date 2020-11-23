@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="xsolla_payments_redirect_scheme">xsolla</string>
+    <string name="xsolla_payments_redirect_scheme">xsollasdk</string>
     <string name="xsolla_payments_redirect_host">example.com</string>
     <string name="xsolla_payments_redirect_path_prefix">/standard</string>
 </resources>

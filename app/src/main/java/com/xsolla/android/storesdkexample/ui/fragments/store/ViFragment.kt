@@ -37,6 +37,10 @@ class ViFragment : BaseFragment() {
     private fun getInventory() {
         XStore.getInventory(object : XStoreCallback<InventoryResponse>() {
             override fun onSuccess(response: InventoryResponse) {
+                if (!isAdded) {
+                    return
+                }
+
                 val items = response.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
                 inventoryViewModel.inventory.value = items
                 getSubscriptions()
