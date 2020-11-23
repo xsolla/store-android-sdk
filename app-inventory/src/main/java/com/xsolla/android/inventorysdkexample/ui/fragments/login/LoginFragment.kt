@@ -8,6 +8,8 @@ import android.text.TextWatcher
 import com.xsolla.android.inventorysdkexample.BuildConfig
 import com.xsolla.android.inventorysdkexample.R
 import com.xsolla.android.inventorysdkexample.StoreActivity
+import com.xsolla.android.inventorysdkexample.TutorialActivity
+import com.xsolla.android.inventorysdkexample.data.local.PrefManager
 import com.xsolla.android.inventorysdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.inventorysdkexample.util.ViewUtils
 import com.xsolla.android.inventorysdkexample.util.setRateLimitedClickListener
@@ -47,6 +49,9 @@ class LoginFragment : BaseFragment() {
                 override fun onSuccess() {
                     val intent = Intent(requireActivity(), StoreActivity::class.java)
                     startActivity(intent)
+                    if (!PrefManager.getHideTutorial()) {
+                        startTutorial()
+                    }
                     activity?.finish()
                     ViewUtils.enable(v)
                 }
@@ -166,6 +171,9 @@ class LoginFragment : BaseFragment() {
         override fun onAuthSuccess() {
             val intent = Intent(requireActivity(), StoreActivity::class.java)
             startActivity(intent)
+            if (!PrefManager.getHideTutorial()) {
+                startTutorial()
+            }
             activity?.finish()
         }
 
@@ -192,6 +200,12 @@ class LoginFragment : BaseFragment() {
                 selectedSocialNetwork = SocialNetwork.valueOf(it)
             }
         }
+    }
+
+    private fun startTutorial() {
+        val intent = Intent(activity, TutorialActivity::class.java)
+        intent.putExtra(TutorialActivity.EXTRA_MANUAL_RUN, false)
+        startActivity(intent)
     }
 
 }

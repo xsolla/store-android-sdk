@@ -67,12 +67,19 @@
         app:item_icon="@drawable/ic_store"
         app:item_text="@string/drawer_item_coupon" />
 
-<!--    <com.xsolla.android.inventorysdkexample.ui.view.DrawerItem-->
-<!--        android:id="@+id/itemWebStore"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:item_icon="@drawable/ic_store"-->
-<!--        app:item_text="@string/drawer_item_webstore" />-->
+    <com.xsolla.android.inventorysdkexample.ui.view.DrawerItem
+        android:id="@+id/itemWebStore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:item_icon="@drawable/ic_webstore"
+        app:item_text="@string/drawer_item_webstore" />
+
+    <com.xsolla.android.inventorysdkexample.ui.view.DrawerItem
+        android:id="@+id/itemTutorial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:item_icon="@drawable/ic_tutorial"
+        app:item_text="@string/drawer_item_tutorial" />
 
     <com.xsolla.android.inventorysdkexample.ui.view.DrawerItem
         android:id="@+id/itemLogout"

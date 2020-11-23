@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -25,6 +26,7 @@ import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.inventorysdkexample.ui.vm.VmBalance
 import com.xsolla.android.inventorysdkexample.ui.vm.VmProfile
 import com.xsolla.android.inventorysdkexample.ui.vm.base.ViewModelFactory
+import com.xsolla.android.inventorysdkexample.util.extensions.openInBrowser
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.RefreshTokenCallback
 import com.xsolla.android.store.XStore
@@ -61,14 +63,6 @@ class StoreActivity : AppCompatActivity() {
         initNavController()
         initDrawer()
         initVirtualBalance()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
     }
 
     override fun onResume() {
@@ -148,10 +142,14 @@ class StoreActivity : AppCompatActivity() {
             navController.navigate(R.id.nav_redeem_coupon)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-//        itemWebStore.setOnClickListener {
-//
-//            drawerLayout.closeDrawer(GravityCompat.START)
-//        }
+        itemWebStore.setOnClickListener {
+            openWebStore()
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        itemTutorial.setOnClickListener {
+            startTutorial()
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
         itemLogout.setOnClickListener {
             XLogin.logout()
             startLogin()
@@ -199,5 +197,16 @@ class StoreActivity : AppCompatActivity() {
     private fun showSnack(message: String) {
         val rootView: View = findViewById(android.R.id.content)
         Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show()
+    }
+
+    private fun openWebStore() =
+            "https://livedemo.xsolla.com/sdk-account-linking-android/?token=${XLogin.token}&remember_me=false"
+            .toUri()
+            .openInBrowser(this)
+
+    private fun startTutorial() {
+        val intent = Intent(this, TutorialActivity::class.java)
+        intent.putExtra(TutorialActivity.EXTRA_MANUAL_RUN, true)
+        startActivity(intent)
     }
 }
