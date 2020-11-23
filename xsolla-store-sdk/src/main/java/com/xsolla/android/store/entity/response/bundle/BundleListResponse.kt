@@ -12,7 +12,7 @@ data class BundleItem(
     val name: String,
     val groups: List<Group> = emptyList(),
     val description: String,
-    val attributes: Any, // TODO
+    val attributes: List<Any> = emptyList(),
     val type: String,
     @SerializedName("bundle_type")
     val bundleType: String,
