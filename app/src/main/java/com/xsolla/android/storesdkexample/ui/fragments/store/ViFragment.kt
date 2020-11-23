@@ -81,6 +81,10 @@ class ViFragment : BaseFragment() {
     private fun getVirtualItems(inventory: List<InventoryResponse.Item>, bundles: List<VirtualItemUiEntity>) {
         XStore.getVirtualItems(object : XStoreCallback<VirtualItemsResponse>() {
             override fun onSuccess(response: VirtualItemsResponse) {
+                if (!isAdded) {
+                    return
+                }
+
                 val items = response.items
 
                 val bundleGroup = bundles.firstOrNull()?.groups?.firstOrNull()?.name
@@ -104,8 +108,14 @@ class ViFragment : BaseFragment() {
 
                 groups.add(0, "ALL")
 
-                packOfItems.add(bundles)
-                groups.add(bundleGroup)
+                if (!groups.contains(bundleGroup)) {
+                    packOfItems.add(bundles)
+                    groups.add(bundleGroup)
+                } else if (groups.contains(bundleGroup)) {
+                    val updatedItems = packOfItems[groups.indexOf(bundleGroup)].toMutableList()
+                    updatedItems.addAll(bundles)
+                    packOfItems[groups.indexOf(bundleGroup)] = updatedItems
+                }
                 rootView.viewPager.adapter = ViPagerAdapter(this@ViFragment, packOfItems)
 
                 TabLayoutMediator(tabLayout, viewPager) { tab, position ->
