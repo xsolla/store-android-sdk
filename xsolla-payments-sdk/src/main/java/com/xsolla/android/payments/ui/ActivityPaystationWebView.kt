@@ -42,8 +42,13 @@ class ActivityPaystationWebView : ActivityPaystation() {
         webview.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(webView: WebView, url: String): Boolean {
                 val urlLower = url.toLowerCase()
+
+                if (url.startsWith(getString(R.string.xsolla_payments_redirect_scheme)))
+                    return false
+
                 if (!(urlLower.startsWith("https:") || urlLower.startsWith("http:")))
                     return true
+
                 return false
             }
 
