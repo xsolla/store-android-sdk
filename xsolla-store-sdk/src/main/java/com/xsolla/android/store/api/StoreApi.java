@@ -14,6 +14,7 @@ import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.RedeemCouponResponse;
 import com.xsolla.android.store.entity.response.items.RewardsByCodeResponse;
+import com.xsolla.android.store.entity.response.items.RewardsByPromocodeResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
@@ -213,6 +214,12 @@ public interface StoreApi {
     Call<CartResponse> redeemPromocode(
             @Path("project_id") int projectId,
             @Body RedeemPromocodeRequestBody body
+    );
+
+    @GET("api/v2/project/{project_id}/promocode/code/{promocode_code}/rewards")
+    Call<RewardsByPromocodeResponse> getPromocodeRewardByCode(
+            @Path("project_id") int projectId,
+            @Path("promocode_code") String promocode
     );
 
 }

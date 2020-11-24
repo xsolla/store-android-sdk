@@ -17,6 +17,7 @@ import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.RedeemCouponResponse;
 import com.xsolla.android.store.entity.response.items.RewardsByCodeResponse;
+import com.xsolla.android.store.entity.response.items.RewardsByPromocodeResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
@@ -551,6 +552,21 @@ public class XStore {
             @NotNull XStoreCallback<CartResponse> callback
     ) {
         getRequestExecutor().redeemPromocode(promocode, cartId, selectedUnitItems, callback);
+    }
+
+    /**
+     * Gets promo code rewards by its code. Can be used to allow users to choose one of many items as a bonus.
+     * The usual case is choosing a DRM if the promo code contains a game as a bonus (type=unit)
+     *
+     * @param promocode            unique code of promocode. Contains letters and numbers
+     * @param callback             status callback
+     * @see <a href="https://developers.xsolla.com/store-api/promotions/promo-codes/get-promo-code-rewards-by-code">Store API Reference</a>
+     */
+    public static void getPromocodeRewardsByCode(
+            @NotNull String promocode,
+            @NotNull XStoreCallback<RewardsByPromocodeResponse> callback
+    ) {
+        getRequestExecutor().getPromocodeRewardByCode(promocode, callback);
     }
 
 }
