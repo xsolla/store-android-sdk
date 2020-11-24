@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.17.0] - Store SDK - 2020-11-24
+
+### Added
+
+- Bundles functionality.
+
+
+## [0.15.1] - Payments SDK - 2020-11-24
+
+### Fixed
+
+- Back to game redirects.
+
+
 ## [0.16.0] - Store SDK - 2020-11-16
 
 ### Added
