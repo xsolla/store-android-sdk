@@ -9,3 +9,14 @@ data class RedeemCouponRequestBody(
     @SerializedName("selected_unit_items")
     val selectedUnitItems: JsonObject? = null
 )
+
+data class RedeemPromocodeRequestBody(
+    @SerializedName("coupon_code")
+    val promocode: String,
+    @SerializedName("selected_unit_items")
+    val selectedUnitItems: JsonObject? = null,
+    @SerializedName("cart")
+    val cart: CartIdRequest = CartIdRequest("current")
+)
+
+data class CartIdRequest(val id: String = "current")

@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.xsolla.android.store.entity.request.cart.FillCartWithItemsRequestBody;
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
 import com.xsolla.android.store.entity.request.coupon.RedeemCouponRequestBody;
+import com.xsolla.android.store.entity.request.coupon.RedeemPromocodeRequestBody;
 import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
@@ -206,6 +207,12 @@ public interface StoreApi {
     Call<RewardsByCodeResponse> getCouponRewardsByCode(
             @Path("project_id") int projectId,
             @Path("coupon_code") String couponCode
+    );
+
+    @POST("api/v2/project/{project_id}/promocode/redeem")
+    Call<CartResponse> redeemPromocode(
+            @Path("project_id") int projectId,
+            @Body RedeemPromocodeRequestBody body
     );
 
 }

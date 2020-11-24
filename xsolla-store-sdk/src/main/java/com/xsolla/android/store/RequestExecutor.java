@@ -2,14 +2,15 @@ package com.xsolla.android.store;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
 import com.xsolla.android.store.entity.request.cart.FillCartItem;
 import com.xsolla.android.store.entity.request.cart.FillCartWithItemsRequestBody;
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
+import com.xsolla.android.store.entity.request.coupon.CartIdRequest;
 import com.xsolla.android.store.entity.request.coupon.RedeemCouponRequestBody;
+import com.xsolla.android.store.entity.request.coupon.RedeemPromocodeRequestBody;
 import com.xsolla.android.store.entity.request.inventory.ConsumeItemBody;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
 import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
@@ -38,9 +39,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 import kotlin.Pair;
-
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 
 class RequestExecutor {
 
@@ -235,10 +233,7 @@ class RequestExecutor {
             @Nullable Pair<String, String> selectedUnitItems,
             @NotNull XStoreCallback<RedeemCouponResponse> callback
     ) {
-        JsonObject unitItems = selectedUnitItems != null ? new JsonObject() : null;
-        if (unitItems != null) {
-            unitItems.addProperty(selectedUnitItems.getFirst(), selectedUnitItems.getSecond());
-        }
+        JsonObject unitItems = createJsonObjectFromPair(selectedUnitItems);
 
         storeApi.redeemCoupon(
                 projectId,
@@ -253,4 +248,27 @@ class RequestExecutor {
         storeApi.getCouponRewardsByCode(projectId, couponCode).enqueue(callback);
     }
 
+    public void redeemPromocode(
+            @NotNull String promocode,
+            @NotNull String cartId,
+            @Nullable Pair<String, String> selectedUnitItems,
+            @NotNull XStoreCallback<CartResponse> callback
+    ) {
+        JsonObject unitItems = createJsonObjectFromPair(selectedUnitItems);
+
+        storeApi.redeemPromocode(
+                projectId,
+                new RedeemPromocodeRequestBody(promocode, unitItems, new CartIdRequest(cartId))
+        ).enqueue(callback);
+    }
+
+    @Nullable
+    private JsonObject createJsonObjectFromPair(@Nullable Pair<String, String> pair) {
+        JsonObject jsonObject = pair != null ? new JsonObject() : null;
+        if (jsonObject != null) {
+            jsonObject.addProperty(pair.getFirst(), pair.getSecond());
+        }
+
+        return jsonObject;
+    }
 }

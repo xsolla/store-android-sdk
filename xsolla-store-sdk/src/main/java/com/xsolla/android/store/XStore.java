@@ -519,4 +519,38 @@ public class XStore {
         getRequestExecutor().getCouponRewardsByCode(couponCode, callback);
     }
 
+    /**
+     * Redeems a code of promo code.
+     * After redeeming a promo code, the user will get free items and/or the price of cart will be decreased.
+     *
+     * @param promocode            unique code of promocode. Contains letters and numbers
+     * @param callback             status callback
+     * @see <a href="https://developers.xsolla.com/store-api/promotions/promo-codes/redeem-promo-code">Store API Reference</a>
+     */
+    public static void redeemPromocode(
+            @NotNull String promocode,
+            @NotNull XStoreCallback<CartResponse> callback
+    ) {
+        getRequestExecutor().redeemPromocode(promocode, "current", null, callback);
+    }
+
+    /**
+     * Redeems a code of promo code.
+     * After redeeming a promo code, the user will get free items and/or the price of cart will be decreased.
+     *
+     * @param promocode            unique code of promocode. Contains letters and numbers
+     * @param cartId               cart id. Default value is "current"
+     * @param selectedUnitItems    the reward that is selected by a user. Object key is an SKU of a unit, and value is an SKU of one of the items in a unit
+     * @param callback             status callback
+     * @see <a href="https://developers.xsolla.com/store-api/promotions/promo-codes/redeem-promo-code">Store API Reference</a>
+     */
+    public static void redeemPromocode(
+            @NotNull String promocode,
+            @NotNull String cartId,
+            @Nullable Pair<String, String> selectedUnitItems,
+            @NotNull XStoreCallback<CartResponse> callback
+    ) {
+        getRequestExecutor().redeemPromocode(promocode, cartId, selectedUnitItems, callback);
+    }
+
 }
