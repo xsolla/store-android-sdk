@@ -140,6 +140,13 @@ public interface StoreApi {
             @Body FillCartWithItemsRequestBody items
     );
 
+    @PUT("api/v2/project/{project_id}/cart/{cart_id}/fill")
+    Call<CartResponse> fillSpecificCartWithItems(
+            @Path("project_id") int projectId,
+            @Path("cart_id") String cartId,
+            @Body FillCartWithItemsRequestBody items
+    );
+
     @GET("api/v2/project/{project_id}/user/inventory/items")
     Call<InventoryResponse> getInventory(@Path("project_id") int projectId);
 

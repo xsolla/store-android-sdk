@@ -315,6 +315,23 @@ public class XStore {
     }
 
     /**
+     * Fills the specific cart with items.
+     * If the cart already has an item, the existing item will be replaced by the given value
+     *
+     * @param cartId   cart id
+     * @param items    list of items
+     * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/cart-payment/cart/cart-fill-by-id">Store API Reference</a>
+     */
+    public static void fillSpecificCartWithItems(
+            @NotNull String cartId,
+            @NotNull List<FillCartItem> items,
+            @NotNull XStoreCallback<CartResponse> callback
+    ) {
+        getRequestExecutor().fillSpecificCartWithItems(cartId, items, callback);
+    }
+
+    /**
      * Get a current user’s inventory
      *
      * @param callback status callback

@@ -162,6 +162,14 @@ class RequestExecutor {
         storeApi.fillCartWithItems(projectId, new FillCartWithItemsRequestBody(items)).enqueue(callback);
     }
 
+    public void fillSpecificCartWithItems(
+            @NotNull String cartId,
+            @NotNull List<FillCartItem> items,
+            @NotNull XStoreCallback<CartResponse> callback
+    ) {
+        storeApi.fillSpecificCartWithItems(projectId, cartId, new FillCartWithItemsRequestBody(items)).enqueue(callback);
+    }
+
     public void getInventory(XStoreCallback<InventoryResponse> callback) {
         storeApi.getInventory(projectId).enqueue(callback);
     }
