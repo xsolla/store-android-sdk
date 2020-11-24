@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.xsolla.android.login.api.LoginApi
 import com.xsolla.android.login.callback.AuthCallback
 import com.xsolla.android.login.callback.CheckUserAgeCallback
+import com.xsolla.android.login.callback.CreateCodeForLinkingAccountCallback
 import com.xsolla.android.login.callback.DeleteCurrentUserAvatarCallback
 import com.xsolla.android.login.callback.DeleteCurrentUserPhoneCallback
 import com.xsolla.android.login.callback.FinishSocialCallback
@@ -49,6 +50,7 @@ import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder
 import com.xsolla.android.login.entity.request.UserFriendsRequestType
 import com.xsolla.android.login.entity.response.AuthResponse
 import com.xsolla.android.login.entity.response.CheckUserAgeResponse
+import com.xsolla.android.login.entity.response.CreateCodeForLinkingAccountResponse
 import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
 import com.xsolla.android.login.entity.response.OauthAuthResponse
 import com.xsolla.android.login.entity.response.PhoneResponse
@@ -1045,6 +1047,36 @@ class XLogin private constructor(
                     }
 
                     override fun onFailure(call: Call<CheckUserAgeResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
+         * Creates the code for linking the platform account to the existing main account
+         * when the user logs in to the game via a gaming console.
+         *
+         * @param callback         status callback
+         * @see <a href="https://developers.xsolla.com/login-api/methods/users/create-code-for-linking-accounts">Login API Reference</a>
+         */
+        fun createCodeForLinkingAccount(callback: CreateCodeForLinkingAccountCallback) {
+            getInstance().loginApi
+                .createCodeForLinkingAccounts("Bearer $token")
+                .enqueue(object : Callback<CreateCodeForLinkingAccountResponse> {
+                    override fun onResponse(call: Call<CreateCodeForLinkingAccountResponse>, response: Response<CreateCodeForLinkingAccountResponse>) {
+                        if (response.isSuccessful) {
+                            val data = response.body()
+                            if (data != null) {
+                                callback.onSuccess(data.code)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<CreateCodeForLinkingAccountResponse>, t: Throwable) {
                         callback.onError(t, null)
                     }
                 })

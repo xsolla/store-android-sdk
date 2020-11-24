@@ -17,6 +17,7 @@ import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromClientRe
 import com.xsolla.android.login.entity.response.AuthResponse
 import com.xsolla.android.login.entity.response.AuthSocialResponse
 import com.xsolla.android.login.entity.response.CheckUserAgeResponse
+import com.xsolla.android.login.entity.response.CreateCodeForLinkingAccountResponse
 import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse
 import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
 import com.xsolla.android.login.entity.response.OauthAuthResponse
@@ -260,4 +261,9 @@ interface LoginApi {
 
     @POST("api/users/age/check")
     fun checkUserAge(@Body body: CheckUserAgeBody): Call<CheckUserAgeResponse>
+
+    @POST("api/users/account/code")
+    fun createCodeForLinkingAccounts(
+        @Header("authorization") authHeader: String
+    ): Call<CreateCodeForLinkingAccountResponse>
 }
