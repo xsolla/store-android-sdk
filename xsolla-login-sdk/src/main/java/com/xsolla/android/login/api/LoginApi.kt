@@ -3,6 +3,7 @@ package com.xsolla.android.login.api
 import com.xsolla.android.login.entity.common.UserAttribute
 import com.xsolla.android.login.entity.request.AuthUserBody
 import com.xsolla.android.login.entity.request.AuthUserSocialBody
+import com.xsolla.android.login.entity.request.CheckUserAgeBody
 import com.xsolla.android.login.entity.request.GetUsersAttributesFromClientRequest
 import com.xsolla.android.login.entity.request.OauthAuthUserBody
 import com.xsolla.android.login.entity.request.OauthGetCodeBySocialTokenBody
@@ -15,6 +16,7 @@ import com.xsolla.android.login.entity.request.UpdateUserPhoneBody
 import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromClientRequest
 import com.xsolla.android.login.entity.response.AuthResponse
 import com.xsolla.android.login.entity.response.AuthSocialResponse
+import com.xsolla.android.login.entity.response.CheckUserAgeResponse
 import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse
 import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
 import com.xsolla.android.login.entity.response.OauthAuthResponse
@@ -255,4 +257,7 @@ interface LoginApi {
         @Query("projectId") projectId: String,
         @Body resetPasswordBody: ResetPasswordBody
     ): Call<Void>
+
+    @POST("api/users/age/check")
+    fun checkUserAge(@Body body: CheckUserAgeBody): Call<CheckUserAgeResponse>
 }

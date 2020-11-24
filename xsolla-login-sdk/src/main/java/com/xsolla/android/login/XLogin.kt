@@ -8,6 +8,7 @@ import androidx.annotation.IntRange
 import androidx.fragment.app.Fragment
 import com.xsolla.android.login.api.LoginApi
 import com.xsolla.android.login.callback.AuthCallback
+import com.xsolla.android.login.callback.CheckUserAgeCallback
 import com.xsolla.android.login.callback.DeleteCurrentUserAvatarCallback
 import com.xsolla.android.login.callback.DeleteCurrentUserPhoneCallback
 import com.xsolla.android.login.callback.FinishSocialCallback
@@ -32,6 +33,7 @@ import com.xsolla.android.login.callback.UpdateUsersAttributesCallback
 import com.xsolla.android.login.callback.UploadCurrentUserAvatarCallback
 import com.xsolla.android.login.entity.common.UserAttribute
 import com.xsolla.android.login.entity.request.AuthUserBody
+import com.xsolla.android.login.entity.request.CheckUserAgeBody
 import com.xsolla.android.login.entity.request.GetUsersAttributesFromClientRequest
 import com.xsolla.android.login.entity.request.OauthAuthUserBody
 import com.xsolla.android.login.entity.request.OauthRegisterUserBody
@@ -46,6 +48,7 @@ import com.xsolla.android.login.entity.request.UserFriendsRequestSortBy
 import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder
 import com.xsolla.android.login.entity.request.UserFriendsRequestType
 import com.xsolla.android.login.entity.response.AuthResponse
+import com.xsolla.android.login.entity.response.CheckUserAgeResponse
 import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
 import com.xsolla.android.login.entity.response.OauthAuthResponse
 import com.xsolla.android.login.entity.response.PhoneResponse
@@ -1011,6 +1014,37 @@ class XLogin private constructor(
                     }
 
                     override fun onFailure(call: Call<Void>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
+         * Checks user’s age for a particular region. The age requirements depend on the region.
+         * Service determines the user’s location by the IP address.
+         *
+         * @param birthday         user's birth date in the 'YYYY-MM-DD' format
+         * @param callback         status callback
+         * @see <a href="https://developers.xsolla.com/login-api/methods/users/check-users-age/">Login API Reference</a>
+         */
+        fun checkUserAge(birthday: String, callback: CheckUserAgeCallback) {
+            getInstance().loginApi
+                .checkUserAge(CheckUserAgeBody(getInstance().projectId, birthday))
+                .enqueue(object : Callback<CheckUserAgeResponse> {
+                    override fun onResponse(call: Call<CheckUserAgeResponse>, response: Response<CheckUserAgeResponse>) {
+                        if (response.isSuccessful) {
+                            val data = response.body()
+                            if (data != null) {
+                                callback.onSuccess(data.accepted)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<CheckUserAgeResponse>, t: Throwable) {
                         callback.onError(t, null)
                     }
                 })

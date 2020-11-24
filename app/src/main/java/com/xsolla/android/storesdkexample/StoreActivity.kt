@@ -23,7 +23,9 @@ import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.login.XLogin
+import com.xsolla.android.login.callback.CheckUserAgeCallback
 import com.xsolla.android.login.callback.RefreshTokenCallback
+import com.xsolla.android.login.entity.response.CheckUserAgeResponse
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
