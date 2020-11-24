@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
+import com.xsolla.android.store.entity.request.cart.FillCartItem;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
@@ -27,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.List;
 
 import kotlin.Pair;
 import okhttp3.Interceptor;
@@ -295,6 +297,21 @@ public class XStore {
      */
     public static void deleteItemFromCurrentCart(String itemSku, XStoreCallback<Void> callback) {
         getRequestExecutor().deleteItemFromCurrentCart(itemSku, callback);
+    }
+
+    /**
+     * Fills the cart with items.
+     * If the cart already has an item, the existing item will be replaced by the given value
+     *
+     * @param items    list of items
+     * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/cart-payment/cart/cart-fill">Store API Reference</a>
+     */
+    public static void fillCartWithItems(
+            @NotNull List<FillCartItem> items,
+            @NotNull XStoreCallback<CartResponse> callback
+    ) {
+        getRequestExecutor().fillCartWithItems(items, callback);
     }
 
     /**

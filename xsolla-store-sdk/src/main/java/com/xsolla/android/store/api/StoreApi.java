@@ -1,6 +1,7 @@
 package com.xsolla.android.store.api;
 
 import com.google.gson.JsonObject;
+import com.xsolla.android.store.entity.request.cart.FillCartWithItemsRequestBody;
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
 import com.xsolla.android.store.entity.request.coupon.RedeemCouponRequestBody;
 import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
@@ -131,6 +132,12 @@ public interface StoreApi {
     Call<Void> deleteItemFromCurrentCart(
             @Path("project_id") int projectId,
             @Path("item_sku") String itemSku
+    );
+
+    @PUT("api/v2/project/{project_id}/cart/fill")
+    Call<CartResponse> fillCartWithItems(
+            @Path("project_id") int projectId,
+            @Body FillCartWithItemsRequestBody items
     );
 
     @GET("api/v2/project/{project_id}/user/inventory/items")

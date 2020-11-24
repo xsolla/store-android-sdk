@@ -6,6 +6,8 @@ import com.google.gson.JsonParser;
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
+import com.xsolla.android.store.entity.request.cart.FillCartItem;
+import com.xsolla.android.store.entity.request.cart.FillCartWithItemsRequestBody;
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
 import com.xsolla.android.store.entity.request.coupon.RedeemCouponRequestBody;
 import com.xsolla.android.store.entity.request.inventory.ConsumeItemBody;
@@ -32,6 +34,8 @@ import okhttp3.RequestBody;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 import kotlin.Pair;
 
@@ -149,6 +153,13 @@ class RequestExecutor {
 
     public void deleteItemFromCurrentCart(String itemSku, XStoreCallback<Void> callback) {
         storeApi.deleteItemFromCurrentCart(projectId, itemSku).enqueue(callback);
+    }
+
+    public void fillCartWithItems(
+            @NotNull List<FillCartItem> items,
+            @NotNull XStoreCallback<CartResponse> callback
+    ) {
+        storeApi.fillCartWithItems(projectId, new FillCartWithItemsRequestBody(items)).enqueue(callback);
     }
 
     public void getInventory(XStoreCallback<InventoryResponse> callback) {
