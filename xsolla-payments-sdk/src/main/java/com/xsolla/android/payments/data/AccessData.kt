@@ -40,7 +40,7 @@ class AccessData(
         if (externalId != null) {
             settings.put("external_id", externalId)
         }
-        settings.put("xsolla_product_tag", "SDK-payments_ver-${BuildConfig.VERSION_NAME}_integr-simplified_engine-android_enginever-${Build.VERSION.RELEASE}")
+        settings.put("xsolla_product_tag", "SDK-payments_ver-${BuildConfig.VERSION_NAME}_integr-serverless_engine-android_enginever-${Build.VERSION.RELEASE}")
         root.put("settings", settings)
 
         if (virtualItems != null) {
@@ -73,7 +73,7 @@ class AccessData(
         private var virtualItems: List<VirtualItem>? = null
 
         /**
-         * Set Project ID from Publisher Account. Simplified integration must be enabled for this project.
+         * Set Project ID from Publisher Account. Serverless integration must be enabled for this project.
          */
         fun projectId(projectId: Int) = apply { this.projectId = projectId }
 

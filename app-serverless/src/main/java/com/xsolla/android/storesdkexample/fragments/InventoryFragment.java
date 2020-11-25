@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.xsolla.android.simplifiedexample.R;
+import com.xsolla.android.serverlessexample.R;
 import com.xsolla.android.storesdkexample.adapter.InventoryAdapter;
 import com.xsolla.android.storesdkexample.data.store.Store;
 import com.xsolla.android.storesdkexample.fragments.base.BaseFragment;

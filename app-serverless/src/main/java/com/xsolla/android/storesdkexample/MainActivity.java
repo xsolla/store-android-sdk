@@ -17,7 +17,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.xsolla.android.simplifiedexample.R;
+import com.xsolla.android.serverlessexample.R;
 import com.xsolla.android.storesdkexample.data.db.DB;
 import com.xsolla.android.storesdkexample.data.store.Catalog;
 import com.xsolla.android.storesdkexample.fragments.MainFragment;

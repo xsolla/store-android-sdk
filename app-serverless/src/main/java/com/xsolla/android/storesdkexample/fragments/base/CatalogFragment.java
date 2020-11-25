@@ -2,7 +2,7 @@ package com.xsolla.android.storesdkexample.fragments.base;
 
 import androidx.appcompat.widget.Toolbar;
 
-import com.xsolla.android.simplifiedexample.R;
+import com.xsolla.android.serverlessexample.R;
 
 public abstract class CatalogFragment extends BaseFragment {
 

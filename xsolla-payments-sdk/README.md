@@ -10,7 +10,7 @@ The following integration options are available:
 
     **Info:** Currently, Xsolla provides integration with PlayFab services.
 
-*   Serverless or **simplified integration** is suitable for partners who want to use Xsolla Pay Station for in-game purchases, but their games have no server part and game logic is implemented on the client side.
+*   **Serverless** integration is suitable for partners who want to use Xsolla Pay Station for in-game purchases, but their games have no server part and game logic is implemented on the client side.
 
 See the [wikis](https://github.com/xsolla/store-android-sdk/wiki) to learn how to integrate Xsolla products using Payments Android SDK.
 

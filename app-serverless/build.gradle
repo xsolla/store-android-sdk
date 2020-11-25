@@ -7,7 +7,7 @@ android {
     compileSdkVersion sdk_compile
 
     defaultConfig {
-        applicationId "com.xsolla.android.simplifiedexample"
+        applicationId "com.xsolla.android.serverlessexample"
         minSdkVersion sdk_min
         targetSdkVersion sdk_target
         versionCode sample_app_version_code

@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.xsolla.android.simplifiedexample.R;
+import com.xsolla.android.serverlessexample.R;
 import com.xsolla.android.storesdkexample.data.store.Store;
 import com.xsolla.android.storesdkexample.listener.CreatePaystationIntentListener;
 import com.xsolla.android.storesdkexample.util.ViewUtils;
@@ -22,19 +22,19 @@ import org.jetbrains.annotations.NotNull;
 import java.math.RoundingMode;
 import java.util.List;
 
-public class VirtualCurrencyAdapter extends RecyclerView.Adapter<VirtualCurrencyAdapter.ViewHolder> {
+public class VirtualItemsAdapter extends RecyclerView.Adapter<VirtualItemsAdapter.ViewHolder> {
 
     private Context context;
-    private List<Store.VirtualCurrencyPack> items;
+    private List<Store.VirtualItem> items;
     private CreatePaystationIntentListener createPaystationIntentListener;
 
-    public VirtualCurrencyAdapter(
+    public VirtualItemsAdapter(
             Context context,
-            List<Store.VirtualCurrencyPack> virtualCurrencyPacks,
+            List<Store.VirtualItem> items,
             CreatePaystationIntentListener createPaystationIntentListener
     ) {
         this.context = context;
-        this.items = virtualCurrencyPacks;
+        this.items = items;
         this.createPaystationIntentListener = createPaystationIntentListener;
     }
 
@@ -60,6 +60,7 @@ public class VirtualCurrencyAdapter extends RecyclerView.Adapter<VirtualCurrency
         ImageView itemIcon;
         TextView itemName;
         TextView itemPrice;
+        TextView itemExpiration;
         ImageView buyButton;
 
         public ViewHolder(@NonNull View itemView) {
@@ -67,10 +68,11 @@ public class VirtualCurrencyAdapter extends RecyclerView.Adapter<VirtualCurrency
             itemIcon = itemView.findViewById(R.id.item_icon);
             itemName = itemView.findViewById(R.id.item_name);
             itemPrice = itemView.findViewById(R.id.item_price);
+            itemExpiration = itemView.findViewById(R.id.item_expiration);
             buyButton = itemView.findViewById(R.id.buy_button);
         }
 
-        private void bind(final Store.VirtualCurrencyPack item) {
+        private void bind(final Store.VirtualItem item) {
             Glide.with(itemView).load(item.getImageUrl()).into(itemIcon);
             itemName.setText(item.getName());
 
@@ -93,7 +95,7 @@ public class VirtualCurrencyAdapter extends RecyclerView.Adapter<VirtualCurrency
             }
         }
 
-        private void initForRealCurrency(Store.VirtualCurrencyPack item) {
+        private void initForRealCurrency(Store.VirtualItem item) {
             buyButton.setOnClickListener(v -> {
                 ViewUtils.disable(v);
                 Store.createPaystationIntent(context, item.getSku(), new Store.CreatePaystationIntentCallback() {
@@ -112,12 +114,11 @@ public class VirtualCurrencyAdapter extends RecyclerView.Adapter<VirtualCurrency
             });
         }
 
-        private void initForVirtualCurrency(Store.VirtualCurrencyPack item) {
+        private void initForVirtualCurrency(Store.VirtualItem item) {
             Store.Price price = item.getVirtualPrices().get(0);
             buyButton.setOnClickListener(v -> {
             });
         }
-
     }
 
 }

@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.xsolla.android.simplifiedexample.R;
+import com.xsolla.android.serverlessexample.R;
 import com.xsolla.android.storesdkexample.fragments.MainFragment;
 
 public abstract class BaseFragment extends Fragment {

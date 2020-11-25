@@ -27,7 +27,7 @@ build:
     paths:
       - app/build/outputs/
       - app-playfab/build/outputs/
-      - app-simplified/build/outputs/
+      - app-serverless/build/outputs/
   cache:
     key: ${CI_PROJECT_ID}
     paths:
@@ -62,7 +62,7 @@ generateDebugApp:
   script:
     - mv app/build/outputs/apk/debug/app-debug.apk ./artifacts/SampleApp-Default.apk
     - mv app-playfab/build/outputs/apk/debug/app-playfab-debug.apk ./artifacts/SampleApp-Playfab.apk
-    - mv app-simplified/build/outputs/apk/debug/app-simplified-debug.apk ./artifacts/SampleApp-Simplified.apk
+    - mv app-serverless/build/outputs/apk/debug/app-serverless-debug.apk ./artifacts/SampleApp-Serverless.apk
   artifacts:
     expire_in: 2 hours
     paths:
