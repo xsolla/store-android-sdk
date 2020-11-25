@@ -23,6 +23,7 @@ import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
 import com.xsolla.android.login.entity.response.OauthAuthResponse
 import com.xsolla.android.login.entity.response.OauthGetCodeBySocialTokenResponse
 import com.xsolla.android.login.entity.response.OauthLinkForSocialAuthResponse
+import com.xsolla.android.login.entity.response.OauthViaProviderProjectResponse
 import com.xsolla.android.login.entity.response.PhoneResponse
 import com.xsolla.android.login.entity.response.PictureResponse
 import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse
@@ -239,6 +240,15 @@ interface LoginApi {
         @Query("response_type") responseType: String,
         @Query("scope") scope: String
     ): Call<OauthLinkForSocialAuthResponse>
+
+    @FormUrlEncoded
+    @POST("api/oauth2/cross/{platformProviderName}/login")
+    fun authViaProviderProject(
+        @Path("platformProviderName") platformProviderName: String,
+        @Query("client_id") clientId: Int,
+        @Query("scope") scope: String,
+        @Field("access_token") accessToken: String
+    ): Call<OauthViaProviderProjectResponse>
 
     @POST("/api/oauth2/social/{providerName}/login_with_token")
     fun oauthGetCodeBySocialToken(

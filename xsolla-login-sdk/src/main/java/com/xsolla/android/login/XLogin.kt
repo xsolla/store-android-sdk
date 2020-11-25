@@ -8,6 +8,7 @@ import androidx.annotation.IntRange
 import androidx.fragment.app.Fragment
 import com.xsolla.android.login.api.LoginApi
 import com.xsolla.android.login.callback.AuthCallback
+import com.xsolla.android.login.callback.AuthViaProviderProjectCallback
 import com.xsolla.android.login.callback.CheckUserAgeCallback
 import com.xsolla.android.login.callback.CreateCodeForLinkingAccountCallback
 import com.xsolla.android.login.callback.DeleteCurrentUserAvatarCallback
@@ -53,6 +54,7 @@ import com.xsolla.android.login.entity.response.CheckUserAgeResponse
 import com.xsolla.android.login.entity.response.CreateCodeForLinkingAccountResponse
 import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
 import com.xsolla.android.login.entity.response.OauthAuthResponse
+import com.xsolla.android.login.entity.response.OauthViaProviderProjectResponse
 import com.xsolla.android.login.entity.response.PhoneResponse
 import com.xsolla.android.login.entity.response.PictureResponse
 import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse
@@ -339,6 +341,43 @@ class XLogin private constructor(
                     }
 
                     override fun onFailure(call: Call<OauthAuthResponse?>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
+         * Calls to exchange the provider JWT by the client JWT.
+         * Provider project — a common project, in which your users authenticate, and the received JWT is then used for authentication in other projects (i.e. games).
+         * Client project — a project, in which your users authenticate automatically, as a result of authentication. They do not need to enter their data.
+         *
+         * @param platformProviderName         name of the provider project. To enable platforms, please contact your Account Manager
+         * @param scope
+         * @param callback                     status callback
+         * @see <a href="https://developers.xsolla.com/login-api/methods/oauth-20/authentication-via-provider-project">Login API Reference</a>
+         */
+        fun oauthAuthenticationViaProviderProject(
+            platformProviderName: String,
+            scope: String,
+            callback: AuthViaProviderProjectCallback
+        ) {
+            getInstance().loginApi
+                .authViaProviderProject(platformProviderName, getInstance().oauthClientId, scope, token!!)
+                .enqueue(object : Callback<OauthViaProviderProjectResponse> {
+                    override fun onResponse(call: Call<OauthViaProviderProjectResponse>, response: Response<OauthViaProviderProjectResponse>) {
+                        if (response.isSuccessful) {
+                            val data = response.body()
+                            if (data != null) {
+                                callback.onSuccess(data)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<OauthViaProviderProjectResponse>, t: Throwable) {
                         callback.onError(t, null)
                     }
                 })
