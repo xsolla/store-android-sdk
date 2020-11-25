@@ -72,12 +72,10 @@ import com.xsolla.android.login.ui.ActivityAuthWebView
 import com.xsolla.android.login.unity.UnityProxyActivity
 import okhttp3.Interceptor
 import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
-import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
