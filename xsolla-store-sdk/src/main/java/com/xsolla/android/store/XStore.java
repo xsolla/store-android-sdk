@@ -339,7 +339,6 @@ public class XStore {
         getRequestExecutor().consumeItem(sku, quantity, instanceId, callback);
     }
 
-
     /**
      * Get an items groups list for building a catalog
      *

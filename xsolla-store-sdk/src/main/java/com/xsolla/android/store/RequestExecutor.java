@@ -166,7 +166,6 @@ class RequestExecutor {
         storeApi.consumeItem(projectId, requestBody).enqueue(callback);
     }
 
-
     public void getItemsGroups(XStoreCallback<ItemsGroupsResponse> callback) {
         storeApi.getItemsGroups(projectId).enqueue(callback);
     }

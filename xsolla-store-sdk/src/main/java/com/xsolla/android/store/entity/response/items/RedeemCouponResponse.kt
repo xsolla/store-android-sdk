@@ -13,19 +13,19 @@ class RedeemCouponResponse(val items: List<Item> = emptyList()) {
             val description: String? = null,
             val groups: List<Group> = emptyList(),
             @SerializedName("image_url")
-        val imageUrl: String? = null,
+            val imageUrl: String? = null,
             @SerializedName("inventory_options")
-        val inventoryOption: InventoryOption? = null,
+            val inventoryOption: InventoryOption? = null,
             @SerializedName("is_free")
-        val isFree: Boolean,
+            val isFree: Boolean,
             val name: String? = null,
             val price: Price? = null,
             val quantity: Int,
             val sku: String,
             val type: String,
             @SerializedName("virtual_item_type")
-        val virtualItemType: InventoryResponse.Item.VirtualItemType? = null,
+            val virtualItemType: InventoryResponse.Item.VirtualItemType? = null,
             @SerializedName("virtual_prices")
-        val virtualPrices: List<VirtualPrice> = emptyList()
+            val virtualPrices: List<VirtualPrice> = emptyList()
     )
 }
