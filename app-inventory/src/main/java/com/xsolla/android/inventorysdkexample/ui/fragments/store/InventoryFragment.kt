@@ -13,7 +13,6 @@ import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.inventorysdkexample.R
 import com.xsolla.android.inventorysdkexample.adapter.InventoryAdapter
-import com.xsolla.android.inventorysdkexample.listener.ConsumeListener
 import com.xsolla.android.inventorysdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.inventorysdkexample.ui.vm.VmInventory
 import kotlinx.android.synthetic.main.fragment_inventory.*
@@ -107,4 +106,10 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
             }
         })
     }
+}
+
+interface ConsumeListener {
+    fun onConsume(item: InventoryResponse.Item)
+    fun onSuccess()
+    fun onFailure(errorMessage: String)
 }

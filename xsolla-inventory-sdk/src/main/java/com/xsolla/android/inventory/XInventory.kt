@@ -17,6 +17,8 @@ class XInventory private constructor(
 
     companion object {
 
+        private const val INVENTORY_HOST = "https://store.xsolla.com"
+
         private var instance: XInventory? = null
 
         private fun getInstance(): XInventory {
@@ -51,7 +53,7 @@ class XInventory private constructor(
             httpClient.addInterceptor(interceptor)
 
             val retrofit = Retrofit.Builder()
-                    .baseUrl("https://store.xsolla.com")
+                    .baseUrl(INVENTORY_HOST)
                     .client(httpClient.build())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
@@ -59,7 +61,7 @@ class XInventory private constructor(
 
             val inventoryApi: InventoryApi = retrofit.create(InventoryApi::class.java)
 
-            val requestExecutor: RequestExecutor = RequestExecutor(projectId, inventoryApi)
+            val requestExecutor = RequestExecutor(projectId, inventoryApi)
             instance = XInventory(requestExecutor)
         }
 

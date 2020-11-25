@@ -13,28 +13,41 @@
         android:adjustViewBounds="true"
         tools:src="@drawable/page1" />
 
-    <TextView
-        android:id="@+id/tutorialTitle"
-        style="?attr/textAppearanceHeadline2"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="34dp"
-        android:layout_marginTop="59dp"
-        android:layout_marginRight="34dp"
-        android:textAlignment="center"
-        android:textColor="@color/white_color"
-        tools:text="@string/tutorial_1_title" />
+        android:layout_marginTop="59dp" >
 
-    <TextView
-        android:id="@+id/tutorialText"
-        style="?attr/textAppearanceBody1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="20dp"
-        android:textAlignment="center"
-        android:textColor="@color/light_state_gray_color"
-        tools:text="@string/tutorial_1_text" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tutorialTitle"
+                style="?attr/textAppearanceHeadline2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="34dp"
+                android:layout_marginRight="34dp"
+                android:textAlignment="center"
+                android:textColor="@color/white_color"
+                tools:text="@string/tutorial_1_title" />
+
+            <TextView
+                android:id="@+id/tutorialText"
+                style="?attr/textAppearanceBody1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="20dp"
+                android:textAlignment="center"
+                android:textColor="@color/light_state_gray_color"
+                tools:text="@string/tutorial_1_text" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
