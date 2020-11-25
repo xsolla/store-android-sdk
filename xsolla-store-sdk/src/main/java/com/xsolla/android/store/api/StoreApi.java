@@ -5,6 +5,9 @@ import com.xsolla.android.store.entity.request.coupon.RedeemCouponRequestBody;
 import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
 import com.xsolla.android.store.entity.response.cart.CartResponse;
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse;
+import com.xsolla.android.store.entity.response.inventory.InventoryResponse;
+import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse;
+import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse;
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.RedeemCouponResponse;
 import com.xsolla.android.store.entity.response.items.RewardsByCodeResponse;
@@ -17,6 +20,7 @@ import com.xsolla.android.store.entity.response.payment.CreateOrderResponse;
 
 import java.util.List;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -126,6 +130,21 @@ public interface StoreApi {
     Call<Void> deleteItemFromCurrentCart(
             @Path("project_id") int projectId,
             @Path("item_sku") String itemSku
+    );
+
+    @GET("api/v2/project/{project_id}/user/inventory/items")
+    Call<InventoryResponse> getInventory(@Path("project_id") int projectId);
+
+    @GET("api/v2/project/{project_id}/user/virtual_currency_balance")
+    Call<VirtualBalanceResponse> getVirtualBalance(@Path("project_id") int projectId);
+
+    @GET("api/v2/project/{project_id}/user/subscriptions")
+    Call<SubscriptionsResponse> getSubscriptions(@Path("project_id") int projectId);
+
+    @POST("api/v2/project/{project_id}/user/inventory/item/consume")
+    Call<Void> consumeItem(
+            @Path("project_id") int projectId,
+            @Body RequestBody body
     );
 
     @GET("api/v2/project/{project_id}/items/groups")
