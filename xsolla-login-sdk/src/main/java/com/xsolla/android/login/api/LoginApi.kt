@@ -18,6 +18,7 @@ import com.xsolla.android.login.entity.response.AuthResponse
 import com.xsolla.android.login.entity.response.AuthSocialResponse
 import com.xsolla.android.login.entity.response.CheckUserAgeResponse
 import com.xsolla.android.login.entity.response.CreateCodeForLinkingAccountResponse
+import com.xsolla.android.login.entity.response.EmailResponse
 import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse
 import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
 import com.xsolla.android.login.entity.response.OauthAuthResponse
@@ -104,6 +105,9 @@ interface LoginApi {
 
     @GET("api/users/me")
     fun getCurrentUserDetails(@Header("authorization") authHeader: String): Call<UserDetailsResponse>
+
+    @GET("api/users/me/email")
+    fun getCurrentUserEmail(@Header("authorization") authHeader: String): Call<EmailResponse>
 
     @PATCH("api/users/me")
     fun updateCurrentUserDetails(

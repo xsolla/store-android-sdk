@@ -15,6 +15,7 @@ import com.xsolla.android.login.callback.DeleteCurrentUserAvatarCallback
 import com.xsolla.android.login.callback.DeleteCurrentUserPhoneCallback
 import com.xsolla.android.login.callback.FinishSocialCallback
 import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
+import com.xsolla.android.login.callback.GetCurrentUserEmailCallback
 import com.xsolla.android.login.callback.GetCurrentUserFriendsCallback
 import com.xsolla.android.login.callback.GetCurrentUserPhoneCallback
 import com.xsolla.android.login.callback.GetSocialFriendsCallback
@@ -52,6 +53,7 @@ import com.xsolla.android.login.entity.request.UserFriendsRequestType
 import com.xsolla.android.login.entity.response.AuthResponse
 import com.xsolla.android.login.entity.response.CheckUserAgeResponse
 import com.xsolla.android.login.entity.response.CreateCodeForLinkingAccountResponse
+import com.xsolla.android.login.entity.response.EmailResponse
 import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
 import com.xsolla.android.login.entity.response.OauthAuthResponse
 import com.xsolla.android.login.entity.response.OauthViaProviderProjectResponse
@@ -733,6 +735,35 @@ class XLogin private constructor(
                     }
 
                     override fun onFailure(call: Call<UserDetailsResponse?>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
+         * Gets the email of the authenticated user by JWT
+         *
+         * @param callback    callback with data
+         * @see <a href="https://developers.xsolla.com/user-account-api/user-email/getusersmeemail">User Account API Reference</a>
+         */
+        fun getCurrentUserEmail(callback: GetCurrentUserEmailCallback) {
+            getInstance().loginApi
+                .getCurrentUserEmail("Bearer $token")
+                .enqueue(object : Callback<EmailResponse> {
+                    override fun onResponse(call: Call<EmailResponse>, response: Response<EmailResponse>) {
+                        if (response.isSuccessful) {
+                            val data = response.body()
+                            if (data != null) {
+                                callback.onSuccess(data.email)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<EmailResponse>, t: Throwable) {
                         callback.onError(t, null)
                     }
                 })
