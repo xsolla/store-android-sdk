@@ -7,33 +7,7 @@ import android.os.Build
 import androidx.annotation.IntRange
 import androidx.fragment.app.Fragment
 import com.xsolla.android.login.api.LoginApi
-import com.xsolla.android.login.callback.AuthCallback
-import com.xsolla.android.login.callback.AuthViaProviderProjectCallback
-import com.xsolla.android.login.callback.CheckUserAgeCallback
-import com.xsolla.android.login.callback.CreateCodeForLinkingAccountCallback
-import com.xsolla.android.login.callback.DeleteCurrentUserAvatarCallback
-import com.xsolla.android.login.callback.DeleteCurrentUserPhoneCallback
-import com.xsolla.android.login.callback.FinishSocialCallback
-import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
-import com.xsolla.android.login.callback.GetCurrentUserEmailCallback
-import com.xsolla.android.login.callback.GetCurrentUserFriendsCallback
-import com.xsolla.android.login.callback.GetCurrentUserPhoneCallback
-import com.xsolla.android.login.callback.GetSocialFriendsCallback
-import com.xsolla.android.login.callback.GetUserPublicInfoCallback
-import com.xsolla.android.login.callback.GetUsersAttributesCallback
-import com.xsolla.android.login.callback.LinkedSocialNetworksCallback
-import com.xsolla.android.login.callback.RefreshTokenCallback
-import com.xsolla.android.login.callback.RegisterCallback
-import com.xsolla.android.login.callback.ResetPasswordCallback
-import com.xsolla.android.login.callback.SearchUsersByNicknameCallback
-import com.xsolla.android.login.callback.StartSocialCallback
-import com.xsolla.android.login.callback.UnlinkSocialNetworkCallback
-import com.xsolla.android.login.callback.UpdateCurrentUserDetailsCallback
-import com.xsolla.android.login.callback.UpdateCurrentUserFriendsCallback
-import com.xsolla.android.login.callback.UpdateCurrentUserPhoneCallback
-import com.xsolla.android.login.callback.UpdateSocialFriendsCallback
-import com.xsolla.android.login.callback.UpdateUsersAttributesCallback
-import com.xsolla.android.login.callback.UploadCurrentUserAvatarCallback
+import com.xsolla.android.login.callback.*
 import com.xsolla.android.login.entity.common.UserAttribute
 import com.xsolla.android.login.entity.request.AuthUserBody
 import com.xsolla.android.login.entity.request.CheckUserAgeBody
@@ -50,20 +24,7 @@ import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromClientRe
 import com.xsolla.android.login.entity.request.UserFriendsRequestSortBy
 import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder
 import com.xsolla.android.login.entity.request.UserFriendsRequestType
-import com.xsolla.android.login.entity.response.AuthResponse
-import com.xsolla.android.login.entity.response.CheckUserAgeResponse
-import com.xsolla.android.login.entity.response.CreateCodeForLinkingAccountResponse
-import com.xsolla.android.login.entity.response.EmailResponse
-import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
-import com.xsolla.android.login.entity.response.OauthAuthResponse
-import com.xsolla.android.login.entity.response.OauthViaProviderProjectResponse
-import com.xsolla.android.login.entity.response.PhoneResponse
-import com.xsolla.android.login.entity.response.PictureResponse
-import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse
-import com.xsolla.android.login.entity.response.SocialFriendsResponse
-import com.xsolla.android.login.entity.response.UserDetailsResponse
-import com.xsolla.android.login.entity.response.UserFriendsResponse
-import com.xsolla.android.login.entity.response.UserPublicInfoResponse
+import com.xsolla.android.login.entity.response.*
 import com.xsolla.android.login.jwt.JWT
 import com.xsolla.android.login.social.FriendsPlatform
 import com.xsolla.android.login.social.LoginSocial
@@ -686,6 +647,36 @@ class XLogin private constructor(
             intent.putExtra(ActivityAuthWebView.ARG_CALLBACK_URL, getInstance().callbackUrl)
             intent.putExtra(ActivityAuthWebView.ARG_TOKEN, token)
             return intent
+        }
+
+        /**
+         * Links the social network, which is used by the player for authentication, to the user account.
+         *
+         * @param locale                 region in the <language code>_<country code> format
+         * @param callback               status callback
+         * @see [User Account API Reference](https://developers.xsolla.com/user-account-api/social-networks/link-social-network-to-account)
+         */
+        fun getLinksForSocialAuth(locale: String, callback: GetLinksForSocialAuthCallback) {
+            getInstance().loginApi
+                    .getLinksForSocialAuth("Bearer $token", locale)
+                    .enqueue(object : Callback<List<LinkForSocialAuthWithProvider>> {
+                        override fun onResponse(call: Call<List<LinkForSocialAuthWithProvider>>, response: Response<List<LinkForSocialAuthWithProvider>>) {
+                            if (response.isSuccessful) {
+                                val data = response.body()
+                                if (data != null) {
+                                    callback.onSuccess(data)
+                                } else {
+                                    callback.onError(null, "Empty response")
+                                }
+                            } else {
+                                callback.onError(null, getErrorMessage(response.errorBody()))
+                            }
+                        }
+
+                        override fun onFailure(call: Call<List<LinkForSocialAuthWithProvider>>, t: Throwable) {
+                            callback.onError(t, null)
+                        }
+                    })
         }
 
         fun getUserPublicInfo(userId: String, callback: GetUserPublicInfoCallback) {

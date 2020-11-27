@@ -14,24 +14,7 @@ import com.xsolla.android.login.entity.request.UpdateUserDetailsBody
 import com.xsolla.android.login.entity.request.UpdateUserFriendsRequest
 import com.xsolla.android.login.entity.request.UpdateUserPhoneBody
 import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromClientRequest
-import com.xsolla.android.login.entity.response.AuthResponse
-import com.xsolla.android.login.entity.response.AuthSocialResponse
-import com.xsolla.android.login.entity.response.CheckUserAgeResponse
-import com.xsolla.android.login.entity.response.CreateCodeForLinkingAccountResponse
-import com.xsolla.android.login.entity.response.EmailResponse
-import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse
-import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
-import com.xsolla.android.login.entity.response.OauthAuthResponse
-import com.xsolla.android.login.entity.response.OauthGetCodeBySocialTokenResponse
-import com.xsolla.android.login.entity.response.OauthLinkForSocialAuthResponse
-import com.xsolla.android.login.entity.response.OauthViaProviderProjectResponse
-import com.xsolla.android.login.entity.response.PhoneResponse
-import com.xsolla.android.login.entity.response.PictureResponse
-import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse
-import com.xsolla.android.login.entity.response.SocialFriendsResponse
-import com.xsolla.android.login.entity.response.UserDetailsResponse
-import com.xsolla.android.login.entity.response.UserFriendsResponse
-import com.xsolla.android.login.entity.response.UserPublicInfoResponse
+import com.xsolla.android.login.entity.response.*
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -173,6 +156,12 @@ interface LoginApi {
         @Path("providerName") providerName: String,
         @Query("login_url") urlRedirect: String
     ): Call<String>
+
+    @GET("api/users/me/login_urls")
+    fun getLinksForSocialAuth(
+        @Header("authorization") authHeader: String,
+        @Query("locale") locale: String
+    ): Call<List<LinkForSocialAuthWithProvider>>
 
     @DELETE("/api/users/me/social_providers/{providerName}")
     fun unlinkSocialNetwork(
