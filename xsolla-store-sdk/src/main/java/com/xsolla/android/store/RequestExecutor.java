@@ -154,14 +154,14 @@ class RequestExecutor {
         storeApi.deleteItemFromCurrentCart(projectId, itemSku).enqueue(callback);
     }
 
-    public void fillCartWithItems(
+    public void fillCurrentCartWithItems(
             @NotNull List<FillCartItem> items,
             @NotNull XStoreCallback<CartResponse> callback
     ) {
         storeApi.fillCartWithItems(projectId, new FillCartWithItemsRequestBody(items)).enqueue(callback);
     }
 
-    public void fillSpecificCartWithItems(
+    public void fillCartByIdWithItems(
             @NotNull String cartId,
             @NotNull List<FillCartItem> items,
             @NotNull XStoreCallback<CartResponse> callback

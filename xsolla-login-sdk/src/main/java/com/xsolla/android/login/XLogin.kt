@@ -359,7 +359,7 @@ class XLogin private constructor(
          * @param callback                     status callback
          * @see <a href="https://developers.xsolla.com/login-api/methods/oauth-20/authentication-via-provider-project">Login API Reference</a>
          */
-        fun oauthAuthenticationViaProviderProject(
+        fun oauthAuthenticateViaProviderProject(
             platformProviderName: String,
             scope: String,
             providerAccessToken: String,

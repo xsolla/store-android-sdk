@@ -308,11 +308,11 @@ public class XStore {
      * @param callback status callback
      * @see <a href="https://developers.xsolla.com/store-api/cart-payment/cart/cart-fill">Store API Reference</a>
      */
-    public static void fillCartWithItems(
+    public static void fillCurrentCartWithItems(
             @NotNull List<FillCartItem> items,
             @NotNull XStoreCallback<CartResponse> callback
     ) {
-        getRequestExecutor().fillCartWithItems(items, callback);
+        getRequestExecutor().fillCurrentCartWithItems(items, callback);
     }
 
     /**
@@ -324,12 +324,12 @@ public class XStore {
      * @param callback status callback
      * @see <a href="https://developers.xsolla.com/store-api/cart-payment/cart/cart-fill-by-id">Store API Reference</a>
      */
-    public static void fillSpecificCartWithItems(
+    public static void fillCartByIdWithItems(
             @NotNull String cartId,
             @NotNull List<FillCartItem> items,
             @NotNull XStoreCallback<CartResponse> callback
     ) {
-        getRequestExecutor().fillSpecificCartWithItems(cartId, items, callback);
+        getRequestExecutor().fillCartByIdWithItems(cartId, items, callback);
     }
 
     /**
