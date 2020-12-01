@@ -37,6 +37,7 @@ data class VirtualPrice(
 
     data class CalculatedPrice(
         val amount: BigDecimal? = null,
+        @SerializedName("amount_without_discount")
         val amountWithoutDiscount: BigDecimal? = null
     ) : Serializable
 }
