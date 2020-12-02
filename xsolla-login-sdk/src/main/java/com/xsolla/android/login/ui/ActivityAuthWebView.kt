@@ -22,7 +22,7 @@ class ActivityAuthWebView : AppCompatActivity() {
 
         const val RESULT = "result"
 
-        private const val USER_AGENT = "Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19"
+        private const val USER_AGENT = "Mozilla/5.0 (Linux; Android 10; Redmi Note 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Mobile Safari/537.36"
     }
 
     private lateinit var callbackUrl: String
