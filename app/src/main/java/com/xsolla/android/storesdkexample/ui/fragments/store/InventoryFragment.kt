@@ -1,6 +1,7 @@
 package com.xsolla.android.storesdkexample.ui.fragments.store
 
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -42,9 +43,13 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
         viewModel.inventory.observe(viewLifecycleOwner) {
             inventoryAdapter.items = it
             inventoryAdapter.notifyDataSetChanged()
+
+            setupPlaceholderVisibility()
         }
         viewModel.subscriptions.observe(viewLifecycleOwner) {
             inventoryAdapter.setSubscriptions(it)
+
+            setupPlaceholderVisibility()
         }
 
         getItems()
@@ -108,5 +113,10 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
                 showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
         })
+    }
+
+    private fun setupPlaceholderVisibility() {
+        noItemsPlaceholder.isVisible = viewModel.inventorySize == 0
+        recycler.isVisible = viewModel.inventorySize != 0
     }
 }

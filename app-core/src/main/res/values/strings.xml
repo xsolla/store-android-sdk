@@ -42,6 +42,8 @@
     <string name="drawer_item_account">Account</string>
     <string name="drawer_item_logout">Log out</string>
 
+    <string name="inventory_placeholder">Your items appear here</string>
+
     <string name="cart_fragment_checkout_button">Go to Checkout</string>
     <string name="cart_fragment_continue_button">Back to store</string>
     <string name="cart_fragment_clear_button">Clear All</string>
