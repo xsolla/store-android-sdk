@@ -1,6 +1,7 @@
 package com.xsolla.android.inventorysdkexample.ui.fragments.tutorial
 
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +37,7 @@ class TutorialPageFragment : Fragment() {
                     else -> throw IllegalArgumentException()
                 }
         )
+        tutorialText.movementMethod = LinkMovementMethod.getInstance()
         tutorialText.setText(
                 when (page) {
                     1 -> R.string.tutorial_1_text

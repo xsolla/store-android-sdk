@@ -15,7 +15,7 @@
         Buy items in the web store
     </string>
     <string name="tutorial_3_text">
-         1. Go to the web store\n2. Log in to the same account as you used for the demo.\n3. Buy items. You can use our test cards.\nItems you purchased will be available in the inventory.
+         1. Go to the web store\n2. Log in to the same account as you used for the demo.\n3. Buy items. You can use our <a href="https://developers.xsolla.com/doc/pay-station/references/test-cards/">test cards</a>.\nItems you purchased will be available in the inventory.
     </string>
     <string name="tutorial_4_title">
         Redeem a coupon code

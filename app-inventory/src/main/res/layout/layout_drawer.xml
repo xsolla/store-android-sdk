@@ -64,7 +64,7 @@
         android:id="@+id/itemRedeemCoupon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:item_icon="@drawable/ic_store"
+        app:item_icon="@drawable/ic_redeem_coupon"
         app:item_text="@string/drawer_item_coupon" />
 
     <com.xsolla.android.inventorysdkexample.ui.view.DrawerItem

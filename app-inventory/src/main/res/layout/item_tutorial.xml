@@ -16,12 +16,12 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="59dp" >
+        android:layout_marginTop="59dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tutorialTitle"
@@ -44,6 +44,7 @@
                 android:layout_marginRight="20dp"
                 android:textAlignment="center"
                 android:textColor="@color/light_state_gray_color"
+                android:textColorLink="@color/light_state_gray_color"
                 tools:text="@string/tutorial_1_text" />
 
         </LinearLayout>
