@@ -63,6 +63,7 @@ generateDebugApp:
     - mv app/build/outputs/apk/debug/app-debug.apk ./artifacts/SampleApp-Default.apk
     - mv app-playfab/build/outputs/apk/debug/app-playfab-debug.apk ./artifacts/SampleApp-Playfab.apk
     - mv app-simplified/build/outputs/apk/debug/app-simplified-debug.apk ./artifacts/SampleApp-Simplified.apk
+    - mv app-inventory/build/outputs/apk/debug/app-inventory-debug.apk ./artifacts/SampleApp-Inventory.apk
   artifacts:
     expire_in: 2 hours
     paths:
