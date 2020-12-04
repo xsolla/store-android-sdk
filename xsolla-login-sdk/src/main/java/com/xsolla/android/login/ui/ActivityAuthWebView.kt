@@ -43,7 +43,7 @@ class ActivityAuthWebView : AppCompatActivity() {
             )
         }
 
-        configureWebView()
+        configureWebView(url)
         if (token == null) {
             webview.loadUrl(url)
         } else {
@@ -63,9 +63,11 @@ class ActivityAuthWebView : AppCompatActivity() {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun configureWebView() {
+    private fun configureWebView(url: String) {
         webview.settings.javaScriptEnabled = true
-        webview.settings.userAgentString = USER_AGENT
+        if (url.contains("google", ignoreCase = true)) {
+            webview.settings.userAgentString = USER_AGENT
+        }
         if (!webview.isInEditMode) {
             webview.settings.builtInZoomControls = true
             webview.settings.setSupportZoom(true)
