@@ -1,6 +1,6 @@
 package com.xsolla.android.storesdkexample.listener
 
-import com.xsolla.android.store.entity.response.inventory.InventoryResponse
+import com.xsolla.android.inventory.entity.response.InventoryResponse
 
 interface ConsumeListener {
     fun onConsume(item: InventoryResponse.Item)

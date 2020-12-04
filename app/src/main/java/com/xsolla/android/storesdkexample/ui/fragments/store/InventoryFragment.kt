@@ -6,17 +6,18 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
-import com.xsolla.android.store.entity.response.inventory.InventoryResponse
-import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse
+import com.xsolla.android.inventory.XInventory
+import com.xsolla.android.inventory.callback.ConsumeItemCallback
+import com.xsolla.android.inventory.callback.GetInventoryCallback
+import com.xsolla.android.inventory.callback.GetSubscriptionsCallback
+import com.xsolla.android.inventory.entity.response.InventoryResponse
+import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.InventoryAdapter
 import com.xsolla.android.storesdkexample.listener.ConsumeListener
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmInventory
-import kotlinx.android.synthetic.main.fragment_inventory.goToStoreButton
-import kotlinx.android.synthetic.main.fragment_inventory.recycler
+import kotlinx.android.synthetic.main.fragment_inventory.*
 
 class InventoryFragment : BaseFragment(), ConsumeListener {
 
@@ -51,26 +52,26 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
     }
 
     private fun getItems() {
-        XStore.getInventory(object : XStoreCallback<InventoryResponse>() {
-            override fun onSuccess(response: InventoryResponse) {
-                val virtualItems = response.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
+        XInventory.getInventory(object : GetInventoryCallback {
+            override fun onSuccess(data: InventoryResponse) {
+                val virtualItems = data.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
                 viewModel.inventory.value = virtualItems
             }
 
-            override fun onFailure(errorMessage: String) {
-                showSnack(errorMessage)
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
         })
     }
 
     private fun getSubscriptions() {
-        XStore.getSubscriptions(object : XStoreCallback<SubscriptionsResponse>() {
-            override fun onSuccess(response: SubscriptionsResponse) {
-                viewModel.subscriptions.value = response.items
+        XInventory.getSubscriptions(object : GetSubscriptionsCallback {
+            override fun onSuccess(data: SubscriptionsResponse) {
+                viewModel.subscriptions.value = data.items
             }
 
-            override fun onFailure(errorMessage: String) {
-                showSnack(errorMessage)
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
         })
     }
@@ -88,23 +89,23 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
     }
 
     private fun consume(item: InventoryResponse.Item) {
-        XStore.consumeItem(item.sku, 1, null, object : XStoreCallback<Void>() {
-            override fun onSuccess(response: Void?) {
-                XStore.getInventory(object : XStoreCallback<InventoryResponse>() {
-                    override fun onSuccess(response: InventoryResponse) {
-                        inventoryAdapter.items = response.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
+        XInventory.consumeItem(item.sku!!, 1, null, object : ConsumeItemCallback {
+            override fun onSuccess() {
+                XInventory.getInventory(object : GetInventoryCallback {
+                    override fun onSuccess(data: InventoryResponse) {
+                        inventoryAdapter.items = data.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
                         inventoryAdapter.notifyDataSetChanged()
                         showSnack("Item consumed")
                     }
 
-                    override fun onFailure(errorMessage: String) {
-                        showSnack(errorMessage)
+                    override fun onError(throwable: Throwable?, errorMessage: String?) {
+                        showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
                     }
                 })
             }
 
-            override fun onFailure(errorMessage: String) {
-                showSnack(errorMessage)
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
         })
     }

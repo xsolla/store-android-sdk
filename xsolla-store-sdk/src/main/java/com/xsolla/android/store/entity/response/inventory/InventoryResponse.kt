@@ -9,20 +9,20 @@ data class InventoryResponse(val items: List<Item> = emptyList()) {
 
     @Parcelize
     data class Item(
-        @SerializedName("instance_id")
-        val instanceId: String? = null,
-        val sku: String? = null,
-        val type: Type? = null,
-        val name: String? = null,
-        val quantity: Long,
-        val description: String? = null,
-        @SerializedName("image_url")
-        val imageUrl: String? = null,
-        val groups: List<Group> = emptyList(),
-        @SerializedName("remaining_uses")
-        val remainingUses: Long,
-        @SerializedName("virtual_item_type")
-        val virtualItemType: VirtualItemType? = null
+            @SerializedName("instance_id")
+            val instanceId: String? = null,
+            val sku: String? = null,
+            val type: Type? = null,
+            val name: String? = null,
+            val quantity: Long,
+            val description: String? = null,
+            @SerializedName("image_url")
+            val imageUrl: String? = null,
+            val groups: List<Group> = emptyList(),
+            @SerializedName("remaining_uses")
+            val remainingUses: Long,
+            @SerializedName("virtual_item_type")
+            val virtualItemType: VirtualItemType? = null
     ) : Parcelable {
         enum class Type {
             @SerializedName("virtual_good")

@@ -1,0 +1,66 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
+android {
+    compileSdkVersion sdk_compile
+
+    defaultConfig {
+        applicationId "com.xsolla.android.inventorysdkexample"
+        minSdkVersion sdk_min
+        targetSdkVersion sdk_target
+        versionCode sample_app_version_code
+        versionName sample_app_version_name
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary true
+
+        buildConfigField 'int', 'PROJECT_ID', '58917' // Replace to your Project ID
+        buildConfigField 'String', 'LOGIN_ID', '"026201e3-7e40-11ea-a85b-42010aa80004"' // Replace to your project's Login ID
+        buildConfigField 'boolean', 'WITH_LOGOUT', 'false'
+        buildConfigField 'boolean', 'USE_OAUTH', 'true'
+        buildConfigField 'int', 'OAUTH_CLIENT_ID', '57'
+
+        buildConfigField "String", "VERSION_NAME", "\"$versionName\""
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField 'boolean', 'IS_SANDBOX', 'false'
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField 'boolean', 'IS_SANDBOX', 'true'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+}
+
+dependencies {
+    implementation project(":app-core")
+
+    implementation project(":xsolla-login-sdk")
+    // Uncomment to implement native auth
+//    implementation project(":xsolla-login-sdk-facebook")
+//    implementation project(":xsolla-login-sdk-google")
+    implementation project(":xsolla-store-sdk") // only for coupons
+    implementation project(":xsolla-inventory-sdk")
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+}

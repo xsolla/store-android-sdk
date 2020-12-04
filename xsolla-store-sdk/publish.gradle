@@ -18,8 +18,8 @@ afterEvaluate {
                 version = android.defaultConfig.versionName
 
                 pom {
-                    name = 'Xsolla Login Android SDK'
-                    description = 'Xsolla Login Android SDK is used to integrate Xsolla Login, a single sign-on tool that uses API methods to authenticate and secure user passwords. This creates a seamless one-click registration experience players can use for fast and safe transactions across all of your games.'
+                    name = 'Xsolla Store Android SDK'
+                    description = 'Xsolla Store Android SDK is used to integrate Xsolla Store, a comprehensive e-store solution for partners that supports various monetization options'
                     url = 'https://github.com/xsolla/store-android-sdk'
                     organization {
                         name = 'Xsolla'

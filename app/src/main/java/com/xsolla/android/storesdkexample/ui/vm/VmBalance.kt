@@ -2,22 +2,21 @@ package com.xsolla.android.storesdkexample.ui.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
-import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse
+import com.xsolla.android.inventory.XInventory
+import com.xsolla.android.inventory.callback.GetVirtualBalanceCallback
+import com.xsolla.android.inventory.entity.response.VirtualBalanceResponse
 
 class VmBalance : ViewModel() {
 
     val virtualBalance = MutableLiveData<List<VirtualBalanceResponse.Item>>(listOf())
 
     fun updateVirtualBalance() {
-        XStore.getVirtualBalance(object : XStoreCallback<VirtualBalanceResponse>() {
-            override fun onSuccess(response: VirtualBalanceResponse) {
-                virtualBalance.value = response.items
+        XInventory.getVirtualBalance(object : GetVirtualBalanceCallback {
+            override fun onSuccess(data: VirtualBalanceResponse) {
+                virtualBalance.value = data.items
             }
 
-            override fun onFailure(errorMessage: String) {
-
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
             }
         })
     }

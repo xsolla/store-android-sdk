@@ -4,9 +4,10 @@ import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
-import com.xsolla.android.store.entity.response.inventory.InventoryResponse
+import com.xsolla.android.inventory.XInventory
+import com.xsolla.android.inventory.callback.ConsumeItemCallback
+import com.xsolla.android.inventory.callback.GetInventoryCallback
+import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.util.ViewUtils
@@ -39,11 +40,11 @@ class ConsumeFragment : BaseFragment() {
                     ViewUtils.enable(v)
                     return@setOnClickListener
                 }
-                XStore.consumeItem(item.sku, quantity, null, object : XStoreCallback<Void>() {
-                    override fun onSuccess(response: Void?) {
-                        XStore.getInventory(object : XStoreCallback<InventoryResponse>() {
-                            override fun onSuccess(response: InventoryResponse) {
-                                response.items
+                XInventory.consumeItem(item.sku!!, quantity, null, object : ConsumeItemCallback {
+                    override fun onSuccess() {
+                        XInventory.getInventory(object : GetInventoryCallback{
+                            override fun onSuccess(data: InventoryResponse) {
+                                data.items
                                         .find { it.sku == item.sku }
                                         ?.quantity
                                         ?.let { quantity -> updateQuantity(quantity) }
@@ -57,18 +58,19 @@ class ConsumeFragment : BaseFragment() {
                                 ViewUtils.enable(v)
                             }
 
-                            override fun onFailure(errorMessage: String) {
-                                showSnack(errorMessage)
+                            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                                showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
                                 ViewUtils.enable(v)
                             }
 
                         })
                     }
 
-                    override fun onFailure(errorMessage: String) {
-                        showSnack(errorMessage)
+                    override fun onError(throwable: Throwable?, errorMessage: String?) {
+                        showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
                         ViewUtils.enable(v)
                     }
+
                 })
             }
         }

@@ -54,6 +54,7 @@ dependencies {
 //    implementation project(":xsolla-login-sdk-facebook")
 //    implementation project(":xsolla-login-sdk-google")
     implementation project(":xsolla-store-sdk")
+    implementation project(":xsolla-inventory-sdk")
     implementation project(":xsolla-payments-sdk")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
