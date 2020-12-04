@@ -4,6 +4,7 @@ You can use the Xsolla Android SDK to integrate Xsolla products with apps based 
 
 *   Xsolla Login Android  SDK
 *   Xsolla Store Android SDK
+*   Xsolla Inventory Android SDK
 *   Xsolla Payments Android SDK
 
 ## System Requirements
