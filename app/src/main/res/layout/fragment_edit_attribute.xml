@@ -82,12 +82,14 @@
     <Button
         android:id="@+id/removeDiscardButton"
         style="@style/Widget.Xsolla.TextButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:gravity="start|center_vertical"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:text="@string/character_edit_attribute_remove_button"
         android:textColor="@color/light_state_gray_color"
         app:layout_constraintStart_toStartOf="@id/attributeValueLayout"
+        app:layout_constraintEnd_toStartOf="@id/saveButton"
         app:layout_constraintTop_toBottomOf="@id/attributeValueLayout" />
 
     <Button
