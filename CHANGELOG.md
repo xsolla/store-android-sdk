@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.0] - Inventory SDK - 2020-12-04
+
+### Added
+
+- Inventory SDK release
+
 ## [0.17.0] - Store SDK - 2020-11-24
 
 ### Added

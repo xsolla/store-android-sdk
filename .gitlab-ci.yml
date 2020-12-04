@@ -102,6 +102,22 @@ publishStore:
     paths:
       - .gradle/*
 
+publishInventory:
+  tags:
+    - sdk
+  stage: publish
+  when: manual
+  only:
+    - /^v.*/
+  except:
+    - branches
+  script:
+    - ./gradlew :xsolla-inventory-sdk:bintrayUpload
+  cache:
+    key: ${CI_PROJECT_ID}
+    paths:
+      - .gradle/*
+
 publishPayments:
   tags:
     - sdk
