@@ -7,63 +7,10 @@ import android.os.Build
 import androidx.annotation.IntRange
 import androidx.fragment.app.Fragment
 import com.xsolla.android.login.api.LoginApi
-import com.xsolla.android.login.callback.AuthCallback
-import com.xsolla.android.login.callback.AuthViaProviderProjectCallback
-import com.xsolla.android.login.callback.CheckUserAgeCallback
-import com.xsolla.android.login.callback.CreateCodeForLinkingAccountCallback
-import com.xsolla.android.login.callback.DeleteCurrentUserAvatarCallback
-import com.xsolla.android.login.callback.DeleteCurrentUserPhoneCallback
-import com.xsolla.android.login.callback.FinishSocialCallback
-import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
-import com.xsolla.android.login.callback.GetCurrentUserEmailCallback
-import com.xsolla.android.login.callback.GetCurrentUserFriendsCallback
-import com.xsolla.android.login.callback.GetCurrentUserPhoneCallback
-import com.xsolla.android.login.callback.GetSocialFriendsCallback
-import com.xsolla.android.login.callback.GetUserPublicInfoCallback
-import com.xsolla.android.login.callback.GetUsersAttributesCallback
-import com.xsolla.android.login.callback.LinkedSocialNetworksCallback
-import com.xsolla.android.login.callback.RefreshTokenCallback
-import com.xsolla.android.login.callback.RegisterCallback
-import com.xsolla.android.login.callback.ResetPasswordCallback
-import com.xsolla.android.login.callback.SearchUsersByNicknameCallback
-import com.xsolla.android.login.callback.StartSocialCallback
-import com.xsolla.android.login.callback.UnlinkSocialNetworkCallback
-import com.xsolla.android.login.callback.UpdateCurrentUserDetailsCallback
-import com.xsolla.android.login.callback.UpdateCurrentUserFriendsCallback
-import com.xsolla.android.login.callback.UpdateCurrentUserPhoneCallback
-import com.xsolla.android.login.callback.UpdateSocialFriendsCallback
-import com.xsolla.android.login.callback.UpdateUsersAttributesCallback
-import com.xsolla.android.login.callback.UploadCurrentUserAvatarCallback
+import com.xsolla.android.login.callback.*
 import com.xsolla.android.login.entity.common.UserAttribute
-import com.xsolla.android.login.entity.request.AuthUserBody
-import com.xsolla.android.login.entity.request.CheckUserAgeBody
-import com.xsolla.android.login.entity.request.GetUsersAttributesFromClientRequest
-import com.xsolla.android.login.entity.request.OauthAuthUserBody
-import com.xsolla.android.login.entity.request.OauthRegisterUserBody
-import com.xsolla.android.login.entity.request.RegisterUserBody
-import com.xsolla.android.login.entity.request.ResetPasswordBody
-import com.xsolla.android.login.entity.request.UpdateUserDetailsBody
-import com.xsolla.android.login.entity.request.UpdateUserFriendsRequest
-import com.xsolla.android.login.entity.request.UpdateUserFriendsRequestAction
-import com.xsolla.android.login.entity.request.UpdateUserPhoneBody
-import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromClientRequest
-import com.xsolla.android.login.entity.request.UserFriendsRequestSortBy
-import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder
-import com.xsolla.android.login.entity.request.UserFriendsRequestType
-import com.xsolla.android.login.entity.response.AuthResponse
-import com.xsolla.android.login.entity.response.CheckUserAgeResponse
-import com.xsolla.android.login.entity.response.CreateCodeForLinkingAccountResponse
-import com.xsolla.android.login.entity.response.EmailResponse
-import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
-import com.xsolla.android.login.entity.response.OauthAuthResponse
-import com.xsolla.android.login.entity.response.OauthViaProviderProjectResponse
-import com.xsolla.android.login.entity.response.PhoneResponse
-import com.xsolla.android.login.entity.response.PictureResponse
-import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse
-import com.xsolla.android.login.entity.response.SocialFriendsResponse
-import com.xsolla.android.login.entity.response.UserDetailsResponse
-import com.xsolla.android.login.entity.response.UserFriendsResponse
-import com.xsolla.android.login.entity.response.UserPublicInfoResponse
+import com.xsolla.android.login.entity.request.*
+import com.xsolla.android.login.entity.response.*
 import com.xsolla.android.login.jwt.JWT
 import com.xsolla.android.login.social.FriendsPlatform
 import com.xsolla.android.login.social.LoginSocial
@@ -453,8 +400,8 @@ class XLogin private constructor(
          *
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-get-link-for-social-auth)
          */
-        fun finishSocialAuth(context: Context?, socialNetwork: SocialNetwork?, activityResultRequestCode: Int, activityResultCode: Int, activityResultData: Intent?, callback: FinishSocialCallback?) {
-            finishSocialAuth(context, socialNetwork, activityResultRequestCode, activityResultCode, activityResultData, false, callback)
+        fun finishSocialAuth(activity: Activity?, socialNetwork: SocialNetwork?, activityResultRequestCode: Int, activityResultCode: Int, activityResultData: Intent?, callback: FinishSocialCallback?) {
+            finishSocialAuth(activity, socialNetwork, activityResultRequestCode, activityResultCode, activityResultData, false, callback)
         }
 
         /**
@@ -471,8 +418,8 @@ class XLogin private constructor(
          *
          * @see [Login API Reference](https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth)
          */
-        fun finishSocialAuth(context: Context?, socialNetwork: SocialNetwork?, activityResultRequestCode: Int, activityResultCode: Int, activityResultData: Intent?, withLogout: Boolean, callback: FinishSocialCallback?) {
-            loginSocial.finishSocialAuth(context!!, socialNetwork!!, activityResultRequestCode, activityResultCode, activityResultData, withLogout, callback!!)
+        fun finishSocialAuth(activity: Activity?, socialNetwork: SocialNetwork?, activityResultRequestCode: Int, activityResultCode: Int, activityResultData: Intent?, withLogout: Boolean, callback: FinishSocialCallback?) {
+            loginSocial.finishSocialAuth(activity!!, socialNetwork!!, activityResultRequestCode, activityResultCode, activityResultData, withLogout, callback!!)
         }
 
         /**

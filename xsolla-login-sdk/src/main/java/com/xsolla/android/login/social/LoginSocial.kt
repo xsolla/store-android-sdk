@@ -12,6 +12,7 @@ import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.GoogleAuthUtil
+import com.google.android.gms.auth.UserRecoverableAuthException
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.common.api.ApiException
@@ -37,6 +38,7 @@ object LoginSocial {
 
     private const val RC_AUTH_WEBVIEW = 31000
     private const val RC_AUTH_GOOGLE = 31001
+    private const val RC_AUTH_GOOGLE_REQUEST_PERMISSION = 31002
 
     private const val magicString = "oauth2:https://www.googleapis.com/auth/plus.login"
 
@@ -49,6 +51,7 @@ object LoginSocial {
 
     private lateinit var fbCallbackManager: CallbackManager
     private lateinit var fbCallback: FacebookCallback<LoginResult>
+    private var googleCredentialFromIntent: Intent? = null
 
     private var facebookAppId: String? = null
     private var googleServerId: String? = null
@@ -146,7 +149,7 @@ object LoginSocial {
         }
     }
 
-    fun finishSocialAuth(context: Context, socialNetwork: SocialNetwork, activityResultRequestCode: Int, activityResultCode: Int, activityResultData: Intent?, withLogout: Boolean, callback: FinishSocialCallback) {
+    fun finishSocialAuth(activity: Activity, socialNetwork: SocialNetwork, activityResultRequestCode: Int, activityResultCode: Int, activityResultData: Intent?, withLogout: Boolean, callback: FinishSocialCallback) {
         if (activityResultRequestCode == RC_AUTH_WEBVIEW) {
             val (status, token, code, error) = fromResultIntent(activityResultData)
             when (status) {
@@ -179,40 +182,60 @@ object LoginSocial {
             return
         }
         if (activityResultRequestCode == RC_AUTH_GOOGLE && socialNetwork == SocialNetwork.GOOGLE) {
-            try {
-                val oneTapClient = Identity.getSignInClient(context)
-                val credential = oneTapClient.getSignInCredentialFromIntent(activityResultData)
-                val idToken = credential.googleIdToken
-                if (idToken == null) {
-                    callback.onAuthError(null, "idToken is null")
-                } else {
-                    val email = JWT(idToken).getClaim("email").asString()
-                    Thread(Runnable {
-                        val oauthToken = GoogleAuthUtil.getToken(context, email, magicString)
-                        if (oauthToken == null) {
-                            Handler(Looper.getMainLooper()).post {
-                                callback.onAuthError(null, "oauthToken is null")
-                            }
+            getGoogleAuthToken(activity, activityResultData, withLogout, callback)
+            return
+        }
+        if (activityResultRequestCode == RC_AUTH_GOOGLE_REQUEST_PERMISSION && activityResultCode == Activity.RESULT_OK) {
+            getGoogleAuthToken(activity, activityResultData, withLogout, callback)
+        } else {
+            callback.onAuthCancelled()
+        }
+    }
+
+    private fun getGoogleAuthToken(activity: Activity, activityResultData: Intent?, withLogout: Boolean, callback: FinishSocialCallback) {
+        try {
+            val oneTapClient = Identity.getSignInClient(activity)
+            val credential = oneTapClient.getSignInCredentialFromIntent(googleCredentialFromIntent ?: activityResultData)
+            val idToken = credential.googleIdToken
+            if (idToken == null) {
+                callback.onAuthError(null, "idToken is null")
+            } else {
+                val email = JWT(idToken).getClaim("email").asString()
+                Thread(Runnable {
+                    val oauthToken = try {
+                        GoogleAuthUtil.getToken(activity, email, magicString)
+                    } catch (e: UserRecoverableAuthException) {
+                        googleCredentialFromIntent = activityResultData
+                        activity.startActivityForResult(e.intent, RC_AUTH_GOOGLE_REQUEST_PERMISSION)
+                        return@Runnable
+                    } catch (e: Exception) {
+                        callback.onAuthError(e, e.localizedMessage)
+                        return@Runnable
+                    }
+
+                    if (oauthToken == null) {
+                        Handler(Looper.getMainLooper()).post {
+                            callback.onAuthError(null, "oauthToken is null")
                         }
-                        finishSocialCallback = callback
-                        this.withLogout = withLogout
-                        getLoginTokenFromSocial(SocialNetwork.GOOGLE, oauthToken, withLogout) { t, error ->
-                            if (t == null && error == null) {
-                                finishSocialCallback?.onAuthSuccess()
-                            } else {
-                                finishSocialCallback?.onAuthError(t, error)
-                            }
-                            finishSocialCallback = null
-                            this.withLogout = false
+                    }
+                    finishSocialCallback = callback
+                    this.withLogout = withLogout
+                    getLoginTokenFromSocial(SocialNetwork.GOOGLE, oauthToken, withLogout) { t, error ->
+                        if (t == null && error == null) {
+                            finishSocialCallback?.onAuthSuccess()
+                        } else {
+                            finishSocialCallback?.onAuthError(t, error)
                         }
-                    }).start()
-                }
-            } catch (e: ApiException) {
-                if (e.statusCode == CommonStatusCodes.CANCELED) {
-                    callback.onAuthCancelled()
-                } else {
-                    callback.onAuthError(e, null)
-                }
+                        finishSocialCallback = null
+                        this.withLogout = false
+                    }
+                }).start()
+            }
+        } catch (e: ApiException) {
+            if (e.statusCode == CommonStatusCodes.CANCELED) {
+                callback.onAuthCancelled()
+            } else {
+                callback.onAuthError(e, null)
             }
         }
     }
@@ -228,6 +251,7 @@ object LoginSocial {
             return
         }
         if (socialNetwork == SocialNetwork.GOOGLE && googleAvailable) {
+            googleCredentialFromIntent = null
             val oneTapClient = Identity.getSignInClient(activity ?: fragment?.activity!!)
             val oneTapRequest = BeginSignInRequest.builder()
                     .setGoogleIdTokenRequestOptions(
