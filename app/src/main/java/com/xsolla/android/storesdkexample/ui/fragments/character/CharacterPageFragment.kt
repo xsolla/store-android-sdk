@@ -15,7 +15,7 @@ import com.xsolla.android.storesdkexample.adapter.UserAttributesAdapter
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmCharacterPage
-import com.xsolla.android.storesdkexample.util.extensions.openInBrowser
+import com.xsolla.android.appcore.extensions.openInBrowser
 import com.xsolla.android.appcore.extensions.setClickableSpan
 import kotlinx.android.synthetic.main.fragment_character_page.addAttributeButton
 import kotlinx.android.synthetic.main.fragment_character_page.attributesRecycler

@@ -3,6 +3,7 @@ package com.xsolla.android.customauth.ui.login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.net.toUri
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -12,17 +13,22 @@ import com.xsolla.android.customauth.R
 import com.xsolla.android.customauth.data.local.PrefManager
 import com.xsolla.android.customauth.data.remote.NetworkManager
 import com.xsolla.android.customauth.data.remote.RestService
-import com.xsolla.android.customauth.data.remote.dto.AuthRequest
 import com.xsolla.android.customauth.databinding.ActivityLoginBinding
 import com.xsolla.android.customauth.ui.store.StoreActivity
+import com.xsolla.android.appcore.extensions.openLink
+import com.xsolla.android.customauth.data.remote.dto.AuthRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class LoginActivity : AppCompatActivity(R.layout.activity_login) {
+    private companion object {
+        private const val HOW_TO_URL = "https://developers.xsolla.com/sdk/android/use-xsolla-servers/how-tos/#android_sdk_use_xsolla_servers_how_to_use_partners_login_system"
+    }
+
     private val binding: ActivityLoginBinding by viewBinding(R.id.loginContainer)
 
-    private val loginApi: RestService = NetworkManager.fakeApi
+    private val loginApi: RestService = NetworkManager.api
     private val preferences: PrefManager = PrefManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +78,7 @@ class LoginActivity : AppCompatActivity(R.layout.activity_login) {
             startIndex = binding.demoDescription2.text.indexOf("see", ignoreCase = true),
             endIndex = binding.demoDescription2.text.indexOf("see", ignoreCase = true) + "See the documentation".length
         ) {
-            Snackbar.make(binding.root, "link to how-to", Snackbar.LENGTH_LONG).show()
+            HOW_TO_URL.toUri().openLink(this)
         }
     }
 }

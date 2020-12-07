@@ -17,7 +17,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField 'int', 'PROJECT_ID', '58917' // Replace to your Project ID
+        buildConfigField 'int', 'PROJECT_ID', '77640'
         buildConfigField "String", "VERSION_NAME", "\"$versionName\""
     }
     buildTypes {

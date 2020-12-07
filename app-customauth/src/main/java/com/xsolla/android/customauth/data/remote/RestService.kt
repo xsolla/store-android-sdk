@@ -6,13 +6,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface RestService {
-    @POST("/api/auth")
-    suspend fun auth(@Body request: AuthRequest) : AuthResponse
-}
-
-// TODO: delete
-class FakeRestService : RestService {
-    override suspend fun auth(request: AuthRequest): AuthResponse {
-        return AuthResponse("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOltdLCJlbWFpbCI6Inhzb2xsYXN0b3Jlc2RrLmFAZ21haWwuY29tIiwiZXhwIjoxNjA1NzYzNzU0LCJncm91cHMiOlt7ImlkIjo2NDgxLCJuYW1lIjoiZGVmYXVsdCIsImlzX2RlZmF1bHQiOnRydWV9XSwiaWF0IjoxNjA1Njc3MzU0LCJpc19tYXN0ZXIiOnRydWUsImlzcyI6Imh0dHBzOi8vbG9naW4ueHNvbGxhLmNvbSIsImp0aSI6ImY4ZjQxM2VmLTc2NzAtNGU1Yy1hMjg3LTYwMGQ0MDZmMzQ4NCIsInByb21vX2VtYWlsX2FncmVlbWVudCI6dHJ1ZSwicHVibGlzaGVyX2lkIjoxMzY1OTMsInNjcCI6WyJvZmZsaW5lIl0sInN1YiI6IjE0ZGNiMzQzLWFkMjUtNDZhOS05YjE2LWJjZWVjNWNmN2NjZiIsInR5cGUiOiJ4c29sbGFfbG9naW4iLCJ1c2VybmFtZSI6Inhzb2xsYSIsInhzb2xsYV9sb2dpbl9hY2Nlc3Nfa2V5Ijoialpta3dObUlsZ25IZVVCSE8xRURRUFhleHJhdjJYdEk4Y1FJeF90ajliZyIsInhzb2xsYV9sb2dpbl9wcm9qZWN0X2lkIjoiMDI2MjAxZTMtN2U0MC0xMWVhLWE4NWItNDIwMTBhYTgwMDA0In0.atYDH72Lrn5NATnmZU0rTlZITisx96DTRS3fD-XxRN8")
-    }
+    @POST("login")
+    suspend fun auth(@Body request: AuthRequest): AuthResponse
 }
