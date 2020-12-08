@@ -8,6 +8,7 @@
     <string name="failure">Failure</string>
     <string name="save_changes">Save changes</string>
     <string name="update">Update</string>
+    <string name="back">Back</string>
 
     <string name="login_tab">log in</string>
     <string name="sign_up_tab">sign up</string>
