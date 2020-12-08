@@ -24,7 +24,7 @@
         <item name="snackbarStyle">@style/SnackbarTheme</item>
         <item name="snackbarTextViewStyle">@style/SnackbarTextViewTheme</item>
 
-        <item name="textInputStyle">@style/Widget.Xsolla.TextInputLayout</item>
+        <item name="textInputStyle">@style/Widget.Xsolla.TextInputLayoutFilled</item>
 
         <!-- Typography -->
         <item name="textAppearanceButton">@style/ButtonText</item>

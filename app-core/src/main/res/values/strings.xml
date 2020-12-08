@@ -15,6 +15,7 @@
     <string name="email_input_hint">E-mail</string>
     <string name="password_input_hint">Password</string>
     <string name="password_confirm_input_hint">Confirm password</string>
+    <string name="password_min_length_helper">Minimum length: 6 symbols</string>
     <string name="log_in_button">log in</string>
     <string name="sign_up_button">sign up</string>
     <string name="reset_password_button">reset password</string>

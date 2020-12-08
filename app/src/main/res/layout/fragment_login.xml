@@ -6,7 +6,6 @@
     android:orientation="vertical">
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.Xsolla.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/username_input_hint">
@@ -20,9 +19,9 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.Xsolla.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:hint="@string/password_input_hint"
         app:passwordToggleEnabled="true"
         app:passwordToggleTint="@color/white_color">
