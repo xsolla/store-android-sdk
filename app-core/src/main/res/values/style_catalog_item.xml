@@ -36,9 +36,9 @@
     <style name="Widget.Xsolla.CatalogItem.AddToCartButton" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
         <item name="android:minHeight">@dimen/catalog_item_add_to_cart_button_size</item>
         <item name="android:minWidth">@dimen/catalog_item_add_to_cart_button_size</item>
-        <item name="cornerRadius">@dimen/catalog_item_add_to_cart_button_corner_radius</item>
+        <item name="cornerRadius">0dp</item>
         <item name="strokeWidth">@dimen/catalog_item_add_to_cart_button_stroke_width</item>
-        <item name="strokeColor">@color/magenta_color</item>
+        <item name="strokeColor">@color/light_state_gray_color</item>
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
         <item name="iconPadding">0dp</item>

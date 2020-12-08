@@ -4,7 +4,7 @@
     <style name="Widget.Xsolla.Cart.ButtonClear" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
         <item name="android:minHeight">@dimen/cart_fragment_clear_button_height</item>
         <item name="android:minWidth">@dimen/cart_fragment_clear_button_width</item>
-        <item name="cornerRadius">@dimen/cart_fragment_clear_button_corner_radius</item>
+        <item name="cornerRadius">0dp</item>
         <item name="strokeWidth">@dimen/cart_fragment_clear_button_stroke_width</item>
         <item name="strokeColor">@color/secondary_color_50</item>
         <item name="android:insetTop">0dp</item>
