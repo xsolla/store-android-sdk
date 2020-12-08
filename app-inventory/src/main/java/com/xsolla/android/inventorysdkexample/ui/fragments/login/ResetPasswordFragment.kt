@@ -7,6 +7,7 @@ import com.xsolla.android.inventorysdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.inventorysdkexample.util.ViewUtils
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.ResetPasswordCallback
+import kotlinx.android.synthetic.main.fragmen_reset_password.*
 import kotlinx.android.synthetic.main.fragmen_reset_password.view.*
 
 class ResetPasswordFragment : BaseFragment() {
@@ -16,11 +17,7 @@ class ResetPasswordFragment : BaseFragment() {
     }
 
     override fun initUI() {
-        rootView.toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-        rootView.toolbar.setNavigationOnClickListener {
-            openLoginFragment()
-        }
-
+        backButton.setOnClickListener { openLoginFragment() }
         rootView.usernameInput.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(s: Editable) {
                 rootView.resetPasswordButton.isEnabled = s.isNotEmpty()
