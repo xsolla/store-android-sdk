@@ -32,6 +32,7 @@
         style="@style/Widget.Xsolla.Cart.ButtonClear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:text="@string/cart_fragment_clear_button"
         app:layout_constraintBottom_toBottomOf="@+id/textFragmentTitle"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,25 +50,25 @@
         <Button
             android:id="@+id/continueButton"
             style="@style/Widget.Xsolla.ActionButton.Small.Secondary"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/cart_fragment_action_button_right_margin"
-            android:layout_marginEnd="@dimen/cart_fragment_action_button_left_margin"
-            android:layout_marginBottom="8dp"
             android:text="@string/cart_fragment_continue_button"
+            app:layout_constraintBaseline_toBaselineOf="@+id/checkoutButton"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toStartOf="@id/checkoutButton"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/checkoutButton"
             style="@style/Widget.Xsolla.ActionButton.Small"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/cart_fragment_action_button_right_margin"
-            android:layout_marginEnd="@dimen/cart_fragment_action_button_left_margin"
             android:text="@string/cart_fragment_checkout_button"
-            app:layout_constraintBottom_toTopOf="@id/continueButton"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/continueButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/continueButton" />
 
         <TextView
             android:id="@+id/subtotalLabel"

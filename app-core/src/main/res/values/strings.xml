@@ -42,7 +42,7 @@
     <string name="drawer_item_logout">Log out</string>
 
     <string name="cart_fragment_checkout_button">Go to Checkout</string>
-    <string name="cart_fragment_continue_button">Continue Shopping</string>
+    <string name="cart_fragment_continue_button">Back to store</string>
     <string name="cart_fragment_clear_button">Clear All</string>
     <string name="cart_message_empty">Your cart is empty</string>
     <string name="cart_subtotal">Subtotal</string>
