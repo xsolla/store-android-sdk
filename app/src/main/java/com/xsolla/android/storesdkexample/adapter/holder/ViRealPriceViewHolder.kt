@@ -16,14 +16,7 @@ import com.xsolla.android.storesdkexample.ui.fragments.store.VirtualItemUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.util.AmountUtils
 import com.xsolla.android.storesdkexample.util.ViewUtils
-import kotlinx.android.synthetic.main.item_vi_real_price.view.addToCartButton
-import kotlinx.android.synthetic.main.item_vi_real_price.view.itemAdditionalInfo
-import kotlinx.android.synthetic.main.item_vi_real_price.view.itemIcon
-import kotlinx.android.synthetic.main.item_vi_real_price.view.itemName
-import kotlinx.android.synthetic.main.item_vi_real_price.view.itemOldPrice
-import kotlinx.android.synthetic.main.item_vi_real_price.view.itemPrice
-import kotlinx.android.synthetic.main.item_vi_real_price.view.itemSaleLabel
-import kotlinx.android.synthetic.main.item_vi_real_price.view.purchasedPlaceholder
+import kotlinx.android.synthetic.main.item_vi_real_price.view.*
 import kotlinx.android.synthetic.main.item_vi_virtual_price.view.buyButton
 
 class ViRealPriceViewHolder(
@@ -76,7 +69,12 @@ class ViRealPriceViewHolder(
             itemView.itemSaleLabel.visibility = View.INVISIBLE
         } else {
             if (itemView.itemOldPrice.isVisible && itemView.itemSaleLabel.isVisible) {
+                val currentPrice = price.getAmountDecimal()
+                val priceWithoutDiscount = price.getAmountWithoutDiscountDecimal()
+                val discount = 100 - ((currentPrice!!.toInt() * 100) / priceWithoutDiscount!!.toInt())
+
                 itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
+                itemView.itemSaleDiscount.text = "-${discount}%"
                 itemView.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal())
                 itemView.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             }

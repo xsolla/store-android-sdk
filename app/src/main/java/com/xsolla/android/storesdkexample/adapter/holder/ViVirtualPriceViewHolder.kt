@@ -72,11 +72,16 @@ class ViVirtualPriceViewHolder(
             itemView.itemOldPrice.visibility = View.INVISIBLE
             itemView.itemSaleLabel.visibility = View.INVISIBLE
         } else {
+            val currentPrice = price.getAmountDecimal()
+            val priceWithoutDiscount = price.getAmountWithoutDiscountDecimal()
+            val discount = 100 - ((currentPrice!!.toInt() * 100) / priceWithoutDiscount!!.toInt())
+
             itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal())
             itemView.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal())
             itemView.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             itemView.itemOldPrice.visibility = View.VISIBLE
             itemView.itemSaleLabel.visibility = View.VISIBLE
+            itemView.itemSaleDiscount.text = "-${discount}%"
         }
     }
 
