@@ -86,7 +86,7 @@ class ViVirtualPriceViewHolder(
         } else {
             itemView.itemAdditionalInfo.visibility = View.VISIBLE
             val sb = StringBuilder()
-            sb.append("Expiration: ")
+            sb.append("Expiration in ")
             sb.append(expirationPeriod.value)
             sb.append(' ')
             sb.append(expirationPeriod.type.name.toLowerCase())
