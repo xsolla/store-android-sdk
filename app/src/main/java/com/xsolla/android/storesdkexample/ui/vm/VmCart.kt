@@ -107,4 +107,18 @@ class VmCart(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    fun redeemPromocode(promocode: String, onSuccess: () -> Unit, onError: (errorMessage: String) -> Unit) {
+        XStore.redeemPromocode(promocode, object : XStoreCallback<CartResponse>() {
+            override fun onSuccess(response: CartResponse) {
+                cartContent.value = response.items
+                cartPrice.value = response.price
+                onSuccess()
+            }
+
+            override fun onFailure(errorMessage: String) {
+                onError(errorMessage)
+            }
+        })
+    }
+
 }

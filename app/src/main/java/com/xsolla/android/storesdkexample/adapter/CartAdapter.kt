@@ -4,6 +4,8 @@ import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.store.entity.response.cart.CartResponse
@@ -106,6 +108,10 @@ class CartAdapter(
             } else {
                 itemView.itemButtonMinus.setImageResource(R.drawable.ic_cart_delete)
             }
+
+            itemView.itemButtonMinus.isGone = item.price == null
+            itemView.itemButtonPlus.isGone = item.price == null
+
             itemView.itemButtonMinus.setOnClickListener {
                 vmCart.changeItemCount(item, -1) { result -> cartChangeListener.onChange(result) }
             }

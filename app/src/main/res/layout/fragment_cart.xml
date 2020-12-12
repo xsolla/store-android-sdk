@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -74,14 +73,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
             android:fontFamily="sans-serif"
             android:text="@string/cart_subtotal"
             android:textAllCaps="true"
             android:textColor="@color/white_color"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/pricesAndButtonsLayout" />
+            app:layout_constraintTop_toBottomOf="@id/input" />
 
         <TextView
             android:id="@+id/subtotalValue"
@@ -147,6 +146,31 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/totalLabel"
             tools:text="12800" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input"
+            style="@style/Widget.Xsolla.TextInputLayoutFilled"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:hint="@string/promocode_hint"
+            app:endIconMode="custom"
+            app:endIconTint="@color/white_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:placeholderText="@string/promocode_placeholder"
+            tools:endIconDrawable="@drawable/ic_arrow_forward_white_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputEdit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
