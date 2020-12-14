@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -41,7 +40,7 @@ class CartFragment : BaseFragment(), CartChangeListener {
     override fun initUI() {
         promocodeArrowEndIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_forward_white_24)!!
         promocodeSuccessEndIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_check_black_24)!!.apply {
-            this.setTint(Color.WHITE)
+            setTint(Color.WHITE)
         }
 
         val cartAdapter = CartAdapter(mutableListOf(), vmCart, this)
