@@ -37,9 +37,7 @@ class VcRealPriceViewHolder(
             itemView.itemOldPrice.visibility = View.INVISIBLE
             itemView.itemSaleLabel.visibility = View.INVISIBLE
         } else {
-            val currentPrice = price.getAmountDecimal()
-            val priceWithoutDiscount = price.getAmountWithoutDiscountDecimal()
-            val discount = 100 - ((currentPrice!!.toInt() * 100) / priceWithoutDiscount!!.toInt())
+            val discount = AmountUtils.calculateDiscount(price.getAmountDecimal()!!, price.getAmountWithoutDiscountDecimal()!!)
 
             itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
             itemView.itemSaleDiscount.text = "-${discount}%"
