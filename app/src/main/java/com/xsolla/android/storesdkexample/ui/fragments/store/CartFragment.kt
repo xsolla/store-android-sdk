@@ -39,8 +39,6 @@ class CartFragment : BaseFragment(), CartChangeListener {
     override fun getLayout() = R.layout.fragment_cart
 
     override fun initUI() {
-        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-
         promocodeArrowEndIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_forward_white_24)!!
         promocodeSuccessEndIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_check_black_24)!!.apply {
             this.setTint(Color.WHITE)
@@ -144,11 +142,6 @@ class CartFragment : BaseFragment(), CartChangeListener {
 
     override fun onChange(result: String) {
         showSnack(result)
-    }
-
-    override fun onDestroyView() {
-        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-        super.onDestroyView()
     }
 
     private fun setupPromocodeInput() {
