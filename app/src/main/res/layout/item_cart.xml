@@ -45,6 +45,7 @@
             tools:text="Some item" />
 
         <LinearLayout
+            android:id="@+id/priceLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -61,7 +62,7 @@
                 style="@style/Widget.Xsolla.CatalogItem.Price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$ 0" />
+                tools:text="$ 100" />
 
             <TextView
                 android:id="@+id/itemOldPrice"
@@ -76,9 +77,9 @@
 
         <TextView
             android:id="@+id/itemExpiration"
+            style="?attr/textAppearanceBody2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
             android:textColor="@color/light_state_gray_color"
             android:textSize="15sp"
             tools:text="10 days" />

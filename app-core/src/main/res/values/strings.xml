@@ -123,5 +123,6 @@
 
     <string name="promocode_hint">Enter your promocode here</string>
     <string name="promocode_placeholder">\tfor example, NEWGAMER2020</string>
+    <string name="promocode_bonus_item_placeholder">BONUS ITEM</string>
 
 </resources>
