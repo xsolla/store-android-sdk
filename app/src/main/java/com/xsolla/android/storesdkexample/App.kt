@@ -19,8 +19,14 @@ class App: Application() {
         instance = this
     }
 
+    // 1. Собирается и нативная и не нативная (flavors)
+    // 2. google server id не заливается
+
+    // Взять образ другой, docker hub
     override fun onCreate() {
         super.onCreate()
+
+        val credential = BuildConfig.GOOGLE_CREDENTIAL
         if (BuildConfig.USE_OAUTH) {
             val loginConfig = LoginConfig.OauthBuilder()
                 .setProjectId(BuildConfig.LOGIN_ID)
@@ -31,6 +37,7 @@ class App: Application() {
         } else {
             val loginConfig = LoginConfig.JwtBuilder()
                 .setProjectId(BuildConfig.LOGIN_ID)
+                .setSocialConfig(XLogin.SocialConfig(googleServerId = "653881162314-g6cnf0n2m62ll90ee571uqg6h6hors8q.apps.googleusercontent.com"))
                 .build()
 
             XLogin.init(this, loginConfig)
