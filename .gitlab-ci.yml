@@ -7,13 +7,13 @@ stages:
 
 before_script:
   # Extract the SDK version that we're building against
+  - chmod +x ./gradlew
+  - export GOOGLE_GITLAB_VARIABLE=$(($GOOGLE_SERVER_ID)) && echo $GOOGLE_GITLAB_VARIABLE
   - export ANDROID_COMPILE_SDK=`egrep '^[[:blank:]]+ext.sdk_compile'  build.gradle | awk '{print $3}'`
   - export GRADLE_USER_HOME=$(pwd)/.gradle
   # Install platform tools and Android SDK for the compile target
   - echo y | /sdk/tools/bin/sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}" > /dev/null
-  - chmod +x ./gradlew
   - touch local.properties
-  - export GOOGLE_GITLAB_VARIABLE=$(($GOOGLE_SERVER_ID)) && echo $GOOGLE_GITLAB_VARIABLE
 
 build:
   tags:
