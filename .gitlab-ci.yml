@@ -3,7 +3,7 @@ image: jangrewe/gitlab-ci-android
 stages:
   - build
   - test
-  - publish
+#  - publish
 
 before_script:
   # Extract the SDK version that we're building against
