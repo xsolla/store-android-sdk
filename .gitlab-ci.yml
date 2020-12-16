@@ -13,6 +13,7 @@ before_script:
   - echo y | /sdk/tools/bin/sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}" > /dev/null
   - chmod +x ./gradlew
   - touch local.properties
+  - export GOOGLE_GITLAB_VARIABLE=$(($GOOGLE_SERVER_ID)) && echo $GOOGLE_GITLAB_VARIABLE
 
 build:
   tags:
