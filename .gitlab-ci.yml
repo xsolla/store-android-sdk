@@ -1,4 +1,4 @@
-image: circleci/android
+image: circleci/android:api-29
 
 stages:
   - build
