@@ -6,7 +6,6 @@
     android:orientation="vertical">
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.Xsolla.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/username_input_hint">
@@ -20,9 +19,9 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.Xsolla.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:hint="@string/email_input_hint">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -34,12 +33,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.Xsolla.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:hint="@string/password_input_hint"
         app:passwordToggleEnabled="true"
-        app:passwordToggleTint="@color/white_color">
+        app:passwordToggleTint="@color/white_color"
+        app:helperTextEnabled="true"
+        app:helperText="@string/password_min_length_helper">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordInput"
@@ -50,9 +51,9 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.Xsolla.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:hint="@string/password_confirm_input_hint"
         app:passwordToggleEnabled="true"
         app:passwordToggleTint="@color/white_color">
@@ -71,6 +72,7 @@
         style="@style/Widget.Xsolla.ActionButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:enabled="false"
         android:text="@string/sign_up_button" />
 

@@ -4,6 +4,7 @@
     <!--Palette colors:-->
     <color name="magenta_color">#FF005B</color>
     <color name="dark_magenta_color">#D6004C</color>
+    <color name="semi_transparent_magenta_color">#80FF005B</color>
 
     <color name="light_state_gray_color">#848EB1</color>
     <color name="dark_state_blue_color">#2D2F47</color>

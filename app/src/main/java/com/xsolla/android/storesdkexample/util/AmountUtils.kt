@@ -15,4 +15,8 @@ object AmountUtils {
         return amount?.setScale(2, RoundingMode.HALF_UP)?.toPlainString()
     }
 
+    fun calculateDiscount(amount: BigDecimal, amountWithoutDiscount: BigDecimal): Int {
+        return 100 - amount.times(BigDecimal(100)).divide(amountWithoutDiscount, RoundingMode.HALF_UP).toInt()
+    }
+
 }

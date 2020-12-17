@@ -5,15 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:paddingStart="@dimen/login_activity_padding"
-    android:paddingEnd="@dimen/login_activity_padding"
+    android:fillViewport="true"
     tools:context=".LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:paddingStart="@dimen/login_activity_padding"
+        android:paddingEnd="@dimen/login_activity_padding"
         android:orientation="vertical">
 
         <ImageView

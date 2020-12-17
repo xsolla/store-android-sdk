@@ -4,24 +4,13 @@
     <style name="Widget.Xsolla.Cart.ButtonClear" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
         <item name="android:minHeight">@dimen/cart_fragment_clear_button_height</item>
         <item name="android:minWidth">@dimen/cart_fragment_clear_button_width</item>
-        <item name="cornerRadius">@dimen/cart_fragment_clear_button_corner_radius</item>
+        <item name="cornerRadius">0dp</item>
         <item name="strokeWidth">@dimen/cart_fragment_clear_button_stroke_width</item>
         <item name="strokeColor">@color/secondary_color_50</item>
-        <item name="android:insetTop">0dp</item>
-        <item name="android:insetBottom">0dp</item>
-        <item name="iconPadding">0dp</item>
-        <item name="android:padding">0dp</item>
-        <item name="android:fontFamily">sans-serif</item>
         <item name="android:textAllCaps">true</item>
         <item name="iconTint">?attr/colorOnSurface</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
-        <item name="android:layout_marginEnd">@dimen/cart_fragment_clear_button_right_margin</item>
-        <item name="android:paddingEnd">@dimen/cart_fragment_clear_button_horizontal_padding</item>
-        <item name="android:paddingStart">@dimen/cart_fragment_clear_button_horizontal_padding</item>
-        <item name="android:textAlignment">viewStart</item>
-        <item name="android:drawableEnd">@drawable/ic_cart_clear</item>
-        <item name="android:textSize">@dimen/cart_fragment_clear_button_text_size</item>
-        <item name="android:letterSpacing">-0.03</item>
+        <item name="android:drawableLeft">@drawable/ic_cart_clear</item>
     </style>
 
 </resources>

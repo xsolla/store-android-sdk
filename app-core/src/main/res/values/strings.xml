@@ -8,6 +8,7 @@
     <string name="failure">Failure</string>
     <string name="save_changes">Save changes</string>
     <string name="update">Update</string>
+    <string name="back">Back</string>
 
     <string name="login_tab">log in</string>
     <string name="sign_up_tab">sign up</string>
@@ -15,6 +16,7 @@
     <string name="email_input_hint">E-mail</string>
     <string name="password_input_hint">Password</string>
     <string name="password_confirm_input_hint">Confirm password</string>
+    <string name="password_min_length_helper">Minimum length: 6 symbols</string>
     <string name="log_in_button">log in</string>
     <string name="sign_up_button">sign up</string>
     <string name="reset_password_button">reset password</string>
@@ -40,7 +42,7 @@
     <string name="drawer_item_logout">Log out</string>
 
     <string name="cart_fragment_checkout_button">Go to Checkout</string>
-    <string name="cart_fragment_continue_button">Continue Shopping</string>
+    <string name="cart_fragment_continue_button">Back to store</string>
     <string name="cart_fragment_clear_button">Clear All</string>
     <string name="cart_message_empty">Your cart is empty</string>
     <string name="cart_subtotal">Subtotal</string>
