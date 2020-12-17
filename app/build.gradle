@@ -6,6 +6,15 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 android {
     compileSdkVersion sdk_compile
 
+    signingConfigs {
+        release {
+            storeFile file("../xsolla.keystore")
+            storePassword "${System.env.STORE_PASSWORD}"
+            keyAlias "${System.env.KEY_ALIAS}"
+            keyPassword "${System.env.KEY_PASSWORD}"
+        }
+    }
+
     defaultConfig {
         applicationId "com.xsolla.android.storesdkexample"
         minSdkVersion sdk_min
@@ -16,11 +25,11 @@ android {
         vectorDrawables.useSupportLibrary true
 
         buildConfigField 'int', 'PROJECT_ID', '58917' // Replace to your Project ID
-        buildConfigField 'String', 'LOGIN_ID', '"026201e3-7e40-11ea-a85b-42010aa80004"' // Replace to your project's Login ID
+        buildConfigField 'String', 'LOGIN_ID', '"ba55b4f6-babf-11ea-a85b-42010aa80004"' // Replace to your project's Login ID
         buildConfigField 'String', 'GOOGLE_CREDENTIAL', "\"${System.env.GOOGLE_SERVER_ID}\""
         buildConfigField 'boolean', 'WITH_LOGOUT', 'false'
         buildConfigField 'boolean', 'USE_OAUTH', 'false'
-        buildConfigField 'int', 'OAUTH_CLIENT_ID', '57'
+        buildConfigField 'int', 'OAUTH_CLIENT_ID', '58'
 
         buildConfigField "String", "VERSION_NAME", "\"$versionName\""
     }

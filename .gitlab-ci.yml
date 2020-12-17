@@ -1,9 +1,18 @@
 image: circleci/android:api-29
 
 stages:
+  - generate_keystore
   - build
   - test
   - publish
+
+generate_keystore:
+  stage: generate_keystore
+  script:
+    - echo $STORE_FILE | base64 -d > xsolla.keystore
+  artifacts:
+    paths:
+      - xsolla.keystore
 
 build:
   tags:
