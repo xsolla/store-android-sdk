@@ -26,6 +26,7 @@ class App: Application() {
             val loginConfig = LoginConfig.OauthBuilder()
                 .setProjectId(BuildConfig.LOGIN_ID)
                 .setOauthClientId(BuildConfig.OAUTH_CLIENT_ID)
+                .setSocialConfig(XLogin.SocialConfig(googleServerId = BuildConfig.GOOGLE_CREDENTIAL))
                 .build()
 
             XLogin.init(this, loginConfig)
