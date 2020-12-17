@@ -154,7 +154,7 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        XLogin.finishSocialAuth(context, selectedSocialNetwork, requestCode, resultCode, data, BuildConfig.WITH_LOGOUT, finishSocialCallback)
+        XLogin.finishSocialAuth(activity, selectedSocialNetwork, requestCode, resultCode, data, BuildConfig.WITH_LOGOUT, finishSocialCallback)
         super.onActivityResult(requestCode, resultCode, data)
     }
 
