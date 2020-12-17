@@ -12,9 +12,14 @@ generate_keystore:
     - branches
   script:
     - echo $STORE_FILE | base64 -d > xsolla.keystore
+    - echo "keystorePath=xsolla.keystore" > signing.properties
+    - echo "keystorePassword=$STORE_PASSWORD" >> signing.properties
+    - echo "keyAlias=$KEY_ALIAS" >> signing.properties
+    - echo "keyPassword=$KEY_PASSWORD" >> signing.properties
   artifacts:
     paths:
       - xsolla.keystore
+      - signing.properties
 
 build:
   tags:
