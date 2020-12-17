@@ -56,3 +56,7 @@ enum class GenderResponse {
 data class PhoneResponse(val phone: String?)
 
 data class PictureResponse(val picture: String)
+
+data class CheckUserAgeResponse(val accepted: Boolean)
+
+data class EmailResponse(@SerializedName("current_email") val email: String?)

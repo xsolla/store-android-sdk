@@ -6,3 +6,8 @@ interface GetCurrentUserDetailsCallback {
     fun onSuccess(data: UserDetailsResponse)
     fun onError(throwable: Throwable?, errorMessage: String?)
 }
+
+interface GetCurrentUserEmailCallback {
+    fun onSuccess(email: String?)
+    fun onError(throwable: Throwable?, errorMessage: String?)
+}

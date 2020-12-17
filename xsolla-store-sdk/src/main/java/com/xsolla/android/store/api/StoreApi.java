@@ -1,7 +1,9 @@
 package com.xsolla.android.store.api;
 
+import com.google.gson.JsonObject;
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody;
 import com.xsolla.android.store.entity.request.coupon.RedeemCouponRequestBody;
+import com.xsolla.android.store.entity.request.coupon.RedeemPromocodeRequestBody;
 import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody;
 import com.xsolla.android.store.entity.response.bundle.BundleItem;
 import com.xsolla.android.store.entity.response.bundle.BundleListResponse;
@@ -13,6 +15,7 @@ import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.RedeemCouponResponse;
 import com.xsolla.android.store.entity.response.items.RewardsByCodeResponse;
+import com.xsolla.android.store.entity.response.items.RewardsByPromocodeResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
@@ -134,6 +137,19 @@ public interface StoreApi {
             @Path("item_sku") String itemSku
     );
 
+    @PUT("api/v2/project/{project_id}/cart/fill")
+    Call<CartResponse> fillCartWithItems(
+            @Path("project_id") int projectId,
+            @Body FillCartWithItemsRequestBody items
+    );
+
+    @PUT("api/v2/project/{project_id}/cart/{cart_id}/fill")
+    Call<CartResponse> fillSpecificCartWithItems(
+            @Path("project_id") int projectId,
+            @Path("cart_id") String cartId,
+            @Body FillCartWithItemsRequestBody items
+    );
+
     @GET("api/v2/project/{project_id}/user/inventory/items")
     Call<InventoryResponse> getInventory(@Path("project_id") int projectId);
 
@@ -207,6 +223,18 @@ public interface StoreApi {
     Call<BundleItem> getBundle(
             @Path("project_id") int projectId,
             @Path("sku") String bundleSku
+    );
+
+    @POST("api/v2/project/{project_id}/promocode/redeem")
+    Call<CartResponse> redeemPromocode(
+            @Path("project_id") int projectId,
+            @Body RedeemPromocodeRequestBody body
+    );
+
+    @GET("api/v2/project/{project_id}/promocode/code/{promocode_code}/rewards")
+    Call<RewardsByPromocodeResponse> getPromocodeRewardByCode(
+            @Path("project_id") int projectId,
+            @Path("promocode_code") String promocode
     );
 
 }

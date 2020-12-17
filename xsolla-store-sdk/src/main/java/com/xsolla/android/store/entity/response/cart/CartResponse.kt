@@ -12,7 +12,8 @@ data class CartResponse(
     val price: Price? = null,
     @SerializedName("is_free")
     val isFree: Boolean,
-    val items: List<Item> = emptyList()
+    val items: List<Item> = emptyList(),
+    val warnings: List<Warning> = emptyList()
 ) {
     data class Item(
         val sku: String? = null,
@@ -31,5 +32,14 @@ data class CartResponse(
         val virtualPrices: List<VirtualPrice> = emptyList(),
         @SerializedName("inventory_options")
         val inventoryOption: InventoryOption? = null
+    )
+
+    data class Warning(
+        val sku: String,
+        val quantity: Int,
+        @SerializedName("error_code")
+        val errorCode: Int,
+        @SerializedName("error_message")
+        val errorMessage: String
     )
 }

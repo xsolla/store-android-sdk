@@ -7,10 +7,63 @@ import android.os.Build
 import androidx.annotation.IntRange
 import androidx.fragment.app.Fragment
 import com.xsolla.android.login.api.LoginApi
-import com.xsolla.android.login.callback.*
+import com.xsolla.android.login.callback.AuthCallback
+import com.xsolla.android.login.callback.AuthViaProviderProjectCallback
+import com.xsolla.android.login.callback.CheckUserAgeCallback
+import com.xsolla.android.login.callback.CreateCodeForLinkingAccountCallback
+import com.xsolla.android.login.callback.DeleteCurrentUserAvatarCallback
+import com.xsolla.android.login.callback.DeleteCurrentUserPhoneCallback
+import com.xsolla.android.login.callback.FinishSocialCallback
+import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
+import com.xsolla.android.login.callback.GetCurrentUserEmailCallback
+import com.xsolla.android.login.callback.GetCurrentUserFriendsCallback
+import com.xsolla.android.login.callback.GetCurrentUserPhoneCallback
+import com.xsolla.android.login.callback.GetSocialFriendsCallback
+import com.xsolla.android.login.callback.GetUserPublicInfoCallback
+import com.xsolla.android.login.callback.GetUsersAttributesCallback
+import com.xsolla.android.login.callback.LinkedSocialNetworksCallback
+import com.xsolla.android.login.callback.RefreshTokenCallback
+import com.xsolla.android.login.callback.RegisterCallback
+import com.xsolla.android.login.callback.ResetPasswordCallback
+import com.xsolla.android.login.callback.SearchUsersByNicknameCallback
+import com.xsolla.android.login.callback.StartSocialCallback
+import com.xsolla.android.login.callback.UnlinkSocialNetworkCallback
+import com.xsolla.android.login.callback.UpdateCurrentUserDetailsCallback
+import com.xsolla.android.login.callback.UpdateCurrentUserFriendsCallback
+import com.xsolla.android.login.callback.UpdateCurrentUserPhoneCallback
+import com.xsolla.android.login.callback.UpdateSocialFriendsCallback
+import com.xsolla.android.login.callback.UpdateUsersAttributesCallback
+import com.xsolla.android.login.callback.UploadCurrentUserAvatarCallback
 import com.xsolla.android.login.entity.common.UserAttribute
-import com.xsolla.android.login.entity.request.*
-import com.xsolla.android.login.entity.response.*
+import com.xsolla.android.login.entity.request.AuthUserBody
+import com.xsolla.android.login.entity.request.CheckUserAgeBody
+import com.xsolla.android.login.entity.request.GetUsersAttributesFromClientRequest
+import com.xsolla.android.login.entity.request.OauthAuthUserBody
+import com.xsolla.android.login.entity.request.OauthRegisterUserBody
+import com.xsolla.android.login.entity.request.RegisterUserBody
+import com.xsolla.android.login.entity.request.ResetPasswordBody
+import com.xsolla.android.login.entity.request.UpdateUserDetailsBody
+import com.xsolla.android.login.entity.request.UpdateUserFriendsRequest
+import com.xsolla.android.login.entity.request.UpdateUserFriendsRequestAction
+import com.xsolla.android.login.entity.request.UpdateUserPhoneBody
+import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromClientRequest
+import com.xsolla.android.login.entity.request.UserFriendsRequestSortBy
+import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder
+import com.xsolla.android.login.entity.request.UserFriendsRequestType
+import com.xsolla.android.login.entity.response.AuthResponse
+import com.xsolla.android.login.entity.response.CheckUserAgeResponse
+import com.xsolla.android.login.entity.response.CreateCodeForLinkingAccountResponse
+import com.xsolla.android.login.entity.response.EmailResponse
+import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
+import com.xsolla.android.login.entity.response.OauthAuthResponse
+import com.xsolla.android.login.entity.response.OauthViaProviderProjectResponse
+import com.xsolla.android.login.entity.response.PhoneResponse
+import com.xsolla.android.login.entity.response.PictureResponse
+import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse
+import com.xsolla.android.login.entity.response.SocialFriendsResponse
+import com.xsolla.android.login.entity.response.UserDetailsResponse
+import com.xsolla.android.login.entity.response.UserFriendsResponse
+import com.xsolla.android.login.entity.response.UserPublicInfoResponse
 import com.xsolla.android.login.jwt.JWT
 import com.xsolla.android.login.social.FriendsPlatform
 import com.xsolla.android.login.social.LoginSocial
@@ -285,6 +338,45 @@ class XLogin private constructor(
                     }
 
                     override fun onFailure(call: Call<OauthAuthResponse?>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
+         * Calls to exchange the provider JWT by the client JWT.
+         * Provider project — a common project, in which your users authenticate, and the received JWT is then used for authentication in other projects (i.e. games).
+         * Client project — a project, in which your users authenticate automatically, as a result of authentication. They do not need to enter their data.
+         *
+         * @param platformProviderName         name of the provider project. To enable platforms, please contact your Account Manager
+         * @param scope
+         * @param providerAccessToken          token received after authentication in the provider project
+         * @param callback                     status callback
+         * @see <a href="https://developers.xsolla.com/login-api/methods/oauth-20/authentication-via-provider-project">Login API Reference</a>
+         */
+        fun oauthAuthenticateViaProviderProject(
+            platformProviderName: String,
+            scope: String,
+            providerAccessToken: String,
+            callback: AuthViaProviderProjectCallback
+        ) {
+            getInstance().loginApi
+                .authViaProviderProject(platformProviderName, getInstance().oauthClientId, scope, providerAccessToken)
+                .enqueue(object : Callback<OauthViaProviderProjectResponse> {
+                    override fun onResponse(call: Call<OauthViaProviderProjectResponse>, response: Response<OauthViaProviderProjectResponse>) {
+                        if (response.isSuccessful) {
+                            val data = response.body()
+                            if (data != null) {
+                                callback.onSuccess(data)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<OauthViaProviderProjectResponse>, t: Throwable) {
                         callback.onError(t, null)
                     }
                 })
@@ -651,6 +743,35 @@ class XLogin private constructor(
         }
 
         /**
+         * Gets the email of the authenticated user by JWT
+         *
+         * @param callback    callback with data
+         * @see <a href="https://developers.xsolla.com/user-account-api/user-email/getusersmeemail">User Account API Reference</a>
+         */
+        fun getCurrentUserEmail(callback: GetCurrentUserEmailCallback) {
+            getInstance().loginApi
+                .getCurrentUserEmail("Bearer $token")
+                .enqueue(object : Callback<EmailResponse> {
+                    override fun onResponse(call: Call<EmailResponse>, response: Response<EmailResponse>) {
+                        if (response.isSuccessful) {
+                            val data = response.body()
+                            if (data != null) {
+                                callback.onSuccess(data.email)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<EmailResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
          * Updates the details of the authenticated user
          *
          * @param birthday    birthday in the format "yyyy-MM-dd"
@@ -969,6 +1090,67 @@ class XLogin private constructor(
                     }
 
                     override fun onFailure(call: Call<Void>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
+         * Checks user’s age for a particular region. The age requirements depend on the region.
+         * Service determines the user’s location by the IP address.
+         *
+         * @param birthday         user's birth date in the 'YYYY-MM-DD' format
+         * @param callback         status callback
+         * @see <a href="https://developers.xsolla.com/login-api/methods/users/check-users-age/">Login API Reference</a>
+         */
+        fun checkUserAge(birthday: String, callback: CheckUserAgeCallback) {
+            getInstance().loginApi
+                .checkUserAge(CheckUserAgeBody(getInstance().projectId, birthday))
+                .enqueue(object : Callback<CheckUserAgeResponse> {
+                    override fun onResponse(call: Call<CheckUserAgeResponse>, response: Response<CheckUserAgeResponse>) {
+                        if (response.isSuccessful) {
+                            val data = response.body()
+                            if (data != null) {
+                                callback.onSuccess(data.accepted)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<CheckUserAgeResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
+         * Creates the code for linking the platform account to the existing main account
+         * when the user logs in to the game via a gaming console.
+         *
+         * @param callback         status callback
+         * @see <a href="https://developers.xsolla.com/login-api/methods/users/create-code-for-linking-accounts">Login API Reference</a>
+         */
+        fun createCodeForLinkingAccount(callback: CreateCodeForLinkingAccountCallback) {
+            getInstance().loginApi
+                .createCodeForLinkingAccounts("Bearer $token")
+                .enqueue(object : Callback<CreateCodeForLinkingAccountResponse> {
+                    override fun onResponse(call: Call<CreateCodeForLinkingAccountResponse>, response: Response<CreateCodeForLinkingAccountResponse>) {
+                        if (response.isSuccessful) {
+                            val data = response.body()
+                            if (data != null) {
+                                callback.onSuccess(data.code)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<CreateCodeForLinkingAccountResponse>, t: Throwable) {
                         callback.onError(t, null)
                     }
                 })

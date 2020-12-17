@@ -5,6 +5,7 @@ import android.os.Build;
 import com.xsolla.android.store.api.StoreApi;
 import com.xsolla.android.store.api.XStoreCallback;
 import com.xsolla.android.store.entity.request.cart.CartRequestOptions;
+import com.xsolla.android.store.entity.request.cart.FillCartItem;
 import com.xsolla.android.store.entity.request.items.ItemsRequestOptions;
 import com.xsolla.android.store.entity.request.payment.PaymentOptions;
 import com.xsolla.android.store.entity.response.bundle.BundleItem;
@@ -17,6 +18,7 @@ import com.xsolla.android.store.entity.response.inventory.VirtualBalanceResponse
 import com.xsolla.android.store.entity.response.items.PhysicalItemsResponse;
 import com.xsolla.android.store.entity.response.items.RedeemCouponResponse;
 import com.xsolla.android.store.entity.response.items.RewardsByCodeResponse;
+import com.xsolla.android.store.entity.response.items.RewardsByPromocodeResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse;
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyResponse;
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse;
@@ -28,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.List;
 
 import kotlin.Pair;
 import okhttp3.Interceptor;
@@ -299,6 +302,38 @@ public class XStore {
     }
 
     /**
+     * Fills the cart with items.
+     * If the cart already has an item, the existing item will be replaced by the given value
+     *
+     * @param items    list of items
+     * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/cart-payment/cart/cart-fill">Store API Reference</a>
+     */
+    public static void fillCurrentCartWithItems(
+            @NotNull List<FillCartItem> items,
+            @NotNull XStoreCallback<CartResponse> callback
+    ) {
+        getRequestExecutor().fillCurrentCartWithItems(items, callback);
+    }
+
+    /**
+     * Fills the specific cart with items.
+     * If the cart already has an item, the existing item will be replaced by the given value
+     *
+     * @param cartId   cart id
+     * @param items    list of items
+     * @param callback status callback
+     * @see <a href="https://developers.xsolla.com/store-api/cart-payment/cart/cart-fill-by-id">Store API Reference</a>
+     */
+    public static void fillCartByIdWithItems(
+            @NotNull String cartId,
+            @NotNull List<FillCartItem> items,
+            @NotNull XStoreCallback<CartResponse> callback
+    ) {
+        getRequestExecutor().fillCartByIdWithItems(cartId, items, callback);
+    }
+
+    /**
      * Get a current user’s inventory
      *
      * @param callback status callback
@@ -532,6 +567,55 @@ public class XStore {
             @NotNull XStoreCallback<BundleListResponse> callback
     ) {
         getRequestExecutor().getBundleList(locale, limit, offset, callback);
+    }
+
+    /**
+     * Redeems a code of promo code.
+     * After redeeming a promo code, the user will get free items and/or the price of cart will be decreased.
+     *
+     * @param promocode            unique code of promocode. Contains letters and numbers
+     * @param callback             status callback
+     * @see <a href="https://developers.xsolla.com/store-api/promotions/promo-codes/redeem-promo-code">Store API Reference</a>
+     */
+    public static void redeemPromocode(
+            @NotNull String promocode,
+            @NotNull XStoreCallback<CartResponse> callback
+    ) {
+        getRequestExecutor().redeemPromocode(promocode, "current", null, callback);
+    }
+
+    /**
+     * Redeems a code of promo code.
+     * After redeeming a promo code, the user will get free items and/or the price of cart will be decreased.
+     *
+     * @param promocode            unique code of promocode. Contains letters and numbers
+     * @param cartId               cart id. Default value is "current"
+     * @param selectedUnitItems    the reward that is selected by a user. Object key is an SKU of a unit, and value is an SKU of one of the items in a unit
+     * @param callback             status callback
+     * @see <a href="https://developers.xsolla.com/store-api/promotions/promo-codes/redeem-promo-code">Store API Reference</a>
+     */
+    public static void redeemPromocode(
+            @NotNull String promocode,
+            @NotNull String cartId,
+            @Nullable Pair<String, String> selectedUnitItems,
+            @NotNull XStoreCallback<CartResponse> callback
+    ) {
+        getRequestExecutor().redeemPromocode(promocode, cartId, selectedUnitItems, callback);
+    }
+
+    /**
+     * Gets promo code rewards by its code. Can be used to allow users to choose one of many items as a bonus.
+     * The usual case is choosing a DRM if the promo code contains a game as a bonus (type=unit)
+     *
+     * @param promocode            unique code of promocode. Contains letters and numbers
+     * @param callback             status callback
+     * @see <a href="https://developers.xsolla.com/store-api/promotions/promo-codes/get-promo-code-rewards-by-code">Store API Reference</a>
+     */
+    public static void getPromocodeRewardsByCode(
+            @NotNull String promocode,
+            @NotNull XStoreCallback<RewardsByPromocodeResponse> callback
+    ) {
+        getRequestExecutor().getPromocodeRewardByCode(promocode, callback);
     }
 
 }
