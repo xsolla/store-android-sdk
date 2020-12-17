@@ -13,6 +13,12 @@ android {
             keyAlias "${System.env.KEY_ALIAS}"
             keyPassword "${System.env.KEY_PASSWORD}"
         }
+        debug {
+            storeFile file("../xsolla.keystore")
+            storePassword "${System.env.STORE_PASSWORD}"
+            keyAlias "${System.env.KEY_ALIAS}"
+            keyPassword "${System.env.KEY_PASSWORD}"
+        }
     }
 
     defaultConfig {
