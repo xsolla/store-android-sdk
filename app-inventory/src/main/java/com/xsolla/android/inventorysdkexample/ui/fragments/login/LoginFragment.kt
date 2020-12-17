@@ -117,6 +117,9 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
             override fun onSuccess() {
                 val intent = Intent(requireActivity(), StoreActivity::class.java)
                 startActivity(intent)
+                if (!PrefManager.getHideTutorial()) {
+                    startTutorial()
+                }
                 activity?.finish()
                 loginButton.isEnabled = true
                 demoUserButton.isEnabled = true
