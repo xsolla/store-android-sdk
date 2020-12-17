@@ -79,6 +79,7 @@ class XLogin private constructor(
          *
          * @return token
          */
+        @JvmStatic
         val token: String?
             get() = if (getInstance().useOauth) {
                 getInstance().tokenUtils.oauthAccessToken
@@ -92,6 +93,7 @@ class XLogin private constructor(
          * @param context      application context
          * @param loginConfig  config for initializing. Use LoginConfig.OauthBuilder or LoginConfig.JwtBuilder
          */
+        @JvmStatic
         fun init(context: Context, loginConfig: LoginConfig) {
             val interceptor = Interceptor { chain ->
                 val originalRequest = chain.request()
@@ -146,6 +148,7 @@ class XLogin private constructor(
          *
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-register-a-new-user)
          */
+        @JvmStatic
         fun register(username: String, email: String, password: String, callback: RegisterCallback) {
             val retrofitCallback: Callback<Void> = object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -184,6 +187,7 @@ class XLogin private constructor(
          *
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/jwt-auth-by-username-and-password)
          */
+        @JvmStatic
         fun authenticate(username: String, password: String, callback: AuthCallback) {
             authenticate(username, password, false, callback)
         }
@@ -198,6 +202,7 @@ class XLogin private constructor(
          *
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/jwt-auth-by-username-and-password)
          */
+        @JvmStatic
         fun authenticate(username: String, password: String, withLogout: Boolean, callback: AuthCallback) {
             if (!getInstance().useOauth) {
                 val authUserBody = AuthUserBody(username, password)
@@ -260,6 +265,7 @@ class XLogin private constructor(
          * @param callback status callback
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/generate-jwt)
          */
+        @JvmStatic
         fun refreshToken(callback: RefreshTokenCallback) {
             require(getInstance().useOauth) { "Impossible to refresh JWT token. Use OAuth 2.0 instead" }
             getInstance().loginApi
@@ -301,6 +307,7 @@ class XLogin private constructor(
          * @param callback                     status callback
          * @see <a href="https://developers.xsolla.com/login-api/methods/oauth-20/authentication-via-provider-project">Login API Reference</a>
          */
+        @JvmStatic
         fun oauthAuthenticateViaProviderProject(
             platformProviderName: String,
             scope: String,
@@ -339,6 +346,7 @@ class XLogin private constructor(
          *
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-get-link-for-social-auth)
          */
+        @JvmStatic
         fun startSocialAuth(fragment: Fragment?, socialNetwork: SocialNetwork?, callback: StartSocialCallback?) {
             startSocialAuth(fragment, socialNetwork, false, callback)
         }
@@ -354,6 +362,7 @@ class XLogin private constructor(
          *
          * @see [Login API Reference](https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth)
          */
+        @JvmStatic
         fun startSocialAuth(fragment: Fragment?, socialNetwork: SocialNetwork?, withLogout: Boolean, callback: StartSocialCallback?) {
             loginSocial.startSocialAuth(null, fragment, socialNetwork!!, withLogout, callback!!)
         }
@@ -368,6 +377,7 @@ class XLogin private constructor(
          *
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-get-link-for-social-auth)
          */
+        @JvmStatic
         fun startSocialAuth(activity: Activity?, socialNetwork: SocialNetwork?, callback: StartSocialCallback?) {
             startSocialAuth(activity, socialNetwork, false, callback)
         }
@@ -383,6 +393,7 @@ class XLogin private constructor(
          *
          * @see [Login API Reference](https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth)
          */
+        @JvmStatic
         fun startSocialAuth(activity: Activity?, socialNetwork: SocialNetwork?, withLogout: Boolean, callback: StartSocialCallback?) {
             loginSocial.startSocialAuth(activity, null, socialNetwork!!, withLogout, callback!!)
         }
@@ -400,6 +411,7 @@ class XLogin private constructor(
          *
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-get-link-for-social-auth)
          */
+        @JvmStatic
         fun finishSocialAuth(activity: Activity?, socialNetwork: SocialNetwork?, activityResultRequestCode: Int, activityResultCode: Int, activityResultData: Intent?, callback: FinishSocialCallback?) {
             finishSocialAuth(activity, socialNetwork, activityResultRequestCode, activityResultCode, activityResultData, false, callback)
         }
@@ -418,6 +430,7 @@ class XLogin private constructor(
          *
          * @see [Login API Reference](https://developers.xsolla.com/login-api/jwt/jwt-get-link-for-social-auth)
          */
+        @JvmStatic
         fun finishSocialAuth(activity: Activity?, socialNetwork: SocialNetwork?, activityResultRequestCode: Int, activityResultCode: Int, activityResultData: Intent?, withLogout: Boolean, callback: FinishSocialCallback?) {
             loginSocial.finishSocialAuth(activity!!, socialNetwork!!, activityResultRequestCode, activityResultCode, activityResultData, withLogout, callback!!)
         }
@@ -429,6 +442,7 @@ class XLogin private constructor(
          * @param callback status callback
          * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/general/reset-password)
          */
+        @JvmStatic
         fun resetPassword(username: String?, callback: ResetPasswordCallback) {
             val resetPasswordBody = ResetPasswordBody(username!!)
             getInstance().loginApi
@@ -451,6 +465,7 @@ class XLogin private constructor(
         /**
          * Clear authentication data
          */
+        @JvmStatic
         fun logout() {
             getInstance().tokenUtils.jwtToken = null
             getInstance().tokenUtils.oauthRefreshToken = null
@@ -468,6 +483,7 @@ class XLogin private constructor(
          * @param callback           callback with social friends
          * @see <a href="https://developers.xsolla.com/login-api/methods/users/get-users-friends">Login API Reference</a>
          */
+        @JvmStatic
         fun getSocialFriends(
             platform: FriendsPlatform?,
             offset: Int,
@@ -507,6 +523,7 @@ class XLogin private constructor(
          * @param callback           callback with users
          * @see <a href="https://developers.xsolla.com/login-api/methods/users/search-users-by-nickname">Login API Reference</a>
          */
+        @JvmStatic
         fun searchUsersByNickname(
             nickname: String?,
             offset: Int,
@@ -541,6 +558,7 @@ class XLogin private constructor(
          * @param callback           callback with social networks linked to the user account
          * @see [Login API Reference](https://developers.xsolla.com/user-account-api/social-networks/get-linked-networks/)
          */
+        @JvmStatic
         fun getLinkedSocialNetworks(callback: LinkedSocialNetworksCallback) {
             getInstance().loginApi
                 .getLinkedSocialNetworks("Bearer $token")
@@ -570,6 +588,7 @@ class XLogin private constructor(
          * @param platform       social network for decoupling
          * @param callback       callback that indicates the success of failure of an action
          */
+        @JvmStatic
         fun unlinkSocialNetwork(platform: SocialNetworkForLinking, callback: UnlinkSocialNetworkCallback) {
             getInstance().loginApi
                 .unlinkSocialNetwork("Bearer $token", platform.name.toLowerCase())
@@ -596,6 +615,7 @@ class XLogin private constructor(
          * @param callback        callback that indicates the success of failure of an action
          * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/users/update-users-friends/)
          */
+        @JvmStatic
         fun updateSocialFriends(platform: FriendsPlatform?, callback: UpdateSocialFriendsCallback) {
             getInstance().loginApi
                 .updateSocialFriends("Bearer $token", platform?.name?.toLowerCase())
@@ -622,6 +642,7 @@ class XLogin private constructor(
          * @return                       intent that you can use for open activity for result
          * @see [User Account API Reference](https://developers.xsolla.com/user-account-api/social-networks/link-social-network-to-account)
          */
+        @JvmStatic
         fun createSocialAccountLinkingIntent(context: Context, socialNetwork: SocialNetworkForLinking): Intent {
             val intent = Intent(context, ActivityAuthWebView::class.java)
             intent.putExtra(ActivityAuthWebView.ARG_AUTH_URL, LOGIN_HOST + "/api/users/me/social_providers/" + socialNetwork.name.toLowerCase() + "/login_redirect")
@@ -637,6 +658,7 @@ class XLogin private constructor(
          * @param callback callback that contains public user info
          * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/users/get-user-public-profile/)
          */
+        @JvmStatic
         fun getUserPublicInfo(userId: String, callback: GetUserPublicInfoCallback) {
             getInstance().loginApi
                 .getUserPublicInfo("Bearer $token", userId)
@@ -666,6 +688,7 @@ class XLogin private constructor(
          * @param callback    callback with data
          * @see <a href="https://developers.xsolla.com/user-account-api/all-user-details/get-user-details">User Account API Reference</a>
          */
+        @JvmStatic
         fun getCurrentUserDetails(callback: GetCurrentUserDetailsCallback) {
             getInstance().loginApi
                 .getCurrentUserDetails("Bearer $token")
@@ -695,6 +718,7 @@ class XLogin private constructor(
          * @param callback    callback with data
          * @see <a href="https://developers.xsolla.com/user-account-api/user-email/getusersmeemail">User Account API Reference</a>
          */
+        @JvmStatic
         fun getCurrentUserEmail(callback: GetCurrentUserEmailCallback) {
             getInstance().loginApi
                 .getCurrentUserEmail("Bearer $token")
@@ -729,6 +753,7 @@ class XLogin private constructor(
          * @param callback    status callback
          * @see <a href="https://developers.xsolla.com/user-account-api/all-user-details/patchusersme/">User Account API Reference</a>
          */
+        @JvmStatic
         fun updateCurrentUserDetails(
             birthday: String?,
             firstName: String?,
@@ -761,6 +786,7 @@ class XLogin private constructor(
          * @param callback    status callback
          * @see <a href="https://developers.xsolla.com/user-account-api/user-picture/deleteusersmepicture/">User Account API Reference</a>
          */
+        @JvmStatic
         fun deleteCurrentUserAvatar(callback: DeleteCurrentUserAvatarCallback) {
             getInstance().loginApi
                 .deleteUserPicture("Bearer $token")
@@ -786,6 +812,7 @@ class XLogin private constructor(
          * @param callback    callback with url of new avatar
          * @see [User Account API Reference](https://developers.xsolla.com/user-account-api/user-picture/postusersmepicture)
          */
+        @JvmStatic
         fun uploadCurrentUserAvatar(file: File, callback: UploadCurrentUserAvatarCallback) {
             val part = MultipartBody.Part.createFormData("picture", file.name, RequestBody.create(MediaType.parse("image/*"), file))
             getInstance().loginApi
@@ -815,6 +842,7 @@ class XLogin private constructor(
          * @param callback    callback with data
          * @see [User Account API Reference](https://developers.xsolla.com/user-account-api/user-phone-number/getusersmephone)
          */
+        @JvmStatic
         fun getCurrentUserPhone(callback: GetCurrentUserPhoneCallback) {
             getInstance().loginApi
                 .getUserPhone("Bearer $token")
@@ -844,6 +872,7 @@ class XLogin private constructor(
          * @param callback    status callback
          * @see <a href="https://developers.xsolla.com/user-account-api/user-phone-number/postusersmephone">User Account API Reference</a>
          */
+        @JvmStatic
         fun updateCurrentUserPhone(phone: String?, callback: UpdateCurrentUserPhoneCallback) {
             val updateUserPhoneBody = UpdateUserPhoneBody(phone!!)
             getInstance().loginApi
@@ -870,6 +899,7 @@ class XLogin private constructor(
          * @param callback    status callback
          * @see <a href="https://developers.xsolla.com/user-account-api/user-phone-number/deleteusersmephonephonenumber">User Account API Reference</a>
          */
+        @JvmStatic
         fun deleteCurrentUserPhone(phone: String, callback: DeleteCurrentUserPhoneCallback) {
             getInstance().loginApi
                 .deleteUserPhone("Bearer $token", phone)
@@ -899,6 +929,7 @@ class XLogin private constructor(
          * @param callback                  callback with friends' relationships and pagination params
          * @see [User Account API Reference](https://developers.xsolla.com/user-account-api/user-friends/get-friends)
          */
+        @JvmStatic
         fun getCurrentUserFriends(
             afterUrl: String?,
             @IntRange(from = 1, to = 50) limit: Int,
@@ -937,6 +968,7 @@ class XLogin private constructor(
          * @param callback                  callback that indicates the success of failure of an action
          * @see [User Account API Reference](https://developers.xsolla.com/user-account-api/user-friends/postusersmerelationships)
          */
+        @JvmStatic
         fun updateCurrentUserFriend(
             friendXsollaUserId: String,
             action: UpdateUserFriendsRequestAction,
@@ -972,6 +1004,7 @@ class XLogin private constructor(
          *
          * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/attributes/get-users-attributes-from-client)
          */
+        @JvmStatic
         fun getUsersAttributesFromClient(
             keys: List<String>?,
             publisherProjectId: Int?,
@@ -1016,6 +1049,7 @@ class XLogin private constructor(
          * @param callback                  callback that indicates the success or failure of an action
          * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/attributes/update-users-attributes-from-client)
          */
+        @JvmStatic
         fun updateUsersAttributesFromClient(
             attributes: List<UserAttribute>?,
             publisherProjectId: Int?,
@@ -1050,6 +1084,7 @@ class XLogin private constructor(
          * @param callback         status callback
          * @see <a href="https://developers.xsolla.com/login-api/methods/users/check-users-age/">Login API Reference</a>
          */
+        @JvmStatic
         fun checkUserAge(birthday: String, callback: CheckUserAgeCallback) {
             getInstance().loginApi
                 .checkUserAge(CheckUserAgeBody(getInstance().projectId, birthday))
@@ -1080,6 +1115,7 @@ class XLogin private constructor(
          * @param callback         status callback
          * @see <a href="https://developers.xsolla.com/login-api/methods/users/create-code-for-linking-accounts">Login API Reference</a>
          */
+        @JvmStatic
         fun createCodeForLinkingAccount(callback: CreateCodeForLinkingAccountCallback) {
             getInstance().loginApi
                 .createCodeForLinkingAccounts("Bearer $token")
@@ -1103,6 +1139,7 @@ class XLogin private constructor(
                 })
         }
 
+        @JvmStatic
         fun isTokenExpired(leewaySec: Long): Boolean {
             return if (getInstance().useOauth) {
                 getInstance().tokenUtils.oauthExpireTimeUnixSec <= System.currentTimeMillis() / 1000
@@ -1112,6 +1149,7 @@ class XLogin private constructor(
             }
         }
 
+        @JvmStatic
         fun canRefreshToken(): Boolean {
             return getInstance().useOauth && getInstance().tokenUtils.oauthRefreshToken != null
         }
@@ -1121,6 +1159,7 @@ class XLogin private constructor(
          *
          * @return parsed JWT content
          */
+        @JvmStatic
         val jwt: JWT?
             get() {
                 require(!getInstance().useOauth) { "Unavailable when OAuth 2.0 is used" }

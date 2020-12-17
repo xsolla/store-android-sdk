@@ -28,6 +28,7 @@ class XInventory private constructor(
             return instance!!
         }
 
+        @JvmStatic
         fun init(projectId: Int, token: String) {
 
             val interceptor = Interceptor { chain ->
@@ -75,6 +76,7 @@ class XInventory private constructor(
          * @param callback status callback
          * @see [Inventory API Reference](https://developers.xsolla.com/store-api/inventory-client/get-user-inventory)
          */
+        @JvmStatic
         fun getInventory(callback: GetInventoryCallback) {
             getRequestExecutor().getInventory(callback)
         }
@@ -85,6 +87,7 @@ class XInventory private constructor(
          * @param callback status callback
          * @see [Inventory API Reference](https://developers.xsolla.com/store-api/inventory-client/get-user-subscriptions)
          */
+        @JvmStatic
         fun getSubscriptions(callback: GetSubscriptionsCallback) {
             getRequestExecutor().getSubscriptions(callback)
         }
@@ -95,6 +98,7 @@ class XInventory private constructor(
          * @param callback status callback
          * @see [Inventory API Reference](https://developers.xsolla.com/store-api/inventory-client/get-user-virtual-balance)
          */
+        @JvmStatic
         fun getVirtualBalance(callback: GetVirtualBalanceCallback) {
             getRequestExecutor().getVirtualBalance(callback)
         }
@@ -108,6 +112,7 @@ class XInventory private constructor(
          * @param callback   status callback
          * @see [Inventory API Reference](https://developers.xsolla.com/store-api/inventory-client/consume-item)
          */
+        @JvmStatic
         fun consumeItem(sku: String, quantity: Long, instanceId: String?, callback: ConsumeItemCallback) {
             getRequestExecutor().consumeItem(sku, quantity, instanceId, callback)
         }
