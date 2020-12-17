@@ -18,6 +18,7 @@
     <string name="password_confirm_input_hint">Confirm password</string>
     <string name="password_min_length_helper">Minimum length: 6 symbols</string>
     <string name="log_in_button">log in</string>
+    <string name="log_in_as_demo_user">log in as demo user</string>
     <string name="sign_up_button">sign up</string>
     <string name="reset_password_button">reset password</string>
     <string name="log_in_with_google_button">log in with google</string>

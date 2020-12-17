@@ -1,11 +1,11 @@
 package com.xsolla.android.storesdkexample.ui.fragments.login
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import com.xsolla.android.appcore.LoginBottomSheet
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.AuthCallback
 import com.xsolla.android.login.callback.FinishSocialCallback
@@ -15,13 +15,11 @@ import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.StoreActivity
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
-import com.xsolla.android.storesdkexample.util.ViewUtils
 import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_login.view.*
 import java.util.*
 
-class LoginFragment : BaseFragment() {
+class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
 
     companion object {
         private const val MIN_PASSWORD_LENGTH = 6
@@ -37,61 +35,42 @@ class LoginFragment : BaseFragment() {
     override fun initUI() {
         initLoginButtonEnabling()
 
-        rootView.loginButton.setOnClickListener { v ->
-            ViewUtils.disable(v)
-
-            hideKeyboard()
+        loginButton.setOnClickListener {
             val username = usernameInput.text.toString()
             val password = passwordInput.text.toString()
-
-            XLogin.authenticate(username, password, BuildConfig.WITH_LOGOUT, object : AuthCallback {
-                override fun onSuccess() {
-                    val intent = Intent(requireActivity(), StoreActivity::class.java)
-                    startActivity(intent)
-                    activity?.finish()
-                    ViewUtils.enable(v)
-                }
-
-                override fun onError(throwable: Throwable?, errorMessage: String?) {
-                    showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
-                    ViewUtils.enable(v)
-                }
-
-            })
+            loginWithPassword(username, password)
         }
 
-        rootView.googleButton.setRateLimitedClickListener {
+        demoUserButton.setOnClickListener {
+            loginWithPassword("xsolla", "xsolla")
+        }
+
+        googleButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.GOOGLE
             XLogin.startSocialAuth(this, SocialNetwork.GOOGLE, BuildConfig.WITH_LOGOUT, startSocialCallback)
         }
 
-        rootView.facebookButton.setRateLimitedClickListener {
+        facebookButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.FACEBOOK
             XLogin.startSocialAuth(this, SocialNetwork.FACEBOOK, BuildConfig.WITH_LOGOUT, startSocialCallback)
         }
 
-        rootView.twitterButton.setRateLimitedClickListener {
-            selectedSocialNetwork = SocialNetwork.TWITTER
-            XLogin.startSocialAuth(this, SocialNetwork.TWITTER, BuildConfig.WITH_LOGOUT, startSocialCallback)
-        }
-
-        rootView.baiduButton.setRateLimitedClickListener {
+        baiduButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.BAIDU
             XLogin.startSocialAuth(this, SocialNetwork.BAIDU, BuildConfig.WITH_LOGOUT, startSocialCallback)
         }
 
-        rootView.naverButton.setRateLimitedClickListener {
-            selectedSocialNetwork = SocialNetwork.NAVER
-            XLogin.startSocialAuth(this, SocialNetwork.NAVER, BuildConfig.WITH_LOGOUT, startSocialCallback)
+        moreButton.setRateLimitedClickListener {
+            LoginBottomSheet.newInstance().show(childFragmentManager, "moreSocials")
         }
 
-        rootView.resetPasswordButton.setOnClickListener { resetPassword() }
+        resetPasswordButton.setOnClickListener { resetPassword() }
 
-        rootView.privacyPolicyButton.setOnClickListener { showPrivacyPolicy() }
+        privacyPolicyButton.setOnClickListener { showPrivacyPolicy() }
     }
 
     private fun initLoginButtonEnabling() {
-        rootView.usernameInput.addTextChangedListener(object : TextWatcher {
+        usernameInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 updateLoginButtonEnable()
             }
@@ -105,7 +84,7 @@ class LoginFragment : BaseFragment() {
             }
         })
 
-        rootView.passwordInput.addTextChangedListener(object : TextWatcher {
+        passwordInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 updateLoginButtonEnable()
             }
@@ -121,9 +100,33 @@ class LoginFragment : BaseFragment() {
     }
 
     private fun updateLoginButtonEnable() {
-        val usernameValid = rootView.usernameInput.text?.isNotEmpty() ?: false
-        val passwordValid = (rootView.passwordInput.text?.length ?: 0) >= MIN_PASSWORD_LENGTH
-        rootView.loginButton.isEnabled = usernameValid && passwordValid
+        val usernameValid = usernameInput.text?.isNotEmpty() ?: false
+        val passwordValid = (passwordInput.text?.length ?: 0) >= MIN_PASSWORD_LENGTH
+        loginButton.isEnabled = usernameValid && passwordValid
+    }
+
+    private fun loginWithPassword(username: String, password: String) {
+        loginButton.isEnabled = false
+        demoUserButton.isEnabled = false
+
+        hideKeyboard()
+
+        XLogin.authenticate(username, password, BuildConfig.WITH_LOGOUT, object : AuthCallback {
+            override fun onSuccess() {
+                val intent = Intent(requireActivity(), StoreActivity::class.java)
+                startActivity(intent)
+                activity?.finish()
+                loginButton.isEnabled = true
+                demoUserButton.isEnabled = true
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
+                loginButton.isEnabled = true
+                demoUserButton.isEnabled = true
+            }
+
+        })
     }
 
     private fun resetPassword() {
@@ -191,6 +194,19 @@ class LoginFragment : BaseFragment() {
         savedInstanceState?.let { state ->
             state.getString("selectedSocialNetwork")?.let {
                 selectedSocialNetwork = SocialNetwork.valueOf(it)
+            }
+        }
+    }
+
+    override fun onSocialClicked(socialNetwork: LoginBottomSheet.SocialNetworks) {
+        when (socialNetwork) {
+            LoginBottomSheet.SocialNetworks.TWITTER -> {
+                selectedSocialNetwork = SocialNetwork.TWITTER
+                XLogin.startSocialAuth(this, SocialNetwork.TWITTER, BuildConfig.WITH_LOGOUT, startSocialCallback)
+            }
+            LoginBottomSheet.SocialNetworks.LINKEDIN -> {
+                selectedSocialNetwork = SocialNetwork.LINKEDIN
+                XLogin.startSocialAuth(this, SocialNetwork.LINKEDIN, BuildConfig.WITH_LOGOUT, startSocialCallback)
             }
         }
     }

@@ -59,4 +59,12 @@
         <item name="icon">@drawable/ic_naver</item>
     </style>
 
+    <style name="Widget.Xsolla.SocialButton.Linkedin.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_linkedin</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.More.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_social_more</item>
+    </style>
+
 </resources>
