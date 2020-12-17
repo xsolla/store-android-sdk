@@ -390,7 +390,7 @@ class XLogin private constructor(
         /**
          * Finish authentication via a social network
          *
-         * @param context                   application context
+         * @param activity                  current activity
          * @param socialNetwork             social network to authenticate with, must be connected to Login in Publisher Account
          * @param activityResultRequestCode request code from onActivityResult
          * @param activityResultCode        result code from onActivityResult
@@ -407,7 +407,7 @@ class XLogin private constructor(
         /**
          * Finish authentication via a social network
          *
-         * @param context                   application context
+         * @param activity                  current activity
          * @param socialNetwork             social network to authenticate with, must be connected to Login in Publisher Account
          * @param activityResultRequestCode request code from onActivityResult
          * @param activityResultCode        result code from onActivityResult

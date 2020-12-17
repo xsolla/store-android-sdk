@@ -209,7 +209,9 @@ object LoginSocial {
                         activity.startActivityForResult(e.intent, RC_AUTH_GOOGLE_REQUEST_PERMISSION)
                         return@Runnable
                     } catch (e: Exception) {
-                        callback.onAuthError(e, e.localizedMessage)
+                        Handler(Looper.getMainLooper()).post {
+                            callback.onAuthError(e, e.localizedMessage)
+                        }
                         return@Runnable
                     }
 
@@ -217,6 +219,7 @@ object LoginSocial {
                         Handler(Looper.getMainLooper()).post {
                             callback.onAuthError(null, "oauthToken is null")
                         }
+                        return@Runnable
                     }
                     finishSocialCallback = callback
                     this.withLogout = withLogout
