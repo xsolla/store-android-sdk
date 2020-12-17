@@ -20,6 +20,7 @@ generate_keystore:
     paths:
       - xsolla.keystore
       - signing.properties
+    expire_in: 10 mins
 
 build:
   tags:
