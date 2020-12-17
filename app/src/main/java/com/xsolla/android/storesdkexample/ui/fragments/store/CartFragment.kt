@@ -2,10 +2,12 @@ package com.xsolla.android.storesdkexample.ui.fragments.store
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -21,26 +23,26 @@ import com.xsolla.android.storesdkexample.listener.CartChangeListener
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.util.AmountUtils
-import kotlinx.android.synthetic.main.fragment_cart.checkoutButton
-import kotlinx.android.synthetic.main.fragment_cart.clearButton
-import kotlinx.android.synthetic.main.fragment_cart.continueButton
-import kotlinx.android.synthetic.main.fragment_cart.discountLabel
-import kotlinx.android.synthetic.main.fragment_cart.discountValue
-import kotlinx.android.synthetic.main.fragment_cart.recycler
-import kotlinx.android.synthetic.main.fragment_cart.subtotalLabel
-import kotlinx.android.synthetic.main.fragment_cart.subtotalValue
-import kotlinx.android.synthetic.main.fragment_cart.totalValue
+import kotlinx.android.synthetic.main.fragment_cart.*
 import java.math.BigDecimal
 
 class CartFragment : BaseFragment(), CartChangeListener {
 
     private val vmCart: VmCart by activityViewModels()
 
+    private lateinit var promocodeArrowEndIconDrawable: Drawable
+    private lateinit var promocodeSuccessEndIconDrawable: Drawable
+
     private var orderId = 0
 
     override fun getLayout() = R.layout.fragment_cart
 
     override fun initUI() {
+        promocodeArrowEndIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_forward_white_24)!!
+        promocodeSuccessEndIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_check_black_24)!!.apply {
+            setTint(Color.WHITE)
+        }
+
         val cartAdapter = CartAdapter(mutableListOf(), vmCart, this)
         with(recycler) {
             setHasFixedSize(true)
@@ -65,8 +67,9 @@ class CartFragment : BaseFragment(), CartChangeListener {
 
             val currency = items[0].price!!.currency
 
-            val sumWithoutDiscount = items.map { item -> item.price!!.getAmountWithoutDiscountDecimal()!! * item.quantity.toBigDecimal() }.fold(BigDecimal.ZERO, BigDecimal::add)
-            val sumWithDiscount = items.map { item -> item.price!!.getAmountDecimal()!! * item.quantity.toBigDecimal() }.fold(BigDecimal.ZERO, BigDecimal::add)
+            val itemsWithoutBonus = items.filter { it.price != null }
+            val sumWithoutDiscount = itemsWithoutBonus.map { item -> item.price!!.getAmountWithoutDiscountDecimal()!! * item.quantity.toBigDecimal() }.fold(BigDecimal.ZERO, BigDecimal::add)
+            val sumWithDiscount = itemsWithoutBonus.map { item -> item.price!!.getAmountDecimal()!! * item.quantity.toBigDecimal() }.fold(BigDecimal.ZERO, BigDecimal::add)
             val discount = sumWithoutDiscount.minus(sumWithDiscount)
 
             val hasDiscount = discount.toDouble() != 0.0
@@ -105,6 +108,8 @@ class CartFragment : BaseFragment(), CartChangeListener {
         vmCart.orderId.observe(viewLifecycleOwner, Observer {
             orderId = it
         })
+
+        setupPromocodeInput()
     }
 
     override fun onResume() {
@@ -136,6 +141,30 @@ class CartFragment : BaseFragment(), CartChangeListener {
 
     override fun onChange(result: String) {
         showSnack(result)
+    }
+
+    private fun setupPromocodeInput() {
+        input.setEndIconOnClickListener {
+            hideKeyboard()
+
+            vmCart.redeemPromocode(
+                inputEdit.text.toString(),
+                onSuccess = { input.endIconDrawable = promocodeSuccessEndIconDrawable },
+                onError = { message ->
+                    input.isErrorEnabled = true
+                    input.error = message
+                }
+            )
+        }
+        inputEdit.addTextChangedListener {
+            input.isErrorEnabled = false
+
+            if (!it.isNullOrBlank()) {
+                input.endIconDrawable = promocodeArrowEndIconDrawable
+            } else {
+                input.endIconDrawable = null
+            }
+        }
     }
 
     companion object {

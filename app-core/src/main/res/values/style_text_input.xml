@@ -5,6 +5,7 @@
         <item name="boxBackgroundColor">@color/filledbox_background_color</item>
         <item name="boxStrokeColor">@color/filledbox_stroke_color</item>
         <item name="hintTextColor">@color/on_surface_disabled_color</item>
+        <item name="placeholderTextColor">@color/on_surface_medium_color</item>
         <item name="android:textColorHint">@color/on_surface_disabled_color</item>
         <item name="boxCornerRadiusTopStart">0dp</item>
         <item name="boxCornerRadiusTopEnd">0dp</item>
