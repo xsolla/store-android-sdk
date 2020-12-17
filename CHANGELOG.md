@@ -1,5 +1,37 @@
 # Changelog
 
+## [1.1.0] - Login SDK - 2020-12-18
+
+### Added
+
+- New social networks support
+- New API methods support
+
+### Fixed
+
+- Native first time auth with Google
+- Java support
+
+## [1.0.1] - Inventory SDK - 2020-12-18
+
+### Fixed
+
+- Java support
+
+## [0.18.0] - Store SDK - 2020-12-18
+
+### Added
+
+- New API methods support
+- Promocodes functionality
+
+## [0.15.2] - Payments SDK - 2020-12-18
+
+### Fixed
+
+- Fix serverless integration naming
+
+
 ## [1.0.0] - Inventory SDK - 2020-12-04
 
 ### Added
