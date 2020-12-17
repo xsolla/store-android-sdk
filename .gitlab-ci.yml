@@ -8,6 +8,8 @@ stages:
 
 generate_keystore:
   stage: generate_keystore
+  except:
+    - branches
   script:
     - echo $STORE_FILE | base64 -d > xsolla.keystore
   artifacts:
