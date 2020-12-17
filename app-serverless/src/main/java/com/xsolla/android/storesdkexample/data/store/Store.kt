@@ -6,7 +6,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.xsolla.android.payments.XPayments
 import com.xsolla.android.payments.data.AccessData
 import com.xsolla.android.payments.status.PaymentStatus
-import com.xsolla.android.simplifiedexample.BuildConfig
+import com.xsolla.android.serverlessexample.BuildConfig
 import com.xsolla.android.storesdkexample.data.db.DB
 import com.xsolla.android.storesdkexample.data.db.VirtualCurrency
 import com.xsolla.android.storesdkexample.data.db.VirtualItem

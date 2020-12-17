@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xsolla.android.payments.XPayments;
-import com.xsolla.android.simplifiedexample.BuildConfig;
-import com.xsolla.android.simplifiedexample.R;
-import com.xsolla.android.storesdkexample.adapter.VirtualItemsAdapter;
+import com.xsolla.android.serverlessexample.BuildConfig;
+import com.xsolla.android.serverlessexample.R;
+import com.xsolla.android.storesdkexample.adapter.VirtualCurrencyAdapter;
 import com.xsolla.android.storesdkexample.data.store.Store;
 import com.xsolla.android.storesdkexample.fragments.base.CatalogFragment;
 import com.xsolla.android.storesdkexample.listener.CreatePaystationIntentListener;
@@ -19,11 +19,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class VirtualItemsFragment extends CatalogFragment {
+public class VirtualCurrencyFragment extends CatalogFragment {
 
     private static final int RC_PAYSTATION = 1;
 
-    private VirtualItemsAdapter virtualItemsAdapter;
+    private VirtualCurrencyAdapter shopAdapter;
     private RecyclerView recyclerView;
 
     @Override
@@ -41,20 +41,19 @@ public class VirtualItemsFragment extends CatalogFragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        setupToolbar("Virtual Items");
+        setupToolbar("Virtual Currency");
         getItems();
     }
 
 
     private void getItems() {
-        Store.getVirtualItems(new Store.VirtualItemsCallback() {
+        Store.getVirtualCurrencyPacks(new Store.VirtualCurrencyPacksCallback() {
             @Override
-            public void onSuccess(@NotNull List<Store.VirtualItem> virtualItems) {
-                virtualItemsAdapter = new VirtualItemsAdapter(
+            public void onSuccess(@NotNull List<Store.VirtualCurrencyPack> virtualCurrencyPacks) {
+                shopAdapter = new VirtualCurrencyAdapter(
                         getContext(),
-                        virtualItems,
+                        virtualCurrencyPacks,
                         new CreatePaystationIntentListener() {
-
                             @Override
                             public void onIntentCreated(Intent intent, String externalId) {
                                 startActivityForResult(intent, RC_PAYSTATION);
@@ -66,7 +65,7 @@ public class VirtualItemsFragment extends CatalogFragment {
                                 showSnack(message);
                             }
                         });
-                recyclerView.setAdapter(virtualItemsAdapter);
+                recyclerView.setAdapter(shopAdapter);
             }
 
             @Override
