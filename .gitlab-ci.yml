@@ -10,6 +10,8 @@ generate_keystore:
   stage: generate_keystore
   except:
     - branches
+  before_script:
+    - rm xsolla.keystore
   script:
     - echo $STORE_FILE | base64 -d > xsolla.keystore
   artifacts:
