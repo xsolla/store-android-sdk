@@ -29,7 +29,10 @@ build:
   except:
     - branches
   script:
-    - ./gradlew assembleRelease
+    - ./gradlew :app:assembleRelease
+    - ./gradlew :app-playfab:assembleRelease
+    - ./gradlew :app-simplified:assembleRelease
+    - ./gradlew :app-inventory:assembleRelease
   artifacts:
     expire_in: 2 hours
     paths:
