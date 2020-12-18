@@ -8,11 +8,6 @@ android {
 
     signingConfigs {
         release {
-            /*storeFile file("../xsolla.keystore")
-            storePassword "${System.env.STORE_PASSWORD}"
-            keyAlias "${System.env.KEY_ALIAS}"
-            keyPassword "${System.env.KEY_PASSWORD}"*/
-
             file("../signing.properties").with { propFile ->
                 if (propFile.canRead()) {
                     def properties = new Properties()
