@@ -29,16 +29,14 @@ build:
   except:
     - branches
   script:
-    - ./gradlew :app:assembleRelease
-    - ./gradlew :app-playfab:assembleRelease
-    - ./gradlew :app-simplified:assembleRelease
-    - ./gradlew :app-inventory:assembleRelease
+    - ./gradlew assembleRelease
   artifacts:
     expire_in: 2 hours
     paths:
       - app/build/outputs/
       - app-playfab/build/outputs/
       - app-serverless/build/outputs/
+      - app-inventory/build/outputs/
   cache:
     key: ${CI_PROJECT_ID}
     paths:
