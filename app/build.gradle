@@ -22,21 +22,6 @@ android {
                 }
             }
         }
-        debug {
-            file("../signing.properties").with { propFile ->
-                if (propFile.canRead()) {
-                    def properties = new Properties()
-                    properties.load(new FileInputStream(propFile))
-
-                    storeFile file(properties['keystorePath'])
-                    storePassword properties['keystorePassword']
-                    keyAlias properties['keyAlias']
-                    keyPassword properties['keyPassword']
-                } else {
-                    println 'Unable to read signing.properties'
-                }
-            }
-        }
     }
 
     defaultConfig {
@@ -67,8 +52,6 @@ android {
             buildConfigField 'boolean', 'IS_SANDBOX', 'false'
         }
         debug {
-            signingConfig signingConfigs.debug
-
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
@@ -88,7 +71,6 @@ dependencies {
     implementation project(":app-core")
 
     implementation project(":xsolla-login-sdk")
-    // Uncomment to implement native auth
     implementation project(":xsolla-login-sdk-facebook")
     implementation project(":xsolla-login-sdk-google")
     implementation project(":xsolla-store-sdk")
