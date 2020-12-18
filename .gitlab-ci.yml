@@ -8,11 +8,11 @@ stages:
 
 generate_keystore:
   stage: generate_keystore
-#  except:
-#    - branches
+  except:
+    - branches
   script:
     - echo $STORE_FILE | base64 -di > debug.keystore
-    - echo "keystorePath=debug.keystore" > signing.properties
+    - echo "keystorePath=../debug.keystore" > signing.properties
     - echo "keystorePassword=$STORE_PASSWORD" >> signing.properties
     - echo "keyAlias=$KEY_ALIAS" >> signing.properties
     - echo "keyPassword=$KEY_PASSWORD" >> signing.properties
@@ -26,8 +26,8 @@ build:
   tags:
     - sdk
   stage: build
-#  except:
-#    - branches
+  except:
+    - branches
   script:
     - ./gradlew assembleDebug
   artifacts:
@@ -45,8 +45,8 @@ test:
   tags:
     - sdk
   stage: test
-#  except:
-#    - branches
+  except:
+    - branches
   script:
     - ./gradlew test
   cache:
@@ -58,8 +58,8 @@ generateDebugApp:
   tags:
     - sdk
   stage: publish
-#  except:
-#    - branches
+  except:
+    - branches
   before_script:
     - mkdir -p artifacts
     - touch ./artifacts/info.txt

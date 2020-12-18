@@ -33,7 +33,7 @@ android {
                     def properties = new Properties()
                     properties.load(new FileInputStream(propFile))
 
-                    storeFile file("../debug.keystore")
+                    storeFile file(properties['keystorePath'])
                     storePassword properties['keystorePassword']
                     keyAlias properties['keyAlias']
                     keyPassword properties['keyPassword']
