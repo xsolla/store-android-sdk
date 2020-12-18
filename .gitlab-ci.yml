@@ -68,10 +68,10 @@ generateDebugApp:
     - echo "Git commit          ${CI_COMMIT_SHA}"       >> ./artifacts/info.txt
     - echo "Gitlab pipeline     ${CI_PIPELINE_ID}"      >> ./artifacts/info.txt
   script:
-    - mv app/build/outputs/apk/release/app-debug.apk ./artifacts/SampleApp-Default.apk
-    - mv app-playfab/build/outputs/apk/release/app-playfab-debug.apk ./artifacts/SampleApp-Playfab.apk
-    - mv app-serverless/build/outputs/apk/release/app-serverless-debug.apk ./artifacts/SampleApp-Serverless.apk
-    - mv app-inventory/build/outputs/apk/release/app-inventory-debug.apk ./artifacts/SampleApp-Inventory.apk
+    - mv app/build/outputs/apk/release/app-release.apk ./artifacts/SampleApp-Default.apk
+    - mv app-playfab/build/outputs/apk/release/app-playfab-release.apk ./artifacts/SampleApp-Playfab.apk
+    - mv app-serverless/build/outputs/apk/release/app-serverless-release.apk ./artifacts/SampleApp-Serverless.apk
+    - mv app-inventory/build/outputs/apk/release/app-inventory-release.apk ./artifacts/SampleApp-Inventory.apk
   artifacts:
     expire_in: 2 hours
     paths:
