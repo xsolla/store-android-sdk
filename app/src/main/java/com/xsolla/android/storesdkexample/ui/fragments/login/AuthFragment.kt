@@ -1,22 +1,22 @@
 package com.xsolla.android.storesdkexample.ui.fragments.login
 
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayout
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.databinding.FragmentAuthBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_auth.*
-import kotlinx.android.synthetic.main.fragment_auth.view.*
 
 class AuthFragment : BaseFragment() {
-    override fun getLayout(): Int {
-        return R.layout.fragment_auth
-    }
+    private val binding: FragmentAuthBinding by viewBinding()
+
+    override fun getLayout() = R.layout.fragment_auth
 
     override fun initUI() {
         initTabs()
     }
 
     private fun initTabs() {
-        rootView.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab) {
                 val fragment = when(tab.position) {
                     0 -> LoginFragment()
@@ -25,7 +25,7 @@ class AuthFragment : BaseFragment() {
                 }
 
                 fragment?.let { newFragment ->
-                    fragmentContainer.removeAllViews()
+                    binding.fragmentContainer.removeAllViews()
                     parentFragmentManager
                             .beginTransaction()
                             .replace(R.id.fragmentContainer, newFragment)

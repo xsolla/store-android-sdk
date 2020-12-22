@@ -9,17 +9,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.VcAdapter
+import com.xsolla.android.storesdkexample.databinding.FragmentCatalogBinding
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.util.BaseParcelable
-import kotlinx.android.synthetic.main.fragment_catalog.view.*
 
 class VcPageFragment : Fragment(), PurchaseListener {
+    private val binding: FragmentCatalogBinding by viewBinding()
 
     private val vmCart: VmCart by activityViewModels()
     private val vmBalance: VmBalance by activityViewModels()
@@ -44,7 +46,7 @@ class VcPageFragment : Fragment(), PurchaseListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val items = requireArguments().getParcelable<BaseParcelable>(ARG_ITEMS)?.value as? List<VirtualCurrencyPackageResponse.Item>
         items?.let {
-            with(view.catalogRecyclerView) {
+            with(binding.catalogRecyclerView) {
                 val linearLayoutManager = LinearLayoutManager(context)
                 addItemDecoration(DividerItemDecoration(context, linearLayoutManager.orientation).apply {
                     ContextCompat.getDrawable(context, R.drawable.item_divider)?.let { setDrawable(it) }

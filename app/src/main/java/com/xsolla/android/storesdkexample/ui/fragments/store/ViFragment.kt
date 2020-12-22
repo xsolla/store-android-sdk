@@ -2,6 +2,7 @@ package com.xsolla.android.storesdkexample.ui.fragments.store
 
 import android.os.Parcelable
 import androidx.fragment.app.activityViewModels
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.inventory.callback.GetInventoryCallback
@@ -19,14 +20,14 @@ import com.xsolla.android.store.entity.response.common.VirtualPrice
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.ViPagerAdapter
+import com.xsolla.android.storesdkexample.databinding.FragmentViBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmInventory
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
-import kotlinx.android.synthetic.main.fragment_vi.*
-import kotlinx.android.synthetic.main.fragment_vi.view.*
 
 class ViFragment : BaseFragment() {
+    private val binding: FragmentViBinding by viewBinding()
 
     private val inventoryViewModel: VmInventory by activityViewModels()
 
@@ -119,9 +120,9 @@ class ViFragment : BaseFragment() {
                     updatedItems.addAll(bundles)
                     packOfItems[groups.indexOf(bundleGroup)] = updatedItems
                 }
-                rootView.viewPager.adapter = ViPagerAdapter(this@ViFragment, packOfItems)
+                binding.viewPager.adapter = ViPagerAdapter(this@ViFragment, packOfItems)
 
-                TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
                     tab.text = groups[position]
                 }.attach()
             }

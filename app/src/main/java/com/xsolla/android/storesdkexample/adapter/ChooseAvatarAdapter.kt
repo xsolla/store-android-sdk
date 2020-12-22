@@ -10,10 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.data.local.PrefManager
+import com.xsolla.android.storesdkexample.databinding.ItemAvatarBinding
 import com.xsolla.android.storesdkexample.util.extensions.dpToPx
-import kotlinx.android.synthetic.main.item_avatar.view.avatarForChoosing
-import kotlinx.android.synthetic.main.item_avatar.view.avatarOverlay
-import kotlinx.android.synthetic.main.item_avatar.view.icCheck
 
 class ChooseAvatarAdapter(
     private val items: List<AvatarItem>,
@@ -33,15 +31,17 @@ class ChooseAvatarAdapter(
     }
 
     class ChooseAvatarViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val binding = ItemAvatarBinding.bind(view)
+
         fun bind(item: AvatarItem, userId: String, onAvatarClickListener: (resource: Int) -> Unit) {
             Glide.with(itemView)
                 .load(item.resource)
                 .circleCrop()
-                .into(itemView.avatarForChoosing)
+                .into(binding.avatarForChoosing)
 
             val currentAvatar = PrefManager.getAvatar(userId)
-            itemView.avatarOverlay.isVisible = item.resource == currentAvatar
-            itemView.icCheck.isVisible = item.resource == currentAvatar
+            binding.avatarOverlay.isVisible = item.resource == currentAvatar
+            binding.icCheck.isVisible = item.resource == currentAvatar
 
             itemView.setOnClickListener { onAvatarClickListener(item.resource) }
         }

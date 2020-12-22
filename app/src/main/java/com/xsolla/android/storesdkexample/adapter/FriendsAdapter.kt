@@ -4,11 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.viewbinding.ViewBinding
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.holder.FriendsViewHolder
+import com.xsolla.android.storesdkexample.databinding.ItemAddFriendButtonBinding
+import com.xsolla.android.storesdkexample.databinding.ItemFriendBinding
 import com.xsolla.android.storesdkexample.ui.vm.FriendUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.FriendsRelationship
 import com.xsolla.android.storesdkexample.ui.vm.FriendsTab
+import kotlin.reflect.KClass
 
 class FriendsAdapter(
     private val currentTab: FriendsTab,
@@ -41,7 +45,7 @@ class FriendsAdapter(
         } else {
             LayoutInflater.from(parent.context).inflate(R.layout.item_friend, parent, false)
         }
-        return FriendsViewHolder(view)
+        return FriendsViewHolder(view, ViewType.getBy(viewType))
     }
 
     override fun onBindViewHolder(holder: FriendsViewHolder, position: Int) {

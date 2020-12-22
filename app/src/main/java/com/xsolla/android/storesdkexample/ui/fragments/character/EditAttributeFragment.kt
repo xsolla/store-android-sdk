@@ -6,50 +6,45 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.login.entity.common.UserAttributePermission
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.databinding.FragmentEditAttributeBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmCharacterPage
-import kotlinx.android.synthetic.main.activity_store.appbar
-import kotlinx.android.synthetic.main.app_bar_main.view.mainToolbar
-import kotlinx.android.synthetic.main.fragment_edit_attribute.attributeKeyInput
-import kotlinx.android.synthetic.main.fragment_edit_attribute.attributeValueInput
-import kotlinx.android.synthetic.main.fragment_edit_attribute.close
-import kotlinx.android.synthetic.main.fragment_edit_attribute.removeDiscardButton
-import kotlinx.android.synthetic.main.fragment_edit_attribute.saveButton
 
 class EditAttributeFragment : BaseFragment() {
+
+    private val binding: FragmentEditAttributeBinding by viewBinding()
 
     private val args: EditAttributeFragmentArgs by navArgs()
     private val viewModel: VmCharacterPage by activityViewModels()
 
     override fun getLayout() = R.layout.fragment_edit_attribute
 
-    override val toolbarOption = ToolbarOptions(showBalance = true, showCart = false)
-
     override fun initUI() {
-        requireActivity().appbar.mainToolbar.isGone = true
+        mainToolbar?.isGone = true
 
-        close.setOnClickListener { navigateUp() }
+        binding.close.setOnClickListener { navigateUp() }
 
-        saveButton.isEnabled = !attributeKeyInput.text.isNullOrBlank() && !attributeValueInput.text.isNullOrBlank()
-        attributeKeyInput.addTextChangedListener { text ->
-            saveButton.isEnabled = !text.isNullOrBlank() && !attributeValueInput.text.isNullOrBlank()
+        binding.saveButton.isEnabled = !binding.attributeKeyInput.text.isNullOrBlank() && !binding.attributeValueInput.text.isNullOrBlank()
+        binding.attributeKeyInput.addTextChangedListener { text ->
+            binding.saveButton.isEnabled = !text.isNullOrBlank() && !binding.attributeValueInput.text.isNullOrBlank()
         }
-        attributeValueInput.addTextChangedListener { text ->
-            saveButton.isEnabled = !text.isNullOrBlank() && !attributeKeyInput.text.isNullOrBlank()
+        binding.attributeValueInput.addTextChangedListener { text ->
+            binding.saveButton.isEnabled = !text.isNullOrBlank() && !binding.attributeKeyInput.text.isNullOrBlank()
         }
 
         if (args.isEdit) {
             val attribute = args.attribute ?: throw IllegalArgumentException("If isEdit is true attribute param must not be null")
 
-            attributeKeyInput.setText(attribute.key)
-            attributeValueInput.setText(attribute.value)
+            binding.attributeKeyInput.setText(attribute.key)
+            binding.attributeValueInput.setText(attribute.value)
 
-            saveButton.setOnClickListener {
-                val key = attributeKeyInput.text?.toString() ?: return@setOnClickListener
-                val value = attributeValueInput.text?.toString() ?: return@setOnClickListener
+            binding.saveButton.setOnClickListener {
+                val key = binding.attributeKeyInput.text?.toString() ?: return@setOnClickListener
+                val value = binding.attributeValueInput.text?.toString() ?: return@setOnClickListener
 
                 if (attribute.key == key) {
                     viewModel.saveAttribute(attribute.copy(value = value), true, ::navigateUp)
@@ -58,15 +53,15 @@ class EditAttributeFragment : BaseFragment() {
                 }
             }
 
-            removeDiscardButton.setOnClickListener {
+            binding.removeDiscardButton.setOnClickListener {
                 viewModel.deleteAttribute(attribute, ::navigateUp)
             }
         } else {
-            removeDiscardButton.setText(R.string.character_edit_attribute_discard_button)
-            removeDiscardButton.setOnClickListener { navigateUp() }
-            saveButton.setOnClickListener {
-                val key = attributeKeyInput.text?.toString()
-                val value = attributeValueInput.text?.toString()
+            binding.removeDiscardButton.setText(R.string.character_edit_attribute_discard_button)
+            binding.removeDiscardButton.setOnClickListener { navigateUp() }
+            binding.saveButton.setOnClickListener {
+                val key = binding.attributeKeyInput.text?.toString()
+                val value = binding.attributeValueInput.text?.toString()
 
                 if (!key.isNullOrBlank() && !value.isNullOrBlank()) {
                     viewModel.saveAttribute(UserAttributeUiEntity(key, UserAttributePermission.PUBLIC, value), false, ::navigateUp)
@@ -76,7 +71,7 @@ class EditAttributeFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
-        requireActivity().appbar.mainToolbar.isVisible = true
+        mainToolbar?.isVisible = true
         super.onDestroyView()
     }
 

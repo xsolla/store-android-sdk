@@ -6,12 +6,9 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.xsolla.android.storesdkexample.adapter.UserAttributeItem
-import com.xsolla.android.appcore.extensions.setClickableSpan
-import kotlinx.android.synthetic.main.item_user_attribute.view.editButton
-import kotlinx.android.synthetic.main.item_user_attribute.view.key
-import kotlinx.android.synthetic.main.item_user_attribute.view.value
-import kotlinx.android.synthetic.main.item_user_attribute_footer.view.editableFooter
-import kotlinx.android.synthetic.main.item_user_attribute_footer.view.readOnlyFooter
+import com.xsolla.android.storesdkexample.databinding.ItemUserAttributeBinding
+import com.xsolla.android.storesdkexample.databinding.ItemUserAttributeFooterBinding
+import com.xsolla.android.storesdkexample.util.extensions.setClickableSpan
 
 class UserAttributeViewHolder(
     view: View,
@@ -28,10 +25,12 @@ class UserAttributeViewHolder(
         }
 
     private fun bindItem(item: UserAttributeItem.Item) {
-        itemView.key.text = item.item.key
-        itemView.value.text = item.item.value
-        itemView.editButton.isGone = item.readOnly
-        itemView.editButton.setOnClickListener {
+        val binding = ItemUserAttributeBinding.bind(itemView)
+
+        binding.key.text = item.item.key
+        binding.value.text = item.item.value
+        binding.editButton.isGone = item.readOnly
+        binding.editButton.setOnClickListener {
             AlertDialog.Builder(it.context)
                 .setTitle("${item.item.key} options")
                 .setItems(arrayOf("Edit", "Delete")) { _, option ->
@@ -46,16 +45,18 @@ class UserAttributeViewHolder(
     }
 
     private fun bindFooter(footer: UserAttributeItem.Footer) {
-        itemView.readOnlyFooter.isVisible = footer.readOnly
-        itemView.editableFooter.isGone = footer.readOnly
+        val binding = ItemUserAttributeFooterBinding.bind(itemView)
 
-        itemView.readOnlyFooter.setClickableSpan(
+        binding.readOnlyFooter.isVisible = footer.readOnly
+        binding.editableFooter.isGone = footer.readOnly
+
+        binding.readOnlyFooter.setClickableSpan(
             isUnderlineText = true,
-            startIndex = itemView.readOnlyFooter.text.indexOf("See"),
-            endIndex = itemView.readOnlyFooter.text.lastIndexOf("documentation") + "documentation".length,
+            startIndex = binding.readOnlyFooter.text.indexOf("See"),
+            endIndex = binding.readOnlyFooter.text.lastIndexOf("documentation") + "documentation".length,
             onClick = { onDocumentationClick() }
         )
-        itemView.editableFooter.setOnClickListener {
+        binding.editableFooter.setOnClickListener {
             onAddAttributeButtonClick()
         }
     }

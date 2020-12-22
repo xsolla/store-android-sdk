@@ -13,11 +13,10 @@ import com.xsolla.android.store.entity.response.common.VirtualPrice
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.databinding.ItemViVirtualPriceBinding
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.util.ViewUtils
-import kotlinx.android.synthetic.main.item_vi_virtual_price.view.*
-
 
 class VcVirtualPriceViewHolder(
     inflater: LayoutInflater,
@@ -25,37 +24,38 @@ class VcVirtualPriceViewHolder(
     private val vmBalance: VmBalance,
     private val purchaseListener: PurchaseListener
 ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_vi_virtual_price, parent, false)) {
+    private val binding = ItemViVirtualPriceBinding.bind(itemView)
 
     fun bind(item: VirtualCurrencyPackageResponse.Item) {
         val price = item.virtualPrices[0]
-        Glide.with(itemView).load(item.imageUrl).into(itemView.itemIcon)
-        itemView.itemName.text = item.name
-        itemView.itemAdditionalInfo.text = item.description
+        Glide.with(itemView).load(item.imageUrl).into(binding.itemIcon)
+        binding.itemName.text = item.name
+        binding.itemAdditionalInfo.text = item.description
         bindItemPrice(price)
         initBuyButton(item, price)
     }
 
     private fun bindItemPrice(price: VirtualPrice) {
-        Glide.with(itemView.context).load(price.imageUrl).into(itemView.itemVirtualPriceIcon)
+        Glide.with(itemView.context).load(price.imageUrl).into(binding.itemVirtualPriceIcon)
 
         if (price.getAmountDecimal() == price.getAmountWithoutDiscountDecimal() || price.calculatedPrice?.amountWithoutDiscount == null) {
-            itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal())
-            itemView.itemOldPrice.visibility = View.INVISIBLE
-            itemView.itemSaleLabel.visibility = View.INVISIBLE
+            binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal())
+            binding.itemOldPrice.visibility = View.INVISIBLE
+            binding.itemSaleLabel.visibility = View.INVISIBLE
         } else {
             val discount = AmountUtils.calculateDiscount(price.getAmountDecimal()!!, price.getAmountWithoutDiscountDecimal()!!)
 
-            itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal())
-            itemView.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal())
-            itemView.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-            itemView.itemOldPrice.visibility = View.VISIBLE
-            itemView.itemSaleLabel.visibility = View.VISIBLE
-            itemView.itemSaleDiscount.text = "-${discount}%"
+            binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal())
+            binding.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal())
+            binding.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+            binding.itemOldPrice.visibility = View.VISIBLE
+            binding.itemSaleLabel.visibility = View.VISIBLE
+            binding.itemSaleDiscount.text = "-${discount}%"
         }
     }
 
     private fun initBuyButton(item: VirtualCurrencyPackageResponse.Item, virtualPrice: VirtualPrice) {
-        itemView.buyButton.setOnClickListener { v ->
+        binding.buyButton.setOnClickListener { v ->
             ViewUtils.disable(v)
             XStore.createOrderByVirtualCurrency(item.sku, virtualPrice.sku, object : XStoreCallback<CreateOrderByVirtualCurrencyResponse?>() {
                 override fun onSuccess(response: CreateOrderByVirtualCurrencyResponse?) {

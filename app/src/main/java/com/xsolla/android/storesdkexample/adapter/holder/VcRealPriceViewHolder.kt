@@ -11,10 +11,10 @@ import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.databinding.ItemViRealPriceBinding
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.util.ViewUtils
-import kotlinx.android.synthetic.main.item_vi_real_price.view.*
 
 class VcRealPriceViewHolder(
         inflater: LayoutInflater,
@@ -22,32 +22,33 @@ class VcRealPriceViewHolder(
         private val vmCart: VmCart,
         private val purchaseListener: PurchaseListener
 ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_vi_real_price, parent, false)) {
+    private val binding = ItemViRealPriceBinding.bind(itemView)
 
     fun bind(item: VirtualCurrencyPackageResponse.Item) {
-        Glide.with(itemView).load(item.imageUrl).into(itemView.itemIcon)
-        itemView.itemName.text = item.name
-        itemView.itemAdditionalInfo.text = item.description
+        Glide.with(itemView).load(item.imageUrl).into(binding.itemIcon)
+        binding.itemName.text = item.name
+        binding.itemAdditionalInfo.text = item.description
         bindItemPrice(item)
     }
 
     private fun bindItemPrice(item: VirtualCurrencyPackageResponse.Item) {
         val price = item.price
         if (price!!.getAmountDecimal() == price.getAmountWithoutDiscountDecimal()) {
-            itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
-            itemView.itemOldPrice.visibility = View.INVISIBLE
-            itemView.itemSaleLabel.visibility = View.INVISIBLE
+            binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
+            binding.itemOldPrice.visibility = View.INVISIBLE
+            binding.itemSaleLabel.visibility = View.INVISIBLE
         } else {
             val discount = AmountUtils.calculateDiscount(price.getAmountDecimal()!!, price.getAmountWithoutDiscountDecimal()!!)
 
-            itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
-            itemView.itemSaleDiscount.text = "-${discount}%"
-            itemView.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal())
-            itemView.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-            itemView.itemOldPrice.visibility = View.VISIBLE
-            itemView.itemSaleLabel.visibility = View.VISIBLE
+            binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
+            binding.itemSaleDiscount.text = "-${discount}%"
+            binding.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal())
+            binding.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+            binding.itemOldPrice.visibility = View.VISIBLE
+            binding.itemSaleLabel.visibility = View.VISIBLE
         }
 
-        itemView.addToCartButton.setOnClickListener { v ->
+        binding.addToCartButton.setOnClickListener { v ->
             ViewUtils.disable(v)
             val cartContent = vmCart.cartContent.value
             val quantity = cartContent?.find { it.sku == item.sku }?.quantity ?: 0

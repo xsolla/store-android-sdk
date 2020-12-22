@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.appcore.utils.AmountUtils
 import com.xsolla.android.payments.XPayments.Companion.createIntentBuilder
 import com.xsolla.android.payments.XPayments.Result.Companion.fromResultIntent
@@ -20,13 +21,16 @@ import com.xsolla.android.payments.data.AccessToken
 import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.CartAdapter
+import com.xsolla.android.storesdkexample.databinding.FragmentCartBinding
 import com.xsolla.android.storesdkexample.listener.CartChangeListener
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
-import kotlinx.android.synthetic.main.fragment_cart.*
+import com.xsolla.android.storesdkexample.util.AmountUtils
+
 import java.math.BigDecimal
 
 class CartFragment : BaseFragment(), CartChangeListener {
+    private val binding: FragmentCartBinding by viewBinding()
 
     private val vmCart: VmCart by activityViewModels()
 
@@ -44,7 +48,7 @@ class CartFragment : BaseFragment(), CartChangeListener {
         }
 
         val cartAdapter = CartAdapter(mutableListOf(), vmCart, this)
-        with(recycler) {
+        with(binding.recycler) {
             setHasFixedSize(true)
             val linearLayoutManager = LinearLayoutManager(context)
             addItemDecoration(DividerItemDecoration(context, linearLayoutManager.orientation).apply {
@@ -63,7 +67,7 @@ class CartFragment : BaseFragment(), CartChangeListener {
             cartAdapter.items.clear()
             cartAdapter.items.addAll(items)
             cartAdapter.notifyDataSetChanged()
-            checkoutButton.isEnabled = items.isNotEmpty()
+            binding.checkoutButton.isEnabled = items.isNotEmpty()
 
             val currency = items[0].price!!.currency
 
@@ -73,28 +77,28 @@ class CartFragment : BaseFragment(), CartChangeListener {
             val discount = sumWithoutDiscount.minus(sumWithDiscount)
 
             val hasDiscount = discount.toDouble() != 0.0
-            subtotalLabel.isVisible = hasDiscount
-            subtotalValue.isVisible = hasDiscount
-            discountLabel.isVisible = hasDiscount
-            discountValue.isVisible = hasDiscount
+            binding.subtotalLabel.isVisible = hasDiscount
+            binding.subtotalValue.isVisible = hasDiscount
+            binding.discountLabel.isVisible = hasDiscount
+            binding.discountValue.isVisible = hasDiscount
 
-            subtotalValue.text = AmountUtils.prettyPrint(sumWithoutDiscount, currency!!)
-            discountValue.text = "- ${AmountUtils.prettyPrint(discount, currency)}"
-            totalValue.text = AmountUtils.prettyPrint(sumWithDiscount, currency)
+            binding.subtotalValue.text = AmountUtils.prettyPrint(sumWithoutDiscount, currency!!)
+            binding.discountValue.text = "- ${AmountUtils.prettyPrint(discount, currency)}"
+            binding.totalValue.text = AmountUtils.prettyPrint(sumWithDiscount, currency)
         })
 
-        clearButton.setOnClickListener {
+        binding.clearButton.setOnClickListener {
             vmCart.clearCart { result ->
                 showSnack(result)
                 findNavController().navigateUp()
             }
         }
 
-        checkoutButton.setOnClickListener {
+        binding.checkoutButton.setOnClickListener {
             vmCart.createOrder { error -> showSnack(error) }
         }
 
-        continueButton.setOnClickListener { findNavController().navigateUp() }
+        binding.continueButton.setOnClickListener { findNavController().navigateUp() }
 
         vmCart.paymentToken.observe(viewLifecycleOwner, Observer {
             val intent = createIntentBuilder(requireContext())
@@ -144,25 +148,25 @@ class CartFragment : BaseFragment(), CartChangeListener {
     }
 
     private fun setupPromocodeInput() {
-        input.setEndIconOnClickListener {
+        binding.input.setEndIconOnClickListener {
             hideKeyboard()
 
             vmCart.redeemPromocode(
-                inputEdit.text.toString(),
-                onSuccess = { input.endIconDrawable = promocodeSuccessEndIconDrawable },
+                    binding.inputEdit.text.toString(),
+                onSuccess = { binding.input.endIconDrawable = promocodeSuccessEndIconDrawable },
                 onError = { message ->
-                    input.isErrorEnabled = true
-                    input.error = message
+                    binding.input.isErrorEnabled = true
+                    binding.input.error = message
                 }
             )
         }
-        inputEdit.addTextChangedListener {
-            input.isErrorEnabled = false
+        binding.inputEdit.addTextChangedListener {
+            binding.input.isErrorEnabled = false
 
             if (!it.isNullOrBlank()) {
-                input.endIconDrawable = promocodeArrowEndIconDrawable
+                binding.input.endIconDrawable = promocodeArrowEndIconDrawable
             } else {
-                input.endIconDrawable = null
+                binding.input.endIconDrawable = null
             }
         }
     }

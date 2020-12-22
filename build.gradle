@@ -21,7 +21,7 @@ buildscript {
     ext.sdk_target = 29
     ext.sdk_compile = 29
 
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.4.21'
 
     repositories {
         google()

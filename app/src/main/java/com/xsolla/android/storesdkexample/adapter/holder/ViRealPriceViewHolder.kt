@@ -12,12 +12,11 @@ import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.common.ExpirationPeriod
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.databinding.ItemViRealPriceBinding
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.fragments.store.VirtualItemUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.util.ViewUtils
-import kotlinx.android.synthetic.main.item_vi_real_price.view.*
-import kotlinx.android.synthetic.main.item_vi_virtual_price.view.buyButton
 
 class ViRealPriceViewHolder(
         inflater: LayoutInflater,
@@ -25,10 +24,11 @@ class ViRealPriceViewHolder(
         private val vmCart: VmCart,
         private val purchaseListener: PurchaseListener
 ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_vi_real_price, parent, false)) {
+    private val binding = ItemViRealPriceBinding.bind(itemView)
 
     fun bind(item: VirtualItemUiEntity) {
-        Glide.with(itemView).load(item.imageUrl).into(itemView.itemIcon)
-        itemView.itemName.text = item.name
+        Glide.with(itemView).load(item.imageUrl).into(binding.itemIcon)
+        binding.itemName.text = item.name
         bindPurchasedPlaceholderIfNeed(item)
         bindItemPrice(item)
         bindExpirationPeriod(item.inventoryOption?.expirationPeriod)
@@ -37,48 +37,45 @@ class ViRealPriceViewHolder(
     private fun bindPurchasedPlaceholderIfNeed(item: VirtualItemUiEntity) {
         if (item.hasInInventory) {
             if (item.inventoryOption?.consumable == null && item.inventoryOption?.expirationPeriod == null) {
-                itemView.purchasedPlaceholder.isVisible = true
-                itemView.buyButton?.isVisible = false
-                itemView.addToCartButton?.isVisible = false
-                itemView.itemPrice.isVisible = false
-                itemView.itemOldPrice.isVisible = false
-                itemView.itemSaleLabel.isVisible = false
+                binding.purchasedPlaceholder.isVisible = true
+                binding.addToCartButton?.isVisible = false
+                binding.itemPrice.isVisible = false
+                binding.itemOldPrice.isVisible = false
+                binding.itemSaleLabel.isVisible = false
             } else {
-                itemView.purchasedPlaceholder.isVisible = false
-                itemView.buyButton?.isVisible = true
-                itemView.addToCartButton?.isVisible = true
-                itemView.itemPrice.isVisible = true
-                itemView.itemOldPrice.isVisible = true
-                itemView.itemSaleLabel.isVisible = true
+                binding.purchasedPlaceholder.isVisible = false
+                binding.addToCartButton?.isVisible = true
+                binding.itemPrice.isVisible = true
+                binding.itemOldPrice.isVisible = true
+                binding.itemSaleLabel.isVisible = true
             }
         } else {
-            itemView.purchasedPlaceholder.isVisible = false
-            itemView.buyButton?.isVisible = true
-            itemView.addToCartButton?.isVisible = true
-            itemView.itemPrice.isVisible = true
-            itemView.itemOldPrice.isVisible = true
-            itemView.itemSaleLabel.isVisible = true
+            binding.purchasedPlaceholder.isVisible = false
+            binding.addToCartButton?.isVisible = true
+            binding.itemPrice.isVisible = true
+            binding.itemOldPrice.isVisible = true
+            binding.itemSaleLabel.isVisible = true
         }
     }
 
     private fun bindItemPrice(item: VirtualItemUiEntity) {
         val price = item.price
         if (price!!.getAmountDecimal() == price.getAmountWithoutDiscountDecimal() || price.getAmountWithoutDiscountDecimal() == null) {
-            itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
-            itemView.itemOldPrice.visibility = View.INVISIBLE
-            itemView.itemSaleLabel.visibility = View.INVISIBLE
+            binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
+            binding.itemOldPrice.visibility = View.INVISIBLE
+            binding.itemSaleLabel.visibility = View.INVISIBLE
         } else {
-            if (itemView.itemOldPrice.isVisible && itemView.itemSaleLabel.isVisible) {
+            if (binding.itemOldPrice.isVisible && binding.itemSaleLabel.isVisible) {
                 val discount = AmountUtils.calculateDiscount(price.getAmountDecimal()!!, price.getAmountWithoutDiscountDecimal()!!)
 
-                itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
-                itemView.itemSaleDiscount.text = "-${discount}%"
-                itemView.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal())
-                itemView.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+                binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
+                binding.itemSaleDiscount.text = "-${discount}%"
+                binding.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal())
+                binding.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             }
         }
 
-        itemView.addToCartButton.setOnClickListener { v ->
+        binding.addToCartButton.setOnClickListener { v ->
             ViewUtils.disable(v)
             val cartContent = vmCart.cartContent.value
             val quantity = cartContent?.find { it.sku == item.sku }?.quantity ?: 0
@@ -99,9 +96,9 @@ class ViRealPriceViewHolder(
 
     private fun bindExpirationPeriod(expirationPeriod: ExpirationPeriod?) {
         if (expirationPeriod == null) {
-            itemView.itemAdditionalInfo.visibility = View.GONE
+            binding.itemAdditionalInfo.visibility = View.GONE
         } else {
-            itemView.itemAdditionalInfo.visibility = View.VISIBLE
+            binding.itemAdditionalInfo.visibility = View.VISIBLE
             val sb = StringBuilder()
             sb.append("Expiration in ")
             sb.append(expirationPeriod.value)
@@ -110,7 +107,7 @@ class ViRealPriceViewHolder(
             if (expirationPeriod.value != 1) {
                 sb.append('s')
             }
-            itemView.itemAdditionalInfo.text = sb
+            binding.itemAdditionalInfo.text = sb
         }
     }
 

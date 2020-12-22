@@ -4,11 +4,10 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.inventory.callback.ConsumeItemCallback
 import com.xsolla.android.inventory.callback.GetInventoryCallback
@@ -17,14 +16,15 @@ import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.InventoryAdapter
+import com.xsolla.android.storesdkexample.databinding.FragmentInventoryBinding
 import com.xsolla.android.storesdkexample.listener.ConsumeListener
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.ui.vm.VmInventory
-import kotlinx.android.synthetic.main.fragment_inventory.*
 
 class InventoryFragment : BaseFragment(), ConsumeListener,PurchaseListener {
+    private val binding: FragmentInventoryBinding by viewBinding()
 
     private val viewModel: VmInventory by activityViewModels()
     private val vmCart : VmCart by activityViewModels()
@@ -33,17 +33,17 @@ class InventoryFragment : BaseFragment(), ConsumeListener,PurchaseListener {
     override fun getLayout() = R.layout.fragment_inventory
 
     override fun initUI() {
-        with(recycler) {
+        with(binding.recycler) {
             val linearLayoutManager = LinearLayoutManager(context)
             addItemDecoration(DividerItemDecoration(context, linearLayoutManager.orientation).apply {
                 ContextCompat.getDrawable(context, R.drawable.item_divider)?.let { setDrawable(it) }
             })
             layoutManager = linearLayoutManager
-            goToStoreButton.setOnClickListener { findNavController().navigate(R.id.nav_vi) }
+            binding.goToStoreButton.setOnClickListener { findNavController().navigate(R.id.nav_vi) }
         }
 
         inventoryAdapter = InventoryAdapter(listOf(), this,this,vmCart)
-        recycler.adapter = inventoryAdapter
+        binding.recycler.adapter = inventoryAdapter
 
         viewModel.inventory.observe(viewLifecycleOwner) {
             inventoryAdapter.items = it
@@ -106,7 +106,7 @@ class InventoryFragment : BaseFragment(), ConsumeListener,PurchaseListener {
     }
 
     private fun setupPlaceholderVisibility() {
-        noItemsPlaceholder.isVisible = viewModel.inventorySize == 0
-        recycler.isVisible = viewModel.inventorySize != 0
+        binding.noItemsPlaceholder.isVisible = viewModel.inventorySize == 0
+        binding.recycler.isVisible = viewModel.inventorySize != 0
     }
 }

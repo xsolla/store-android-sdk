@@ -9,18 +9,16 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.DeleteSwipeCallback
 import com.xsolla.android.storesdkexample.adapter.UserAttributesAdapter
+import com.xsolla.android.storesdkexample.databinding.FragmentCharacterPageBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmCharacterPage
 import com.xsolla.android.appcore.extensions.openInBrowser
 import com.xsolla.android.appcore.extensions.setClickableSpan
-import kotlinx.android.synthetic.main.fragment_character_page.addAttributeButton
-import kotlinx.android.synthetic.main.fragment_character_page.attributesRecycler
-import kotlinx.android.synthetic.main.fragment_character_page.noItemsLayout
-import kotlinx.android.synthetic.main.fragment_character_page.noItemsPlaceholder
 
 class CharacterPageFragment : BaseFragment() {
     companion object {
@@ -32,6 +30,8 @@ class CharacterPageFragment : BaseFragment() {
             }
         }
     }
+
+    private val binding: FragmentCharacterPageBinding by viewBinding()
 
     private lateinit var adapter: UserAttributesAdapter
 
@@ -58,7 +58,7 @@ class CharacterPageFragment : BaseFragment() {
             },
             onDocumentationClick = { openHowToForAttributes() }
         )
-        attributesRecycler.adapter = adapter
+        binding.attributesRecycler.adapter = adapter
 
         if (!readOnly) {
             val itemTouch = ItemTouchHelper(
@@ -67,7 +67,7 @@ class CharacterPageFragment : BaseFragment() {
                     ColorDrawable(ContextCompat.getColor(requireContext(), R.color.magenta_color))
                 )
             )
-            itemTouch.attachToRecyclerView(attributesRecycler)
+            itemTouch.attachToRecyclerView(binding.attributesRecycler)
         }
 
         if (readOnly) {
@@ -84,19 +84,19 @@ class CharacterPageFragment : BaseFragment() {
     }
 
     private fun configurePlaceholderAndVisibilities(items: List<UserAttributeUiEntity>, readOnly: Boolean) {
-        attributesRecycler.isVisible = items.isNotEmpty()
-        noItemsLayout.isVisible = items.isEmpty()
-        noItemsPlaceholder.setText(if (readOnly) R.string.character_read_only_attributes_placeholder else R.string.character_editable_attributes_placeholder)
-        addAttributeButton.isVisible = items.isEmpty() && !readOnly
-        addAttributeButton.setOnClickListener {
+        binding.attributesRecycler.isVisible = items.isNotEmpty()
+        binding.noItemsLayout.isVisible = items.isEmpty()
+        binding.noItemsPlaceholder.setText(if (readOnly) R.string.character_read_only_attributes_placeholder else R.string.character_editable_attributes_placeholder)
+        binding.addAttributeButton.isVisible = items.isEmpty() && !readOnly
+        binding.addAttributeButton.setOnClickListener {
             findNavController().navigate(R.id.fragment_edit_attribute, EditAttributeFragmentArgs(false, null).toBundle())
         }
 
         if (readOnly) {
-            noItemsPlaceholder.setClickableSpan(
+            binding.noItemsPlaceholder.setClickableSpan(
                 isUnderlineText = true,
-                startIndex = noItemsPlaceholder.text.indexOf("See"),
-                endIndex = noItemsPlaceholder.text.lastIndexOf("documentation") + "documentation".length,
+                startIndex = binding.noItemsPlaceholder.text.indexOf("See"),
+                endIndex = binding.noItemsPlaceholder.text.lastIndexOf("documentation") + "documentation".length,
                 onClick = { openHowToForAttributes() }
             )
         }

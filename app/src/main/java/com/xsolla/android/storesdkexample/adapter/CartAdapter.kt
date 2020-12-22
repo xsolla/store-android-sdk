@@ -12,9 +12,10 @@ import com.xsolla.android.appcore.utils.AmountUtils
 import com.xsolla.android.store.entity.response.cart.CartResponse
 import com.xsolla.android.store.entity.response.common.ExpirationPeriod
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.databinding.ItemCartBinding
 import com.xsolla.android.storesdkexample.listener.CartChangeListener
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
-import kotlinx.android.synthetic.main.item_cart.view.*
+import com.xsolla.android.storesdkexample.util.AmountUtils
 
 class CartAdapter(
         val items: MutableList<CartResponse.Item>,
@@ -39,10 +40,11 @@ class CartAdapter(
             inflater: LayoutInflater,
             parent: ViewGroup
     ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_cart, parent, false)) {
+        private val binding = ItemCartBinding.bind(itemView)
 
         fun bind(item: CartResponse.Item) {
-            Glide.with(itemView).load(item.imageUrl).into(itemView.itemIcon)
-            itemView.itemName.text = item.name
+            Glide.with(itemView).load(item.imageUrl).into(binding.itemIcon)
+            binding.itemName.text = item.name
 
             bindCounter(item)
 
@@ -58,38 +60,38 @@ class CartAdapter(
         private fun bindItemPrice(item: CartResponse.Item) {
             val price = item.price
             if (price!!.getAmountDecimal() == price.getAmountWithoutDiscountDecimal()) {
-                itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!, price.currency!!)
-                itemView.itemOldPrice.visibility = View.INVISIBLE
-                itemView.itemSaleLabel.visibility = View.INVISIBLE
+                binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!, price.currency!!)
+                binding.itemOldPrice.visibility = View.INVISIBLE
+                binding.itemSaleLabel.visibility = View.INVISIBLE
             } else {
-                itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!, price.currency!!)
-                itemView.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal()!!)
-                itemView.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-                itemView.itemOldPrice.visibility = View.VISIBLE
-                itemView.itemSaleLabel.visibility = View.VISIBLE
+                binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!, price.currency!!)
+                binding.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal()!!)
+                binding.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+                binding.itemOldPrice.visibility = View.VISIBLE
+                binding.itemSaleLabel.visibility = View.VISIBLE
             }
         }
 
         private fun bindItemVirtualPrice(item: CartResponse.Item) {
             val price = item.virtualPrices[0]
 
-            itemView.itemVirtualPriceIcon.visibility = View.VISIBLE
-            Glide.with(itemView.context).load(price.imageUrl).into(itemView.itemVirtualPriceIcon)
+            binding.itemVirtualPriceIcon.visibility = View.VISIBLE
+            Glide.with(itemView.context).load(price.imageUrl).into(binding.itemVirtualPriceIcon)
             if (price.getAmountDecimal() == price.getAmountWithoutDiscountDecimal() || price.calculatedPrice?.amountWithoutDiscount == null) {
-                itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!)
-                itemView.itemOldPrice.visibility = View.INVISIBLE
-                itemView.itemSaleLabel.visibility = View.INVISIBLE
+                binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!)
+                binding.itemOldPrice.visibility = View.INVISIBLE
+                binding.itemSaleLabel.visibility = View.INVISIBLE
             } else {
-                itemView.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!)
-                itemView.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal()!!)
-                itemView.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-                itemView.itemOldPrice.visibility = View.VISIBLE
-                itemView.itemSaleLabel.visibility = View.VISIBLE
+                binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!)
+                binding.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal()!!)
+                binding.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+                binding.itemOldPrice.visibility = View.VISIBLE
+                binding.itemSaleLabel.visibility = View.VISIBLE
             }
         }
 
         private fun binExpirationPeriod(expirationPeriod: ExpirationPeriod) {
-            itemView.itemExpiration.visibility = View.VISIBLE
+            binding.itemExpiration.visibility = View.VISIBLE
             val sb = StringBuilder()
             sb.append("Expiration in ")
             sb.append(expirationPeriod.value)
@@ -98,30 +100,30 @@ class CartAdapter(
             if (expirationPeriod.value != 1) {
                 sb.append('s')
             }
-            itemView.itemExpiration.text = sb
+            binding.itemExpiration.text = sb
         }
 
         private fun bindCounter(item: CartResponse.Item) {
-            itemView.itemTextCount.text = item.quantity.toString()
+            binding.itemTextCount.text = item.quantity.toString()
             if (item.quantity > 1) {
-                itemView.itemButtonMinus.setImageResource(R.drawable.ic_cart_minus)
+                binding.itemButtonMinus.setImageResource(R.drawable.ic_cart_minus)
             } else {
-                itemView.itemButtonMinus.setImageResource(R.drawable.ic_cart_delete)
+                binding.itemButtonMinus.setImageResource(R.drawable.ic_cart_delete)
             }
 
-            itemView.priceLayout.isGone = item.price == null
-            itemView.itemButtonMinus.isGone = item.price == null
-            itemView.itemButtonPlus.isGone = item.price == null
+            binding.priceLayout.isGone = item.price == null
+            binding.itemButtonMinus.isGone = item.price == null
+            binding.itemButtonPlus.isGone = item.price == null
 
             if (item.price == null) {
-                itemView.itemExpiration.isVisible = true
-                itemView.itemExpiration.text = itemView.resources.getString(R.string.promocode_bonus_item_placeholder)
+                binding.itemExpiration.isVisible = true
+                binding.itemExpiration.text = itemView.resources.getString(R.string.promocode_bonus_item_placeholder)
             }
 
-            itemView.itemButtonMinus.setOnClickListener {
+            binding.itemButtonMinus.setOnClickListener {
                 vmCart.changeItemCount(item, -1) { result -> cartChangeListener.onChange(result) }
             }
-            itemView.itemButtonPlus.setOnClickListener {
+            binding.itemButtonPlus.setOnClickListener {
                 vmCart.changeItemCount(item, 1) { result -> cartChangeListener.onChange(result) }
             }
         }

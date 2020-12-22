@@ -3,15 +3,16 @@ package com.xsolla.android.storesdkexample.ui.fragments.store
 import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import androidx.navigation.fragment.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.inventory.callback.ConsumeItemCallback
 import com.xsolla.android.inventory.callback.GetInventoryCallback
 import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.databinding.FragmentConsumeBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.util.ViewUtils
-import kotlinx.android.synthetic.main.fragment_consume.*
 
 class ConsumeFragment : BaseFragment() {
 
@@ -19,19 +20,21 @@ class ConsumeFragment : BaseFragment() {
         const val ITEM_ARG = "item"
     }
 
+    private val binding: FragmentConsumeBinding by viewBinding()
+
     override fun getLayout() = R.layout.fragment_consume
 
     override fun initUI() {
         arguments?.getParcelable<InventoryResponse.Item>(ITEM_ARG)?.let { item ->
-            Glide.with(requireActivity()).load(item.imageUrl).into(itemIcon)
-            itemName.text = item.name
+            Glide.with(requireActivity()).load(item.imageUrl).into(binding.itemIcon)
+            binding.itemName.text = item.name
             updateQuantity(item.quantity)
-            goToStoreButton.setOnClickListener { findNavController().navigate(R.id.nav_vi) }
+            binding.goToStoreButton.setOnClickListener { findNavController().navigate(R.id.nav_vi) }
 
-            consumeButton.setOnClickListener { v ->
+            binding.consumeButton.setOnClickListener { v ->
                 ViewUtils.disable(v)
                 val quantity = try {
-                    quantityInput.text.toString().toLong()
+                    binding.quantityInput.text.toString().toLong()
                 } catch (e: Exception) {
                     0L
                 }
@@ -77,8 +80,8 @@ class ConsumeFragment : BaseFragment() {
     }
 
     private fun updateQuantity(quantity: Long) {
-        quantityLabel.text = String.format("of %s available", quantity)
-        quantityInput.setText("1")
+        binding.quantityLabel.text = String.format("of %s available", quantity)
+        binding.quantityInput.setText("1")
     }
 
 }

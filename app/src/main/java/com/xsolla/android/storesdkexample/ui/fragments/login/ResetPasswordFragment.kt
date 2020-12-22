@@ -2,25 +2,25 @@ package com.xsolla.android.storesdkexample.ui.fragments.login
 
 import android.text.Editable
 import android.text.TextWatcher
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.ResetPasswordCallback
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.databinding.FragmenResetPasswordBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.util.ViewUtils
-import kotlinx.android.synthetic.main.fragmen_reset_password.*
-import kotlinx.android.synthetic.main.fragmen_reset_password.view.*
 
 class ResetPasswordFragment : BaseFragment() {
 
-    override fun getLayout(): Int {
-        return R.layout.fragmen_reset_password
-    }
+    private val binding: FragmenResetPasswordBinding by viewBinding()
+
+    override fun getLayout() = R.layout.fragmen_reset_password
 
     override fun initUI() {
-        backButton.setOnClickListener { openLoginFragment() }
-        rootView.usernameInput.addTextChangedListener(object : TextWatcher{
+        binding.backButton.setOnClickListener { openLoginFragment() }
+        binding.usernameInput.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(s: Editable) {
-                rootView.resetPasswordButton.isEnabled = s.isNotEmpty()
+                binding.resetPasswordButton.isEnabled = s.isNotEmpty()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -33,10 +33,10 @@ class ResetPasswordFragment : BaseFragment() {
 
         })
 
-        rootView.resetPasswordButton.setOnClickListener { v ->
+        binding.resetPasswordButton.setOnClickListener { v ->
             ViewUtils.disable(v)
             hideKeyboard()
-            val username = rootView.usernameInput.text.toString()
+            val username = binding.usernameInput.text.toString()
             XLogin.resetPassword(username, object : ResetPasswordCallback {
                 override fun onSuccess() {
                     showSnack("Password reset success. Check your email")

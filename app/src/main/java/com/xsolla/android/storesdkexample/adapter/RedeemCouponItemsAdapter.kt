@@ -11,11 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.store.entity.response.items.RedeemCouponResponse
 import com.xsolla.android.storesdkexample.R
-import kotlinx.android.synthetic.main.item_received_from_coupon.view.divider
-import kotlinx.android.synthetic.main.item_received_from_coupon.view.expirationPeriod
-import kotlinx.android.synthetic.main.item_received_from_coupon.view.name
-import kotlinx.android.synthetic.main.item_received_from_coupon.view.picture
-import kotlinx.android.synthetic.main.item_received_from_coupon.view.quantity
+import com.xsolla.android.storesdkexample.databinding.ItemReceivedFromCouponBinding
 
 class RedeemCouponItemsAdapter(
     private val items: List<RedeemCouponResponse.Item>
@@ -33,20 +29,22 @@ class RedeemCouponItemsAdapter(
     override fun getItemCount() = items.size
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val binding = ItemReceivedFromCouponBinding.bind(view)
+
         fun bind(item: RedeemCouponResponse.Item) {
-            Glide.with(itemView.context).load(item.imageUrl).into(itemView.picture)
-            itemView.name.text = item.name
-            itemView.quantity.text = item.quantity.toString()
+            Glide.with(itemView.context).load(item.imageUrl).into(binding.picture)
+            binding.name.text = item.name
+            binding.quantity.text = item.quantity.toString()
 
             val expirationPeriod = item.inventoryOption?.expirationPeriod
             if (expirationPeriod != null) {
-                itemView.expirationPeriod.isVisible = true
-                itemView.expirationPeriod.text = itemView.context.getString(R.string.coupon_received_item_exp_period, expirationPeriod.value, expirationPeriod.type.name.toLowerCase())
+                binding.expirationPeriod.isVisible = true
+                binding.expirationPeriod.text = itemView.context.getString(R.string.coupon_received_item_exp_period, expirationPeriod.value, expirationPeriod.type.name.toLowerCase())
             } else {
-                itemView.expirationPeriod.isGone = true
+                binding.expirationPeriod.isGone = true
             }
 
-            configureConstraints(itemView.expirationPeriod.isVisible)
+            configureConstraints(binding.expirationPeriod.isVisible)
         }
 
         private fun configureConstraints(hasExpPeriod: Boolean) {
@@ -54,9 +52,9 @@ class RedeemCouponItemsAdapter(
             val constraintSet = ConstraintSet().apply { clone(constraintLayout) }
 
             if (hasExpPeriod) {
-                constraintSet.connect(itemView.divider.id, ConstraintSet.TOP, itemView.expirationPeriod.id, ConstraintSet.BOTTOM)
+                constraintSet.connect(binding.divider.id, ConstraintSet.TOP, binding.expirationPeriod.id, ConstraintSet.BOTTOM)
             } else {
-                constraintSet.connect(itemView.divider.id, ConstraintSet.TOP, itemView.picture.id, ConstraintSet.BOTTOM)
+                constraintSet.connect(binding.divider.id, ConstraintSet.TOP, binding.picture.id, ConstraintSet.BOTTOM)
             }
 
             constraintSet.applyTo(constraintLayout)

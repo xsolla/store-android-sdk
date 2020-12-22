@@ -11,28 +11,24 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.AvatarItem
 import com.xsolla.android.storesdkexample.adapter.AvatarsItemDecoration
 import com.xsolla.android.storesdkexample.adapter.ChooseAvatarAdapter
 import com.xsolla.android.storesdkexample.data.local.PrefManager
+import com.xsolla.android.storesdkexample.databinding.FragmentChooseAvatarBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmChooseAvatar
 import com.xsolla.android.storesdkexample.ui.vm.VmProfile
 import com.xsolla.android.storesdkexample.ui.vm.base.ViewModelFactory
-import kotlinx.android.synthetic.main.activity_store.appbar
-import kotlinx.android.synthetic.main.app_bar_main.view.mainToolbar
-import kotlinx.android.synthetic.main.fragment_choose_avatar.avatarsRecycler
-import kotlinx.android.synthetic.main.fragment_choose_avatar.close
-import kotlinx.android.synthetic.main.fragment_choose_avatar.lockForeground
-import kotlinx.android.synthetic.main.fragment_choose_avatar.mainAvatar
-import kotlinx.android.synthetic.main.fragment_choose_avatar.progress
-import kotlinx.android.synthetic.main.fragment_choose_avatar.removeAvatarButton
 import java.io.ByteArrayOutputStream
 import java.io.File
 
 class ChooseAvatarFragment : BaseFragment() {
+    private val binding: FragmentChooseAvatarBinding by viewBinding()
+
     private val args: ChooseAvatarFragmentArgs by navArgs()
     private val viewModel: VmChooseAvatar by viewModels()
     private val profileViewModel: VmProfile by activityViewModels {
@@ -53,14 +49,14 @@ class ChooseAvatarFragment : BaseFragment() {
     override fun getLayout() = R.layout.fragment_choose_avatar
 
     override fun initUI() {
-        requireActivity().appbar.mainToolbar.isGone = true
-        close.setOnClickListener { findNavController().navigateUp() }
-        Glide.with(this).load(args.currentAvatar).error(R.drawable.ic_default_avatar).circleCrop().into(mainAvatar)
+        mainToolbar?.isGone = true
+        binding.close.setOnClickListener { findNavController().navigateUp() }
+        Glide.with(this).load(args.currentAvatar).error(R.drawable.ic_default_avatar).circleCrop().into(binding.mainAvatar)
 
         viewModel.uploadingResult.observe(viewLifecycleOwner) { showSnack(it) }
         viewModel.loading.observe(viewLifecycleOwner) {
-            lockForeground.isVisible = it
-            progress.isInvisible = !it
+            binding.lockForeground.isVisible = it
+            binding.progress.isInvisible = !it
         }
 
         adapter = ChooseAvatarAdapter(avatars, args.id, onAvatarClickListener = { avatarRes ->
@@ -69,20 +65,20 @@ class ChooseAvatarFragment : BaseFragment() {
             val file = prepareFile(avatarRes)
             viewModel.uploadAvatar(file) {
                 profileViewModel.updateAvatar(it)
-                Glide.with(this).load(avatarRes).circleCrop().into(mainAvatar)
+                Glide.with(this).load(avatarRes).circleCrop().into(binding.mainAvatar)
 
                 PrefManager.setAvatar(args.id, avatarRes)
                 adapter.notifyDataSetChanged()
             }
         })
-        avatarsRecycler.adapter = adapter
-        avatarsRecycler.layoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
-        avatarsRecycler.addItemDecoration(AvatarsItemDecoration())
-        avatarsRecycler.setHasFixedSize(true)
+        binding.avatarsRecycler.adapter = adapter
+        binding.avatarsRecycler.layoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
+        binding.avatarsRecycler.addItemDecoration(AvatarsItemDecoration())
+        binding.avatarsRecycler.setHasFixedSize(true)
 
-        removeAvatarButton.setOnClickListener {
+        binding.removeAvatarButton.setOnClickListener {
             viewModel.removeAvatar {
-                Glide.with(this).load(R.drawable.ic_default_avatar).circleCrop().into(mainAvatar)
+                Glide.with(this).load(R.drawable.ic_default_avatar).circleCrop().into(binding.mainAvatar)
 
                 PrefManager.setAvatar(args.id, -1)
                 adapter.notifyDataSetChanged()
@@ -92,7 +88,7 @@ class ChooseAvatarFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
-        requireActivity().appbar.mainToolbar.isVisible = true
+        mainToolbar?.isVisible = true
         super.onDestroyView()
     }
 

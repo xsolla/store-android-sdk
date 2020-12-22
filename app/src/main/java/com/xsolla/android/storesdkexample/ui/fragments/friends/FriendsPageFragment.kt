@@ -4,13 +4,14 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.FriendsAdapter
+import com.xsolla.android.storesdkexample.databinding.FragmentFriendsPageBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.FriendUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.FriendsTab
 import com.xsolla.android.storesdkexample.ui.vm.VmFriends
-import kotlinx.android.synthetic.main.fragment_friends_page.*
 
 class FriendsPageFragment : BaseFragment() {
     companion object {
@@ -22,6 +23,8 @@ class FriendsPageFragment : BaseFragment() {
             }
         }
     }
+
+    private val binding: FragmentFriendsPageBinding by viewBinding()
 
     private lateinit var adapter: FriendsAdapter
 
@@ -35,9 +38,9 @@ class FriendsPageFragment : BaseFragment() {
 
     override fun initUI() {
         tab = FriendsTab.getBy(requireArguments().getInt(EXTRA_TAB))
-        noItemsPlaceholder.setText(tab.placeholderText)
+        binding.noItemsPlaceholder.setText(tab.placeholderText)
 
-        addFriendFlowButton.setOnClickListener {
+        binding.addFriendFlowButton.setOnClickListener {
             findNavController().navigate(R.id.fragment_add_friends)
         }
 
@@ -51,7 +54,7 @@ class FriendsPageFragment : BaseFragment() {
             onCancelRequestButtonClick = { item, from -> viewModel.updateFriend(item, VmFriends.UpdateFriendStrategy.CancelStrategy(from)) },
             onAddFriendButtonClick = { item, from -> viewModel.updateFriend(item, VmFriends.UpdateFriendStrategy.AddStrategy(from)) }
         )
-        friendsRecycler.adapter = adapter
+        binding.friendsRecycler.adapter = adapter
 
         viewModel.items.observe(viewLifecycleOwner) {
             val itemsForTab = viewModel.getItemsByTab(viewModel.tab.value!!)
@@ -83,13 +86,13 @@ class FriendsPageFragment : BaseFragment() {
 
     private fun setupPlaceholder(itemsForTab: List<FriendUiEntity>) {
         if (itemsForTab.isEmpty()) {
-            friendsRecycler.isVisible = false
-            noItemsPlaceholder.isVisible = true
-            addFriendFlowButton.isVisible = (viewModel.tab.value == FriendsTab.FRIENDS)
+            binding.friendsRecycler.isVisible = false
+            binding.noItemsPlaceholder.isVisible = true
+            binding.addFriendFlowButton.isVisible = (viewModel.tab.value == FriendsTab.FRIENDS)
         } else {
-            noItemsPlaceholder.isVisible = false
-            friendsRecycler.isVisible = true
-            addFriendFlowButton.isVisible = false
+            binding.noItemsPlaceholder.isVisible = false
+            binding.friendsRecycler.isVisible = true
+            binding.addFriendFlowButton.isVisible = false
         }
     }
 }

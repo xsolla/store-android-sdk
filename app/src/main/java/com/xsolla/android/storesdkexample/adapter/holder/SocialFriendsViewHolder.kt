@@ -9,12 +9,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.xsolla.android.login.social.SocialNetworkForLinking
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.databinding.ItemFriendBinding
 import com.xsolla.android.storesdkexample.ui.vm.FriendsRelationship
 import com.xsolla.android.storesdkexample.ui.vm.VmSocialFriends
-import kotlinx.android.synthetic.main.item_friend.view.*
-import kotlinx.android.synthetic.main.layout_accept_decline_friends.view.*
 
 class SocialFriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+    private val binding = ItemFriendBinding.bind(view)
 
     fun bind(
             item: VmSocialFriends.SocialFriendUiEntity,
@@ -27,23 +28,23 @@ class SocialFriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             onAddFriendButtonClick: (user: VmSocialFriends.SocialFriendUiEntity) -> Unit
     ) {
 
-        itemView.friendNickname.text = item.nickname
+        binding.friendNickname.text = item.nickname
         setupOnline(item)
         setupAvatar(item)
 
-        itemView.friendsAcceptDeclineButtons.friendAcceptButton.setOnClickListener {
+        binding.friendsAcceptDeclineButtons.friendAcceptButton.setOnClickListener {
             onAcceptButtonClick(item)
         }
-        itemView.friendsAcceptDeclineButtons.friendDeclineButton.setOnClickListener {
+        binding.friendsAcceptDeclineButtons.friendDeclineButton.setOnClickListener {
             onDeclineButtonClick(item)
         }
-        itemView.unblockButton.setOnClickListener {
+        binding.unblockButton.setOnClickListener {
             onUnblockOptionsClick(item)
         }
-        itemView.addFriendButton.setOnClickListener {
+        binding.addFriendButton.setOnClickListener {
             onAddFriendButtonClick(item)
         }
-        itemView.cancelRequestButton.setOnClickListener {
+        binding.cancelRequestButton.setOnClickListener {
             onCancelRequestButtonClick(item)
         }
 
@@ -57,16 +58,16 @@ class SocialFriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             .apply(RequestOptions.circleCropTransform())
             .placeholder(R.drawable.ic_xsolla_logo)
             .error(R.drawable.ic_xsolla_logo)
-            .into(itemView.friendAvatar)
+            .into(binding.friendAvatar)
     }
 
     private fun setupOnline(item: VmSocialFriends.SocialFriendUiEntity) {
-        itemView.icOnline.isVisible = false
-        itemView.icOffline.isGone = false
+        binding.icOnline.isVisible = false
+        binding.icOffline.isGone = false
     }
 
     private fun configureOptionsWithBlock(item: VmSocialFriends.SocialFriendUiEntity, onBlockOptionClick: (user: VmSocialFriends.SocialFriendUiEntity) -> Unit) {
-        itemView.friendsOptionsButton.setOnClickListener {
+        binding.friendsOptionsButton.setOnClickListener {
             AlertDialog.Builder(itemView.context)
                     .setTitle(itemView.context.getString(R.string.friends_options_dialog_title, item.nickname))
                     .setItems(arrayOf(itemView.context.getString(R.string.friends_option_block))) { _, _  ->
@@ -78,7 +79,7 @@ class SocialFriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     private fun configureDelete(item: VmSocialFriends.SocialFriendUiEntity, onDeleteOptionClick: (user: VmSocialFriends.SocialFriendUiEntity) -> Unit) {
         AlertDialog.Builder(itemView.context)
-                .setTitle(itemView.context.getString(R.string.friends_option_delete_title, itemView.friendNickname.text))
+                .setTitle(itemView.context.getString(R.string.friends_option_delete_title, binding.friendNickname.text))
                 .setPositiveButton(R.string.friends_options_delete_button) { _, _ ->
                     onDeleteOptionClick(item)
                 }
@@ -90,7 +91,7 @@ class SocialFriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     private fun configureBlock(item: VmSocialFriends.SocialFriendUiEntity, onBlockOptionClick: (user: VmSocialFriends.SocialFriendUiEntity) -> Unit) {
         AlertDialog.Builder(itemView.context)
-                .setTitle(itemView.context.getString(R.string.friends_option_block_title, itemView.friendNickname.text))
+                .setTitle(itemView.context.getString(R.string.friends_option_block_title, binding.friendNickname.text))
                 .setPositiveButton(R.string.friends_options_block_button) { _, _ ->
                     onBlockOptionClick(item)
                 }
@@ -105,34 +106,34 @@ class SocialFriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             onDeleteOptionClick: (user: VmSocialFriends.SocialFriendUiEntity) -> Unit,
             onBlockOptionClick: (user: VmSocialFriends.SocialFriendUiEntity) -> Unit
     ) {
-        itemView.friendsAcceptDeclineButtons.isVisible = false
-        itemView.cancelRequestButton.isVisible = false
-        itemView.addFriendButton.isVisible = false
-        itemView.unblockButton.isVisible = false
-        itemView.friendsOptionsButton.isVisible = false
-        itemView.friendAcceptedText.isVisible = false
-        itemView.friendDeclinedText.isVisible = false
+        binding.friendsAcceptDeclineButtons.root.isVisible = false
+        binding.cancelRequestButton.isVisible = false
+        binding.addFriendButton.isVisible = false
+        binding.unblockButton.isVisible = false
+        binding.friendsOptionsButton.isVisible = false
+        binding.friendAcceptedText.isVisible = false
+        binding.friendDeclinedText.isVisible = false
         if (item.xsollaId == null) {
             return
         }
         if (item.relationship == FriendsRelationship.NONE) {
-            itemView.addFriendButton.isVisible = true
-            itemView.friendsOptionsButton.isVisible = true
+            binding.addFriendButton.isVisible = true
+            binding.friendsOptionsButton.isVisible = true
             configureOptionsWithBlock(item, onBlockOptionClick)
         }
         if (item.relationship == FriendsRelationship.REQUESTED) {
-            itemView.cancelRequestButton.isVisible = true
-            itemView.friendsOptionsButton.isVisible = true
+            binding.cancelRequestButton.isVisible = true
+            binding.friendsOptionsButton.isVisible = true
             configureOptionsWithBlock(item, onBlockOptionClick)
         }
         if (item.relationship == FriendsRelationship.PENDING) {
-            itemView.friendsAcceptDeclineButtons.isVisible = true
-            itemView.friendsOptionsButton.isVisible = true
+            binding.friendsAcceptDeclineButtons.root.isVisible = true
+            binding.friendsOptionsButton.isVisible = true
             configureOptionsWithBlock(item, onBlockOptionClick)
         }
         if (item.relationship == FriendsRelationship.STANDARD) {
-            itemView.friendsOptionsButton.isVisible = true
-            itemView.friendsOptionsButton.setOnClickListener {
+            binding.friendsOptionsButton.isVisible = true
+            binding.friendsOptionsButton.setOnClickListener {
                 AlertDialog.Builder(itemView.context)
                         .setTitle(itemView.context.getString(R.string.friends_options_dialog_title, item.nickname))
                         .setItems(arrayOf(itemView.context.getString(R.string.friends_option_delete), itemView.context.getString(R.string.friends_option_block))) { _, which ->
@@ -148,11 +149,11 @@ class SocialFriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     }
 
     private fun configureFriendsInPlaceholder(item: VmSocialFriends.SocialFriendUiEntity) {
-        itemView.friendsInPlaceholder.isVisible = true
+        binding.friendsInPlaceholder.isVisible = true
 
-        itemView.friendsInIconFacebook.isVisible = item.fromPlatform.contains(SocialNetworkForLinking.FACEBOOK)
-        itemView.friendsInIconTwitter.isVisible = item.fromPlatform.contains(SocialNetworkForLinking.TWITTER)
-        itemView.friendsInIconVk.isVisible = item.fromPlatform.contains(SocialNetworkForLinking.VK)
+        binding.friendsInIconFacebook.isVisible = item.fromPlatform.contains(SocialNetworkForLinking.FACEBOOK)
+        binding.friendsInIconTwitter.isVisible = item.fromPlatform.contains(SocialNetworkForLinking.TWITTER)
+        binding.friendsInIconVk.isVisible = item.fromPlatform.contains(SocialNetworkForLinking.VK)
 
     }
 }

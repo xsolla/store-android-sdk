@@ -5,12 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
@@ -19,6 +19,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -27,19 +28,16 @@ import com.xsolla.android.appcore.extensions.setRateLimitedClickListener
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.RefreshTokenCallback
 import com.xsolla.android.store.XStore
+import com.xsolla.android.storesdkexample.databinding.ActivityStoreBinding
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.ui.vm.VmProfile
 import com.xsolla.android.storesdkexample.ui.vm.base.ViewModelFactory
 import com.xsolla.android.storesdkexample.util.sumByLong
-import kotlinx.android.synthetic.main.activity_store.*
-import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.app_bar_main.view.*
-import kotlinx.android.synthetic.main.drawer_expandable_item.*
-import kotlinx.android.synthetic.main.item_balance.view.*
-import kotlinx.android.synthetic.main.layout_drawer.*
 
-class StoreActivity : AppCompatActivity() {
+class StoreActivity : AppCompatActivity(R.layout.activity_store) {
+    private val binding: ActivityStoreBinding by viewBinding(R.id.drawer_layout)
+
     private val vmCart: VmCart by viewModels()
     private val vmBalance: VmBalance by viewModels()
     private val vmProfile: VmProfile by viewModels {
@@ -47,13 +45,11 @@ class StoreActivity : AppCompatActivity() {
     }
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var drawerLayout: DrawerLayout
 
     var showCartMenu = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_store)
 
         if (XLogin.isTokenExpired(60)) {
             if (!XLogin.canRefreshToken()) {
@@ -86,20 +82,21 @@ class StoreActivity : AppCompatActivity() {
         super.onResume()
         if (XLogin.isTokenExpired(60)) {
             if (XLogin.canRefreshToken()) {
-                lock.visibility = View.VISIBLE
+                binding.lock.visibility = View.VISIBLE
                 XLogin.refreshToken(object : RefreshTokenCallback {
                     override fun onSuccess() {
-                        lock.visibility = View.GONE
+                        binding.lock.visibility = View.GONE
                         XStore.init(BuildConfig.PROJECT_ID, XLogin.token)
                         XInventory.init(BuildConfig.PROJECT_ID, XLogin.token!!)
                         vmCart.updateCart()
                         vmBalance.updateVirtualBalance()
                         setDrawerData()
-                        drawerLayout.closeDrawer(GravityCompat.START)
+
+                        binding.root.closeDrawers()
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
-                        lock.visibility = View.GONE
+                        binding.lock.visibility = View.GONE
                         startLogin()
                     }
                 })
@@ -113,10 +110,10 @@ class StoreActivity : AppCompatActivity() {
             vmBalance.updateVirtualBalance()
 
             setDrawerData()
-            drawerLayout.closeDrawer(GravityCompat.START)
+            binding.root.closeDrawers()
         }
 
-        appbar?.mainToolbar?.title = ""
+        binding.appbar.mainToolbar.title = ""
     }
 
     private fun initVirtualBalance() {
@@ -125,12 +122,15 @@ class StoreActivity : AppCompatActivity() {
             balanceContainer.removeAllViews()
                 virtualBalanceList.forEach { item ->
                     val balanceView = LayoutInflater.from(this).inflate(R.layout.item_balance, null)
-                    Glide.with(this).load(item.imageUrl).into(balanceView.balanceIcon)
-                    balanceView.balanceAmount.text = item.amount.toString()
+                    val balanceIcon = balanceView.findViewById<ImageView>(R.id.balanceIcon)
+                    val balanceAmount = balanceView.findViewById<TextView>(R.id.balanceAmount)
+
+                    Glide.with(this).load(item.imageUrl).into(balanceIcon)
+                    balanceAmount.text = item.amount.toString()
                     balanceContainer.addView(balanceView, 0)
                 }
         })
-        chargeBalanceButton.setRateLimitedClickListener { findNavController(R.id.nav_host_fragment).navigate(R.id.nav_vc) }
+        binding.appbar.chargeBalanceButton.setRateLimitedClickListener { findNavController(R.id.nav_host_fragment).navigate(R.id.nav_vc) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -175,50 +175,54 @@ class StoreActivity : AppCompatActivity() {
     }
 
     private fun initDrawer() {
-        drawerLayout = findViewById(R.id.drawer_layout)
         val navController = findNavController(R.id.nav_host_fragment)
-        itemAccount.setOnClickListener {
+
+        findViewById<View>(R.id.itemAccount).setOnClickListener {
             navController.navigate(R.id.nav_profile)
-            drawerLayout.closeDrawer(GravityCompat.START)
+            binding.root.closeDrawers()
         }
-        itemInventory.setOnClickListener {
+        findViewById<View>(R.id.itemInventory).setOnClickListener {
             navController.navigate(R.id.nav_inventory)
-            drawerLayout.closeDrawer(GravityCompat.START)
+            binding.root.closeDrawers()
         }
-        itemCharacter.setOnClickListener {
+        findViewById<View>(R.id.itemCharacter).setOnClickListener {
             navController.navigate(R.id.nav_character)
-            drawerLayout.closeDrawer(GravityCompat.START)
+            binding.root.closeDrawers()
         }
-        itemFriends.setOnClickListener {
+        findViewById<View>(R.id.itemFriends).setOnClickListener {
             navController.navigate(R.id.nav_friends)
-            drawerLayout.closeDrawer(GravityCompat.START)
+            binding.root.closeDrawers()
         }
-        itemVirtualItems.setOnClickListener {
+        findViewById<View>(R.id.itemVirtualItems).setOnClickListener {
             navController.navigate(R.id.nav_vi)
-            drawerLayout.closeDrawer(GravityCompat.START)
+            binding.root.closeDrawers()
         }
-        itemVirtualCurrency.setOnClickListener {
+        findViewById<View>(R.id.itemVirtualCurrency).setOnClickListener {
             navController.navigate(R.id.nav_vc)
-            drawerLayout.closeDrawer(GravityCompat.START)
+            binding.root.closeDrawers()
         }
-        itemCoupon.setOnClickListener {
+        findViewById<View>(R.id.itemCoupon).setOnClickListener {
             navController.navigate(R.id.nav_redeem_coupon)
-            drawerLayout.closeDrawer(GravityCompat.START)
+            binding.root.closeDrawers()
         }
-        itemCart.setOnClickListener {
+        findViewById<View>(R.id.itemCart).setOnClickListener {
             if (vmCart.cartContent.value.isNullOrEmpty()) {
                 showSnack(getString(R.string.cart_message_empty))
             } else {
                 navController.navigate(R.id.nav_cart)
-                drawerLayout.closeDrawer(GravityCompat.START)
+                binding.root.closeDrawers()
             }
         }
-        itemLogout.setOnClickListener {
+        findViewById<View>(R.id.itemLogout).setOnClickListener {
             XLogin.logout()
             startLogin()
         }
         vmCart.cartContent.observe(this, Observer {
             val count = it.sumByLong { item -> item.quantity }
+
+            val textCartCounter = binding.root.findViewById<TextView>(R.id.textCartCounter)
+            val bgCartCounter = binding.root.findViewById<View>(R.id.bgCartCounter)
+
             textCartCounter.text = count.toString()
             if (count == 0L) {
                 bgCartCounter.visibility = View.GONE
@@ -231,11 +235,14 @@ class StoreActivity : AppCompatActivity() {
     }
 
     private fun setDrawerData() {
-        vmProfile.state.observe(this) { data ->
-            if (data.email.isNotBlank()) textEmail.text = data.email
-            else textEmail.visibility = View.GONE
+        val email = binding.root.findViewById<TextView>(R.id.textEmail)
+        val username = binding.root.findViewById<TextView>(R.id.textUsername)
 
-            textUsername.text = when {
+        vmProfile.state.observe(this) { data ->
+            if (data.email.isNotBlank()) email.text = data.email
+            else email.visibility = View.GONE
+
+            username.text = when {
                 data.nickname.isNotBlank() -> {
                     data.nickname
                 }
@@ -258,7 +265,7 @@ class StoreActivity : AppCompatActivity() {
                 .circleCrop()
                 .placeholder(R.drawable.ic_profile)
                 .error(R.drawable.ic_profile)
-                .into(iconProfile)
+                .into(binding.root.findViewById(R.id.iconProfile))
         }
     }
 

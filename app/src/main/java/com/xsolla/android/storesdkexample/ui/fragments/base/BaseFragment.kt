@@ -5,17 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import com.xsolla.android.storesdkexample.util.extensions.hideKeyboard
+import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.StoreActivity
-import kotlinx.android.synthetic.main.activity_store.*
-import kotlinx.android.synthetic.main.app_bar_main.view.*
 
 abstract class BaseFragment : Fragment() {
+    var mainToolbar: View? = null
     lateinit var rootView: View
 
     abstract fun getLayout(): Int
@@ -31,9 +29,11 @@ abstract class BaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mainToolbar = requireActivity().findViewById(R.id.mainToolbar)
+
         initUI()
 
-        requireActivity().appbar?.balanceLayout?.isVisible = toolbarOption.showBalance
+        requireActivity().findViewById<View>(R.id.balanceLayout)?.isVisible = toolbarOption.showBalance
         (requireActivity() as? StoreActivity)?.showCartMenu = toolbarOption.showCart
         requireActivity().invalidateOptionsMenu()
     }

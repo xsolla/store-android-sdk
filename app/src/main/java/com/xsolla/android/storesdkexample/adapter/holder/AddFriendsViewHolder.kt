@@ -8,12 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.storesdkexample.databinding.ItemFriendBinding
 import com.xsolla.android.storesdkexample.ui.vm.FriendUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.FriendsRelationship
-import kotlinx.android.synthetic.main.item_friend.view.*
-import kotlinx.android.synthetic.main.layout_accept_decline_friends.view.*
 
 class AddFriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private val binding = ItemFriendBinding.bind(view)
+
     fun bind(
             item: FriendUiEntity,
             onDeleteOptionClick: (user: FriendUiEntity) -> Unit,
@@ -25,23 +26,23 @@ class AddFriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             onAddFriendButtonClick: (user: FriendUiEntity) -> Unit
     ) {
 
-        itemView.friendNickname.text = item.nickname
+        binding.friendNickname.text = item.nickname
         setupOnline(item)
         setupAvatar(item)
 
-        itemView.friendsAcceptDeclineButtons.friendAcceptButton.setOnClickListener {
+        binding.friendsAcceptDeclineButtons.friendAcceptButton.setOnClickListener {
             onAcceptButtonClick(item)
         }
-        itemView.friendsAcceptDeclineButtons.friendDeclineButton.setOnClickListener {
+        binding.friendsAcceptDeclineButtons.friendDeclineButton.setOnClickListener {
             onDeclineButtonClick(item)
         }
-        itemView.unblockButton.setOnClickListener {
+        binding.unblockButton.setOnClickListener {
             onUnblockOptionsClick(item)
         }
-        itemView.addFriendButton.setOnClickListener {
+        binding.addFriendButton.setOnClickListener {
             onAddFriendButtonClick(item)
         }
-        itemView.cancelRequestButton.setOnClickListener {
+        binding.cancelRequestButton.setOnClickListener {
             onCancelRequestButtonClick(item)
         }
 
@@ -54,16 +55,16 @@ class AddFriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                 .apply(RequestOptions.circleCropTransform())
                 .placeholder(R.drawable.ic_xsolla_logo)
                 .error(R.drawable.ic_xsolla_logo)
-                .into(itemView.friendAvatar)
+                .into(binding.friendAvatar)
     }
 
     private fun setupOnline(item: FriendUiEntity) {
-        itemView.icOnline.isVisible = item.isOnline
-        itemView.icOffline.isGone = item.isOnline
+        binding.icOnline.isVisible = item.isOnline
+        binding.icOffline.isGone = item.isOnline
     }
 
     private fun configureOptionsWithBlock(item: FriendUiEntity, onBlockOptionClick: (user: FriendUiEntity) -> Unit) {
-        itemView.friendsOptionsButton.setOnClickListener {
+        binding.friendsOptionsButton.setOnClickListener {
             AlertDialog.Builder(itemView.context)
                     .setTitle(itemView.context.getString(R.string.friends_options_dialog_title, item.nickname))
                     .setItems(arrayOf(itemView.context.getString(R.string.friends_option_block))) { _, _  ->
@@ -75,7 +76,7 @@ class AddFriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     private fun configureDelete(item: FriendUiEntity, onDeleteOptionClick: (user: FriendUiEntity) -> Unit) {
         AlertDialog.Builder(itemView.context)
-                .setTitle(itemView.context.getString(R.string.friends_option_delete_title, itemView.friendNickname.text))
+                .setTitle(itemView.context.getString(R.string.friends_option_delete_title, binding.friendNickname.text))
                 .setPositiveButton(R.string.friends_options_delete_button) { _, _ ->
                     onDeleteOptionClick(item)
                 }
@@ -87,7 +88,7 @@ class AddFriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     private fun configureBlock(item: FriendUiEntity, onBlockOptionClick: (user: FriendUiEntity) -> Unit) {
         AlertDialog.Builder(itemView.context)
-                .setTitle(itemView.context.getString(R.string.friends_option_block_title, itemView.friendNickname.text))
+                .setTitle(itemView.context.getString(R.string.friends_option_block_title, binding.friendNickname.text))
                 .setPositiveButton(R.string.friends_options_block_button) { _, _ ->
                     onBlockOptionClick(item)
                 }
@@ -104,27 +105,28 @@ class AddFriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     ) {
 
         if (item.relationship == FriendsRelationship.NONE) {
-            itemView.friendAcceptedText.isVisible = false
-            itemView.friendDeclinedText.isVisible = false
-            itemView.addFriendButton.isVisible = true
+            binding.friendAcceptedText.isVisible = false
+            binding.friendDeclinedText.isVisible = false
+            binding.addFriendButton.isVisible = true
             configureOptionsWithBlock(item, onBlockOptionClick)
         }
         if (item.relationship == FriendsRelationship.REQUESTED) {
-            itemView.friendAcceptedText.isVisible = false
-            itemView.friendDeclinedText.isVisible = false
-            itemView.cancelRequestButton.isVisible = true
+            binding.friendAcceptedText.isVisible = false
+            binding.friendDeclinedText.isVisible = false
+            binding.cancelRequestButton.isVisible = true
             configureOptionsWithBlock(item, onBlockOptionClick)
         }
         if (item.relationship == FriendsRelationship.PENDING) {
-            itemView.friendAcceptedText.isVisible = false
-            itemView.friendDeclinedText.isVisible = false
-            itemView.friendsAcceptDeclineButtons.isVisible = true
+            binding.friendAcceptedText.isVisible = false
+            binding.friendDeclinedText.isVisible = false
+            binding.friendsAcceptDeclineButtons.friendAcceptButton.isVisible = true
+            binding.friendsAcceptDeclineButtons.friendDeclineButton.isVisible = true
             configureOptionsWithBlock(item, onBlockOptionClick)
         }
         if (item.relationship == FriendsRelationship.STANDARD) {
-            itemView.friendAcceptedText.isVisible = false
-            itemView.friendDeclinedText.isVisible = false
-            itemView.friendsOptionsButton.setOnClickListener {
+            binding.friendAcceptedText.isVisible = false
+            binding.friendDeclinedText.isVisible = false
+            binding.friendsOptionsButton.setOnClickListener {
                 AlertDialog.Builder(itemView.context)
                         .setTitle(itemView.context.getString(R.string.friends_options_dialog_title, item.nickname))
                         .setItems(arrayOf(itemView.context.getString(R.string.friends_option_delete), itemView.context.getString(R.string.friends_option_block))) { _, which ->

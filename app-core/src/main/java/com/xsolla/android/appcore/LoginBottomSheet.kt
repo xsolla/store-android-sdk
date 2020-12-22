@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.login_bottom_sheet.*
 
 class LoginBottomSheet : BottomSheetDialogFragment() {
 
@@ -16,11 +16,11 @@ class LoginBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         listener = parentFragment as SocialClickListener
-        twitterButton.setOnClickListener {
+        view.findViewById<Button>(R.id.twitterButton).setOnClickListener {
             listener.onSocialClicked(SocialNetworks.TWITTER)
             dismiss()
         }
-        linkedinButton.setOnClickListener {
+        view.findViewById<Button>(R.id.linkedinButton).setOnClickListener {
             listener.onSocialClicked(SocialNetworks.LINKEDIN)
             dismiss()
         }

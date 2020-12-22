@@ -7,6 +7,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.appcore.extensions.setRateLimitedClickListener
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.entity.request.UpdateUserFriendsRequestAction
@@ -14,9 +15,11 @@ import com.xsolla.android.login.social.SocialNetworkForLinking
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.AddFriendsAdapter
 import com.xsolla.android.storesdkexample.adapter.SocialFriendsAdapter
+import com.xsolla.android.storesdkexample.databinding.FragmentAddFriendsBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmAddFriends
 import com.xsolla.android.storesdkexample.ui.vm.VmSocialFriends
+import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import kotlinx.android.synthetic.main.fragment_add_friends.*
 
 class AddFriendsFragment : BaseFragment() {
@@ -24,6 +27,8 @@ class AddFriendsFragment : BaseFragment() {
     private companion object {
         private const val RC_LINKING = 33
     }
+
+    private val binding: FragmentAddFriendsBinding by viewBinding()
 
     private lateinit var socialNetworksIcons: Map<SocialNetworkForLinking, Triple<Int, Int, ImageView>>
 
@@ -39,9 +44,9 @@ class AddFriendsFragment : BaseFragment() {
 
     override fun initUI() {
         socialNetworksIcons = mapOf(
-                SocialNetworkForLinking.FACEBOOK to Triple(R.drawable.ic_linking_facebook_add, R.drawable.ic_linking_facebook_added, iconFacebook),
-                SocialNetworkForLinking.VK to Triple(R.drawable.ic_linking_vk_add, R.drawable.ic_linking_vk_added, iconVk),
-                SocialNetworkForLinking.TWITTER to Triple(R.drawable.ic_linking_twitter_add, R.drawable.ic_linking_twitter_added, iconTwitter)
+                SocialNetworkForLinking.FACEBOOK to Triple(R.drawable.ic_linking_facebook_add, R.drawable.ic_linking_facebook_added, binding.iconFacebook),
+                SocialNetworkForLinking.VK to Triple(R.drawable.ic_linking_vk_add, R.drawable.ic_linking_vk_added, binding.iconVk),
+                SocialNetworkForLinking.TWITTER to Triple(R.drawable.ic_linking_twitter_add, R.drawable.ic_linking_twitter_added, binding.iconTwitter)
         )
         searchAdapter = AddFriendsAdapter(
                 { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.FRIEND_REMOVE) },
@@ -61,7 +66,7 @@ class AddFriendsFragment : BaseFragment() {
                 { vmSocialFriends.updateFriendship(it.toFriendUiEntity(), UpdateUserFriendsRequestAction.FRIEND_REQUEST_CANCEL) },
                 { vmSocialFriends.updateFriendship(it.toFriendUiEntity(), UpdateUserFriendsRequestAction.FRIEND_REQUEST_ADD) }
         )
-        searchInput.addTextChangedListener {
+        binding.searchInput.addTextChangedListener {
             vmAddFriends.currentSearchQuery.value = it?.toString() ?: ""
         }
         vmSocialFriends.loadLinkedSocialAccounts()
@@ -92,7 +97,7 @@ class AddFriendsFragment : BaseFragment() {
         vmSocialFriends.hasError.observe(viewLifecycleOwner, errorObserver)
         vmAddFriends.loadAllFriends()
 
-        updateFriendsButton.setOnClickListener { vmSocialFriends.updateSocialFriends() }
+        binding.updateFriendsButton.setOnClickListener { vmSocialFriends.updateSocialFriends() }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -126,29 +131,29 @@ class AddFriendsFragment : BaseFragment() {
     }
 
     private fun initSocialScreen() {
-        labelSocialAccounts.text = getString(R.string.add_friends_social_accounts)
-        labelSocialAccounts.isVisible = true
-        socialButtonsScroll.isVisible = true
-        labelListTitle.text = getString(R.string.add_friends_recommended)
-        labelListTitle.isVisible = true
-        updateFriendsButton.isVisible = true
-        recycler.adapter = socialFriendsAdapter
-        recyclerEmpty.text = getString(R.string.add_friends_social_empty)
+        binding.labelSocialAccounts.text = getString(R.string.add_friends_social_accounts)
+        binding.labelSocialAccounts.isVisible = true
+        binding.socialButtonsScroll.isVisible = true
+        binding.labelListTitle.text = getString(R.string.add_friends_recommended)
+        binding.labelListTitle.isVisible = true
+        binding.updateFriendsButton.isVisible = true
+        binding.recycler.adapter = socialFriendsAdapter
+        binding.recyclerEmpty.text = getString(R.string.add_friends_social_empty)
         setEmptyTextVisibility()
     }
 
     private fun initSearchScreen() {
-        labelSocialAccounts.isGone = true
-        socialButtonsScroll.isGone = true
-        labelListTitle.isGone = true
-        updateFriendsButton.isGone = true
-        recycler.adapter = searchAdapter
-        recyclerEmpty.text = getString(R.string.add_friends_search_empty)
+        binding.labelSocialAccounts.isGone = true
+        binding.socialButtonsScroll.isGone = true
+        binding.labelListTitle.isGone = true
+        binding.updateFriendsButton.isGone = true
+        binding.recycler.adapter = searchAdapter
+        binding.recyclerEmpty.text = getString(R.string.add_friends_search_empty)
         setEmptyTextVisibility()
     }
 
     private fun setEmptyTextVisibility() {
-        recyclerEmpty.isVisible =
+        binding.recyclerEmpty.isVisible =
                 vmAddFriends.currentSearchQuery.value.isNullOrBlank() &&
                         vmSocialFriends.socialFriendsList.value.isNullOrEmpty() ||
                         !vmAddFriends.currentSearchQuery.value.isNullOrBlank() &&
