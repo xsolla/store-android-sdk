@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1] - Login SDK - 2020-12-22
+
+### Fixed
+
+- Unreal Engine compatibility
+
+
 ## [1.1.0] - Login SDK - 2020-12-18
 
 ### Added

@@ -11,8 +11,8 @@ buildscript {
     ext.inventory_sdk_version_name = '1.0.1'
     ext.inventory_sdk_version_code = 2
 
-    ext.login_sdk_version_name = '1.1.0'
-    ext.login_sdk_version_code = 10
+    ext.login_sdk_version_name = '1.1.1'
+    ext.login_sdk_version_code = 11
 
     ext.sample_app_version_name = '1.4.0'
     ext.sample_app_version_code = 13
