@@ -24,6 +24,7 @@ import kotlinx.coroutines.withContext
 class LoginActivity : AppCompatActivity(R.layout.activity_login) {
     private companion object {
         private const val HOW_TO_URL = "https://developers.xsolla.com/sdk/android/use-xsolla-servers/how-tos/#android_sdk_use_xsolla_servers_how_to_use_partners_login_system"
+        private const val BACKEND_URL = "https://github.com/xsolla/xsolla-sdk-backend"
     }
 
     private val binding: ActivityLoginBinding by viewBinding(R.id.loginContainer)
@@ -70,7 +71,7 @@ class LoginActivity : AppCompatActivity(R.layout.activity_login) {
             startIndex = binding.demoDescription1.text.indexOf("here", ignoreCase = true),
             endIndex = binding.demoDescription1.text.indexOf("here", ignoreCase = true) + "here".length
         ) {
-            Snackbar.make(binding.root, "link to backend", Snackbar.LENGTH_LONG).show()
+            BACKEND_URL.toUri().openLink(this)
         }
         binding.demoDescription2.setClickableSpan(
             isUnderlineText = true,
