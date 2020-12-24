@@ -1,18 +1,28 @@
-image: jangrewe/gitlab-ci-android
+image: circleci/android:api-29
 
 stages:
+  - generate_keystore
   - build
   - test
   - publish
 
-before_script:
-  # Extract the SDK version that we're building against
-  - export ANDROID_COMPILE_SDK=`egrep '^[[:blank:]]+ext.sdk_compile'  build.gradle | awk '{print $3}'`
-  - export GRADLE_USER_HOME=$(pwd)/.gradle
-  # Install platform tools and Android SDK for the compile target
-  - echo y | /sdk/tools/bin/sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}" > /dev/null
-  - chmod +x ./gradlew
-  - touch local.properties
+generate_keystore:
+  tags:
+    - sdk
+  stage: generate_keystore
+  except:
+    - branches
+  script:
+    - echo $STORE_FILE | base64 -di > xsolla.keystore
+    - echo "keystorePath=../xsolla.keystore" > signing.properties
+    - echo "keystorePassword=$STORE_PASSWORD" >> signing.properties
+    - echo "keyAlias=$KEY_ALIAS" >> signing.properties
+    - echo "keyPassword=$KEY_PASSWORD" >> signing.properties
+  artifacts:
+    paths:
+      - xsolla.keystore
+      - signing.properties
+    expire_in: 10 mins
 
 build:
   tags:
@@ -21,13 +31,14 @@ build:
   except:
     - branches
   script:
-    - ./gradlew assembleDebug
+    - ./gradlew assembleRelease
   artifacts:
     expire_in: 2 hours
     paths:
       - app/build/outputs/
       - app-playfab/build/outputs/
       - app-serverless/build/outputs/
+      - app-inventory/build/outputs/
   cache:
     key: ${CI_PROJECT_ID}
     paths:
@@ -60,10 +71,10 @@ generateDebugApp:
     - echo "Git commit          ${CI_COMMIT_SHA}"       >> ./artifacts/info.txt
     - echo "Gitlab pipeline     ${CI_PIPELINE_ID}"      >> ./artifacts/info.txt
   script:
-    - mv app/build/outputs/apk/debug/app-debug.apk ./artifacts/SampleApp-Default.apk
-    - mv app-playfab/build/outputs/apk/debug/app-playfab-debug.apk ./artifacts/SampleApp-Playfab.apk
-    - mv app-serverless/build/outputs/apk/debug/app-serverless-debug.apk ./artifacts/SampleApp-Serverless.apk
-    - mv app-inventory/build/outputs/apk/debug/app-inventory-debug.apk ./artifacts/SampleApp-Inventory.apk
+    - mv app/build/outputs/apk/release/app-release.apk ./artifacts/SampleApp-Default.apk
+    - mv app-playfab/build/outputs/apk/release/app-playfab-release.apk ./artifacts/SampleApp-Playfab.apk
+    - mv app-serverless/build/outputs/apk/release/app-serverless-release.apk ./artifacts/SampleApp-Serverless.apk
+    - mv app-inventory/build/outputs/apk/release/app-inventory-release.apk ./artifacts/SampleApp-Inventory.apk
   artifacts:
     expire_in: 2 hours
     paths:
