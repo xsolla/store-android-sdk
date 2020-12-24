@@ -200,7 +200,7 @@ class StoreActivity : AppCompatActivity() {
     }
 
     private fun openWebStore() =
-            "https://livedemo.xsolla.com/sdk-account-linking-android/?token=${XLogin.token}&remember_me=false"
+            "https://sitebuilder.xsolla.com/game/sdk-web-store-android/?token=${XLogin.token}&remember_me=false"
             .toUri()
             .openInBrowser(this)
 
