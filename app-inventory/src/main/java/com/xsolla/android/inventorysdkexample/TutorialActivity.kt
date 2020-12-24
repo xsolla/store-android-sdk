@@ -5,41 +5,44 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.inventorysdkexample.data.local.PrefManager
+import com.xsolla.android.inventorysdkexample.databinding.ActivityTutorialBinding
 import com.xsolla.android.inventorysdkexample.ui.fragments.tutorial.TutorialPageFragment
-import kotlinx.android.synthetic.main.activity_tutorial.*
 
-class TutorialActivity : AppCompatActivity() {
+class TutorialActivity : AppCompatActivity(R.layout.activity_tutorial) {
 
     companion object {
         const val EXTRA_MANUAL_RUN = "EXTRA_MANUAL_RUN"
     }
 
+    private val binding: ActivityTutorialBinding by viewBinding(R.id.container)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_tutorial)
+
         val isManualRun = intent.getBooleanExtra(EXTRA_MANUAL_RUN, false)
-        buttonClose.setOnClickListener {
+        binding.buttonClose.setOnClickListener {
             finish()
         }
-        pager.adapter = object : FragmentStateAdapter(this) {
+        binding.pager.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount() = 4
             override fun createFragment(position: Int) = TutorialPageFragment.newInstance(position + 1)
         }
-        pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 setupButtons(position + 1, isManualRun)
                 setupPageIndicator(position + 1)
             }
         })
         if (isManualRun) {
-            pager.setCurrentItem(1, false)
+            binding.pager.setCurrentItem(1, false)
         }
-        pager.isUserInputEnabled = false
+        binding.pager.isUserInputEnabled = false
     }
 
     private fun setupButtons(page: Int, isManualRun: Boolean) {
-        buttonBack.apply {
+        binding.buttonBack.apply {
             when (page) {
                 1 -> {
                     isVisible = true
@@ -58,7 +61,7 @@ class TutorialActivity : AppCompatActivity() {
                 }
             }
         }
-        buttonNext.apply {
+        binding.buttonNext.apply {
             when (page) {
                 1, 2, 3 -> {
                     isVisible = true
@@ -75,24 +78,24 @@ class TutorialActivity : AppCompatActivity() {
     }
 
     private fun setupPageIndicator(page: Int) {
-        dot1.setImageResource(R.drawable.ic_tutorial_dot_inactive)
-        dot2.setImageResource(R.drawable.ic_tutorial_dot_inactive)
-        dot3.setImageResource(R.drawable.ic_tutorial_dot_inactive)
-        dot4.setImageResource(R.drawable.ic_tutorial_dot_inactive)
+        binding.dot1.setImageResource(R.drawable.ic_tutorial_dot_inactive)
+        binding.dot2.setImageResource(R.drawable.ic_tutorial_dot_inactive)
+        binding.dot3.setImageResource(R.drawable.ic_tutorial_dot_inactive)
+        binding.dot4.setImageResource(R.drawable.ic_tutorial_dot_inactive)
         when(page) {
-            1 -> dot1.setImageResource(R.drawable.ic_tutorial_dot_active)
-            2 -> dot2.setImageResource(R.drawable.ic_tutorial_dot_active)
-            3 -> dot3.setImageResource(R.drawable.ic_tutorial_dot_active)
-            4 -> dot4.setImageResource(R.drawable.ic_tutorial_dot_active)
+            1 -> binding.dot1.setImageResource(R.drawable.ic_tutorial_dot_active)
+            2 -> binding.dot2.setImageResource(R.drawable.ic_tutorial_dot_active)
+            3 -> binding.dot3.setImageResource(R.drawable.ic_tutorial_dot_active)
+            4 -> binding.dot4.setImageResource(R.drawable.ic_tutorial_dot_active)
         }
     }
 
     private fun next() {
-        pager.setCurrentItem(pager.currentItem + 1, true)
+        binding.pager.setCurrentItem(binding.pager.currentItem + 1, true)
     }
 
     private fun back() {
-        pager.setCurrentItem(pager.currentItem - 1, true)
+        binding.pager.setCurrentItem(binding.pager.currentItem - 1, true)
     }
 
     private fun done() {

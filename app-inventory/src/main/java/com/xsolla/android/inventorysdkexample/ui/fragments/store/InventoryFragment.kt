@@ -2,9 +2,9 @@ package com.xsolla.android.inventorysdkexample.ui.fragments.store
 
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.inventory.callback.ConsumeItemCallback
 import com.xsolla.android.inventory.callback.GetInventoryCallback
@@ -13,11 +13,13 @@ import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.inventorysdkexample.R
 import com.xsolla.android.inventorysdkexample.adapter.InventoryAdapter
+import com.xsolla.android.inventorysdkexample.databinding.FragmentInventoryBinding
 import com.xsolla.android.inventorysdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.inventorysdkexample.ui.vm.VmInventory
-import kotlinx.android.synthetic.main.fragment_inventory.*
 
 class InventoryFragment : BaseFragment(), ConsumeListener {
+
+    private val binding: FragmentInventoryBinding by viewBinding()
 
     private val viewModel: VmInventory by activityViewModels()
     private lateinit var inventoryAdapter: InventoryAdapter
@@ -25,7 +27,7 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
     override fun getLayout() = R.layout.fragment_inventory
 
     override fun initUI() {
-        with(recycler) {
+        with(binding.recycler) {
             val linearLayoutManager = LinearLayoutManager(context)
             addItemDecoration(DividerItemDecoration(context, linearLayoutManager.orientation).apply {
                 ContextCompat.getDrawable(context, R.drawable.item_divider)?.let { setDrawable(it) }
@@ -34,7 +36,7 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
         }
 
         inventoryAdapter = InventoryAdapter(listOf(), this)
-        recycler.adapter = inventoryAdapter
+        binding.recycler.adapter = inventoryAdapter
 
         viewModel.inventory.observe(viewLifecycleOwner) {
             inventoryAdapter.items = it

@@ -1,21 +1,22 @@
 package com.xsolla.android.inventorysdkexample.ui.fragments.login
 
-import android.text.Editable
-import android.text.TextWatcher
+import androidx.core.widget.addTextChangedListener
+import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.tabs.TabLayout
 import com.xsolla.android.inventorysdkexample.R
+import com.xsolla.android.inventorysdkexample.databinding.FragmentSignUpBinding
 import com.xsolla.android.inventorysdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.inventorysdkexample.util.ViewUtils
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.RegisterCallback
-import kotlinx.android.synthetic.main.fragment_auth.*
-import kotlinx.android.synthetic.main.fragment_sign_up.*
-import kotlinx.android.synthetic.main.fragment_sign_up.view.*
 
 class SignUpFragment : BaseFragment() {
 
     companion object {
         private const val MIN_PASSWORD_LENGTH = 6
     }
+
+    private val binding: FragmentSignUpBinding by viewBinding()
 
     override fun getLayout(): Int {
         return R.layout.fragment_sign_up
@@ -24,13 +25,13 @@ class SignUpFragment : BaseFragment() {
     override fun initUI() {
         initLoginButtonEnabling()
 
-        rootView.signUpButton.setOnClickListener { v ->
+        binding.signUpButton.setOnClickListener { v ->
 
             ViewUtils.disable(v)
             hideKeyboard()
-            val username = usernameInput.text.toString()
-            val email = emailInput.text.toString()
-            val password = passwordInput.text.toString()
+            val username = binding.usernameInput.text.toString()
+            val email = binding.emailInput.text.toString()
+            val password = binding.passwordInput.text.toString()
 
             XLogin.register(username, email, password, object : RegisterCallback {
                 override fun onSuccess() {
@@ -39,7 +40,7 @@ class SignUpFragment : BaseFragment() {
                             .beginTransaction()
                             .replace(R.id.fragmentContainer, LoginFragment())
                             .commit()
-                    activity?.tabLayout?.getTabAt(0)?.select()
+                    activity?.findViewById<TabLayout>(R.id.tabLayout)?.getTabAt(0)?.select()
                     ViewUtils.enable(v)
                 }
 
@@ -52,69 +53,18 @@ class SignUpFragment : BaseFragment() {
     }
 
     private fun initLoginButtonEnabling() {
-        rootView.usernameInput.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                updateLoginButtonEnable()
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-        })
-
-        rootView.emailInput.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                updateLoginButtonEnable()
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-        })
-
-        rootView.passwordInput.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                updateLoginButtonEnable()
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-        })
-
-        rootView.passwordConfirmInput.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                updateLoginButtonEnable()
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-        })
+        binding.usernameInput.addTextChangedListener { updateLoginButtonEnable() }
+        binding.emailInput.addTextChangedListener { updateLoginButtonEnable() }
+        binding.passwordInput.addTextChangedListener { updateLoginButtonEnable() }
+        binding.passwordConfirmInput.addTextChangedListener { updateLoginButtonEnable() }
     }
 
     private fun updateLoginButtonEnable() {
-        rootView.signUpButton.isEnabled = rootView.usernameInput.text?.isNotEmpty() == true
-                && rootView.emailInput.text?.isNotEmpty() == true
-                && (rootView.passwordInput.text?.length!! >= MIN_PASSWORD_LENGTH) == true
-                && (rootView.passwordConfirmInput.text?.length!! >= MIN_PASSWORD_LENGTH) == true
-                && (rootView.passwordInput.text?.toString() == rootView.passwordConfirmInput.text?.toString())
+        binding.signUpButton.isEnabled = binding.usernameInput.text?.isNotEmpty() == true
+                && binding.emailInput.text?.isNotEmpty() == true
+                && (binding.passwordInput.text?.length!! >= MIN_PASSWORD_LENGTH) == true
+                && (binding.passwordConfirmInput.text?.length!! >= MIN_PASSWORD_LENGTH) == true
+                && (binding.passwordInput.text?.toString() == binding.passwordConfirmInput.text?.toString())
     }
 
 }

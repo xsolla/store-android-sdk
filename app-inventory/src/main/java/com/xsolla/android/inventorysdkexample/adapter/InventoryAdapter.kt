@@ -8,8 +8,8 @@ import com.bumptech.glide.Glide
 import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.inventorysdkexample.R
+import com.xsolla.android.inventorysdkexample.databinding.ItemInventoryBinding
 import com.xsolla.android.inventorysdkexample.ui.fragments.store.ConsumeListener
-import kotlinx.android.synthetic.main.item_inventory.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,20 +42,22 @@ class InventoryAdapter(
             inflater: LayoutInflater,
             parent: ViewGroup) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_inventory, parent, false)) {
 
+        private val binding: ItemInventoryBinding = ItemInventoryBinding.bind(itemView)
+
         fun bind(item: InventoryResponse.Item) {
-            Glide.with(itemView).load(item.imageUrl).into(itemView.itemIcon)
-            itemView.itemName.text = item.name
-            itemView.itemQuantity.text = item.quantity.toString()
+            Glide.with(itemView).load(item.imageUrl).into(binding.itemIcon)
+            binding.itemName.text = item.name
+            binding.itemQuantity.text = item.quantity.toString()
             if (item.virtualItemType == InventoryResponse.Item.VirtualItemType.NON_RENEWING_SUBSCRIPTION) {
-                itemView.itemQuantity.visibility = View.INVISIBLE
+                binding.itemQuantity.visibility = View.INVISIBLE
             } else {
-                itemView.itemQuantity.visibility = View.VISIBLE
+                binding.itemQuantity.visibility = View.VISIBLE
             }
 
-            itemView.itemExpiration.text = getExpirationText(item)
+            binding.itemExpiration.text = getExpirationText(item)
 
-            itemView.consumeButton.visibility = if (item.remainingUses == 0L) View.INVISIBLE else View.VISIBLE
-            itemView.consumeButton.setOnClickListener { consumeListener.onConsume(item) }
+            binding.consumeButton.visibility = if (item.remainingUses == 0L) View.INVISIBLE else View.VISIBLE
+            binding.consumeButton.setOnClickListener { consumeListener.onConsume(item) }
         }
 
         private fun getExpirationText(item: InventoryResponse.Item): String? {

@@ -5,12 +5,14 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.appcore.LoginBottomSheet
 import com.xsolla.android.inventorysdkexample.BuildConfig
 import com.xsolla.android.inventorysdkexample.R
 import com.xsolla.android.inventorysdkexample.StoreActivity
 import com.xsolla.android.inventorysdkexample.TutorialActivity
 import com.xsolla.android.inventorysdkexample.data.local.PrefManager
+import com.xsolla.android.inventorysdkexample.databinding.FragmentLoginBinding
 import com.xsolla.android.inventorysdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.inventorysdkexample.util.setRateLimitedClickListener
 import com.xsolla.android.login.XLogin
@@ -18,7 +20,6 @@ import com.xsolla.android.login.callback.AuthCallback
 import com.xsolla.android.login.callback.FinishSocialCallback
 import com.xsolla.android.login.callback.StartSocialCallback
 import com.xsolla.android.login.social.SocialNetwork
-import kotlinx.android.synthetic.main.fragment_login.*
 import java.util.*
 
 class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
@@ -27,6 +28,8 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         private const val MIN_PASSWORD_LENGTH = 6
         private val POLICY_LANGUAGES = listOf("de", "ko", "zh", "ja", "ru")
     }
+
+    private val binding: FragmentLoginBinding by viewBinding()
 
     private var selectedSocialNetwork: SocialNetwork? = null
 
@@ -37,42 +40,42 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
     override fun initUI() {
         initLoginButtonEnabling()
 
-        loginButton.setOnClickListener {
-            val username = usernameInput.text.toString()
-            val password = passwordInput.text.toString()
+        binding.loginButton.setOnClickListener {
+            val username = binding.usernameInput.text.toString()
+            val password = binding.passwordInput.text.toString()
             loginWithPassword(username, password)
         }
 
-        demoUserButton.setOnClickListener {
+        binding.demoUserButton.setOnClickListener {
             loginWithPassword("xsolla", "xsolla")
         }
 
-        googleButton.setRateLimitedClickListener {
+        binding.googleButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.GOOGLE
             XLogin.startSocialAuth(this, SocialNetwork.GOOGLE, BuildConfig.WITH_LOGOUT, startSocialCallback)
         }
 
-        facebookButton.setRateLimitedClickListener {
+        binding.facebookButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.FACEBOOK
             XLogin.startSocialAuth(this, SocialNetwork.FACEBOOK, BuildConfig.WITH_LOGOUT, startSocialCallback)
         }
 
-        baiduButton.setRateLimitedClickListener {
+        binding.baiduButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.BAIDU
             XLogin.startSocialAuth(this, SocialNetwork.BAIDU, BuildConfig.WITH_LOGOUT, startSocialCallback)
         }
 
-        moreButton.setRateLimitedClickListener {
+        binding.moreButton.setRateLimitedClickListener {
             LoginBottomSheet.newInstance().show(childFragmentManager, "moreSocials")
         }
 
-        resetPasswordButton.setOnClickListener { resetPassword() }
+        binding.resetPasswordButton.setOnClickListener { resetPassword() }
 
-        privacyPolicyButton.setOnClickListener { showPrivacyPolicy() }
+        binding.privacyPolicyButton.setOnClickListener { showPrivacyPolicy() }
     }
 
     private fun initLoginButtonEnabling() {
-        usernameInput.addTextChangedListener(object : TextWatcher {
+        binding.usernameInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 updateLoginButtonEnable()
             }
@@ -86,7 +89,7 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
             }
         })
 
-        passwordInput.addTextChangedListener(object : TextWatcher {
+        binding.passwordInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 updateLoginButtonEnable()
             }
@@ -102,14 +105,14 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
     }
 
     private fun updateLoginButtonEnable() {
-        val usernameValid = usernameInput.text?.isNotEmpty() ?: false
-        val passwordValid = (passwordInput.text?.length ?: 0) >= MIN_PASSWORD_LENGTH
-        loginButton.isEnabled = usernameValid && passwordValid
+        val usernameValid = binding.usernameInput.text?.isNotEmpty() ?: false
+        val passwordValid = (binding.passwordInput.text?.length ?: 0) >= MIN_PASSWORD_LENGTH
+        binding.loginButton.isEnabled = usernameValid && passwordValid
     }
 
     private fun loginWithPassword(username: String, password: String) {
-        loginButton.isEnabled = false
-        demoUserButton.isEnabled = false
+        binding.loginButton.isEnabled = false
+        binding.demoUserButton.isEnabled = false
 
         hideKeyboard()
 
@@ -121,14 +124,14 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
                     startTutorial()
                 }
                 activity?.finish()
-                loginButton.isEnabled = true
-                demoUserButton.isEnabled = true
+                binding.loginButton.isEnabled = true
+                binding.demoUserButton.isEnabled = true
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
                 showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
-                loginButton.isEnabled = true
-                demoUserButton.isEnabled = true
+                binding.loginButton.isEnabled = true
+                binding.demoUserButton.isEnabled = true
             }
 
         })

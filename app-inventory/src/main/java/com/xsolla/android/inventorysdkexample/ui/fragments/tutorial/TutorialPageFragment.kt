@@ -2,24 +2,19 @@ package com.xsolla.android.inventorysdkexample.ui.fragments.tutorial
 
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.inventorysdkexample.R
-import kotlinx.android.synthetic.main.item_tutorial.*
+import com.xsolla.android.inventorysdkexample.databinding.ItemTutorialBinding
 
-class TutorialPageFragment : Fragment() {
+class TutorialPageFragment : Fragment(R.layout.item_tutorial) {
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.item_tutorial, container, false)
+    private val binding: ItemTutorialBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val page = requireArguments()[ARG_PAGE] as Int
-        tutorialImage.setImageResource(
+        binding.tutorialImage.setImageResource(
                 when (page) {
                     1 -> R.drawable.page1
                     2 -> R.drawable.page2
@@ -28,7 +23,7 @@ class TutorialPageFragment : Fragment() {
                     else -> throw IllegalArgumentException()
                 }
         )
-        tutorialTitle.setText(
+        binding.tutorialTitle.setText(
                 when (page) {
                     1 -> R.string.tutorial_1_title
                     2 -> R.string.tutorial_2_title
@@ -37,8 +32,8 @@ class TutorialPageFragment : Fragment() {
                     else -> throw IllegalArgumentException()
                 }
         )
-        tutorialText.movementMethod = LinkMovementMethod.getInstance()
-        tutorialText.setText(
+        binding.tutorialText.movementMethod = LinkMovementMethod.getInstance()
+        binding.tutorialText.setText(
                 when (page) {
                     1 -> R.string.tutorial_1_text
                     2 -> R.string.tutorial_2_text

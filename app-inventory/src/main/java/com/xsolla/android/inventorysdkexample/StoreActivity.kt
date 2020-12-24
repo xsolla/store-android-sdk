@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -13,16 +15,17 @@ import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.inventory.XInventory
+import com.xsolla.android.inventorysdkexample.databinding.ActivityStoreBinding
 import com.xsolla.android.inventorysdkexample.ui.vm.VmBalance
 import com.xsolla.android.inventorysdkexample.ui.vm.VmProfile
 import com.xsolla.android.inventorysdkexample.ui.vm.base.ViewModelFactory
@@ -30,12 +33,10 @@ import com.xsolla.android.inventorysdkexample.util.extensions.openInBrowser
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.RefreshTokenCallback
 import com.xsolla.android.store.XStore
-import kotlinx.android.synthetic.main.activity_store.*
-import kotlinx.android.synthetic.main.app_bar_main.view.*
-import kotlinx.android.synthetic.main.item_balance.view.*
-import kotlinx.android.synthetic.main.layout_drawer.*
 
-class StoreActivity : AppCompatActivity() {
+class StoreActivity : AppCompatActivity(R.layout.activity_store) {
+    private val binding: ActivityStoreBinding by viewBinding(R.id.drawer_layout)
+
     private val vmBalance: VmBalance by viewModels()
     private val vmProfile: VmProfile by viewModels {
         ViewModelFactory(resources)
@@ -46,7 +47,6 @@ class StoreActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_store)
 
         if (XLogin.isTokenExpired(60)) {
             if (!XLogin.canRefreshToken()) {
@@ -69,10 +69,10 @@ class StoreActivity : AppCompatActivity() {
         super.onResume()
         if (XLogin.isTokenExpired(60)) {
             if (XLogin.canRefreshToken()) {
-                lock.visibility = View.VISIBLE
+                binding.lock.visibility = View.VISIBLE
                 XLogin.refreshToken(object : RefreshTokenCallback {
                     override fun onSuccess() {
-                        lock.visibility = View.GONE
+                        binding.lock.visibility = View.GONE
                         XInventory.init(BuildConfig.PROJECT_ID, XLogin.token!!)
                         XStore.init(BuildConfig.PROJECT_ID, XLogin.token!!)
                         vmBalance.updateVirtualBalance()
@@ -81,7 +81,7 @@ class StoreActivity : AppCompatActivity() {
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
-                        lock.visibility = View.GONE
+                        binding.lock.visibility = View.GONE
                         startLogin()
                     }
                 })
@@ -97,19 +97,22 @@ class StoreActivity : AppCompatActivity() {
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
-        appbar?.mainToolbar?.title = ""
+        binding.appbar.mainToolbar.title = ""
     }
 
     private fun initVirtualBalance() {
         val balanceContainer: LinearLayout = findViewById(R.id.balanceContainer)
         vmBalance.virtualBalance.observe(this, Observer { virtualBalanceList ->
             balanceContainer.removeAllViews()
-                virtualBalanceList.forEach { item ->
-                    val balanceView = LayoutInflater.from(this).inflate(R.layout.item_balance, null)
-                    Glide.with(this).load(item.imageUrl).into(balanceView.balanceIcon)
-                    balanceView.balanceAmount.text = item.amount.toString()
-                    balanceContainer.addView(balanceView, 0)
-                }
+            virtualBalanceList.forEach { item ->
+                val balanceView = LayoutInflater.from(this).inflate(R.layout.item_balance, null)
+                val balanceIcon = balanceView.findViewById<ImageView>(R.id.balanceIcon)
+                val balanceAmount = balanceView.findViewById<TextView>(R.id.balanceAmount)
+
+                Glide.with(this).load(item.imageUrl).into(balanceIcon)
+                balanceAmount.text = item.amount.toString()
+                balanceContainer.addView(balanceView, 0)
+            }
         })
     }
 
@@ -134,34 +137,37 @@ class StoreActivity : AppCompatActivity() {
     private fun initDrawer() {
         drawerLayout = findViewById(R.id.drawer_layout)
         val navController = findNavController(R.id.nav_host_fragment)
-        itemInventory.setOnClickListener {
+        findViewById<View>(R.id.itemInventory).setOnClickListener {
             navController.navigate(R.id.nav_inventory)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-        itemRedeemCoupon.setOnClickListener {
+        findViewById<View>(R.id.itemRedeemCoupon).setOnClickListener {
             navController.navigate(R.id.nav_redeem_coupon)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-        itemWebStore.setOnClickListener {
+        findViewById<View>(R.id.itemWebStore).setOnClickListener {
             openWebStore()
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-        itemTutorial.setOnClickListener {
+        findViewById<View>(R.id.itemTutorial).setOnClickListener {
             startTutorial()
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-        itemLogout.setOnClickListener {
+        findViewById<View>(R.id.itemLogout).setOnClickListener {
             XLogin.logout()
             startLogin()
         }
     }
 
     private fun setDrawerData() {
-        vmProfile.state.observe(this) { data ->
-            if (data.email.isNotBlank()) textEmail.text = data.email
-            else textEmail.visibility = View.GONE
+        val email = binding.root.findViewById<TextView>(R.id.textEmail)
+        val username = binding.root.findViewById<TextView>(R.id.textUsername)
 
-            textUsername.text = when {
+        vmProfile.state.observe(this) { data ->
+            if (data.email.isNotBlank()) email.text = data.email
+            else email.visibility = View.GONE
+
+            username.text = when {
                 data.nickname.isNotBlank() -> {
                     data.nickname
                 }
@@ -180,11 +186,11 @@ class StoreActivity : AppCompatActivity() {
             }
 
             Glide.with(this@StoreActivity)
-                .load(data.avatar)
-                .circleCrop()
-                .placeholder(R.drawable.ic_profile)
-                .error(R.drawable.ic_profile)
-                .into(iconProfile)
+                    .load(data.avatar)
+                    .circleCrop()
+                    .placeholder(R.drawable.ic_profile)
+                    .error(R.drawable.ic_profile)
+                    .into(binding.root.findViewById(R.id.iconProfile))
         }
     }
 
