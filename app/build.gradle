@@ -6,6 +6,24 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 android {
     compileSdkVersion sdk_compile
 
+    signingConfigs {
+        release {
+            file("../signing.properties").with { propFile ->
+                if (propFile.canRead()) {
+                    def properties = new Properties()
+                    properties.load(new FileInputStream(propFile))
+
+                    storeFile file(properties['keystorePath'])
+                    storePassword properties['keystorePassword']
+                    keyAlias properties['keyAlias']
+                    keyPassword properties['keyPassword']
+                } else {
+                    println 'Unable to read signing.properties'
+                }
+            }
+        }
+    }
+
     defaultConfig {
         applicationId "com.xsolla.android.storesdkexample"
         minSdkVersion sdk_min
@@ -16,15 +34,18 @@ android {
         vectorDrawables.useSupportLibrary true
 
         buildConfigField 'int', 'PROJECT_ID', '58917' // Replace to your Project ID
-        buildConfigField 'String', 'LOGIN_ID', '"026201e3-7e40-11ea-a85b-42010aa80004"' // Replace to your project's Login ID
+        buildConfigField 'String', 'LOGIN_ID', '"ba55b4f6-babf-11ea-a85b-42010aa80004"' // Replace to your project's Login ID
+        buildConfigField 'String', 'GOOGLE_CREDENTIAL', "\"${System.env.GOOGLE_SERVER_ID}\""
         buildConfigField 'boolean', 'WITH_LOGOUT', 'false'
         buildConfigField 'boolean', 'USE_OAUTH', 'true'
-        buildConfigField 'int', 'OAUTH_CLIENT_ID', '57'
+        buildConfigField 'int', 'OAUTH_CLIENT_ID', '58'
 
         buildConfigField "String", "VERSION_NAME", "\"$versionName\""
     }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
@@ -50,9 +71,8 @@ dependencies {
     implementation project(":app-core")
 
     implementation project(":xsolla-login-sdk")
-    // Uncomment to implement native auth
-//    implementation project(":xsolla-login-sdk-facebook")
-//    implementation project(":xsolla-login-sdk-google")
+    implementation project(":xsolla-login-sdk-facebook")
+    implementation project(":xsolla-login-sdk-google")
     implementation project(":xsolla-store-sdk")
     implementation project(":xsolla-inventory-sdk")
     implementation project(":xsolla-payments-sdk")
