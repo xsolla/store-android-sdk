@@ -12,7 +12,7 @@ import com.xsolla.android.inventorysdkexample.R
 import com.xsolla.android.inventorysdkexample.StoreActivity
 import com.xsolla.android.inventorysdkexample.TutorialActivity
 import com.xsolla.android.inventorysdkexample.data.local.PrefManager
-import com.xsolla.android.inventorysdkexample.databinding.FragmentLoginBinding
+import com.xsolla.android.appcore.databinding.FragmentLoginBinding
 import com.xsolla.android.inventorysdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.inventorysdkexample.util.setRateLimitedClickListener
 import com.xsolla.android.login.XLogin

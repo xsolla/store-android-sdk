@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.inventorysdkexample.R
-import com.xsolla.android.inventorysdkexample.databinding.ItemInventoryBinding
+import com.xsolla.android.appcore.databinding.ItemInventoryBinding
 import com.xsolla.android.inventorysdkexample.ui.fragments.store.ConsumeListener
 import java.text.SimpleDateFormat
 import java.util.*

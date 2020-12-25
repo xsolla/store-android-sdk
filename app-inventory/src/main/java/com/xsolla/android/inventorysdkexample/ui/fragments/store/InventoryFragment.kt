@@ -13,7 +13,7 @@ import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.inventorysdkexample.R
 import com.xsolla.android.inventorysdkexample.adapter.InventoryAdapter
-import com.xsolla.android.inventorysdkexample.databinding.FragmentInventoryBinding
+import com.xsolla.android.appcore.databinding.FragmentInventoryBinding
 import com.xsolla.android.inventorysdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.inventorysdkexample.ui.vm.VmInventory
 

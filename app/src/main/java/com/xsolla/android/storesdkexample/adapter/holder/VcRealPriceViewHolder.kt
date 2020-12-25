@@ -11,7 +11,7 @@ import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.databinding.ItemViRealPriceBinding
+import com.xsolla.android.appcore.databinding.ItemViRealPriceBinding
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.util.ViewUtils

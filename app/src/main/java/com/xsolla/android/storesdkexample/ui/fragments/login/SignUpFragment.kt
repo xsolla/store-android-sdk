@@ -6,7 +6,7 @@ import com.google.android.material.tabs.TabLayout
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.RegisterCallback
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.databinding.FragmentSignUpBinding
+import com.xsolla.android.appcore.databinding.FragmentSignUpBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.util.ViewUtils
 

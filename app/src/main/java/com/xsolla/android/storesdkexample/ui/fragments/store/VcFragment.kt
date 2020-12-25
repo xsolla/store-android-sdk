@@ -7,7 +7,7 @@ import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.VcPagerAdapter
-import com.xsolla.android.storesdkexample.databinding.FragmentVcBinding
+import com.xsolla.android.appcore.databinding.FragmentVcBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 
 class VcFragment : BaseFragment() {

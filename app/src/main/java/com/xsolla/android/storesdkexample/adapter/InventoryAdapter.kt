@@ -11,7 +11,7 @@ import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.databinding.ItemInventoryBinding
+import com.xsolla.android.appcore.databinding.ItemInventoryBinding
 import com.xsolla.android.storesdkexample.listener.ConsumeListener
 import java.text.SimpleDateFormat
 import java.util.*

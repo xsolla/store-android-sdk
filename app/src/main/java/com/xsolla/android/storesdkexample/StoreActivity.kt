@@ -23,12 +23,12 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import com.xsolla.android.appcore.databinding.ActivityStoreBinding
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.appcore.extensions.setRateLimitedClickListener
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.RefreshTokenCallback
 import com.xsolla.android.store.XStore
-import com.xsolla.android.storesdkexample.databinding.ActivityStoreBinding
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.ui.vm.VmProfile

@@ -6,7 +6,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.ResetPasswordCallback
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.databinding.FragmenResetPasswordBinding
+import com.xsolla.android.appcore.databinding.FragmenResetPasswordBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.util.ViewUtils
 

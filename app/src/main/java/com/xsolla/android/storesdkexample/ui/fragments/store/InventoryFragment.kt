@@ -16,7 +16,7 @@ import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.InventoryAdapter
-import com.xsolla.android.storesdkexample.databinding.FragmentInventoryBinding
+import com.xsolla.android.appcore.databinding.FragmentInventoryBinding
 import com.xsolla.android.storesdkexample.listener.ConsumeListener
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment

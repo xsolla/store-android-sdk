@@ -9,7 +9,7 @@ import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.login.entity.common.UserAttributePermission
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.databinding.FragmentEditAttributeBinding
+import com.xsolla.android.appcore.databinding.FragmentEditAttributeBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmCharacterPage

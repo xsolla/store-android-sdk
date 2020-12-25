@@ -11,8 +11,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions.circleCropTransform
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.FriendsAdapter
-import com.xsolla.android.storesdkexample.databinding.ItemAddFriendButtonBinding
-import com.xsolla.android.storesdkexample.databinding.ItemFriendBinding
+import com.xsolla.android.appcore.databinding.ItemAddFriendButtonBinding
+import com.xsolla.android.appcore.databinding.ItemFriendBinding
 import com.xsolla.android.storesdkexample.ui.vm.FriendUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.FriendsTab
 import com.xsolla.android.storesdkexample.ui.vm.TemporaryFriendRelationship

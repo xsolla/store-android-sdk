@@ -10,7 +10,7 @@ import com.xsolla.android.inventory.callback.ConsumeItemCallback
 import com.xsolla.android.inventory.callback.GetInventoryCallback
 import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventorysdkexample.R
-import com.xsolla.android.inventorysdkexample.databinding.FragmentConsumeBinding
+import com.xsolla.android.appcore.databinding.FragmentConsumeBinding
 import com.xsolla.android.inventorysdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.inventorysdkexample.util.ViewUtils
 

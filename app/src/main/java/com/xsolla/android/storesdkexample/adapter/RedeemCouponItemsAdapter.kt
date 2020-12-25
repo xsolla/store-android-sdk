@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.store.entity.response.items.RedeemCouponResponse
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.databinding.ItemReceivedFromCouponBinding
+import com.xsolla.android.appcore.databinding.ItemReceivedFromCouponBinding
 
 class RedeemCouponItemsAdapter(
     private val items: List<RedeemCouponResponse.Item>

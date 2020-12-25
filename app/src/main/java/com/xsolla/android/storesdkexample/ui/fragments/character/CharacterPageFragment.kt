@@ -13,7 +13,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.DeleteSwipeCallback
 import com.xsolla.android.storesdkexample.adapter.UserAttributesAdapter
-import com.xsolla.android.storesdkexample.databinding.FragmentCharacterPageBinding
+import com.xsolla.android.appcore.databinding.FragmentCharacterPageBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmCharacterPage

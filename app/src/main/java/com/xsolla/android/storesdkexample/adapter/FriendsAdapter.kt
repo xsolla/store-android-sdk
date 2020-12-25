@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.holder.FriendsViewHolder
-import com.xsolla.android.storesdkexample.databinding.ItemAddFriendButtonBinding
-import com.xsolla.android.storesdkexample.databinding.ItemFriendBinding
+import com.xsolla.android.appcore.databinding.ItemAddFriendButtonBinding
+import com.xsolla.android.appcore.databinding.ItemFriendBinding
 import com.xsolla.android.storesdkexample.ui.vm.FriendUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.FriendsRelationship
 import com.xsolla.android.storesdkexample.ui.vm.FriendsTab

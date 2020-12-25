@@ -14,7 +14,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.FriendsPagerAdapter
-import com.xsolla.android.storesdkexample.databinding.FragmentFriendsBinding
+import com.xsolla.android.appcore.databinding.FragmentFriendsBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.FriendsTab
 import com.xsolla.android.storesdkexample.ui.vm.VmFriends

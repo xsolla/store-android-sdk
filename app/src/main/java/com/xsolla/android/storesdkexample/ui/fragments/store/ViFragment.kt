@@ -20,7 +20,7 @@ import com.xsolla.android.store.entity.response.common.VirtualPrice
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.ViPagerAdapter
-import com.xsolla.android.storesdkexample.databinding.FragmentViBinding
+import com.xsolla.android.appcore.databinding.FragmentViBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmInventory
 import kotlinx.android.parcel.Parcelize

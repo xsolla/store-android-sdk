@@ -13,7 +13,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.CharacterPageAdapter
 import com.xsolla.android.storesdkexample.data.local.PrefManager
-import com.xsolla.android.storesdkexample.databinding.FragmentCharacterBinding
+import com.xsolla.android.appcore.databinding.FragmentCharacterBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.UserInformation
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance

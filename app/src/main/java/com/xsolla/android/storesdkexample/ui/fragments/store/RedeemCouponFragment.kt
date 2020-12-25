@@ -8,7 +8,7 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.RedeemCouponItemsAdapter
-import com.xsolla.android.storesdkexample.databinding.FragmentRedeemCouponBinding
+import com.xsolla.android.appcore.databinding.FragmentRedeemCouponBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.RedeemCouponResult
 import com.xsolla.android.storesdkexample.ui.vm.VmCoupon

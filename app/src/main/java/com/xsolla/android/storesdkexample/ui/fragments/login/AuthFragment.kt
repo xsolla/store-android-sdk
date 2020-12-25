@@ -3,7 +3,7 @@ package com.xsolla.android.storesdkexample.ui.fragments.login
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayout
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.databinding.FragmentAuthBinding
+import com.xsolla.android.appcore.databinding.FragmentAuthBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 
 class AuthFragment : BaseFragment() {
@@ -13,6 +13,8 @@ class AuthFragment : BaseFragment() {
 
     override fun initUI() {
         initTabs()
+
+        parentFragmentManager.beginTransaction().replace(R.id.fragmentContainer, LoginFragment()).commit()
     }
 
     private fun initTabs() {

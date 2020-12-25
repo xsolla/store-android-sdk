@@ -53,35 +53,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iconProfile" />
 
-    <com.xsolla.android.inventorysdkexample.ui.view.DrawerItem
+    <com.xsolla.android.appcore.DrawerItem
         android:id="@+id/itemInventory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:item_icon="@drawable/ic_inventory"
         app:item_text="@string/drawer_item_inventory" />
 
-    <com.xsolla.android.inventorysdkexample.ui.view.DrawerItem
+    <com.xsolla.android.appcore.DrawerItem
         android:id="@+id/itemRedeemCoupon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:item_icon="@drawable/ic_redeem_coupon"
         app:item_text="@string/drawer_item_coupon" />
 
-    <com.xsolla.android.inventorysdkexample.ui.view.DrawerItem
+    <com.xsolla.android.appcore.DrawerItem
         android:id="@+id/itemWebStore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:item_icon="@drawable/ic_webstore"
         app:item_text="@string/drawer_item_webstore" />
 
-    <com.xsolla.android.inventorysdkexample.ui.view.DrawerItem
+    <com.xsolla.android.appcore.DrawerItem
         android:id="@+id/itemTutorial"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:item_icon="@drawable/ic_tutorial"
         app:item_text="@string/drawer_item_tutorial" />
 
-    <com.xsolla.android.inventorysdkexample.ui.view.DrawerItem
+    <com.xsolla.android.appcore.DrawerItem
         android:id="@+id/itemLogout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -14,7 +14,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.databinding.FragmentProfileBinding
+import com.xsolla.android.appcore.databinding.FragmentProfileBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.FieldsForChanging
 import com.xsolla.android.storesdkexample.ui.vm.Gender

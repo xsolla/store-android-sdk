@@ -14,7 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.VcAdapter
-import com.xsolla.android.storesdkexample.databinding.FragmentCatalogBinding
+import com.xsolla.android.appcore.databinding.FragmentCatalogBinding
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart

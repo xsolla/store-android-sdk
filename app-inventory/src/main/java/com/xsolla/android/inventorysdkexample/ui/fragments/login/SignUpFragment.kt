@@ -4,7 +4,7 @@ import androidx.core.widget.addTextChangedListener
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayout
 import com.xsolla.android.inventorysdkexample.R
-import com.xsolla.android.inventorysdkexample.databinding.FragmentSignUpBinding
+import com.xsolla.android.appcore.databinding.FragmentSignUpBinding
 import com.xsolla.android.inventorysdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.inventorysdkexample.util.ViewUtils
 import com.xsolla.android.login.XLogin

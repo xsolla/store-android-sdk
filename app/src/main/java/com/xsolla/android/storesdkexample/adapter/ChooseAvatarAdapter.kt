@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.data.local.PrefManager
-import com.xsolla.android.storesdkexample.databinding.ItemAvatarBinding
+import com.xsolla.android.appcore.databinding.ItemAvatarBinding
 import com.xsolla.android.storesdkexample.util.extensions.dpToPx
 
 class ChooseAvatarAdapter(

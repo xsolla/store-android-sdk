@@ -21,7 +21,7 @@ import com.xsolla.android.payments.data.AccessToken
 import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.CartAdapter
-import com.xsolla.android.storesdkexample.databinding.FragmentCartBinding
+import com.xsolla.android.appcore.databinding.FragmentCartBinding
 import com.xsolla.android.storesdkexample.listener.CartChangeListener
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmCart

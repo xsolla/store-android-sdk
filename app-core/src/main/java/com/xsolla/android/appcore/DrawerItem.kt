@@ -1,4 +1,4 @@
-package com.xsolla.android.inventorysdkexample.ui.view
+package com.xsolla.android.appcore
 
 import android.content.Context
 import android.util.AttributeSet
@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.res.use
-import com.xsolla.android.inventorysdkexample.R
+import com.xsolla.android.appcore.R
 
 class DrawerItem(context: Context, attrs: AttributeSet): LinearLayout(context, attrs) {
 

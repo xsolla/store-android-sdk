@@ -10,7 +10,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.inventorysdkexample.R
-import com.xsolla.android.inventorysdkexample.databinding.ItemReceivedFromCouponBinding
+import com.xsolla.android.appcore.databinding.ItemReceivedFromCouponBinding
 import com.xsolla.android.store.entity.response.items.RedeemCouponResponse
 
 class RedeemCouponItemsAdapter(

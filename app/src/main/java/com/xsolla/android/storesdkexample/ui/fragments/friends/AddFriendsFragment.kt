@@ -15,7 +15,7 @@ import com.xsolla.android.login.social.SocialNetworkForLinking
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.AddFriendsAdapter
 import com.xsolla.android.storesdkexample.adapter.SocialFriendsAdapter
-import com.xsolla.android.storesdkexample.databinding.FragmentAddFriendsBinding
+import com.xsolla.android.appcore.databinding.FragmentAddFriendsBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmAddFriends
 import com.xsolla.android.storesdkexample.ui.vm.VmSocialFriends

@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.xsolla.android.login.social.SocialNetworkForLinking
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.databinding.ItemFriendBinding
+import com.xsolla.android.appcore.databinding.ItemFriendBinding
 import com.xsolla.android.storesdkexample.ui.vm.FriendsRelationship
 import com.xsolla.android.storesdkexample.ui.vm.VmSocialFriends
 
