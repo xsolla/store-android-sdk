@@ -11,10 +11,10 @@ import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 
 class VcAdapter(
-        private val items: List<VirtualCurrencyPackageResponse.Item>,
-        private val vmCart: VmCart,
-        private val vmBalance: VmBalance,
-        private val purchaseListener: PurchaseListener
+    private val items: List<VirtualCurrencyPackageResponse.Item>,
+    private val vmCart: VmCart,
+    private val vmBalance: VmBalance,
+    private val purchaseListener: PurchaseListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {

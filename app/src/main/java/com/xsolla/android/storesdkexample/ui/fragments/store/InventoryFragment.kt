@@ -52,33 +52,8 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
             setupPlaceholderVisibility()
         }
 
-        getItems()
-        getSubscriptions()
-    }
-
-    private fun getItems() {
-        XInventory.getInventory(object : GetInventoryCallback {
-            override fun onSuccess(data: InventoryResponse) {
-                val virtualItems = data.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
-                viewModel.inventory.value = virtualItems
-            }
-
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
-            }
-        })
-    }
-
-    private fun getSubscriptions() {
-        XInventory.getSubscriptions(object : GetSubscriptionsCallback {
-            override fun onSuccess(data: SubscriptionsResponse) {
-                viewModel.subscriptions.value = data.items
-            }
-
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
-            }
-        })
+        viewModel.getItems { showSnack(it) }
+        viewModel.getSubscriptions { showSnack(it) }
     }
 
     override fun onConsume(item: InventoryResponse.Item) {

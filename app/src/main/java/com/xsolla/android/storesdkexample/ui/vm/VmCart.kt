@@ -3,6 +3,7 @@ package com.xsolla.android.storesdkexample.ui.vm
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.xsolla.android.appcore.SingleLiveEvent
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.request.payment.PaymentOptions
@@ -15,7 +16,6 @@ import com.xsolla.android.store.entity.response.payment.CreateOrderResponse
 import com.xsolla.android.storesdkexample.App
 import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.util.SingleLiveEvent
 
 class VmCart(application: Application) : AndroidViewModel(application) {
 

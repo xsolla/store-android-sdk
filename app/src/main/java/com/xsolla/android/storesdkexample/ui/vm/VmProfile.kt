@@ -4,6 +4,7 @@ import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.xsolla.android.appcore.SingleLiveEvent
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
 import com.xsolla.android.login.callback.ResetPasswordCallback
@@ -12,7 +13,6 @@ import com.xsolla.android.login.callback.UpdateCurrentUserPhoneCallback
 import com.xsolla.android.login.entity.response.GenderResponse
 import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.storesdkexample.util.SingleLiveEvent
 import java.util.Locale
 import java.util.regex.Pattern
 

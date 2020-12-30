@@ -1,4 +1,4 @@
-package com.xsolla.android.storesdkexample.util
+package com.xsolla.android.appcore.utils
 
 import java.math.BigDecimal
 import java.math.RoundingMode
