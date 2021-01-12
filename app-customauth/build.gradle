@@ -6,7 +6,24 @@ plugins {
 
 android {
     compileSdkVersion sdk_compile
-    buildToolsVersion sdk_tools_version
+
+    signingConfigs {
+        release {
+            file("../signing.properties").with { propFile ->
+                if (propFile.canRead()) {
+                    def properties = new Properties()
+                    properties.load(new FileInputStream(propFile))
+
+                    storeFile file(properties['keystorePath'])
+                    storePassword properties['keystorePassword']
+                    keyAlias properties['keyAlias']
+                    keyPassword properties['keyPassword']
+                } else {
+                    println 'Unable to read signing.properties'
+                }
+            }
+        }
+    }
 
     defaultConfig {
         applicationId "com.xsolla.android.customauth"
@@ -22,12 +39,17 @@ android {
     }
     buildTypes {
         release {
-            buildConfigField 'boolean', 'IS_SANDBOX', 'false'
+            signingConfig signingConfigs.release
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField 'boolean', 'IS_SANDBOX', 'true'
         }
         debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
             buildConfigField 'boolean', 'IS_SANDBOX', 'true'
         }
     }
