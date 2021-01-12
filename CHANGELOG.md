@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0] - Demo Apps - 2021-01-12
+
+### Added
+
+- Access token authentication demo app
+- Web Store link in Inventory demo
+
+
 ## [1.1.1] - Login SDK - 2020-12-22
 
 ### Fixed
