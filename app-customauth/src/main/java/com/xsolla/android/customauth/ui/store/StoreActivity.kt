@@ -1,13 +1,13 @@
 package com.xsolla.android.customauth.ui.store
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.lifecycle.observe
 import androidx.navigation.NavController
@@ -26,6 +26,7 @@ import com.xsolla.android.customauth.databinding.ActivityStoreBinding
 import com.xsolla.android.customauth.ui.login.LoginActivity
 import com.xsolla.android.customauth.viewmodels.VmBalance
 import com.xsolla.android.customauth.viewmodels.VmCart
+import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.store.XStore
 
 class StoreActivity : AppCompatActivity(R.layout.activity_store) {
@@ -45,6 +46,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
         setSupportActionBar(binding.appbar.mainToolbar)
 
         XStore.init(BuildConfig.PROJECT_ID, preferences.token)
+        XInventory.init(BuildConfig.PROJECT_ID, preferences.token!!)
         balanceViewModel.updateVirtualBalance()
 
         initNavController()
