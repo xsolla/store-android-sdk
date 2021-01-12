@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.customauth.R
 import com.xsolla.android.customauth.databinding.ItemInventoryBinding
-import com.xsolla.android.store.entity.response.inventory.InventoryResponse
-import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse
+import com.xsolla.android.inventory.entity.response.InventoryResponse
+import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 
 class InventoryAdapter(
-    private var subscriptions: List<SubscriptionsResponse.Item>? = null,
-    private val consumeListener: ConsumeListener
+        private var subscriptions: List<SubscriptionsResponse.Item>? = null,
+        private val consumeListener: ConsumeListener
 ) : ListAdapter<InventoryResponse.Item, InventoryViewHolder>(InventoryDiffUtilCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InventoryViewHolder {
         return InventoryViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_inventory, parent, false))

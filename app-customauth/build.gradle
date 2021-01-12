@@ -52,6 +52,7 @@ androidExtensions {
 dependencies {
     // Core
     implementation project(":app-core")
+    implementation project(":xsolla-inventory-sdk")
     implementation project(":xsolla-store-sdk")
     implementation project(":xsolla-payments-sdk")
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

@@ -11,9 +11,10 @@ import com.xsolla.android.customauth.ui.BaseFragment
 import com.xsolla.android.customauth.ui.adapter.ConsumeListener
 import com.xsolla.android.customauth.ui.adapter.InventoryAdapter
 import com.xsolla.android.customauth.viewmodels.VmInventory
-import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
-import com.xsolla.android.store.entity.response.inventory.InventoryResponse
+import com.xsolla.android.inventory.XInventory
+import com.xsolla.android.inventory.callback.ConsumeItemCallback
+import com.xsolla.android.inventory.callback.GetInventoryCallback
+import com.xsolla.android.inventory.entity.response.InventoryResponse
 
 class InventoryFragment : BaseFragment(), ConsumeListener {
     private val binding: FragmentInventoryBinding by viewBinding()
@@ -50,23 +51,23 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
     }
 
     private fun consume(item: InventoryResponse.Item) {
-        XStore.consumeItem(item.sku, 1, null, object : XStoreCallback<Void>() {
-            override fun onSuccess(response: Void?) {
-                XStore.getInventory(object : XStoreCallback<InventoryResponse>() {
-                    override fun onSuccess(response: InventoryResponse) {
-                        val items = response.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
+        XInventory.consumeItem(item.sku!!, 1, null, object : ConsumeItemCallback {
+            override fun onSuccess() {
+                XInventory.getInventory(object : GetInventoryCallback {
+                    override fun onSuccess(data: InventoryResponse) {
+                        val items = data.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
                         adapter.submitList(items.toList())
                         showSnack("Item consumed")
                     }
 
-                    override fun onFailure(errorMessage: String) {
-                        showSnack(errorMessage)
+                    override fun onError(throwable: Throwable?, errorMessage: String?) {
+                        showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
                     }
                 })
             }
 
-            override fun onFailure(errorMessage: String) {
-                showSnack(errorMessage)
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
         })
     }

@@ -9,14 +9,17 @@ import com.xsolla.android.customauth.databinding.FragmentViBinding
 import com.xsolla.android.customauth.ui.BaseFragment
 import com.xsolla.android.customauth.ui.adapter.ViPagerAdapter
 import com.xsolla.android.customauth.viewmodels.VmInventory
+import com.xsolla.android.inventory.XInventory
+import com.xsolla.android.inventory.callback.GetInventoryCallback
+import com.xsolla.android.inventory.callback.GetSubscriptionsCallback
+import com.xsolla.android.inventory.entity.response.InventoryResponse
+import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.common.Group
 import com.xsolla.android.store.entity.response.common.InventoryOption
 import com.xsolla.android.store.entity.response.common.Price
 import com.xsolla.android.store.entity.response.common.VirtualPrice
-import com.xsolla.android.store.entity.response.inventory.InventoryResponse
-import com.xsolla.android.store.entity.response.inventory.SubscriptionsResponse
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
@@ -33,28 +36,28 @@ class ViFragment : BaseFragment() {
     }
 
     private fun getInventory() {
-        XStore.getInventory(object : XStoreCallback<InventoryResponse>() {
-            override fun onSuccess(response: InventoryResponse) {
-                val items = response.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
+        XInventory.getInventory(object : GetInventoryCallback {
+            override fun onSuccess(data: InventoryResponse) {
+                val items = data.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
                 inventoryViewModel.inventory.value = items
                 getVirtualItems(items)
                 getSubscriptions()
             }
 
-            override fun onFailure(errorMessage: String) {
-                showSnack(errorMessage)
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
         })
     }
 
     private fun getSubscriptions() {
-        XStore.getSubscriptions(object : XStoreCallback<SubscriptionsResponse>() {
-            override fun onSuccess(response: SubscriptionsResponse) {
-                inventoryViewModel.subscriptions.value = response.items
+        XInventory.getSubscriptions(object : GetSubscriptionsCallback {
+            override fun onSuccess(data: SubscriptionsResponse) {
+                inventoryViewModel.subscriptions.value = data.items
             }
 
-            override fun onFailure(errorMessage: String) {
-                showSnack(errorMessage)
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
         })
     }
@@ -122,17 +125,17 @@ class ViFragment : BaseFragment() {
 
 @Parcelize
 data class VirtualItemUiEntity(
-    val sku: String? = null,
-    val name: String? = null,
-    val groups: List<Group> = emptyList(),
-    val attributes: @RawValue List<Any> = emptyList(),
-    val type: String? = null,
-    val description: String? = null,
-    val imageUrl: String? = null,
-    val isFree: Boolean,
-    val price: Price? = null,
-    val virtualPrices: List<VirtualPrice> = emptyList(),
-    val inventoryOption: InventoryOption? = null,
+        val sku: String? = null,
+        val name: String? = null,
+        val groups: List<Group> = emptyList(),
+        val attributes: @RawValue List<Any> = emptyList(),
+        val type: String? = null,
+        val description: String? = null,
+        val imageUrl: String? = null,
+        val isFree: Boolean,
+        val price: Price? = null,
+        val virtualPrices: List<VirtualPrice> = emptyList(),
+        val inventoryOption: InventoryOption? = null,
 
-    val hasInInventory: Boolean
+        val hasInInventory: Boolean
 ) : Parcelable

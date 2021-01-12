@@ -16,8 +16,6 @@ import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.StoreActivity
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
-import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
-import com.xsolla.android.storesdkexample.util.ViewUtils
 import kotlinx.android.synthetic.main.fragment_login.*
 import java.util.*
 
