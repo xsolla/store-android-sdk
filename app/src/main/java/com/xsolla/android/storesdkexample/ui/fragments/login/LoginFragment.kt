@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import com.xsolla.android.appcore.LoginBottomSheet
+import com.xsolla.android.appcore.extensions.setRateLimitedClickListener
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.AuthCallback
 import com.xsolla.android.login.callback.FinishSocialCallback
@@ -15,7 +16,6 @@ import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.StoreActivity
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
-import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import kotlinx.android.synthetic.main.fragment_login.*
 import java.util.*
 

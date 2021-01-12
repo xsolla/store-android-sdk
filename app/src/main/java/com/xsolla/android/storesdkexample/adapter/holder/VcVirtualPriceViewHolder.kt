@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.xsolla.android.appcore.utils.AmountUtils
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.store.entity.response.common.VirtualPrice
@@ -14,16 +15,15 @@ import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurr
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
-import com.xsolla.android.storesdkexample.util.AmountUtils
 import com.xsolla.android.storesdkexample.util.ViewUtils
 import kotlinx.android.synthetic.main.item_vi_virtual_price.view.*
 
 
 class VcVirtualPriceViewHolder(
-        inflater: LayoutInflater,
-        parent: ViewGroup,
-        private val vmBalance: VmBalance,
-        private val purchaseListener: PurchaseListener
+    inflater: LayoutInflater,
+    parent: ViewGroup,
+    private val vmBalance: VmBalance,
+    private val purchaseListener: PurchaseListener
 ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_vi_virtual_price, parent, false)) {
 
     fun bind(item: VirtualCurrencyPackageResponse.Item) {

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.inventory.callback.ConsumeItemCallback
 import com.xsolla.android.inventory.entity.response.VirtualBalanceResponse
+import com.xsolla.android.appcore.SingleLiveEvent
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
 import com.xsolla.android.login.callback.GetUsersAttributesCallback
@@ -16,7 +17,6 @@ import com.xsolla.android.login.entity.common.UserAttributePermission
 import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.data.local.PrefManager
-import com.xsolla.android.storesdkexample.util.SingleLiveEvent
 import com.xsolla.android.storesdkexample.util.extensions.toUiEntity
 import kotlinx.android.parcel.Parcelize
 
