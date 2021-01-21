@@ -303,7 +303,7 @@ public class XStore {
 
     /**
      * Fills the cart with items.
-     * If the cart already has an item, the existing item will be replaced by the given value
+     * If the cart already has an item, the existing item will be replaced by the given value.
      *
      * @param items    list of items
      * @param callback status callback
@@ -318,7 +318,7 @@ public class XStore {
 
     /**
      * Fills the specific cart with items.
-     * If the cart already has an item, the existing item will be replaced by the given value
+     * If the cart already has an item, the existing item will be replaced by the given value.
      *
      * @param cartId   cart id
      * @param items    list of items
@@ -570,7 +570,7 @@ public class XStore {
     }
 
     /**
-     * Redeems a code of promo code.
+     * Redeems a promo code.
      * After redeeming a promo code, the user will get free items and/or the price of cart will be decreased.
      *
      * @param promocode            unique code of promocode. Contains letters and numbers
@@ -585,7 +585,7 @@ public class XStore {
     }
 
     /**
-     * Redeems a code of promo code.
+     * Redeems a promo code.
      * After redeeming a promo code, the user will get free items and/or the price of cart will be decreased.
      *
      * @param promocode            unique code of promocode. Contains letters and numbers
@@ -605,7 +605,7 @@ public class XStore {
 
     /**
      * Gets promo code rewards by its code. Can be used to allow users to choose one of many items as a bonus.
-     * The usual case is choosing a DRM if the promo code contains a game as a bonus (type=unit)
+     * The usual case is choosing a DRM if the promo code contains a game as a bonus (type=unit).
      *
      * @param promocode            unique code of promocode. Contains letters and numbers
      * @param callback             status callback

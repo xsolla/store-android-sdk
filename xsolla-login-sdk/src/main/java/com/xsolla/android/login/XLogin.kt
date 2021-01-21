@@ -298,8 +298,8 @@ class XLogin private constructor(
 
         /**
          * Calls to exchange the provider JWT by the client JWT.
-         * Provider project — a common project, in which your users authenticate, and the received JWT is then used for authentication in other projects (i.e. games).
-         * Client project — a project, in which your users authenticate automatically, as a result of authentication. They do not need to enter their data.
+         * Provider project is a common project where your users authenticate, and the received JWT is then used for authentication in other projects (i.e., games).
+         * Client project is a project where your users authenticate automatically as a result of authentication. They don't need to enter their data.
          *
          * @param platformProviderName         name of the provider project. To enable platforms, please contact your Account Manager
          * @param scope
@@ -583,7 +583,7 @@ class XLogin private constructor(
         }
 
         /**
-         * Unlink social network from current user account
+         * Unlinks social network from current user account.
          *
          * @param platform       social network for decoupling
          * @param callback       callback that indicates the success of failure of an action
@@ -683,9 +683,9 @@ class XLogin private constructor(
         }
 
         /**
-         * Gets details of the user authenticated
+         * Gets details of the authenticated user.
          *
-         * @param callback    callback with data
+         * @param callback    Callback with data.
          * @see <a href="https://developers.xsolla.com/user-account-api/all-user-details/get-user-details">User Account API Reference</a>
          */
         @JvmStatic
@@ -713,9 +713,9 @@ class XLogin private constructor(
         }
 
         /**
-         * Gets the email of the authenticated user by JWT
+         * Gets the email of the authenticated user by a JWT.
          *
-         * @param callback    callback with data
+         * @param callback    Callback with data.
          * @see <a href="https://developers.xsolla.com/user-account-api/user-email/getusersmeemail">User Account API Reference</a>
          */
         @JvmStatic
