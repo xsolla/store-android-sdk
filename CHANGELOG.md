@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2] - Login SDK - 2021-01-22
+
+### Fixed
+
+- Unity compatibility
+
+
 ## [1.5.0] - Demo Apps - 2021-01-12
 
 ### Added
