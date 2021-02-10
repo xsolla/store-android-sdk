@@ -95,6 +95,7 @@ publishLogin:
     - ./gradlew :xsolla-login-sdk:bintrayUpload
     - ./gradlew :xsolla-login-sdk-facebook:bintrayUpload
     - ./gradlew :xsolla-login-sdk-google:bintrayUpload
+    - ./gradlew :xsolla-login-sdk-wechat:bintrayUpload
   cache:
     key: ${CI_PROJECT_ID}
     paths:
