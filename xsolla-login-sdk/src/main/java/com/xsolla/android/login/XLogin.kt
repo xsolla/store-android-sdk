@@ -47,9 +47,10 @@ class XLogin private constructor(
         loginSocial.init(context.applicationContext, loginApi, projectId, callbackUrl, tokenUtils, useOauth, oauthClientId, socialConfig)
     }
 
-    data class SocialConfig(
+    data class SocialConfig @JvmOverloads constructor(
         val facebookAppId: String? = null,
-        val googleServerId: String? = null
+        val googleServerId: String? = null,
+        val wechatAppId: String? = null
     )
 
     object Unity {
