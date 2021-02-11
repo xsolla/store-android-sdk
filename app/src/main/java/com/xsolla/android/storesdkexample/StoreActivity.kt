@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -23,8 +24,9 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.xsolla.android.inventory.XInventory
+import com.xsolla.android.appcore.databinding.ActivityStoreBinding
 import com.xsolla.android.appcore.extensions.setRateLimitedClickListener
+import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.RefreshTokenCallback
 import com.xsolla.android.store.XStore
@@ -112,7 +114,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
             binding.root.closeDrawers()
         }
 
-        binding.appbar.mainToolbar.title = ""
+        findViewById<Toolbar>(R.id.mainToolbar).title = ""
     }
 
     private fun initVirtualBalance() {
@@ -129,7 +131,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
                     balanceContainer.addView(balanceView, 0)
                 }
         })
-        binding.appbar.chargeBalanceButton.setRateLimitedClickListener { findNavController(R.id.nav_host_fragment).navigate(R.id.nav_vc) }
+        findViewById<Button>(R.id.chargeBalanceButton).setRateLimitedClickListener { findNavController(R.id.nav_host_fragment).navigate(R.id.nav_vc) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -100,27 +100,27 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
     }
 
     private fun initDrawer() {
-        binding.drawer.findViewById<View>(R.id.itemCharacter).isGone = true
-        binding.drawer.findViewById<View>(R.id.itemFriends).isGone = true
-        binding.drawer.findViewById<View>(R.id.itemAccount).isGone = true
+        findViewById<View>(R.id.itemCharacter).isGone = true
+        findViewById<View>(R.id.itemFriends).isGone = true
+        findViewById<View>(R.id.itemAccount).isGone = true
 
-        binding.drawer.findViewById<View>(R.id.itemInventory).setOnClickListener {
+        findViewById<View>(R.id.itemInventory).setOnClickListener {
             navController.navigate(R.id.nav_inventory)
             binding.root.close()
         }
-        binding.drawer.findViewById<View>(R.id.itemVirtualItems).setOnClickListener {
+        findViewById<View>(R.id.itemVirtualItems).setOnClickListener {
             navController.navigate(R.id.nav_vi)
             binding.root.close()
         }
-        binding.drawer.findViewById<View>(R.id.itemVirtualCurrency).setOnClickListener {
+        findViewById<View>(R.id.itemVirtualCurrency).setOnClickListener {
             navController.navigate(R.id.nav_vc)
             binding.root.close()
         }
-        binding.drawer.findViewById<View>(R.id.itemCoupon).setOnClickListener {
+        findViewById<View>(R.id.itemCoupon).setOnClickListener {
             navController.navigate(R.id.nav_coupon)
             binding.root.close()
         }
-        binding.drawer.findViewById<View>(R.id.itemCart).setOnClickListener {
+        findViewById<View>(R.id.itemCart).setOnClickListener {
             if (cartViewModel.cartContent.value.isNullOrEmpty()) {
                 showSnack(getString(R.string.cart_message_empty))
             } else {
@@ -128,12 +128,12 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
             }
             binding.root.close()
         }
-        binding.drawer.findViewById<View>(R.id.itemLogout).setOnClickListener { logout() }
+        findViewById<View>(R.id.itemLogout).setOnClickListener { logout() }
     }
 
     private fun setDrawerData() {
-        binding.drawer.findViewById<TextView>(R.id.textEmail).text = preferences.email
-        binding.drawer.findViewById<TextView>(R.id.textUsername).isGone = true
+        findViewById<TextView>(R.id.textEmail).text = preferences.email
+        findViewById<TextView>(R.id.textUsername).isGone = true
     }
 
     private fun observeCart() {
@@ -145,9 +145,9 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
             cartCounter?.text = count.toString()
             cartCounter?.isGone = count == 0
 
-            binding.drawer.findViewById<TextView>(R.id.textCartCounter).text = count.toString()
-            binding.drawer.findViewById<View>(R.id.textCartCounter).isGone = count == 0
-            binding.drawer.findViewById<View>(R.id.bgCartCounter).isGone = count == 0
+            findViewById<TextView>(R.id.textCartCounter).text = count.toString()
+            findViewById<View>(R.id.textCartCounter).isGone = count == 0
+            findViewById<View>(R.id.bgCartCounter).isGone = count == 0
         }
     }
 

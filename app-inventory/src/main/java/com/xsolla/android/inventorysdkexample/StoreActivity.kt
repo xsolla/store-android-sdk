@@ -97,7 +97,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
-        binding.appbar.mainToolbar.title = ""
+        findViewById<Toolbar>(R.id.mainToolbar).title = ""
     }
 
     private fun initVirtualBalance() {
