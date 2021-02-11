@@ -20,7 +20,6 @@ import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmAddFriends
 import com.xsolla.android.storesdkexample.ui.vm.VmSocialFriends
 import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
-import kotlinx.android.synthetic.main.fragment_add_friends.*
 
 class AddFriendsFragment : BaseFragment() {
 

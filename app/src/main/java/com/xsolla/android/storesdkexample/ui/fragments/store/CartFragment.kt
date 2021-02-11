@@ -25,8 +25,6 @@ import com.xsolla.android.appcore.databinding.FragmentCartBinding
 import com.xsolla.android.storesdkexample.listener.CartChangeListener
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
-import com.xsolla.android.storesdkexample.util.AmountUtils
-
 import java.math.BigDecimal
 
 class CartFragment : BaseFragment(), CartChangeListener {

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.xsolla.android.storesdkexample.adapter.UserAttributeItem
 import com.xsolla.android.appcore.databinding.ItemUserAttributeBinding
 import com.xsolla.android.appcore.databinding.ItemUserAttributeFooterBinding
-import com.xsolla.android.storesdkexample.util.extensions.setClickableSpan
+import com.xsolla.android.appcore.extensions.setClickableSpan
 
 class UserAttributeViewHolder(
     view: View,
