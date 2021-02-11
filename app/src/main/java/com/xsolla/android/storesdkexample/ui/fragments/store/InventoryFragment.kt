@@ -1,5 +1,6 @@
 package com.xsolla.android.storesdkexample.ui.fragments.store
 
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -7,6 +8,7 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.inventory.callback.ConsumeItemCallback
 import com.xsolla.android.inventory.callback.GetInventoryCallback
@@ -16,13 +18,16 @@ import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.InventoryAdapter
 import com.xsolla.android.storesdkexample.listener.ConsumeListener
+import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
+import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.ui.vm.VmInventory
 import kotlinx.android.synthetic.main.fragment_inventory.*
 
-class InventoryFragment : BaseFragment(), ConsumeListener {
+class InventoryFragment : BaseFragment(), ConsumeListener,PurchaseListener {
 
     private val viewModel: VmInventory by activityViewModels()
+    private val vmCart : VmCart by activityViewModels()
     private lateinit var inventoryAdapter: InventoryAdapter
 
     override fun getLayout() = R.layout.fragment_inventory
@@ -37,7 +42,7 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
             goToStoreButton.setOnClickListener { findNavController().navigate(R.id.nav_vi) }
         }
 
-        inventoryAdapter = InventoryAdapter(listOf(), this)
+        inventoryAdapter = InventoryAdapter(listOf(), this,this,vmCart)
         recycler.adapter = inventoryAdapter
 
         viewModel.inventory.observe(viewLifecycleOwner) {
@@ -66,6 +71,16 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
 
     override fun onFailure(errorMessage: String) {
         showSnack(errorMessage)
+    }
+
+    override fun showMessage(message: String) {
+        //when item added to cart callback
+        showSnackbar(message)
+    }
+
+    private fun showSnackbar(message: String) {
+        val rootView = requireActivity().findViewById<View>(android.R.id.content)
+        Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show()
     }
 
     private fun consume(item: InventoryResponse.Item) {
