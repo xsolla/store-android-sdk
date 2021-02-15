@@ -35,7 +35,7 @@ class InventoryAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return ViewHolder(inflater, parent,purchaseListener,vmCart)
+        return ViewHolder(inflater, parent, purchaseListener, vmCart)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -73,26 +73,27 @@ class InventoryAdapter(
 
             subscriptions?.find { it.sku == item.sku }?.let {
                 return if (it.status == SubscriptionsResponse.Item.Status.ACTIVE) {
+                    itemView.buyAgainButton.visibility = View.INVISIBLE
                     val date = Date(it.expiredAt * 1000)
                     val sdf = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.US)
                     val formattedDate = sdf.format(date)
                     "Active until: $formattedDate"
+
+
                 } else {
 
-                    //reuse existing Consume button if subscription expired
-                    itemView.consumeButton.visibility = View.VISIBLE
-                    itemView.consumeButton.text = "Buy Again"
-
-                    itemView.setOnClickListener { view->
+                    itemView.buyAgainButton.visibility = View.VISIBLE
+                    itemView.buyAgainButton.setOnClickListener { view ->
                         //disable button while operation in progress
                         com.xsolla.android.storesdkexample.util.ViewUtils.disable(view)
                         val cartContent = vmCart.cartContent.value
-                        val quantity = cartContent!!.find { item1 -> item1.sku==item.sku }?.quantity ?:0
+                        val quantity = cartContent?.find { item1 -> item1.sku == item.sku }?.quantity ?: 0
                         // check if there is item in cart, if not - set quantity to 0
-                        XStore.updateItemFromCurrentCart(item.sku,quantity, object :XStoreCallback<Void>(){
+                        XStore.updateItemFromCurrentCart(item.sku, quantity + 1, object : XStoreCallback<Void>() {
                             override fun onSuccess(response: Void?) {
                                 vmCart.updateCart()
                                 com.xsolla.android.storesdkexample.util.ViewUtils.enable(view)
+                                itemView.buyAgainButton.visibility = View.INVISIBLE
                                 //enable button after process are done
                             }
 
@@ -106,7 +107,6 @@ class InventoryAdapter(
                     }
 
                     "Expired"
-
                 }
             }
 

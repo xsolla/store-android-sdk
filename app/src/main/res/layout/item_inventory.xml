@@ -51,7 +51,16 @@
                 android:id="@+id/consumeButton"
                 style="@style/Widget.Xsolla.ConsumeButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                tools:visibility="gone" />
+
+            <Button
+                android:id="@+id/buyAgainButton"
+                style="@style/Widget.Xsolla.ConsumeButton"
+                android:layout_width="106dp"
+                android:layout_height="40dp"
+                android:text="@string/buy_again"
+                android:visibility="invisible" />
 
         </LinearLayout>
 
