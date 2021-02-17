@@ -54,6 +54,7 @@ class XLogin private constructor(
     )
 
     object Unity {
+        @JvmStatic
         fun authSocial(activity: Activity, socialNetwork: SocialNetwork, withLogout: Boolean) {
             val intent = Intent(activity, UnityProxyActivity::class.java)
             intent.putExtra(UnityProxyActivity.ARG_SOCIAL_NETWORK, socialNetwork.name)

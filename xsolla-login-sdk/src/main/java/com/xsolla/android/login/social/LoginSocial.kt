@@ -75,6 +75,7 @@ object LoginSocial {
     private var finishSocialCallback: FinishSocialCallback? = null
     private var withLogout = false
 
+    @JvmStatic
     var wechatResult: BaseResp? = null
 
     fun init(context: Context, loginApi: LoginApi, projectId: String, callbackUrl: String, tokenUtils: TokenUtils, useOauth: Boolean, oauthClientId: Int, socialConfig: XLogin.SocialConfig?) {
