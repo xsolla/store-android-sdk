@@ -1,51 +1,11 @@
 package com.xsolla.android.login.api
 
 import com.xsolla.android.login.entity.common.UserAttribute
-import com.xsolla.android.login.entity.request.AuthUserBody
-import com.xsolla.android.login.entity.request.AuthUserSocialBody
-import com.xsolla.android.login.entity.request.CheckUserAgeBody
-import com.xsolla.android.login.entity.request.GetUsersAttributesFromClientRequest
-import com.xsolla.android.login.entity.request.OauthAuthUserBody
-import com.xsolla.android.login.entity.request.OauthGetCodeBySocialTokenBody
-import com.xsolla.android.login.entity.request.OauthRegisterUserBody
-import com.xsolla.android.login.entity.request.RegisterUserBody
-import com.xsolla.android.login.entity.request.ResetPasswordBody
-import com.xsolla.android.login.entity.request.UpdateUserDetailsBody
-import com.xsolla.android.login.entity.request.UpdateUserFriendsRequest
-import com.xsolla.android.login.entity.request.UpdateUserPhoneBody
-import com.xsolla.android.login.entity.request.UpdateUsersAttributesFromClientRequest
-import com.xsolla.android.login.entity.response.AuthResponse
-import com.xsolla.android.login.entity.response.AuthSocialResponse
-import com.xsolla.android.login.entity.response.CheckUserAgeResponse
-import com.xsolla.android.login.entity.response.CreateCodeForLinkingAccountResponse
-import com.xsolla.android.login.entity.response.EmailResponse
-import com.xsolla.android.login.entity.response.LinkForSocialAuthResponse
-import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
-import com.xsolla.android.login.entity.response.OauthAuthResponse
-import com.xsolla.android.login.entity.response.OauthGetCodeBySocialTokenResponse
-import com.xsolla.android.login.entity.response.OauthLinkForSocialAuthResponse
-import com.xsolla.android.login.entity.response.OauthViaProviderProjectResponse
-import com.xsolla.android.login.entity.response.PhoneResponse
-import com.xsolla.android.login.entity.response.PictureResponse
-import com.xsolla.android.login.entity.response.SearchUsersByNicknameResponse
-import com.xsolla.android.login.entity.response.SocialFriendsResponse
-import com.xsolla.android.login.entity.response.UserDetailsResponse
-import com.xsolla.android.login.entity.response.UserFriendsResponse
-import com.xsolla.android.login.entity.response.UserPublicInfoResponse
+import com.xsolla.android.login.entity.request.*
+import com.xsolla.android.login.entity.response.*
 import okhttp3.MultipartBody
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Multipart
-import retrofit2.http.PATCH
-import retrofit2.http.POST
-import retrofit2.http.Part
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface LoginApi {
 
@@ -70,6 +30,14 @@ interface LoginApi {
         @Query("projectId") projectId: String,
         @Query("with_logout") withLogout: String,
         @Body authUserSocialBody: AuthUserSocialBody
+    ): Call<AuthSocialResponse>
+
+    @POST("/api/social/mobile/{providerName}/login_with_code")
+    fun loginSocialWithOauthCode(
+            @Path("providerName") providerName: String,
+            @Query("projectId") projectId: String,
+            @Query("with_logout") withLogout: String,
+            @Body authUserSocialWithCodeBody: AuthUserSocialWithCodeBody
     ): Call<AuthSocialResponse>
 
     // Profile and friends
@@ -263,6 +231,17 @@ interface LoginApi {
         @Query("response_type") responseType: String,
         @Query("scope") scope: String,
         @Body oauthGetCodeBySocialTokenBody: OauthGetCodeBySocialTokenBody
+    ): Call<OauthGetCodeBySocialTokenResponse>
+
+    @POST("/api/oauth2/social/mobile/{providerName}/login_with_code")
+    fun oauthGetCodeBySocialCode(
+            @Path("providerName") providerName: String,
+            @Query("client_id") clientId: Int,
+            @Query("state") state: String,
+            @Query("redirect_uri") redirectUri: String,
+            @Query("response_type") responseType: String,
+            @Query("scope") scope: String,
+            @Body authUserSocialWithCodeBody: AuthUserSocialWithCodeBody
     ): Call<OauthGetCodeBySocialTokenResponse>
 
     // General
