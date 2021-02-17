@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3] - Login SDK - 2021-02-17
+
+### Added
+
+- WeChat native authentication
+
+
 ## [1.1.2] - Login SDK - 2021-01-22
 
 ### Fixed

@@ -13,6 +13,10 @@
             android:name=".unity.UnityProxyActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/XsollaLoginTheme.Transparent"/>
+        <activity
+            android:name=".ui.ActivityWechatProxy"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/XsollaLoginTheme.Transparent"/>
     </application>
 
 </manifest>

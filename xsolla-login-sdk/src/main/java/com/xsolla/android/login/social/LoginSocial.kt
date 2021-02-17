@@ -17,16 +17,22 @@ import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
+import com.tencent.mm.opensdk.modelbase.BaseResp
+import com.tencent.mm.opensdk.modelmsg.SendAuth
+import com.tencent.mm.opensdk.openapi.IWXAPI
+import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.api.LoginApi
 import com.xsolla.android.login.callback.FinishSocialCallback
 import com.xsolla.android.login.callback.StartSocialCallback
 import com.xsolla.android.login.entity.request.AuthUserSocialBody
+import com.xsolla.android.login.entity.request.AuthUserSocialWithCodeBody
 import com.xsolla.android.login.entity.request.OauthGetCodeBySocialTokenBody
 import com.xsolla.android.login.entity.response.*
 import com.xsolla.android.login.token.TokenUtils
 import com.xsolla.android.login.ui.ActivityAuthWebView
 import com.xsolla.android.login.ui.ActivityAuthWebView.Result.Companion.fromResultIntent
+import com.xsolla.android.login.ui.ActivityWechatProxy
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
@@ -37,8 +43,11 @@ import java.util.*
 object LoginSocial {
 
     private const val RC_AUTH_WEBVIEW = 31000
+
     private const val RC_AUTH_GOOGLE = 31001
     private const val RC_AUTH_GOOGLE_REQUEST_PERMISSION = 31002
+
+    private const val RC_AUTH_WECHAT = 31003
 
     private const val magicString = "oauth2:https://www.googleapis.com/auth/plus.login"
 
@@ -53,13 +62,21 @@ object LoginSocial {
     private lateinit var fbCallback: FacebookCallback<LoginResult>
     private var googleCredentialFromIntent: Intent? = null
 
+    private lateinit var iwxapi: IWXAPI
+
     private var facebookAppId: String? = null
     private var googleServerId: String? = null
+
+    @JvmStatic
+    var wechatAppId: String? = null
 
     private var googleAvailable = false
 
     private var finishSocialCallback: FinishSocialCallback? = null
     private var withLogout = false
+
+    @JvmStatic
+    var wechatResult: BaseResp? = null
 
     fun init(context: Context, loginApi: LoginApi, projectId: String, callbackUrl: String, tokenUtils: TokenUtils, useOauth: Boolean, oauthClientId: Int, socialConfig: XLogin.SocialConfig?) {
         this.loginApi = loginApi
@@ -77,6 +94,10 @@ object LoginSocial {
             if (!socialConfig.googleServerId.isNullOrBlank()) {
                 this.googleServerId = socialConfig.googleServerId
                 initGoogle()
+            }
+            if (!socialConfig.wechatAppId.isNullOrBlank()) {
+                this.wechatAppId = socialConfig.wechatAppId
+                initWechat(context)
             }
         }
     }
@@ -139,6 +160,16 @@ object LoginSocial {
         }
     }
 
+    private fun initWechat(context: Context) {
+        try {
+            Class.forName("com.tencent.mm.opensdk.openapi.WXAPIFactory")
+            iwxapi = WXAPIFactory.createWXAPI(context, wechatAppId, false)
+            iwxapi.registerApp(wechatAppId)
+        } catch (e: ClassNotFoundException) {
+            // WeChat SDK isn't bundled, use webview instead
+        }
+    }
+
     fun startSocialAuth(activity: Activity?, fragment: Fragment?, socialNetwork: SocialNetwork, withLogout: Boolean, callback: StartSocialCallback) {
         tryNativeSocialAuth(activity, fragment, socialNetwork, withLogout) { nativeResult ->
             if (nativeResult) {
@@ -181,6 +212,28 @@ object LoginSocial {
             fbCallbackManager.onActivityResult(activityResultRequestCode, activityResultCode, activityResultData)
             return
         }
+        if (socialNetwork == SocialNetwork.WECHAT && ::iwxapi.isInitialized) {
+            when (wechatResult?.errCode) {
+                BaseResp.ErrCode.ERR_OK -> {
+                    val code = (wechatResult as SendAuth.Resp).code
+                    getLoginTokenFromSocialCode(SocialNetwork.WECHAT, code, withLogout) { t, error ->
+                        if (t == null && error == null) {
+                            callback.onAuthSuccess()
+                        } else {
+                            callback.onAuthError(t, error)
+                        }
+                    }
+                }
+                BaseResp.ErrCode.ERR_USER_CANCEL -> {
+                    callback.onAuthCancelled()
+                }
+                BaseResp.ErrCode.ERR_AUTH_DENIED -> {
+                    callback.onAuthError(null, wechatResult?.errStr ?: "ERR_AUTH_DENIED")
+                }
+            }
+            wechatResult = null
+            return
+        }
         if (activityResultRequestCode == RC_AUTH_GOOGLE && socialNetwork == SocialNetwork.GOOGLE) {
             getGoogleAuthToken(activity, activityResultData, withLogout, callback)
             return
@@ -195,7 +248,8 @@ object LoginSocial {
     private fun getGoogleAuthToken(activity: Activity, activityResultData: Intent?, withLogout: Boolean, callback: FinishSocialCallback) {
         try {
             val oneTapClient = Identity.getSignInClient(activity)
-            val credential = oneTapClient.getSignInCredentialFromIntent(googleCredentialFromIntent ?: activityResultData)
+            val credential = oneTapClient.getSignInCredentialFromIntent(googleCredentialFromIntent
+                    ?: activityResultData)
             val idToken = credential.googleIdToken
             if (idToken == null) {
                 callback.onAuthError(null, "idToken is null")
@@ -285,6 +339,22 @@ object LoginSocial {
                         callback.invoke(false)
                         it.printStackTrace()
                     }
+            return
+        }
+        if (socialNetwork == SocialNetwork.WECHAT && ::iwxapi.isInitialized) {
+            if (iwxapi.isWXAppInstalled) {
+                val intent = if (activity != null) {
+                    Intent(activity, ActivityWechatProxy::class.java)
+                } else {
+                    Intent(fragment?.activity, ActivityWechatProxy::class.java)
+                }
+                intent.putExtra(ActivityWechatProxy.EXTRA_WECHAT_ID, wechatAppId)
+                activity?.startActivityForResult(intent, RC_AUTH_WECHAT)
+                fragment?.startActivityForResult(intent, RC_AUTH_WECHAT)
+                callback.invoke(true)
+            } else {
+                callback.invoke(false)
+            }
             return
         }
         callback.invoke(false)
@@ -392,6 +462,65 @@ object LoginSocial {
         } else {
             val oauthGetCodeBySocialTokenBody = OauthGetCodeBySocialTokenBody(socialToken, null)
             loginApi.oauthGetCodeBySocialToken(socialNetwork.providerName, oauthClientId, UUID.randomUUID().toString(), callbackUrl, "code", "offline", oauthGetCodeBySocialTokenBody)
+                    .enqueue(object : Callback<OauthGetCodeBySocialTokenResponse> {
+                        override fun onResponse(call: Call<OauthGetCodeBySocialTokenResponse>, response: Response<OauthGetCodeBySocialTokenResponse>) {
+                            if (response.isSuccessful) {
+                                val url = response.body()?.loginUrl
+                                if (url == null) {
+                                    callback.invoke(null, "Empty url")
+                                    return
+                                }
+                                val code = TokenUtils.getCodeFromUrl(url)
+                                if (code == null) {
+                                    callback.invoke(null, "Code not found url")
+                                    return
+                                }
+                                getOauthTokensFromCode(code) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
+                                    if (throwable == null && errorMessage == null) {
+                                        tokenUtils.oauthAccessToken = accessToken
+                                        tokenUtils.oauthRefreshToken = refreshToken
+                                        tokenUtils.oauthExpireTimeUnixSec = System.currentTimeMillis() / 1000 + expiresIn!!
+                                    }
+                                    callback.invoke(throwable, errorMessage)
+                                }
+                            } else {
+                                callback.invoke(null, getErrorMessage(response.errorBody()))
+                            }
+                        }
+
+                        override fun onFailure(call: Call<OauthGetCodeBySocialTokenResponse>, t: Throwable) {
+                            callback.invoke(t, null)
+                        }
+                    })
+        }
+    }
+
+    private fun getLoginTokenFromSocialCode(socialNetwork: SocialNetwork, socialCode: String, withLogout: Boolean, callback: (Throwable?, String?) -> Unit) {
+        if (!useOauth) {
+            val authUserSocialWithCodeBody = AuthUserSocialWithCodeBody(socialCode)
+            loginApi.loginSocialWithOauthCode(socialNetwork.providerName, projectId, if (withLogout) "1" else "0", authUserSocialWithCodeBody)
+                    .enqueue(object : Callback<AuthSocialResponse> {
+                        override fun onResponse(call: Call<AuthSocialResponse>, response: Response<AuthSocialResponse>) {
+                            if (response.isSuccessful) {
+                                val jwtToken = response.body()?.token
+                                if (jwtToken == null) {
+                                    callback.invoke(null, "Token not found")
+                                    return
+                                }
+                                tokenUtils.jwtToken = jwtToken
+                                callback.invoke(null, null)
+                            } else {
+                                callback.invoke(null, getErrorMessage(response.errorBody()))
+                            }
+                        }
+
+                        override fun onFailure(call: Call<AuthSocialResponse>, t: Throwable) {
+                            callback.invoke(t, null)
+                        }
+                    })
+        } else {
+            val authUserSocialWithCodeBody = AuthUserSocialWithCodeBody(socialCode)
+            loginApi.oauthGetCodeBySocialCode(socialNetwork.providerName, oauthClientId, UUID.randomUUID().toString(), callbackUrl, "code", "offline", authUserSocialWithCodeBody)
                     .enqueue(object : Callback<OauthGetCodeBySocialTokenResponse> {
                         override fun onResponse(call: Call<OauthGetCodeBySocialTokenResponse>, response: Response<OauthGetCodeBySocialTokenResponse>) {
                             if (response.isSuccessful) {
