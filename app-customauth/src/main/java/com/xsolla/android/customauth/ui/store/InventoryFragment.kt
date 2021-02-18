@@ -10,22 +10,24 @@ import com.xsolla.android.customauth.databinding.FragmentInventoryBinding
 import com.xsolla.android.customauth.ui.BaseFragment
 import com.xsolla.android.customauth.ui.adapter.ConsumeListener
 import com.xsolla.android.customauth.ui.adapter.InventoryAdapter
+import com.xsolla.android.customauth.viewmodels.VmCart
 import com.xsolla.android.customauth.viewmodels.VmInventory
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.inventory.callback.ConsumeItemCallback
 import com.xsolla.android.inventory.callback.GetInventoryCallback
 import com.xsolla.android.inventory.entity.response.InventoryResponse
 
-class InventoryFragment : BaseFragment(), ConsumeListener {
+class InventoryFragment : BaseFragment(), ConsumeListener, PurchaseListener {
     private val binding: FragmentInventoryBinding by viewBinding()
     private val viewModel: VmInventory by viewModels()
+    private val vmCart: VmCart by viewModels()
 
     private lateinit var adapter: InventoryAdapter
 
     override fun getLayout() = R.layout.fragment_inventory
 
     override fun initUI() {
-        adapter = InventoryAdapter(listOf(), this)
+        adapter = InventoryAdapter(listOf(), this, this, vmCart)
         binding.recycler.adapter = adapter
         binding.recycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
             ContextCompat.getDrawable(requireContext(), R.drawable.item_divider)?.let { setDrawable(it) }
@@ -48,6 +50,10 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
 
     override fun onFailure(errorMessage: String) {
         showSnack(errorMessage)
+    }
+
+    override fun showMessage(message: String) {
+        showSnack(message)
     }
 
     private fun consume(item: InventoryResponse.Item) {

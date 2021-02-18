@@ -12,7 +12,12 @@ import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.appcore.databinding.ItemInventoryBinding
+import com.xsolla.android.store.XStore
+import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.storesdkexample.listener.ConsumeListener
+import com.xsolla.android.storesdkexample.listener.PurchaseListener
+import com.xsolla.android.storesdkexample.ui.vm.VmCart
+import com.xsolla.android.storesdkexample.util.ViewUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -21,7 +26,6 @@ class InventoryAdapter(
         private val consumeListener: ConsumeListener,
         private val purchaseListener: PurchaseListener,
         private val vmCart: VmCart
-
 ) : RecyclerView.Adapter<InventoryAdapter.ViewHolder>() {
 
     private var subscriptions: List<SubscriptionsResponse.Item>? = null
@@ -48,7 +52,8 @@ class InventoryAdapter(
             inflater: LayoutInflater,
             parent: ViewGroup,
             private val purchaseListener: PurchaseListener,
-            private val vmCart: VmCart) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_inventory, parent, false)) {
+            private val vmCart: VmCart
+    ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_inventory, parent, false)) {
         private val binding = ItemInventoryBinding.bind(itemView)
 
         fun bind(item: InventoryResponse.Item) {
@@ -72,7 +77,7 @@ class InventoryAdapter(
 
             subscriptions?.find { it.sku == item.sku }?.let {
                 return if (it.status == SubscriptionsResponse.Item.Status.ACTIVE) {
-                    itemView.buyAgainButton.visibility = View.INVISIBLE
+                    binding.buyAgainButton.visibility = View.GONE
                     val date = Date(it.expiredAt * 1000)
                     val sdf = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.US)
                     val formattedDate = sdf.format(date)
@@ -81,30 +86,30 @@ class InventoryAdapter(
 
                 } else {
 
-                    itemView.buyAgainButton.visibility = View.VISIBLE
-                    itemView.buyAgainButton.setOnClickListener { view ->
-                        //disable button while operation in progress
-                        com.xsolla.android.storesdkexample.util.ViewUtils.disable(view)
+                    binding.buyAgainButton.visibility = View.VISIBLE
+                    binding.buyAgainButton.setOnClickListener { view ->
+
+                        ViewUtils.disable(view)
                         val cartContent = vmCart.cartContent.value
-                        val quantity = cartContent?.find { item1 -> item1.sku == item.sku }?.quantity ?: 0
+                        val quantity = cartContent?.find { item1 -> item1.sku == item.sku }?.quantity
+                                ?: 0
                         // check if there is item in cart, if not - set quantity to 0
                         XStore.updateItemFromCurrentCart(item.sku, quantity + 1, object : XStoreCallback<Void>() {
                             override fun onSuccess(response: Void?) {
                                 vmCart.updateCart()
-                                com.xsolla.android.storesdkexample.util.ViewUtils.enable(view)
-                                itemView.buyAgainButton.visibility = View.INVISIBLE
+                                ViewUtils.enable(view)
+                                binding.buyAgainButton.visibility = View.GONE
                                 //enable button after process are done
                             }
 
                             override fun onFailure(errorMessage: String?) {
                                 purchaseListener.onFailure(errorMessage!!)
-                                com.xsolla.android.storesdkexample.util.ViewUtils.enable(view)
+                                ViewUtils.enable(view)
                             }
 
+
                         })
-
                     }
-
                     "Expired"
                 }
             }

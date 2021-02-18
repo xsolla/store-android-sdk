@@ -23,8 +23,9 @@ import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.ui.vm.VmInventory
 
-class InventoryFragment : BaseFragment(), ConsumeListener,PurchaseListener {
+class InventoryFragment : BaseFragment(), ConsumeListener, PurchaseListener {
     private val binding: FragmentInventoryBinding by viewBinding()
+    private val vmCart: VmCart by activityViewModels()
 
     private val viewModel: VmInventory by activityViewModels()
     private val vmCart : VmCart by activityViewModels()
@@ -42,7 +43,7 @@ class InventoryFragment : BaseFragment(), ConsumeListener,PurchaseListener {
             binding.goToStoreButton.setOnClickListener { findNavController().navigate(R.id.nav_vi) }
         }
 
-        inventoryAdapter = InventoryAdapter(listOf(), this,this,vmCart)
+        inventoryAdapter = InventoryAdapter(listOf(), this, this, vmCart)
         binding.recycler.adapter = inventoryAdapter
 
         viewModel.inventory.observe(viewLifecycleOwner) {
@@ -74,13 +75,7 @@ class InventoryFragment : BaseFragment(), ConsumeListener,PurchaseListener {
     }
 
     override fun showMessage(message: String) {
-        //when item added to cart callback
-        showSnackbar(message)
-    }
-
-    private fun showSnackbar(message: String) {
-        val rootView = requireActivity().findViewById<View>(android.R.id.content)
-        Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show()
+        showSnack(message)
     }
 
     private fun consume(item: InventoryResponse.Item) {

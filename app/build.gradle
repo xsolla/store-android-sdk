@@ -7,6 +7,7 @@ plugins {
 
 android {
     compileSdkVersion sdk_compile
+    buildFeatures.viewBinding true
 
     signingConfigs {
         release {
@@ -68,9 +69,7 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
-    buildFeatures {
-        viewBinding true
-    }
+
 }
 
 dependencies {
