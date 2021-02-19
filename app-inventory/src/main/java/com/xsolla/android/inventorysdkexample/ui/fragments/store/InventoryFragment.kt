@@ -1,10 +1,12 @@
 package com.xsolla.android.inventorysdkexample.ui.fragments.store
 
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.xsolla.android.appcore.databinding.FragmentInventoryBinding
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.inventory.callback.ConsumeItemCallback
 import com.xsolla.android.inventory.callback.GetInventoryCallback
@@ -13,9 +15,10 @@ import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.inventorysdkexample.R
 import com.xsolla.android.inventorysdkexample.adapter.InventoryAdapter
-import com.xsolla.android.appcore.databinding.FragmentInventoryBinding
 import com.xsolla.android.inventorysdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.inventorysdkexample.ui.vm.VmInventory
+import com.xsolla.android.inventorysdkexample.util.extensions.openInBrowser
+import com.xsolla.android.login.XLogin
 
 class InventoryFragment : BaseFragment(), ConsumeListener {
 
@@ -33,6 +36,7 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
                 ContextCompat.getDrawable(context, R.drawable.item_divider)?.let { setDrawable(it) }
             })
             layoutManager = linearLayoutManager
+            binding.goToStoreButton.setOnClickListener { openWebStore() }
         }
 
         inventoryAdapter = InventoryAdapter(listOf(), this)
@@ -49,6 +53,11 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
         getItems()
         getSubscriptions()
     }
+
+    private fun openWebStore() =
+            "https://sitebuilder.xsolla.com/game/sdk-web-store-android/?token=${XLogin.token}&remember_me=false"
+                    .toUri()
+                    .openInBrowser(requireContext())
 
     private fun getItems() {
         XInventory.getInventory(object : GetInventoryCallback {

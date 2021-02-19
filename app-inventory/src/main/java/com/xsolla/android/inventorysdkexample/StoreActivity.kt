@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -63,6 +64,13 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
         initNavController()
         initDrawer()
         initVirtualBalance()
+
+        initChargeCurrencyButton()
+    }
+
+    private fun initChargeCurrencyButton() {
+        val button = findViewById<Button>(R.id.chargeBalanceButton)
+        button.setOnClickListener { openWebStore() }
     }
 
     override fun onResume() {
