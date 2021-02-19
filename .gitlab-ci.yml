@@ -22,7 +22,7 @@ generate_keystore:
     paths:
       - xsolla.keystore
       - signing.properties
-    expire_in: 10 mins
+    expire_in: 30 mins
 
 build:
   tags:
@@ -58,7 +58,7 @@ test:
     paths:
       - .gradle/*
 
-generateDebugApp:
+generateReleaseApp:
   tags:
     - sdk
   stage: publish
@@ -78,7 +78,7 @@ generateDebugApp:
     - mv app-inventory/build/outputs/apk/release/app-inventory-release.apk ./artifacts/SampleApp-Inventory.apk
     - mv app-customauth/build/outputs/apk/release/app-customauth-release.apk ./artifacts/SampleApp-Customauth.apk
   artifacts:
-    expire_in: 2 hours
+    expire_in: 24 hours
     paths:
       - artifacts
 
@@ -149,3 +149,16 @@ publishPayments:
     key: ${CI_PROJECT_ID}
     paths:
       - .gradle/*
+
+generateHtmlDocumentation:
+  tags:
+    - sdk
+  stage: publish
+  except:
+    - branches
+  script:
+    - ./gradlew dokkaHtmlMultiModule
+  artifacts:
+    expire_in: 24 hours
+    paths:
+      - build/dokka/htmlMultiModule

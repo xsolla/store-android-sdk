@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'org.jetbrains.dokka'
 
 android {
     compileSdkVersion sdk_compile
@@ -32,6 +33,15 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.6.4'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.4'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+
+dokkaHtml.configure {
+    dokkaSourceSets {
+        named("main") {
+            moduleName.set("Xsolla Inventory SDK for Android")
+            includes.from("Module.md")
+        }
+    }
 }
 
 apply from: 'publish.gradle'

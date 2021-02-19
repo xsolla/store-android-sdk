@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'org.jetbrains.dokka'
 
 android {
     compileSdkVersion sdk_compile
@@ -40,6 +41,16 @@ dependencies {
 
     implementation 'androidx.work:work-runtime:2.3.4'
     implementation 'androidx.work:work-runtime-ktx:2.3.4'
+}
+
+dokkaHtml.configure {
+    dokkaSourceSets {
+        named("main") {
+            noAndroidSdkLink.set(false)
+            moduleName.set("Xsolla Payments SDK for Android")
+            includes.from("Module.md")
+        }
+    }
 }
 
 apply from: 'publish.gradle'
