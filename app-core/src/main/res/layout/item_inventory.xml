@@ -59,6 +59,7 @@
                 android:layout_width="106dp"
                 android:layout_height="40dp"
                 android:text="@string/buy_again"
+                android:textAllCaps="true"
                 android:visibility="gone" />
 
         </LinearLayout>

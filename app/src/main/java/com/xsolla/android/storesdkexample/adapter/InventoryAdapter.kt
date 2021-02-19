@@ -6,14 +6,12 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.ViewUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.xsolla.android.appcore.databinding.ItemInventoryBinding
 import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.appcore.databinding.ItemInventoryBinding
-import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
 import com.xsolla.android.storesdkexample.listener.ConsumeListener
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
@@ -37,7 +35,7 @@ class InventoryAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return ViewHolder(inflater, parent, purchaseListener, vmCart)
+        return ViewHolder(inflater, parent, vmCart)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -51,7 +49,6 @@ class InventoryAdapter(
     inner class ViewHolder(
             inflater: LayoutInflater,
             parent: ViewGroup,
-            private val purchaseListener: PurchaseListener,
             private val vmCart: VmCart
     ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_inventory, parent, false)) {
         private val binding = ItemInventoryBinding.bind(itemView)
@@ -86,35 +83,39 @@ class InventoryAdapter(
 
                 } else {
 
-                    binding.buyAgainButton.visibility = View.VISIBLE
-                    binding.buyAgainButton.setOnClickListener { view ->
-
-                        ViewUtils.disable(view)
-                        val cartContent = vmCart.cartContent.value
-                        val quantity = cartContent?.find { item1 -> item1.sku == item.sku }?.quantity
-                                ?: 0
-                        // check if there is item in cart, if not - set quantity to 0
-                        XStore.updateItemFromCurrentCart(item.sku, quantity + 1, object : XStoreCallback<Void>() {
-                            override fun onSuccess(response: Void?) {
-                                vmCart.updateCart()
-                                ViewUtils.enable(view)
-                                binding.buyAgainButton.visibility = View.GONE
-                                //enable button after process are done
-                            }
-
-                            override fun onFailure(errorMessage: String?) {
-                                purchaseListener.onFailure(errorMessage!!)
-                                ViewUtils.enable(view)
-                            }
-
-
-                        })
-                    }
+                    buyAgainExpiredSubscription(item)
                     "Expired"
                 }
             }
 
             return null
+        }
+
+        private fun buyAgainExpiredSubscription(item: InventoryResponse.Item) {
+            binding.buyAgainButton.visibility = View.VISIBLE
+            binding.buyAgainButton.setOnClickListener { view ->
+
+                ViewUtils.disable(view)
+                val cartContent = vmCart.cartContent.value
+                val quantity = cartContent?.find { item1 -> item1.sku == item.sku }?.quantity
+                        ?: 0
+                // check if there is item in cart, if not - set quantity to 0
+                XStore.updateItemFromCurrentCart(item.sku, quantity + 1, object : XStoreCallback<Void>() {
+                    override fun onSuccess(response: Void?) {
+                        vmCart.updateCart()
+                        ViewUtils.enable(view)
+                        binding.buyAgainButton.visibility = View.GONE
+                        //enable button after process are done
+                    }
+
+                    override fun onFailure(errorMessage: String?) {
+                        purchaseListener.onFailure(errorMessage!!)
+                        ViewUtils.enable(view)
+                    }
+
+
+                })
+            }
         }
 
     }

@@ -67,31 +67,35 @@ class InventoryViewHolder(inflater: LayoutInflater,
                 val formattedDate = sdf.format(date)
                 "Active until: $formattedDate"
             } else {
-                binding.buyAgainButton.visibility = View.VISIBLE
-                binding.buyAgainButton.setOnClickListener { view ->
-                    val cartContent = vmCart.cartContent.value
-                    val quantity = cartContent?.find { item1 -> item1.sku == item.sku }?.quantity
-                            ?: 0
-                    // check if there is item in cart, if not - set quantity to 0
-                    XStore.updateItemFromCurrentCart(item.sku, quantity + 1, object : XStoreCallback<Void>() {
-                        override fun onSuccess(response: Void?) {
-                            vmCart.updateCart()
-                            binding.buyAgainButton.visibility = View.GONE
-
-                        }
-
-                        override fun onFailure(errorMessage: String?) {
-                            purchaseListener.onFailure(errorMessage!!)
-                        }
-
-                    })
-                }
+                buyAgainExpiredSubscription(item)
 
                 "Expired"
             }
         }
 
         return null
+    }
+
+    private fun buyAgainExpiredSubscription(item: InventoryResponse.Item) {
+        binding.buyAgainButton.visibility = View.VISIBLE
+        binding.buyAgainButton.setOnClickListener { view ->
+            val cartContent = vmCart.cartContent.value
+            val quantity = cartContent?.find { item1 -> item1.sku == item.sku }?.quantity
+                    ?: 0
+            // check if there is item in cart, if not - set quantity to 0
+            XStore.updateItemFromCurrentCart(item.sku, quantity + 1, object : XStoreCallback<Void>() {
+                override fun onSuccess(response: Void?) {
+                    vmCart.updateCart()
+                    binding.buyAgainButton.visibility = View.GONE
+
+                }
+
+                override fun onFailure(errorMessage: String?) {
+                    purchaseListener.onFailure(errorMessage!!)
+                }
+
+            })
+        }
     }
 }
 

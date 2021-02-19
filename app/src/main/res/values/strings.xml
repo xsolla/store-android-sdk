@@ -3,5 +3,4 @@
     <string name="xsolla_payments_redirect_scheme">xsollasdk</string>
     <string name="xsolla_payments_redirect_host">example.com</string>
     <string name="xsolla_payments_redirect_path_prefix">/standard</string>
-    <string name="buy_again">BUY AGAIN</string>
 </resources>
