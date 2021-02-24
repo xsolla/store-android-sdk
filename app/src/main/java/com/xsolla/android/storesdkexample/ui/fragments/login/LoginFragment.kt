@@ -18,7 +18,6 @@ import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.StoreActivity
 import com.xsolla.android.appcore.databinding.FragmentLoginBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
-import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 import java.util.*
 
 class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {

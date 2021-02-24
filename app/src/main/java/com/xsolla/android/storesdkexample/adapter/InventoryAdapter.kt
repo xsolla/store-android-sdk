@@ -3,7 +3,6 @@ package com.xsolla.android.storesdkexample.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.ViewUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.appcore.databinding.ItemInventoryBinding

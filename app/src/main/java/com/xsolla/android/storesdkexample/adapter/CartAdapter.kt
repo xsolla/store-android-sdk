@@ -15,7 +15,6 @@ import com.xsolla.android.store.entity.response.common.ExpirationPeriod
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.CartChangeListener
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
-import com.xsolla.android.storesdkexample.util.AmountUtils
 
 class CartAdapter(
         val items: MutableList<CartResponse.Item>,

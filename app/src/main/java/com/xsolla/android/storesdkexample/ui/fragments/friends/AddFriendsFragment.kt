@@ -19,7 +19,6 @@ import com.xsolla.android.appcore.databinding.FragmentAddFriendsBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmAddFriends
 import com.xsolla.android.storesdkexample.ui.vm.VmSocialFriends
-import com.xsolla.android.storesdkexample.util.setRateLimitedClickListener
 
 class AddFriendsFragment : BaseFragment() {
 

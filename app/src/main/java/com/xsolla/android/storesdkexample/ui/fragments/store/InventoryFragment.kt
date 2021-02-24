@@ -25,7 +25,6 @@ import com.xsolla.android.storesdkexample.ui.vm.VmInventory
 
 class InventoryFragment : BaseFragment(), ConsumeListener, PurchaseListener {
     private val binding: FragmentInventoryBinding by viewBinding()
-    private val vmCart: VmCart by activityViewModels()
 
     private val viewModel: VmInventory by activityViewModels()
     private val vmCart : VmCart by activityViewModels()
