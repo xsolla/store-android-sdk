@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.5.2] - Demo Apps - 2021-02-24
+
+### Added
+
+- Renew subscription button
+
+### Fixed
+
+- Kotlin synthetics replaced by view bindings
+
+
 ## [1.1.3] - Login SDK - 2021-02-17
 
 ### Added
