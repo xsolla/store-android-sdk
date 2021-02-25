@@ -22,7 +22,8 @@ class ActivityAuthWebView : AppCompatActivity() {
 
         const val RESULT = "result"
 
-        private const val USER_AGENT = "Mozilla/5.0 (Linux; Android 10; Redmi Note 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Mobile Safari/537.36"
+        private const val USER_AGENT_GOOGLE = "Mozilla/5.0 (Linux; Android 10; Redmi Note 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Mobile Safari/537.36"
+        private const val USER_AGENT_QQ = "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36"
     }
 
     private lateinit var callbackUrl: String
@@ -66,7 +67,10 @@ class ActivityAuthWebView : AppCompatActivity() {
     private fun configureWebView(url: String) {
         webview.settings.javaScriptEnabled = true
         if (url.contains("google", ignoreCase = true)) {
-            webview.settings.userAgentString = USER_AGENT
+            webview.settings.userAgentString = USER_AGENT_GOOGLE
+        }
+        if (url.contains("qq.com", ignoreCase = true)) {
+            webview.settings.userAgentString = USER_AGENT_QQ
         }
         if (!webview.isInEditMode) {
             webview.settings.builtInZoomControls = true
