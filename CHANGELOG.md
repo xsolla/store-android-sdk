@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.4] - Login SDK - 2021-02-25
+
+### Fixed
+
+- QQ authentication
+
+
 ## [1.5.2] - Demo Apps - 2021-02-24
 
 ### Added
