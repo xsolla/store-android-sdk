@@ -24,16 +24,18 @@ class App: Application() {
 
         if (BuildConfig.USE_OAUTH) {
             val loginConfig = LoginConfig.OauthBuilder()
-                .setProjectId(BuildConfig.LOGIN_ID)
-                .setOauthClientId(BuildConfig.OAUTH_CLIENT_ID)
-                .setSocialConfig(XLogin.SocialConfig(googleServerId = BuildConfig.GOOGLE_CREDENTIAL))
+                    .setProjectId(BuildConfig.LOGIN_ID)
+                    .setOauthClientId(BuildConfig.OAUTH_CLIENT_ID)
+                    .setSocialConfig(XLogin.SocialConfig(facebookAppId = BuildConfig.FACEBOOK_CREDENTIAL,
+                            googleServerId = BuildConfig.GOOGLE_CREDENTIAL))
                 .build()
 
             XLogin.init(this, loginConfig)
         } else {
             val loginConfig = LoginConfig.JwtBuilder()
-                .setProjectId(BuildConfig.LOGIN_ID)
-                .setSocialConfig(XLogin.SocialConfig(googleServerId = BuildConfig.GOOGLE_CREDENTIAL))
+                    .setProjectId(BuildConfig.LOGIN_ID)
+                    .setSocialConfig(XLogin.SocialConfig(facebookAppId = BuildConfig.FACEBOOK_CREDENTIAL,
+                            googleServerId = BuildConfig.GOOGLE_CREDENTIAL))
                 .build()
 
             XLogin.init(this, loginConfig)
