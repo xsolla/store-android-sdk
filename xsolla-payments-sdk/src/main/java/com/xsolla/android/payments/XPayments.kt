@@ -13,7 +13,7 @@ import com.xsolla.android.payments.status.StatusWorker
 import com.xsolla.android.payments.ui.ActivityPaystation
 import com.xsolla.android.payments.ui.ActivityPaystationBrowserProxy
 import com.xsolla.android.payments.ui.ActivityPaystationWebView
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 import java.util.concurrent.TimeUnit
 
