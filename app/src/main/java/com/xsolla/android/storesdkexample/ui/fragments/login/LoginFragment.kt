@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.appcore.LoginBottomSheet
 import com.xsolla.android.appcore.databinding.FragmentLoginBinding
+import com.xsolla.android.appcore.extensions.setRateLimitedClickListener
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.AuthCallback
 import com.xsolla.android.login.callback.FinishSocialCallback
@@ -102,8 +103,8 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
     }
 
     private fun updateLoginButtonEnable() {
-        val usernameValid = binding.usernameInput.text.isNotEmpty() ?: false
-        val passwordValid = (binding.passwordInput.text.length ?: 0) >= MIN_PASSWORD_LENGTH
+        val usernameValid = binding.usernameInput.text?.isNotEmpty() ?: false
+        val passwordValid = (binding.passwordInput.text?.length ?: 0) >= MIN_PASSWORD_LENGTH
         binding.loginButton.isEnabled = usernameValid && passwordValid
     }
 

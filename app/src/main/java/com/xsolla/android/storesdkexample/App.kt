@@ -22,20 +22,23 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
 
+        val socialConfig = XLogin.SocialConfig(
+                facebookAppId = BuildConfig.FACEBOOK_CREDENTIAL,
+                googleServerId = BuildConfig.GOOGLE_CREDENTIAL
+        )
+
         if (BuildConfig.USE_OAUTH) {
             val loginConfig = LoginConfig.OauthBuilder()
                     .setProjectId(BuildConfig.LOGIN_ID)
                     .setOauthClientId(BuildConfig.OAUTH_CLIENT_ID)
-                    .setSocialConfig(XLogin.SocialConfig(facebookAppId = BuildConfig.FACEBOOK_CREDENTIAL,
-                            googleServerId = BuildConfig.GOOGLE_CREDENTIAL))
+                    .setSocialConfig(socialConfig)
                 .build()
 
             XLogin.init(this, loginConfig)
         } else {
             val loginConfig = LoginConfig.JwtBuilder()
                     .setProjectId(BuildConfig.LOGIN_ID)
-                    .setSocialConfig(XLogin.SocialConfig(facebookAppId = BuildConfig.FACEBOOK_CREDENTIAL,
-                            googleServerId = BuildConfig.GOOGLE_CREDENTIAL))
+                    .setSocialConfig(socialConfig)
                 .build()
 
             XLogin.init(this, loginConfig)
