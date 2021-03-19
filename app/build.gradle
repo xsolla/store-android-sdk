@@ -39,6 +39,7 @@ android {
         buildConfigField 'int', 'PROJECT_ID', '58917' // Replace to your Project ID
         buildConfigField 'String', 'LOGIN_ID', '"ba55b4f6-babf-11ea-a85b-42010aa80004"' // Replace to your project's Login ID
         buildConfigField 'String', 'GOOGLE_CREDENTIAL', "\"${System.env.GOOGLE_SERVER_ID}\""
+        buildConfigField 'String', 'FACEBOOK_CREDENTIAL', "\"${System.env.FACEBOOK_APP_ID}\""
         buildConfigField 'boolean', 'WITH_LOGOUT', 'false'
         buildConfigField 'boolean', 'USE_OAUTH', 'true'
         buildConfigField 'int', 'OAUTH_CLIENT_ID', '58'
