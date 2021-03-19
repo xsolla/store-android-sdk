@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.appcore.LoginBottomSheet
+import com.xsolla.android.appcore.databinding.FragmentLoginBinding
 import com.xsolla.android.appcore.extensions.setRateLimitedClickListener
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.AuthCallback
@@ -16,7 +17,6 @@ import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.StoreActivity
-import com.xsolla.android.appcore.databinding.FragmentLoginBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import java.util.*
 
@@ -181,7 +181,7 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         }
 
         override fun onAuthError(throwable: Throwable?, errorMessage: String?) {
-            showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
+            showSnack(throwable?.javaClass?.name ?: throwable?.localizedMessage ?: "Error")
         }
     }
 

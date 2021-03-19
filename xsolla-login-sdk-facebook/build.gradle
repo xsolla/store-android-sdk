@@ -27,7 +27,7 @@ android {
 }
 
 dependencies {
-    api 'com.facebook.android:facebook-login:7.0.0'
+    api 'com.facebook.android:facebook-login:8.1.0'
 }
 
 apply from: 'publish.gradle'
