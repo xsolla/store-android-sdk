@@ -1,3 +1,8 @@
+include:
+  - project: 'sysadm-docker/ubuntu-sshclient'
+    ref:     'master'
+    file:    'gitlab-ci-template.yml'
+
 image: circleci/android:api-29
 
 stages:
