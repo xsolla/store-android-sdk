@@ -10,6 +10,8 @@ stages:
   - build
   - test
   - publish
+  - deploy
+  - linking
 
 generate_keystore:
   tags:
