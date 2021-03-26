@@ -150,15 +150,48 @@ publishPayments:
     paths:
       - .gradle/*
 
-generateHtmlDocumentation:
+build doc:
   tags:
     - sdk
-  stage: publish
-  except:
-    - branches
+  stage: build
+  only:
+    - /^doc-.*/
   script:
     - ./gradlew dokkaHtmlMultiModule
+    - cd build/dokka/htmlMultiModule/ && zip -r ../build.zip *
   artifacts:
     expire_in: 24 hours
     paths:
-      - build/dokka/htmlMultiModule
+      - build/dokka/build.zip
+
+deploy doc:
+  stage: deploy
+  extends:      .deploy doc
+  only:
+    - /^doc-.*/
+  dependencies:
+    - build doc
+  environment:
+    name: doc/$CI_COMMIT_REF_SLUG
+    url: https://$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME.doc.srv.local/$URL_SLUG
+    on_stop: stop doc
+  when: manual
+
+current doc:
+  extends:      .current doc
+  only:
+    - /^doc-.*/
+  dependencies:
+    - deploy doc
+  environment:
+    name: doc/current
+    url: https://developers.xsolla.com/sdk-code-references/android-store
+
+stop doc:
+  extends:      .stop doc
+  environment:
+    name: doc/$CI_COMMIT_REF_SLUG
+    action: stop
+  only:
+    - /^doc-.*/
+  dependencies: []
