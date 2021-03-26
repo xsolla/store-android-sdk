@@ -10,6 +10,7 @@ stages:
   - build
   - test
   - publish
+  - build_doc
   - deploy
   - linking
 
@@ -160,7 +161,7 @@ publishPayments:
 build doc:
   tags:
     - sdk
-  stage: build
+  stage: build_doc
   only:
     - /^doc-.*/
   script:
