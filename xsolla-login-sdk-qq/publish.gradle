@@ -1,0 +1,60 @@
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                artifact androidSourcesJar
+
+                groupId = 'com.xsolla.android'
+                artifactId = 'login-qq'
+                version = android.defaultConfig.versionName
+
+                pom {
+                    name = 'Xsolla Login Android SDK'
+                    description = 'Xsolla Login Android SDK is used to integrate Xsolla Login, a single sign-on tool that uses API methods to authenticate and secure user passwords. This creates a seamless one-click registration experience players can use for fast and safe transactions across all of your games.'
+                    url = 'https://github.com/xsolla/store-android-sdk'
+                    organization {
+                        name = 'Xsolla'
+                        url = 'https://xsolla.com'
+                    }
+                    licenses {
+                        license {
+                            name = 'The Apache Software License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    scm {
+                        connection = 'https://github.com/xsolla/store-android-sdk.git'
+                        developerConnection = 'https://github.com/xsolla/store-android-sdk.git'
+                        url = 'https://github.com/xsolla/store-android-sdk.git'
+                    }
+                }
+            }
+        }
+    }
+    bintray {
+        user = System.getenv('BINTRAY_USER')
+        key = System.getenv('BINTRAY_KEY')
+        publications = ['release']
+        pkg {
+            repo = 'maven'
+            name = 'xsolla-login-qq'
+            vcsUrl = 'https://github.com/xsolla/store-android-sdk'
+            licenses = ['Apache-2.0']
+
+            publish = true
+
+            version {
+                name = android.defaultConfig.versionName
+            }
+        }
+    }
+}
