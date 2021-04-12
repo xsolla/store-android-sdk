@@ -33,4 +33,12 @@ dependencies {
     implementation 'com.playfab:client-sdk:0.107.200330'
 }
 
-apply from: 'publish.gradle'
+ext {
+    PUBLISH_GROUP_ID = 'com.xsolla.android'
+    PUBLISH_ARTIFACT_ID = 'payments-playfab'
+    PUBLISH_VERSION = payments_sdk_version_name
+    PUBLISH_NAME = 'Xsolla Payments SDK for Android'
+    PUBLISH_DESCRIPTION = 'Xsolla Payments SDK for Android allows partners to monetize their product by providing users with a convenient UI to pay for in-game purchases in the game store'
+}
+
+apply from: "${rootDir}/publishMavenCentral.gradle"

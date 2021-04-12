@@ -44,5 +44,12 @@ dokkaHtml.configure {
     }
 }
 
+ext {
+    PUBLISH_GROUP_ID = 'com.xsolla.android'
+    PUBLISH_ARTIFACT_ID = 'store'
+    PUBLISH_VERSION = store_sdk_version_name
+    PUBLISH_NAME = 'Xsolla Store SDK for Android'
+    PUBLISH_DESCRIPTION = 'Xsolla Store SDK for Android is used to integrate Xsolla Store, a comprehensive e-store solution for partners that supports various monetization options'
+}
 
-apply from: 'publish.gradle'
+apply from: "${rootDir}/publishMavenCentral.gradle"
