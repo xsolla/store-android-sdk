@@ -29,4 +29,12 @@ dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
 }
 
-apply from: 'publish.gradle'
+ext {
+    PUBLISH_GROUP_ID = 'com.xsolla.android'
+    PUBLISH_ARTIFACT_ID = 'login-qq'
+    PUBLISH_VERSION = login_sdk_version_name
+    PUBLISH_NAME = 'Xsolla Login SDK for Android'
+    PUBLISH_DESCRIPTION = 'Xsolla Login SDK for Android is used to integrate Xsolla Login, a single sign-on tool that uses API methods to authenticate and secure user passwords. This creates a seamless one-click registration experience players can use for fast and safe transactions across all of your games.'
+}
+
+apply from: "${rootDir}/publishMavenCentral.gradle"

@@ -44,4 +44,12 @@ dokkaHtml.configure {
     }
 }
 
-apply from: 'publish.gradle'
+ext {
+    PUBLISH_GROUP_ID = 'com.xsolla.android'
+    PUBLISH_ARTIFACT_ID = 'inventory'
+    PUBLISH_VERSION = inventory_sdk_version_name
+    PUBLISH_NAME = 'Xsolla Inventory SDK for Android'
+    PUBLISH_DESCRIPTION = 'Xsolla Inventory SDK for Android is used to integrate applications based on Android with Player Inventory for managing: user inventory, virtual currency balance, cross-platform inventory'
+}
+
+apply from: "${rootDir}/publishMavenCentral.gradle"
