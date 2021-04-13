@@ -54,6 +54,13 @@ publishing {
                     name = 'Xsolla'
                     url = 'https://xsolla.com'
                 }
+                developers {
+                    developer {
+                        id = 'xsolla'
+                        name = 'Xsolla SDK Team'
+                        email = 'publisher-sdk@xsolla.com'
+                    }
+                }
                 licenses {
                     license {
                         name = 'The Apache Software License, Version 2.0'
