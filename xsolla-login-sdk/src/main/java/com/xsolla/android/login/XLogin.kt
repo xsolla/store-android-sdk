@@ -150,6 +150,7 @@ class XLogin private constructor(
          * @see [JWT Login API Reference](https://developers.xsolla.com/login-api/methods/jwt/jwt-register-a-new-user)
          *
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-register-a-new-user)
+         *
          */
         @JvmStatic
         fun register(username: String, email: String, password: String, callback: RegisterCallback) {
@@ -299,45 +300,6 @@ class XLogin private constructor(
                 })
         }
 
-        /**
-         * Calls to exchange the provider JWT by the client JWT.
-         * Provider project is a common project where your users authenticate, and the received JWT is then used for authentication in other projects (i.e., games).
-         * Client project is a project where your users authenticate automatically as a result of authentication. They don't need to enter their data.
-         *
-         * @param platformProviderName         name of the provider project. To enable platforms, please contact your Account Manager
-         * @param scope
-         * @param providerAccessToken          token received after authentication in the provider project
-         * @param callback                     status callback
-         * @see <a href="https://developers.xsolla.com/login-api/methods/oauth-20/authentication-via-provider-project">Login API Reference</a>
-         */
-        @JvmStatic
-        fun oauthAuthenticateViaProviderProject(
-            platformProviderName: String,
-            scope: String,
-            providerAccessToken: String,
-            callback: AuthViaProviderProjectCallback
-        ) {
-            getInstance().loginApi
-                .authViaProviderProject(platformProviderName, getInstance().oauthClientId, scope, providerAccessToken)
-                .enqueue(object : Callback<OauthViaProviderProjectResponse> {
-                    override fun onResponse(call: Call<OauthViaProviderProjectResponse>, response: Response<OauthViaProviderProjectResponse>) {
-                        if (response.isSuccessful) {
-                            val data = response.body()
-                            if (data != null) {
-                                callback.onSuccess(data)
-                            } else {
-                                callback.onError(null, "Empty response")
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
-                        }
-                    }
-
-                    override fun onFailure(call: Call<OauthViaProviderProjectResponse>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
-        }
 
         /**
          * Start authentication via a social network
@@ -484,7 +446,7 @@ class XLogin private constructor(
          * @param limit              maximum number of friends that are returned at a time
          * @param fromGameOnly       shows whether the social friends are from your game
          * @param callback           callback with social friends
-         * @see <a href="https://developers.xsolla.com/login-api/methods/users/get-users-friends">Login API Reference</a>
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/users/get-users-friends)
          */
         @JvmStatic
         fun getSocialFriends(
@@ -524,7 +486,7 @@ class XLogin private constructor(
          * @param offset             number of the elements from which the list is generated
          * @param limit              maximum number of users that are returned at a time
          * @param callback           callback with users
-         * @see <a href="https://developers.xsolla.com/login-api/methods/users/search-users-by-nickname">Login API Reference</a>
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/users/search-users-by-nickname)
          */
         @JvmStatic
         fun searchUsersByNickname(
@@ -559,7 +521,7 @@ class XLogin private constructor(
          * Gets a list of the social networks linked to the user account.
          *
          * @param callback           callback with social networks linked to the user account
-         * @see [Login API Reference](https://developers.xsolla.com/user-account-api/social-networks/get-linked-networks/)
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/social-networks/get-linked-networks)
          */
         @JvmStatic
         fun getLinkedSocialNetworks(callback: LinkedSocialNetworksCallback) {
@@ -616,7 +578,7 @@ class XLogin private constructor(
          *
          * @param platform        chosen social provider. If you do not specify it, the method updates friends in all social providers
          * @param callback        callback that indicates the success of failure of an action
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/users/update-users-friends/)
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-friends/update-social-account-friends/)
          */
         @JvmStatic
         fun updateSocialFriends(platform: FriendsPlatform?, callback: UpdateSocialFriendsCallback) {
@@ -643,7 +605,7 @@ class XLogin private constructor(
          * @param context                activity/fragment or any view context
          * @param socialNetwork          social network for linking
          * @return                       intent that you can use for open activity for result
-         * @see [User Account API Reference](https://developers.xsolla.com/user-account-api/social-networks/link-social-network-to-account)
+         * @see [User Account API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/social-networks/link-social-network-to-account)
          */
         @JvmStatic
         fun createSocialAccountLinkingIntent(context: Context, socialNetwork: SocialNetworkForLinking): Intent {
@@ -659,7 +621,7 @@ class XLogin private constructor(
          *
          * @param userId user ID
          * @param callback callback that contains public user info
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/users/get-user-public-profile/)
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-friends/get-user-public-profile/)
          */
         @JvmStatic
         fun getUserPublicInfo(userId: String, callback: GetUserPublicInfoCallback) {
@@ -689,7 +651,7 @@ class XLogin private constructor(
          * Gets details of the authenticated user.
          *
          * @param callback    Callback with data.
-         * @see <a href="https://developers.xsolla.com/user-account-api/all-user-details/get-user-details">User Account API Reference</a>
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/get-user-details)
          */
         @JvmStatic
         fun getCurrentUserDetails(callback: GetCurrentUserDetailsCallback) {
@@ -719,7 +681,7 @@ class XLogin private constructor(
          * Gets the email of the authenticated user by a JWT.
          *
          * @param callback    Callback with data.
-         * @see <a href="https://developers.xsolla.com/user-account-api/user-email/getusersmeemail">User Account API Reference</a>
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/get-user-email)
          */
         @JvmStatic
         fun getCurrentUserEmail(callback: GetCurrentUserEmailCallback) {
@@ -754,7 +716,7 @@ class XLogin private constructor(
          * @param lastName    last name
          * @param nickname    nickname
          * @param callback    status callback
-         * @see <a href="https://developers.xsolla.com/user-account-api/all-user-details/patchusersme/">User Account API Reference</a>
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/update-user-details)
          */
         @JvmStatic
         fun updateCurrentUserDetails(
@@ -787,7 +749,7 @@ class XLogin private constructor(
          * Deletes avatar of the authenticated user
          *
          * @param callback    status callback
-         * @see <a href="https://developers.xsolla.com/user-account-api/user-picture/deleteusersmepicture/">User Account API Reference</a>
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/delete-user-picture)
          */
         @JvmStatic
         fun deleteCurrentUserAvatar(callback: DeleteCurrentUserAvatarCallback) {
@@ -813,7 +775,7 @@ class XLogin private constructor(
          *
          * @param file        file that stores the avatar for uploading
          * @param callback    callback with url of new avatar
-         * @see [User Account API Reference](https://developers.xsolla.com/user-account-api/user-picture/postusersmepicture)
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/upload-user-picture)
          */
         @JvmStatic
         fun uploadCurrentUserAvatar(file: File, callback: UploadCurrentUserAvatarCallback) {
@@ -843,7 +805,7 @@ class XLogin private constructor(
          * Gets the phone number of the authenticated user
          *
          * @param callback    callback with data
-         * @see [User Account API Reference](https://developers.xsolla.com/user-account-api/user-phone-number/getusersmephone)
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/get-user-phone-number)
          */
         @JvmStatic
         fun getCurrentUserPhone(callback: GetCurrentUserPhoneCallback) {
@@ -873,7 +835,7 @@ class XLogin private constructor(
          *
          * @param phone       new phone value
          * @param callback    status callback
-         * @see <a href="https://developers.xsolla.com/user-account-api/user-phone-number/postusersmephone">User Account API Reference</a>
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/update-user-phone-number)
          */
         @JvmStatic
         fun updateCurrentUserPhone(phone: String?, callback: UpdateCurrentUserPhoneCallback) {
@@ -900,7 +862,7 @@ class XLogin private constructor(
          *
          * @param phone       current user's phone
          * @param callback    status callback
-         * @see <a href="https://developers.xsolla.com/user-account-api/user-phone-number/deleteusersmephonephonenumber">User Account API Reference</a>
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/delete-user-phone-number)
          */
         @JvmStatic
         fun deleteCurrentUserPhone(phone: String, callback: DeleteCurrentUserPhoneCallback) {
@@ -930,7 +892,7 @@ class XLogin private constructor(
          * @param sortBy                    condition for sorting the users
          * @param sortOrder                 condition for sorting the list of the users
          * @param callback                  callback with friends' relationships and pagination params
-         * @see [User Account API Reference](https://developers.xsolla.com/user-account-api/user-friends/get-friends)
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-friends/get-users-friends)
          */
         @JvmStatic
         fun getCurrentUserFriends(
@@ -969,7 +931,7 @@ class XLogin private constructor(
          * @param friendXsollaUserId        id of the user to change relationship with
          * @param action                    type of the action
          * @param callback                  callback that indicates the success of failure of an action
-         * @see [User Account API Reference](https://developers.xsolla.com/user-account-api/user-friends/postusersmerelationships)
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-friends/update-users-friends)
          */
         @JvmStatic
         fun updateCurrentUserFriend(
@@ -1003,9 +965,9 @@ class XLogin private constructor(
          * @param userId                    User ID which attributes you want to get. Returns only attributes with the `public` value of the `permission` parameter. If you do not specify it or put your user ID there, it returns only your attributes with any value for the `permission` parameter.
          * @param getReadOnlyAttributes     true for getting read only attributes, false for editable attributes
          * @param callback                  callback with operation response
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/attributes/get-users-read-only-attributes-from-client)
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/attributes/client/get-users-read-only-attributes-from-client)
          *
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/attributes/get-users-attributes-from-client)
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/attributes/client/get-users-attributes-from-client)
          */
         @JvmStatic
         fun getUsersAttributesFromClient(
@@ -1050,7 +1012,7 @@ class XLogin private constructor(
          * @param publisherProjectId        Project ID from Publisher Account which you want to update the value of specified attributes for. If you do not specify it, it updates attributes that are general to all games only.
          * @param removingKeys              List of attributes which you want to delete. If you specify the same attribute in `attributes` parameter, it will not be deleted.
          * @param callback                  callback that indicates the success or failure of an action
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/attributes/update-users-attributes-from-client)
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/attributes/client/update-users-attributes-from-client)
          */
         @JvmStatic
         fun updateUsersAttributesFromClient(
@@ -1085,7 +1047,7 @@ class XLogin private constructor(
          *
          * @param birthday         user's birth date in the 'YYYY-MM-DD' format
          * @param callback         status callback
-         * @see <a href="https://developers.xsolla.com/login-api/methods/users/check-users-age/">Login API Reference</a>
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/check-users-age)
          */
         @JvmStatic
         fun checkUserAge(birthday: String, callback: CheckUserAgeCallback) {
@@ -1116,7 +1078,7 @@ class XLogin private constructor(
          * when the user logs in to the game via a gaming console.
          *
          * @param callback         status callback
-         * @see <a href="https://developers.xsolla.com/login-api/methods/users/create-code-for-linking-accounts">Login API Reference</a>
+         *  @see [Login API Reference](https://developers.xsolla.com/login-api/linking-account/linking/create-code-for-linking-accounts)
          */
         @JvmStatic
         fun createCodeForLinkingAccount(callback: CreateCodeForLinkingAccountCallback) {
