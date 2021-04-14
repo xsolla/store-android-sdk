@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.15.3] - Payments SDK - 2021-04-13
+
+### Fixed
+
+- Redirect while WebView payment flow
+
+### Added
+
+- Library is available in Maven Central
+
+## [0.18.1] - Store SDK - 2021-04-13
+
+### Added
+
+- Library is available in Maven Central
+
+## [1.0.2] - Inventory SDK - 2021-04-13
+
+### Added
+
+- Library is available in Maven Central
+
+## [1.1.5] - Login SDK - 2021-04-13
+
+### Added
+
+- QQ native authentication
+- Facebook SDK updated
+- Library is available in Maven Central
+
+
 ## [1.1.4] - Login SDK - 2021-02-25
 
 ### Fixed
