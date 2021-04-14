@@ -5,29 +5,30 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.xsolla.android.payments.R
 import com.xsolla.android.payments.XPayments
-import kotlinx.android.synthetic.main.xsolla_payments_activity_paystation.*
 
 class ActivityPaystationWebView : ActivityPaystation() {
 
     private lateinit var url: String
+    private lateinit var webView: WebView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.xsolla_payments_activity_paystation)
-
+        webView = findViewById(R.id.webview)
         url = intent.getStringExtra(ARG_URL)!!
 
         configureWebView()
-        webview.loadUrl(url)
+        webView.loadUrl(url)
     }
 
     override fun onBackPressed() {
-        if (webview.canGoBack()) {
-            webview.goBack()
+        if (webView.canGoBack()) {
+            webView.goBack()
         } else {
             finishWithResult(
                     Activity.RESULT_CANCELED,
@@ -38,8 +39,8 @@ class ActivityPaystationWebView : ActivityPaystation() {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun configureWebView() {
-        webview.settings.javaScriptEnabled = true
-        webview.webViewClient = object : WebViewClient() {
+        webView.settings.javaScriptEnabled = true
+        webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(webView: WebView, url: String): Boolean {
                 val urlLower = url.toLowerCase()
 
@@ -56,6 +57,8 @@ class ActivityPaystationWebView : ActivityPaystation() {
                 val uri = Uri.parse(url)
                 if (uri.authority == getString(R.string.xsolla_payments_redirect_host)) {
                     val invoiceId = uri.getQueryParameter("invoice_id")
+                    //hide error message
+                    webView.visibility = View.INVISIBLE
                     finishWithResult(
                             Activity.RESULT_OK,
                             XPayments.Result(XPayments.Status.COMPLETED, invoiceId)
@@ -63,6 +66,7 @@ class ActivityPaystationWebView : ActivityPaystation() {
                 }
                 super.doUpdateVisitedHistory(view, url, isReload)
             }
+
         }
     }
 

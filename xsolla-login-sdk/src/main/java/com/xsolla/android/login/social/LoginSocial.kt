@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentSender
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.Fragment
 import com.auth0.android.jwt.JWT
 import com.facebook.*
@@ -17,10 +18,14 @@ import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
+import com.tencent.connect.common.Constants
 import com.tencent.mm.opensdk.modelbase.BaseResp
 import com.tencent.mm.opensdk.modelmsg.SendAuth
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
+import com.tencent.tauth.IUiListener
+import com.tencent.tauth.Tencent
+import com.tencent.tauth.UiError
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.api.LoginApi
 import com.xsolla.android.login.callback.FinishSocialCallback
@@ -64,8 +69,12 @@ object LoginSocial {
 
     private lateinit var iwxapi: IWXAPI
 
+    private lateinit var tencent: Tencent
+    private lateinit var qqListener: IUiListener
+
     private var facebookAppId: String? = null
     private var googleServerId: String? = null
+    private var qqAppId: String? = null
 
     @JvmStatic
     var wechatAppId: String? = null
@@ -98,6 +107,10 @@ object LoginSocial {
             if (!socialConfig.wechatAppId.isNullOrBlank()) {
                 this.wechatAppId = socialConfig.wechatAppId
                 initWechat(context)
+            }
+            if (!socialConfig.qqAppId.isNullOrBlank()) {
+                this.qqAppId = socialConfig.qqAppId
+                initQq(context)
             }
         }
     }
@@ -170,6 +183,47 @@ object LoginSocial {
         }
     }
 
+    private fun initQq(context: Context) {
+        try {
+            Class.forName("com.tencent.tauth.Tencent")
+            tencent = Tencent.createInstance(qqAppId, context)
+            qqListener = object : IUiListener {
+                override fun onComplete(response: Any) {
+                    response as JSONObject
+                    val accessToken = response.getString("access_token")
+                    getLoginTokenFromSocial(SocialNetwork.QQ, accessToken, withLogout) { t, error ->
+                        if (t == null && error == null) {
+                            finishSocialCallback?.onAuthSuccess()
+                        } else {
+                            finishSocialCallback?.onAuthError(t, error)
+                        }
+                        finishSocialCallback = null
+                        withLogout = false
+                    }
+                }
+
+                override fun onError(uiError: UiError) {
+                    finishSocialCallback?.onAuthError(null, uiError.errorMessage)
+                    finishSocialCallback = null
+                    withLogout = false
+                }
+
+                override fun onCancel() {
+                    finishSocialCallback?.onAuthCancelled()
+                    finishSocialCallback = null
+                    withLogout = false
+                }
+
+                override fun onWarning(code: Int) {
+                    Log.w("XsollaLogin", "QQ warning $code")
+                }
+
+            }
+        } catch (e: ClassNotFoundException) {
+            // QQ SDK isn't bundled, use webview instead
+        }
+    }
+
     fun startSocialAuth(activity: Activity?, fragment: Fragment?, socialNetwork: SocialNetwork, withLogout: Boolean, callback: StartSocialCallback) {
         tryNativeSocialAuth(activity, fragment, socialNetwork, withLogout) { nativeResult ->
             if (nativeResult) {
@@ -232,6 +286,12 @@ object LoginSocial {
                 }
             }
             wechatResult = null
+            return
+        }
+        if (socialNetwork == SocialNetwork.QQ && ::tencent.isInitialized && activityResultRequestCode == Constants.REQUEST_LOGIN) {
+            finishSocialCallback = callback
+            this.withLogout = withLogout
+            Tencent.onActivityResultData(activityResultRequestCode, activityResultCode, activityResultData, qqListener)
             return
         }
         if (activityResultRequestCode == RC_AUTH_GOOGLE && socialNetwork == SocialNetwork.GOOGLE) {
@@ -357,6 +417,11 @@ object LoginSocial {
             }
             return
         }
+        if (socialNetwork == SocialNetwork.QQ && ::tencent.isInitialized) {
+            tencent.login(activity ?: fragment?.activity, "all", qqListener)
+            callback.invoke(true)
+            return
+        }
         callback.invoke(false)
     }
 
@@ -437,9 +502,10 @@ object LoginSocial {
     }
 
     private fun getLoginTokenFromSocial(socialNetwork: SocialNetwork, socialToken: String, withLogout: Boolean, callback: (Throwable?, String?) -> Unit) {
+        val providerName = if (socialNetwork == SocialNetwork.QQ) "qq_mobile" else socialNetwork.providerName
         if (!useOauth) {
             val authUserSocialBody = AuthUserSocialBody(socialToken)
-            loginApi.loginSocial(socialNetwork.providerName, projectId, if (withLogout) "1" else "0", authUserSocialBody)
+            loginApi.loginSocial(providerName, projectId, if (withLogout) "1" else "0", authUserSocialBody)
                     .enqueue(object : Callback<AuthSocialResponse> {
                         override fun onResponse(call: Call<AuthSocialResponse>, response: Response<AuthSocialResponse>) {
                             if (response.isSuccessful) {
@@ -461,7 +527,7 @@ object LoginSocial {
                     })
         } else {
             val oauthGetCodeBySocialTokenBody = OauthGetCodeBySocialTokenBody(socialToken, null)
-            loginApi.oauthGetCodeBySocialToken(socialNetwork.providerName, oauthClientId, UUID.randomUUID().toString(), callbackUrl, "code", "offline", oauthGetCodeBySocialTokenBody)
+            loginApi.oauthGetCodeBySocialToken(providerName, oauthClientId, UUID.randomUUID().toString(), callbackUrl, "code", "offline", oauthGetCodeBySocialTokenBody)
                     .enqueue(object : Callback<OauthGetCodeBySocialTokenResponse> {
                         override fun onResponse(call: Call<OauthGetCodeBySocialTokenResponse>, response: Response<OauthGetCodeBySocialTokenResponse>) {
                             if (response.isSuccessful) {
