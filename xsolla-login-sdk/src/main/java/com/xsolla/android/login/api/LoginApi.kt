@@ -213,15 +213,6 @@ interface LoginApi {
         @Query("scope") scope: String
     ): Call<OauthLinkForSocialAuthResponse>
 
-    @FormUrlEncoded
-    @POST("api/oauth2/cross/{platformProviderName}/login")
-    fun authViaProviderProject(
-        @Path("platformProviderName") platformProviderName: String,
-        @Query("client_id") clientId: Int,
-        @Query("scope") scope: String,
-        @Field("access_token") accessToken: String
-    ): Call<OauthViaProviderProjectResponse>
-
     @POST("/api/oauth2/social/{providerName}/login_with_token")
     fun oauthGetCodeBySocialToken(
         @Path("providerName") providerName: String,
