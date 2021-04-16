@@ -9,7 +9,7 @@ import com.xsolla.android.appcore.databinding.ItemInventoryBinding
 import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
+import com.xsolla.android.store.callbacks.UpdateItemFromCurrentCartCallback
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.ConsumeListener
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
@@ -99,21 +99,19 @@ class InventoryAdapter(
                 val quantity = cartContent?.find { item1 -> item1.sku == item.sku }?.quantity
                         ?: 0
                 // check if there is item in cart, if not - set quantity to 0
-                XStore.updateItemFromCurrentCart(item.sku, quantity + 1, object : XStoreCallback<Void>() {
-                    override fun onSuccess(response: Void?) {
+                XStore.updateItemFromCurrentCart(object : UpdateItemFromCurrentCartCallback {
+                    override fun onSuccess() {
                         vmCart.updateCart()
                         ViewUtils.enable(view)
                         binding.buyAgainButton.visibility = View.GONE
                         //enable button after process are done
                     }
 
-                    override fun onFailure(errorMessage: String?) {
-                        purchaseListener.onFailure(errorMessage!!)
+                    override fun onError(throwable: Throwable?, errorMessage: String?) {
+                        purchaseListener.onFailure(errorMessage ?: throwable?.javaClass?.name ?: "Error")
                         ViewUtils.enable(view)
                     }
-
-
-                })
+                }, item.sku!!, quantity + 1)
             }
         }
 

@@ -16,16 +16,18 @@ import com.xsolla.android.customauth.ui.store.VirtualItemUiEntity
 import com.xsolla.android.customauth.viewmodels.VmBalance
 import com.xsolla.android.customauth.viewmodels.VmCart
 import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
+import com.xsolla.android.store.callbacks.CreateOrderByVirtualCurrencyCallback
+import com.xsolla.android.store.callbacks.UpdateItemFromCurrentCartCallback
 import com.xsolla.android.store.entity.response.common.ExpirationPeriod
 import com.xsolla.android.store.entity.response.common.VirtualPrice
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse
+import java.util.*
 
 class ViAdapter(
-    private val items: List<VirtualItemUiEntity>,
-    private val vmCart: VmCart,
-    private val vmBalance: VmBalance,
-    private val purchaseListener: PurchaseListener
+        private val items: List<VirtualItemUiEntity>,
+        private val vmCart: VmCart,
+        private val vmBalance: VmBalance,
+        private val purchaseListener: PurchaseListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -61,9 +63,9 @@ class ViAdapter(
 }
 
 class ViRealPriceViewHolder(
-    private val vmCart: VmCart,
-    private val purchaseListener: PurchaseListener,
-    view: View
+        private val vmCart: VmCart,
+        private val purchaseListener: PurchaseListener,
+        view: View
 ) : RecyclerView.ViewHolder(view) {
 
     private val binding: ItemViRealPriceBinding = ItemViRealPriceBinding.bind(view)
@@ -118,18 +120,19 @@ class ViRealPriceViewHolder(
             v.isEnabled = false
             val cartContent = vmCart.cartContent.value
             val quantity = cartContent?.find { it.sku == item.sku }?.quantity ?: 0
-            XStore.updateItemFromCurrentCart(item.sku, quantity + 1, object : XStoreCallback<Void>() {
-                override fun onSuccess(response: Void?) {
+            XStore.updateItemFromCurrentCart(object : UpdateItemFromCurrentCartCallback {
+
+                override fun onSuccess() {
                     vmCart.updateCart()
                     purchaseListener.onSuccess()
                     v.isEnabled = true
                 }
 
-                override fun onFailure(errorMessage: String) {
-                    purchaseListener.onFailure(errorMessage)
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    purchaseListener.onFailure(errorMessage ?: throwable?.javaClass?.name ?: "Error")
                     v.isEnabled = true
                 }
-            })
+            }, item.sku!!, quantity + 1)
         }
     }
 
@@ -142,7 +145,7 @@ class ViRealPriceViewHolder(
             sb.append("Expiration: ")
             sb.append(expirationPeriod.value)
             sb.append(' ')
-            sb.append(expirationPeriod.type.name.toLowerCase())
+            sb.append(expirationPeriod.type.name.toLowerCase(Locale.getDefault()))
             if (expirationPeriod.value != 1) {
                 sb.append('s')
             }
@@ -153,9 +156,9 @@ class ViRealPriceViewHolder(
 }
 
 class ViVirtualPriceViewHolder(
-    private val vmBalance: VmBalance,
-    private val purchaseListener: PurchaseListener,
-    view: View
+        private val vmBalance: VmBalance,
+        private val purchaseListener: PurchaseListener,
+        view: View
 ) : RecyclerView.ViewHolder(view) {
 
     private val binding: ItemViVirtualPriceBinding = ItemViVirtualPriceBinding.bind(view)
@@ -222,7 +225,7 @@ class ViVirtualPriceViewHolder(
             sb.append("Expiration: ")
             sb.append(expirationPeriod.value)
             sb.append(' ')
-            sb.append(expirationPeriod.type.name.toLowerCase())
+            sb.append(expirationPeriod.type.name.toLowerCase(Locale.getDefault()))
             if (expirationPeriod.value != 1) {
                 sb.append('s')
             }
@@ -233,18 +236,19 @@ class ViVirtualPriceViewHolder(
     private fun initBuyButton(item: VirtualItemUiEntity, virtualPrice: VirtualPrice) {
         binding.buyButton.setOnClickListener { v ->
             v.isEnabled = false
-            XStore.createOrderByVirtualCurrency(item.sku, virtualPrice.sku, object : XStoreCallback<CreateOrderByVirtualCurrencyResponse?>() {
-                override fun onSuccess(response: CreateOrderByVirtualCurrencyResponse?) {
+            XStore.createOrderByVirtualCurrency(object : CreateOrderByVirtualCurrencyCallback {
+
+                override fun onSuccess(response: CreateOrderByVirtualCurrencyResponse) {
                     vmBalance.updateVirtualBalance()
                     purchaseListener.showMessage("Purchased by Virtual currency")
                     v.isEnabled = true
                 }
 
-                override fun onFailure(errorMessage: String) {
-                    purchaseListener.showMessage(errorMessage)
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    purchaseListener.showMessage(errorMessage ?: throwable?.javaClass?.name ?: "Error")
                     v.isEnabled = true
                 }
-            })
+            }, item.sku!!, virtualPrice.sku!!)
         }
     }
 }

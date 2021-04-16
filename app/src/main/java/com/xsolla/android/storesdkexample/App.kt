@@ -43,5 +43,8 @@ class App: Application() {
 
             XLogin.init(this, loginConfig)
         }
+
+
     }
+
 }

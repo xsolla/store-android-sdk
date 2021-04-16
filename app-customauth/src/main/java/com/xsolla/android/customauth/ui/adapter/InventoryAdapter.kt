@@ -15,7 +15,7 @@ import com.xsolla.android.customauth.viewmodels.VmCart
 import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
+import com.xsolla.android.store.callbacks.UpdateItemFromCurrentCartCallback
 
 class InventoryAdapter(
         private var subscriptions: List<SubscriptionsResponse.Item>? = null,
@@ -78,23 +78,23 @@ class InventoryViewHolder(inflater: LayoutInflater,
 
     private fun buyAgainExpiredSubscription(item: InventoryResponse.Item) {
         binding.buyAgainButton.visibility = View.VISIBLE
-        binding.buyAgainButton.setOnClickListener { view ->
+        binding.buyAgainButton.setOnClickListener {
             val cartContent = vmCart.cartContent.value
             val quantity = cartContent?.find { item1 -> item1.sku == item.sku }?.quantity
                     ?: 0
             // check if there is item in cart, if not - set quantity to 0
-            XStore.updateItemFromCurrentCart(item.sku, quantity + 1, object : XStoreCallback<Void>() {
-                override fun onSuccess(response: Void?) {
+            XStore.updateItemFromCurrentCart(object : UpdateItemFromCurrentCartCallback {
+
+                override fun onSuccess() {
                     vmCart.updateCart()
                     binding.buyAgainButton.visibility = View.GONE
-
                 }
 
-                override fun onFailure(errorMessage: String?) {
-                    purchaseListener.onFailure(errorMessage!!)
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    purchaseListener.onFailure(errorMessage ?: throwable?.javaClass?.name ?: "Error")
                 }
 
-            })
+            }, item.sku!!, quantity + 1)
         }
     }
 }

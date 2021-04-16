@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.xsolla.android.appcore.SingleLiveEvent
 import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
+import com.xsolla.android.store.callbacks.*
 import com.xsolla.android.store.entity.request.payment.PaymentOptions
 import com.xsolla.android.store.entity.request.payment.PaymentProjectSettings
 import com.xsolla.android.store.entity.request.payment.UiProjectSetting
@@ -26,16 +26,17 @@ class VmCart(application: Application) : AndroidViewModel(application) {
     val orderId = SingleLiveEvent<Int>()
 
     fun updateCart(onUpdate: ((String) -> Unit)? = null) {
-        XStore.getCurrentCart(object : XStoreCallback<CartResponse>() {
+        XStore.getCurrentCart(object : GetCurrentUserCartCallback {
             override fun onSuccess(response: CartResponse) {
                 cartContent.value = response.items
                 cartPrice.value = response.price
             }
 
-            override fun onFailure(errorMessage: String) {
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
                 cartContent.value = listOf()
-                onUpdate?.invoke(errorMessage)
+                onUpdate?.invoke(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
+
         })
     }
 
@@ -43,16 +44,17 @@ class VmCart(application: Application) : AndroidViewModel(application) {
         val currentQuantity = cartContent.value?.find { it.sku == item.sku }?.quantity
         currentQuantity?.let {
             val newQuantity = it + diff
-            XStore.updateItemFromCurrentCart(item.sku, newQuantity, object : XStoreCallback<Void?>() {
-                override fun onSuccess(response: Void?) {
+            XStore.updateItemFromCurrentCart(object : UpdateItemFromCurrentCartCallback {
+
+                override fun onSuccess() {
                     updateCart()
                     onChange.invoke(if (newQuantity == 0L) "Item removed from cart" else "Item's quantity changed")
                 }
 
-                override fun onFailure(errorMessage: String) {
-                    onChange.invoke(errorMessage)
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    onChange.invoke(errorMessage ?: throwable?.javaClass?.name ?: "Error")
                 }
-            })
+            }, item.sku!!, newQuantity)
         }
     }
 
@@ -61,64 +63,69 @@ class VmCart(application: Application) : AndroidViewModel(application) {
                 isSandbox = BuildConfig.IS_SANDBOX,
                 settings = PaymentProjectSettings(UiProjectSetting(theme = "default_dark"))
         )
-        XStore.createOrderFromCurrentCart(paymentOptions, object : XStoreCallback<CreateOrderResponse>() {
+        XStore.createOrderFromCurrentCart(object : CreateOrderCallback {
             override fun onSuccess(response: CreateOrderResponse) {
                 orderId.value = response.orderId
                 paymentToken.value = response.token
             }
 
-            override fun onFailure(errorMessage: String) {
-                onCreateOrder.invoke(errorMessage)
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                onCreateOrder.invoke(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
-        })
+
+        }, paymentOptions)
     }
 
     fun checkOrder(orderId: Int, onCheckOrder: (String) -> Unit) {
-        XStore.getOrder(orderId.toString(), object : XStoreCallback<OrderResponse>() {
+        XStore.getOrder(object : GetOrderCallback {
             override fun onSuccess(response: OrderResponse) {
                 if (response.status == OrderResponse.Status.DONE) {
-                    XStore.clearCurrentCart(object : XStoreCallback<Void?>() {
-                        override fun onSuccess(response: Void?) {
+                    XStore.clearCurrentCart(object : ClearCurrentCartCallback {
+                        override fun onSuccess() {
                             updateCart()
                         }
-                        override fun onFailure(errorMessage: String) {
-                            onCheckOrder.invoke(errorMessage)
+
+                        override fun onError(throwable: Throwable?, errorMessage: String?) {
+                            onCheckOrder.invoke(errorMessage ?: throwable?.javaClass?.name ?: "Error")
                         }
                     })
                 }
             }
 
-            override fun onFailure(errorMessage: String) {
-                onCheckOrder.invoke(errorMessage)
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                onCheckOrder.invoke(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
-        })
+
+        }, orderId.toString())
     }
 
     fun clearCart(onClear: (String) -> Unit) {
-        XStore.clearCurrentCart(object : XStoreCallback<Void>() {
-            override fun onSuccess(response: Void?) {
+        XStore.clearCurrentCart(object : ClearCurrentCartCallback {
+
+            override fun onSuccess() {
                 updateCart()
                 onClear.invoke(getApplication<App>().getString(R.string.cart_message_empty))
             }
 
-            override fun onFailure(errorMessage: String) {
-                onClear.invoke(errorMessage)
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                onClear.invoke(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
         })
     }
 
     fun redeemPromocode(promocode: String, onSuccess: () -> Unit, onError: (errorMessage: String) -> Unit) {
-        XStore.redeemPromocode(promocode, object : XStoreCallback<CartResponse>() {
+        XStore.redeemPromocode(object : RedeemPromocodeCallback {
             override fun onSuccess(response: CartResponse) {
                 cartContent.value = response.items
                 cartPrice.value = response.price
                 onSuccess()
             }
 
-            override fun onFailure(errorMessage: String) {
-                onError(errorMessage)
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                onError(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
-        })
+
+        }, promocode)
     }
 
 }
