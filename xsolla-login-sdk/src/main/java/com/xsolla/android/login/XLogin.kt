@@ -72,7 +72,7 @@ class XLogin private constructor(
 
         private fun getInstance(): XLogin {
             if (instance == null) {
-                throw IllegalStateException("XLogin SDK not initialized. Call \"XLogin.init()\" in MainActivity.onCreate()")
+                throw IllegalStateException("Login SDK not initialized. Call \"XLogin.init()\" in MainActivity.onCreate()")
             }
             return instance!!
         }

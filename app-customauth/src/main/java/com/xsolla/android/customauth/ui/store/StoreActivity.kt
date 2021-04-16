@@ -45,7 +45,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
         super.onCreate(savedInstanceState)
         setSupportActionBar(binding.appbar.mainToolbar)
 
-        XStore.init(BuildConfig.PROJECT_ID, preferences.token)
+        XStore.init(BuildConfig.PROJECT_ID, preferences.token!!)
         XInventory.init(BuildConfig.PROJECT_ID, preferences.token!!)
         balanceViewModel.updateVirtualBalance()
 
