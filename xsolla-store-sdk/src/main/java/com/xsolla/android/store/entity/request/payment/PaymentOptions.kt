@@ -11,9 +11,51 @@ data class PaymentOptions(
     val customParameters: CustomParameters? = null
 )
 
-data class PaymentProjectSettings(val ui: UiProjectSetting)
+data class PaymentProjectSettings(
+        val ui: UiProjectSetting,
+        val paymentMethod: Int,
+        val returnUrl: String,
+        val redirectPolicy: SettingsRedirectPolicy
+        )
 
-data class UiProjectSetting(val theme: String = "default")
+data class SettingsRedirectPolicy(
+        val redirectConditions: String,
+        val delay: Int,
+        val statusForManualRedirection: String,
+        val redirectButtonCaption: String
+)
+
+data class UiProjectSetting(
+        val size: String,
+        val theme: String = "default",
+        val version: String = "mobile",
+        val desktop: DesktopSettings,
+        val mobile: MobileSettings,
+        val licenseUrl: String,
+        val mode: String,
+        val userAccount: UserAccountDetails
+        )
+
+data class MobileSettings (
+        val mode: String = "saved_accounts",
+        val header: UiMobileProjectSettingHeader,
+        val footer: UiDesktopProjectSettingFooter
+        )
+
+class UiDesktopProjectSettingFooter (val isVisible: Boolean)
+
+class UiMobileProjectSettingHeader (val closeButton: Boolean)
+
+data class DesktopSettings(val header: UiDesktopProjectSettingHeader)
+
+data class UiDesktopProjectSettingHeader(
+        val isVisible: Boolean,
+        val visibleLogo: Boolean,
+        val visibleName: Boolean,
+        val visiblePurchase: Boolean,
+        val type: String,
+        val closeButton: Boolean
+        )
 
 class CustomParameters private constructor(private val parameters: Map<String, Value>) {
     class Builder {
