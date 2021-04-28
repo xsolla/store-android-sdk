@@ -60,8 +60,8 @@ class VmCart(application: Application) : AndroidViewModel(application) {
 
     fun createOrder(onCreateOrder: (String) -> Unit) {
         val paymentOptions = PaymentOptions(
-                isSandbox = BuildConfig.IS_SANDBOX,
-                settings = PaymentProjectSettings(UiProjectSetting(theme = "default_dark"))
+                isSandbox = BuildConfig.IS_SANDBOX
+
         )
         XStore.createOrderFromCurrentCart(object : CreateOrderCallback {
             override fun onSuccess(response: CreateOrderResponse) {

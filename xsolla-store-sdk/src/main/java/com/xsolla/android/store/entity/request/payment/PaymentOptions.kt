@@ -8,32 +8,36 @@ data class PaymentOptions(
     val locale: String = "en",
     val isSandbox: Boolean = true,
     val settings: PaymentProjectSettings? = null,
-    val customParameters: CustomParameters? = null
+    val customParameters: CustomParameters? = null,
+    val shippingData: PaymentShippingData? = null,
+    val shippingMethod: String? = null
 )
+
+
 
 data class PaymentProjectSettings(
         val ui: UiProjectSetting,
-        val paymentMethod: Int,
-        val returnUrl: String,
-        val redirectPolicy: SettingsRedirectPolicy
+        val paymentMethod: Int =1,
+        val returnUrl: String? = null,
+        val redirectPolicy: SettingsRedirectPolicy? = null
         )
 
 data class SettingsRedirectPolicy(
-        val redirectConditions: String,
-        val delay: Int,
-        val statusForManualRedirection: String,
-        val redirectButtonCaption: String
+        val redirectConditions: String = "none",
+        val delay: Int = 0,
+        val statusForManualRedirection: String = "none",
+        val redirectButtonCaption: String = "Finish"
 )
 
 data class UiProjectSetting(
-        val size: String,
-        val theme: String = "default",
+        val size: String ="medium",
+        val theme: String = "default_dark",
         val version: String = "mobile",
-        val desktop: DesktopSettings,
-        val mobile: MobileSettings,
-        val licenseUrl: String,
-        val mode: String,
-        val userAccount: UserAccountDetails
+        val desktop: DesktopSettings? =null,
+        val mobile: MobileSettings? = null,
+        val licenseUrl: String?= null,
+        val mode: String ="user_account",
+        val userAccount: UserAccountDetails? = null
         )
 
 data class MobileSettings (
@@ -42,9 +46,9 @@ data class MobileSettings (
         val footer: UiDesktopProjectSettingFooter
         )
 
-class UiDesktopProjectSettingFooter (val isVisible: Boolean)
+class UiDesktopProjectSettingFooter (val isVisible: Boolean = true)
 
-class UiMobileProjectSettingHeader (val closeButton: Boolean)
+class UiMobileProjectSettingHeader (val closeButton: Boolean = false)
 
 data class DesktopSettings(val header: UiDesktopProjectSettingHeader)
 
@@ -91,7 +95,6 @@ class CustomParameters private constructor(private val parameters: Map<String, V
                 this.addProperty(key, value)
             }
         }
-
     private fun JsonObject.addProperty(key: String, value: Value) =
         when (value) {
             is Value.String -> {
