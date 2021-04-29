@@ -7,8 +7,6 @@ import com.xsolla.android.appcore.SingleLiveEvent
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.callbacks.*
 import com.xsolla.android.store.entity.request.payment.PaymentOptions
-import com.xsolla.android.store.entity.request.payment.PaymentProjectSettings
-import com.xsolla.android.store.entity.request.payment.UiProjectSetting
 import com.xsolla.android.store.entity.response.cart.CartResponse
 import com.xsolla.android.store.entity.response.common.Price
 import com.xsolla.android.store.entity.response.order.OrderResponse
@@ -60,7 +58,7 @@ class VmCart(application: Application) : AndroidViewModel(application) {
 
     fun createOrder(onCreateOrder: (String) -> Unit) {
         val paymentOptions = PaymentOptions(
-                isSandbox = BuildConfig.IS_SANDBOX
+            isSandbox = BuildConfig.IS_SANDBOX
 
         )
         XStore.createOrderFromCurrentCart(object : CreateOrderCallback {
@@ -86,7 +84,9 @@ class VmCart(application: Application) : AndroidViewModel(application) {
                         }
 
                         override fun onError(throwable: Throwable?, errorMessage: String?) {
-                            onCheckOrder.invoke(errorMessage ?: throwable?.javaClass?.name ?: "Error")
+                            onCheckOrder.invoke(
+                                errorMessage ?: throwable?.javaClass?.name ?: "Error"
+                            )
                         }
                     })
                 }
@@ -113,7 +113,11 @@ class VmCart(application: Application) : AndroidViewModel(application) {
         })
     }
 
-    fun redeemPromocode(promocode: String, onSuccess: () -> Unit, onError: (errorMessage: String) -> Unit) {
+    fun redeemPromocode(
+        promocode: String,
+        onSuccess: () -> Unit,
+        onError: (errorMessage: String) -> Unit
+    ) {
         XStore.redeemPromocode(object : RedeemPromocodeCallback {
             override fun onSuccess(response: CartResponse) {
                 cartContent.value = response.items
