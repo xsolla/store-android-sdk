@@ -8,9 +8,7 @@ data class PaymentOptions(
     val locale: String = "en",
     val isSandbox: Boolean = true,
     val settings: PaymentProjectSettings? = null,
-    val customParameters: CustomParameters? = null,
-    val shippingData: PaymentShippingData? = null,
-    val shippingMethod: String? = null
+    val customParameters: CustomParameters? = null
 )
 
 
