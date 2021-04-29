@@ -63,13 +63,12 @@ class XStore private constructor(
                     .addHeader("X-ENGINE-V", Build.VERSION.RELEASE)
                     .addHeader("X-SDK", "STORE")
                     .addHeader("X-SDK-V", BuildConfig.VERSION_NAME)
-                    .url(
-                        originalRequest.url().newBuilder()
-                            .addQueryParameter("engine", "android")
-                            .addQueryParameter("engine_v", Build.VERSION.RELEASE)
-                            .addQueryParameter("sdk", "store")
-                            .addQueryParameter("sdk_v", BuildConfig.VERSION_NAME)
-                            .build()
+                    .url(originalRequest.url().newBuilder()
+                        .addQueryParameter("engine", "android")
+                        .addQueryParameter("engine_v", Build.VERSION.RELEASE)
+                        .addQueryParameter("sdk", "store")
+                        .addQueryParameter("sdk_v", BuildConfig.VERSION_NAME)
+                        .build()
                     )
                 val newRequest = builder.build()
                 chain.proceed(newRequest)
@@ -103,25 +102,14 @@ class XStore private constructor(
          */
         @JvmStatic
         @JvmOverloads
-        fun getVirtualItems(
-            callback: GetVirtualItemsCallback,
-            limit: Int = 50,
-            offset: Int = 0,
-            locale: String = "en",
-            additionalFields: List<String>? = listOf()
-        ) {
-            getInstance().storeApi.getVirtualItems(
-                getInstance().projectId,
-                limit,
-                offset,
-                locale,
-                additionalFields
-            )
+        fun getVirtualItems(callback: GetVirtualItemsCallback,
+                            limit: Int = 50,
+                            offset: Int = 0,
+                            locale: String = "en",
+                            additionalFields: List<String>? = listOf()) {
+            getInstance().storeApi.getVirtualItems(getInstance().projectId, limit, offset, locale, additionalFields)
                 .enqueue(object : Callback<VirtualItemsResponse> {
-                    override fun onResponse(
-                        call: Call<VirtualItemsResponse>,
-                        response: Response<VirtualItemsResponse>
-                    ) {
+                    override fun onResponse(call: Call<VirtualItemsResponse>, response: Response<VirtualItemsResponse>) {
                         if (response.isSuccessful) {
                             val virtualItemsResponse = response.body()
                             if (virtualItemsResponse != null) {
@@ -152,25 +140,14 @@ class XStore private constructor(
          */
         @JvmStatic
         @JvmOverloads
-        fun getVirtualCurrency(
-            callback: GetVirtualCurrencyCallback,
-            limit: Int = 50,
-            offset: Int = 0,
-            locale: String = "en",
-            additionalFields: List<String> = listOf()
-        ) {
-            getInstance().storeApi.getVirtualCurrency(
-                getInstance().projectId,
-                limit,
-                offset,
-                locale,
-                additionalFields
-            )
+        fun getVirtualCurrency(callback: GetVirtualCurrencyCallback,
+                               limit: Int = 50,
+                               offset: Int = 0,
+                               locale: String = "en",
+                               additionalFields: List<String> = listOf()) {
+            getInstance().storeApi.getVirtualCurrency(getInstance().projectId, limit, offset, locale, additionalFields)
                 .enqueue(object : Callback<VirtualCurrencyResponse> {
-                    override fun onResponse(
-                        call: Call<VirtualCurrencyResponse>,
-                        response: Response<VirtualCurrencyResponse>
-                    ) {
+                    override fun onResponse(call: Call<VirtualCurrencyResponse>, response: Response<VirtualCurrencyResponse>) {
                         if (response.isSuccessful) {
                             val virtualCurrencyResponse = response.body()
                             if (virtualCurrencyResponse != null) {
@@ -202,25 +179,14 @@ class XStore private constructor(
          */
         @JvmStatic
         @JvmOverloads
-        fun getVirtualCurrencyPackage(
-            callback: GetVirtualCurrencyPackageCallback,
-            limit: Int = 50,
-            offset: Int = 0,
-            locale: String = "en",
-            additionalFields: List<String>? = listOf()
-        ) {
-            getInstance().storeApi.getVirtualCurrencyPackage(
-                getInstance().projectId,
-                limit,
-                offset,
-                locale,
-                additionalFields
-            )
+        fun getVirtualCurrencyPackage(callback: GetVirtualCurrencyPackageCallback,
+                                      limit: Int = 50,
+                                      offset: Int = 0,
+                                      locale: String = "en",
+                                      additionalFields: List<String>? = listOf()) {
+            getInstance().storeApi.getVirtualCurrencyPackage(getInstance().projectId, limit, offset, locale, additionalFields)
                 .enqueue(object : Callback<VirtualCurrencyPackageResponse> {
-                    override fun onResponse(
-                        call: Call<VirtualCurrencyPackageResponse>,
-                        response: Response<VirtualCurrencyPackageResponse>
-                    ) {
+                    override fun onResponse(call: Call<VirtualCurrencyPackageResponse>, response: Response<VirtualCurrencyPackageResponse>) {
                         if (response.isSuccessful) {
                             val virtualCurrencyPackageResponse = response.body()
                             if (virtualCurrencyPackageResponse != null) {
@@ -233,10 +199,7 @@ class XStore private constructor(
                         }
                     }
 
-                    override fun onFailure(
-                        call: Call<VirtualCurrencyPackageResponse>,
-                        t: Throwable
-                    ) {
+                    override fun onFailure(call: Call<VirtualCurrencyPackageResponse>, t: Throwable) {
                         callback.onError(t, null)
                     }
                 })
@@ -255,27 +218,15 @@ class XStore private constructor(
          */
         @JvmStatic
         @JvmOverloads
-        fun getItemsBySpecifiedGroup(
-            callback: GetVirtualItemsByGroupCallback,
-            externalId: String = "all",
-            limit: Int = 50,
-            offset: Int = 0,
-            locale: String = "en",
-            additionalFields: List<String> = listOf()
-        ) {
-            getInstance().storeApi.getItemsBySpecifiedGroup(
-                getInstance().projectId,
-                externalId,
-                limit,
-                offset,
-                locale,
-                additionalFields
-            )
+        fun getItemsBySpecifiedGroup(callback: GetVirtualItemsByGroupCallback,
+                                     externalId: String = "all",
+                                     limit: Int = 50,
+                                     offset: Int = 0,
+                                     locale: String = "en",
+                                     additionalFields: List<String> = listOf()) {
+            getInstance().storeApi.getItemsBySpecifiedGroup(getInstance().projectId, externalId, limit, offset, locale, additionalFields)
                 .enqueue(object : Callback<VirtualItemsResponse> {
-                    override fun onResponse(
-                        call: Call<VirtualItemsResponse>,
-                        response: Response<VirtualItemsResponse>
-                    ) {
+                    override fun onResponse(call: Call<VirtualItemsResponse>, response: Response<VirtualItemsResponse>) {
                         if (response.isSuccessful) {
                             val virtualItemsByGroupResponse = response.body()
                             if (virtualItemsByGroupResponse != null) {
@@ -307,25 +258,14 @@ class XStore private constructor(
          */
         @JvmStatic
         @JvmOverloads
-        fun getPhysicalItems(
-            callback: GetPhysicalItemsCallback,
-            limit: Int = 50,
-            offset: Int = 0,
-            locale: String = "en",
-            additionalFields: List<String> = listOf()
-        ) {
-            getInstance().storeApi.getPhysicalItems(
-                getInstance().projectId,
-                limit,
-                offset,
-                locale,
-                additionalFields
-            )
+        fun getPhysicalItems(callback: GetPhysicalItemsCallback,
+                             limit: Int = 50,
+                             offset: Int = 0,
+                             locale: String = "en",
+                             additionalFields: List<String> = listOf()) {
+            getInstance().storeApi.getPhysicalItems(getInstance().projectId, limit, offset, locale, additionalFields)
                 .enqueue(object : Callback<PhysicalItemsResponse> {
-                    override fun onResponse(
-                        call: Call<PhysicalItemsResponse>,
-                        response: Response<PhysicalItemsResponse>
-                    ) {
+                    override fun onResponse(call: Call<PhysicalItemsResponse>, response: Response<PhysicalItemsResponse>) {
                         if (response.isSuccessful) {
                             val physicalItemsResponse = response.body()
                             if (physicalItemsResponse != null) {
@@ -356,18 +296,13 @@ class XStore private constructor(
          */
         @JvmStatic
         @JvmOverloads
-        fun getCartById(
-            callback: GetCartByIdCallback,
-            cartId: String,
-            currency: String = "USD",
-            locale: String = "en"
-        ) {
+        fun getCartById(callback: GetCartByIdCallback,
+                        cartId: String,
+                        currency: String = "USD",
+                        locale: String = "en") {
             getInstance().storeApi.getCartById(getInstance().projectId, cartId, currency, locale)
                 .enqueue(object : Callback<CartResponse> {
-                    override fun onResponse(
-                        call: Call<CartResponse>,
-                        response: Response<CartResponse>
-                    ) {
+                    override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
                         if (response.isSuccessful) {
                             val cartResponse = response.body()
                             if (cartResponse != null) {
@@ -396,17 +331,12 @@ class XStore private constructor(
          */
         @JvmStatic
         @JvmOverloads
-        fun getCurrentCart(
-            callback: GetCurrentUserCartCallback,
-            currency: String = "USD",
-            locale: String = "en"
-        ) {
+        fun getCurrentCart(callback: GetCurrentUserCartCallback,
+                           currency: String = "USD",
+                           locale: String = "en") {
             getInstance().storeApi.getCurrentUserCart(getInstance().projectId, currency, locale)
                 .enqueue(object : Callback<CartResponse> {
-                    override fun onResponse(
-                        call: Call<CartResponse>,
-                        response: Response<CartResponse>
-                    ) {
+                    override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
                         if (response.isSuccessful) {
                             val cartResponse = response.body()
                             if (cartResponse != null) {
@@ -433,10 +363,8 @@ class XStore private constructor(
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/cart-clear-by-id)
          */
         @JvmStatic
-        fun clearCartById(
-            callback: ClearCartByIdCallback,
-            cartId: String
-        ) {
+        fun clearCartById(callback: ClearCartByIdCallback,
+                          cartId: String) {
             getInstance().storeApi.clearCartById(getInstance().projectId, cartId)
                 .enqueue(object : Callback<Void?> {
                     override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
@@ -487,19 +415,12 @@ class XStore private constructor(
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/put-item-by-cart-id/)
          */
         @JvmStatic
-        fun updateItemFromCartByCartId(
-            callback: UpdateItemFromCartByCartIdCallback,
-            cartId: String,
-            itemSku: String,
-            quantity: Long
-        ) {
+        fun updateItemFromCartByCartId(callback: UpdateItemFromCartByCartIdCallback,
+                                       cartId: String,
+                                       itemSku: String,
+                                       quantity: Long) {
             val body = UpdateItemBody(quantity)
-            getInstance().storeApi.updateItemFromCartByCartId(
-                getInstance().projectId,
-                cartId,
-                itemSku,
-                body
-            )
+            getInstance().storeApi.updateItemFromCartByCartId(getInstance().projectId, cartId, itemSku, body)
                 .enqueue(object : Callback<Void?> {
                     override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
                         if (response.isSuccessful) {
@@ -524,11 +445,9 @@ class XStore private constructor(
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/put-item/)
          */
         @JvmStatic
-        fun updateItemFromCurrentCart(
-            callback: UpdateItemFromCurrentCartCallback,
-            itemSku: String,
-            quantity: Long
-        ) {
+        fun updateItemFromCurrentCart(callback: UpdateItemFromCurrentCartCallback,
+                                      itemSku: String,
+                                      quantity: Long) {
             val body = UpdateItemBody(quantity)
             getInstance().storeApi.updateItemFromCurrentCart(getInstance().projectId, itemSku, body)
                 .enqueue(object : Callback<Void?> {
@@ -555,16 +474,10 @@ class XStore private constructor(
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/delete-item-by-cart-id/)
          */
         @JvmStatic
-        fun deleteItemFromCartByCartId(
-            callback: DeleteItemFromCartByIdCallback,
-            cartId: String,
-            itemSku: String
-        ) {
-            getInstance().storeApi.deleteItemFromCartByCartId(
-                getInstance().projectId,
-                cartId,
-                itemSku
-            )
+        fun deleteItemFromCartByCartId(callback: DeleteItemFromCartByIdCallback,
+                                       cartId: String,
+                                       itemSku: String) {
+            getInstance().storeApi.deleteItemFromCartByCartId(getInstance().projectId, cartId, itemSku)
                 .enqueue(object : Callback<Void?> {
                     override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
                         if (response.isSuccessful) {
@@ -588,10 +501,8 @@ class XStore private constructor(
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/delete-item/)
          */
         @JvmStatic
-        fun deleteItemFromCurrentCart(
-            callback: DeleteItemFromCurrentCartCallback,
-            itemSku: String
-        ) {
+        fun deleteItemFromCurrentCart(callback: DeleteItemFromCurrentCartCallback,
+                                      itemSku: String) {
             getInstance().storeApi.deleteItemFromCurrentCart(getInstance().projectId, itemSku)
                 .enqueue(object : Callback<Void?> {
                     override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
@@ -617,17 +528,12 @@ class XStore private constructor(
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/cart-fill/)
          */
         @JvmStatic
-        fun fillCurrentCartWithItems(
-            callback: FillCartWithItemsCallback,
-            items: List<FillCartItem>
-        ) {
+        fun fillCurrentCartWithItems(callback: FillCartWithItemsCallback,
+                                     items: List<FillCartItem>) {
             val body = FillCartWithItemsRequestBody(items)
             getInstance().storeApi.fillCartWithItems(getInstance().projectId, body)
                 .enqueue(object : Callback<CartResponse> {
-                    override fun onResponse(
-                        call: Call<CartResponse>,
-                        response: Response<CartResponse>
-                    ) {
+                    override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
                         if (response.isSuccessful) {
                             val cartResponse = response.body()
                             if (cartResponse != null) {
@@ -656,18 +562,13 @@ class XStore private constructor(
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/cart-fill-by-id/)
          */
         @JvmStatic
-        fun fillCartByIdWithItems(
-            callback: FillSpecificCartWithItemsCallback,
-            cartId: String,
-            items: List<FillCartItem>
-        ) {
+        fun fillCartByIdWithItems(callback: FillSpecificCartWithItemsCallback,
+                                  cartId: String,
+                                  items: List<FillCartItem>) {
             val body = FillCartWithItemsRequestBody(items)
             getInstance().storeApi.fillSpecificCartWithItems(getInstance().projectId, cartId, body)
                 .enqueue(object : Callback<CartResponse> {
-                    override fun onResponse(
-                        call: Call<CartResponse>,
-                        response: Response<CartResponse>
-                    ) {
+                    override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
                         if (response.isSuccessful) {
                             val cartResponse = response.body()
                             if (cartResponse != null) {
@@ -699,10 +600,7 @@ class XStore private constructor(
         fun getItemsGroups(callback: GetItemsGroupsCallback) {
             getInstance().storeApi.getItemsGroups(getInstance().projectId)
                 .enqueue(object : Callback<ItemsGroupsResponse> {
-                    override fun onResponse(
-                        call: Call<ItemsGroupsResponse>,
-                        response: Response<ItemsGroupsResponse>
-                    ) {
+                    override fun onResponse(call: Call<ItemsGroupsResponse>, response: Response<ItemsGroupsResponse>) {
                         if (response.isSuccessful) {
                             val itemsGroupsResponse = response.body()
                             if (itemsGroupsResponse != null) {
@@ -729,16 +627,11 @@ class XStore private constructor(
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/order/get-order/)
          */
         @JvmStatic
-        fun getOrder(
-            callback: GetOrderCallback,
-            orderId: String
-        ) {
+        fun getOrder(callback: GetOrderCallback,
+                     orderId: String) {
             getInstance().storeApi.getOrder(getInstance().projectId, orderId)
                 .enqueue(object : Callback<OrderResponse> {
-                    override fun onResponse(
-                        call: Call<OrderResponse>,
-                        response: Response<OrderResponse>
-                    ) {
+                    override fun onResponse(call: Call<OrderResponse>, response: Response<OrderResponse>) {
                         if (response.isSuccessful) {
                             val orderResponse = response.body()
                             if (orderResponse != null) {
@@ -767,18 +660,13 @@ class XStore private constructor(
          */
         @JvmStatic
         @JvmOverloads
-        fun createOrderFromCartById(
-            callback: CreateOrderCallback,
-            cartId: String,
-            options: PaymentOptions? = null
-        ) {
+        fun createOrderFromCartById(callback: CreateOrderCallback,
+                                    cartId: String,
+                                    options: PaymentOptions? = null) {
             val body = CreateOrderRequestBody(options)
             getInstance().storeApi.createOrderFromCartById(getInstance().projectId, cartId, body)
                 .enqueue(object : Callback<CreateOrderResponse> {
-                    override fun onResponse(
-                        call: Call<CreateOrderResponse>,
-                        response: Response<CreateOrderResponse>
-                    ) {
+                    override fun onResponse(call: Call<CreateOrderResponse>, response: Response<CreateOrderResponse>) {
                         if (response.isSuccessful) {
                             val createOrderResponse = response.body()
                             if (createOrderResponse != null) {
@@ -806,17 +694,12 @@ class XStore private constructor(
          */
         @JvmStatic
         @JvmOverloads
-        fun createOrderFromCurrentCart(
-            callback: CreateOrderCallback,
-            options: PaymentOptions? = null
-        ) {
+        fun createOrderFromCurrentCart(callback: CreateOrderCallback,
+                                       options: PaymentOptions? = null) {
             val body = CreateOrderRequestBody(options)
             getInstance().storeApi.createOrderFromCurrentCart(getInstance().projectId, body)
                 .enqueue(object : Callback<CreateOrderResponse> {
-                    override fun onResponse(
-                        call: Call<CreateOrderResponse>,
-                        response: Response<CreateOrderResponse>
-                    ) {
+                    override fun onResponse(call: Call<CreateOrderResponse>, response: Response<CreateOrderResponse>) {
                         if (response.isSuccessful) {
                             val cartResponse = response.body()
                             if (cartResponse != null) {
@@ -845,18 +728,13 @@ class XStore private constructor(
          */
         @JvmStatic
         @JvmOverloads
-        fun createOrderByItemSku(
-            callback: CreateOrderCallback,
-            itemSku: String,
-            options: PaymentOptions? = null
-        ) {
+        fun createOrderByItemSku(callback: CreateOrderCallback,
+                                 itemSku: String,
+                                 options: PaymentOptions? = null) {
             val body = CreateOrderRequestBody(options)
             getInstance().storeApi.createOrderByItemSku(getInstance().projectId, itemSku, body)
                 .enqueue(object : Callback<CreateOrderResponse> {
-                    override fun onResponse(
-                        call: Call<CreateOrderResponse>,
-                        response: Response<CreateOrderResponse>
-                    ) {
+                    override fun onResponse(call: Call<CreateOrderResponse>, response: Response<CreateOrderResponse>) {
                         if (response.isSuccessful) {
                             val createOrderResponse = response.body()
                             if (createOrderResponse != null) {
@@ -884,23 +762,13 @@ class XStore private constructor(
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/virtual-items-currency/virtual-payment/create-order-with-item-for-virtual-currency/)
          */
         @JvmStatic
-        fun createOrderByVirtualCurrency(
-            callback: CreateOrderByVirtualCurrencyCallback,
-            itemSku: String,
-            virtualCurrencySku: String
-        ) {
+        fun createOrderByVirtualCurrency(callback: CreateOrderByVirtualCurrencyCallback,
+                                         itemSku: String,
+                                         virtualCurrencySku: String) {
             // TODO: 2/17/2021 Add Platform @Query parameter
-            getInstance().storeApi.createOrderByVirtualCurrency(
-                getInstance().projectId,
-                itemSku,
-                virtualCurrencySku,
-                "android_standalone"
-            )
+            getInstance().storeApi.createOrderByVirtualCurrency(getInstance().projectId, itemSku, virtualCurrencySku, "android_standalone")
                 .enqueue(object : Callback<CreateOrderByVirtualCurrencyResponse> {
-                    override fun onResponse(
-                        call: Call<CreateOrderByVirtualCurrencyResponse>,
-                        response: Response<CreateOrderByVirtualCurrencyResponse>
-                    ) {
+                    override fun onResponse(call: Call<CreateOrderByVirtualCurrencyResponse>, response: Response<CreateOrderByVirtualCurrencyResponse>) {
                         if (response.isSuccessful) {
                             val createOrderByVirtualCurrencyResponse = response.body()
                             if (createOrderByVirtualCurrencyResponse != null) {
@@ -913,10 +781,7 @@ class XStore private constructor(
                         }
                     }
 
-                    override fun onFailure(
-                        call: Call<CreateOrderByVirtualCurrencyResponse>,
-                        t: Throwable
-                    ) {
+                    override fun onFailure(call: Call<CreateOrderByVirtualCurrencyResponse>, t: Throwable) {
                         callback.onError(t, null)
                     }
                 })
@@ -932,19 +797,14 @@ class XStore private constructor(
          */
         @JvmStatic
         @JvmOverloads
-        fun redeemCoupon(
-            callback: RedeemCouponCallback,
-            couponCode: String,
-            selectedUnitItems: Pair<String, String>? = null
-        ) {
+        fun redeemCoupon(callback: RedeemCouponCallback,
+                         couponCode: String,
+                         selectedUnitItems: Pair<String, String>? = null) {
             val json = createJsonObjectFromPair(selectedUnitItems)
             val body = RedeemCouponRequestBody(couponCode, json)
             getInstance().storeApi.redeemCoupon(getInstance().projectId, body)
                 .enqueue(object : Callback<RedeemCouponResponse> {
-                    override fun onResponse(
-                        call: Call<RedeemCouponResponse>,
-                        response: Response<RedeemCouponResponse>
-                    ) {
+                    override fun onResponse(call: Call<RedeemCouponResponse>, response: Response<RedeemCouponResponse>) {
                         if (response.isSuccessful) {
                             val redeemCouponResponse = response.body()
                             if (redeemCouponResponse != null) {
@@ -972,16 +832,11 @@ class XStore private constructor(
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/promotions/coupons/redeem-coupon/)
          */
         @JvmStatic
-        fun getCouponRewardsByCode(
-            callback: GetCouponRewardsByCodeCallback,
-            couponCode: String
-        ) {
+        fun getCouponRewardsByCode(callback: GetCouponRewardsByCodeCallback,
+                                   couponCode: String) {
             getInstance().storeApi.getCouponRewardsByCode(getInstance().projectId, couponCode)
                 .enqueue(object : Callback<RewardsByCodeResponse> {
-                    override fun onResponse(
-                        call: Call<RewardsByCodeResponse>,
-                        response: Response<RewardsByCodeResponse>
-                    ) {
+                    override fun onResponse(call: Call<RewardsByCodeResponse>, response: Response<RewardsByCodeResponse>) {
                         if (response.isSuccessful) {
                             val rewardsByCodeResponse = response.body()
                             if (rewardsByCodeResponse != null) {
@@ -1008,16 +863,11 @@ class XStore private constructor(
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/bundles/catalog/get-bundle/)
          */
         @JvmStatic
-        fun getBundle(
-            callback: GetBundleCallback,
-            bundleSku: String
-        ) {
+        fun getBundle(callback: GetBundleCallback,
+                      bundleSku: String) {
             getInstance().storeApi.getBundle(getInstance().projectId, bundleSku)
                 .enqueue(object : Callback<BundleItem> {
-                    override fun onResponse(
-                        call: Call<BundleItem>,
-                        response: Response<BundleItem>
-                    ) {
+                    override fun onResponse(call: Call<BundleItem>, response: Response<BundleItem>) {
                         if (response.isSuccessful) {
                             val bundleItem = response.body()
                             if (bundleItem != null) {
@@ -1050,18 +900,13 @@ class XStore private constructor(
          */
         @JvmStatic
         @JvmOverloads
-        fun getBundleList(
-            callback: GetBundleListCallback,
-            limit: Int = 50,
-            offset: Int = 0,
-            locale: String = "en"
-        ) {
+        fun getBundleList(callback: GetBundleListCallback,
+                          limit: Int = 50,
+                          offset: Int = 0,
+                          locale: String = "en") {
             getInstance().storeApi.getBundleList(getInstance().projectId, locale, limit, offset)
                 .enqueue(object : Callback<BundleListResponse> {
-                    override fun onResponse(
-                        call: Call<BundleListResponse>,
-                        response: Response<BundleListResponse>
-                    ) {
+                    override fun onResponse(call: Call<BundleListResponse>, response: Response<BundleListResponse>) {
                         if (response.isSuccessful) {
                             val bundleListResponse = response.body()
                             if (bundleListResponse != null) {
@@ -1092,21 +937,16 @@ class XStore private constructor(
          */
         @JvmStatic
         @JvmOverloads
-        fun redeemPromocode(
-            callback: RedeemPromocodeCallback,
-            promocode: String,
-            selectedUnitItems: Pair<String, String>? = null,
-            cartId: String = "current"
-        ) {
+        fun redeemPromocode(callback: RedeemPromocodeCallback,
+                            promocode: String,
+                            selectedUnitItems: Pair<String, String>? = null,
+                            cartId: String = "current") {
             val json = createJsonObjectFromPair(selectedUnitItems)
             val cart = CartIdRequest(cartId)
             val body = RedeemPromocodeRequestBody(promocode, json, cart)
             getInstance().storeApi.redeemPromocode(getInstance().projectId, body)
                 .enqueue(object : Callback<CartResponse> {
-                    override fun onResponse(
-                        call: Call<CartResponse>,
-                        response: Response<CartResponse>
-                    ) {
+                    override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
                         if (response.isSuccessful) {
                             val cartResponse = response.body()
                             if (cartResponse != null) {
@@ -1133,16 +973,11 @@ class XStore private constructor(
          * @param callback             status callback
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/promotions/promo-codes/get-promo-code-rewards-by-code/)
          */
-        fun getPromocodeRewardsByCode(
-            callback: GetPromocodeRewardByCodeCallback,
-            promocode: String
-        ) {
+        fun getPromocodeRewardsByCode(callback: GetPromocodeRewardByCodeCallback,
+                                      promocode: String) {
             getInstance().storeApi.getPromocodeRewardByCode(getInstance().projectId, promocode)
                 .enqueue(object : Callback<RewardsByPromocodeResponse> {
-                    override fun onResponse(
-                        call: Call<RewardsByPromocodeResponse>,
-                        response: Response<RewardsByPromocodeResponse>
-                    ) {
+                    override fun onResponse(call: Call<RewardsByPromocodeResponse>, response: Response<RewardsByPromocodeResponse>) {
                         if (response.isSuccessful) {
                             val rewardsByPromocodeResponse = response.body()
                             if (rewardsByPromocodeResponse != null) {
