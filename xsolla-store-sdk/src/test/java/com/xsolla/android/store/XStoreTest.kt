@@ -21,7 +21,7 @@ class XStoreTest : TestCase() {
                 .addHeader("X-ENGINE-V", "4.3.4")
                 .addHeader("X-SDK", "LOGIN")
                 .addHeader("X-SDK-V", "1.5.1")
-                .url(originalRequest.url().newBuilder()
+                .url(originalRequest.url.newBuilder()
                         .addQueryParameter("engine", "android")
                         .addQueryParameter("engine_v", "4.3.4")
                         .addQueryParameter("sdk", "login")

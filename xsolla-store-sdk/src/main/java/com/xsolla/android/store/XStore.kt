@@ -31,8 +31,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class XStore private constructor(
-        private val projectId: Int,
-        private val storeApi: StoreApi
+    private val projectId: Int,
+    private val storeApi: StoreApi
 ) {
 
     companion object {
@@ -58,18 +58,18 @@ class XStore private constructor(
             val interceptor = Interceptor { chain ->
                 val originalRequest = chain.request()
                 val builder = originalRequest.newBuilder()
-                        .addHeader("Authorization", "Bearer $token")
-                        .addHeader("X-ENGINE", "ANDROID")
-                        .addHeader("X-ENGINE-V", Build.VERSION.RELEASE)
-                        .addHeader("X-SDK", "STORE")
-                        .addHeader("X-SDK-V", BuildConfig.VERSION_NAME)
-                        .url(originalRequest.url().newBuilder()
-                                .addQueryParameter("engine", "android")
-                                .addQueryParameter("engine_v", Build.VERSION.RELEASE)
-                                .addQueryParameter("sdk", "store")
-                                .addQueryParameter("sdk_v", BuildConfig.VERSION_NAME)
-                                .build()
-                        )
+                    .addHeader("Authorization", "Bearer $token")
+                    .addHeader("X-ENGINE", "ANDROID")
+                    .addHeader("X-ENGINE-V", Build.VERSION.RELEASE)
+                    .addHeader("X-SDK", "STORE")
+                    .addHeader("X-SDK-V", BuildConfig.VERSION_NAME)
+                    .url(originalRequest.url().newBuilder()
+                        .addQueryParameter("engine", "android")
+                        .addQueryParameter("engine_v", Build.VERSION.RELEASE)
+                        .addQueryParameter("sdk", "store")
+                        .addQueryParameter("sdk_v", BuildConfig.VERSION_NAME)
+                        .build()
+                    )
                 val newRequest = builder.build()
                 chain.proceed(newRequest)
             }
@@ -78,15 +78,15 @@ class XStore private constructor(
             httpClient.addInterceptor(interceptor)
 
             val retrofit = Retrofit.Builder()
-                    .baseUrl(STORE_HOST)
-                    .client(httpClient.build())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
+                .baseUrl(STORE_HOST)
+                .client(httpClient.build())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
 
             val storeApi = retrofit.create(StoreApi::class.java)
 
             instance = XStore(
-                    projectId, storeApi
+                projectId, storeApi
             )
         }
 
@@ -108,24 +108,24 @@ class XStore private constructor(
                             locale: String = "en",
                             additionalFields: List<String>? = listOf()) {
             getInstance().storeApi.getVirtualItems(getInstance().projectId, limit, offset, locale, additionalFields)
-                    .enqueue(object : Callback<VirtualItemsResponse> {
-                        override fun onResponse(call: Call<VirtualItemsResponse>, response: Response<VirtualItemsResponse>) {
-                            if (response.isSuccessful) {
-                                val virtualItemsResponse = response.body()
-                                if (virtualItemsResponse != null) {
-                                    callback.onSuccess(virtualItemsResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<VirtualItemsResponse> {
+                    override fun onResponse(call: Call<VirtualItemsResponse>, response: Response<VirtualItemsResponse>) {
+                        if (response.isSuccessful) {
+                            val virtualItemsResponse = response.body()
+                            if (virtualItemsResponse != null) {
+                                callback.onSuccess(virtualItemsResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<VirtualItemsResponse>, t: Throwable) {
-                            callback.onError(throwable = t, errorMessage = null)
-                        }
-                    })
+                    override fun onFailure(call: Call<VirtualItemsResponse>, t: Throwable) {
+                        callback.onError(throwable = t, errorMessage = null)
+                    }
+                })
         }
 
         /**
@@ -146,24 +146,24 @@ class XStore private constructor(
                                locale: String = "en",
                                additionalFields: List<String> = listOf()) {
             getInstance().storeApi.getVirtualCurrency(getInstance().projectId, limit, offset, locale, additionalFields)
-                    .enqueue(object : Callback<VirtualCurrencyResponse> {
-                        override fun onResponse(call: Call<VirtualCurrencyResponse>, response: Response<VirtualCurrencyResponse>) {
-                            if (response.isSuccessful) {
-                                val virtualCurrencyResponse = response.body()
-                                if (virtualCurrencyResponse != null) {
-                                    callback.onSuccess(virtualCurrencyResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<VirtualCurrencyResponse> {
+                    override fun onResponse(call: Call<VirtualCurrencyResponse>, response: Response<VirtualCurrencyResponse>) {
+                        if (response.isSuccessful) {
+                            val virtualCurrencyResponse = response.body()
+                            if (virtualCurrencyResponse != null) {
+                                callback.onSuccess(virtualCurrencyResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<VirtualCurrencyResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<VirtualCurrencyResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -185,24 +185,24 @@ class XStore private constructor(
                                       locale: String = "en",
                                       additionalFields: List<String>? = listOf()) {
             getInstance().storeApi.getVirtualCurrencyPackage(getInstance().projectId, limit, offset, locale, additionalFields)
-                    .enqueue(object : Callback<VirtualCurrencyPackageResponse> {
-                        override fun onResponse(call: Call<VirtualCurrencyPackageResponse>, response: Response<VirtualCurrencyPackageResponse>) {
-                            if (response.isSuccessful) {
-                                val virtualCurrencyPackageResponse = response.body()
-                                if (virtualCurrencyPackageResponse != null) {
-                                    callback.onSuccess(virtualCurrencyPackageResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<VirtualCurrencyPackageResponse> {
+                    override fun onResponse(call: Call<VirtualCurrencyPackageResponse>, response: Response<VirtualCurrencyPackageResponse>) {
+                        if (response.isSuccessful) {
+                            val virtualCurrencyPackageResponse = response.body()
+                            if (virtualCurrencyPackageResponse != null) {
+                                callback.onSuccess(virtualCurrencyPackageResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<VirtualCurrencyPackageResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<VirtualCurrencyPackageResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -225,24 +225,24 @@ class XStore private constructor(
                                      locale: String = "en",
                                      additionalFields: List<String> = listOf()) {
             getInstance().storeApi.getItemsBySpecifiedGroup(getInstance().projectId, externalId, limit, offset, locale, additionalFields)
-                    .enqueue(object : Callback<VirtualItemsResponse> {
-                        override fun onResponse(call: Call<VirtualItemsResponse>, response: Response<VirtualItemsResponse>) {
-                            if (response.isSuccessful) {
-                                val virtualItemsByGroupResponse = response.body()
-                                if (virtualItemsByGroupResponse != null) {
-                                    callback.onSuccess(virtualItemsByGroupResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<VirtualItemsResponse> {
+                    override fun onResponse(call: Call<VirtualItemsResponse>, response: Response<VirtualItemsResponse>) {
+                        if (response.isSuccessful) {
+                            val virtualItemsByGroupResponse = response.body()
+                            if (virtualItemsByGroupResponse != null) {
+                                callback.onSuccess(virtualItemsByGroupResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<VirtualItemsResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<VirtualItemsResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -264,24 +264,24 @@ class XStore private constructor(
                              locale: String = "en",
                              additionalFields: List<String> = listOf()) {
             getInstance().storeApi.getPhysicalItems(getInstance().projectId, limit, offset, locale, additionalFields)
-                    .enqueue(object : Callback<PhysicalItemsResponse> {
-                        override fun onResponse(call: Call<PhysicalItemsResponse>, response: Response<PhysicalItemsResponse>) {
-                            if (response.isSuccessful) {
-                                val physicalItemsResponse = response.body()
-                                if (physicalItemsResponse != null) {
-                                    callback.onSuccess(physicalItemsResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<PhysicalItemsResponse> {
+                    override fun onResponse(call: Call<PhysicalItemsResponse>, response: Response<PhysicalItemsResponse>) {
+                        if (response.isSuccessful) {
+                            val physicalItemsResponse = response.body()
+                            if (physicalItemsResponse != null) {
+                                callback.onSuccess(physicalItemsResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<PhysicalItemsResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<PhysicalItemsResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -301,24 +301,24 @@ class XStore private constructor(
                         currency: String = "USD",
                         locale: String = "en") {
             getInstance().storeApi.getCartById(getInstance().projectId, cartId, currency, locale)
-                    .enqueue(object : Callback<CartResponse> {
-                        override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
-                            if (response.isSuccessful) {
-                                val cartResponse = response.body()
-                                if (cartResponse != null) {
-                                    callback.onSuccess(cartResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<CartResponse> {
+                    override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
+                        if (response.isSuccessful) {
+                            val cartResponse = response.body()
+                            if (cartResponse != null) {
+                                callback.onSuccess(cartResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<CartResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<CartResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -335,24 +335,24 @@ class XStore private constructor(
                            currency: String = "USD",
                            locale: String = "en") {
             getInstance().storeApi.getCurrentUserCart(getInstance().projectId, currency, locale)
-                    .enqueue(object : Callback<CartResponse> {
-                        override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
-                            if (response.isSuccessful) {
-                                val cartResponse = response.body()
-                                if (cartResponse != null) {
-                                    callback.onSuccess(cartResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<CartResponse> {
+                    override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
+                        if (response.isSuccessful) {
+                            val cartResponse = response.body()
+                            if (cartResponse != null) {
+                                callback.onSuccess(cartResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<CartResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<CartResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -366,19 +366,19 @@ class XStore private constructor(
         fun clearCartById(callback: ClearCartByIdCallback,
                           cartId: String) {
             getInstance().storeApi.clearCartById(getInstance().projectId, cartId)
-                    .enqueue(object : Callback<Void?> {
-                        override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
-                            if (response.isSuccessful) {
-                                callback.onSuccess()
-                            } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
-                            }
+                .enqueue(object : Callback<Void?> {
+                    override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                        if (response.isSuccessful) {
+                            callback.onSuccess()
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<Void?>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<Void?>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -390,19 +390,19 @@ class XStore private constructor(
         @JvmStatic
         fun clearCurrentCart(callback: ClearCurrentCartCallback) {
             getInstance().storeApi.clearCurrentCart(getInstance().projectId)
-                    .enqueue(object : Callback<Void?> {
-                        override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
-                            if (response.isSuccessful) {
-                                callback.onSuccess()
-                            } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
-                            }
+                .enqueue(object : Callback<Void?> {
+                    override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                        if (response.isSuccessful) {
+                            callback.onSuccess()
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<Void?>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<Void?>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -421,19 +421,19 @@ class XStore private constructor(
                                        quantity: Long) {
             val body = UpdateItemBody(quantity)
             getInstance().storeApi.updateItemFromCartByCartId(getInstance().projectId, cartId, itemSku, body)
-                    .enqueue(object : Callback<Void?> {
-                        override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
-                            if (response.isSuccessful) {
-                                callback.onSuccess()
-                            } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
-                            }
+                .enqueue(object : Callback<Void?> {
+                    override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                        if (response.isSuccessful) {
+                            callback.onSuccess()
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<Void?>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<Void?>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -450,19 +450,19 @@ class XStore private constructor(
                                       quantity: Long) {
             val body = UpdateItemBody(quantity)
             getInstance().storeApi.updateItemFromCurrentCart(getInstance().projectId, itemSku, body)
-                    .enqueue(object : Callback<Void?> {
-                        override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
-                            if (response.isSuccessful) {
-                                callback.onSuccess()
-                            } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
-                            }
+                .enqueue(object : Callback<Void?> {
+                    override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                        if (response.isSuccessful) {
+                            callback.onSuccess()
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<Void?>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<Void?>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -478,19 +478,19 @@ class XStore private constructor(
                                        cartId: String,
                                        itemSku: String) {
             getInstance().storeApi.deleteItemFromCartByCartId(getInstance().projectId, cartId, itemSku)
-                    .enqueue(object : Callback<Void?> {
-                        override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
-                            if (response.isSuccessful) {
-                                callback.onSuccess()
-                            } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
-                            }
+                .enqueue(object : Callback<Void?> {
+                    override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                        if (response.isSuccessful) {
+                            callback.onSuccess()
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<Void?>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<Void?>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -504,19 +504,19 @@ class XStore private constructor(
         fun deleteItemFromCurrentCart(callback: DeleteItemFromCurrentCartCallback,
                                       itemSku: String) {
             getInstance().storeApi.deleteItemFromCurrentCart(getInstance().projectId, itemSku)
-                    .enqueue(object : Callback<Void?> {
-                        override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
-                            if (response.isSuccessful) {
-                                callback.onSuccess()
-                            } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
-                            }
+                .enqueue(object : Callback<Void?> {
+                    override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                        if (response.isSuccessful) {
+                            callback.onSuccess()
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<Void?>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<Void?>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -532,25 +532,25 @@ class XStore private constructor(
                                      items: List<FillCartItem>) {
             val body = FillCartWithItemsRequestBody(items)
             getInstance().storeApi.fillCartWithItems(getInstance().projectId, body)
-                    .enqueue(object : Callback<CartResponse> {
-                        override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
-                            if (response.isSuccessful) {
-                                val cartResponse = response.body()
-                                if (cartResponse != null) {
-                                    callback.onSuccess(cartResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
-
+                .enqueue(object : Callback<CartResponse> {
+                    override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
+                        if (response.isSuccessful) {
+                            val cartResponse = response.body()
+                            if (cartResponse != null) {
+                                callback.onSuccess(cartResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
-                        }
 
-                        override fun onFailure(call: Call<CartResponse>, t: Throwable) {
-                            callback.onError(t, null)
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
-                    })
+                    }
+
+                    override fun onFailure(call: Call<CartResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -567,26 +567,26 @@ class XStore private constructor(
                                   items: List<FillCartItem>) {
             val body = FillCartWithItemsRequestBody(items)
             getInstance().storeApi.fillSpecificCartWithItems(getInstance().projectId, cartId, body)
-                    .enqueue(object : Callback<CartResponse> {
-                        override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
-                            if (response.isSuccessful) {
-                                val cartResponse = response.body()
-                                if (cartResponse != null) {
-                                    callback.onSuccess(cartResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
-
+                .enqueue(object : Callback<CartResponse> {
+                    override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
+                        if (response.isSuccessful) {
+                            val cartResponse = response.body()
+                            if (cartResponse != null) {
+                                callback.onSuccess(cartResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
-                        }
 
-                        override fun onFailure(call: Call<CartResponse>, t: Throwable) {
-                            callback.onError(t, null)
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                    })
+                    override fun onFailure(call: Call<CartResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+
+                })
         }
 
 
@@ -599,24 +599,24 @@ class XStore private constructor(
         @JvmStatic
         fun getItemsGroups(callback: GetItemsGroupsCallback) {
             getInstance().storeApi.getItemsGroups(getInstance().projectId)
-                    .enqueue(object : Callback<ItemsGroupsResponse> {
-                        override fun onResponse(call: Call<ItemsGroupsResponse>, response: Response<ItemsGroupsResponse>) {
-                            if (response.isSuccessful) {
-                                val itemsGroupsResponse = response.body()
-                                if (itemsGroupsResponse != null) {
-                                    callback.onSuccess(itemsGroupsResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<ItemsGroupsResponse> {
+                    override fun onResponse(call: Call<ItemsGroupsResponse>, response: Response<ItemsGroupsResponse>) {
+                        if (response.isSuccessful) {
+                            val itemsGroupsResponse = response.body()
+                            if (itemsGroupsResponse != null) {
+                                callback.onSuccess(itemsGroupsResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<ItemsGroupsResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<ItemsGroupsResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -630,24 +630,24 @@ class XStore private constructor(
         fun getOrder(callback: GetOrderCallback,
                      orderId: String) {
             getInstance().storeApi.getOrder(getInstance().projectId, orderId)
-                    .enqueue(object : Callback<OrderResponse> {
-                        override fun onResponse(call: Call<OrderResponse>, response: Response<OrderResponse>) {
-                            if (response.isSuccessful) {
-                                val orderResponse = response.body()
-                                if (orderResponse != null) {
-                                    callback.onSuccess(orderResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<OrderResponse> {
+                    override fun onResponse(call: Call<OrderResponse>, response: Response<OrderResponse>) {
+                        if (response.isSuccessful) {
+                            val orderResponse = response.body()
+                            if (orderResponse != null) {
+                                callback.onSuccess(orderResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<OrderResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<OrderResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -665,24 +665,24 @@ class XStore private constructor(
                                     options: PaymentOptions? = null) {
             val body = CreateOrderRequestBody(options)
             getInstance().storeApi.createOrderFromCartById(getInstance().projectId, cartId, body)
-                    .enqueue(object : Callback<CreateOrderResponse> {
-                        override fun onResponse(call: Call<CreateOrderResponse>, response: Response<CreateOrderResponse>) {
-                            if (response.isSuccessful) {
-                                val createOrderResponse = response.body()
-                                if (createOrderResponse != null) {
-                                    callback.onSuccess(createOrderResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<CreateOrderResponse> {
+                    override fun onResponse(call: Call<CreateOrderResponse>, response: Response<CreateOrderResponse>) {
+                        if (response.isSuccessful) {
+                            val createOrderResponse = response.body()
+                            if (createOrderResponse != null) {
+                                callback.onSuccess(createOrderResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<CreateOrderResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<CreateOrderResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -698,24 +698,24 @@ class XStore private constructor(
                                        options: PaymentOptions? = null) {
             val body = CreateOrderRequestBody(options)
             getInstance().storeApi.createOrderFromCurrentCart(getInstance().projectId, body)
-                    .enqueue(object : Callback<CreateOrderResponse> {
-                        override fun onResponse(call: Call<CreateOrderResponse>, response: Response<CreateOrderResponse>) {
-                            if (response.isSuccessful) {
-                                val cartResponse = response.body()
-                                if (cartResponse != null) {
-                                    callback.onSuccess(cartResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<CreateOrderResponse> {
+                    override fun onResponse(call: Call<CreateOrderResponse>, response: Response<CreateOrderResponse>) {
+                        if (response.isSuccessful) {
+                            val cartResponse = response.body()
+                            if (cartResponse != null) {
+                                callback.onSuccess(cartResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<CreateOrderResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<CreateOrderResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -733,24 +733,24 @@ class XStore private constructor(
                                  options: PaymentOptions? = null) {
             val body = CreateOrderRequestBody(options)
             getInstance().storeApi.createOrderByItemSku(getInstance().projectId, itemSku, body)
-                    .enqueue(object : Callback<CreateOrderResponse> {
-                        override fun onResponse(call: Call<CreateOrderResponse>, response: Response<CreateOrderResponse>) {
-                            if (response.isSuccessful) {
-                                val createOrderResponse = response.body()
-                                if (createOrderResponse != null) {
-                                    callback.onSuccess(createOrderResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<CreateOrderResponse> {
+                    override fun onResponse(call: Call<CreateOrderResponse>, response: Response<CreateOrderResponse>) {
+                        if (response.isSuccessful) {
+                            val createOrderResponse = response.body()
+                            if (createOrderResponse != null) {
+                                callback.onSuccess(createOrderResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<CreateOrderResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<CreateOrderResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -767,24 +767,24 @@ class XStore private constructor(
                                          virtualCurrencySku: String) {
             // TODO: 2/17/2021 Add Platform @Query parameter
             getInstance().storeApi.createOrderByVirtualCurrency(getInstance().projectId, itemSku, virtualCurrencySku, "android_standalone")
-                    .enqueue(object : Callback<CreateOrderByVirtualCurrencyResponse> {
-                        override fun onResponse(call: Call<CreateOrderByVirtualCurrencyResponse>, response: Response<CreateOrderByVirtualCurrencyResponse>) {
-                            if (response.isSuccessful) {
-                                val createOrderByVirtualCurrencyResponse = response.body()
-                                if (createOrderByVirtualCurrencyResponse != null) {
-                                    callback.onSuccess(createOrderByVirtualCurrencyResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<CreateOrderByVirtualCurrencyResponse> {
+                    override fun onResponse(call: Call<CreateOrderByVirtualCurrencyResponse>, response: Response<CreateOrderByVirtualCurrencyResponse>) {
+                        if (response.isSuccessful) {
+                            val createOrderByVirtualCurrencyResponse = response.body()
+                            if (createOrderByVirtualCurrencyResponse != null) {
+                                callback.onSuccess(createOrderByVirtualCurrencyResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<CreateOrderByVirtualCurrencyResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<CreateOrderByVirtualCurrencyResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -803,24 +803,24 @@ class XStore private constructor(
             val json = createJsonObjectFromPair(selectedUnitItems)
             val body = RedeemCouponRequestBody(couponCode, json)
             getInstance().storeApi.redeemCoupon(getInstance().projectId, body)
-                    .enqueue(object : Callback<RedeemCouponResponse> {
-                        override fun onResponse(call: Call<RedeemCouponResponse>, response: Response<RedeemCouponResponse>) {
-                            if (response.isSuccessful) {
-                                val redeemCouponResponse = response.body()
-                                if (redeemCouponResponse != null) {
-                                    callback.onSuccess(redeemCouponResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<RedeemCouponResponse> {
+                    override fun onResponse(call: Call<RedeemCouponResponse>, response: Response<RedeemCouponResponse>) {
+                        if (response.isSuccessful) {
+                            val redeemCouponResponse = response.body()
+                            if (redeemCouponResponse != null) {
+                                callback.onSuccess(redeemCouponResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<RedeemCouponResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<RedeemCouponResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -835,24 +835,24 @@ class XStore private constructor(
         fun getCouponRewardsByCode(callback: GetCouponRewardsByCodeCallback,
                                    couponCode: String) {
             getInstance().storeApi.getCouponRewardsByCode(getInstance().projectId, couponCode)
-                    .enqueue(object : Callback<RewardsByCodeResponse> {
-                        override fun onResponse(call: Call<RewardsByCodeResponse>, response: Response<RewardsByCodeResponse>) {
-                            if (response.isSuccessful) {
-                                val rewardsByCodeResponse = response.body()
-                                if (rewardsByCodeResponse != null) {
-                                    callback.onSuccess(rewardsByCodeResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<RewardsByCodeResponse> {
+                    override fun onResponse(call: Call<RewardsByCodeResponse>, response: Response<RewardsByCodeResponse>) {
+                        if (response.isSuccessful) {
+                            val rewardsByCodeResponse = response.body()
+                            if (rewardsByCodeResponse != null) {
+                                callback.onSuccess(rewardsByCodeResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<RewardsByCodeResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<RewardsByCodeResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -866,24 +866,24 @@ class XStore private constructor(
         fun getBundle(callback: GetBundleCallback,
                       bundleSku: String) {
             getInstance().storeApi.getBundle(getInstance().projectId, bundleSku)
-                    .enqueue(object : Callback<BundleItem> {
-                        override fun onResponse(call: Call<BundleItem>, response: Response<BundleItem>) {
-                            if (response.isSuccessful) {
-                                val bundleItem = response.body()
-                                if (bundleItem != null) {
-                                    callback.onSuccess(bundleItem)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<BundleItem> {
+                    override fun onResponse(call: Call<BundleItem>, response: Response<BundleItem>) {
+                        if (response.isSuccessful) {
+                            val bundleItem = response.body()
+                            if (bundleItem != null) {
+                                callback.onSuccess(bundleItem)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<BundleItem>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<BundleItem>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -905,24 +905,24 @@ class XStore private constructor(
                           offset: Int = 0,
                           locale: String = "en") {
             getInstance().storeApi.getBundleList(getInstance().projectId, locale, limit, offset)
-                    .enqueue(object : Callback<BundleListResponse> {
-                        override fun onResponse(call: Call<BundleListResponse>, response: Response<BundleListResponse>) {
-                            if (response.isSuccessful) {
-                                val bundleListResponse = response.body()
-                                if (bundleListResponse != null) {
-                                    callback.onSuccess(bundleListResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<BundleListResponse> {
+                    override fun onResponse(call: Call<BundleListResponse>, response: Response<BundleListResponse>) {
+                        if (response.isSuccessful) {
+                            val bundleListResponse = response.body()
+                            if (bundleListResponse != null) {
+                                callback.onSuccess(bundleListResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<BundleListResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<BundleListResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -945,24 +945,24 @@ class XStore private constructor(
             val cart = CartIdRequest(cartId)
             val body = RedeemPromocodeRequestBody(promocode, json, cart)
             getInstance().storeApi.redeemPromocode(getInstance().projectId, body)
-                    .enqueue(object : Callback<CartResponse> {
-                        override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
-                            if (response.isSuccessful) {
-                                val cartResponse = response.body()
-                                if (cartResponse != null) {
-                                    callback.onSuccess(cartResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<CartResponse> {
+                    override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
+                        if (response.isSuccessful) {
+                            val cartResponse = response.body()
+                            if (cartResponse != null) {
+                                callback.onSuccess(cartResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<CartResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<CartResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
@@ -976,24 +976,24 @@ class XStore private constructor(
         fun getPromocodeRewardsByCode(callback: GetPromocodeRewardByCodeCallback,
                                       promocode: String) {
             getInstance().storeApi.getPromocodeRewardByCode(getInstance().projectId, promocode)
-                    .enqueue(object : Callback<RewardsByPromocodeResponse> {
-                        override fun onResponse(call: Call<RewardsByPromocodeResponse>, response: Response<RewardsByPromocodeResponse>) {
-                            if (response.isSuccessful) {
-                                val rewardsByPromocodeResponse = response.body()
-                                if (rewardsByPromocodeResponse != null) {
-                                    callback.onSuccess(rewardsByPromocodeResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+                .enqueue(object : Callback<RewardsByPromocodeResponse> {
+                    override fun onResponse(call: Call<RewardsByPromocodeResponse>, response: Response<RewardsByPromocodeResponse>) {
+                        if (response.isSuccessful) {
+                            val rewardsByPromocodeResponse = response.body()
+                            if (rewardsByPromocodeResponse != null) {
+                                callback.onSuccess(rewardsByPromocodeResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<RewardsByPromocodeResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
+                    override fun onFailure(call: Call<RewardsByPromocodeResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
 

@@ -11,9 +11,53 @@ data class PaymentOptions(
     val customParameters: CustomParameters? = null
 )
 
-data class PaymentProjectSettings(val ui: UiProjectSetting)
 
-data class UiProjectSetting(val theme: String = "default")
+
+data class PaymentProjectSettings(
+        val ui: UiProjectSetting,
+        val paymentMethod: Int =1,
+        val returnUrl: String? = null,
+        val redirectPolicy: SettingsRedirectPolicy? = null
+        )
+
+data class SettingsRedirectPolicy(
+        val redirectConditions: String = "none",
+        val delay: Int = 0,
+        val statusForManualRedirection: String = "none",
+        val redirectButtonCaption: String = "Finish"
+)
+
+data class UiProjectSetting(
+        val size: String ="medium",
+        val theme: String = "default_dark",
+        val version: String = "mobile",
+        val desktop: DesktopSettings? =null,
+        val mobile: MobileSettings? = null,
+        val licenseUrl: String?= null,
+        val mode: String ="user_account",
+        val userAccount: UserAccountDetails? = null
+        )
+
+data class MobileSettings (
+        val mode: String = "saved_accounts",
+        val header: UiMobileProjectSettingHeader,
+        val footer: UiDesktopProjectSettingFooter
+        )
+
+class UiDesktopProjectSettingFooter (val isVisible: Boolean = true)
+
+class UiMobileProjectSettingHeader (val closeButton: Boolean = false)
+
+data class DesktopSettings(val header: UiDesktopProjectSettingHeader)
+
+data class UiDesktopProjectSettingHeader(
+        val isVisible: Boolean,
+        val visibleLogo: Boolean,
+        val visibleName: Boolean,
+        val visiblePurchase: Boolean,
+        val type: String,
+        val closeButton: Boolean
+        )
 
 class CustomParameters private constructor(private val parameters: Map<String, Value>) {
     class Builder {
@@ -49,7 +93,6 @@ class CustomParameters private constructor(private val parameters: Map<String, V
                 this.addProperty(key, value)
             }
         }
-
     private fun JsonObject.addProperty(key: String, value: Value) =
         when (value) {
             is Value.String -> {
