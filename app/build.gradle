@@ -70,6 +70,10 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
+    lintOptions {
+        quiet true
+        abortOnError true
+    }
 
 }
 

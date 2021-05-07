@@ -63,6 +63,11 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    lintOptions {
+        quiet true
+        abortOnError true
+    }
 }
 
 
