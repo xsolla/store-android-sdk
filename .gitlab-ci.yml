@@ -1,3 +1,8 @@
+include:
+  - project: 'sysadm-docker/ubuntu-sshclient'
+    ref:     'master'
+    file:    'gitlab-ci-template.yml'
+
 image: circleci/android:api-29
 
 stages:
@@ -5,6 +10,9 @@ stages:
   - build
   - test
   - publish
+  - build_doc
+  - deploy
+  - linking
 
 generate_keystore:
   tags:
@@ -150,15 +158,48 @@ publishPayments:
     paths:
       - .gradle/*
 
-generateHtmlDocumentation:
+build doc:
   tags:
     - sdk
-  stage: publish
-  except:
-    - branches
+  stage: build_doc
+  only:
+    - /^v.*/
   script:
     - ./gradlew dokkaHtmlMultiModule
+    - cd build/dokka/htmlMultiModule/ && mv -- '-modules.html' index.html && zip -r ../../../build.zip *
   artifacts:
     expire_in: 24 hours
     paths:
-      - build/dokka/htmlMultiModule
+      - build.zip
+
+deploy doc:
+  stage: deploy
+  extends:      .deploy doc
+  only:
+    - /^v.*/
+  dependencies:
+    - build doc
+  environment:
+    name: doc/$CI_COMMIT_REF_SLUG
+    url: https://$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME.doc.srv.local/$URL_SLUG
+    on_stop: stop doc
+  when: manual
+
+current doc:
+  extends:      .current doc
+  only:
+    - /^v.*/
+  dependencies:
+    - deploy doc
+  environment:
+    name: doc/current
+    url: https://developers.xsolla.com/sdk-code-references/android-store
+
+stop doc:
+  extends:      .stop doc
+  environment:
+    name: doc/$CI_COMMIT_REF_SLUG
+    action: stop
+  only:
+    - /^v.*/
+  dependencies: []
