@@ -8,6 +8,7 @@ image: circleci/android:api-29
 stages:
   - generate_keystore
   - build
+  - lint
   - test
   - publish
   - build_doc
@@ -48,6 +49,36 @@ build:
       - app-serverless/build/outputs/
       - app-inventory/build/outputs/
       - app-customauth/build/outputs/
+  cache:
+    key: ${CI_PROJECT_ID}
+    paths:
+      - .gradle/*
+
+lint:
+  tags:
+    - sdk
+  stage: lint
+  except:
+    - branches
+  script:
+    - ./gradlew lint
+  artifacts:
+    expire_in: 24 hours
+    paths:
+      - app/build/reports/
+      - app-playfab/build/reports/
+      - app-serverless/build/reports/
+      - app-inventory/build/reports/
+      - app-customauth/build/reports/
+      - xsolla-inventory-sdk/build/reports/
+      - xsolla-login-sdk/build/reports/
+      - xsolla-login-sdk-facebook/build/reports/
+      - xsolla-login-sdk-google/build/reports/
+      - xsolla-login-sdk-qq/build/reports/
+      - xsolla-login-sdk-wechat/build/reports/
+      - xsolla-payments-sdk/build/reports/
+      - xsolla-payments-sdk-playfab/build/reports/
+      - xsolla-store-sdk/build/reports/
   cache:
     key: ${CI_PROJECT_ID}
     paths:
