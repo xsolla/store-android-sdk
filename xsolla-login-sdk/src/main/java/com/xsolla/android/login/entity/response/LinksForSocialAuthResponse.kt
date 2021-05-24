@@ -10,5 +10,5 @@ data class LinksForSocialAuthResponse(
 data class LinksItem(
     @SerializedName("auth_url")
     val authUrl:String,
-    val provider: SocialNetwork
+    val provider: SocialNetwork?
 )
