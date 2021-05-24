@@ -10,7 +10,9 @@ data class SocialFriendsResponse(
     val offset: Int,
     val platform: SocialNetworkForLinking?,
     @SerializedName("total_count")
-    val totalCount: Int
+    val totalCount: Int,
+    @SerializedName("with_xl_uid")
+    val withXlUid: Boolean
 )
 
 data class SocialFriend(
@@ -20,5 +22,7 @@ data class SocialFriend(
     @SerializedName("user_id")
     val socialNetworkUserId: String,
     @SerializedName("xl_uid")
-    val xsollaUserId: String?
+    val xsollaUserId: String?,
+    @SerializedName("tag")
+    val tag: String?
 )

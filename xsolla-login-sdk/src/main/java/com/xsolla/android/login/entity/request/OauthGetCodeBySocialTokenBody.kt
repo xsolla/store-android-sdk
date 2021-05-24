@@ -6,5 +6,7 @@ data class OauthGetCodeBySocialTokenBody(
         @SerializedName("access_token")
         val accessToken: String,
         @SerializedName("access_token_secret")
-        val accessTokenSecret: String?
+        val accessTokenSecret: String?,
+        @SerializedName("openid")
+        val openId: String? = null
 )

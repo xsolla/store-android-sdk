@@ -26,7 +26,11 @@ data class UserDetailsResponse(
     val phone: String?,
     val picture: String?,
     @SerializedName("registered")
-    val registrationTime: String
+    val registrationTime: String,
+    @SerializedName("is_anonymous")
+    val isAnonymous: Boolean?,
+    @SerializedName("tag")
+    val tag:String?
 )
 
 data class BanInfo(
@@ -50,7 +54,11 @@ enum class GenderResponse {
     @SerializedName("f")
     F,
     @SerializedName("m")
-    M
+    M,
+    @SerializedName("other")
+    OTHER,
+    @SerializedName("prefer not to answer")
+    PREFER_NOT_TO_ANSWER
 }
 
 data class PhoneResponse(val phone: String?)

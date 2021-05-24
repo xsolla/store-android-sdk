@@ -11,11 +11,20 @@ data class RewardsByCodeResponse(
 data class RewardsByPromocodeResponse(
     val bonus: List<Bonus>,
     val discount: Discount? = null,
+    @SerializedName("discounted_items")
+    val discountedItems: List<DiscountedItems>? = null,
     @SerializedName("is_selectable")
     val isSelectable: Boolean,
 ) {
-    data class Discount(val percent: String)
+    data class Discount(
+        val percent: String
+    )
 }
+
+data class DiscountedItems(
+    val sku: String,
+    val discount: RewardsByPromocodeResponse.Discount
+)
 
 data class Bonus(
     val quantity: Int,
@@ -29,25 +38,30 @@ data class Item(
     val description: String? = null,
     @SerializedName("image_url")
     val imageUrl: String? = null,
+    @SerializedName("unit_items")
+    val unitItems: List<UnitItem>? = null,
     @SerializedName("virtual_item_type")
     val virtualItemType: VirtualItemType? = null,
     @SerializedName("bundle_type")
     val bundleType: String? = null,
     @SerializedName("content")
     val bundleContent: BundleContent? = null,
-    @SerializedName("unit_items")
-    val unitItems: List<UnitItem>? = null
-)
+
+    )
 
 enum class ItemType {
     @SerializedName("virtual_good")
     VIRTUAL_GOOD,
+
     @SerializedName("virtual_currency")
     VIRTUAL_CURRENCY,
+
     @SerializedName("bundle")
     BUNDLE,
+
     @SerializedName("physical_good")
     PHYSICAL_GOOD,
+
     @SerializedName("unit")
     UNIT
 }
@@ -55,8 +69,10 @@ enum class ItemType {
 enum class VirtualItemType {
     @SerializedName("consumable")
     CONSUMABLE,
+
     @SerializedName("non_consumable")
     NON_CONSUMABLE,
+
     @SerializedName("non_renewing_subscription")
     NON_RENEWING_SUBSCRIPTION
 }

@@ -27,7 +27,7 @@ class VmAddFriends(application: Application) : AndroidViewModel(application) {
         private const val SEARCH_MIN_LENGTH = 3
         private const val SEARCH_DELAY = 1000L // Login API has a limit of 1rps for search
         const val REQUEST_OFFSET = 0
-        const val REQUEST_LIMIT = 100
+        const val REQUEST_LIMIT = 50
 
         const val MAX_LIMIT_FOR_LOADING_FRIENDS = 50
     }
@@ -66,7 +66,7 @@ class VmAddFriends(application: Application) : AndroidViewModel(application) {
     }
 
     private fun doSearch(query: String) {
-        XLogin.searchUsersByNickname(query, REQUEST_OFFSET, REQUEST_LIMIT, object : SearchUsersByNicknameCallback {
+        XLogin.searchUsersByNickname(query, object : SearchUsersByNicknameCallback {
             override fun onSuccess(data: SearchUsersByNicknameResponse) {
                 val newList = mutableListOf<FriendUiEntity>()
                 for (user in data.users) {
@@ -92,7 +92,13 @@ class VmAddFriends(application: Application) : AndroidViewModel(application) {
                         continue
                     }
                     newList.add(
-                            FriendUiEntity(user.xsollaUserId, user.avatar, false, user.nickname, FriendsRelationship.NONE)
+                        FriendUiEntity(
+                            user.xsollaUserId,
+                            user.avatar,
+                            false,
+                            user.nickname,
+                            FriendsRelationship.NONE
+                        )
                     )
                 }
                 searchResultList.value = newList
@@ -103,37 +109,52 @@ class VmAddFriends(application: Application) : AndroidViewModel(application) {
                 throwable?.printStackTrace()
             }
 
-        })
+        }, REQUEST_OFFSET, REQUEST_LIMIT)
     }
 
     fun loadAllFriends() {
         loadItemsByTab(UserFriendsRequestType.FRIENDS, FriendsRelationship.STANDARD, friendsActive)
-        loadItemsByTab(UserFriendsRequestType.FRIEND_REQUESTED, FriendsRelationship.REQUESTED, friendsRequested)
-        loadItemsByTab(UserFriendsRequestType.FRIEND_REQUESTED_BY, FriendsRelationship.PENDING, friendsRequestedBy)
+        loadItemsByTab(
+            UserFriendsRequestType.FRIEND_REQUESTED,
+            FriendsRelationship.REQUESTED,
+            friendsRequested
+        )
+        loadItemsByTab(
+            UserFriendsRequestType.FRIEND_REQUESTED_BY,
+            FriendsRelationship.PENDING,
+            friendsRequestedBy
+        )
         loadItemsByTab(UserFriendsRequestType.BLOCKED, FriendsRelationship.BLOCKED, friendsBlocked)
-        loadItemsByTab(UserFriendsRequestType.BLOCKED_BY, FriendsRelationship.BLOCKED_BY, friendsBlockedBy)
+        loadItemsByTab(
+            UserFriendsRequestType.BLOCKED_BY,
+            FriendsRelationship.BLOCKED_BY,
+            friendsBlockedBy
+        )
     }
 
-    private fun loadItemsByTab(requestType: UserFriendsRequestType, relationship: FriendsRelationship, items: MutableList<FriendUiEntity>) {
+    private fun loadItemsByTab(
+        requestType: UserFriendsRequestType,
+        relationship: FriendsRelationship,
+        items: MutableList<FriendUiEntity>
+    ) {
         items.clear()
         XLogin.getCurrentUserFriends(
-                null,
-                MAX_LIMIT_FOR_LOADING_FRIENDS,
-                requestType,
-                UserFriendsRequestSortBy.BY_UPDATED,
-                UserFriendsRequestSortOrder.ASC,
-                object : GetCurrentUserFriendsCallback {
-                    override fun onSuccess(data: UserFriendsResponse) {
-                        if (data.relationships.isNotEmpty()) {
-                            val uiEntities = data.toUiEntities(relationship)
-                            items.apply { addAll(uiEntities) }
-                        }
-                    }
-
-                    override fun onError(throwable: Throwable?, errorMessage: String?) {
-                        hasError.value = errorMessage ?: throwable?.javaClass?.name ?: "Failure"
+            null,
+            requestType,
+            UserFriendsRequestSortBy.BY_UPDATED,
+            UserFriendsRequestSortOrder.ASC,
+            object : GetCurrentUserFriendsCallback {
+                override fun onSuccess(data: UserFriendsResponse) {
+                    if (data.relationships.isNotEmpty()) {
+                        val uiEntities = data.toUiEntities(relationship)
+                        items.apply { addAll(uiEntities) }
                     }
                 }
+
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    hasError.value = errorMessage ?: throwable?.javaClass?.name ?: "Failure"
+                }
+            }, MAX_LIMIT_FOR_LOADING_FRIENDS
         )
     }
 
@@ -148,15 +169,18 @@ class VmAddFriends(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateFriendship(user: FriendUiEntity, updateType: UpdateUserFriendsRequestAction) {
-        XLogin.updateCurrentUserFriend(user.id, updateType, object : UpdateCurrentUserFriendsCallback {
-            override fun onSuccess() {
-                reloadAfterChange()
-            }
+        XLogin.updateCurrentUserFriend(
+            user.id,
+            updateType,
+            object : UpdateCurrentUserFriendsCallback {
+                override fun onSuccess() {
+                    reloadAfterChange()
+                }
 
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                hasError.value = errorMessage ?: throwable?.javaClass?.name ?: "Failure"
-            }
-        })
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    hasError.value = errorMessage ?: throwable?.javaClass?.name ?: "Failure"
+                }
+            })
     }
 
 }

@@ -208,7 +208,6 @@ class VmFriends : ViewModel() {
     private fun loadItemsByTab(tab: FriendsTab) {
         XLogin.getCurrentUserFriends(
             null,
-            MAX_LIMIT_FOR_LOADING_FRIENDS,
             tab.requestType,
             UserFriendsRequestSortBy.BY_UPDATED,
             UserFriendsRequestSortOrder.ASC,
@@ -223,7 +222,7 @@ class VmFriends : ViewModel() {
                 override fun onError(throwable: Throwable?, errorMessage: String?) {
                     hasError.value = true
                 }
-            }
+            },MAX_LIMIT_FOR_LOADING_FRIENDS
         )
     }
 }

@@ -10,5 +10,7 @@ data class UserPublicInfoResponse(
     @SerializedName("registered")
     val registeredTime: String,
     @SerializedName("user_id")
-    val xsollaUserId: String
+    val xsollaUserId: String,
+    @SerializedName("tag")
+    val tag:String?
 )

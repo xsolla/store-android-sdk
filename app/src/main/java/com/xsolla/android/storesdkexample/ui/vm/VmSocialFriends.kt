@@ -46,7 +46,6 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
     private suspend fun loadItemsByTab(requestType: UserFriendsRequestType, relationship: FriendsRelationship): List<FriendUiEntity> = suspendCoroutine { continuation ->
         XLogin.getCurrentUserFriends(
                 null,
-                VmAddFriends.MAX_LIMIT_FOR_LOADING_FRIENDS,
                 requestType,
                 UserFriendsRequestSortBy.BY_UPDATED,
                 UserFriendsRequestSortOrder.ASC,
@@ -64,13 +63,13 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
                         hasError.value = errorMessage ?: throwable?.javaClass?.name ?: "Failure"
                         continuation.resume(listOf())
                     }
-                }
+                },VmAddFriends.MAX_LIMIT_FOR_LOADING_FRIENDS
         )
     }
 
     fun loadAllSocialFriends() = viewModelScope.launch {
         loadAllXsollaFriends()
-        XLogin.getSocialFriends(null, VmAddFriends.REQUEST_OFFSET, VmAddFriends.REQUEST_LIMIT, false, object : GetSocialFriendsCallback {
+        XLogin.getSocialFriends(null, false, object : GetSocialFriendsCallback {
             override fun onSuccess(data: SocialFriendsResponse) {
 
                 val groupByXsollaId = data.friendsList.groupBy { it.xsollaUserId }
@@ -111,7 +110,7 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
                 throwable?.printStackTrace()
                 hasError.value = errorMessage ?: throwable?.javaClass?.name ?: "Failure"
             }
-        })
+        }, VmAddFriends.REQUEST_OFFSET, VmAddFriends.REQUEST_LIMIT)
     }
 
     private fun findRelationship(xsollaId: String): FriendsRelationship {

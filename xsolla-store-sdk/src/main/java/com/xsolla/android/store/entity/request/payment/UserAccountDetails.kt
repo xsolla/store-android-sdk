@@ -1,7 +1,10 @@
 package com.xsolla.android.store.entity.request.payment
 
+import com.google.gson.annotations.SerializedName
+
 data class UserAccountDetails(
         val history: UserAccountHistory,
+        @SerializedName("payment_accounts")
         val paymentAccounts: UserAccountPaymentAccounts,
         val info: UserAccountInfo,
         val subscriptions: UserAccountSubscriptions

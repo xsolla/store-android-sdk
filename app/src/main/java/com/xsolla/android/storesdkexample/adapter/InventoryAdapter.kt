@@ -74,7 +74,7 @@ class InventoryAdapter(
             subscriptions?.find { it.sku == item.sku }?.let {
                 return if (it.status == SubscriptionsResponse.Item.Status.ACTIVE) {
                     binding.buyAgainButton.visibility = View.GONE
-                    val date = Date(it.expiredAt * 1000)
+                    val date = Date(it.expiredAt?.times(1000)!!)  //date *1000
                     val sdf = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.US)
                     val formattedDate = sdf.format(date)
                     "Active until: $formattedDate"

@@ -126,16 +126,16 @@ class ViFragment : BaseFragment() {
 
 @Parcelize
 data class VirtualItemUiEntity(
-        val sku: String? = null,
-        val name: String? = null,
-        val groups: List<Group> = emptyList(),
-        val attributes: @RawValue List<Any> = emptyList(),
-        val type: String? = null,
-        val description: String? = null,
-        val imageUrl: String? = null,
-        val isFree: Boolean,
-        val price: Price? = null,
-        val virtualPrices: List<VirtualPrice> = emptyList(),
-        val inventoryOption: InventoryOption? = null,
-        val hasInInventory: Boolean
+    val sku: String? = null,
+    val name: String? = null,
+    val groups: List<Group> = emptyList(),
+    val attributes: @RawValue List<Any> = emptyList(),
+    val type: String? = null,
+    val description: String? = null,
+    val imageUrl: String? = null,
+    val isFree: Boolean,
+    val price: Price? = null,
+    val virtualPrices: List<VirtualPrice> = emptyList(),
+    val inventoryOption: InventoryOption? = null,
+    val hasInInventory: Boolean
 ) : Parcelable

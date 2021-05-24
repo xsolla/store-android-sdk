@@ -187,13 +187,17 @@ enum class FieldsForChanging {
 
 enum class Gender(val response: GenderResponse) {
     Female(GenderResponse.F),
-    Male(GenderResponse.M);
+    Male(GenderResponse.M),
+    Other(GenderResponse.OTHER),
+    PreferNotToAnswer(GenderResponse.PREFER_NOT_TO_ANSWER);
 
     companion object {
         fun getBy(response: GenderResponse?): Gender? {
             return when (response) {
                 GenderResponse.F -> Female
                 GenderResponse.M -> Male
+                GenderResponse.OTHER -> Other
+                GenderResponse.PREFER_NOT_TO_ANSWER -> PreferNotToAnswer
                 null -> null
             }
         }
