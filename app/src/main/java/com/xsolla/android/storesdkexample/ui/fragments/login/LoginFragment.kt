@@ -114,7 +114,17 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
 
         hideKeyboard()
 
-        XLogin.authenticate(username, password, BuildConfig.WITH_LOGOUT, object : AuthCallback {
+        XLogin.authenticate(username,password, object :AuthCallback{
+            override fun onSuccess() {
+                TODO("Not yet implemented")
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                TODO("Not yet implemented")
+            }
+        })
+
+        XLogin.login(username, password, object : AuthCallback {
             override fun onSuccess() {
                 val intent = Intent(requireActivity(), StoreActivity::class.java)
                 startActivity(intent)
@@ -129,7 +139,7 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
                 binding.demoUserButton.isEnabled = true
             }
 
-        })
+        },BuildConfig.WITH_LOGOUT)
     }
 
     private fun resetPassword() {

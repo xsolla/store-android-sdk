@@ -27,6 +27,8 @@ data class VirtualItemsResponse(val items: List<Item> = emptyList()) {
         @SerializedName("virtual_prices")
         val virtualPrices: List<VirtualPrice> = emptyList(),
         @SerializedName("inventory_options")
-        val inventoryOption: InventoryOption? = null
+        val inventoryOption: InventoryOption? = null,
+        @SerializedName("virtual_item_type")
+        val virtualItemType: String? = null
     ) : Parcelable
 }

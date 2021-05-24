@@ -16,6 +16,7 @@ import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.callbacks.UpdateItemFromCurrentCartCallback
+import java.util.*
 
 class InventoryAdapter(
         private var subscriptions: List<SubscriptionsResponse.Item>? = null,
@@ -62,7 +63,7 @@ class InventoryViewHolder(inflater: LayoutInflater,
         subscriptions?.find { it.sku == item.sku }?.let {
             return if (it.status == SubscriptionsResponse.Item.Status.ACTIVE) {
                 binding.buyAgainButton.visibility = View.GONE
-                val date = java.util.Date(it.expiredAt * 1000)
+                val date = Date(it.expiredAt?.times(1000)!!)  //date *1000
                 val sdf = java.text.SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", java.util.Locale.US)
                 val formattedDate = sdf.format(date)
                 "Active until: $formattedDate"

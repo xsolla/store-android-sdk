@@ -41,9 +41,6 @@ class CartAdapter(
 
             bindCounter(item)
 
-            if (item.virtualPrices.isNotEmpty()) {
-                bindItemVirtualPrice(item)
-            }
 
             item.price?.let { bindItemPrice(item) }
 
@@ -58,24 +55,6 @@ class CartAdapter(
                 binding.itemSaleLabel.visibility = View.INVISIBLE
             } else {
                 binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!, price.currency!!)
-                binding.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal()!!)
-                binding.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-                binding.itemOldPrice.visibility = View.VISIBLE
-                binding.itemSaleLabel.visibility = View.VISIBLE
-            }
-        }
-
-        private fun bindItemVirtualPrice(item: CartResponse.Item) {
-            val price = item.virtualPrices[0]
-
-            binding.itemVirtualPriceIcon.visibility = View.VISIBLE
-            Glide.with(itemView.context).load(price.imageUrl).into(binding.itemVirtualPriceIcon)
-            if (price.getAmountDecimal() == price.getAmountWithoutDiscountDecimal() || price.calculatedPrice?.amountWithoutDiscount == null) {
-                binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!)
-                binding.itemOldPrice.visibility = View.INVISIBLE
-                binding.itemSaleLabel.visibility = View.INVISIBLE
-            } else {
-                binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!)
                 binding.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal()!!)
                 binding.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                 binding.itemOldPrice.visibility = View.VISIBLE

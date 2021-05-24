@@ -12,7 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class XInventory private constructor(
-        private val requestExecutor: RequestExecutor
+    private val requestExecutor: RequestExecutor
 ) {
 
     companion object {
@@ -34,18 +34,19 @@ class XInventory private constructor(
             val interceptor = Interceptor { chain ->
                 val originalRequest = chain.request()
                 val builder = originalRequest.newBuilder()
-                        .addHeader("Authorization", "Bearer $token")
-                        .addHeader("X-ENGINE", "ANDROID")
-                        .addHeader("X-ENGINE-V", Build.VERSION.RELEASE)
-                        .addHeader("X-SDK", "STORE")
-                        .addHeader("X-SDK-V", BuildConfig.VERSION_NAME)
-                        .url(originalRequest.url().newBuilder()
-                                .addQueryParameter("engine", "android")
-                                .addQueryParameter("engine_v", Build.VERSION.RELEASE)
-                                .addQueryParameter("sdk", "store")
-                                .addQueryParameter("sdk_v", BuildConfig.VERSION_NAME)
-                                .build()
-                        )
+                    .addHeader("Authorization", "Bearer $token")
+                    .addHeader("X-ENGINE", "ANDROID")
+                    .addHeader("X-ENGINE-V", Build.VERSION.RELEASE)
+                    .addHeader("X-SDK", "STORE")
+                    .addHeader("X-SDK-V", BuildConfig.VERSION_NAME)
+                    .url(
+                        originalRequest.url().newBuilder()
+                            .addQueryParameter("engine", "android")
+                            .addQueryParameter("engine_v", Build.VERSION.RELEASE)
+                            .addQueryParameter("sdk", "store")
+                            .addQueryParameter("sdk_v", BuildConfig.VERSION_NAME)
+                            .build()
+                    )
                 val newRequest = builder.build()
                 chain.proceed(newRequest)
             }
@@ -54,10 +55,10 @@ class XInventory private constructor(
             httpClient.addInterceptor(interceptor)
 
             val retrofit = Retrofit.Builder()
-                    .baseUrl(INVENTORY_HOST)
-                    .client(httpClient.build())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
+                .baseUrl(INVENTORY_HOST)
+                .client(httpClient.build())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
 
 
             val inventoryApi: InventoryApi = retrofit.create(InventoryApi::class.java)
@@ -70,39 +71,59 @@ class XInventory private constructor(
             return getInstance().requestExecutor
         }
 
+        //TextReview
         /**
          * Get a current user’s inventory
          *
-         * @param callback status callback
-         * @see [Inventory API Reference](https://developers.xsolla.com/store-api/inventory-client/get-user-inventory)
-         */
-        @JvmStatic
-        fun getInventory(callback: GetInventoryCallback) {
-            getRequestExecutor().getInventory(callback)
-        }
-
-        /**
-         * Get a current user’s subscriptions
          *
          * @param callback status callback
-         * @see [Inventory API Reference](https://developers.xsolla.com/store-api/inventory-client/get-user-subscriptions)
+         * @param limit Limit for the number of elements on the page in range of 1..50
+         * @param offset Number of the element from which the list is generated (the count starts from 0).
+         * @param platform Publishing platform the user plays on.
+         * @see [Inventory API Reference](https://developers.xsolla.com/commerce-api/player-inventory/client/get-user-inventory)
          */
         @JvmStatic
-        fun getSubscriptions(callback: GetSubscriptionsCallback) {
-            getRequestExecutor().getSubscriptions(callback)
+        @JvmOverloads
+        fun getInventory(
+            callback: GetInventoryCallback,
+            limit: Int = 50,
+            offset: Int = 0
+        ) {
+            getRequestExecutor().getInventory(callback, limit, offset)
         }
 
+        //TextReview
         /**
          * Get a current user’s virtual balance
          *
          * @param callback status callback
-         * @see [Inventory API Reference](https://developers.xsolla.com/store-api/inventory-client/get-user-virtual-balance)
+         * @param platform Publishing platform the user plays on.
+         * @see [Inventory API Reference](https://developers.xsolla.com/commerce-api/player-inventory/client/get-user-virtual-balance)
          */
         @JvmStatic
-        fun getVirtualBalance(callback: GetVirtualBalanceCallback) {
+        fun getVirtualBalance(
+            callback: GetVirtualBalanceCallback
+        ) {
             getRequestExecutor().getVirtualBalance(callback)
         }
 
+        //TextReview
+        /**
+         * Get a current user’s subscriptions
+         *
+         * @param callback status callback
+         * @param platform Publishing platform the user plays on.
+         * @see [Inventory API Reference](https://developers.xsolla.com/commerce-api/player-inventory/client/get-user-subscriptions)
+         */
+        @JvmStatic
+        fun getSubscriptions(
+            callback: GetSubscriptionsCallback
+        ) {
+            getRequestExecutor().getSubscriptions(callback)
+        }
+
+
+        //TextReview
         /**
          * Consume an item from a current user’s inventory
          *
@@ -110,10 +131,16 @@ class XInventory private constructor(
          * @param quantity   item quantity, if an item is uncountable, should be null
          * @param instanceId instance item ID, if an item is countable, should be null
          * @param callback   status callback
-         * @see [Inventory API Reference](https://developers.xsolla.com/store-api/inventory-client/consume-item)
+         * @param platform Publishing platform the user plays on.
+         * @see [Inventory API Reference](https://developers.xsolla.com/commerce-api/player-inventory/client/consume-item)
          */
         @JvmStatic
-        fun consumeItem(sku: String, quantity: Long, instanceId: String?, callback: ConsumeItemCallback) {
+        fun consumeItem(
+            sku: String,
+            quantity: Long,
+            instanceId: String?,
+            callback: ConsumeItemCallback
+        ) {
             getRequestExecutor().consumeItem(sku, quantity, instanceId, callback)
         }
 

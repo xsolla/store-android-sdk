@@ -6,5 +6,7 @@ data class AuthUserSocialBody @JvmOverloads constructor(
         @SerializedName("access_token")
         val accessToken: String,
         @SerializedName("access_token_secret")
-        val accessTokenSecret: String? = null
+        val accessTokenSecret: String? = null,
+        @SerializedName("openid")
+        val openId: String? = null
 )
