@@ -272,6 +272,113 @@ class XLogin private constructor(
         }
 
         /**
+         * Starts authentication by the user phone number and sends a verification code to their phone number.
+
+         *
+         * @param phoneNumber User's phone number
+         * @param withLogout only JWT param false to keep existing tokens, true to deactivate existing and activate a new one
+         * @param callback status callback
+         * @see [JWT Login API Reference](https://developers.xsolla.com/login-api/methods/jwt/jwt-start-auth-by-phone-number)
+         *
+         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-start-auth-by-phone-number)
+         */
+        @JvmStatic
+        fun startAuthByMobilePhone(phoneNumber: String, callback: StartAuthByPhoneCallback, withLogout: Boolean = false) {
+            val retrofitCallback: Callback<Void> = object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        callback.onAuthStarted()
+                    } else {
+                        callback.onError(null, getErrorMessage(response.errorBody()))
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    callback.onError(t, null)
+                }
+            }
+            if (!getInstance().useOauth) {
+                val body = StartAuthByPhoneBody(phoneNumber)
+                getInstance().loginApi.startAuthByPhone(getInstance().projectId, getInstance().callbackUrl,
+                    null, if (withLogout) "1" else "0", body)
+                    .enqueue(retrofitCallback)
+            } else {
+                val body = StartAuthByPhoneBody(phoneNumber)
+                getInstance().loginApi.oauthStartAuthByPhone("code", getInstance().oauthClientId, "offline",
+                    UUID.randomUUID().toString(), getInstance().callbackUrl, body)
+                    .enqueue(retrofitCallback)
+            }
+        }
+
+        /**
+         * Completes authentication by the user phone number and a verification code.
+
+         *
+         * @param phoneNumber User's phone number
+         * @param code Verification code from phone
+         * @param callback status callback
+         * @see [JWT Login API Reference](https://developers.xsolla.com/login-api/methods/jwt/jwt-complete-auth-by-phone-number)
+         *
+         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-complete-auth-by-phone-number)
+         */
+        @JvmStatic
+        fun completeAuthByMobilePhone(phoneNumber: String, code: String, callback: CompleteAuthByPhoneCallback) {
+            if (!getInstance().useOauth) {
+                val body = CompleteAuthByPhoneBody(code, phoneNumber)
+                getInstance().loginApi.completeAuthByPhone(getInstance().projectId, body)
+                    .enqueue(object : Callback<AuthResponse?> {
+                        override fun onResponse(call: Call<AuthResponse?>, response: Response<AuthResponse?>) {
+                            if (response.isSuccessful) {
+                                val authResponse = response.body()
+                                if (authResponse != null) {
+                                    val token = authResponse.getToken()
+                                    getInstance().tokenUtils.jwtToken = token
+                                    callback.onSuccess()
+                                } else {
+                                    callback.onError(null, "Empty response")
+                                }
+                            } else {
+                                callback.onError(null, getErrorMessage(response.errorBody()))
+                            }
+                        }
+
+                        override fun onFailure(call: Call<AuthResponse?>, t: Throwable) {
+                            callback.onError(t, null)
+                        }
+                    })
+
+            } else {
+                val body = CompleteAuthByPhoneBody(code, phoneNumber)
+                getInstance().loginApi.oauthCompleteAuthByPhone(getInstance().oauthClientId, body)
+                    .enqueue(object : Callback<OauthAuthResponse?> {
+                        override fun onResponse(call: Call<OauthAuthResponse?>, response: Response<OauthAuthResponse?>) {
+                            if (response.isSuccessful) {
+                                val oauthAuthResponse = response.body()
+                                if (oauthAuthResponse != null) {
+                                    val accessToken = oauthAuthResponse.accessToken
+                                    val refreshToken = oauthAuthResponse.refreshToken
+                                    val expiresIn = oauthAuthResponse.expiresIn
+                                    getInstance().tokenUtils.oauthAccessToken = accessToken
+                                    getInstance().tokenUtils.oauthRefreshToken = refreshToken
+                                    getInstance().tokenUtils.oauthExpireTimeUnixSec = System.currentTimeMillis() / 1000 + expiresIn
+                                    callback.onSuccess()
+                                } else {
+                                    callback.onError(null, "Empty response")
+                                }
+                            } else {
+                                callback.onError(null, getErrorMessage(response.errorBody()))
+                            }
+                        }
+
+                        override fun onFailure(call: Call<OauthAuthResponse?>, t: Throwable) {
+                            callback.onError(t, null)
+                        }
+                    })
+            }
+        }
+
+
+        /**
          * Clear authentication data
          */
         @JvmStatic
