@@ -92,6 +92,18 @@ test:
     - branches
   script:
     - ./gradlew test
+  artifacts:
+    expire_in: 24 hours
+    paths:
+      - xsolla-inventory-sdk/build/reports/
+      - xsolla-login-sdk/build/reports/
+      - xsolla-login-sdk-facebook/build/reports/
+      - xsolla-login-sdk-google/build/reports/
+      - xsolla-login-sdk-qq/build/reports/
+      - xsolla-login-sdk-wechat/build/reports/
+      - xsolla-payments-sdk/build/reports/
+      - xsolla-payments-sdk-playfab/build/reports/
+      - xsolla-store-sdk/build/reports/
   cache:
     key: ${CI_PROJECT_ID}
     paths:
