@@ -6,18 +6,23 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.xsolla.android.analytics.Message
+import com.xsolla.android.analytics.XAnalytics
 import com.xsolla.android.appcore.LoginBottomSheet
 import com.xsolla.android.appcore.databinding.FragmentLoginBinding
 import com.xsolla.android.appcore.extensions.setRateLimitedClickListener
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.AuthCallback
 import com.xsolla.android.login.callback.FinishSocialCallback
+import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
 import com.xsolla.android.login.callback.StartSocialCallback
+import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.StoreActivity
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
+import com.xsolla.android.storesdkexample.util.extensions.getTimeInEpoch
 import java.util.*
 
 class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
@@ -31,6 +36,8 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
 
     private var selectedSocialNetwork: SocialNetwork? = null
 
+    private var authId: String? = null
+
     override fun getLayout(): Int {
         return R.layout.fragment_login
     }
@@ -38,36 +45,127 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
     override fun initUI() {
         initLoginButtonEnabling()
 
+
+        val calendar = Calendar.getInstance()
+
+        XLogin.getCurrentUserDetails(object : GetCurrentUserDetailsCallback {
+            override fun onSuccess(data: UserDetailsResponse) {
+                authId = data.id
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                authId = null
+            }
+        })
+
+
         binding.loginButton.setOnClickListener {
             val username = binding.usernameInput.text.toString()
             val password = binding.passwordInput.text.toString()
+
+            //create and publish analytics message
+            val message = Message(
+                time = XAnalytics.getTime(),
+                entity = Message.Entity.Authentication,
+                action = "User Authenticated via login-password",
+                idString = XAnalytics.getHardwareId(requireContext()),
+                idStringAuth = authId,
+                isTest = true
+            )
+            XAnalytics.publish(message)
             loginWithPassword(username, password)
         }
 
         binding.demoUserButton.setOnClickListener {
+            val message = Message(
+                time = calendar.getTimeInEpoch(),
+                entity = Message.Entity.Authentication,
+                action = "User Authenticated via demo-user",
+                idString = XAnalytics.getHardwareId(requireContext()),
+                idStringAuth = authId,
+                isTest = true
+            )
+            XAnalytics.publish(message)
             loginWithPassword("xsolla", "xsolla")
         }
 
         binding.googleButton.setRateLimitedClickListener {
+            val message = Message(
+
+                time = calendar.getTimeInEpoch(),
+                entity = Message.Entity.Authentication,
+                action = "User Authenticated via social network",
+                idString = XAnalytics.getHardwareId(requireContext()),
+                idStringAuth = authId,
+                customAttr = "Social network - GOOGLE",
+                isTest = true
+            )
+            XAnalytics.publish(message)
             selectedSocialNetwork = SocialNetwork.GOOGLE
-            XLogin.startSocialAuth(this, SocialNetwork.GOOGLE, BuildConfig.WITH_LOGOUT, startSocialCallback)
+            XLogin.startSocialAuth(
+                this,
+                SocialNetwork.GOOGLE,
+                BuildConfig.WITH_LOGOUT,
+                startSocialCallback
+            )
         }
 
         binding.facebookButton.setRateLimitedClickListener {
+            val message = Message(
+                time = calendar.getTimeInEpoch(),
+                entity = Message.Entity.Authentication,
+                action = "User Authenticated via social network",
+                idString = XAnalytics.getHardwareId(requireContext()),
+                idStringAuth = authId,
+                customAttr = "Social network - FACEBOOK",
+                isTest = true
+            )
+           XAnalytics.publish(message)
             selectedSocialNetwork = SocialNetwork.FACEBOOK
-            XLogin.startSocialAuth(this, SocialNetwork.FACEBOOK, BuildConfig.WITH_LOGOUT, startSocialCallback)
+            XLogin.startSocialAuth(
+                this,
+                SocialNetwork.FACEBOOK,
+                BuildConfig.WITH_LOGOUT,
+                startSocialCallback
+            )
         }
 
         binding.baiduButton.setRateLimitedClickListener {
+            val message = Message(
+                time = calendar.getTimeInEpoch(),
+                entity = Message.Entity.Authentication,
+                action = "User Authenticated via social network",
+                idString = XAnalytics.getHardwareId(requireContext()),
+                idStringAuth = authId,
+                customAttr = "Social network - BAIDU",
+                isTest = true
+            )
+            XAnalytics.publish(message)
             selectedSocialNetwork = SocialNetwork.BAIDU
-            XLogin.startSocialAuth(this, SocialNetwork.BAIDU, BuildConfig.WITH_LOGOUT, startSocialCallback)
+            XLogin.startSocialAuth(
+                this,
+                SocialNetwork.BAIDU,
+                BuildConfig.WITH_LOGOUT,
+                startSocialCallback
+            )
         }
 
         binding.moreButton.setRateLimitedClickListener {
             LoginBottomSheet.newInstance().show(childFragmentManager, "moreSocials")
         }
 
-        binding.resetPasswordButton.setOnClickListener { resetPassword() }
+        binding.resetPasswordButton.setOnClickListener {
+            val message = Message(
+                time = calendar.getTimeInEpoch(),
+                entity = Message.Entity.Authentication,
+                action = "Reset password",
+                idString = XAnalytics.getHardwareId(requireContext()),
+                idStringAuth = authId,
+                isTest = true
+            )
+            XAnalytics.publish(message)
+            resetPassword()
+        }
 
         binding.privacyPolicyButton.setOnClickListener { showPrivacyPolicy() }
     }
@@ -134,10 +232,10 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
 
     private fun resetPassword() {
         requireActivity().supportFragmentManager
-                .beginTransaction()
-                .add(R.id.rootFragmentContainer, ResetPasswordFragment())
-                .addToBackStack(null)
-                .commit()
+            .beginTransaction()
+            .add(R.id.rootFragmentContainer, ResetPasswordFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun showPrivacyPolicy() {
@@ -155,7 +253,15 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        XLogin.finishSocialAuth(requireActivity(), selectedSocialNetwork, requestCode, resultCode, data, BuildConfig.WITH_LOGOUT, finishSocialCallback)
+        XLogin.finishSocialAuth(
+            requireActivity(),
+            selectedSocialNetwork,
+            requestCode,
+            resultCode,
+            data,
+            BuildConfig.WITH_LOGOUT,
+            finishSocialCallback
+        )
         super.onActivityResult(requestCode, resultCode, data)
     }
 
@@ -205,11 +311,21 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         when (socialNetwork) {
             LoginBottomSheet.SocialNetworks.TWITTER -> {
                 selectedSocialNetwork = SocialNetwork.TWITTER
-                XLogin.startSocialAuth(this, SocialNetwork.TWITTER, BuildConfig.WITH_LOGOUT, startSocialCallback)
+                XLogin.startSocialAuth(
+                    this,
+                    SocialNetwork.TWITTER,
+                    BuildConfig.WITH_LOGOUT,
+                    startSocialCallback
+                )
             }
             LoginBottomSheet.SocialNetworks.LINKEDIN -> {
                 selectedSocialNetwork = SocialNetwork.LINKEDIN
-                XLogin.startSocialAuth(this, SocialNetwork.LINKEDIN, BuildConfig.WITH_LOGOUT, startSocialCallback)
+                XLogin.startSocialAuth(
+                    this,
+                    SocialNetwork.LINKEDIN,
+                    BuildConfig.WITH_LOGOUT,
+                    startSocialCallback
+                )
             }
         }
     }

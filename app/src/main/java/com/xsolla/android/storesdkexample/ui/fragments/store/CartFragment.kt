@@ -14,14 +14,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.xsolla.android.appcore.databinding.FragmentCartBinding
 import com.xsolla.android.appcore.utils.AmountUtils
+import com.xsolla.android.login.XLogin
 import com.xsolla.android.payments.XPayments.Companion.createIntentBuilder
 import com.xsolla.android.payments.XPayments.Result.Companion.fromResultIntent
 import com.xsolla.android.payments.data.AccessToken
 import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.CartAdapter
-import com.xsolla.android.appcore.databinding.FragmentCartBinding
 import com.xsolla.android.storesdkexample.listener.CartChangeListener
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
@@ -93,6 +94,7 @@ class CartFragment : BaseFragment(), CartChangeListener {
         }
 
         binding.checkoutButton.setOnClickListener {
+            val dsd = XLogin.token
             vmCart.createOrder { error -> showSnack(error) }
         }
 

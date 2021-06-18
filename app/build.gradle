@@ -86,6 +86,7 @@ dependencies {
     implementation project(":xsolla-store-sdk")
     implementation project(":xsolla-inventory-sdk")
     implementation project(":xsolla-payments-sdk")
+    implementation project(":xsolla-analytics-sdk")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

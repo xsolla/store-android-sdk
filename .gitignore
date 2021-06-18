@@ -8,3 +8,4 @@
 /app/release
 .externalNativeBuild
 .cxx
+/app/src/main/res/raw/credentials.json
