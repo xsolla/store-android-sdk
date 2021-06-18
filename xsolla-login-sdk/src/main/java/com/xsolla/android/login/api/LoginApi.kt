@@ -25,8 +25,21 @@ interface LoginApi {
     ): Call<AuthResponse>
 
     //ToDo:: Auth via device ID
-    //ToDo:: Complete auth via phone number
-    //ToDo:: Start auth by phone number
+
+    @POST("api/login/phone/confirm")
+    fun completeAuthByPhone(
+        @Query("projectId") projectId: String,
+        @Body completeAuthByPhoneBody: CompleteAuthByPhoneBody
+    ): Call<AuthResponse>
+
+    @POST("api/login/phone/request")
+    fun startAuthByPhone(
+        @Query("projectId") projectId: String,
+        @Query("login_url") loginUrl: String,
+        @Query("payload") payload: String?,
+        @Query("with_logout") withLogout: String,
+        @Body startAuthByPhoneBody: StartAuthByPhoneBody
+    ): Call<Void>
 
     @GET("/api/social/{providerName}/login_url")
     fun getLinkForSocialAuth(
@@ -69,8 +82,22 @@ interface LoginApi {
     ): Call<OauthAuthResponse>
 
     //ToDo:: Auth via device ID
-    //ToDo:: Complete auth via phone number
-    //ToDo:: Start auth by phone number
+
+    @POST("api/oauth2/login/phone/confirm")
+    fun oauthCompleteAuthByPhone(
+        @Query("client_id") clientId: Int,
+        @Body completeByPhoneBody: CompleteAuthByPhoneBody
+    ): Call<OauthAuthResponse>
+
+    @POST("api/oauth2/login/phone/request")
+    fun oauthStartAuthByPhone(
+        @Query("response_type") responseType: String,
+        @Query("client_id") clientId: Int,
+        @Query("scope") scope: String,
+        @Query("state") state: String,
+        @Query("redirect_uri") redirectUri: String,
+        @Body body: StartAuthByPhoneBody
+    ): Call<Void>
 
     @GET("/api/oauth2/social/{providerName}/login_url")
     fun oauthGetLinkForSocialAuth(
