@@ -24,7 +24,14 @@ interface LoginApi {
         @Body authUserBody: AuthUserBody
     ): Call<AuthResponse>
 
-    //ToDo:: Auth via device ID
+    @POST("/api/login/device/{device_type}")
+    fun authViaDeviceId(
+        @Path("device_type") deviceType: String,
+        @Query("projectId") projectId: String,
+        @Query("payload") payload: String?,
+        @Query("with_logout") withLogout: String,
+        @Body loginByDeviceIdBody: AuthViaDeviceIdBody
+    ) : Call <AuthViaIdResponse>
 
     @POST("api/login/phone/confirm")
     fun completeAuthByPhone(
@@ -81,7 +88,16 @@ interface LoginApi {
         @Body oauthAuthUserBody: OauthAuthUserBody
     ): Call<OauthAuthResponse>
 
-    //ToDo:: Auth via device ID
+    @POST("/api/oauth2/login/device/{device_type}")
+    fun oauthAuthViaDeviceId(
+        @Path("device_type") deviceType: String,
+        @Query("client_id") client:Int,
+        @Query("response_type") responseType: String,
+        @Query("redirect_uri") redirectUri: String,
+        @Query("state") state: String,
+        @Query("scope") scope: String,
+        @Body body: AuthViaDeviceIdBody
+    ) : Call<OauthAuthResponse>
 
     @POST("api/oauth2/login/phone/confirm")
     fun oauthCompleteAuthByPhone(
@@ -237,7 +253,24 @@ interface LoginApi {
     //
     // Devices
 
-    //ToDo:: Devices
+
+    @GET("/api/users/me/devices")
+    fun getUsersDevices(
+        @Header("authorization") authHeader: String
+    ): Call<List<UsersDevicesResponse>>
+
+    @POST("/api/users/me/devices/{device_type}")
+    fun linkDeviceToAccount(
+        @Header("authorization") authHeader: String,
+        @Path("device_type") deviceType: String,
+        @Body linkDeviceToAccountBody: AuthViaDeviceIdBody
+    ): Call<Void>
+
+    @DELETE("/api/users/me/devices/{id}")
+    fun unlinkDeviceFromAccount(
+        @Header("authorization") authHeader: String,
+        @Path("id") id: Int
+    ): Call<Void>
 
     // User Account
     //
@@ -262,6 +295,13 @@ interface LoginApi {
 
     @GET("api/users/me/email")
     fun getCurrentUserEmail(@Header("authorization") authHeader: String): Call<EmailResponse>
+
+    @POST("/api/users/me/link_email_password")
+    fun linkEmailPassword(
+        @Header("authorization") authHeader: String,
+        @Query("login_url") loginUrl: String,
+        @Body linkEmailPasswordBody: LinkEmailPasswordBody
+    ): Call<LinkEmailPasswordResponse>
 
     @GET("api/users/me/phone")
     fun getUserPhone(@Header("authorization") authHeader: String): Call<PhoneResponse>
