@@ -103,8 +103,7 @@ class CartFragment : BaseFragment(), CartChangeListener {
                 .accessToken(AccessToken(it))
                 .useWebview(true)
                 .isSandbox(BuildConfig.IS_SANDBOX)
-                .build()
-            startActivityForResult(intent, RC_PAYSTATION)
+                .launchChromeTab(requireContext())
         })
 
         vmCart.orderId.observe(viewLifecycleOwner, Observer {
