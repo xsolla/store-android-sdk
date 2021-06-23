@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_bundle_top"
+        android:layout_width="match_parent"
+        android:layout_height="124dp"
+        android:background="@color/night_blue_color"
+        app:layout_constraintBottom_toTopOf="@+id/rv_bundle_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_bundle_preview"
+            android:layout_width="94dp"
+            android:layout_height="94dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription='Bundle preview'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_bundle_name"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="6dp"
+            android:background="#00FFFFFF"
+            android:maxLines="2"
+            app:layout_constraintBottom_toTopOf="@+id/tv_bundle_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_bundle_preview"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Super Lootbox Bundle" />
+
+        <TextView
+            android:id="@+id/tv_bundle_description"
+            style="@style/TextAppearance.MaterialComponents.Body2"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/light_state_gray_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_bundle_preview"
+            app:layout_constraintTop_toBottomOf="@+id/tv_bundle_name"
+            tools:text="This bundle contains 5 items" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_bundle_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/black_color"
+        app:layout_constraintBottom_toTopOf="@+id/cl_bundle_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_bundle_top"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_bundle_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/night_blue_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_bundle_content">
+
+
+        <ImageView
+            android:id="@+id/itemVirtualPriceIcon"
+            style="@style/Widget.Xsolla.CatalogItem.Price"
+            android:layout_width="@dimen/catalog_item_virtual_price_icon_width"
+            android:layout_height="@dimen/catalog_item_virtual_price_icon_height"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_bundle_price"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars[1]"
+            tools:visibility="gone" />
+
+        <Button
+            android:id="@+id/bt_bundle_buy"
+            style="@style/Widget.Xsolla.ActionButton.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/buy_now_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_bundle_price"
+            style="@style/Widget.Xsolla.CatalogItem.Price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_bundle_old_price"
+            app:layout_constraintStart_toEndOf="@+id/itemVirtualPriceIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="$ 100" />
+
+        <TextView
+            android:id="@+id/tv_bundle_old_price"
+            style="@style/Widget.Xsolla.CatalogItem.OldPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_bundle_price"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="$ 150" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

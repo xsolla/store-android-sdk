@@ -128,5 +128,7 @@
     <string name="promocode_placeholder">\tfor example, NEWGAMER2020</string>
     <string name="promocode_bonus_item_placeholder">BONUS ITEM</string>
     <string name="buy_again">Buy again</string>
+    <string name="buy_now_button">Buy now</string>
+    <string name="preview">Preview</string>
 
 </resources>

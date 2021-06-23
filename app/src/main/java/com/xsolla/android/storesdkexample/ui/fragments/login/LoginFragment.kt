@@ -22,7 +22,6 @@ import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.StoreActivity
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
-import com.xsolla.android.storesdkexample.util.extensions.getTimeInEpoch
 import java.util.*
 
 class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
@@ -62,45 +61,16 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         binding.loginButton.setOnClickListener {
             val username = binding.usernameInput.text.toString()
             val password = binding.passwordInput.text.toString()
-
-            //create and publish analytics message
-            val message = Message(
-                time = XAnalytics.getTime(),
-                entity = Message.Entity.Authentication,
-                action = "User Authenticated via login-password",
-                idString = XAnalytics.getHardwareId(requireContext()),
-                idStringAuth = authId,
-                isTest = true
-            )
-            XAnalytics.publish(message)
-            loginWithPassword(username, password)
+          loginWithPassword(username, password)
         }
 
         binding.demoUserButton.setOnClickListener {
-            val message = Message(
-                time = calendar.getTimeInEpoch(),
-                entity = Message.Entity.Authentication,
-                action = "User Authenticated via demo-user",
-                idString = XAnalytics.getHardwareId(requireContext()),
-                idStringAuth = authId,
-                isTest = true
-            )
-            XAnalytics.publish(message)
+
             loginWithPassword("xsolla", "xsolla")
         }
 
         binding.googleButton.setRateLimitedClickListener {
-            val message = Message(
 
-                time = calendar.getTimeInEpoch(),
-                entity = Message.Entity.Authentication,
-                action = "User Authenticated via social network",
-                idString = XAnalytics.getHardwareId(requireContext()),
-                idStringAuth = authId,
-                customAttr = "Social network - GOOGLE",
-                isTest = true
-            )
-            XAnalytics.publish(message)
             selectedSocialNetwork = SocialNetwork.GOOGLE
             XLogin.startSocialAuth(
                 this,
@@ -111,16 +81,6 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         }
 
         binding.facebookButton.setRateLimitedClickListener {
-            val message = Message(
-                time = calendar.getTimeInEpoch(),
-                entity = Message.Entity.Authentication,
-                action = "User Authenticated via social network",
-                idString = XAnalytics.getHardwareId(requireContext()),
-                idStringAuth = authId,
-                customAttr = "Social network - FACEBOOK",
-                isTest = true
-            )
-           XAnalytics.publish(message)
             selectedSocialNetwork = SocialNetwork.FACEBOOK
             XLogin.startSocialAuth(
                 this,
@@ -131,16 +91,7 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         }
 
         binding.baiduButton.setRateLimitedClickListener {
-            val message = Message(
-                time = calendar.getTimeInEpoch(),
-                entity = Message.Entity.Authentication,
-                action = "User Authenticated via social network",
-                idString = XAnalytics.getHardwareId(requireContext()),
-                idStringAuth = authId,
-                customAttr = "Social network - BAIDU",
-                isTest = true
-            )
-            XAnalytics.publish(message)
+
             selectedSocialNetwork = SocialNetwork.BAIDU
             XLogin.startSocialAuth(
                 this,
@@ -155,15 +106,7 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         }
 
         binding.resetPasswordButton.setOnClickListener {
-            val message = Message(
-                time = calendar.getTimeInEpoch(),
-                entity = Message.Entity.Authentication,
-                action = "Reset password",
-                idString = XAnalytics.getHardwareId(requireContext()),
-                idStringAuth = authId,
-                isTest = true
-            )
-            XAnalytics.publish(message)
+
             resetPassword()
         }
 

@@ -57,8 +57,8 @@ class CartAdapter(
             if (price!!.getAmountDecimal() == price.getAmountWithoutDiscountDecimal()) {
                 binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!, price.currency!!)
                 binding.itemOldPrice.visibility = View.INVISIBLE
-                binding.itemSaleLabel.visibility = View.INVISIBLE
-            } else {
+                binding.itemSaleLabel.visibility = View.INVISIBLE }
+            else {
                 binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!, price.currency!!)
                 binding.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal()!!)
                 binding.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
