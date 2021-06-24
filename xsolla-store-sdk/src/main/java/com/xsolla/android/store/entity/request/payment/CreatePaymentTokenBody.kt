@@ -12,7 +12,7 @@ data class CreatePaymentTokenBody(
 )
 
 data class PurchaseObject(
-    val checkout: PurchaseObjectCheckout,
+    val checkout: PurchaseObjectCheckout? = null,
     val items: List<PurchaseObjectItem>? = null,
     val description: PurchaseObjectDescription?= null
 
@@ -41,8 +41,8 @@ data class PurchaseObjectItem(
 
 data class PaymentTokenBodySettings(
     val uiSettings: PaymentProjectSettings?,
-    val currency: String = "USD",
-    val locale: String = "en",
+    val currency: String? = null,
+    val locale: String? = null,
     val sandbox: Boolean = true,
     @SerializedName("external_id")
     val externalId: String? = null,
