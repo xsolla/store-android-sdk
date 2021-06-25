@@ -97,7 +97,7 @@ interface LoginApi {
         @Query("state") state: String,
         @Query("scope") scope: String,
         @Body body: AuthViaDeviceIdBody
-    ) : Call<OauthAuthResponse>
+    ) : Call<OauthGetCodeResponse>
 
     @POST("api/oauth2/login/phone/confirm")
     fun oauthCompleteAuthByPhone(
@@ -134,7 +134,7 @@ interface LoginApi {
         @Query("response_type") responseType: String,
         @Query("scope") scope: String,
         @Body oauthGetCodeBySocialTokenBody: OauthGetCodeBySocialTokenBody
-    ): Call<OauthGetCodeBySocialTokenResponse>
+    ): Call<OauthGetCodeResponse>
 
     @FormUrlEncoded
     @POST("/api/oauth2/token")
@@ -423,5 +423,5 @@ interface LoginApi {
         @Query("response_type") responseType: String,
         @Query("scope") scope: String,
         @Body authUserSocialWithCodeBody: AuthUserSocialWithCodeBody
-    ): Call<OauthGetCodeBySocialTokenResponse>
+    ): Call<OauthGetCodeResponse>
 }

@@ -38,7 +38,7 @@ import com.xsolla.android.login.token.TokenUtils
 import com.xsolla.android.login.ui.ActivityAuthWebView
 import com.xsolla.android.login.ui.ActivityAuthWebView.Result.Companion.fromResultIntent
 import com.xsolla.android.login.ui.ActivityWechatProxy
-import okhttp3.ResponseBody
+import com.xsolla.android.login.util.Utils
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -271,7 +271,7 @@ object LoginSocial {
             when (status) {
                 ActivityAuthWebView.Status.SUCCESS -> {
                     if (useOauth) {
-                        getOauthTokensFromCode(code!!) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
+                        Utils.getOauthTokensFromCode(code!!) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
                             if (throwable == null && errorMessage == null) {
                                 tokenUtils.oauthAccessToken = accessToken
                                 tokenUtils.oauthRefreshToken = refreshToken
@@ -517,7 +517,7 @@ object LoginSocial {
                             openWebviewActivity(url, activity, fragment)
                             callback.onAuthStarted()
                         } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+                            callback.onError(null, Utils.getErrorMessage(response.errorBody()))
                         }
                     }
 
@@ -548,7 +548,7 @@ object LoginSocial {
                             openWebviewActivity(url, activity, fragment)
                             callback.onAuthStarted()
                         } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+                            callback.onError(null, Utils.getErrorMessage(response.errorBody()))
                         }
                     }
 
@@ -577,19 +577,6 @@ object LoginSocial {
         } else {
             fragment!!.startActivityForResult(intent, RC_AUTH_WEBVIEW)
         }
-    }
-
-    private fun getErrorMessage(errorBody: ResponseBody?): String {
-        if (errorBody == null) {
-            return "Unknown Error"
-        }
-        try {
-            val errorObject = JSONObject(errorBody.string())
-            return errorObject.getJSONObject("error").getString("description")
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return "Unknown Error"
     }
 
     private fun getLoginTokenFromSocial(
@@ -623,7 +610,7 @@ object LoginSocial {
                             tokenUtils.jwtToken = jwtToken
                             callback.invoke(null, null)
                         } else {
-                            callback.invoke(null, getErrorMessage(response.errorBody()))
+                            callback.invoke(null, Utils.getErrorMessage(response.errorBody()))
                         }
                     }
 
@@ -642,10 +629,10 @@ object LoginSocial {
                 "offline",
                 oauthGetCodeBySocialTokenBody
             )
-                .enqueue(object : Callback<OauthGetCodeBySocialTokenResponse> {
+                .enqueue(object : Callback<OauthGetCodeResponse> {
                     override fun onResponse(
-                        call: Call<OauthGetCodeBySocialTokenResponse>,
-                        response: Response<OauthGetCodeBySocialTokenResponse>
+                        call: Call<OauthGetCodeResponse>,
+                        response: Response<OauthGetCodeResponse>
                     ) {
                         if (response.isSuccessful) {
                             val url = response.body()?.loginUrl
@@ -658,7 +645,7 @@ object LoginSocial {
                                 callback.invoke(null, "Code not found url")
                                 return
                             }
-                            getOauthTokensFromCode(code) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
+                            Utils.getOauthTokensFromCode(code) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
                                 if (throwable == null && errorMessage == null) {
                                     tokenUtils.oauthAccessToken = accessToken
                                     tokenUtils.oauthRefreshToken = refreshToken
@@ -668,12 +655,12 @@ object LoginSocial {
                                 callback.invoke(throwable, errorMessage)
                             }
                         } else {
-                            callback.invoke(null, getErrorMessage(response.errorBody()))
+                            callback.invoke(null, Utils.getErrorMessage(response.errorBody()))
                         }
                     }
 
                     override fun onFailure(
-                        call: Call<OauthGetCodeBySocialTokenResponse>,
+                        call: Call<OauthGetCodeResponse>,
                         t: Throwable
                     ) {
                         callback.invoke(t, null)
@@ -710,7 +697,7 @@ object LoginSocial {
                             tokenUtils.jwtToken = jwtToken
                             callback.invoke(null, null)
                         } else {
-                            callback.invoke(null, getErrorMessage(response.errorBody()))
+                            callback.invoke(null, Utils.getErrorMessage(response.errorBody()))
                         }
                     }
 
@@ -729,10 +716,10 @@ object LoginSocial {
                 "offline",
                 authUserSocialWithCodeBody
             )
-                .enqueue(object : Callback<OauthGetCodeBySocialTokenResponse> {
+                .enqueue(object : Callback<OauthGetCodeResponse> {
                     override fun onResponse(
-                        call: Call<OauthGetCodeBySocialTokenResponse>,
-                        response: Response<OauthGetCodeBySocialTokenResponse>
+                        call: Call<OauthGetCodeResponse>,
+                        response: Response<OauthGetCodeResponse>
                     ) {
                         if (response.isSuccessful) {
                             val url = response.body()?.loginUrl
@@ -745,7 +732,7 @@ object LoginSocial {
                                 callback.invoke(null, "Code not found url")
                                 return
                             }
-                            getOauthTokensFromCode(code) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
+                            Utils.getOauthTokensFromCode(code) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
                                 if (throwable == null && errorMessage == null) {
                                     tokenUtils.oauthAccessToken = accessToken
                                     tokenUtils.oauthRefreshToken = refreshToken
@@ -755,56 +742,18 @@ object LoginSocial {
                                 callback.invoke(throwable, errorMessage)
                             }
                         } else {
-                            callback.invoke(null, getErrorMessage(response.errorBody()))
+                            callback.invoke(null, Utils.getErrorMessage(response.errorBody()))
                         }
                     }
 
                     override fun onFailure(
-                        call: Call<OauthGetCodeBySocialTokenResponse>,
+                        call: Call<OauthGetCodeResponse>,
                         t: Throwable
                     ) {
                         callback.invoke(t, null)
                     }
                 })
         }
-    }
-
-    private fun getOauthTokensFromCode(
-        code: String,
-        callback: (Throwable?, String?, String?, String?, Int?) -> Unit
-    ) {
-        loginApi
-            .oauthGetTokenByCode(code, "authorization_code", oauthClientId, callbackUrl)
-            .enqueue(object : Callback<OauthAuthResponse> {
-                override fun onResponse(
-                    call: Call<OauthAuthResponse>,
-                    response: Response<OauthAuthResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val oauthAuthResponse = response.body()
-                        if (oauthAuthResponse != null) {
-                            val accessToken = oauthAuthResponse.accessToken
-                            val refreshToken = oauthAuthResponse.refreshToken
-                            val expiresIn = oauthAuthResponse.expiresIn
-                            callback.invoke(null, null, accessToken, refreshToken, expiresIn)
-                        } else {
-                            callback.invoke(null, "Empty response", null, null, null)
-                        }
-                    } else {
-                        callback.invoke(
-                            null,
-                            getErrorMessage(response.errorBody()),
-                            null,
-                            null,
-                            null
-                        )
-                    }
-                }
-
-                override fun onFailure(call: Call<OauthAuthResponse>, t: Throwable) {
-                    callback.invoke(t, null, null, null, null)
-                }
-            })
     }
 
 }

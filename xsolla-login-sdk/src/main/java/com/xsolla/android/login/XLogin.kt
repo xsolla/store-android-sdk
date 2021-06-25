@@ -21,6 +21,7 @@ import com.xsolla.android.login.social.SocialNetworkForLinking
 import com.xsolla.android.login.token.TokenUtils
 import com.xsolla.android.login.ui.ActivityAuthWebView
 import com.xsolla.android.login.unity.UnityProxyActivity
+import com.xsolla.android.login.util.Utils
 import okhttp3.*
 import org.json.JSONObject
 import retrofit2.Call
@@ -35,7 +36,7 @@ import java.util.*
  * Entry point for Xsolla Login SDK
  */
 class XLogin private constructor(
-    context: Context,
+    private val context: Context,
     private val projectId: String,
     private val callbackUrl: String,
     private val useOauth: Boolean,
@@ -139,6 +140,8 @@ class XLogin private constructor(
 
             val loginApi = retrofit.create(LoginApi::class.java)
             val tokenUtils = TokenUtils(context)
+
+            Utils.init(loginApi, loginConfig.oauthClientId, loginConfig.callbackUrl)
 
             instance = XLogin(
                 context,
@@ -285,7 +288,11 @@ class XLogin private constructor(
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-start-auth-by-phone-number)
          */
         @JvmStatic
-        fun startAuthByMobilePhone(phoneNumber: String, callback: StartAuthByPhoneCallback, withLogout: Boolean = false) {
+        fun startAuthByMobilePhone(
+            phoneNumber: String,
+            callback: StartAuthByPhoneCallback,
+            withLogout: Boolean = false
+        ) {
             val retrofitCallback: Callback<Void> = object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
@@ -301,13 +308,17 @@ class XLogin private constructor(
             }
             if (!getInstance().useOauth) {
                 val body = StartAuthByPhoneBody(phoneNumber)
-                getInstance().loginApi.startAuthByPhone(getInstance().projectId, getInstance().callbackUrl,
-                    null, if (withLogout) "1" else "0", body)
+                getInstance().loginApi.startAuthByPhone(
+                    getInstance().projectId, getInstance().callbackUrl,
+                    null, if (withLogout) "1" else "0", body
+                )
                     .enqueue(retrofitCallback)
             } else {
                 val body = StartAuthByPhoneBody(phoneNumber)
-                getInstance().loginApi.oauthStartAuthByPhone("code", getInstance().oauthClientId, "offline",
-                    UUID.randomUUID().toString(), getInstance().callbackUrl, body)
+                getInstance().loginApi.oauthStartAuthByPhone(
+                    "code", getInstance().oauthClientId, "offline",
+                    UUID.randomUUID().toString(), getInstance().callbackUrl, body
+                )
                     .enqueue(retrofitCallback)
             }
         }
@@ -324,12 +335,19 @@ class XLogin private constructor(
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-complete-auth-by-phone-number)
          */
         @JvmStatic
-        fun completeAuthByMobilePhone(phoneNumber: String, code: String, callback: CompleteAuthByPhoneCallback) {
+        fun completeAuthByMobilePhone(
+            phoneNumber: String,
+            code: String,
+            callback: CompleteAuthByPhoneCallback
+        ) {
             if (!getInstance().useOauth) {
                 val body = CompleteAuthByPhoneBody(code, phoneNumber)
                 getInstance().loginApi.completeAuthByPhone(getInstance().projectId, body)
                     .enqueue(object : Callback<AuthResponse?> {
-                        override fun onResponse(call: Call<AuthResponse?>, response: Response<AuthResponse?>) {
+                        override fun onResponse(
+                            call: Call<AuthResponse?>,
+                            response: Response<AuthResponse?>
+                        ) {
                             if (response.isSuccessful) {
                                 val authResponse = response.body()
                                 if (authResponse != null) {
@@ -353,7 +371,10 @@ class XLogin private constructor(
                 val body = CompleteAuthByPhoneBody(code, phoneNumber)
                 getInstance().loginApi.oauthCompleteAuthByPhone(getInstance().oauthClientId, body)
                     .enqueue(object : Callback<OauthAuthResponse?> {
-                        override fun onResponse(call: Call<OauthAuthResponse?>, response: Response<OauthAuthResponse?>) {
+                        override fun onResponse(
+                            call: Call<OauthAuthResponse?>,
+                            response: Response<OauthAuthResponse?>
+                        ) {
                             if (response.isSuccessful) {
                                 val oauthAuthResponse = response.body()
                                 if (oauthAuthResponse != null) {
@@ -362,7 +383,8 @@ class XLogin private constructor(
                                     val expiresIn = oauthAuthResponse.expiresIn
                                     getInstance().tokenUtils.oauthAccessToken = accessToken
                                     getInstance().tokenUtils.oauthRefreshToken = refreshToken
-                                    getInstance().tokenUtils.oauthExpireTimeUnixSec = System.currentTimeMillis() / 1000 + expiresIn
+                                    getInstance().tokenUtils.oauthExpireTimeUnixSec =
+                                        System.currentTimeMillis() / 1000 + expiresIn
                                     callback.onSuccess()
                                 } else {
                                     callback.onError(null, "Empty response")
@@ -395,7 +417,6 @@ class XLogin private constructor(
          * Authenticates a user via a particular device ID.
          * To enable authentication, contact your Account Manager.
          *
-         * @param context Android context
          * @param callback status callback
          * @param withLogout Shows whether to deactivate the existing user JWT values and activate the one generated by this method.
          * Can have the following values:
@@ -408,20 +429,30 @@ class XLogin private constructor(
          */
         @SuppressLint("HardwareIds")
         @JvmStatic
-        fun authenticateViaDeviceId(context: Context,
-                                    callback: AuthViaDeviceIdCallback,
-                                    withLogout: Boolean = false) {
+        fun authenticateViaDeviceId(
+            callback: AuthViaDeviceIdCallback,
+            withLogout: Boolean = false
+        ) {
             val deviceNameString = Build.MANUFACTURER + " " + Build.MODEL
             if (!getInstance().useOauth) {
-                val body = AuthViaDeviceIdBody(deviceNameString, Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID))
+                val body = AuthViaDeviceIdBody(
+                    deviceNameString, Settings.Secure.getString(
+                        getInstance().context.contentResolver, Settings.Secure.ANDROID_ID
+                    )
+                )
                 val deviceType = "android"
 
-                getInstance().loginApi.authViaDeviceId(deviceType = deviceType,
+                getInstance().loginApi.authViaDeviceId(
+                    deviceType = deviceType,
                     projectId = getInstance().projectId,
                     payload = null,
-                    withLogout = if (withLogout) "1" else "0", body)
+                    withLogout = if (withLogout) "1" else "0", body
+                )
                     .enqueue(object : Callback<AuthViaIdResponse> {
-                        override fun onResponse(call: Call<AuthViaIdResponse>, response: Response<AuthViaIdResponse>) {
+                        override fun onResponse(
+                            call: Call<AuthViaIdResponse>,
+                            response: Response<AuthViaIdResponse>
+                        ) {
                             if (response.isSuccessful) {
                                 val authResponse = response.body()
                                 if (authResponse != null) {
@@ -442,7 +473,11 @@ class XLogin private constructor(
                         }
                     })
             } else {
-                val body = AuthViaDeviceIdBody(deviceNameString, Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID))
+                val body = AuthViaDeviceIdBody(
+                    deviceNameString, Settings.Secure.getString(
+                        getInstance().context.contentResolver, Settings.Secure.ANDROID_ID
+                    )
+                )
                 getInstance().loginApi.oauthAuthViaDeviceId(
                     deviceType = "android",
                     client = getInstance().oauthClientId,
@@ -450,29 +485,41 @@ class XLogin private constructor(
                     redirectUri = getInstance().callbackUrl,
                     state = UUID.randomUUID().toString(),
                     scope = "offline",
-                    body)
-                    .enqueue(object : Callback<OauthAuthResponse?> {
-                        override fun onResponse(call: Call<OauthAuthResponse?>, response: Response<OauthAuthResponse?>) {
+                    body
+                )
+                    .enqueue(object : Callback<OauthGetCodeResponse?> {
+                        override fun onResponse(
+                            call: Call<OauthGetCodeResponse?>,
+                            response: Response<OauthGetCodeResponse?>
+                        ) {
                             if (response.isSuccessful) {
-                                val oauthAuthResponse = response.body()
-                                if (oauthAuthResponse != null) {
-                                    val accessToken = oauthAuthResponse.accessToken
-                                    val refreshToken = oauthAuthResponse.refreshToken
-                                    val expiresIn = oauthAuthResponse.expiresIn
-                                    getInstance().tokenUtils.oauthAccessToken = accessToken
-                                    getInstance().tokenUtils.oauthRefreshToken = refreshToken
-                                    getInstance().tokenUtils.oauthExpireTimeUnixSec = System.currentTimeMillis() / 1000 + expiresIn
-                                    callback.onSuccess()
-                                } else {
-                                    callback.onError(null, "Empty response")
+                                val url = response.body()?.loginUrl
+                                if (url == null) {
+                                    callback.onError(null, "Empty url")
+                                    return
+                                }
+                                val code = TokenUtils.getCodeFromUrl(url)
+                                if (code == null) {
+                                    callback.onError(null, "Code not found url")
+                                    return
+                                }
+                                Utils.getOauthTokensFromCode(code) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
+                                    if (throwable == null && errorMessage == null) {
+                                        getInstance().tokenUtils.oauthAccessToken = accessToken
+                                        getInstance().tokenUtils.oauthRefreshToken = refreshToken
+                                        getInstance().tokenUtils.oauthExpireTimeUnixSec =
+                                            System.currentTimeMillis() / 1000 + expiresIn!!
+                                        callback.onSuccess()
+                                    } else {
+                                        callback.onError(throwable, errorMessage)
+                                    }
                                 }
                             } else {
                                 callback.onError(null, getErrorMessage(response.errorBody()))
                             }
                         }
 
-
-                        override fun onFailure(call: Call<OauthAuthResponse?>, t: Throwable) {
+                        override fun onFailure(call: Call<OauthGetCodeResponse?>, t: Throwable) {
                             callback.onError(t, null)
                         }
                     })
@@ -825,11 +872,14 @@ class XLogin private constructor(
          */
 
         @JvmStatic
-        fun getUsersDevices(callback: GetUsersDevicesCallback){
+        fun getUsersDevices(callback: GetUsersDevicesCallback) {
             getInstance().loginApi.getUsersDevices(
                 authHeader = "Bearer $token"
-            ).enqueue(object : Callback<List<UsersDevicesResponse>>{
-                override fun onResponse(call: Call<List<UsersDevicesResponse>>, response: Response<List<UsersDevicesResponse>>) {
+            ).enqueue(object : Callback<List<UsersDevicesResponse>> {
+                override fun onResponse(
+                    call: Call<List<UsersDevicesResponse>>,
+                    response: Response<List<UsersDevicesResponse>>
+                ) {
                     if (response.isSuccessful) {
                         val usersDevices = response.body()
                         if (usersDevices != null) {
@@ -843,7 +893,7 @@ class XLogin private constructor(
                 }
 
                 override fun onFailure(call: Call<List<UsersDevicesResponse>>, t: Throwable) {
-                    callback.onError(t,null)
+                    callback.onError(t, null)
                 }
             })
         }
@@ -852,22 +902,26 @@ class XLogin private constructor(
         /**
          * Links the specified device to the user account. To enable authentication via device ID and linking, contact your Account Manager.
          *
-         * @param context android context
          * @param callback      status callback
          * @see (https://developers.xsolla.com/login-api/user-account/managed-by-client/devices/link-device-to-account/)
          */
         @SuppressLint("HardwareIds")
         @JvmStatic
-        fun linkDeviceToAccount(context: Context,
-                                callback: LinkDeviceToAccountCallback) {
+        fun linkDeviceToAccount(
+            callback: LinkDeviceToAccountCallback
+        ) {
             val deviceNameString = Build.MANUFACTURER + " " + Build.MODEL
-            val body = AuthViaDeviceIdBody(deviceNameString, Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID))
+            val body = AuthViaDeviceIdBody(
+                deviceNameString,
+                Settings.Secure.getString(getInstance().context.contentResolver, Settings.Secure.ANDROID_ID)
+            )
             val deviceType = "android"
 
             getInstance().loginApi.linkDeviceToAccount(
                 authHeader = "Bearer $token",
                 deviceType = deviceType,
-                body).enqueue(object : Callback<Void> {
+                body
+            ).enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
                         callback.onSuccess()
@@ -890,11 +944,14 @@ class XLogin private constructor(
          */
 
         @JvmStatic
-        fun unlinkDeviceFromAccount(id: Int,
-                                    callback: UnlinkDeviceFromAccountCallback) {
+        fun unlinkDeviceFromAccount(
+            id: Int,
+            callback: UnlinkDeviceFromAccountCallback
+        ) {
             getInstance().loginApi.unlinkDeviceFromAccount(
                 authHeader = "Bearer $token",
-                id = id).enqueue(object : Callback<Void>{
+                id = id
+            ).enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
                         callback.onSuccess()
@@ -1031,20 +1088,29 @@ class XLogin private constructor(
          * @see (https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/add-username-email-auth-to-account/)
          */
         @JvmStatic
-        fun linkEmailPassword(email: String, password: String, username: String, promoEmailAgreement: Boolean, callback: LinkEmailPasswordCallback) {
-            val body = LinkEmailPasswordBody(email, password, if (promoEmailAgreement) 1 else 0, username)
+        fun linkEmailPassword(
+            email: String,
+            password: String,
+            username: String,
+            promoEmailAgreement: Boolean,
+            callback: LinkEmailPasswordCallback
+        ) {
+            val body =
+                LinkEmailPasswordBody(email, password, if (promoEmailAgreement) 1 else 0, username)
             getInstance().loginApi.linkEmailPassword(
                 authHeader = "Bearer $token",
                 loginUrl = getInstance().callbackUrl,
                 linkEmailPasswordBody = body
             ).enqueue(object : Callback<LinkEmailPasswordResponse> {
-                override fun onResponse(call: Call<LinkEmailPasswordResponse>, response: Response<LinkEmailPasswordResponse>) {
+                override fun onResponse(
+                    call: Call<LinkEmailPasswordResponse>,
+                    response: Response<LinkEmailPasswordResponse>
+                ) {
                     if (response.isSuccessful) {
                         val linkEmailPasswordResponse = response.body()
                         if (linkEmailPasswordResponse != null) {
                             callback.onSuccess(linkEmailPasswordResponse)
-                        }
-                        else {
+                        } else {
                             callback.onError(null, "Empty response")
                         }
                     } else {
@@ -1058,7 +1124,7 @@ class XLogin private constructor(
             })
         }
 
-                        /**
+        /**
          * Gets the phone number of the authenticated user
          *
          * @param callback    callback with data
