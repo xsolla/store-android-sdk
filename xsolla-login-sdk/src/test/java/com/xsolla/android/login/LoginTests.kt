@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.xsolla.android.login.callback.*
 import com.xsolla.android.login.entity.response.UsersDevicesResponse
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -13,6 +14,8 @@ import java.util.concurrent.CountDownLatch
 
 @RunWith(RobolectricTestRunner::class)
 class LoginTests {
+
+    // Init methods for different auth types
 
     private fun initSdkOauth() {
         val loginConfig = LoginConfig.OauthBuilder()
@@ -28,6 +31,8 @@ class LoginTests {
             .build()
         XLogin.init(ApplicationProvider.getApplicationContext(), loginConfig)
     }
+
+    // Init for different auth states
 
     private fun initLoggedOut() {
         XLogin.logout()
@@ -70,6 +75,8 @@ class LoginTests {
         latch.await()
         Assert.assertFalse(error)
     }
+
+    // Auth by device id tests
 
     @Test
     fun authenticateViaDeviceIdJwt() {
@@ -202,6 +209,196 @@ class LoginTests {
         })
         latch.await()
         Assert.assertFalse(error)
+    }
+
+    // Phone number auth tests
+
+    @Test
+    fun startPhoneNumberAuthJwt_Success() {
+        initSdkJwt()
+        initLoggedOut()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        XLogin.startAuthByMobilePhone(phoneNumber, object : StartAuthByPhoneCallback {
+            override fun onAuthStarted() {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                error = true
+                latch.countDown()
+            }
+        })
+        latch.await()
+        Assert.assertFalse(error)
+    }
+
+    @Test
+    fun startPhoneNumberAuthJwt_Fail() {
+        initSdkJwt()
+        initLoggedOut()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        var err: String? = null
+        XLogin.startAuthByMobilePhone(phoneNumber + phoneNumber, object : StartAuthByPhoneCallback {
+            override fun onAuthStarted() {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                error = true
+                err = errorMessage
+                latch.countDown()
+            }
+        })
+        latch.await()
+        Assert.assertTrue(error)
+        Assert.assertEquals("body.phone_number in body should match '^\\+(\\d){5,25}\$'", err)
+    }
+
+    @Test
+    fun startPhoneNumberAuthOauth_Success() {
+        initSdkOauth()
+        initLoggedOut()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        XLogin.startAuthByMobilePhone(phoneNumber, object : StartAuthByPhoneCallback {
+            override fun onAuthStarted() {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                error = true
+                latch.countDown()
+            }
+        })
+        latch.await()
+        Assert.assertFalse(error)
+    }
+
+    @Test
+    fun startPhoneNumberAuthOauth_Fail() {
+        initSdkOauth()
+        initLoggedOut()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        var err: String? = null
+        XLogin.startAuthByMobilePhone(phoneNumber + phoneNumber, object : StartAuthByPhoneCallback {
+            override fun onAuthStarted() {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                error = true
+                err = errorMessage
+                latch.countDown()
+            }
+        })
+        latch.await()
+        Assert.assertTrue(error)
+        Assert.assertEquals("body.phone_number in body should match '^\\+(\\d){5,25}\$'", err)
+    }
+
+    @Test
+    fun completeAuthByMobilePhoneJwt_Fail() {
+        initSdkJwt()
+        initLoggedOut()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        var err: String? = null
+        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, object : CompleteAuthByPhoneCallback {
+            override fun onSuccess() {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                error = true
+                err = errorMessage
+                latch.countDown()
+            }
+        })
+        latch.await()
+        Assert.assertTrue(error)
+        Assert.assertEquals("", err) // TODO add error message check for wrong sms code
+    }
+
+    @Test
+    fun completeAuthByMobilePhoneOauth_Fail() {
+        initSdkOauth()
+        initLoggedOut()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        var err: String? = null
+        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, object : CompleteAuthByPhoneCallback {
+            override fun onSuccess() {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                error = true
+                err = errorMessage
+                latch.countDown()
+            }
+        })
+        latch.await()
+        Assert.assertTrue(error)
+        Assert.assertEquals("", err) // TODO add error message check for wrong sms code
+    }
+
+    @Ignore("for manual testing (needs correct sms code and phone number substitution)")
+    @Test
+    fun completeAuthByMobilePhoneJwt_Success() {
+        initSdkJwt()
+        initLoggedOut()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, object : CompleteAuthByPhoneCallback {
+            override fun onSuccess() {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                error = true
+                latch.countDown()
+            }
+        })
+        latch.await()
+        Assert.assertFalse(error)
+        Assert.assertFalse(XLogin.token.isNullOrEmpty())
+        Assert.assertFalse(XLogin.canRefreshToken())
+        Assert.assertFalse(XLogin.isTokenExpired(60))
+    }
+
+    @Ignore("for manual testing (needs correct sms code and phone number substitution)")
+    @Test
+    fun completeAuthByMobilePhoneOauth_Success() {
+        initSdkOauth()
+        initLoggedOut()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, object : CompleteAuthByPhoneCallback {
+            override fun onSuccess() {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                error = true
+                latch.countDown()
+            }
+        })
+        latch.await()
+        Assert.assertFalse(error)
+        Assert.assertFalse(XLogin.token.isNullOrEmpty())
+        Assert.assertTrue(XLogin.canRefreshToken())
+        Assert.assertFalse(XLogin.isTokenExpired(60))
     }
 
 }
