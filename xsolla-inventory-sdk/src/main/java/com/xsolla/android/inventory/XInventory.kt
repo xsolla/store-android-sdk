@@ -71,13 +71,12 @@ class XInventory private constructor(
             return getInstance().requestExecutor
         }
 
-        //TextReview
         /**
-         * Get a current user’s inventory
+         * Gets the current user’s inventory.
          *
          *
-         * @param callback status callback
-         * @param limit Limit for the number of elements on the page in range of 1..50
+         * @param callback Status callback.
+         * @param limit Limit for the number of elements on the page in the range from 1 to 50.
          * @param offset Number of the element from which the list is generated (the count starts from 0).
          * @param platform Publishing platform the user plays on.
          * @see [Inventory API Reference](https://developers.xsolla.com/commerce-api/player-inventory/client/get-user-inventory)
@@ -92,11 +91,10 @@ class XInventory private constructor(
             getRequestExecutor().getInventory(callback, limit, offset)
         }
 
-        //TextReview
         /**
-         * Get a current user’s virtual balance
+         * Gets the current user’s virtual balance.
          *
-         * @param callback status callback
+         * @param callback Status callback.
          * @param platform Publishing platform the user plays on.
          * @see [Inventory API Reference](https://developers.xsolla.com/commerce-api/player-inventory/client/get-user-virtual-balance)
          */
@@ -107,11 +105,10 @@ class XInventory private constructor(
             getRequestExecutor().getVirtualBalance(callback)
         }
 
-        //TextReview
         /**
-         * Get a current user’s subscriptions
+         * Gets the current list of user’s subscriptions.
          *
-         * @param callback status callback
+         * @param callback Status callback.
          * @param platform Publishing platform the user plays on.
          * @see [Inventory API Reference](https://developers.xsolla.com/commerce-api/player-inventory/client/get-user-subscriptions)
          */
@@ -123,14 +120,13 @@ class XInventory private constructor(
         }
 
 
-        //TextReview
         /**
-         * Consume an item from a current user’s inventory
+         * Consumes an item from the current user’s inventory.
          *
-         * @param sku        item SKU
-         * @param quantity   item quantity, if an item is uncountable, should be null
-         * @param instanceId instance item ID, if an item is countable, should be null
-         * @param callback   status callback
+         * @param sku        Item SKU.
+         * @param quantity   Item quantity. If an item is uncountable, should be null.
+         * @param instanceId Instance item ID. If an item is countable, should be null.
+         * @param callback   Status callback.
          * @param platform Publishing platform the user plays on.
          * @see [Inventory API Reference](https://developers.xsolla.com/commerce-api/player-inventory/client/consume-item)
          */
