@@ -338,10 +338,11 @@ class XLogin private constructor(
         fun completeAuthByMobilePhone(
             phoneNumber: String,
             code: String,
+            operationId: String,
             callback: CompleteAuthByPhoneCallback
         ) {
             if (!getInstance().useOauth) {
-                val body = CompleteAuthByPhoneBody(code, phoneNumber)
+                val body = CompleteAuthByPhoneBody(code, phoneNumber,operationId)
                 getInstance().loginApi.completeAuthByPhone(getInstance().projectId, body)
                     .enqueue(object : Callback<AuthResponse?> {
                         override fun onResponse(
@@ -368,7 +369,7 @@ class XLogin private constructor(
                     })
 
             } else {
-                val body = CompleteAuthByPhoneBody(code, phoneNumber)
+                val body = CompleteAuthByPhoneBody(code, phoneNumber,operationId)
                 getInstance().loginApi.oauthCompleteAuthByPhone(getInstance().oauthClientId, body)
                     .enqueue(object : Callback<OauthAuthResponse?> {
                         override fun onResponse(

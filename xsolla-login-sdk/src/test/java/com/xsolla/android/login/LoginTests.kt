@@ -311,7 +311,7 @@ class LoginTests {
         val latch = CountDownLatch(1)
         var error = false
         var err: String? = null
-        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, object : CompleteAuthByPhoneCallback {
+        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, operationId, object : CompleteAuthByPhoneCallback {
             override fun onSuccess() {
                 latch.countDown()
             }
@@ -335,7 +335,7 @@ class LoginTests {
         val latch = CountDownLatch(1)
         var error = false
         var err: String? = null
-        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, object : CompleteAuthByPhoneCallback {
+        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, operationId, object : CompleteAuthByPhoneCallback {
             override fun onSuccess() {
                 latch.countDown()
             }
@@ -359,7 +359,7 @@ class LoginTests {
 
         val latch = CountDownLatch(1)
         var error = false
-        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, object : CompleteAuthByPhoneCallback {
+        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, operationId, object : CompleteAuthByPhoneCallback {
             override fun onSuccess() {
                 latch.countDown()
             }
@@ -384,7 +384,7 @@ class LoginTests {
 
         val latch = CountDownLatch(1)
         var error = false
-        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, object : CompleteAuthByPhoneCallback {
+        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, operationId, object : CompleteAuthByPhoneCallback {
             override fun onSuccess() {
                 latch.countDown()
             }

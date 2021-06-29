@@ -12,3 +12,4 @@ const val password = "xsolla"
 
 const val phoneNumber = "+79820000000"
 const val smsCode = "0000"
+const val operationId = "456839"
