@@ -293,18 +293,30 @@ class XLogin private constructor(
             callback: StartAuthByPhoneCallback,
             withLogout: Boolean = false
         ) {
-            val retrofitCallback: Callback<Void> = object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        callback.onAuthStarted()
-                    } else {
+            val retrofitCallback: Callback<StartAuthByMobileResponse> = object : Callback<StartAuthByMobileResponse> {
+                override fun onResponse(
+                    call: Call<StartAuthByMobileResponse>,
+                    response: Response<StartAuthByMobileResponse>
+                ) {
+                    if (response.isSuccessful){
+                        val response = response.body()
+                        if (response!=null){
+                            callback.onAuthStarted(response)
+                        }
+                        else{
+                            callback.onError(null, "Empty response")
+                        }
+                    }
+                    else{
                         callback.onError(null, getErrorMessage(response.errorBody()))
                     }
                 }
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    callback.onError(t, null)
+                override fun onFailure(call: Call<StartAuthByMobileResponse>, t: Throwable) {
+                    TODO("Not yet implemented")
                 }
+
+
             }
             if (!getInstance().useOauth) {
                 val body = StartAuthByPhoneBody(phoneNumber)
@@ -329,6 +341,7 @@ class XLogin private constructor(
          *
          * @param phoneNumber User's phone number
          * @param code Verification code from phone
+         * @param operationId ID of the confirmation code.
          * @param callback status callback
          * @see [JWT Login API Reference](https://developers.xsolla.com/login-api/methods/jwt/jwt-complete-auth-by-phone-number)
          *
@@ -342,7 +355,7 @@ class XLogin private constructor(
             callback: CompleteAuthByPhoneCallback
         ) {
             if (!getInstance().useOauth) {
-                val body = CompleteAuthByPhoneBody(code, phoneNumber,operationId)
+                val body = CompleteAuthByPhoneBody(code,operationId, phoneNumber)
                 getInstance().loginApi.completeAuthByPhone(getInstance().projectId, body)
                     .enqueue(object : Callback<AuthResponse?> {
                         override fun onResponse(
@@ -369,7 +382,7 @@ class XLogin private constructor(
                     })
 
             } else {
-                val body = CompleteAuthByPhoneBody(code, phoneNumber,operationId)
+                val body = CompleteAuthByPhoneBody(code,operationId,phoneNumber)
                 getInstance().loginApi.oauthCompleteAuthByPhone(getInstance().oauthClientId, body)
                     .enqueue(object : Callback<OauthAuthResponse?> {
                         override fun onResponse(

@@ -4,6 +4,7 @@ import android.content.Context
 import android.provider.Settings
 import androidx.test.core.app.ApplicationProvider
 import com.xsolla.android.login.callback.*
+import com.xsolla.android.login.entity.response.StartAuthByMobileResponse
 import com.xsolla.android.login.entity.response.UsersDevicesResponse
 import org.junit.Assert
 import org.junit.Ignore
@@ -221,7 +222,8 @@ class LoginTests {
         val latch = CountDownLatch(1)
         var error = false
         XLogin.startAuthByMobilePhone(phoneNumber, object : StartAuthByPhoneCallback {
-            override fun onAuthStarted() {
+
+            override fun onAuthStarted(data: StartAuthByMobileResponse) {
                 latch.countDown()
             }
 
@@ -243,7 +245,8 @@ class LoginTests {
         var error = false
         var err: String? = null
         XLogin.startAuthByMobilePhone(phoneNumber + phoneNumber, object : StartAuthByPhoneCallback {
-            override fun onAuthStarted() {
+
+            override fun onAuthStarted(data: StartAuthByMobileResponse) {
                 latch.countDown()
             }
 
@@ -266,7 +269,8 @@ class LoginTests {
         val latch = CountDownLatch(1)
         var error = false
         XLogin.startAuthByMobilePhone(phoneNumber, object : StartAuthByPhoneCallback {
-            override fun onAuthStarted() {
+
+            override fun onAuthStarted(data: StartAuthByMobileResponse) {
                 latch.countDown()
             }
 
@@ -288,7 +292,8 @@ class LoginTests {
         var error = false
         var err: String? = null
         XLogin.startAuthByMobilePhone(phoneNumber + phoneNumber, object : StartAuthByPhoneCallback {
-            override fun onAuthStarted() {
+
+            override fun onAuthStarted(data: StartAuthByMobileResponse) {
                 latch.countDown()
             }
 
@@ -324,7 +329,7 @@ class LoginTests {
         })
         latch.await()
         Assert.assertTrue(error)
-        Assert.assertEquals("", err) // TODO add error message check for wrong sms code
+        Assert.assertEquals("Wrong authorization code.", err) // TODO add error message check for wrong sms code
     }
 
     @Test
@@ -348,7 +353,7 @@ class LoginTests {
         })
         latch.await()
         Assert.assertTrue(error)
-        Assert.assertEquals("", err) // TODO add error message check for wrong sms code
+        Assert.assertEquals("Wrong authorization code.", err) // TODO add error message check for wrong sms code
     }
 
     @Ignore("for manual testing (needs correct sms code and phone number substitution)")

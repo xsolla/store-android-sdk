@@ -46,7 +46,7 @@ interface LoginApi {
         @Query("payload") payload: String?,
         @Query("with_logout") withLogout: String,
         @Body startAuthByPhoneBody: StartAuthByPhoneBody
-    ): Call<Void>
+    ): Call<StartAuthByMobileResponse>
 
     @GET("/api/social/{providerName}/login_url")
     fun getLinkForSocialAuth(
@@ -113,7 +113,7 @@ interface LoginApi {
         @Query("state") state: String,
         @Query("redirect_uri") redirectUri: String,
         @Body body: StartAuthByPhoneBody
-    ): Call<Void>
+    ): Call<StartAuthByMobileResponse>
 
     @GET("/api/oauth2/social/{providerName}/login_url")
     fun oauthGetLinkForSocialAuth(

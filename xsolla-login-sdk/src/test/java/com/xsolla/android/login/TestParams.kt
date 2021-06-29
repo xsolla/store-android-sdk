@@ -10,6 +10,6 @@ const val deviceId = "1A49CBD892750200"
 const val username = "xsolla"
 const val password = "xsolla"
 
-const val phoneNumber = "+79820000000"
+const val phoneNumber = "+9530000000"
 const val smsCode = "0000"
 const val operationId = "456839"
