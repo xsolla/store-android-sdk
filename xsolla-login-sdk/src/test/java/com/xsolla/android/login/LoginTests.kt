@@ -4,7 +4,7 @@ import android.content.Context
 import android.provider.Settings
 import androidx.test.core.app.ApplicationProvider
 import com.xsolla.android.login.callback.*
-import com.xsolla.android.login.entity.response.StartAuthByMobileResponse
+import com.xsolla.android.login.entity.response.StartAuthByPhoneResponse
 import com.xsolla.android.login.entity.response.UsersDevicesResponse
 import org.junit.Assert
 import org.junit.Ignore
@@ -221,9 +221,11 @@ class LoginTests {
 
         val latch = CountDownLatch(1)
         var error = false
+        var operationId: String? = null
         XLogin.startAuthByMobilePhone(phoneNumber, object : StartAuthByPhoneCallback {
-
-            override fun onAuthStarted(data: StartAuthByMobileResponse) {
+            override fun onAuthStarted(data: StartAuthByPhoneResponse) {
+                operationId = data.operationId
+                println("!!! jwt operation id = $operationId")
                 latch.countDown()
             }
 
@@ -234,6 +236,7 @@ class LoginTests {
         })
         latch.await()
         Assert.assertFalse(error)
+        Assert.assertFalse(operationId.isNullOrEmpty())
     }
 
     @Test
@@ -245,8 +248,7 @@ class LoginTests {
         var error = false
         var err: String? = null
         XLogin.startAuthByMobilePhone(phoneNumber + phoneNumber, object : StartAuthByPhoneCallback {
-
-            override fun onAuthStarted(data: StartAuthByMobileResponse) {
+            override fun onAuthStarted(data: StartAuthByPhoneResponse) {
                 latch.countDown()
             }
 
@@ -268,9 +270,11 @@ class LoginTests {
 
         val latch = CountDownLatch(1)
         var error = false
+        var operationId: String? = null
         XLogin.startAuthByMobilePhone(phoneNumber, object : StartAuthByPhoneCallback {
-
-            override fun onAuthStarted(data: StartAuthByMobileResponse) {
+            override fun onAuthStarted(data: StartAuthByPhoneResponse) {
+                operationId = data.operationId
+                println("!!! oauth operation id = $operationId")
                 latch.countDown()
             }
 
@@ -281,6 +285,7 @@ class LoginTests {
         })
         latch.await()
         Assert.assertFalse(error)
+        Assert.assertFalse(operationId.isNullOrEmpty())
     }
 
     @Test
@@ -292,8 +297,7 @@ class LoginTests {
         var error = false
         var err: String? = null
         XLogin.startAuthByMobilePhone(phoneNumber + phoneNumber, object : StartAuthByPhoneCallback {
-
-            override fun onAuthStarted(data: StartAuthByMobileResponse) {
+            override fun onAuthStarted(data: StartAuthByPhoneResponse) {
                 latch.countDown()
             }
 
@@ -329,7 +333,7 @@ class LoginTests {
         })
         latch.await()
         Assert.assertTrue(error)
-        Assert.assertEquals("Wrong authorization code.", err) // TODO add error message check for wrong sms code
+        Assert.assertEquals("Wrong authorization code.", err)
     }
 
     @Test
@@ -353,7 +357,7 @@ class LoginTests {
         })
         latch.await()
         Assert.assertTrue(error)
-        Assert.assertEquals("Wrong authorization code.", err) // TODO add error message check for wrong sms code
+        Assert.assertEquals("Wrong authorization code.", err)
     }
 
     @Ignore("for manual testing (needs correct sms code and phone number substitution)")

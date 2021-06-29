@@ -293,31 +293,28 @@ class XLogin private constructor(
             callback: StartAuthByPhoneCallback,
             withLogout: Boolean = false
         ) {
-            val retrofitCallback: Callback<StartAuthByMobileResponse> = object : Callback<StartAuthByMobileResponse> {
-                override fun onResponse(
-                    call: Call<StartAuthByMobileResponse>,
-                    response: Response<StartAuthByMobileResponse>
-                ) {
-                    if (response.isSuccessful){
-                        val response = response.body()
-                        if (response!=null){
-                            callback.onAuthStarted(response)
-                        }
-                        else{
-                            callback.onError(null, "Empty response")
+            val retrofitCallback: Callback<StartAuthByPhoneResponse> =
+                object : Callback<StartAuthByPhoneResponse> {
+                    override fun onResponse(
+                        call: Call<StartAuthByPhoneResponse>,
+                        response: Response<StartAuthByPhoneResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val body = response.body()
+                            if (body != null) {
+                                callback.onAuthStarted(body)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
                     }
-                    else{
-                        callback.onError(null, getErrorMessage(response.errorBody()))
+
+                    override fun onFailure(call: Call<StartAuthByPhoneResponse>, t: Throwable) {
+                        callback.onError(t, null)
                     }
                 }
-
-                override fun onFailure(call: Call<StartAuthByMobileResponse>, t: Throwable) {
-                    TODO("Not yet implemented")
-                }
-
-
-            }
             if (!getInstance().useOauth) {
                 val body = StartAuthByPhoneBody(phoneNumber)
                 getInstance().loginApi.startAuthByPhone(
@@ -355,7 +352,7 @@ class XLogin private constructor(
             callback: CompleteAuthByPhoneCallback
         ) {
             if (!getInstance().useOauth) {
-                val body = CompleteAuthByPhoneBody(code,operationId, phoneNumber)
+                val body = CompleteAuthByPhoneBody(code, operationId, phoneNumber)
                 getInstance().loginApi.completeAuthByPhone(getInstance().projectId, body)
                     .enqueue(object : Callback<AuthResponse?> {
                         override fun onResponse(
@@ -382,7 +379,7 @@ class XLogin private constructor(
                     })
 
             } else {
-                val body = CompleteAuthByPhoneBody(code,operationId,phoneNumber)
+                val body = CompleteAuthByPhoneBody(code, operationId, phoneNumber)
                 getInstance().loginApi.oauthCompleteAuthByPhone(getInstance().oauthClientId, body)
                     .enqueue(object : Callback<OauthAuthResponse?> {
                         override fun onResponse(
@@ -927,7 +924,10 @@ class XLogin private constructor(
             val deviceNameString = Build.MANUFACTURER + " " + Build.MODEL
             val body = AuthViaDeviceIdBody(
                 deviceNameString,
-                Settings.Secure.getString(getInstance().context.contentResolver, Settings.Secure.ANDROID_ID)
+                Settings.Secure.getString(
+                    getInstance().context.contentResolver,
+                    Settings.Secure.ANDROID_ID
+                )
             )
             val deviceType = "android"
 
