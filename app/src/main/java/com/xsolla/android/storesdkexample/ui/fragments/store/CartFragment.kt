@@ -103,9 +103,9 @@ class CartFragment : BaseFragment(), CartChangeListener {
         vmCart.paymentToken.observe(viewLifecycleOwner, Observer {
             val intent = createIntentBuilder(requireContext())
                 .accessToken(AccessToken(it))
-                .useWebview(true)
                 .isSandbox(BuildConfig.IS_SANDBOX)
-                .launchChromeTab(requireContext())
+                .build()
+            startActivityForResult(intent, RC_PAYSTATION)
         })
 
         vmCart.orderId.observe(viewLifecycleOwner, Observer {

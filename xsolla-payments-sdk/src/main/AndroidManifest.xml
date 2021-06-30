@@ -2,19 +2,27 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.xsolla.android.payments">
 
+    <queries>
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+    </queries>
+
     <application>
         <activity
             android:name="com.xsolla.android.payments.ui.ActivityPaystationBrowserProxy"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/xsolla_payments_Theme"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/xsolla_payments_Theme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
-                    android:scheme="@string/xsolla_payments_redirect_scheme"
-                    android:host="@string/xsolla_payments_redirect_host" />
+                    android:host="@string/xsolla_payments_redirect_host"
+                    android:scheme="@string/xsolla_payments_redirect_scheme" />
             </intent-filter>
         </activity>
         <activity
