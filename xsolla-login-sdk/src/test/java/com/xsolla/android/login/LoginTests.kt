@@ -214,6 +214,7 @@ class LoginTests {
 
     // Phone number auth tests
 
+    @Ignore("for manual testing (because of limits)")
     @Test
     fun startPhoneNumberAuthJwt_Success() {
         initSdkJwt()
@@ -263,6 +264,7 @@ class LoginTests {
         Assert.assertEquals("body.phone_number in body should match '^\\+(\\d){5,25}\$'", err)
     }
 
+    @Ignore("for manual testing (because of limits)")
     @Test
     fun startPhoneNumberAuthOauth_Success() {
         initSdkOauth()
