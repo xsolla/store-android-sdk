@@ -1,22 +1,29 @@
 package com.xsolla.android.storesdkexample.adapter.holder
 
+import android.app.Activity
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.appcore.utils.AmountUtils
 import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
+import com.xsolla.android.store.callbacks.UpdateItemFromCurrentCartCallback
 import com.xsolla.android.store.entity.response.common.ExpirationPeriod
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.appcore.databinding.ItemViRealPriceBinding
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
+import com.xsolla.android.storesdkexample.ui.fragments.store.ViFragmentDirections
 import com.xsolla.android.storesdkexample.ui.fragments.store.VirtualItemUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.util.ViewUtils
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.coroutineContext
+import java.util.*
 
 class ViRealPriceViewHolder(
         inflater: LayoutInflater,
@@ -32,6 +39,20 @@ class ViRealPriceViewHolder(
         bindPurchasedPlaceholderIfNeed(item)
         bindItemPrice(item)
         bindExpirationPeriod(item.inventoryOption?.expirationPeriod)
+        bindBundlePlaceholder(item)
+    }
+
+    private fun bindBundlePlaceholder(item: VirtualItemUiEntity) {
+        if (item.sku == "premium_pack" || item.sku == "starter_pack"||
+                item.sku == "lootbox_pack_1" || item.sku == "lootbox_pack_2") {
+            binding.preview.visibility = View.VISIBLE
+            binding.preview.setOnClickListener {
+                it.findNavController().navigate(ViFragmentDirections.actionNavViToBundleFragment(item))
+            }
+        }
+        else{
+            binding.preview.visibility = View.INVISIBLE
+        }
     }
 
     private fun bindPurchasedPlaceholderIfNeed(item: VirtualItemUiEntity) {
@@ -79,18 +100,19 @@ class ViRealPriceViewHolder(
             ViewUtils.disable(v)
             val cartContent = vmCart.cartContent.value
             val quantity = cartContent?.find { it.sku == item.sku }?.quantity ?: 0
-            XStore.updateItemFromCurrentCart(item.sku, quantity + 1, object : XStoreCallback<Void>() {
-                override fun onSuccess(response: Void?) {
+            XStore.updateItemFromCurrentCart(object : UpdateItemFromCurrentCartCallback {
+
+                override fun onSuccess() {
                     vmCart.updateCart()
                     purchaseListener.onSuccess()
                     ViewUtils.enable(v)
                 }
 
-                override fun onFailure(errorMessage: String) {
-                    purchaseListener.onFailure(errorMessage)
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    purchaseListener.onFailure(errorMessage ?: throwable?.javaClass?.name ?: "Error")
                     ViewUtils.enable(v)
                 }
-            })
+            }, item.sku!!, quantity +1)
         }
     }
 
@@ -103,7 +125,7 @@ class ViRealPriceViewHolder(
             sb.append("Expiration in ")
             sb.append(expirationPeriod.value)
             sb.append(' ')
-            sb.append(expirationPeriod.type.name.toLowerCase())
+            sb.append(expirationPeriod.type.name.toLowerCase(Locale.getDefault()))
             if (expirationPeriod.value != 1) {
                 sb.append('s')
             }

@@ -87,7 +87,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
                 XLogin.refreshToken(object : RefreshTokenCallback {
                     override fun onSuccess() {
                         binding.lock.visibility = View.GONE
-                        XStore.init(BuildConfig.PROJECT_ID, XLogin.token)
+                        XStore.init(BuildConfig.PROJECT_ID, XLogin.token!!)
                         XInventory.init(BuildConfig.PROJECT_ID, XLogin.token!!)
                         vmCart.updateCart()
                         vmBalance.updateVirtualBalance()
@@ -105,7 +105,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
                 startLogin()
             }
         } else {
-            XStore.init(BuildConfig.PROJECT_ID, XLogin.token)
+            XStore.init(BuildConfig.PROJECT_ID, XLogin.token!!)
             XInventory.init(BuildConfig.PROJECT_ID, XLogin.token!!)
             vmCart.updateCart()
             vmBalance.updateVirtualBalance()

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="xsolla_payments_statusbar">#605582</color>
+    <color name="xsolla_payments_tab">#070816</color>
 </resources>

@@ -2,20 +2,23 @@
 
 buildscript {
 
-    ext.payments_sdk_version_name = '0.15.3'
-    ext.payments_sdk_version_code = 12
+    ext.payments_sdk_version_name = '0.16.0'
+    ext.payments_sdk_version_code = 13
 
-    ext.store_sdk_version_name = '0.18.1'
-    ext.store_sdk_version_code = 13
+    ext.store_sdk_version_name = '0.19.0'
+    ext.store_sdk_version_code = 14
 
     ext.inventory_sdk_version_name = '1.0.2'
     ext.inventory_sdk_version_code = 3
 
-    ext.login_sdk_version_name = '1.1.5'
-    ext.login_sdk_version_code = 14
+    ext.login_sdk_version_name = '1.2.0'
+    ext.login_sdk_version_code = 15
 
-    ext.sample_app_version_name = '1.5.4'
-    ext.sample_app_version_code = 18
+    ext.sample_app_version_name = '1.6.0'
+    ext.sample_app_version_code = 19
+
+    ext.analytics_sdk_version_name = "0.0.1"
+    ext.analytics_sdk_version_code = 1
 
     ext.sdk_min = 21
     ext.sdk_target = 29
@@ -26,6 +29,7 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.1'

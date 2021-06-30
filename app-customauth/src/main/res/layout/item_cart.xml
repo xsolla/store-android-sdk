@@ -54,7 +54,8 @@
                 android:id="@+id/itemVirtualPriceIcon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/itemPrice"

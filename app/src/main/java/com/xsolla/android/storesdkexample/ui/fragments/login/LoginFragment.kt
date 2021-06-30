@@ -12,7 +12,9 @@ import com.xsolla.android.appcore.extensions.setRateLimitedClickListener
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.AuthCallback
 import com.xsolla.android.login.callback.FinishSocialCallback
+import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
 import com.xsolla.android.login.callback.StartSocialCallback
+import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
@@ -31,12 +33,25 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
 
     private var selectedSocialNetwork: SocialNetwork? = null
 
+    private var authId: String? = null
+
     override fun getLayout(): Int {
         return R.layout.fragment_login
     }
 
     override fun initUI() {
         initLoginButtonEnabling()
+
+        XLogin.getCurrentUserDetails(object : GetCurrentUserDetailsCallback {
+            override fun onSuccess(data: UserDetailsResponse) {
+                authId = data.id
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                authId = null
+            }
+        })
+
 
         binding.loginButton.setOnClickListener {
             val username = binding.usernameInput.text.toString()
@@ -50,24 +65,41 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
 
         binding.googleButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.GOOGLE
-            XLogin.startSocialAuth(this, SocialNetwork.GOOGLE, BuildConfig.WITH_LOGOUT, startSocialCallback)
+            XLogin.startSocialAuth(
+                this,
+                SocialNetwork.GOOGLE,
+                BuildConfig.WITH_LOGOUT,
+                startSocialCallback
+            )
         }
 
         binding.facebookButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.FACEBOOK
-            XLogin.startSocialAuth(this, SocialNetwork.FACEBOOK, BuildConfig.WITH_LOGOUT, startSocialCallback)
+            XLogin.startSocialAuth(
+                this,
+                SocialNetwork.FACEBOOK,
+                BuildConfig.WITH_LOGOUT,
+                startSocialCallback
+            )
         }
 
         binding.baiduButton.setRateLimitedClickListener {
             selectedSocialNetwork = SocialNetwork.BAIDU
-            XLogin.startSocialAuth(this, SocialNetwork.BAIDU, BuildConfig.WITH_LOGOUT, startSocialCallback)
+            XLogin.startSocialAuth(
+                this,
+                SocialNetwork.BAIDU,
+                BuildConfig.WITH_LOGOUT,
+                startSocialCallback
+            )
         }
 
         binding.moreButton.setRateLimitedClickListener {
             LoginBottomSheet.newInstance().show(childFragmentManager, "moreSocials")
         }
 
-        binding.resetPasswordButton.setOnClickListener { resetPassword() }
+        binding.resetPasswordButton.setOnClickListener {
+            resetPassword()
+        }
 
         binding.privacyPolicyButton.setOnClickListener { showPrivacyPolicy() }
     }
@@ -114,7 +146,7 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
 
         hideKeyboard()
 
-        XLogin.authenticate(username, password, BuildConfig.WITH_LOGOUT, object : AuthCallback {
+        XLogin.login(username, password, object : AuthCallback {
             override fun onSuccess() {
                 val intent = Intent(requireActivity(), StoreActivity::class.java)
                 startActivity(intent)
@@ -129,15 +161,15 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
                 binding.demoUserButton.isEnabled = true
             }
 
-        })
+        },BuildConfig.WITH_LOGOUT)
     }
 
     private fun resetPassword() {
         requireActivity().supportFragmentManager
-                .beginTransaction()
-                .add(R.id.rootFragmentContainer, ResetPasswordFragment())
-                .addToBackStack(null)
-                .commit()
+            .beginTransaction()
+            .add(R.id.rootFragmentContainer, ResetPasswordFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun showPrivacyPolicy() {
@@ -155,7 +187,15 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        XLogin.finishSocialAuth(requireActivity(), selectedSocialNetwork, requestCode, resultCode, data, BuildConfig.WITH_LOGOUT, finishSocialCallback)
+        XLogin.finishSocialAuth(
+            requireActivity(),
+            selectedSocialNetwork,
+            requestCode,
+            resultCode,
+            data,
+            BuildConfig.WITH_LOGOUT,
+            finishSocialCallback
+        )
         super.onActivityResult(requestCode, resultCode, data)
     }
 
@@ -205,11 +245,21 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         when (socialNetwork) {
             LoginBottomSheet.SocialNetworks.TWITTER -> {
                 selectedSocialNetwork = SocialNetwork.TWITTER
-                XLogin.startSocialAuth(this, SocialNetwork.TWITTER, BuildConfig.WITH_LOGOUT, startSocialCallback)
+                XLogin.startSocialAuth(
+                    this,
+                    SocialNetwork.TWITTER,
+                    BuildConfig.WITH_LOGOUT,
+                    startSocialCallback
+                )
             }
             LoginBottomSheet.SocialNetworks.LINKEDIN -> {
                 selectedSocialNetwork = SocialNetwork.LINKEDIN
-                XLogin.startSocialAuth(this, SocialNetwork.LINKEDIN, BuildConfig.WITH_LOGOUT, startSocialCallback)
+                XLogin.startSocialAuth(
+                    this,
+                    SocialNetwork.LINKEDIN,
+                    BuildConfig.WITH_LOGOUT,
+                    startSocialCallback
+                )
             }
         }
     }

@@ -2,6 +2,7 @@ package com.xsolla.android.storesdkexample
 
 import android.app.Application
 import android.content.Context
+import com.xsolla.android.appcore.utils.AmountUtils
 import com.xsolla.android.login.LoginConfig
 import com.xsolla.android.login.XLogin
 
@@ -21,6 +22,7 @@ class App: Application() {
 
     override fun onCreate() {
         super.onCreate()
+        AmountUtils.init(applicationContext())
 
         val socialConfig = XLogin.SocialConfig(
                 facebookAppId = BuildConfig.FACEBOOK_CREDENTIAL,
@@ -43,5 +45,8 @@ class App: Application() {
 
             XLogin.init(this, loginConfig)
         }
+
+
     }
+
 }

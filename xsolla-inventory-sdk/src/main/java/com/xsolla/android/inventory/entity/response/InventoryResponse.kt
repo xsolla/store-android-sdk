@@ -3,6 +3,7 @@ package com.xsolla.android.inventory.entity.response
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
 
 data class InventoryResponse(val items: List<Item> = emptyList()) {
 
@@ -13,13 +14,14 @@ data class InventoryResponse(val items: List<Item> = emptyList()) {
         val sku: String? = null,
         val type: Type? = null,
         val name: String? = null,
-        val quantity: Long,
+        val quantity: Long? = null,
         val description: String? = null,
         @SerializedName("image_url")
         val imageUrl: String? = null,
         val groups: List<Group> = emptyList(),
+        val attributes: List<ItemAttributes>,
         @SerializedName("remaining_uses")
-        val remainingUses: Long,
+        val remainingUses: Long? = null,
         @SerializedName("virtual_item_type")
         val virtualItemType: VirtualItemType? = null
     ) : Parcelable {
@@ -46,4 +48,19 @@ data class Group(
         @SerializedName("external_id")
         val externalId: String? = null,
         val name: String? = null
+) : Parcelable
+
+@Parcelize
+data class ItemAttributes(
+    @SerializedName("external_id")
+    val externalId: String? = null,
+    val name: String? = null,
+    val values: List<ValuesAttributes> = emptyList()
+) : Parcelable
+
+@Parcelize
+data class ValuesAttributes(
+    @SerializedName("external_id")
+    val externalId: String? = null,
+    val value: String? = null
 ) : Parcelable

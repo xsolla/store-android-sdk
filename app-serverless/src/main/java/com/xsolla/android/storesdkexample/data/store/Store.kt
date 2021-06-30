@@ -120,7 +120,6 @@ object Store {
                 .build()
         val intent = XPayments.createIntentBuilder(context)
                 .accessData(accessData)
-                .useWebview(true)
                 .isSandbox(BuildConfig.IS_SANDBOX)
                 .build()
         withContext(Dispatchers.Main) {

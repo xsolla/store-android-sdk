@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.16.0] - Payments SDK - 2021-06-30
+
+### Added
+
+- Custom Tabs support
+
+## [0.19.0] - Store SDK - 2021-06-30
+
+### Added
+
+- New Commerce API methods and arguments
+
+## [1.2.0] - Login SDK - 2021-06-30
+
+### Added
+
+- Authentication via device id
+- Authentication via phone number
+
 ## [0.15.3] - Payments SDK - 2021-04-13
 
 ### Fixed

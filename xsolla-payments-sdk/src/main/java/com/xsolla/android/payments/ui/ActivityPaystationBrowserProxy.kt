@@ -3,21 +3,16 @@ package com.xsolla.android.payments.ui
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import com.xsolla.android.payments.XPayments
+import com.xsolla.android.payments.ui.utils.BrowserUtils
 
 class ActivityPaystationBrowserProxy : ActivityPaystation() {
 
     companion object {
-        private fun createIntent(url: String): Intent {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(url)
-            return intent
-        }
-
         fun checkAvailability(context: Context, url: String) =
-                createIntent(url).resolveActivity(context.packageManager) != null
+            BrowserUtils.isBrowserAvailable(context, url)
+                    || BrowserUtils.isCustomTabsAvailable(context, url)
     }
 
     private var needStartBrowser = false
@@ -45,20 +40,24 @@ class ActivityPaystationBrowserProxy : ActivityPaystation() {
         }
         val invoiceId = uri.getQueryParameter("invoice_id")
         finishWithResult(
-                Activity.RESULT_OK,
-                XPayments.Result(XPayments.Status.COMPLETED, invoiceId)
+            Activity.RESULT_OK,
+            XPayments.Result(XPayments.Status.COMPLETED, invoiceId)
         )
     }
 
     override fun onResume() {
         super.onResume()
         if (needStartBrowser) {
-            startActivity(createIntent(url))
+            if (BrowserUtils.isCustomTabsAvailable(this, url)) {
+                BrowserUtils.launchCustomTab(this, url)
+            } else {
+                BrowserUtils.launchBrowser(this, url)
+            }
             needStartBrowser = false
         } else {
             finishWithResult(
-                    Activity.RESULT_CANCELED,
-                    XPayments.Result(XPayments.Status.CANCELLED, null)
+                Activity.RESULT_CANCELED,
+                XPayments.Result(XPayments.Status.CANCELLED, null)
             )
         }
     }

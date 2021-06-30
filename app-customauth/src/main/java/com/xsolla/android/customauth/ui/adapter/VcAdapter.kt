@@ -14,16 +14,17 @@ import com.xsolla.android.customauth.ui.store.PurchaseListener
 import com.xsolla.android.customauth.viewmodels.VmBalance
 import com.xsolla.android.customauth.viewmodels.VmCart
 import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
+import com.xsolla.android.store.callbacks.CreateOrderByVirtualCurrencyCallback
+import com.xsolla.android.store.callbacks.UpdateItemFromCurrentCartCallback
 import com.xsolla.android.store.entity.response.common.VirtualPrice
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse
 
 class VcAdapter(
-    private val items: List<VirtualCurrencyPackageResponse.Item>,
-    private val vmCart: VmCart,
-    private val vmBalance: VmBalance,
-    private val purchaseListener: PurchaseListener
+        private val items: List<VirtualCurrencyPackageResponse.Item>,
+        private val vmCart: VmCart,
+        private val vmBalance: VmBalance,
+        private val purchaseListener: PurchaseListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private companion object {
@@ -60,9 +61,9 @@ class VcAdapter(
 }
 
 class VcRealPriceViewHolder(
-    private val vmCart: VmCart,
-    private val purchaseListener: PurchaseListener,
-    view: View
+        private val vmCart: VmCart,
+        private val purchaseListener: PurchaseListener,
+        view: View
 ) : RecyclerView.ViewHolder(view) {
 
     private val binding: ItemViRealPriceBinding = ItemViRealPriceBinding.bind(view)
@@ -92,27 +93,28 @@ class VcRealPriceViewHolder(
             v.isEnabled = false
             val cartContent = vmCart.cartContent.value
             val quantity = cartContent?.find { it.sku == item.sku }?.quantity ?: 0
-            XStore.updateItemFromCurrentCart(item.sku, quantity + 1, object : XStoreCallback<Void>() {
-                override fun onSuccess(response: Void?) {
+            XStore.updateItemFromCurrentCart(object : UpdateItemFromCurrentCartCallback {
+
+                override fun onSuccess() {
                     vmCart.updateCart()
                     v.isEnabled = true
                 }
 
-                override fun onFailure(errorMessage: String) {
-                    purchaseListener.onFailure(errorMessage)
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    purchaseListener.onFailure(errorMessage ?: throwable?.javaClass?.name ?: "Error")
                     v.isEnabled = true
                 }
 
-            })
+            }, item.sku!!, quantity + 1)
         }
     }
 
 }
 
 class VcVirtualPriceViewHolder(
-    private val vmBalance: VmBalance,
-    private val purchaseListener: PurchaseListener,
-    view: View
+        private val vmBalance: VmBalance,
+        private val purchaseListener: PurchaseListener,
+        view: View
 ) : RecyclerView.ViewHolder(view) {
 
     private val binding: ItemViVirtualPriceBinding = ItemViVirtualPriceBinding.bind(view)
@@ -145,18 +147,19 @@ class VcVirtualPriceViewHolder(
     private fun initBuyButton(item: VirtualCurrencyPackageResponse.Item, virtualPrice: VirtualPrice) {
         binding.buyButton.setOnClickListener { v ->
             v.isEnabled = false
-            XStore.createOrderByVirtualCurrency(item.sku, virtualPrice.sku, object : XStoreCallback<CreateOrderByVirtualCurrencyResponse?>() {
-                override fun onSuccess(response: CreateOrderByVirtualCurrencyResponse?) {
+            XStore.createOrderByVirtualCurrency(object : CreateOrderByVirtualCurrencyCallback {
+
+                override fun onSuccess(response: CreateOrderByVirtualCurrencyResponse) {
                     vmBalance.updateVirtualBalance()
                     purchaseListener.showMessage("Purchased by Virtual currency")
                     v.isEnabled = true
                 }
 
-                override fun onFailure(errorMessage: String) {
-                    purchaseListener.showMessage(errorMessage)
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    purchaseListener.showMessage(errorMessage ?: throwable?.javaClass?.name ?: "Error")
                     v.isEnabled = true
                 }
-            })
+            }, item.sku!!, virtualPrice.sku!!)
         }
     }
 

@@ -3,22 +3,23 @@ package com.xsolla.android.storesdkexample.ui.vm
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
+import com.xsolla.android.store.callbacks.RedeemCouponCallback
 import com.xsolla.android.store.entity.response.items.RedeemCouponResponse
 
 class VmCoupon : ViewModel() {
     val operationResult = MutableLiveData<RedeemCouponResult>()
 
     fun redeemCoupon(coupon: String) {
-        XStore.redeemCoupon(coupon, object : XStoreCallback<RedeemCouponResponse>() {
+        XStore.redeemCoupon(object : RedeemCouponCallback {
             override fun onSuccess(response: RedeemCouponResponse) {
                 operationResult.value = RedeemCouponResult.Success(response.items)
             }
 
-            override fun onFailure(errorMessage: String?) {
-                operationResult.value = RedeemCouponResult.Failure(errorMessage ?: "Unknown error")
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                operationResult.value = RedeemCouponResult.Failure(errorMessage ?: throwable?.javaClass?.name ?: "Unknown error")
             }
-        })
+
+        }, coupon)
     }
 }
 

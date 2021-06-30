@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 
 android {
     compileSdkVersion sdk_compile
@@ -63,11 +63,15 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    lintOptions {
+        quiet true
+        abortOnError true
+    }
 }
 
-androidExtensions {
-    features = ["parcelize"]
-}
+
+
 
 dependencies {
     // Core

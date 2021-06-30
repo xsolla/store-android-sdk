@@ -4,16 +4,80 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 
 data class PaymentOptions(
-    val currency: String = "USD",
-    val locale: String = "en",
+    val currency: String? = null,
+    val locale: String? = null,
+    @SerializedName("is_sandbox")
     val isSandbox: Boolean = true,
     val settings: PaymentProjectSettings? = null,
+    @SerializedName("custom_parameters")
     val customParameters: CustomParameters? = null
 )
 
-data class PaymentProjectSettings(val ui: UiProjectSetting)
 
-data class UiProjectSetting(val theme: String = "default")
+data class PaymentProjectSettings(
+    val ui: UiProjectSetting?,
+    @SerializedName("payment_method")
+    val paymentMethod: Int? = null,
+    @SerializedName("return_url")
+    val returnUrl: String? = null,
+    @SerializedName("redirect_policy")
+    val redirectPolicy: SettingsRedirectPolicy? = null
+)
+
+data class SettingsRedirectPolicy(
+    @SerializedName("redirect_conditions")
+    val redirectConditions: String = "none",
+    val delay: Int = 0,
+    @SerializedName("status_for_manual_redirection")
+    val statusForManualRedirection: String = "none",
+    @SerializedName("redirect_button_caption")
+    val redirectButtonCaption: String? = null
+)
+
+data class UiProjectSetting(
+    val size: String = "medium",
+    val theme: String = "default_dark",
+    val version: String = "mobile",
+    val desktop: DesktopSettings? = null,
+    val mobile: MobileSettings? = null,
+    @SerializedName("license_url")
+    val licenseUrl: String? = null,
+    val mode: String? = null,
+    @SerializedName("user_account")
+    val userAccount: UserAccountDetails? = null
+)
+
+data class MobileSettings(
+    val mode: String? = null,
+    val header: UiMobileProjectSettingHeader? = null,
+    val footer: UiDesktopProjectSettingFooter? = null
+)
+
+class UiDesktopProjectSettingFooter(
+    @SerializedName("is_visible")
+    val isVisible: Boolean
+)
+
+class UiMobileProjectSettingHeader(
+    @SerializedName("close_button")
+    val closeButton: Boolean
+)
+
+data class DesktopSettings(val header: UiDesktopProjectSettingHeader)
+
+data class UiDesktopProjectSettingHeader(
+    @SerializedName("is_visible")
+    val isVisible: Boolean,
+    @SerializedName("visible_logo")
+    val visibleLogo: Boolean,
+    @SerializedName("visible_name")
+    val visibleName: Boolean,
+    @SerializedName("visible_purchase")
+    val visiblePurchase: Boolean,
+    val type: String,
+    @SerializedName("close_button")
+    val closeButton: Boolean
+)
 
 class CustomParameters private constructor(private val parameters: Map<String, Value>) {
     class Builder {
@@ -49,7 +113,6 @@ class CustomParameters private constructor(private val parameters: Map<String, V
                 this.addProperty(key, value)
             }
         }
-
     private fun JsonObject.addProperty(key: String, value: Value) =
         when (value) {
             is Value.String -> {

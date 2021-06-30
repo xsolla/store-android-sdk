@@ -28,7 +28,7 @@ class ConsumeFragment : BaseFragment() {
         arguments?.getParcelable<InventoryResponse.Item>(ITEM_ARG)?.let { item ->
             Glide.with(requireActivity()).load(item.imageUrl).into(binding.itemIcon)
             binding.itemName.text = item.name
-            updateQuantity(item.quantity)
+            updateQuantity(item.quantity!!)
             binding.goToStoreButton.setOnClickListener { findNavController().navigate(R.id.nav_inventory) }
 
             binding.consumeButton.setOnClickListener { v ->
@@ -38,8 +38,8 @@ class ConsumeFragment : BaseFragment() {
                 } catch (e: Exception) {
                     0L
                 }
-                if (quantity > item.quantity) {
-                    updateQuantity(item.quantity)
+                if (quantity > item.quantity!!) {
+                    updateQuantity(item.quantity!!)
                     ViewUtils.enable(v)
                     return@setOnClickListener
                 }

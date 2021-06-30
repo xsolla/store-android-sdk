@@ -89,6 +89,7 @@ class XPayments {
         /**
          * Set use webview instead of a browser
          */
+        @Deprecated("WebView usage is not recommended")
         fun useWebview(useWebview: Boolean) = apply { this.useWebview = useWebview }
 
         /**
@@ -128,6 +129,7 @@ class XPayments {
 
         private fun getServer() = if (isSandbox) SERVER_SANDBOX else SERVER_PROD
     }
+
 
     /**
      * Pay Station result

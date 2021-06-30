@@ -2,6 +2,7 @@ package com.xsolla.android.customauth
 
 import android.app.Application
 import android.content.Context
+import com.xsolla.android.appcore.utils.AmountUtils
 
 class App: Application() {
 

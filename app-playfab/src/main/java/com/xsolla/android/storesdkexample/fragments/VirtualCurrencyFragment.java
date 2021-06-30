@@ -61,7 +61,6 @@ public class VirtualCurrencyFragment extends CatalogFragment {
                             public void onOrderCreated(String psToken) {
                                 Intent intent = XPayments.createIntentBuilder(getContext())
                                         .accessToken(new AccessToken(psToken))
-                                        .useWebview(true)
                                         .isSandbox(BuildConfig.IS_SANDBOX)
                                         .build();
                                 startActivityForResult(intent, RC_PAYSTATION);

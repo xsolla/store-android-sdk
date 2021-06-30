@@ -5,20 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.xsolla.android.appcore.databinding.ItemViVirtualPriceBinding
 import com.xsolla.android.appcore.utils.AmountUtils
 import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
+import com.xsolla.android.store.callbacks.CreateOrderByVirtualCurrencyCallback
 import com.xsolla.android.store.entity.response.common.ExpirationPeriod
 import com.xsolla.android.store.entity.response.common.VirtualPrice
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.appcore.databinding.ItemViVirtualPriceBinding
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
+import com.xsolla.android.storesdkexample.ui.fragments.store.ViFragmentDirections
 import com.xsolla.android.storesdkexample.ui.fragments.store.VirtualItemUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.util.ViewUtils
+import java.util.*
 
 class ViVirtualPriceViewHolder(
     inflater: LayoutInflater,
@@ -36,6 +39,20 @@ class ViVirtualPriceViewHolder(
         bindItemPrice(price)
         bindExpirationPeriod(item.inventoryOption?.expirationPeriod)
         initBuyButton(item, price)
+        bindBundlePlaceholder(item)
+    }
+
+    private fun bindBundlePlaceholder(item: VirtualItemUiEntity) {
+        if (item.sku == "premium_pack" || item.sku == "starter_pack"||
+                item.sku == "lootbox_pack_1" || item.sku == "lootbox_pack_2") {
+            binding.preview.visibility = View.VISIBLE
+            binding.preview.setOnClickListener {
+                it.findNavController().navigate(ViFragmentDirections.actionNavViToBundleFragment(item))
+            }
+        }
+        else{
+            binding.preview.visibility = View.INVISIBLE
+        }
     }
 
     private fun bindPurchasedPlaceholderIfNeed(item: VirtualItemUiEntity) {
@@ -93,7 +110,7 @@ class ViVirtualPriceViewHolder(
             sb.append("Expiration in ")
             sb.append(expirationPeriod.value)
             sb.append(' ')
-            sb.append(expirationPeriod.type.name.toLowerCase())
+            sb.append(expirationPeriod.type.name.toLowerCase(Locale.getDefault()))
             if (expirationPeriod.value != 1) {
                 sb.append('s')
             }
@@ -104,18 +121,18 @@ class ViVirtualPriceViewHolder(
     private fun initBuyButton(item: VirtualItemUiEntity, virtualPrice: VirtualPrice) {
         binding.buyButton.setOnClickListener { v ->
             ViewUtils.disable(v)
-            XStore.createOrderByVirtualCurrency(item.sku, virtualPrice.sku, object : XStoreCallback<CreateOrderByVirtualCurrencyResponse?>() {
-                override fun onSuccess(response: CreateOrderByVirtualCurrencyResponse?) {
+            XStore.createOrderByVirtualCurrency(object : CreateOrderByVirtualCurrencyCallback {
+                override fun onSuccess(response: CreateOrderByVirtualCurrencyResponse) {
                     vmBalance.updateVirtualBalance()
                     purchaseListener.showMessage("Purchased by Virtual currency")
                     ViewUtils.enable(v)
                 }
 
-                override fun onFailure(errorMessage: String) {
-                    purchaseListener.showMessage(errorMessage)
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    purchaseListener.showMessage(errorMessage!!)
                     ViewUtils.enable(v)
                 }
-            })
+            }, item.sku!!, virtualPrice.sku!!)
         }
     }
 }

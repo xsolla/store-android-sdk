@@ -10,7 +10,11 @@
         android:id="@+id/nav_vi"
         android:name="com.xsolla.android.storesdkexample.ui.fragments.store.ViFragment"
         android:label=""
-        tools:layout="@layout/fragment_vi" />
+        tools:layout="@layout/fragment_vi" >
+        <action
+            android:id="@+id/action_nav_vi_to_bundleFragment"
+            app:destination="@id/bundleFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_vc"
@@ -94,5 +98,13 @@
         android:id="@+id/nav_redeem_coupon"
         android:name="com.xsolla.android.storesdkexample.ui.fragments.store.RedeemCouponFragment"
         tools:layout="@layout/fragment_redeem_coupon" />
+    <fragment
+        android:id="@+id/bundleFragment"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.store.BundleFragment"
+        android:label="BundleFragment" >
+        <argument
+            android:name="bundle"
+            app:argType="com.xsolla.android.storesdkexample.ui.fragments.store.VirtualItemUiEntity" />
+    </fragment>
 
 </navigation>

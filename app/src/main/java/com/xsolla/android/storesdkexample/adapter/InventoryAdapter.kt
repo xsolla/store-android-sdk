@@ -9,7 +9,7 @@ import com.xsolla.android.appcore.databinding.ItemInventoryBinding
 import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
+import com.xsolla.android.store.callbacks.UpdateItemFromCurrentCartCallback
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.ConsumeListener
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
@@ -64,7 +64,7 @@ class InventoryAdapter(
 
             binding.itemExpiration.text = getExpirationText(item)
 
-            binding.consumeButton.visibility = if (item.remainingUses == 0L) View.INVISIBLE else View.VISIBLE
+            binding.consumeButton.visibility = if (item.remainingUses == null || item.remainingUses == 0L) View.INVISIBLE else View.VISIBLE
             binding.consumeButton.setOnClickListener { consumeListener.onConsume(item) }
         }
 
@@ -74,7 +74,7 @@ class InventoryAdapter(
             subscriptions?.find { it.sku == item.sku }?.let {
                 return if (it.status == SubscriptionsResponse.Item.Status.ACTIVE) {
                     binding.buyAgainButton.visibility = View.GONE
-                    val date = Date(it.expiredAt * 1000)
+                    val date = Date(it.expiredAt?.times(1000)!!)  //date *1000
                     val sdf = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.US)
                     val formattedDate = sdf.format(date)
                     "Active until: $formattedDate"
@@ -99,21 +99,19 @@ class InventoryAdapter(
                 val quantity = cartContent?.find { item1 -> item1.sku == item.sku }?.quantity
                         ?: 0
                 // check if there is item in cart, if not - set quantity to 0
-                XStore.updateItemFromCurrentCart(item.sku, quantity + 1, object : XStoreCallback<Void>() {
-                    override fun onSuccess(response: Void?) {
+                XStore.updateItemFromCurrentCart(object : UpdateItemFromCurrentCartCallback {
+                    override fun onSuccess() {
                         vmCart.updateCart()
                         ViewUtils.enable(view)
                         binding.buyAgainButton.visibility = View.GONE
                         //enable button after process are done
                     }
 
-                    override fun onFailure(errorMessage: String?) {
-                        purchaseListener.onFailure(errorMessage!!)
+                    override fun onError(throwable: Throwable?, errorMessage: String?) {
+                        purchaseListener.onFailure(errorMessage ?: throwable?.javaClass?.name ?: "Error")
                         ViewUtils.enable(view)
                     }
-
-
-                })
+                }, item.sku!!, quantity + 1)
             }
         }
 

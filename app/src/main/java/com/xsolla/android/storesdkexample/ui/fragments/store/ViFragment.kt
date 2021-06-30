@@ -4,13 +4,15 @@ import android.os.Parcelable
 import androidx.fragment.app.activityViewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import com.xsolla.android.appcore.databinding.FragmentViBinding
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.inventory.callback.GetInventoryCallback
 import com.xsolla.android.inventory.callback.GetSubscriptionsCallback
 import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.store.XStore
-import com.xsolla.android.store.api.XStoreCallback
+import com.xsolla.android.store.callbacks.GetBundleListCallback
+import com.xsolla.android.store.callbacks.GetVirtualItemsCallback
 import com.xsolla.android.store.entity.response.bundle.BundleItem
 import com.xsolla.android.store.entity.response.bundle.BundleListResponse
 import com.xsolla.android.store.entity.response.common.Group
@@ -20,11 +22,11 @@ import com.xsolla.android.store.entity.response.common.VirtualPrice
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.ViPagerAdapter
-import com.xsolla.android.appcore.databinding.FragmentViBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmInventory
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.parcel.RawValue
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
+
 
 class ViFragment : BaseFragment() {
     private val binding: FragmentViBinding by viewBinding()
@@ -70,20 +72,21 @@ class ViFragment : BaseFragment() {
     }
 
     private fun getBundles(inventory: List<InventoryResponse.Item>) {
-        XStore.getBundleList(object : XStoreCallback<BundleListResponse>() {
+        XStore.getBundleList(object : GetBundleListCallback {
             override fun onSuccess(response: BundleListResponse) {
                 val bundles = response.items.toUiEntity()
                 getVirtualItems(inventory, bundles)
             }
 
-            override fun onFailure(errorMessage: String) {
-                showSnack(errorMessage)
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
+
         })
     }
 
     private fun getVirtualItems(inventory: List<InventoryResponse.Item>, bundles: List<VirtualItemUiEntity>) {
-        XStore.getVirtualItems(object : XStoreCallback<VirtualItemsResponse>() {
+        XStore.getVirtualItems(object : GetVirtualItemsCallback {
             override fun onSuccess(response: VirtualItemsResponse) {
                 if (!isAdded) {
                     return
@@ -94,10 +97,10 @@ class ViFragment : BaseFragment() {
                 val bundleGroup = bundles.firstOrNull()?.groups?.firstOrNull()?.name
 
                 val groups = items
-                    .flatMap { it.groups }
-                    .map { it.name }
-                    .distinct()
-                    .toMutableList()
+                        .flatMap { it.groups }
+                        .map { it.name }
+                        .distinct()
+                        .toMutableList()
 
                 val packOfItems = mutableListOf<List<VirtualItemUiEntity>>().apply {
                     add(items.toUiEntity(inventory))
@@ -127,9 +130,10 @@ class ViFragment : BaseFragment() {
                 }.attach()
             }
 
-            override fun onFailure(errorMessage: String) {
-                showSnack(errorMessage)
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
+
         })
     }
 
@@ -183,17 +187,17 @@ class ViFragment : BaseFragment() {
 
 @Parcelize
 data class VirtualItemUiEntity(
-    val sku: String? = null,
-    val name: String? = null,
-    val groups: List<Group> = emptyList(),
-    val attributes: @RawValue List<Any> = emptyList(),
-    val type: String? = null,
-    val description: String? = null,
-    val imageUrl: String? = null,
-    val isFree: Boolean,
-    val price: Price? = null,
-    val virtualPrices: List<VirtualPrice> = emptyList(),
-    val inventoryOption: InventoryOption? = null,
+        val sku: String? = null,
+        val name: String? = null,
+        val groups: List<Group> = emptyList(),
+        val attributes: @RawValue List<Any> = emptyList(),
+        val type: String? = null,
+        val description: String? = null,
+        val imageUrl: String? = null,
+        val isFree: Boolean,
+        val price: Price? = null,
+        val virtualPrices: List<VirtualPrice> = emptyList(),
+        val inventoryOption: InventoryOption? = null,
 
-    val hasInInventory: Boolean
+        val hasInInventory: Boolean
 ) : Parcelable

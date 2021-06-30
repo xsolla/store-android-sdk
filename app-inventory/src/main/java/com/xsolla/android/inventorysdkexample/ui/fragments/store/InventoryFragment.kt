@@ -2,6 +2,7 @@ package com.xsolla.android.inventorysdkexample.ui.fragments.store
 
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,9 +11,7 @@ import com.xsolla.android.appcore.databinding.FragmentInventoryBinding
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.inventory.callback.ConsumeItemCallback
 import com.xsolla.android.inventory.callback.GetInventoryCallback
-import com.xsolla.android.inventory.callback.GetSubscriptionsCallback
 import com.xsolla.android.inventory.entity.response.InventoryResponse
-import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.inventorysdkexample.R
 import com.xsolla.android.inventorysdkexample.adapter.InventoryAdapter
 import com.xsolla.android.inventorysdkexample.ui.fragments.base.BaseFragment
@@ -45,44 +44,23 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
         viewModel.inventory.observe(viewLifecycleOwner) {
             inventoryAdapter.items = it
             inventoryAdapter.notifyDataSetChanged()
+
+            setupPlaceholderVisibility()
         }
         viewModel.subscriptions.observe(viewLifecycleOwner) {
             inventoryAdapter.setSubscriptions(it)
+
+            setupPlaceholderVisibility()
         }
 
-        getItems()
-        getSubscriptions()
+        viewModel.getItems { showSnack(it) }
+        viewModel.getSubscriptions { showSnack(it) }
     }
 
     private fun openWebStore() =
             "https://sitebuilder.xsolla.com/game/sdk-web-store-android/?token=${XLogin.token}&remember_me=false"
                     .toUri()
                     .openInBrowser(requireContext())
-
-    private fun getItems() {
-        XInventory.getInventory(object : GetInventoryCallback {
-            override fun onSuccess(data: InventoryResponse) {
-                val virtualItems = data.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
-                viewModel.inventory.value = virtualItems
-            }
-
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
-            }
-        })
-    }
-
-    private fun getSubscriptions() {
-        XInventory.getSubscriptions(object : GetSubscriptionsCallback {
-            override fun onSuccess(data: SubscriptionsResponse) {
-                viewModel.subscriptions.value = data.items
-            }
-
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
-            }
-        })
-    }
 
     override fun onConsume(item: InventoryResponse.Item) {
         consume(item)
@@ -116,6 +94,11 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
                 showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
         })
+    }
+
+    private fun setupPlaceholderVisibility() {
+        binding.noItemsPlaceholder.isVisible = viewModel.inventorySize == 0
+        binding.recycler.isVisible = viewModel.inventorySize != 0
     }
 }
 

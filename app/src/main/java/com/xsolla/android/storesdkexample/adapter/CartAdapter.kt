@@ -47,13 +47,9 @@ class CartAdapter(
 
             bindCounter(item)
 
-            if (item.virtualPrices.isNotEmpty()) {
-                bindItemVirtualPrice(item)
-            }
-
             item.price?.let { bindItemPrice(item) }
 
-            item.inventoryOption?.expirationPeriod?.let { binExpirationPeriod(it) }
+            item.inventoryOption?.expirationPeriod?.let { bindExpirationPeriod(it) }
         }
 
         private fun bindItemPrice(item: CartResponse.Item) {
@@ -61,8 +57,8 @@ class CartAdapter(
             if (price!!.getAmountDecimal() == price.getAmountWithoutDiscountDecimal()) {
                 binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!, price.currency!!)
                 binding.itemOldPrice.visibility = View.INVISIBLE
-                binding.itemSaleLabel.visibility = View.INVISIBLE
-            } else {
+                binding.itemSaleLabel.visibility = View.INVISIBLE }
+            else {
                 binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!, price.currency!!)
                 binding.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal()!!)
                 binding.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
@@ -71,25 +67,7 @@ class CartAdapter(
             }
         }
 
-        private fun bindItemVirtualPrice(item: CartResponse.Item) {
-            val price = item.virtualPrices[0]
-
-            binding.itemVirtualPriceIcon.visibility = View.VISIBLE
-            Glide.with(itemView.context).load(price.imageUrl).into(binding.itemVirtualPriceIcon)
-            if (price.getAmountDecimal() == price.getAmountWithoutDiscountDecimal() || price.calculatedPrice?.amountWithoutDiscount == null) {
-                binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!)
-                binding.itemOldPrice.visibility = View.INVISIBLE
-                binding.itemSaleLabel.visibility = View.INVISIBLE
-            } else {
-                binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!)
-                binding.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal()!!)
-                binding.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-                binding.itemOldPrice.visibility = View.VISIBLE
-                binding.itemSaleLabel.visibility = View.VISIBLE
-            }
-        }
-
-        private fun binExpirationPeriod(expirationPeriod: ExpirationPeriod) {
+        private fun bindExpirationPeriod(expirationPeriod: ExpirationPeriod) {
             binding.itemExpiration.visibility = View.VISIBLE
             val sb = StringBuilder()
             sb.append("Expiration in ")
