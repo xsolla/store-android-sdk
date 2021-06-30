@@ -381,31 +381,39 @@ class XLogin private constructor(
             } else {
                 val body = CompleteAuthByPhoneBody(code, operationId, phoneNumber)
                 getInstance().loginApi.oauthCompleteAuthByPhone(getInstance().oauthClientId, body)
-                    .enqueue(object : Callback<OauthAuthResponse?> {
+                    .enqueue(object : Callback<OauthGetCodeResponse?> {
                         override fun onResponse(
-                            call: Call<OauthAuthResponse?>,
-                            response: Response<OauthAuthResponse?>
+                            call: Call<OauthGetCodeResponse?>,
+                            response: Response<OauthGetCodeResponse?>
                         ) {
                             if (response.isSuccessful) {
-                                val oauthAuthResponse = response.body()
-                                if (oauthAuthResponse != null) {
-                                    val accessToken = oauthAuthResponse.accessToken
-                                    val refreshToken = oauthAuthResponse.refreshToken
-                                    val expiresIn = oauthAuthResponse.expiresIn
-                                    getInstance().tokenUtils.oauthAccessToken = accessToken
-                                    getInstance().tokenUtils.oauthRefreshToken = refreshToken
-                                    getInstance().tokenUtils.oauthExpireTimeUnixSec =
-                                        System.currentTimeMillis() / 1000 + expiresIn
-                                    callback.onSuccess()
-                                } else {
-                                    callback.onError(null, "Empty response")
+                                val url = response.body()?.loginUrl
+                                if (url == null) {
+                                    callback.onError(null, "Empty url")
+                                    return
+                                }
+                                val oauthCode = TokenUtils.getCodeFromUrl(url)
+                                if (oauthCode == null) {
+                                    callback.onError(null, "Code not found url")
+                                    return
+                                }
+                                Utils.getOauthTokensFromCode(oauthCode) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
+                                    if (throwable == null && errorMessage == null) {
+                                        getInstance().tokenUtils.oauthAccessToken = accessToken
+                                        getInstance().tokenUtils.oauthRefreshToken = refreshToken
+                                        getInstance().tokenUtils.oauthExpireTimeUnixSec =
+                                            System.currentTimeMillis() / 1000 + expiresIn!!
+                                        callback.onSuccess()
+                                    } else {
+                                        callback.onError(throwable, errorMessage)
+                                    }
                                 }
                             } else {
                                 callback.onError(null, getErrorMessage(response.errorBody()))
                             }
                         }
 
-                        override fun onFailure(call: Call<OauthAuthResponse?>, t: Throwable) {
+                        override fun onFailure(call: Call<OauthGetCodeResponse?>, t: Throwable) {
                             callback.onError(t, null)
                         }
                     })

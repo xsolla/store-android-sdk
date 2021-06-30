@@ -103,7 +103,7 @@ interface LoginApi {
     fun oauthCompleteAuthByPhone(
         @Query("client_id") clientId: Int,
         @Body completeByPhoneBody: CompleteAuthByPhoneBody
-    ): Call<OauthAuthResponse>
+    ): Call<OauthGetCodeResponse>
 
     @POST("api/oauth2/login/phone/request")
     fun oauthStartAuthByPhone(
