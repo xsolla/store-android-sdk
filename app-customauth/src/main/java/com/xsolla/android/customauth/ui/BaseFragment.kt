@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import com.xsolla.android.appcore.utils.AmountUtils
 import com.xsolla.android.customauth.R
 import com.xsolla.android.customauth.ui.store.StoreActivity
 
@@ -28,6 +29,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        AmountUtils.init(requireContext())
         initUI()
 
         requireActivity().findViewById<View>(R.id.mainToolbar).isVisible = toolbarOption.showMainToolbar

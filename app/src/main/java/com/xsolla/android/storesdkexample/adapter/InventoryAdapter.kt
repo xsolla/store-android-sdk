@@ -64,7 +64,7 @@ class InventoryAdapter(
 
             binding.itemExpiration.text = getExpirationText(item)
 
-            binding.consumeButton.visibility = if (item.remainingUses == 0L) View.INVISIBLE else View.VISIBLE
+            binding.consumeButton.visibility = if (item.remainingUses == null || item.remainingUses == 0L) View.INVISIBLE else View.VISIBLE
             binding.consumeButton.setOnClickListener { consumeListener.onConsume(item) }
         }
 

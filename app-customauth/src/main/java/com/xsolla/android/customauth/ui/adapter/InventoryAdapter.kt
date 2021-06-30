@@ -53,7 +53,7 @@ class InventoryViewHolder(inflater: LayoutInflater,
         binding.itemQuantity.text = item.quantity.toString()
         binding.itemQuantity.isInvisible = item.virtualItemType == InventoryResponse.Item.VirtualItemType.NON_RENEWING_SUBSCRIPTION
         binding.itemExpiration.text = getExpirationText(subscriptions, item)
-        binding.consumeButton.isInvisible = item.remainingUses == 0L
+        binding.consumeButton.isInvisible = item.remainingUses == null || item.remainingUses == 0L
         binding.consumeButton.setOnClickListener { consumeListener.onConsume(item) }
     }
 

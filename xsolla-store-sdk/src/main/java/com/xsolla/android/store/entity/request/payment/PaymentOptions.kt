@@ -4,8 +4,8 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 
 data class PaymentOptions(
-    val currency: String = "USD",
-    val locale: String = "en",
+    val currency: String? = null,
+    val locale: String? = null,
     @SerializedName("is_sandbox")
     val isSandbox: Boolean = true,
     val settings: PaymentProjectSettings? = null,
@@ -15,9 +15,9 @@ data class PaymentOptions(
 
 
 data class PaymentProjectSettings(
-    val ui: UiProjectSetting,
+    val ui: UiProjectSetting?,
     @SerializedName("payment_method")
-    val paymentMethod: Int = 1,
+    val paymentMethod: Int? = null,
     @SerializedName("return_url")
     val returnUrl: String? = null,
     @SerializedName("redirect_policy")
@@ -31,7 +31,7 @@ data class SettingsRedirectPolicy(
     @SerializedName("status_for_manual_redirection")
     val statusForManualRedirection: String = "none",
     @SerializedName("redirect_button_caption")
-    val redirectButtonCaption: String = "Finish"
+    val redirectButtonCaption: String? = null
 )
 
 data class UiProjectSetting(
@@ -42,25 +42,25 @@ data class UiProjectSetting(
     val mobile: MobileSettings? = null,
     @SerializedName("license_url")
     val licenseUrl: String? = null,
-    val mode: String = "user_account",
+    val mode: String? = null,
     @SerializedName("user_account")
     val userAccount: UserAccountDetails? = null
 )
 
 data class MobileSettings(
-    val mode: String = "saved_accounts",
-    val header: UiMobileProjectSettingHeader,
-    val footer: UiDesktopProjectSettingFooter
+    val mode: String? = null,
+    val header: UiMobileProjectSettingHeader? = null,
+    val footer: UiDesktopProjectSettingFooter? = null
 )
 
 class UiDesktopProjectSettingFooter(
     @SerializedName("is_visible")
-    val isVisible: Boolean = true
+    val isVisible: Boolean
 )
 
 class UiMobileProjectSettingHeader(
     @SerializedName("close_button")
-    val closeButton: Boolean = false
+    val closeButton: Boolean
 )
 
 data class DesktopSettings(val header: UiDesktopProjectSettingHeader)

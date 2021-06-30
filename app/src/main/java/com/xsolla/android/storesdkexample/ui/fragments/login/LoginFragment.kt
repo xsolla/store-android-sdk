@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.xsolla.android.analytics.Message
-import com.xsolla.android.analytics.XAnalytics
 import com.xsolla.android.appcore.LoginBottomSheet
 import com.xsolla.android.appcore.databinding.FragmentLoginBinding
 import com.xsolla.android.appcore.extensions.setRateLimitedClickListener
@@ -44,9 +42,6 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
     override fun initUI() {
         initLoginButtonEnabling()
 
-
-        val calendar = Calendar.getInstance()
-
         XLogin.getCurrentUserDetails(object : GetCurrentUserDetailsCallback {
             override fun onSuccess(data: UserDetailsResponse) {
                 authId = data.id
@@ -61,16 +56,14 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         binding.loginButton.setOnClickListener {
             val username = binding.usernameInput.text.toString()
             val password = binding.passwordInput.text.toString()
-          loginWithPassword(username, password)
+            loginWithPassword(username, password)
         }
 
         binding.demoUserButton.setOnClickListener {
-
             loginWithPassword("xsolla", "xsolla")
         }
 
         binding.googleButton.setRateLimitedClickListener {
-
             selectedSocialNetwork = SocialNetwork.GOOGLE
             XLogin.startSocialAuth(
                 this,
@@ -91,7 +84,6 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         }
 
         binding.baiduButton.setRateLimitedClickListener {
-
             selectedSocialNetwork = SocialNetwork.BAIDU
             XLogin.startSocialAuth(
                 this,
@@ -106,7 +98,6 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         }
 
         binding.resetPasswordButton.setOnClickListener {
-
             resetPassword()
         }
 

@@ -61,10 +61,6 @@ android {
 
             buildConfigField 'boolean', 'IS_SANDBOX', 'true'
         }
-        packagingOptions{
-            exclude 'META-INF/INDEX.LIST'
-            exclude 'META-INF/DEPENDENCIES'
-        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -90,7 +86,6 @@ dependencies {
     implementation project(":xsolla-store-sdk")
     implementation project(":xsolla-inventory-sdk")
     implementation project(":xsolla-payments-sdk")
-    implementation project(":xsolla-analytics-sdk")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

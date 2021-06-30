@@ -31,8 +31,8 @@ class ActivityPaystationWebView : ActivityPaystation() {
             webView.goBack()
         } else {
             finishWithResult(
-                    Activity.RESULT_CANCELED,
-                    XPayments.Result(XPayments.Status.CANCELLED, null)
+                Activity.RESULT_CANCELED,
+                XPayments.Result(XPayments.Status.CANCELLED, null)
             )
         }
     }
@@ -55,13 +55,15 @@ class ActivityPaystationWebView : ActivityPaystation() {
 
             override fun doUpdateVisitedHistory(view: WebView, url: String, isReload: Boolean) {
                 val uri = Uri.parse(url)
-                if (uri.authority == getString(R.string.xsolla_payments_redirect_host)) {
+                if (uri.scheme == getString(R.string.xsolla_payments_redirect_scheme)
+                    && uri.authority == getString(R.string.xsolla_payments_redirect_host)
+                ) {
                     val invoiceId = uri.getQueryParameter("invoice_id")
                     //hide error message
                     webView.visibility = View.INVISIBLE
                     finishWithResult(
-                            Activity.RESULT_OK,
-                            XPayments.Result(XPayments.Status.COMPLETED, invoiceId)
+                        Activity.RESULT_OK,
+                        XPayments.Result(XPayments.Status.COMPLETED, invoiceId)
                     )
                 }
                 super.doUpdateVisitedHistory(view, url, isReload)

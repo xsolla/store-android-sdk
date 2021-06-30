@@ -91,7 +91,6 @@ class XStore private constructor(
             )
         }
 
-        //TextReview
         //----------     Cart & Payment     ----------
 
          // Cart & Payment
@@ -101,10 +100,10 @@ class XStore private constructor(
         /**
          * Returns a user’s cart by ID.
          *
-         * @param cartId Cart ID
-         * @param currency The currency which prices are displayed in (USD  by default). Three-letter currency code per ISO 4217
+         * @param cartId Cart ID.
+         * @param currency The currency used to display prices (USD by default). Three-letter currency code per ISO 4217.
          * @param locale Response language. Two-letter lowercase language code per ISO-639-1
-         * @param callback status callback
+         * @param callback Status callback.
          *
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/get-cart-by-id/)
          */
@@ -141,11 +140,11 @@ class XStore private constructor(
         }
 
         /**
-         * Get a current user’s cart
+         * Gets a current user’s cart.
          *
-         * @param currency The currency which prices are displayed in (USD  by default). Three-letter currency code per ISO 4217
-         * @param locale Response language. Two-letter lowercase language code per ISO-639-1
-         * @param callback status callback
+         * @param currency The currency used to display prices (USD by default). Three-letter currency code per ISO 4217.
+         * @param locale Response language. Two-letter lowercase language code per ISO-639-1.
+         * @param callback Status callback.
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/get-user-cart/)
          */
         @JvmStatic
@@ -525,14 +524,13 @@ class XStore private constructor(
                 })
         }
 
-        //TextReview
         /**
          * Creates a new payment token.
          *
-         * @param purchase  object of PurchaseObject.kt type
+         * @param purchase  Object of the PurchaseObject.kt type.
          * @param settings  Custom project settings.
-         * @param customParameters Your custom parameters, represented as a valid JSON set of key-value pairs.
-         * @param callback status callback
+         * @param customParameters Your custom parameters represented as a valid JSON set of key-value pairs.
+         * @param callback Status callback.
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/payment/create-payment)
          */
         @JvmStatic

@@ -13,7 +13,6 @@ import com.xsolla.android.payments.status.StatusWorker
 import com.xsolla.android.payments.ui.ActivityPaystation
 import com.xsolla.android.payments.ui.ActivityPaystationBrowserProxy
 import com.xsolla.android.payments.ui.ActivityPaystationWebView
-import com.xsolla.android.payments.ui.ChromeCustomTab
 import kotlinx.parcelize.Parcelize
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -90,6 +89,7 @@ class XPayments {
         /**
          * Set use webview instead of a browser
          */
+        @Deprecated("WebView usage is not recommended")
         fun useWebview(useWebview: Boolean) = apply { this.useWebview = useWebview }
 
         /**
@@ -128,12 +128,7 @@ class XPayments {
         }
 
         private fun getServer() = if (isSandbox) SERVER_SANDBOX else SERVER_PROD
-
-        fun launchChromeTab(context: Context){
-            ChromeCustomTab.launch(context,generateUrl())
-        }
     }
-
 
 
     /**

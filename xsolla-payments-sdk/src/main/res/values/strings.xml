@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="xsolla_payments_redirect_scheme">app</string>
-    <string name="xsolla_payments_redirect_host">xsollaconfirm</string>
+    <string name="xsolla_payments_redirect_host">example</string>
 </resources>

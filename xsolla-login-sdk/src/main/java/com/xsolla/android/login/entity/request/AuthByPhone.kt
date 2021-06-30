@@ -10,6 +10,8 @@ data class StartAuthByPhoneBody(
 data class CompleteAuthByPhoneBody(
     @SerializedName("code")
     val code: String,
+    @SerializedName("operation_id")
+    val operationId: String,
     @SerializedName("phone_number")
     val phoneNumber: String
 )

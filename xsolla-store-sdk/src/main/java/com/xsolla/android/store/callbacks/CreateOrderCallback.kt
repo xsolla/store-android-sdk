@@ -9,12 +9,12 @@ interface CreateOrderCallback {
     fun onError(throwable: Throwable?, errorMessage: String?)
 }
 
-interface CreateOrderByVirtualCurrencyCallback{
+interface CreateOrderByVirtualCurrencyCallback {
     fun onSuccess(response: CreateOrderByVirtualCurrencyResponse)
     fun onError(throwable: Throwable?, errorMessage: String?)
 }
 
-interface  CreatePaymentTokenCallback{
+interface CreatePaymentTokenCallback {
     fun onSuccess(response: CreatePaymentTokenResponse)
     fun onError(throwable: Throwable?, errorMessage: String?)
 }

@@ -46,7 +46,7 @@ interface LoginApi {
         @Query("payload") payload: String?,
         @Query("with_logout") withLogout: String,
         @Body startAuthByPhoneBody: StartAuthByPhoneBody
-    ): Call<Void>
+    ): Call<StartAuthByPhoneResponse>
 
     @GET("/api/social/{providerName}/login_url")
     fun getLinkForSocialAuth(
@@ -97,13 +97,13 @@ interface LoginApi {
         @Query("state") state: String,
         @Query("scope") scope: String,
         @Body body: AuthViaDeviceIdBody
-    ) : Call<OauthAuthResponse>
+    ) : Call<OauthGetCodeResponse>
 
     @POST("api/oauth2/login/phone/confirm")
     fun oauthCompleteAuthByPhone(
         @Query("client_id") clientId: Int,
         @Body completeByPhoneBody: CompleteAuthByPhoneBody
-    ): Call<OauthAuthResponse>
+    ): Call<OauthGetCodeResponse>
 
     @POST("api/oauth2/login/phone/request")
     fun oauthStartAuthByPhone(
@@ -113,7 +113,7 @@ interface LoginApi {
         @Query("state") state: String,
         @Query("redirect_uri") redirectUri: String,
         @Body body: StartAuthByPhoneBody
-    ): Call<Void>
+    ): Call<StartAuthByPhoneResponse>
 
     @GET("/api/oauth2/social/{providerName}/login_url")
     fun oauthGetLinkForSocialAuth(
@@ -134,7 +134,7 @@ interface LoginApi {
         @Query("response_type") responseType: String,
         @Query("scope") scope: String,
         @Body oauthGetCodeBySocialTokenBody: OauthGetCodeBySocialTokenBody
-    ): Call<OauthGetCodeBySocialTokenResponse>
+    ): Call<OauthGetCodeResponse>
 
     @FormUrlEncoded
     @POST("/api/oauth2/token")
@@ -423,5 +423,5 @@ interface LoginApi {
         @Query("response_type") responseType: String,
         @Query("scope") scope: String,
         @Body authUserSocialWithCodeBody: AuthUserSocialWithCodeBody
-    ): Call<OauthGetCodeBySocialTokenResponse>
+    ): Call<OauthGetCodeResponse>
 }
