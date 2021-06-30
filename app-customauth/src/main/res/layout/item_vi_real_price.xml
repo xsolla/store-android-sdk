@@ -63,6 +63,15 @@
                 android:layout_marginLeft="@dimen/catalog_item_virtual_old_price_left_margin"
                 android:visibility="invisible"
                 tools:text="5" />
+            
+		<TextView
+                android:id="@+id/itemOldPrice"
+                style="@style/Widget.Xsolla.CatalogItem.OldPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/catalog_item_virtual_old_price_left_margin"
+                android:visibility="invisible"
+                tools:text="5" />
 
         </LinearLayout>
 

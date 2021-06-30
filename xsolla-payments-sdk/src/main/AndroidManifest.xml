@@ -14,8 +14,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:scheme="@string/xsolla_payments_redirect_scheme"
-                    android:host="@string/xsolla_payments_redirect_host"
-                    android:pathPrefix="@string/xsolla_payments_redirect_path_prefix" />
+                    android:host="@string/xsolla_payments_redirect_host" />
             </intent-filter>
         </activity>
         <activity
