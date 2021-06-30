@@ -91,7 +91,9 @@ test:
   except:
     - branches
   script:
-    - ./gradlew test
+    - ./gradlew :xsolla-login-sdk:test
+    - ./gradlew :xsolla-store-sdk:test
+    - ./gradlew :xsolla-inventory-sdk:test
   artifacts:
     expire_in: 24 hours
     paths:
