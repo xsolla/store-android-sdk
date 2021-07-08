@@ -7,13 +7,15 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.ImageViewCompat
 import com.xsolla.android.login.R
 import com.xsolla.android.login.token.TokenUtils
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.xsolla_login_activity_auth_webview.*
+import kotlinx.parcelize.Parcelize
 
-class ActivityAuthWebView : AppCompatActivity() {
+class ActivityAuthWebView : ActivityAuth() {
 
     companion object {
         const val ARG_AUTH_URL = "auth_url"
@@ -22,61 +24,67 @@ class ActivityAuthWebView : AppCompatActivity() {
 
         const val RESULT = "result"
 
-        private const val USER_AGENT_GOOGLE = "Mozilla/5.0 (Linux; Android 10; Redmi Note 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Mobile Safari/537.36"
-        private const val USER_AGENT_QQ = "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36"
+        private const val USER_AGENT_GOOGLE =
+            "Mozilla/5.0 (Linux; Android 10; Redmi Note 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Mobile Safari/537.36"
+        private const val USER_AGENT_QQ =
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36"
     }
 
     private lateinit var callbackUrl: String
+    private lateinit var webView: WebView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.xsolla_login_activity_auth_webview)
+
+        webView = findViewById(R.id.webview)
 
         val url = intent.getStringExtra(ARG_AUTH_URL)!!
         callbackUrl = intent.getStringExtra(ARG_CALLBACK_URL)!!
 
         val token = intent.getStringExtra(ARG_TOKEN)
 
-        close_icon.setOnClickListener {
+        val closeIcon = findViewById<ImageView>(R.id.close_icon)
+        closeIcon.setOnClickListener {
             finishWithResult(
-                    Activity.RESULT_CANCELED,
-                    Result(Status.CANCELLED, null, null,null)
+                Activity.RESULT_CANCELED,
+                Result(Status.CANCELLED, null, null, null)
             )
         }
 
         configureWebView(url)
         if (token == null) {
-            webview.loadUrl(url)
+            webView.loadUrl(url)
         } else {
-            webview.loadUrl(url, mapOf("Authorization" to "Bearer $token"))
+            webView.loadUrl(url, mapOf("Authorization" to "Bearer $token"))
         }
     }
 
     override fun onBackPressed() {
-        if (webview.canGoBack()) {
-            webview.goBack()
+        if (webView.canGoBack()) {
+            webView.goBack()
         } else {
             finishWithResult(
-                    Activity.RESULT_CANCELED,
-                    Result(Status.CANCELLED, null, null, null)
+                Activity.RESULT_CANCELED,
+                Result(Status.CANCELLED, null, null, null)
             )
         }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun configureWebView(url: String) {
-        webview.settings.javaScriptEnabled = true
+        webView.settings.javaScriptEnabled = true
         if (url.contains("google", ignoreCase = true)) {
-            webview.settings.userAgentString = USER_AGENT_GOOGLE
+            webView.settings.userAgentString = USER_AGENT_GOOGLE
         }
         if (url.contains("qq.com", ignoreCase = true)) {
-            webview.settings.userAgentString = USER_AGENT_QQ
+            webView.settings.userAgentString = USER_AGENT_QQ
         }
-        if (!webview.isInEditMode) {
-            webview.settings.builtInZoomControls = true
-            webview.settings.setSupportZoom(true)
+        if (!webView.isInEditMode) {
+            webView.settings.builtInZoomControls = true
+            webView.settings.setSupportZoom(true)
         }
-        webview.webViewClient = object : WebViewClient() {
+        webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(webView: WebView, url: String): Boolean {
                 webView.loadUrl(url)
                 return true
@@ -96,13 +104,13 @@ class ActivityAuthWebView : AppCompatActivity() {
         val token = TokenUtils.getTokenFromUrl(url)
         if (code == null && token == null) {
             finishWithResult(
-                    Activity.RESULT_OK,
-                    Result(Status.ERROR, null, null, "Code or token not found")
+                Activity.RESULT_OK,
+                Result(Status.ERROR, null, null, "Code or token not found")
             )
         } else {
             finishWithResult(
-                    Activity.RESULT_OK,
-                    Result(Status.SUCCESS, token, code, null)
+                Activity.RESULT_OK,
+                Result(Status.SUCCESS, token, code, null)
             )
         }
     }
@@ -115,12 +123,17 @@ class ActivityAuthWebView : AppCompatActivity() {
     }
 
     @Parcelize
-    data class Result(val status: Status, val token: String?, val code: String?, val error: String?) : Parcelable {
+    data class Result(
+        val status: Status,
+        val token: String?,
+        val code: String?,
+        val error: String?
+    ) : Parcelable {
         companion object {
             @JvmStatic
             fun fromResultIntent(intent: Intent?): Result =
-                    intent?.getParcelableExtra(RESULT)
-                            ?: Result(Status.ERROR, null, null, "Unknown")
+                intent?.getParcelableExtra(RESULT)
+                    ?: Result(Status.ERROR, null, null, "Unknown")
         }
     }
 
