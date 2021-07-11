@@ -19,6 +19,8 @@ import com.xsolla.android.login.social.LoginSocial
 import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.login.social.SocialNetworkForLinking
 import com.xsolla.android.login.token.TokenUtils
+import com.xsolla.android.login.ui.ActivityAuth
+import com.xsolla.android.login.ui.ActivityAuthBrowserProxy
 import com.xsolla.android.login.ui.ActivityAuthWebView
 import com.xsolla.android.login.unity.UnityProxyActivity
 import com.xsolla.android.login.util.Utils
@@ -1857,12 +1859,12 @@ class XLogin private constructor(
             context: Context,
             socialNetwork: SocialNetworkForLinking
         ): Intent {
-            val intent = Intent(context, ActivityAuthWebView::class.java)
+            val intent = Intent(context, ActivityAuthBrowserProxy::class.java)
             intent.putExtra(
-                ActivityAuthWebView.ARG_AUTH_URL,
+                ActivityAuth.ARG_AUTH_URL,
                 LOGIN_HOST + "/api/users/me/social_providers/" + socialNetwork.name.toLowerCase() + "/login_redirect"
             )
-            intent.putExtra(ActivityAuthWebView.ARG_CALLBACK_URL, getInstance().callbackUrl)
+            intent.putExtra(ActivityAuth.ARG_CALLBACK_URL, getInstance().callbackUrl)
             intent.putExtra(ActivityAuthWebView.ARG_TOKEN, token)
             return intent
         }

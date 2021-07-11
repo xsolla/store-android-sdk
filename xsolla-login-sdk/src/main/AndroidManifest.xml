@@ -2,9 +2,32 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.xsolla.android.login">
 
+    <queries>
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+    </queries>
+
     <application>
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
+
+        <activity
+            android:name="com.xsolla.android.login.ui.ActivityAuthBrowserProxy"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"
+            android:theme="@style/XsollaLoginTheme.Default">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="@string/xsolla_login_redirect_host"
+                    android:scheme="@string/xsolla_login_redirect_scheme" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.ActivityAuthWebView"
             android:configChanges="orientation|screenSize"

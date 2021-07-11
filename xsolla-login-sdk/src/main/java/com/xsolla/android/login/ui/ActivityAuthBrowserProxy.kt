@@ -1,26 +1,36 @@
 package com.xsolla.android.login.ui
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
+import android.util.Log.DEBUG
 import com.xsolla.android.login.ui.utils.BrowserUtils
 
 class ActivityAuthBrowserProxy : ActivityAuth() {
 
+    companion object {
+        fun checkAvailability(context: Context, url: String) =
+            BrowserUtils.isBrowserAvailable(context, url)
+                    || BrowserUtils.isCustomTabsAvailable(context, url)
+    }
+
     private var needStartBrowser = false
     private lateinit var url: String
+    private lateinit var callbackUrl: String
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
 
 
-        url = intent.getStringExtra(ARG_URL)
-        /*val callbackUrl = intent.getStringExtra(ActivityAuthWebView.ARG_CALLBACK_URL)!!
-        val token = intent.getStringExtra(ActivityAuthWebView.ARG_TOKEN)*/
+        url = intent.getStringExtra(ARG_AUTH_URL)
+        callbackUrl = intent.getStringExtra(ARG_CALLBACK_URL)
 
         if (url == null) {
             finish()
+            Log.d("CHROMETAB", "our url == null" )
             return
         }
         if (savedInstanceState == null) {

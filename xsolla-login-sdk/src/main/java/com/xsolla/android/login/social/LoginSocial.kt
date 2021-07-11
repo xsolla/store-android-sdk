@@ -35,6 +35,8 @@ import com.xsolla.android.login.entity.request.AuthUserSocialWithCodeBody
 import com.xsolla.android.login.entity.request.OauthGetCodeBySocialTokenBody
 import com.xsolla.android.login.entity.response.*
 import com.xsolla.android.login.token.TokenUtils
+import com.xsolla.android.login.ui.ActivityAuth
+import com.xsolla.android.login.ui.ActivityAuthBrowserProxy
 import com.xsolla.android.login.ui.ActivityAuthWebView
 import com.xsolla.android.login.ui.ActivityAuthWebView.Result.Companion.fromResultIntent
 import com.xsolla.android.login.ui.ActivityWechatProxy
@@ -444,8 +446,8 @@ object LoginSocial {
             oneTapClient.beginSignIn(oneTapRequest)
                 .addOnSuccessListener {
                     try {
-                        val currentActivity = activity ?: fragment?.activity!!
-                        currentActivity.startIntentSenderForResult(
+                        val currentActivity = activity ?: fragment?.requireActivity()
+                        currentActivity?.startIntentSenderForResult(
                             it.pendingIntent.intentSender,
                             RC_AUTH_GOOGLE,
                             null,
@@ -564,13 +566,22 @@ object LoginSocial {
 
     private fun openWebviewActivity(url: String, activity: Activity?, fragment: Fragment?) {
         val intent: Intent = if (activity != null) {
-            Intent(activity, ActivityAuthWebView::class.java)
+            if (ActivityAuthBrowserProxy.checkAvailability(activity, url)) {
+                Intent(activity, ActivityAuthBrowserProxy::class.java)
+
+            } else {
+                Intent(activity, ActivityAuthWebView::class.java)
+            }
         } else {
-            Intent(fragment!!.context, ActivityAuthWebView::class.java)
+            if (ActivityAuthBrowserProxy.checkAvailability(fragment!!.requireContext(),url)){
+            Intent(fragment.context, ActivityAuthBrowserProxy::class.java)}
+            else{
+                Intent(activity, ActivityAuthWebView::class.java)
+            }
         }
         with(intent) {
-            putExtra(ActivityAuthWebView.ARG_AUTH_URL, url)
-            putExtra(ActivityAuthWebView.ARG_CALLBACK_URL, callbackUrl)
+            putExtra(ActivityAuth.ARG_AUTH_URL, url)
+            putExtra(ActivityAuth.ARG_CALLBACK_URL, callbackUrl)
         }
         if (activity != null) {
             activity.startActivityForResult(intent, RC_AUTH_WEBVIEW)
