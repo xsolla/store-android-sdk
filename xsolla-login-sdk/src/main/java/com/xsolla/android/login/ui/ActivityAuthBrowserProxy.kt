@@ -4,9 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
-import android.util.Log.DEBUG
 import com.xsolla.android.login.ui.utils.BrowserUtils
 
 class ActivityAuthBrowserProxy : ActivityAuth() {
@@ -21,8 +19,8 @@ class ActivityAuthBrowserProxy : ActivityAuth() {
     private lateinit var url: String
     private lateinit var callbackUrl: String
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
 
         url = intent.getStringExtra(ARG_AUTH_URL)
