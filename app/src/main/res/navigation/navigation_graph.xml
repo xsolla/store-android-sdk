@@ -106,5 +106,40 @@
             android:name="bundle"
             app:argType="com.xsolla.android.storesdkexample.ui.fragments.store.VirtualItemUiEntity" />
     </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.login.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_loginOptions"
+            app:destination="@id/loginOptions" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginOptions"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.login.LoginOptions"
+        android:label="LoginOptions" >
+        <action
+            android:id="@+id/action_loginOptions_to_loginWithPhone"
+            app:destination="@id/loginWithPhone" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginWithPhone"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.login.login_options.LoginWithPhone"
+        android:label="LoginWithPhone" />
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.login.AuthFragment"
+        android:label="AuthFragment" >
+        <action
+            android:id="@+id/action_authFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_authFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.login.SignUpFragment"
+        android:label="SignUpFragment" />
 
 </navigation>
