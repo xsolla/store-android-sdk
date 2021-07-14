@@ -58,12 +58,12 @@
         android:text="@string/log_in_button" />
 
     <Button
-        android:id="@+id/demoUserButton"
+        android:id="@+id/moreLoginOptionsButton"
         style="@style/Widget.Xsolla.ActionButton.Small.Secondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:height="@dimen/action_button_height"
-        android:text="@string/log_in_as_demo_user"
+        android:text="@string/login_more_login_options"
         android:textColor="?attr/colorOnSurface"
         app:strokeColor="@color/secondary_color_50" />
 

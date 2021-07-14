@@ -38,7 +38,7 @@ class SignUpFragment : BaseFragment() {
                     showSnack("Registration success. Please check your email")
                     parentFragmentManager
                             .beginTransaction()
-                            .replace(R.id.fragmentContainer, LoginFragment())
+                            .replace(R.id.authFragmentContainer, LoginFragment())
                             .commit()
                     activity?.findViewById<TabLayout>(R.id.tabLayout)?.getTabAt(0)?.select()
                     ViewUtils.enable(v)
