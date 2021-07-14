@@ -1,14 +1,11 @@
 package com.xsolla.android.storesdkexample.ui.fragments.login
 
-import android.app.Activity
+
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.appcore.LoginBottomSheet
 import com.xsolla.android.appcore.databinding.FragmentLoginBinding
@@ -64,8 +61,8 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         }
 
         binding.demoUserButton.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_loginOptions)
-            //loginWithPassword("xsolla", "xsolla")
+
+            loginWithPassword("xsolla", "xsolla")
         }
 
         binding.googleButton.setRateLimitedClickListener {
@@ -166,7 +163,7 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
                 binding.demoUserButton.isEnabled = true
             }
 
-        },BuildConfig.WITH_LOGOUT)
+        }, BuildConfig.WITH_LOGOUT)
     }
 
     private fun resetPassword() {
