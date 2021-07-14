@@ -22,13 +22,11 @@ class ActivityAuthBrowserProxy : ActivityAuth() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         url = intent.getStringExtra(ARG_AUTH_URL)
         callbackUrl = intent.getStringExtra(ARG_CALLBACK_URL)
 
         if (url == null) {
             finish()
-            Log.d("CHROMETAB", "our url == null" )
             return
         }
         if (savedInstanceState == null) {
@@ -47,6 +45,8 @@ class ActivityAuthBrowserProxy : ActivityAuth() {
             }
             needStartBrowser = false
         } else {
+
+            val intent = intent
             finishWithResult(
                 Activity.RESULT_CANCELED,
                 ActivityAuthWebView.Result(
@@ -60,6 +60,7 @@ class ActivityAuthBrowserProxy : ActivityAuth() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        setIntent(intent)
         val uri = intent?.data
         if (uri == null) {
             finish()
