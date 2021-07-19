@@ -138,7 +138,8 @@
     <string name="login_back_button">⟵ Back</string>
     <string name="login_code_from_sms">Enter code from SMS</string>
     <string name="login_log_in">Log in</string>
-    <string name="login_code_expired_in">Code expires in %d</string>
+    <string name="login_code_expired_in">Code expires in:</string>
+    <string name="login_code_timer">%02d:%02d</string>
     <string name="login_code_expired">Code expired</string>
     <string name="login_resend_code">Resend code?</string>
     <string name="login_description" >Restrictions: \n

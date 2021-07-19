@@ -1,28 +1,53 @@
 package com.xsolla.android.storesdkexample.ui.fragments.login.login_options
 
 import android.content.Intent
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.appcore.R
 import com.xsolla.android.appcore.databinding.FragmentLogInWithPhoneEnterCodeBinding
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.CompleteAuthByPhoneCallback
+import com.xsolla.android.login.callback.StartAuthByPhoneCallback
+import com.xsolla.android.login.entity.response.StartAuthByPhoneResponse
 import com.xsolla.android.storesdkexample.StoreActivity
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
+import java.text.SimpleDateFormat
+import java.util.*
 
 class LoginEnterCodeFragment(
-    val operationId: String,
-    val phoneNumber: String
+    private var operationId: String,
+    private val phoneNumber: String
 ) : BaseFragment() {
 
     private val binding: FragmentLogInWithPhoneEnterCodeBinding by viewBinding()
+    private lateinit var countDownTimer: CountDownTimer
 
     override fun getLayout(): Int {
         return R.layout.fragment_log_in_with_phone_enter_code
     }
 
     override fun initUI() {
+
+        initTimer()
+
+        binding.tvResendCode.setOnClickListener {
+            if (binding.tvExpiredIn.visibility == View.GONE){
+            XLogin.startAuthByMobilePhone(phoneNumber,object : StartAuthByPhoneCallback{
+                override fun onAuthStarted(data: StartAuthByPhoneResponse) {
+                    operationId = data.operationId
+                }
+
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
+                }
+            })}
+            else{
+                showSnack("Wait until timer expire")
+            }
+        }
 
         binding.codeInput.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -44,6 +69,7 @@ class LoginEnterCodeFragment(
             val code = binding.codeInput.text.toString()
             XLogin.completeAuthByMobilePhone(phoneNumber,code,operationId,object : CompleteAuthByPhoneCallback{
                 override fun onSuccess() {
+                    countDownTimer.cancel()
                     val intent = Intent(requireActivity(), StoreActivity::class.java)
                     startActivity(intent)
                     activity?.finish()
@@ -54,5 +80,24 @@ class LoginEnterCodeFragment(
                 }
             })
         }
+    }
+
+    private fun initTimer() {
+        val difference:Long = 300000  //current time + 5minutes
+
+        binding.tvTimer.visibility = View.VISIBLE
+
+        countDownTimer = object : CountDownTimer(difference,1000){
+            override fun onTick(millisUntilFinished: Long) {
+                val elapsedMinutes = (millisUntilFinished / 1000) / 60
+                val elapsedSeconds = (millisUntilFinished / 1000) % 60
+                binding.tvTimer.text = context!!.getString(R.string.login_code_timer, elapsedMinutes,elapsedSeconds)
+            }
+
+            override fun onFinish() {
+                binding.tvExpiredIn.visibility = View.GONE
+                binding.tvTimer.text = "Code expired"
+            }
+        }.start()
     }
 }
