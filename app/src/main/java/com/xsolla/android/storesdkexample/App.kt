@@ -34,6 +34,7 @@ class App: Application() {
                     .setProjectId(BuildConfig.LOGIN_ID)
                     .setOauthClientId(BuildConfig.OAUTH_CLIENT_ID)
                     .setSocialConfig(socialConfig)
+                    .setCallbackUrl("app://xsollalogin")
                 .build()
 
             XLogin.init(this, loginConfig)
@@ -41,6 +42,7 @@ class App: Application() {
             val loginConfig = LoginConfig.JwtBuilder()
                     .setProjectId(BuildConfig.LOGIN_ID)
                     .setSocialConfig(socialConfig)
+                    .setCallbackUrl("app://xsollalogin")
                 .build()
 
             XLogin.init(this, loginConfig)
