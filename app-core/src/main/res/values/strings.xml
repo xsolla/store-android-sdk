@@ -135,7 +135,7 @@
     <string name="login_passworless_auth">Passwordless authorization</string>
     <string name="login_phone_input_hint">Enter your phone</string>
     <string name="login_send_code_button">Send code</string>
-    <string name="login_back_button">⟵ Back</string>
+    <string name="login_back_button">← Back</string>
     <string name="login_code_from_sms">Enter code from SMS</string>
     <string name="login_log_in">Log in</string>
     <string name="login_code_expired_in">Code expires in:</string>

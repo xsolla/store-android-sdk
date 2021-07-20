@@ -40,13 +40,15 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
     override fun initUI() {
         initLoginButtonEnabling()
 
+        binding.moreLoginOptionsButton.text = "Log in as demo user" //quick fix of demo user auth
+
         binding.loginButton.setOnClickListener {
             val username = binding.usernameInput.text.toString()
             val password = binding.passwordInput.text.toString()
             loginWithPassword(username, password)
         }
 
-        binding.demoUserButton.setOnClickListener {
+        binding.moreLoginOptionsButton.setOnClickListener {
             loginWithPassword("xsolla", "xsolla")
         }
 
@@ -112,7 +114,7 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
 
     private fun loginWithPassword(username: String, password: String) {
         binding.loginButton.isEnabled = false
-        binding.demoUserButton.isEnabled = false
+        binding.moreLoginOptionsButton.isEnabled = false
 
         hideKeyboard()
 
@@ -125,13 +127,13 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
                 }
                 activity?.finish()
                 binding.loginButton.isEnabled = true
-                binding.demoUserButton.isEnabled = true
+                binding.moreLoginOptionsButton.isEnabled = true
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
                 showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
                 binding.loginButton.isEnabled = true
-                binding.demoUserButton.isEnabled = true
+                binding.moreLoginOptionsButton.isEnabled = true
             }
 
         },BuildConfig.WITH_LOGOUT)
