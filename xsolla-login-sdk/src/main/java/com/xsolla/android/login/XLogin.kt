@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.IntRange
@@ -143,12 +144,18 @@ class XLogin private constructor(
             val loginApi = retrofit.create(LoginApi::class.java)
             val tokenUtils = TokenUtils(context)
 
-            Utils.init(loginApi, loginConfig.oauthClientId, loginConfig.callbackUrl)
+            val callbackUrl = Uri.Builder()
+                .scheme(context.getString(R.string.xsolla_login_redirect_scheme))
+                .authority(context.getString(R.string.xsolla_login_redirect_host))
+                .build()
+                .toString()
+
+            Utils.init(loginApi, loginConfig.oauthClientId, callbackUrl)
 
             instance = XLogin(
                 context,
                 loginConfig.projectId,
-                loginConfig.callbackUrl,
+                callbackUrl,
                 loginConfig.useOauth,
                 loginConfig.oauthClientId,
                 tokenUtils,

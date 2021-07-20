@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import com.xsolla.android.login.ui.utils.BrowserUtils
 
 class ActivityAuthBrowserProxy : ActivityAuth() {
@@ -22,16 +21,17 @@ class ActivityAuthBrowserProxy : ActivityAuth() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        url = intent.getStringExtra(ARG_AUTH_URL)
-        callbackUrl = intent.getStringExtra(ARG_CALLBACK_URL)
+        val url = intent.getStringExtra(ARG_AUTH_URL)
+        val callbackUrl = intent.getStringExtra(ARG_CALLBACK_URL)
 
-        if (url == null) {
+        if (url == null || callbackUrl == null) {
             finish()
             return
         }
         if (savedInstanceState == null) {
             needStartBrowser = true
             this.url = url
+            this.callbackUrl = callbackUrl
         }
     }
 
@@ -45,12 +45,10 @@ class ActivityAuthBrowserProxy : ActivityAuth() {
             }
             needStartBrowser = false
         } else {
-
-            val intent = intent
             finishWithResult(
                 Activity.RESULT_CANCELED,
-                ActivityAuthWebView.Result(
-                    ActivityAuthWebView.Status.CANCELLED,
+                Result(
+                    Status.CANCELLED,
                     null,
                     null,
                     "Code or token not found")
@@ -70,17 +68,16 @@ class ActivityAuthBrowserProxy : ActivityAuth() {
         val code = uri.getQueryParameter("code")
         finishWithResult(
             Activity.RESULT_OK,
-            ActivityAuthWebView.Result(
-                ActivityAuthWebView.Status.SUCCESS,
+            Result(
+                Status.SUCCESS,
                 token, code, null
             )
         )
-
     }
 
-    private fun finishWithResult(resultCode: Int, resultData: ActivityAuthWebView.Result) {
+    private fun finishWithResult(resultCode: Int, resultData: Result) {
         val intent = Intent()
-        intent.putExtra(ActivityAuthWebView.RESULT, resultData)
+        intent.putExtra(RESULT, resultData)
         setResult(resultCode, intent)
         finish()
     }

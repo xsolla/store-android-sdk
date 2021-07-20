@@ -4,16 +4,11 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.ImageButton
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.ImageViewCompat
 import com.xsolla.android.login.R
 import com.xsolla.android.login.token.TokenUtils
-import kotlinx.parcelize.Parcelize
 
 class ActivityAuthWebView : ActivityAuth() {
 
@@ -120,27 +115,6 @@ class ActivityAuthWebView : ActivityAuth() {
         intent.putExtra(RESULT, resultData)
         setResult(resultCode, intent)
         finish()
-    }
-
-    @Parcelize
-    data class Result(
-        val status: Status,
-        val token: String?,
-        val code: String?,
-        val error: String?
-    ) : Parcelable {
-        companion object {
-            @JvmStatic
-            fun fromResultIntent(intent: Intent?): Result =
-                intent?.getParcelableExtra(RESULT)
-                    ?: Result(Status.ERROR, null, null, "Unknown")
-        }
-    }
-
-    enum class Status {
-        SUCCESS,
-        CANCELLED,
-        ERROR
     }
 
 }
