@@ -83,7 +83,9 @@ class LoginEnterCodeFragment(
     private fun initTimer() {
         val difference:Long = 300000  //current time + 5minutes
 
+        binding.tvCodeExpired.visibility = View.INVISIBLE
         binding.tvTimer.visibility = View.VISIBLE
+        binding.tvExpiredIn.visibility = View.VISIBLE
 
         countDownTimer = object : CountDownTimer(difference,1000){
             override fun onTick(millisUntilFinished: Long) {
@@ -93,8 +95,9 @@ class LoginEnterCodeFragment(
             }
 
             override fun onFinish() {
-                binding.tvExpiredIn.visibility = View.GONE
-                binding.tvTimer.text = "Code expired"
+                binding.tvExpiredIn.visibility = View.INVISIBLE
+                binding.tvTimer.visibility = View.INVISIBLE
+                binding.tvCodeExpired.visibility = View.VISIBLE
             }
         }.start()
     }
