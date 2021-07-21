@@ -33,6 +33,11 @@ class LoginEnterCodeFragment(
 
         initTimer()
 
+        binding.btBack.setOnClickListener {
+            hideKeyboard()
+            requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
+        }
+
         binding.tvResendCode.setOnClickListener {
             if (binding.tvExpiredIn.visibility == View.GONE){
             XLogin.startAuthByMobilePhone(phoneNumber,object : StartAuthByPhoneCallback{

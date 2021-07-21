@@ -25,6 +25,7 @@ class LoginWithPhoneFragment: BaseFragment() {
 
     override fun initUI() {
         binding.btBack.setOnClickListener {
+            hideKeyboard()
             requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
         }
 

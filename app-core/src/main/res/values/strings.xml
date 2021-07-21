@@ -125,14 +125,14 @@
     <string name="coupon_received_item_exp_period">Expiration in: %d %ss</string>
     
     <string name="login_more_login_options">More login options</string>
-    <string name="login_description_header">These variants can be set instead of "more log in options" button</string>
-    <string name="login_description_footer" formatted="false">Username/password authorization is used only for the Demo project
-    in order to show the full functionality. When switching to a merchant\'s own project, only one will work with accordance with the settings
-    in the Login section of the publisher.</string>
+    <string name="login_description_header">You can place these buttons instead of "More login options" button.</string>
+    <string name="login_description_footer" formatted="false">Username/password and "Log in with email" authorization options are only shown together
+        for purposes of demonstration.
+        Availability of authorization options depends on Login project settings in Xsolla Publisher Account.</string>
     <string name="login_as_demo_user">Log in as demo user</string>
     <string name="login_with_device_id">Log in  with device id</string>
     <string name="login_with_phone">Log in with phone</string>
-    <string name="login_passworless_auth">Passwordless authorization</string>
+    <string name="login_passworless_auth">Log in with email</string>
     <string name="login_phone_input_hint">Enter your phone</string>
     <string name="login_send_code_button">Send code</string>
     <string name="login_back_button">← Back</string>
