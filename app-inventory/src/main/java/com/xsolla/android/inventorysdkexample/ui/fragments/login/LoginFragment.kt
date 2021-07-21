@@ -14,6 +14,7 @@ import com.xsolla.android.inventorysdkexample.TutorialActivity
 import com.xsolla.android.inventorysdkexample.data.local.PrefManager
 import com.xsolla.android.appcore.databinding.FragmentLoginBinding
 import com.xsolla.android.inventorysdkexample.ui.fragments.base.BaseFragment
+import com.xsolla.android.inventorysdkexample.ui.fragments.login.login_options.MoreLoginOptionsFragment
 import com.xsolla.android.inventorysdkexample.util.setRateLimitedClickListener
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.AuthCallback
@@ -40,7 +41,6 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
     override fun initUI() {
         initLoginButtonEnabling()
 
-        binding.moreLoginOptionsButton.text = "Log in as demo user" //quick fix of demo user auth
 
         binding.loginButton.setOnClickListener {
             val username = binding.usernameInput.text.toString()
@@ -49,7 +49,11 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         }
 
         binding.moreLoginOptionsButton.setOnClickListener {
-            loginWithPassword("xsolla", "xsolla")
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+                .add(R.id.rootFragmentContainer, MoreLoginOptionsFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
         binding.googleButton.setRateLimitedClickListener {

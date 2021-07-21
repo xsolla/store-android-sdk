@@ -35,9 +35,11 @@
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
                 style="@style/Widget.Xsolla.TabLayout"
-                android:layout_marginTop="@dimen/tabs_top_margin"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/tabs_height">
+                android:layout_height="@dimen/tabs_height"
+                android:layout_marginTop="@dimen/tabs_top_margin"
+                app:tabIndicatorColor="@color/white_color"
+                app:tabSelectedTextColor="@color/white_color">
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"

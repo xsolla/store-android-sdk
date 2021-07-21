@@ -40,13 +40,13 @@
         style="?textAppearanceSubtitle2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/forgot_your_password"
-        android:textColor="@color/secondary_color_50"
+        android:layout_marginTop="12dp"
         android:background="?attr/selectableItemBackground"
-        android:textStyle="bold"
         android:clickable="true"
         android:focusable="true"
-        android:layout_marginTop="12dp" />
+        android:fontFamily="@font/roboto"
+        android:text="@string/forgot_your_password"
+        android:textColor="@color/login_text_color" />
 
     <Button
         android:id="@+id/loginButton"
@@ -64,8 +64,8 @@
         android:layout_height="wrap_content"
         android:height="@dimen/action_button_height"
         android:text="@string/login_more_login_options"
-        android:textColor="?attr/colorOnSurface"
-        app:strokeColor="@color/secondary_color_50" />
+        android:textColor="@color/login_text_color"
+        app:strokeColor="@color/login_text_color" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -77,37 +77,45 @@
             style="@style/Widget.Xsolla.SocialButton.Google.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:iconTint="@color/login_text_color"
             app:layout_constraintBaseline_toBaselineOf="@+id/facebookButton"
             app:layout_constraintEnd_toStartOf="@+id/facebookButton"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:strokeColor="@color/login_text_color" />
 
         <Button
             android:id="@+id/facebookButton"
             style="@style/Widget.Xsolla.SocialButton.Facebook.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:iconTint="@color/login_text_color"
             app:layout_constraintEnd_toStartOf="@+id/baiduButton"
             app:layout_constraintStart_toEndOf="@+id/googleButton"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="@color/login_text_color" />
 
         <Button
             android:id="@+id/baiduButton"
             style="@style/Widget.Xsolla.SocialButton.Baidu.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:iconTint="@color/login_text_color"
             app:layout_constraintBaseline_toBaselineOf="@+id/facebookButton"
             app:layout_constraintEnd_toStartOf="@+id/moreButton"
-            app:layout_constraintStart_toEndOf="@+id/facebookButton" />
+            app:layout_constraintStart_toEndOf="@+id/facebookButton"
+            app:strokeColor="@color/login_text_color" />
 
         <Button
             android:id="@+id/moreButton"
             style="@style/Widget.Xsolla.SocialButton.More.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:iconTint="@color/login_text_color"
             app:layout_constraintBaseline_toBaselineOf="@+id/baiduButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/baiduButton" />
+            app:layout_constraintStart_toEndOf="@+id/baiduButton"
+            app:strokeColor="@color/login_text_color" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -115,13 +123,13 @@
         android:id="@+id/privacyPolicyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/privacy_policy"
-        android:fontFamily="sans-serif"
-        android:textColor="@color/secondary_color_50"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
         android:layout_gravity="left"
         android:layout_marginTop="23dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:fontFamily="sans-serif"
+        android:text="@string/privacy_policy"
+        android:textColor="@color/login_text_color"
         android:textSize="14sp" />
 
 </LinearLayout>

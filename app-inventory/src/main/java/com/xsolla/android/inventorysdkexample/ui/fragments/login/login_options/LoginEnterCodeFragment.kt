@@ -1,4 +1,4 @@
-package com.xsolla.android.storesdkexample.ui.fragments.login.login_options
+package com.xsolla.android.inventorysdkexample.ui.fragments.login.login_options
 
 import android.content.Intent
 import android.os.CountDownTimer
@@ -8,19 +8,17 @@ import android.view.View
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.appcore.R
 import com.xsolla.android.appcore.databinding.FragmentLogInWithPhoneEnterCodeBinding
+import com.xsolla.android.inventorysdkexample.StoreActivity
+import com.xsolla.android.inventorysdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.CompleteAuthByPhoneCallback
 import com.xsolla.android.login.callback.StartAuthByPhoneCallback
 import com.xsolla.android.login.entity.response.StartAuthByPhoneResponse
-import com.xsolla.android.storesdkexample.StoreActivity
-import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
-import java.text.SimpleDateFormat
-import java.util.*
 
 class LoginEnterCodeFragment(
     private var operationId: String,
     private val phoneNumber: String
-) : BaseFragment() {
+    ) : BaseFragment() {
 
     private val binding: FragmentLogInWithPhoneEnterCodeBinding by viewBinding()
     private lateinit var countDownTimer: CountDownTimer
@@ -95,7 +93,7 @@ class LoginEnterCodeFragment(
             }
 
             override fun onFinish() {
-                binding.tvExpiredIn.visibility = View.INVISIBLE
+                binding.tvExpiredIn.visibility = View.GONE
                 binding.tvTimer.text = "Code expired"
             }
         }.start()
