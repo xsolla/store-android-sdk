@@ -1,6 +1,5 @@
 package com.xsolla.android.inventorysdkexample
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -15,16 +14,6 @@ class LoginActivity : AppCompatActivity(R.layout.activity_login) {
         super.onCreate(savedInstanceState)
 
         supportFragmentManager.beginTransaction().replace(binding.root.id, AuthFragment()).commit()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        supportFragmentManager.fragments.forEach { fragment ->
-            fragment.onActivityResult(requestCode, resultCode, data)
-            fragment.childFragmentManager.fragments.forEach { childFragment ->
-                childFragment.onActivityResult(requestCode, resultCode, data)
-            }
-        }
     }
 
 }
