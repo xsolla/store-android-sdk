@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.IntRange
@@ -19,6 +20,8 @@ import com.xsolla.android.login.social.LoginSocial
 import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.login.social.SocialNetworkForLinking
 import com.xsolla.android.login.token.TokenUtils
+import com.xsolla.android.login.ui.ActivityAuth
+import com.xsolla.android.login.ui.ActivityAuthBrowserProxy
 import com.xsolla.android.login.ui.ActivityAuthWebView
 import com.xsolla.android.login.unity.UnityProxyActivity
 import com.xsolla.android.login.util.Utils
@@ -141,12 +144,18 @@ class XLogin private constructor(
             val loginApi = retrofit.create(LoginApi::class.java)
             val tokenUtils = TokenUtils(context)
 
-            Utils.init(loginApi, loginConfig.oauthClientId, loginConfig.callbackUrl)
+            val callbackUrl = Uri.Builder()
+                .scheme(context.getString(R.string.xsolla_login_redirect_scheme))
+                .authority(context.getString(R.string.xsolla_login_redirect_host))
+                .build()
+                .toString()
+
+            Utils.init(loginApi, loginConfig.oauthClientId, callbackUrl)
 
             instance = XLogin(
                 context,
                 loginConfig.projectId,
-                loginConfig.callbackUrl,
+                callbackUrl,
                 loginConfig.useOauth,
                 loginConfig.oauthClientId,
                 tokenUtils,
@@ -1857,12 +1866,12 @@ class XLogin private constructor(
             context: Context,
             socialNetwork: SocialNetworkForLinking
         ): Intent {
-            val intent = Intent(context, ActivityAuthWebView::class.java)
+            val intent = Intent(context, ActivityAuthBrowserProxy::class.java)
             intent.putExtra(
-                ActivityAuthWebView.ARG_AUTH_URL,
+                ActivityAuth.ARG_AUTH_URL,
                 LOGIN_HOST + "/api/users/me/social_providers/" + socialNetwork.name.toLowerCase() + "/login_redirect"
             )
-            intent.putExtra(ActivityAuthWebView.ARG_CALLBACK_URL, getInstance().callbackUrl)
+            intent.putExtra(ActivityAuth.ARG_CALLBACK_URL, getInstance().callbackUrl)
             intent.putExtra(ActivityAuthWebView.ARG_TOKEN, token)
             return intent
         }

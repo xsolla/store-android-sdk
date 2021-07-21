@@ -27,4 +27,7 @@
     <string name="tutorial_button_back">Back</string>
     <string name="tutorial_button_next">Next</string>
     <string name="tutorial_button_done">Done</string>
+
+    <string name="xsolla_login_redirect_scheme">app</string>
+    <string name="xsolla_login_redirect_host">xsollalogin</string>
 </resources>

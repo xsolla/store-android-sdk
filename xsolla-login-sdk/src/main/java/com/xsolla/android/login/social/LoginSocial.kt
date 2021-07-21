@@ -35,8 +35,9 @@ import com.xsolla.android.login.entity.request.AuthUserSocialWithCodeBody
 import com.xsolla.android.login.entity.request.OauthGetCodeBySocialTokenBody
 import com.xsolla.android.login.entity.response.*
 import com.xsolla.android.login.token.TokenUtils
-import com.xsolla.android.login.ui.ActivityAuthWebView
-import com.xsolla.android.login.ui.ActivityAuthWebView.Result.Companion.fromResultIntent
+import com.xsolla.android.login.ui.ActivityAuth
+import com.xsolla.android.login.ui.ActivityAuth.Result.Companion.fromResultIntent
+import com.xsolla.android.login.ui.ActivityAuthBrowserProxy
 import com.xsolla.android.login.ui.ActivityWechatProxy
 import com.xsolla.android.login.util.Utils
 import org.json.JSONObject
@@ -269,7 +270,7 @@ object LoginSocial {
         if (activityResultRequestCode == RC_AUTH_WEBVIEW) {
             val (status, token, code, error) = fromResultIntent(activityResultData)
             when (status) {
-                ActivityAuthWebView.Status.SUCCESS -> {
+                ActivityAuth.Status.SUCCESS -> {
                     if (useOauth) {
                         Utils.getOauthTokensFromCode(code!!) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
                             if (throwable == null && errorMessage == null) {
@@ -287,8 +288,8 @@ object LoginSocial {
                         callback.onAuthSuccess()
                     }
                 }
-                ActivityAuthWebView.Status.CANCELLED -> callback.onAuthCancelled()
-                ActivityAuthWebView.Status.ERROR -> callback.onAuthError(null, error!!)
+                ActivityAuth.Status.CANCELLED -> callback.onAuthCancelled()
+                ActivityAuth.Status.ERROR -> callback.onAuthError(null, error!!)
             }
             return
         }
@@ -444,8 +445,8 @@ object LoginSocial {
             oneTapClient.beginSignIn(oneTapRequest)
                 .addOnSuccessListener {
                     try {
-                        val currentActivity = activity ?: fragment?.activity!!
-                        currentActivity.startIntentSenderForResult(
+                        val currentActivity = activity ?: fragment?.requireActivity()
+                        currentActivity?.startIntentSenderForResult(
                             it.pendingIntent.intentSender,
                             RC_AUTH_GOOGLE,
                             null,
@@ -514,7 +515,7 @@ object LoginSocial {
                                 callback.onError(null, "Empty response")
                                 return
                             }
-                            openWebviewActivity(url, activity, fragment)
+                            openBrowserActivity(url, activity, fragment)
                             callback.onAuthStarted()
                         } else {
                             callback.onError(null, Utils.getErrorMessage(response.errorBody()))
@@ -545,7 +546,7 @@ object LoginSocial {
                                 callback.onError(null, "Empty response")
                                 return
                             }
-                            openWebviewActivity(url, activity, fragment)
+                            openBrowserActivity(url, activity, fragment)
                             callback.onAuthStarted()
                         } else {
                             callback.onError(null, Utils.getErrorMessage(response.errorBody()))
@@ -562,15 +563,23 @@ object LoginSocial {
         }
     }
 
-    private fun openWebviewActivity(url: String, activity: Activity?, fragment: Fragment?) {
+    private fun openBrowserActivity(url: String, activity: Activity?, fragment: Fragment?) {
         val intent: Intent = if (activity != null) {
-            Intent(activity, ActivityAuthWebView::class.java)
+            if (ActivityAuthBrowserProxy.checkAvailability(activity, url)) {
+                Intent(activity, ActivityAuthBrowserProxy::class.java)
+            } else {
+                Intent(activity, ActivityAuth::class.java)
+            }
         } else {
-            Intent(fragment!!.context, ActivityAuthWebView::class.java)
+            if (ActivityAuthBrowserProxy.checkAvailability(fragment!!.requireContext(),url)){
+            Intent(fragment.context, ActivityAuthBrowserProxy::class.java)}
+            else{
+                Intent(activity, ActivityAuth::class.java)
+            }
         }
         with(intent) {
-            putExtra(ActivityAuthWebView.ARG_AUTH_URL, url)
-            putExtra(ActivityAuthWebView.ARG_CALLBACK_URL, callbackUrl)
+            putExtra(ActivityAuth.ARG_AUTH_URL, url)
+            putExtra(ActivityAuth.ARG_CALLBACK_URL, callbackUrl)
         }
         if (activity != null) {
             activity.startActivityForResult(intent, RC_AUTH_WEBVIEW)
