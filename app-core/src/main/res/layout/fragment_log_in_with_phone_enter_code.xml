@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     android:background="@color/black_color">
 
+    <TextView
+        android:id="@+id/tv_code_expired"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/login_code_expired"
+        android:textColor="@color/magenta_color"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.047"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+        tools:visibility="invisible" />
+
     <Button
         android:id="@+id/bt_log_in"
         style="@style/Widget.Xsolla.ActionButton"
@@ -79,21 +94,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:fontFamily="@font/roboto_bold"
         android:text="@string/login_resend_code"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_expired_in" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_code_expired" />
 
     <TextView
         android:id="@+id/tv_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="35dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/roboto"
@@ -101,24 +115,24 @@
         android:text="@string/login_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bt_back"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tv_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="142dp"
         android:layout_marginBottom="16dp"
         android:text="@string/login_code_timer"
         android:textColor="@color/magenta_color"
         app:layout_constraintBottom_toTopOf="@+id/tv_resend_code"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/tv_expired_in"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+        app:layout_constraintHorizontal_bias="0.418"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
