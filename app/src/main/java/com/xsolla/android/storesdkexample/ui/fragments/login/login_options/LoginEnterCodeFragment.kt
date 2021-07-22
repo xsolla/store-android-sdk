@@ -67,6 +67,9 @@ class LoginEnterCodeFragment(
                 if (binding.codeInput.text!!.length ==4){
                     binding.btLogIn.isEnabled = true
                 }
+                else{ //codecheck shows it as redundant but itsnt
+                    binding.btLogIn.isEnabled=false
+                }
             }
         })
 

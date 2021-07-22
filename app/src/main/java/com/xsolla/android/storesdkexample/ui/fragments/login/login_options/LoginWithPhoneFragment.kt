@@ -42,6 +42,10 @@ class LoginWithPhoneFragment: BaseFragment() {
                 if (binding.phoneInput.text!!.length>=8){ //min length is +290XXXX - St.Helena isles
                     binding.btSendCode.isEnabled=true
                 }
+                else{ //codecheck shows it as redundant but itsnt
+                    binding.btSendCode.isEnabled=false
+                }
+
             }
         } )
         binding.btSendCode.setOnClickListener {
