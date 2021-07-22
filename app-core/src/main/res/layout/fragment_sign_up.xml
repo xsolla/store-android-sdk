@@ -40,7 +40,7 @@
         app:helperText="@string/password_min_length_helper"
         app:helperTextEnabled="true"
         app:passwordToggleEnabled="true"
-        app:passwordToggleTint="@color/login_text_color">
+        app:passwordToggleTint="@color/text_color_inactive">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordInput"
@@ -56,7 +56,7 @@
         android:layout_marginTop="12dp"
         android:hint="@string/password_confirm_input_hint"
         app:passwordToggleEnabled="true"
-        app:passwordToggleTint="@color/login_text_color">
+        app:passwordToggleTint="@color/text_color_inactive">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordConfirmInput"

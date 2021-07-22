@@ -39,6 +39,6 @@
     <color name="white_color_20">#33FFFFFF</color>
     <color name="cart_badge_color">#F8115D</color>
     <color name="lock_color">#80000000</color>
-    <color name="login_text_color">#99FFFFFF</color>
+    <color name="text_color_inactive">#99FFFFFF</color>
 
 </resources>
