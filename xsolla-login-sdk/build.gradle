@@ -83,3 +83,5 @@ ext {
 }
 
 apply from: "${rootDir}/publishMavenCentral.gradle"
+
+apply from: 'tests.gradle'
