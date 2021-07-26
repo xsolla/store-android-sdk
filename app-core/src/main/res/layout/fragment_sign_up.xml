@@ -37,10 +37,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:hint="@string/password_input_hint"
-        app:passwordToggleEnabled="true"
-        app:passwordToggleTint="@color/white_color"
+        app:helperText="@string/password_min_length_helper"
         app:helperTextEnabled="true"
-        app:helperText="@string/password_min_length_helper">
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/text_color_inactive">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordInput"
@@ -56,7 +56,7 @@
         android:layout_marginTop="12dp"
         android:hint="@string/password_confirm_input_hint"
         app:passwordToggleEnabled="true"
-        app:passwordToggleTint="@color/white_color">
+        app:passwordToggleTint="@color/text_color_inactive">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordConfirmInput"

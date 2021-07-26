@@ -14,7 +14,7 @@ class AuthFragment : BaseFragment() {
     override fun initUI() {
         initTabs()
 
-        parentFragmentManager.beginTransaction().replace(R.id.fragmentContainer, LoginFragment()).commit()
+        parentFragmentManager.beginTransaction().replace(R.id.authFragmentContainer, LoginFragment()).commit()
     }
 
     private fun initTabs() {
@@ -27,10 +27,10 @@ class AuthFragment : BaseFragment() {
                 }
 
                 fragment?.let { newFragment ->
-                    binding.fragmentContainer.removeAllViews()
+                    binding.authFragmentContainer.removeAllViews()
                     parentFragmentManager
                             .beginTransaction()
-                            .replace(R.id.fragmentContainer, newFragment)
+                            .replace(R.id.authFragmentContainer, newFragment)
                             .commit()
                 }
             }

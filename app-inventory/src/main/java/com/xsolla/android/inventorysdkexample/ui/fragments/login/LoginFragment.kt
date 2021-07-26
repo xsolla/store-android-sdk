@@ -14,6 +14,7 @@ import com.xsolla.android.inventorysdkexample.TutorialActivity
 import com.xsolla.android.inventorysdkexample.data.local.PrefManager
 import com.xsolla.android.appcore.databinding.FragmentLoginBinding
 import com.xsolla.android.inventorysdkexample.ui.fragments.base.BaseFragment
+import com.xsolla.android.inventorysdkexample.ui.fragments.login.login_options.MoreLoginOptionsFragment
 import com.xsolla.android.inventorysdkexample.util.setRateLimitedClickListener
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.AuthCallback
@@ -40,14 +41,19 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
     override fun initUI() {
         initLoginButtonEnabling()
 
+
         binding.loginButton.setOnClickListener {
             val username = binding.usernameInput.text.toString()
             val password = binding.passwordInput.text.toString()
             loginWithPassword(username, password)
         }
 
-        binding.demoUserButton.setOnClickListener {
-            loginWithPassword("xsolla", "xsolla")
+        binding.moreLoginOptionsButton.setOnClickListener {
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+                .add(R.id.rootFragmentContainer, MoreLoginOptionsFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
         binding.googleButton.setRateLimitedClickListener {
@@ -112,7 +118,7 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
 
     private fun loginWithPassword(username: String, password: String) {
         binding.loginButton.isEnabled = false
-        binding.demoUserButton.isEnabled = false
+        binding.moreLoginOptionsButton.isEnabled = false
 
         hideKeyboard()
 
@@ -125,13 +131,13 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
                 }
                 activity?.finish()
                 binding.loginButton.isEnabled = true
-                binding.demoUserButton.isEnabled = true
+                binding.moreLoginOptionsButton.isEnabled = true
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
                 showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
                 binding.loginButton.isEnabled = true
-                binding.demoUserButton.isEnabled = true
+                binding.moreLoginOptionsButton.isEnabled = true
             }
 
         },BuildConfig.WITH_LOGOUT)
