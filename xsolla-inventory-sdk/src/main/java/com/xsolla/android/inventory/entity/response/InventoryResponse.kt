@@ -2,8 +2,7 @@ package com.xsolla.android.inventory.entity.response
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.parcel.RawValue
+import kotlinx.parcelize.Parcelize
 
 data class InventoryResponse(val items: List<Item> = emptyList()) {
 

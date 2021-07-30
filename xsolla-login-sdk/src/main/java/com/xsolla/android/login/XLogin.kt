@@ -1874,6 +1874,7 @@ class XLogin private constructor(
             intent.putExtra(ActivityAuth.ARG_CALLBACK_URL, getInstance().callbackUrl)
             intent.putExtra(ActivityAuthWebView.ARG_TOKEN, token)
             return intent
+
         }
 
         /**
