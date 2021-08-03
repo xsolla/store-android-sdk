@@ -1,4 +1,3 @@
-include ':xsolla-analytics-sdk'
 include ':app-core'
 include ':app'
 include ':app-inventory'
