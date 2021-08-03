@@ -45,8 +45,6 @@ build:
     expire_in: 2 hours
     paths:
       - app/build/outputs/
-      - app-playfab/build/outputs/
-      - app-serverless/build/outputs/
       - app-inventory/build/outputs/
       - app-customauth/build/outputs/
   cache:
@@ -66,8 +64,6 @@ lint:
     expire_in: 24 hours
     paths:
       - app/build/reports/
-      - app-playfab/build/reports/
-      - app-serverless/build/reports/
       - app-inventory/build/reports/
       - app-customauth/build/reports/
       - xsolla-inventory-sdk/build/reports/
@@ -77,7 +73,6 @@ lint:
       - xsolla-login-sdk-qq/build/reports/
       - xsolla-login-sdk-wechat/build/reports/
       - xsolla-payments-sdk/build/reports/
-      - xsolla-payments-sdk-playfab/build/reports/
       - xsolla-store-sdk/build/reports/
   cache:
     key: ${CI_PROJECT_ID}
@@ -120,8 +115,6 @@ generateReleaseApp:
     - echo "Gitlab pipeline     ${CI_PIPELINE_ID}"      >> ./artifacts/info.txt
   script:
     - mv app/build/outputs/apk/release/app-release.apk ./artifacts/SampleApp-Default.apk
-    - mv app-playfab/build/outputs/apk/release/app-playfab-release.apk ./artifacts/SampleApp-Playfab.apk
-    - mv app-serverless/build/outputs/apk/release/app-serverless-release.apk ./artifacts/SampleApp-Serverless.apk
     - mv app-inventory/build/outputs/apk/release/app-inventory-release.apk ./artifacts/SampleApp-Inventory.apk
     - mv app-customauth/build/outputs/apk/release/app-customauth-release.apk ./artifacts/SampleApp-Customauth.apk
   artifacts:
@@ -191,7 +184,6 @@ publishPayments:
     - branches
   script:
     - ./gradlew :xsolla-payments-sdk:bintrayUpload
-    - ./gradlew :xsolla-payments-sdk-playfab:bintrayUpload
   cache:
     key: ${CI_PROJECT_ID}
     paths:
