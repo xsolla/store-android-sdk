@@ -88,6 +88,9 @@ dependencies {
     implementation project(":xsolla-payments-sdk")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'com.android.billingclient:billing:3.0.0' //TODO try to update
+    implementation 'com.google.code.gson:gson:2.8.7'
 }
 repositories {
     mavenCentral()
