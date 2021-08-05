@@ -29,7 +29,6 @@ Explore [pricing information](https://xsolla.com/pricing) and [Privacy Policy](h
 
 Xsolla offers necessary tools to help you build and grow your gaming business, including personalized support at every stage. The terms of payment are determined by the contract that you can sign in Xsolla Publisher Account.
 
---
 
 ## License
 
