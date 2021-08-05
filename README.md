@@ -1,26 +1,52 @@
+# Xsolla SDK for Android
 
-# Xsolla Android SDK
-You can use the Xsolla Android SDK to integrate Xsolla products with apps based on [Android](https://www.android.com/). The asset includes the following SDKs:
+Xsolla SDK for Android is a ready-to-use library for applications and games that allows you to easily embed [Xsolla services](https://developers.xsolla.com/#get_started).
 
-*   Xsolla Login Android  SDK
-*   Xsolla Store Android SDK
-*   Xsolla Inventory Android SDK
-*   Xsolla Payments Android SDK
+![android sdk image](https://cdn.xsolla.net/developers/v-release20210804v2-cross-product-update/images/sdk/android/android-ready-made-solution.png "android sdk image")
 
-## System Requirements
 
-*   Android OS 5.0 or higher
+The SDK includes the following libraries:
 
-Please note that the Internet connection is essential for the Xsolla Android SDK.
+* [Login](https://github.com/xsolla/store-android-sdk/tree/master/xsolla-login-sdk) —  allows authenticating users and managing the friend system
+* [Store](https://github.com/xsolla/store-android-sdk/tree/master/xsolla-store-sdk) — allows managing your in-game store
+* [Inventory](https://github.com/xsolla/store-android-sdk/tree/master/xsolla-inventory-sdk) — allows managing player inventory
+* [Payments](https://github.com/xsolla/store-android-sdk/tree/master/xsolla-payments-sdk) — allows using payment UI
 
-## Prerequisites
+You can integrate all of these libraries or specific libraries that meet your needs into your project.
 
-1. [Download](https://developer.android.com/studio)  and [install](https://developer.android.com/studio/install) Android Studio.
-2. Create a new project.
-3. Register an Xsolla [Publisher Account](https://publisher.xsolla.com/signup?store_type=sdk).
-4. Create and set up a Publisher Account project:
-    1. Go to Projects and click **Create new project**.
-    2. In setup mode, add **Project name** and click **Create**.
-    3. Go to **Project settings > Integration settings** and check that **Тokenless integration** is disabled.
-5. Go to the [wiki](https://github.com/xsolla/store-android-sdk/wiki/) to learn how to integrate Xsolla products using **Xsolla Android SDK**.
+[Try our Sample App to learn more](https://github.com/xsolla/store-android-sdk/tree/master/app).
 
+
+## System requirements
+
+* Android OS 5.0 or higher
+* Internet connection
+
+
+## Legal info
+
+Explore [pricing information](https://xsolla.com/pricing) and [Privacy Policy](https://xsolla.com/privacypolicy) that helps you work with Xsolla.
+
+Xsolla offers necessary tools to help you build and grow your gaming business, including personalized support at every stage. The terms of payment are determined by the contract that you can sign in Xsolla Publisher Account.
+
+--
+
+## License
+
+[See the LICENSE file](https://github.com/xsolla/store-android-sdk/blob/master/LICENSE-2.0.txt).
+
+
+## Community
+
+[Join our Discord server](https://discord.gg/auNFyzZx96) and connect with the Xsolla team and developers who use Xsolla products.
+
+
+## Additional resources
+
+* [Xsolla official website](https://xsolla.com/)
+* [Developers documentation](https://developers.xsolla.com/sdk/android/)
+* [Code reference](https://developers.xsolla.com/sdk-code-references/android-store/)
+* API reference:
+    * [Pay Station API](https://developers.xsolla.com/pay-station-api/)
+    * [Login API](https://developers.xsolla.com/login-api/)
+    * [In-Game Store & Buy Button API](https://developers.xsolla.com/commerce-api/)

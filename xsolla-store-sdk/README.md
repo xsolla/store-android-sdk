@@ -1,3 +1,34 @@
-**Xsolla Store Android SDK** is used to integrate Xsolla Store, a comprehensive e-store solution for partners that supports various monetization options Create a  [Publisher Account](https://publisher.xsolla.com/signup?store_type=sdk) with Xsolla to get started.
+The Store library is used to integrate applications based on Android with [In-Game Store](https://developers.xsolla.com/doc/in-game-store/).
 
-Go to the [wiki](https://github.com/xsolla/store-android-sdk/wiki/Xsolla-Login-Android-SDK) to learn how to integrate Xsolla In-Game Store using **Store Android SDK**.
+Main features:
+
+* managing your in-game store
+* selling virtual items
+
+
+## Integration
+
+Before you integrate the library, sign up to [Publisher Account](https://publisher.xsolla.com/signup?store_type=sdk) and set up a new project.
+
+The library is available in [Maven Central](https://search.maven.org/artifact/com.xsolla.android/store). To install it, add the following line to the dependencies section where `<version_number>` is the required version of the Store library:
+
+```
+implementation 'com.xsolla.android:store:<version_number>'
+```
+
+More instructions are on the [Xsolla Developers portal](https://developers.xsolla.com/sdk/android/store/).
+
+
+## Usage
+
+To manage the features of Xsolla products, the library contains a set of classes that let you make requests to the [In-Game Store & Buy Button API](https://developers.xsolla.com/commerce-api/).
+
+After installing and initializing the Store library, implement user authorization logic in your application using [SDK methods](https://developers.xsolla.com/sdk-code-references/android-store/#%5B.ext%2FXsolla+Store+SDK+for+Android%2F%2F%2FPointingToDeclaration%2F%5D%2FMain%2F0).
+
+
+## Additional resources
+
+* [Xsolla official website](https://xsolla.com/)
+* [Developers documentation](https://developers.xsolla.com/sdk/android/login/)
+* [Code reference](https://developers.xsolla.com/sdk-code-references/android-store/#%5B.ext%2FXsolla+Store+SDK+for+Android%2F%2F%2FPointingToDeclaration%2F%5D%2FMain%2F0)
+* [In-Game Store & Buy Button API](https://developers.xsolla.com/commerce-api/)
