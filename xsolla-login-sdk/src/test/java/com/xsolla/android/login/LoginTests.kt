@@ -11,6 +11,7 @@ import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import java.util.*
 import java.util.concurrent.CountDownLatch
 
 @RunWith(RobolectricTestRunner::class)
@@ -22,6 +23,7 @@ class LoginTests {
         val loginConfig = LoginConfig.OauthBuilder()
             .setProjectId(projectId)
             .setOauthClientId(oauthClientId)
+            .setCallbackUrl("app://example")
             .build()
         XLogin.init(ApplicationProvider.getApplicationContext(), loginConfig)
     }
@@ -29,6 +31,7 @@ class LoginTests {
     private fun initSdkJwt() {
         val loginConfig = LoginConfig.JwtBuilder()
             .setProjectId(projectId)
+            .setCallbackUrl("app://example")
             .build()
         XLogin.init(ApplicationProvider.getApplicationContext(), loginConfig)
     }
@@ -410,6 +413,59 @@ class LoginTests {
         Assert.assertFalse(XLogin.token.isNullOrEmpty())
         Assert.assertTrue(XLogin.canRefreshToken())
         Assert.assertFalse(XLogin.isTokenExpired(60))
+    }
+
+    // Registration tests TODO check payload, acceptConsent, promoEmailAgreement and fail scenarios
+    @Test
+    fun registerJwt_Success() {
+        initSdkJwt()
+        initLoggedOut()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        XLogin.register(
+            UUID.randomUUID().toString(),
+            "${UUID.randomUUID()}@gmail.com",
+            UUID.randomUUID().toString(),
+            object : RegisterCallback {
+                override fun onSuccess() {
+                    latch.countDown()
+                }
+
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    error = true
+                    latch.countDown()
+                }
+            }
+        )
+        latch.await()
+        Assert.assertFalse(error)
+    }
+
+    @Test
+    fun registerOauth_Success() {
+        initSdkOauth()
+        initLoggedOut()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        XLogin.register(
+            UUID.randomUUID().toString(),
+            "${UUID.randomUUID()}@gmail.com",
+            UUID.randomUUID().toString(),
+            object : RegisterCallback {
+                override fun onSuccess() {
+                    latch.countDown()
+                }
+
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    error = true
+                    latch.countDown()
+                }
+            }
+        )
+        latch.await()
+        Assert.assertFalse(error)
     }
 
 }

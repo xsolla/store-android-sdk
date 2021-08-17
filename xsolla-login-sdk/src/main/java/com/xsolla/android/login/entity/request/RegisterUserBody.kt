@@ -3,7 +3,6 @@ package com.xsolla.android.login.entity.request
 import com.google.gson.annotations.SerializedName
 
 data class RegisterUserBody(
-    @SerializedName("accept_consent")
     val email: String,
     val password: String,
     val username: String,

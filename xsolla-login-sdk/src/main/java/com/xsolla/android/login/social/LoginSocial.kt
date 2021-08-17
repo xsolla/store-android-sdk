@@ -498,7 +498,7 @@ object LoginSocial {
             loginApi.getLinkForSocialAuth(
                 socialNetwork.providerName,
                 projectId,
-                null,
+                callbackUrl,
                 null,
                 null,
                 if (withLogout) "1" else "0"
