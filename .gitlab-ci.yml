@@ -99,7 +99,6 @@ test:
     key: ${CI_PROJECT_ID}
     paths:
       - .gradle/*
-  allow_failure: true
 
 generateReleaseApp:
   tags:
