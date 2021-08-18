@@ -200,7 +200,7 @@ class XLogin private constructor(
             password: String,
             callback: AuthCallback,
             withLogout: Boolean = false,
-            loginUrl: String? = null,
+            loginUrl: String? = null, // TODO remove argument
             payload: String? = null
         ) {
             if (!getInstance().useOauth) {
@@ -208,7 +208,7 @@ class XLogin private constructor(
                 getInstance().loginApi
                     .login(
                         getInstance().projectId,
-                        loginUrl,
+                        getInstance().callbackUrl,
                         payload,
                         if (withLogout) "1" else "0",
                         authUserBody
@@ -572,7 +572,7 @@ class XLogin private constructor(
             email: String,
             password: String,
             callback: RegisterCallback,
-            loginUrl: String? = null,
+            loginUrl: String? = null, //TODO remove argument
             payload: String? = null,
             acceptConsent: Boolean? = null,
             promoEmailAgreement: Int? = null
@@ -600,7 +600,7 @@ class XLogin private constructor(
                     promoEmailAgreement = promoEmailAgreement
                 )
                 getInstance().loginApi
-                    .registerUser(getInstance().projectId, loginUrl, payload, registerUserBody)
+                    .registerUser(getInstance().projectId, getInstance().callbackUrl, payload, registerUserBody)
                     .enqueue(retrofitCallback)
             } else {
                 val oauthRegisterUserBody = OauthRegisterUserBody(
@@ -713,11 +713,11 @@ class XLogin private constructor(
         fun resetPassword(
             username: String?,
             callback: ResetPasswordCallback,
-            loginUrl: String? = null
+            loginUrl: String? = null //TODO remove argument
         ) {
             val resetPasswordBody = ResetPasswordBody(username!!)
             getInstance().loginApi
-                .resetPassword(getInstance().projectId, loginUrl, resetPasswordBody)
+                .resetPassword(getInstance().projectId, getInstance().callbackUrl, resetPasswordBody)
                 .enqueue(object : Callback<Void?> {
                     override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
                         if (response.isSuccessful) {

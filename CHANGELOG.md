@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1] - Login SDK - 2021-08-18
+
+### Fixed
+
+- Login API arguments
+
+
 ## [0.16.0] - Payments SDK - 2021-06-30
 
 ### Added
