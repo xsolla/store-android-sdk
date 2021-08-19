@@ -4,12 +4,14 @@ import com.xsolla.android.store.entity.request.cart.FillCartWithItemsRequestBody
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody
 import com.xsolla.android.store.entity.request.coupon.RedeemCouponRequestBody
 import com.xsolla.android.store.entity.request.coupon.RedeemPromocodeRequestBody
+import com.xsolla.android.store.entity.request.gamekeys.RedeemGameCodeBody
 import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody
 import com.xsolla.android.store.entity.request.payment.CreatePaymentTokenBody
 import com.xsolla.android.store.entity.request.payment.CreateVirtualOrderRequestBody
 import com.xsolla.android.store.entity.response.bundle.BundleItem
 import com.xsolla.android.store.entity.response.bundle.BundleListResponse
 import com.xsolla.android.store.entity.response.cart.CartResponse
+import com.xsolla.android.store.entity.response.gamekeys.*
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse
 import com.xsolla.android.store.entity.response.items.*
 import com.xsolla.android.store.entity.response.order.OrderResponse
@@ -119,7 +121,7 @@ interface StoreApi {
         @Body body: CreateOrderRequestBody
     ): Call<CreateOrderResponse>
 
-    @POST("/v2/project/{project_id}/payment")
+    @POST("api/v2/project/{project_id}/payment")
     fun createPaymentToken(
         @Path("project_id") projectId: Int,
         @Body body: CreatePaymentTokenBody
@@ -135,6 +137,86 @@ interface StoreApi {
         @Path("order_id") orderId: String
     ): Call<OrderResponse>
 
+    //----------     Game Keys     ----------
+
+    // Game Keys
+    //
+    // Catalog
+
+    @GET("api/v2/project/{project_id}/items/game")
+    fun getGamesList(
+        @Path("project_id") projectId: Int,
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+        @Query("locale") locale: String?,
+        @Query("country") country: String?,
+        @Query("additional_fields") additionalFields: List<String>?
+    ): Call<GameItemsResponse>
+
+    @GET("api/v2/project/{project_id}/items/game/group/{external_id}")
+    fun getGamesListBySpecifiedGroup(
+        @Path("project_id") projectId: Int,
+        @Path("external_id") externalId: String,
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+        @Query("locale") locale: String?,
+        @Query("country") country: String?,
+        @Query("additional_fields") additionalFields: List<String>?
+
+    ): Call<GameItemsResponse>
+
+    @GET("api/v2/project/{project_id}/items/game/sku/{item_sku}")
+    fun getGameForCatalog(
+        @Path("project_id") projectId: Int,
+        @Path("item_sku") itemSku: String,
+        @Query("locale") locale: String?,
+        @Query("additional_fields") additionalFields: List<String>?,
+        @Query("country") country: String?
+    ): Call<GameItemsResponse.GameItem>
+
+    @GET("api/v2/project/{project_id}/items/game/key/sku/{item_sku}")
+    fun getGameKeyForCatalog(
+        @Path("project_id") projectId: Int,
+        @Path("item_sku") itemSku: String,
+        @Query("locale") locale: String?,
+        @Query("additional_fields") additionalFields: List<String>?,
+        @Query("country") country: String?
+    ): Call<GameKeysResponse>
+
+    @GET("api/v2/project/{project_id}/items/game/key/group/{external_id}")
+    fun getGameKeysListBySpecifiedGroup(
+        @Path("project_id") projectId: Int,
+        @Path("external_id") externalId: String,
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+        @Query("locale") locale: String?,
+        @Query("country") country: String?,
+        @Query("additional_fields") additionalFields: List<String>?
+    ): Call<GameKeysListByGroupResponse>
+
+    @GET("api/v2/project/{project_id}/items/game/drm")
+    fun getDrmList(
+        @Path("project_id") projectId: Int
+    ): Call<DrmListResponse>
+
+    // Game Keys
+    //
+    // Entitlement
+
+    @GET("api/v2/project/{project_id}/entitlement")
+    fun getListOfGamesOwned(
+        @Path("project_id") projectId: Int,
+        @Query("limit")limit: Int,
+        @Query("offset") offset: Int,
+        @Query("sandbox") sandbox:Int,
+        @Query("additional_fields") additionalFields: List<String>?
+    ): Call<GamesOwnedResponse>
+
+    @POST("api/v2/project/{project_id}/entitlement/redeem")
+    fun redeemGameCode(
+        @Path("project_id") projectId: Int,
+        @Body body: RedeemGameCodeBody
+    ) : Call<Void>
 
     //----------     Virtual Items & Currency     ----------
 
