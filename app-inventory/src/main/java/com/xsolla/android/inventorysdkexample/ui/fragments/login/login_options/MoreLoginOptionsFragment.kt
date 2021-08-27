@@ -26,15 +26,18 @@ class MoreLoginOptionsFragment : BaseFragment() {
         }
 
         binding.bnLoginWithPhone.setOnClickListener {
-
-            //requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
-
             requireActivity().supportFragmentManager
                 .beginTransaction()
-                .add(R.id.rootFragmentContainer, LoginWithPhoneFragment())
+                .add(R.id.rootFragmentContainer, LoginWithPhoneOrEmailFragment.getInstance(LoginWithPhoneOrEmailFragment.Type.PHONE))
                 .addToBackStack(null)
                 .commit()
-
+        }
+        binding.bnPassworldlessAuth.setOnClickListener {
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+                .add(R.id.rootFragmentContainer, LoginWithPhoneOrEmailFragment.getInstance(LoginWithPhoneOrEmailFragment.Type.EMAIL))
+                .addToBackStack(null)
+                .commit()
         }
         binding.bnLoginAsDemoUser.setOnClickListener {
             binding.bnLoginAsDemoUser.isEnabled = false
