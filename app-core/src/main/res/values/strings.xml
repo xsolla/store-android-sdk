@@ -134,9 +134,11 @@
     <string name="login_with_phone">Log in with phone</string>
     <string name="login_passworless_auth">Log in with email</string>
     <string name="login_phone_input_hint">Enter your phone</string>
+    <string name="login_email_input_hint">Enter your email</string>
     <string name="login_send_code_button">Send code</string>
     <string name="login_back_button">Back</string>
     <string name="login_code_from_sms">Enter code from SMS</string>
+    <string name="login_code_from_email">Enter code from Email</string>
     <string name="login_log_in">Log in</string>
     <string name="login_code_expired_in">Code expires in:</string>
     <string name="login_code_timer">%02d:%02d.</string>

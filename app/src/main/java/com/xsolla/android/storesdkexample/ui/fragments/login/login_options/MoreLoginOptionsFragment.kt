@@ -12,7 +12,7 @@ import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 
 class MoreLoginOptionsFragment : BaseFragment() {
 
-    private val binding : FragmentMoreLogInOptionsBinding by viewBinding()
+    private val binding: FragmentMoreLogInOptionsBinding by viewBinding()
 
     override fun getLayout(): Int {
         return R.layout.fragment_more_log_in_options
@@ -25,15 +25,24 @@ class MoreLoginOptionsFragment : BaseFragment() {
         }
 
         binding.bnLoginWithPhone.setOnClickListener {
-
-            //requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
-
             requireActivity().supportFragmentManager
                 .beginTransaction()
-                .add(R.id.rootFragmentContainer,LoginWithPhoneFragment())
+                .add(
+                    R.id.rootFragmentContainer,
+                    LoginWithPhoneOrEmailFragment.getInstance(LoginWithPhoneOrEmailFragment.Type.PHONE)
+                )
                 .addToBackStack(null)
                 .commit()
-
+        }
+        binding.bnPassworldlessAuth.setOnClickListener {
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+                .add(
+                    R.id.rootFragmentContainer,
+                    LoginWithPhoneOrEmailFragment.getInstance(LoginWithPhoneOrEmailFragment.Type.EMAIL)
+                )
+                .addToBackStack(null)
+                .commit()
         }
         binding.bnLoginAsDemoUser.setOnClickListener {
             binding.bnLoginAsDemoUser.isEnabled = false

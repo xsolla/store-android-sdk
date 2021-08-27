@@ -291,6 +291,8 @@ class XLogin private constructor(
          * @param phoneNumber User's phone number
          * @param withLogout only JWT param false to keep existing tokens, true to deactivate existing and activate a new one
          * @param callback status callback
+         * @param sendLink whether to send a link for authentication
+         * @param linkUrl URL to redirect a user, required if sendLink is true
          * @see [JWT Login API Reference](https://developers.xsolla.com/login-api/methods/jwt/jwt-start-auth-by-phone-number)
          *
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-start-auth-by-phone-number)
@@ -298,14 +300,16 @@ class XLogin private constructor(
         @JvmStatic
         fun startAuthByMobilePhone(
             phoneNumber: String,
-            callback: StartAuthByPhoneCallback,
-            withLogout: Boolean = false
+            callback: StartPasswordlessAuthCallback,
+            withLogout: Boolean = false,
+            sendLink: Boolean = false,
+            linkUrl: String? = null
         ) {
-            val retrofitCallback: Callback<StartAuthByPhoneResponse> =
-                object : Callback<StartAuthByPhoneResponse> {
+            val retrofitCallback: Callback<StartPasswordlessAuthResponse> =
+                object : Callback<StartPasswordlessAuthResponse> {
                     override fun onResponse(
-                        call: Call<StartAuthByPhoneResponse>,
-                        response: Response<StartAuthByPhoneResponse>
+                        call: Call<StartPasswordlessAuthResponse>,
+                        response: Response<StartPasswordlessAuthResponse>
                     ) {
                         if (response.isSuccessful) {
                             val body = response.body()
@@ -319,19 +323,22 @@ class XLogin private constructor(
                         }
                     }
 
-                    override fun onFailure(call: Call<StartAuthByPhoneResponse>, t: Throwable) {
+                    override fun onFailure(
+                        call: Call<StartPasswordlessAuthResponse>,
+                        t: Throwable
+                    ) {
                         callback.onError(t, null)
                     }
                 }
             if (!getInstance().useOauth) {
-                val body = StartAuthByPhoneBody(phoneNumber)
+                val body = StartAuthByPhoneBody(linkUrl, phoneNumber, sendLink)
                 getInstance().loginApi.startAuthByPhone(
                     getInstance().projectId, getInstance().callbackUrl,
                     null, if (withLogout) "1" else "0", body
                 )
                     .enqueue(retrofitCallback)
             } else {
-                val body = StartAuthByPhoneBody(phoneNumber)
+                val body = StartAuthByPhoneBody(linkUrl, phoneNumber, sendLink)
                 getInstance().loginApi.oauthStartAuthByPhone(
                     "code", getInstance().oauthClientId, "offline",
                     UUID.randomUUID().toString(), getInstance().callbackUrl, body
@@ -357,7 +364,7 @@ class XLogin private constructor(
             phoneNumber: String,
             code: String,
             operationId: String,
-            callback: CompleteAuthByPhoneCallback
+            callback: CompletePasswordlessAuthCallback
         ) {
             if (!getInstance().useOauth) {
                 val body = CompleteAuthByPhoneBody(code, operationId, phoneNumber)
@@ -428,6 +435,159 @@ class XLogin private constructor(
             }
         }
 
+        /**
+         * Starts authentication by the user email address and sends a confirmation code to their email address.
+
+         *
+         * @param email User's email
+         * @param withLogout only JWT param false to keep existing tokens, true to deactivate existing and activate a new one
+         * @param callback status callback
+         * @param sendLink whether to send a link for authentication
+         * @param linkUrl URL to redirect a user, required if sendLink is true
+         * @see [JWT Login API Reference](https://developers.xsolla.com/login-api/auth/jwt/jwt-start-auth-by-email)
+         *
+         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/auth/oauth-20/oauth-20-start-auth-by-email)
+         */
+        @JvmStatic
+        fun startAuthByEmail(
+            email: String,
+            callback: StartPasswordlessAuthCallback,
+            withLogout: Boolean = false,
+            sendLink: Boolean = false,
+            linkUrl: String? = null
+        ) {
+            val retrofitCallback: Callback<StartPasswordlessAuthResponse> =
+                object : Callback<StartPasswordlessAuthResponse> {
+                    override fun onResponse(
+                        call: Call<StartPasswordlessAuthResponse>,
+                        response: Response<StartPasswordlessAuthResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val body = response.body()
+                            if (body != null) {
+                                callback.onAuthStarted(body)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(
+                        call: Call<StartPasswordlessAuthResponse>,
+                        t: Throwable
+                    ) {
+                        callback.onError(t, null)
+                    }
+                }
+            val body = StartAuthByEmailBody(linkUrl, email, sendLink)
+            if (!getInstance().useOauth) {
+                getInstance().loginApi.startAuthByEmail(
+                    getInstance().projectId,
+                    getInstance().callbackUrl,
+                    null,
+                    if (withLogout) "1" else "0", body
+                ).enqueue(retrofitCallback)
+            } else {
+                getInstance().loginApi.oauthStartAuthByEmail(
+                    "code",
+                    getInstance().oauthClientId,
+                    "offline",
+                    UUID.randomUUID().toString(),
+                    getInstance().callbackUrl,
+                    body
+                ).enqueue(retrofitCallback)
+            }
+        }
+
+        /**
+         * Completes authentication by the user email address and a confirmation code.
+
+         *
+         * @param email User's email
+         * @param code Verification code from phone
+         * @param operationId ID of the confirmation code.
+         * @param callback status callback
+         * @see [JWT Login API Reference](https://developers.xsolla.com/login-api/auth/jwt/jwt-complete-auth-by-email)
+         *
+         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/auth/oauth-20/oauth-20-complete-auth-by-email)
+         */
+        @JvmStatic
+        fun completeAuthByEmail(
+            email: String,
+            code: String,
+            operationId: String,
+            callback: CompletePasswordlessAuthCallback
+        ) {
+            val body = CompleteAuthByEmailBody(code, operationId, email)
+            if (!getInstance().useOauth) {
+                getInstance().loginApi.completeAuthByEmail(getInstance().projectId, body)
+                    .enqueue(object : Callback<AuthResponse?> {
+                        override fun onResponse(
+                            call: Call<AuthResponse?>,
+                            response: Response<AuthResponse?>
+                        ) {
+                            if (response.isSuccessful) {
+                                val authResponse = response.body()
+                                if (authResponse != null) {
+                                    val token = authResponse.getToken()
+                                    getInstance().tokenUtils.jwtToken = token
+                                    callback.onSuccess()
+                                } else {
+                                    callback.onError(null, "Empty response")
+                                }
+                            } else {
+                                callback.onError(null, getErrorMessage(response.errorBody()))
+                            }
+                        }
+
+                        override fun onFailure(call: Call<AuthResponse?>, t: Throwable) {
+                            callback.onError(t, null)
+                        }
+                    })
+
+            } else {
+                getInstance().loginApi.oauthCompleteAuthByEmail(getInstance().oauthClientId, body)
+                    .enqueue(object : Callback<OauthGetCodeResponse?> {
+                        override fun onResponse(
+                            call: Call<OauthGetCodeResponse?>,
+                            response: Response<OauthGetCodeResponse?>
+                        ) {
+                            if (response.isSuccessful) {
+                                val url = response.body()?.loginUrl
+                                if (url == null) {
+                                    callback.onError(null, "Empty url")
+                                    return
+                                }
+                                val oauthCode = TokenUtils.getCodeFromUrl(url)
+                                if (oauthCode == null) {
+                                    callback.onError(null, "Code not found url")
+                                    return
+                                }
+                                Utils.getOauthTokensFromCode(oauthCode) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
+                                    if (throwable == null && errorMessage == null) {
+                                        getInstance().tokenUtils.oauthAccessToken = accessToken
+                                        getInstance().tokenUtils.oauthRefreshToken = refreshToken
+                                        getInstance().tokenUtils.oauthExpireTimeUnixSec =
+                                            System.currentTimeMillis() / 1000 + expiresIn!!
+                                        callback.onSuccess()
+                                    } else {
+                                        callback.onError(throwable, errorMessage)
+                                    }
+                                }
+                            } else {
+                                callback.onError(null, getErrorMessage(response.errorBody()))
+                            }
+                        }
+
+                        override fun onFailure(call: Call<OauthGetCodeResponse?>, t: Throwable) {
+                            callback.onError(t, null)
+                        }
+                    })
+            }
+        }
+
 
         /**
          * Clear authentication data
@@ -439,6 +599,7 @@ class XLogin private constructor(
             getInstance().tokenUtils.oauthAccessToken = null
             getInstance().tokenUtils.oauthExpireTimeUnixSec = 0
         }
+
         /**
          * Authenticates a user via a particular device ID.
          * To enable authentication, contact your Account Manager.
@@ -1908,6 +2069,45 @@ class XLogin private constructor(
                         callback.onError(t, null)
                     }
                 })
+        }
+
+
+        /**
+         * Waits until the user follows the link provided via email/SMS and returns the code.
+         *
+         * @param login The login identifier of the user. The login identifier can be either the email or the phone number
+         * @param operationId Id of  the confirmation code.
+         * @param callback    Callback with data.
+         * @see [Login API Reference]()
+         */
+        @JvmStatic
+        fun getOtcCode(
+            login: String,
+            operationId: String,
+            callback: GetOtcCodeCallback
+        ) {
+            getInstance().loginApi.getOtcCode(
+                getInstance().projectId,
+                login,
+                operationId
+            ).enqueue(object : Callback<OtcResponse> {
+                override fun onResponse(call: Call<OtcResponse>, response: Response<OtcResponse>) {
+                    if (response.isSuccessful) {
+                        val data = response.body()
+                        if (data != null) {
+                            callback.onSuccess(data)
+                        } else {
+                            callback.onError(null, "Empty response")
+                        }
+                    } else {
+                        callback.onError(null, getErrorMessage(response.errorBody()))
+                    }
+                }
+
+                override fun onFailure(call: Call<OtcResponse>, t: Throwable) {
+                    callback.onError(t, null)
+                }
+            })
         }
 
         @JvmStatic
