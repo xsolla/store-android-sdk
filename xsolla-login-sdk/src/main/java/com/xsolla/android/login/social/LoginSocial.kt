@@ -8,7 +8,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
-import com.auth0.android.jwt.JWT
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -34,6 +33,7 @@ import com.xsolla.android.login.entity.request.AuthUserSocialBody
 import com.xsolla.android.login.entity.request.AuthUserSocialWithCodeBody
 import com.xsolla.android.login.entity.request.OauthGetCodeBySocialTokenBody
 import com.xsolla.android.login.entity.response.*
+import com.xsolla.android.login.jwt.JWT
 import com.xsolla.android.login.token.TokenUtils
 import com.xsolla.android.login.ui.ActivityAuth
 import com.xsolla.android.login.ui.ActivityAuth.Result.Companion.fromResultIntent

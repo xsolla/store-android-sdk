@@ -31,7 +31,6 @@ android {
 }
 
 dependencies {
-    api 'com.auth0.android:jwtdecode:2.0.0'
     api 'com.google.android.gms:play-services-auth:18.0.0'
 }
 
