@@ -16,8 +16,6 @@ stages:
   - linking
 
 generate_keystore:
-  tags:
-    - sdk
   stage: generate_keystore
   except:
     - branches
@@ -34,8 +32,6 @@ generate_keystore:
     expire_in: 30 mins
 
 build:
-  tags:
-    - sdk
   stage: build
   except:
     - branches
@@ -53,8 +49,6 @@ build:
       - .gradle/*
 
 lint:
-  tags:
-    - sdk
   stage: lint
   except:
     - branches
@@ -80,8 +74,6 @@ lint:
       - .gradle/*
 
 test:
-  tags:
-    - sdk
   stage: test
   except:
     - branches
@@ -101,8 +93,6 @@ test:
       - .gradle/*
 
 generateReleaseApp:
-  tags:
-    - sdk
   stage: publish
   except:
     - branches
@@ -123,8 +113,6 @@ generateReleaseApp:
       - artifacts
 
 publishLogin:
-  tags:
-    - sdk
   stage: publish
   when: manual
   only:
@@ -142,8 +130,6 @@ publishLogin:
       - .gradle/*
 
 publishStore:
-  tags:
-    - sdk
   stage: publish
   when: manual
   only:
@@ -158,8 +144,6 @@ publishStore:
       - .gradle/*
 
 publishInventory:
-  tags:
-    - sdk
   stage: publish
   when: manual
   only:
@@ -174,8 +158,6 @@ publishInventory:
       - .gradle/*
 
 publishPayments:
-  tags:
-    - sdk
   stage: publish
   when: manual
   only:
@@ -190,8 +172,6 @@ publishPayments:
       - .gradle/*
 
 build doc:
-  tags:
-    - sdk
   stage: build_doc
   only:
     - /^v.*/
