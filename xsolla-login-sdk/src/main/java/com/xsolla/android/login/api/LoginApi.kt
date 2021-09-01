@@ -228,8 +228,6 @@ interface LoginApi {
     //
     // Resetting
 
-    //ToDo:: Confirm password reset
-
     @POST("/api/password/reset/request")
     fun resetPassword(
         @Query("projectId") projectId: String,
@@ -244,13 +242,11 @@ interface LoginApi {
     //
     // Linking
 
-
     @POST("api/users/account/code")
     fun createCodeForLinkingAccounts(
         @Header("authorization") authHeader: String
     ): Call<CreateCodeForLinkingAccountResponse>
 
-    //ToDo:: Link accounts by code
 
     //----------     Attributes     ----------
 

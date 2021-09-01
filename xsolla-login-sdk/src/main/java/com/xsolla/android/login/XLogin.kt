@@ -82,6 +82,7 @@ class XLogin private constructor(
     companion object {
         private const val LOGIN_HOST = "https://login.xsolla.com"
 
+        @SuppressLint("StaticFieldLeak")
         private var instance: XLogin? = null
         private val loginSocial = LoginSocial
 
@@ -181,12 +182,6 @@ class XLogin private constructor(
          * Can have the following values:
          * 1 -> to deactivate the existing values and activate a new one.
          * 0 -> to keep the existing values activated.
-         *
-         * @param loginUrl URL to redirect the user to after account confirmation,
-         * successful authentication, two-factor authentication configuration, or password reset confirmation.
-         * Must be identical to the CALLBACK URL specified in your login project -> General Settings -> URL block of Xsolla Publisher Account.
-         * REQUIRED if there are several Callback URLs.
-         *
          * @param payload Your custom data. The value of the parameter will be returned in the user JWT -> *payload* claim.
          *
          * @see [JWT Login API Reference](https://developers.xsolla.com/login-api/methods/jwt/auth-by-username-and-password)
@@ -200,7 +195,6 @@ class XLogin private constructor(
             password: String,
             callback: AuthCallback,
             withLogout: Boolean = false,
-            loginUrl: String? = null, // TODO remove argument
             payload: String? = null
         ) {
             if (!getInstance().useOauth) {
@@ -269,19 +263,6 @@ class XLogin private constructor(
                         }
                     })
             }
-        }
-
-        @Deprecated(
-            message = "Deprecated, use login() instead",
-            replaceWith = ReplaceWith(
-                "XLogin.login()",
-                imports = ["com.xsolla.android.login.XLogin"]
-            ),
-            level = DeprecationLevel.WARNING
-        )
-        @JvmStatic
-        fun authenticate(username: String, password: String, callback: AuthCallback) {
-            login(username, password, callback, false, null, null)
         }
 
         //TextReview
@@ -737,7 +718,6 @@ class XLogin private constructor(
             email: String,
             password: String,
             callback: RegisterCallback,
-            loginUrl: String? = null, //TODO remove argument
             payload: String? = null,
             acceptConsent: Boolean? = null,
             promoEmailAgreement: Int? = null
@@ -867,18 +847,12 @@ class XLogin private constructor(
          *
          * @param username user's username
          * @param callback status callback
-         * @param loginUrl URL to redirect the user to after account confirmation,
-         * successful authentication, two-factor authentication configuration, or password reset confirmation.
-         * Must be identical to the CALLBACK URL specified in your login project -> General Settings -> URL block of Xsolla Publisher Account.
-         * REQUIRED if there several Callback URL's.
          * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/general/reset-password)
          */
-        @JvmOverloads
         @JvmStatic
         fun resetPassword(
             username: String?,
-            callback: ResetPasswordCallback,
-            loginUrl: String? = null //TODO remove argument
+            callback: ResetPasswordCallback
         ) {
             val resetPasswordBody = ResetPasswordBody(username!!)
             getInstance().loginApi
@@ -1496,9 +1470,9 @@ class XLogin private constructor(
                     "Bearer $token",
                     afterUrl,
                     limit,
-                    type.name.toLowerCase(),
-                    sortBy.name.toLowerCase(),
-                    sortOrder.name.toLowerCase()
+                    type.name.toLowerCase(Locale.getDefault()),
+                    sortBy.name.toLowerCase(Locale.getDefault()),
+                    sortOrder.name.toLowerCase(Locale.getDefault())
                 )
                 .enqueue(object : Callback<UserFriendsResponse> {
                     override fun onResponse(
@@ -1538,7 +1512,7 @@ class XLogin private constructor(
             callback: UpdateCurrentUserFriendsCallback
         ) {
             val updateUserFriendsRequest =
-                UpdateUserFriendsRequest(action.name.toLowerCase(), friendXsollaUserId)
+                UpdateUserFriendsRequest(action.name.toLowerCase(Locale.getDefault()), friendXsollaUserId)
             getInstance().loginApi
                 .updateFriends("Bearer $token", updateUserFriendsRequest)
                 .enqueue(object : Callback<Void> {
@@ -1578,7 +1552,7 @@ class XLogin private constructor(
             getInstance().loginApi
                 .getSocialFriends(
                     "Bearer $token",
-                    platform?.name?.toLowerCase(),
+                    platform?.name?.toLowerCase(Locale.getDefault()),
                     offset,
                     limit,
                     fromGameOnly
@@ -1617,7 +1591,7 @@ class XLogin private constructor(
         @JvmStatic
         fun updateSocialFriends(platform: FriendsPlatform?, callback: UpdateSocialFriendsCallback) {
             getInstance().loginApi
-                .updateSocialFriends("Bearer $token", platform?.name?.toLowerCase())
+                .updateSocialFriends("Bearer $token", platform?.name?.toLowerCase(Locale.getDefault()))
                 .enqueue(object : Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if (response.isSuccessful) {
@@ -2001,7 +1975,7 @@ class XLogin private constructor(
             callback: UnlinkSocialNetworkCallback
         ) {
             getInstance().loginApi
-                .unlinkSocialNetwork("Bearer $token", platform.name.toLowerCase())
+                .unlinkSocialNetwork("Bearer $token", platform.name.toLowerCase(Locale.getDefault()))
                 .enqueue(object : Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if (response.isSuccessful) {
@@ -2034,7 +2008,7 @@ class XLogin private constructor(
             val intent = Intent(context, ActivityAuthBrowserProxy::class.java)
             intent.putExtra(
                 ActivityAuth.ARG_AUTH_URL,
-                LOGIN_HOST + "/api/users/me/social_providers/" + socialNetwork.name.toLowerCase() + "/login_redirect"
+                LOGIN_HOST + "/api/users/me/social_providers/" + socialNetwork.name.toLowerCase(Locale.getDefault()) + "/login_redirect"
             )
             intent.putExtra(ActivityAuth.ARG_CALLBACK_URL, getInstance().callbackUrl)
             intent.putExtra(ActivityAuthWebView.ARG_TOKEN, token)
