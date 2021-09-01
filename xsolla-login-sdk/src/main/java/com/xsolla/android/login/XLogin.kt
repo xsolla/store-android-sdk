@@ -284,6 +284,7 @@ class XLogin private constructor(
             login(username, password, callback, false, null, null)
         }
 
+        //TextReview
         /**
          * Starts authentication by the user phone number and sends a verification code to their phone number.
 
@@ -347,6 +348,7 @@ class XLogin private constructor(
             }
         }
 
+        //TextReview
         /**
          * Completes authentication by the user phone number and a verification code.
 
@@ -435,6 +437,7 @@ class XLogin private constructor(
             }
         }
 
+        //TextReview
         /**
          * Starts authentication by the user email address and sends a confirmation code to their email address.
 
@@ -501,6 +504,7 @@ class XLogin private constructor(
             }
         }
 
+        //TextReview
         /**
          * Completes authentication by the user email address and a confirmation code.
 

@@ -617,6 +617,7 @@ class XStore private constructor(
         //
         // Catalog
 
+        //TextReview
         /**
          * Gets a games list for building a catalog.
          *
@@ -657,6 +658,7 @@ class XStore private constructor(
             })
         }
 
+        //TextReview
         /**
          * Gets a games list for building a catalog.
          *
@@ -701,6 +703,7 @@ class XStore private constructor(
             })
         }
 
+        //TextReview
         /**
          * Gets a game for the catalog.
          *
@@ -743,6 +746,7 @@ class XStore private constructor(
             })
         }
 
+        //TextReview
         /**
          * Gets a game key for the catalog.
          *
@@ -784,6 +788,7 @@ class XStore private constructor(
             })
         }
 
+        //TextReview
         /**
          * Gets a game key list from the specified group for building a catalog.
          *
@@ -829,6 +834,7 @@ class XStore private constructor(
             })
         }
 
+        //TextReview
         /**
          * Gets the list of available DRMs.
          *
@@ -869,6 +875,7 @@ class XStore private constructor(
         //
         // Entitlement
 
+        //TextReview
         /**
          * Get the list of games owned by the user. The response will contain an array of games owned by a particular user.
          *
@@ -914,6 +921,7 @@ class XStore private constructor(
             })
         }
 
+        //TextReview
         /**
          * Grants entitlement by a provided game code.
          *
