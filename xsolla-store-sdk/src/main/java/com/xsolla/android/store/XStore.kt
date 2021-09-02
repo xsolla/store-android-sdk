@@ -617,12 +617,11 @@ class XStore private constructor(
         //
         // Catalog
 
-        //TextReview
         /**
          * Gets a games list for building a catalog.
          *
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/order/get-order/)
+         * @param callback Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-games-list)
          */
         @JvmStatic
         fun getGamesList(
@@ -658,13 +657,12 @@ class XStore private constructor(
             })
         }
 
-        //TextReview
         /**
-         * Gets a games list for building a catalog.
+         * Gets a games list from the specified group for building a catalog.
          *
-         * @param externalId group external id
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/order/get-order/)
+         * @param externalId Group external ID
+         * @param callback  Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-games-group)
          */
         @JvmStatic
         fun getGamesListByGroup(
@@ -703,13 +701,12 @@ class XStore private constructor(
             })
         }
 
-        //TextReview
         /**
          * Gets a game for the catalog.
          *
-         * @param itemSku item sku
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/order/get-order/)
+         * @param itemSku Item SKU.
+         * @param callback Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-game-by-sku)
          */
         @JvmStatic
         fun getGameForCatalog(
@@ -746,13 +743,12 @@ class XStore private constructor(
             })
         }
 
-        //TextReview
         /**
          * Gets a game key for the catalog.
          *
-         * @param itemSku item sku
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/order/get-order/)
+         * @param itemSku Item SKU.
+         * @param callback Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-game-key-by-sku)
          */
         @JvmStatic
         fun getGameKeyForCatalog(
@@ -788,13 +784,12 @@ class XStore private constructor(
             })
         }
 
-        //TextReview
         /**
          * Gets a game key list from the specified group for building a catalog.
          *
-         * @param externalId group external id
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/order/get-order/)
+         * @param externalId Group external ID.
+         * @param callback Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-game-keys-group)
          */
         @JvmStatic
         fun getGameKeysListByGroup(
@@ -834,13 +829,11 @@ class XStore private constructor(
             })
         }
 
-        //TextReview
         /**
          * Gets the list of available DRMs.
          *
-         *
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/order/get-order/)
+         * @param callback Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-drm-list)
          */
         @JvmStatic
         fun getDrmList(
@@ -875,13 +868,11 @@ class XStore private constructor(
         //
         // Entitlement
 
-        //TextReview
         /**
          * Get the list of games owned by the user. The response will contain an array of games owned by a particular user.
          *
-         *
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/order/get-order/)
+         * @param callback Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/entitlement/get-user-games)
          */
         @JvmStatic
         fun getListOfOwnedGames(
@@ -921,7 +912,6 @@ class XStore private constructor(
             })
         }
 
-        //TextReview
         /**
          * Grants entitlement by a provided game code.
          *

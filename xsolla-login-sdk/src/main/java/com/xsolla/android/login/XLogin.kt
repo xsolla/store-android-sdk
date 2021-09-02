@@ -265,16 +265,15 @@ class XLogin private constructor(
             }
         }
 
-        //TextReview
         /**
          * Starts authentication by the user phone number and sends a verification code to their phone number.
 
          *
-         * @param phoneNumber User's phone number
-         * @param withLogout only JWT param false to keep existing tokens, true to deactivate existing and activate a new one
-         * @param callback status callback
-         * @param sendLink whether to send a link for authentication
-         * @param linkUrl URL to redirect a user, required if sendLink is true
+         * @param phoneNumber User’s phone number.
+         * @param withLogout For JWT only. Pass `false` to keep existing tokens, pass `true` to deactivate existing tokens and activate a new one.
+         * @param callback Status callback.
+         * @param sendLink Whether to send a link for authentication.
+         * @param linkUrl URL to redirect the user, required if `sendLink` is `true`.
          * @see [JWT Login API Reference](https://developers.xsolla.com/login-api/methods/jwt/jwt-start-auth-by-phone-number)
          *
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-start-auth-by-phone-number)
@@ -329,15 +328,13 @@ class XLogin private constructor(
             }
         }
 
-        //TextReview
         /**
-         * Completes authentication by the user phone number and a verification code.
-
+         * Completes authentication by the user’s phone number and a confirmation code.
          *
-         * @param phoneNumber User's phone number
-         * @param code Verification code from phone
+         * @param phoneNumber User’s phone number.
+         * @param code Confirmation code sent to the user via SMS.
          * @param operationId ID of the confirmation code.
-         * @param callback status callback
+         * @param callback Status callback.
          * @see [JWT Login API Reference](https://developers.xsolla.com/login-api/methods/jwt/jwt-complete-auth-by-phone-number)
          *
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-complete-auth-by-phone-number)
@@ -418,16 +415,15 @@ class XLogin private constructor(
             }
         }
 
-        //TextReview
         /**
-         * Starts authentication by the user email address and sends a confirmation code to their email address.
+         * Starts authentication by the user’s email address and sends a confirmation code to their email address.
 
          *
-         * @param email User's email
-         * @param withLogout only JWT param false to keep existing tokens, true to deactivate existing and activate a new one
-         * @param callback status callback
-         * @param sendLink whether to send a link for authentication
-         * @param linkUrl URL to redirect a user, required if sendLink is true
+         * @param email User’s email.
+         * @param withLogout For JWT only. Pass `false` to keep existing tokens, pass `true` to deactivate existing tokens and activate a new one.
+         * @param callback Status callback.
+         * @param sendLink Whether to send a link for authentication.
+         * @param linkUrl URL to redirect the user, required if `sendLink` is `true`.
          * @see [JWT Login API Reference](https://developers.xsolla.com/login-api/auth/jwt/jwt-start-auth-by-email)
          *
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/auth/oauth-20/oauth-20-start-auth-by-email)
@@ -485,15 +481,14 @@ class XLogin private constructor(
             }
         }
 
-        //TextReview
         /**
-         * Completes authentication by the user email address and a confirmation code.
+         * Completes authentication by the user’s email address and a confirmation code.
 
          *
-         * @param email User's email
-         * @param code Verification code from phone
+         * @param email User’s email.
+         * @param code Confirmation code sent to the user via SMS.
          * @param operationId ID of the confirmation code.
-         * @param callback status callback
+         * @param callback Status callback.
          * @see [JWT Login API Reference](https://developers.xsolla.com/login-api/auth/jwt/jwt-complete-auth-by-email)
          *
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/auth/oauth-20/oauth-20-complete-auth-by-email)
