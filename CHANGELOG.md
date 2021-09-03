@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.0.0] - Login SDK - 2021-09-03
+
+### Added
+
+- Custom Tabs usage for social authorizations
+- Passwordless authorization schemes (by phone number and email)
+- Facebook SDK updated
+
+## [1.0.0] - Store SDK - 2021-09-03
+
+### Added
+
+- Game Keys and Entitlement methods
+
+## [0.17.0] - Payments SDK - 2021-09-03
+
+### Removed
+
+- PlayFab and Serverless integrations
+
+
 ## [1.2.1] - Login SDK - 2021-08-18
 
 ### Fixed
