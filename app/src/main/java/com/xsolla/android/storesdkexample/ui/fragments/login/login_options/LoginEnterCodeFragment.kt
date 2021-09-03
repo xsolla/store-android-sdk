@@ -168,7 +168,7 @@ class LoginEnterCodeFragment : BaseFragment() {
     }
 
     private fun initTimer() {
-        val difference: Long = 300000  // 5minutes
+        val difference: Long = 180000  // 3minutes
 
         binding.tvCodeExpired.visibility = View.INVISIBLE
         binding.tvTimer.visibility = View.VISIBLE

@@ -130,7 +130,7 @@
         for purposes of demonstration.
         Availability of authorization options depends on Login project settings in Xsolla Publisher Account.</string>
     <string name="login_as_demo_user">Log in as demo user</string>
-    <string name="login_with_device_id">Log in  with device id</string>
+    <string name="login_with_device_id">Log in with device id</string>
     <string name="login_with_phone">Log in with phone</string>
     <string name="login_passworless_auth">Log in with email</string>
     <string name="login_phone_input_hint">Enter your phone</string>
@@ -145,8 +145,8 @@
     <string name="login_code_expired">Code expired.</string>
     <string name="login_resend_code">Resend code?</string>
     <string name="login_description" >Restrictions: \n
-        1. The confirmation code is valid for 5 minutes. \n
-           \u0009\u0009 After 5 minutes, you will need to request a new \n
+        1. The confirmation code is valid for 3 minutes. \n
+           \u0009\u0009 After 3 minutes, you will need to request a new \n
            \u0009\u0009 confirmation code. \n
         2. If you fail to submit the correct confirmation \n
            \u0009\u0009 code 3 times, the code becomes invalid. \n
