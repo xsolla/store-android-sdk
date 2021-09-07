@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import androidx.core.os.bundleOf
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.appcore.databinding.FragmentLogInWithPhoneOrEmailBinding
+import com.xsolla.android.appcore.extensions.setRateLimitedClickListener
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.StartPasswordlessAuthCallback
 import com.xsolla.android.login.entity.response.StartPasswordlessAuthResponse
@@ -73,7 +74,7 @@ class LoginWithPhoneOrEmailFragment : BaseFragment() {
                 }
             }
         })
-        binding.btSendCode.setOnClickListener {
+        binding.btSendCode.setRateLimitedClickListener {
             val phoneOrEmail = binding.phoneOrEmailInput.text.toString()
             hideKeyboard()
             val callback = object : StartPasswordlessAuthCallback {

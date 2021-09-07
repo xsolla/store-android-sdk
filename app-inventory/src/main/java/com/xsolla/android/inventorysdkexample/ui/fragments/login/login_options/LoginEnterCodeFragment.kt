@@ -3,7 +3,6 @@ package com.xsolla.android.inventorysdkexample.ui.fragments.login.login_options
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -44,14 +43,12 @@ class LoginEnterCodeFragment : BaseFragment() {
 
     private val binding: FragmentLogInWithPhoneOrEmailEnterCodeBinding by viewBinding()
     private lateinit var countDownTimer: CountDownTimer
-    private var handler: Handler = Handler()
-    private var runnable: Runnable? = null
-    private var delay = 20000
+    private var isTimerRunning = false
 
     private lateinit var operationId: String
 
     override fun getLayout(): Int {
-        return R.layout.fragment_log_in_with_phone_or_email_enter_code
+        return com.xsolla.android.appcore.R.layout.fragment_log_in_with_phone_or_email_enter_code
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,57 +56,16 @@ class LoginEnterCodeFragment : BaseFragment() {
         operationId = requireArguments().getString("operationId")!!
     }
 
-    override fun onResume() {
-
-        val phoneOrEmail = requireArguments().getString("phoneOrEmail")!!
-
-        handler.postDelayed(Runnable {
-            handler.postDelayed(runnable, delay.toLong())
-
-            XLogin.getOtcCode(phoneOrEmail, operationId, object : GetOtcCodeCallback {
-                override fun onSuccess(data: OtcResponse) {
-                    XLogin.completeAuthByEmail(
-                        phoneOrEmail,
-                        data.code,
-                        operationId,
-                        object : CompletePasswordlessAuthCallback {
-                            override fun onSuccess() {
-                                countDownTimer.cancel()
-                                val intent = Intent(requireActivity(), StoreActivity::class.java)
-                                startActivity(intent)
-                                activity?.finish()
-                            }
-
-                            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                                showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
-                            }
-                        })
-                }
-
-                override fun onError(throwable: Throwable?, errorMessage: String?) {
-                    showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
-                }
-            })
-
-        }.also { runnable = it }, delay.toLong())
-        super.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        handler.removeCallbacks(runnable)
-    }
-
     override fun initUI() {
 
-        when (requireArguments().getSerializable("type") as Type) {
+        val type = requireArguments().getSerializable("type") as Type
+
+        when (type) {
             Type.EMAIL -> binding.textInputLayout.hint =
                 getString(R.string.login_code_from_email)
             Type.PHONE -> binding.textInputLayout.hint =
                 getString(R.string.login_code_from_sms)
         }
-
-        initTimer()
 
         binding.btBack.setOnClickListener {
             hideKeyboard()
@@ -119,18 +75,24 @@ class LoginEnterCodeFragment : BaseFragment() {
         val phoneOrEmail = requireArguments().getString("phoneOrEmail")!!
 
         binding.tvResendCode.setOnClickListener {
-            if (binding.tvExpiredIn.visibility == View.GONE) {
-                XLogin.startAuthByEmail(phoneOrEmail, object : StartPasswordlessAuthCallback {
+            if (isTimerRunning) {
+                showSnack("Wait until timer expire")
+            } else {
+                val callback = object : StartPasswordlessAuthCallback {
                     override fun onAuthStarted(data: StartPasswordlessAuthResponse) {
                         operationId = data.operationId
+                        initTimer()
+                        startPolling(phoneOrEmail)
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
                         showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
                     }
-                })
-            } else {
-                showSnack("Wait until timer expire")
+                }
+                when (type) {
+                    Type.EMAIL -> XLogin.startAuthByEmail(phoneOrEmail, callback)
+                    Type.PHONE -> XLogin.startAuthByMobilePhone(phoneOrEmail, callback)
+                }
             }
         }
 
@@ -148,27 +110,63 @@ class LoginEnterCodeFragment : BaseFragment() {
 
         binding.btLogIn.setOnClickListener {
             val code = binding.codeInput.text.toString()
-            XLogin.completeAuthByEmail(
+            completeAuth(
+                type,
                 phoneOrEmail,
-                code,
-                operationId,
-                object : CompletePasswordlessAuthCallback {
-                    override fun onSuccess() {
-                        countDownTimer.cancel()
-                        val intent = Intent(requireActivity(), StoreActivity::class.java)
-                        startActivity(intent)
-                        activity?.finish()
-                    }
+                code
+            )
+        }
 
-                    override fun onError(throwable: Throwable?, errorMessage: String?) {
-                        showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
-                    }
-                })
+        initTimer()
+        startPolling(phoneOrEmail)
+    }
+
+    private fun startPolling(phoneOrEmail: String) {
+        if (isTimerRunning) {
+            XLogin.getOtcCode(phoneOrEmail, operationId, object : GetOtcCodeCallback {
+                override fun onSuccess(data: OtcResponse) {
+                    completeAuth(
+                        requireArguments().getSerializable("type") as Type,
+                        phoneOrEmail,
+                        data.code
+                    )
+                }
+
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    startPolling(phoneOrEmail)
+                }
+            })
         }
     }
 
+    private fun completeAuth(type: Type, phoneOrEmail: String, code: String) {
+        val callback = object : CompletePasswordlessAuthCallback {
+            override fun onSuccess() {
+                countDownTimer.cancel()
+                isTimerRunning = false
+                val intent = Intent(requireActivity(), StoreActivity::class.java)
+                startActivity(intent)
+                activity?.finish()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
+            }
+        }
+        when (type) {
+            Type.EMAIL -> XLogin.completeAuthByEmail(phoneOrEmail, code, operationId, callback)
+            Type.PHONE -> XLogin.completeAuthByMobilePhone(
+                phoneOrEmail,
+                code,
+                operationId,
+                callback
+            )
+        }
+
+    }
+
     private fun initTimer() {
-        val difference: Long = 300000  // 5minutes
+        val difference: Long = 180000  // 3minutes
 
         binding.tvCodeExpired.visibility = View.INVISIBLE
         binding.tvTimer.visibility = View.VISIBLE
@@ -178,15 +176,28 @@ class LoginEnterCodeFragment : BaseFragment() {
             override fun onTick(millisUntilFinished: Long) {
                 val elapsedMinutes = (millisUntilFinished / 1000) / 60
                 val elapsedSeconds = (millisUntilFinished / 1000) % 60
-                binding.tvTimer.text =
-                    context!!.getString(R.string.login_code_timer, elapsedMinutes, elapsedSeconds)
+                try {
+                    binding.tvTimer.text =
+                        context!!.getString(
+                            com.xsolla.android.appcore.R.string.login_code_timer,
+                            elapsedMinutes,
+                            elapsedSeconds
+                        )
+                } catch (e: Exception) {
+                }
             }
 
             override fun onFinish() {
-                binding.tvExpiredIn.visibility = View.INVISIBLE
-                binding.tvTimer.visibility = View.INVISIBLE
-                binding.tvCodeExpired.visibility = View.VISIBLE
+                try {
+                    binding.tvExpiredIn.visibility = View.INVISIBLE
+                    binding.tvTimer.visibility = View.INVISIBLE
+                    binding.tvCodeExpired.visibility = View.VISIBLE
+                } catch (e: Exception) {
+                }
+                isTimerRunning = false
             }
         }.start()
+
+        isTimerRunning = true
     }
 }
