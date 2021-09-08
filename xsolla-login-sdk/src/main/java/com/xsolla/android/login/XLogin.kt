@@ -2051,7 +2051,7 @@ class XLogin private constructor(
          * @param login The login identifier of the user. The login identifier can be either the email or the phone number
          * @param operationId Id of  the confirmation code.
          * @param callback    Callback with data.
-         * @see [Login API Reference]()
+         * @see [Login API Reference](https://developers.xsolla.com/login-api/auth/confirmation/get-confirmation-code)
          */
         @JvmStatic
         fun getOtcCode(
