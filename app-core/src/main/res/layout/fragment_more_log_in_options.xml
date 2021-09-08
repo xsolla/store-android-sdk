@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_color">
+
+    <Button
+        android:id="@+id/bn_login_with_device_id"
+        style="@style/Widget.Xsolla.ActionButton.Small.Secondary"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/login_with_device_id"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/bn_login_with_phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bn_login_as_demo_user" />
+
+    <Button
+        android:id="@+id/bn_login_with_phone"
+        style="@style/Widget.Xsolla.ActionButton.Small.Secondary"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/login_with_phone"
+        android:textColor="@color/action_button_small_color"
+        app:layout_constraintBottom_toTopOf="@+id/bn_passworldless_auth"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bn_login_with_device_id"
+        app:strokeColor="@color/action_button_small_color" />
+
+    <Button
+        android:id="@+id/bn_passworldless_auth"
+        style="@style/Widget.Xsolla.ActionButton.Small.Secondary"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/login_passworless_auth"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bn_login_with_phone" />
+
+    <ImageButton
+        android:id="@+id/ib_close_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/color_transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.85"
+        app:srcCompat="@drawable/ic_white_close_24" />
+
+    <TextView
+        android:id="@+id/tv_header"
+        android:layout_width="193dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/roboto"
+        android:text="@string/login_more_login_options"
+        android:textAppearance="@style/Headline2"
+        android:textColor="@color/white_color"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tv_description_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/ib_close_fragment"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="More log in options" />
+
+    <TextView
+        android:id="@+id/tv_description_header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/roboto"
+        android:text="@string/login_description_header"
+        android:textAlignment="viewStart"
+        android:textAppearance="@style/Subtitle1"
+        android:textColor="@color/text_color_inactive"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/bn_login_as_demo_user"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_header" />
+
+    <Button
+        android:id="@+id/bn_login_as_demo_user"
+        style="@style/Widget.Xsolla.ActionButton.Small.Secondary"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="0dp"
+        android:text="@string/login_as_demo_user"
+        app:layout_constraintBottom_toTopOf="@+id/bn_login_with_device_id"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_description_header" />
+
+    <TextView
+        android:id="@+id/tv_description_footer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/roboto"
+        android:text="@string/login_description_footer"
+        android:textAppearance="@style/Subtitle2"
+        android:textColor="@color/text_color_inactive"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bn_passworldless_auth"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

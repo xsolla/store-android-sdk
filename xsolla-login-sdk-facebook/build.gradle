@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 
 android {
     compileSdkVersion sdk_compile
@@ -31,7 +31,7 @@ android {
 }
 
 dependencies {
-    api 'com.facebook.android:facebook-login:8.1.0'
+    api 'com.facebook.android:facebook-login:11.2.0'
 }
 
 ext {

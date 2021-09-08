@@ -31,7 +31,7 @@ interface LoginApi {
         @Query("payload") payload: String?,
         @Query("with_logout") withLogout: String,
         @Body loginByDeviceIdBody: AuthViaDeviceIdBody
-    ) : Call <AuthViaIdResponse>
+    ): Call<AuthViaIdResponse>
 
     @POST("api/login/phone/confirm")
     fun completeAuthByPhone(
@@ -46,7 +46,22 @@ interface LoginApi {
         @Query("payload") payload: String?,
         @Query("with_logout") withLogout: String,
         @Body startAuthByPhoneBody: StartAuthByPhoneBody
-    ): Call<StartAuthByPhoneResponse>
+    ): Call<StartPasswordlessAuthResponse>
+
+    @POST("api/login/email/confirm")
+    fun completeAuthByEmail(
+        @Query("projectId") projectId: String,
+        @Body completeAuthByEmailBody: CompleteAuthByEmailBody
+    ): Call<AuthResponse>
+
+    @POST("api/login/email/request")
+    fun startAuthByEmail(
+        @Query("projectId") projectId: String,
+        @Query("login_url") loginUrl: String,
+        @Query("payload") payload: String?,
+        @Query("with_logout") withLogout: String,
+        @Body startAuthByEmailBody: StartAuthByEmailBody
+    ): Call<StartPasswordlessAuthResponse>
 
     @GET("/api/social/{providerName}/login_url")
     fun getLinkForSocialAuth(
@@ -91,13 +106,13 @@ interface LoginApi {
     @POST("/api/oauth2/login/device/{device_type}")
     fun oauthAuthViaDeviceId(
         @Path("device_type") deviceType: String,
-        @Query("client_id") client:Int,
+        @Query("client_id") client: Int,
         @Query("response_type") responseType: String,
         @Query("redirect_uri") redirectUri: String,
         @Query("state") state: String,
         @Query("scope") scope: String,
         @Body body: AuthViaDeviceIdBody
-    ) : Call<OauthGetCodeResponse>
+    ): Call<OauthGetCodeResponse>
 
     @POST("api/oauth2/login/phone/confirm")
     fun oauthCompleteAuthByPhone(
@@ -112,8 +127,24 @@ interface LoginApi {
         @Query("scope") scope: String,
         @Query("state") state: String,
         @Query("redirect_uri") redirectUri: String,
-        @Body body: StartAuthByPhoneBody
-    ): Call<StartAuthByPhoneResponse>
+        @Body startAuthByPhoneBody: StartAuthByPhoneBody
+    ): Call<StartPasswordlessAuthResponse>
+
+    @POST("api/oauth2/login/email/confirm")
+    fun oauthCompleteAuthByEmail(
+        @Query("client_id") clientId: Int,
+        @Body completeAuthByEmailBody: CompleteAuthByEmailBody
+    ): Call<OauthGetCodeResponse>
+
+    @POST("api/oauth2/login/email/request")
+    fun oauthStartAuthByEmail(
+        @Query("response_type") responseType: String,
+        @Query("client_id") clientId: Int,
+        @Query("scope") scope: String,
+        @Query("state") state: String,
+        @Query("redirect_uri") redirectUri: String,
+        @Body body: StartAuthByEmailBody
+    ): Call<StartPasswordlessAuthResponse>
 
     @GET("/api/oauth2/social/{providerName}/login_url")
     fun oauthGetLinkForSocialAuth(
@@ -197,8 +228,6 @@ interface LoginApi {
     //
     // Resetting
 
-    //ToDo:: Confirm password reset
-
     @POST("/api/password/reset/request")
     fun resetPassword(
         @Query("projectId") projectId: String,
@@ -213,13 +242,11 @@ interface LoginApi {
     //
     // Linking
 
-
     @POST("api/users/account/code")
     fun createCodeForLinkingAccounts(
         @Header("authorization") authHeader: String
     ): Call<CreateCodeForLinkingAccountResponse>
 
-    //ToDo:: Link accounts by code
 
     //----------     Attributes     ----------
 
@@ -328,9 +355,9 @@ interface LoginApi {
         @Part picture: MultipartBody.Part
     ): Call<PictureResponse>
 
-     // User Account
-     //
-     // User Friends
+    // User Account
+    //
+    // User Friends
 
     @GET("api/users/me/relationships")
     fun getUserFriends(
@@ -377,9 +404,9 @@ interface LoginApi {
         @Path("userId") userId: String
     ): Call<UserPublicInfoResponse>
 
-     // User Account
-     //
-     // Social Networks
+    // User Account
+    //
+    // Social Networks
 
     @GET("/users/me/login_urls")
     fun getLinksForSocialAuth(
@@ -424,4 +451,11 @@ interface LoginApi {
         @Query("scope") scope: String,
         @Body authUserSocialWithCodeBody: AuthUserSocialWithCodeBody
     ): Call<OauthGetCodeResponse>
+
+    @GET("api/otc/code")
+    fun getOtcCode(
+        @Query("projectId") projectId: String,
+        @Query("login") login: String,
+        @Query("operation_id") operationId: String
+    ): Call<OtcResponse>
 }

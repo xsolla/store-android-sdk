@@ -4,7 +4,7 @@ import android.content.Context
 import android.provider.Settings
 import androidx.test.core.app.ApplicationProvider
 import com.xsolla.android.login.callback.*
-import com.xsolla.android.login.entity.response.StartAuthByPhoneResponse
+import com.xsolla.android.login.entity.response.StartPasswordlessAuthResponse
 import com.xsolla.android.login.entity.response.UsersDevicesResponse
 import org.junit.Assert
 import org.junit.Ignore
@@ -23,7 +23,6 @@ class LoginTests {
         val loginConfig = LoginConfig.OauthBuilder()
             .setProjectId(projectId)
             .setOauthClientId(oauthClientId)
-            .setCallbackUrl("app://example")
             .build()
         XLogin.init(ApplicationProvider.getApplicationContext(), loginConfig)
     }
@@ -31,7 +30,6 @@ class LoginTests {
     private fun initSdkJwt() {
         val loginConfig = LoginConfig.JwtBuilder()
             .setProjectId(projectId)
-            .setCallbackUrl("app://example")
             .build()
         XLogin.init(ApplicationProvider.getApplicationContext(), loginConfig)
     }
@@ -226,8 +224,8 @@ class LoginTests {
         val latch = CountDownLatch(1)
         var error = false
         var operationId: String? = null
-        XLogin.startAuthByMobilePhone(phoneNumber, object : StartAuthByPhoneCallback {
-            override fun onAuthStarted(data: StartAuthByPhoneResponse) {
+        XLogin.startAuthByMobilePhone(phoneNumber, object : StartPasswordlessAuthCallback {
+            override fun onAuthStarted(data: StartPasswordlessAuthResponse) {
                 operationId = data.operationId
                 println("!!! jwt operation id = $operationId")
                 latch.countDown()
@@ -251,8 +249,8 @@ class LoginTests {
         val latch = CountDownLatch(1)
         var error = false
         var err: String? = null
-        XLogin.startAuthByMobilePhone(phoneNumber + phoneNumber, object : StartAuthByPhoneCallback {
-            override fun onAuthStarted(data: StartAuthByPhoneResponse) {
+        XLogin.startAuthByMobilePhone(phoneNumber + phoneNumber, object : StartPasswordlessAuthCallback {
+            override fun onAuthStarted(data: StartPasswordlessAuthResponse) {
                 latch.countDown()
             }
 
@@ -276,8 +274,8 @@ class LoginTests {
         val latch = CountDownLatch(1)
         var error = false
         var operationId: String? = null
-        XLogin.startAuthByMobilePhone(phoneNumber, object : StartAuthByPhoneCallback {
-            override fun onAuthStarted(data: StartAuthByPhoneResponse) {
+        XLogin.startAuthByMobilePhone(phoneNumber, object : StartPasswordlessAuthCallback {
+            override fun onAuthStarted(data: StartPasswordlessAuthResponse) {
                 operationId = data.operationId
                 println("!!! oauth operation id = $operationId")
                 latch.countDown()
@@ -301,8 +299,8 @@ class LoginTests {
         val latch = CountDownLatch(1)
         var error = false
         var err: String? = null
-        XLogin.startAuthByMobilePhone(phoneNumber + phoneNumber, object : StartAuthByPhoneCallback {
-            override fun onAuthStarted(data: StartAuthByPhoneResponse) {
+        XLogin.startAuthByMobilePhone(phoneNumber + phoneNumber, object : StartPasswordlessAuthCallback {
+            override fun onAuthStarted(data: StartPasswordlessAuthResponse) {
                 latch.countDown()
             }
 
@@ -325,7 +323,7 @@ class LoginTests {
         val latch = CountDownLatch(1)
         var error = false
         var err: String? = null
-        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, operationId, object : CompleteAuthByPhoneCallback {
+        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, operationId, object : CompletePasswordlessAuthCallback {
             override fun onSuccess() {
                 latch.countDown()
             }
@@ -349,7 +347,7 @@ class LoginTests {
         val latch = CountDownLatch(1)
         var error = false
         var err: String? = null
-        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, operationId, object : CompleteAuthByPhoneCallback {
+        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, operationId, object : CompletePasswordlessAuthCallback {
             override fun onSuccess() {
                 latch.countDown()
             }
@@ -373,7 +371,7 @@ class LoginTests {
 
         val latch = CountDownLatch(1)
         var error = false
-        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, operationId, object : CompleteAuthByPhoneCallback {
+        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, operationId, object : CompletePasswordlessAuthCallback {
             override fun onSuccess() {
                 latch.countDown()
             }
@@ -398,7 +396,7 @@ class LoginTests {
 
         val latch = CountDownLatch(1)
         var error = false
-        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, operationId, object : CompleteAuthByPhoneCallback {
+        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, operationId, object : CompletePasswordlessAuthCallback {
             override fun onSuccess() {
                 latch.countDown()
             }

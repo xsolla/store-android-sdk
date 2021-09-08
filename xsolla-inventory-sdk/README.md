@@ -1,8 +1,35 @@
-The **Inventory Android SDK** is used to integrate applications based on Android with [Player Inventory](https://developers.xsolla.com/doc/in-game-store/features/player-inventory/) for managing:
+The Inventory library is used to integrate applications based on Android with [In-Game Store](https://developers.xsolla.com/doc/in-game-store/features/player-inventory/) for managing:
+
 * user inventory
 * virtual currency balance
 * cross-platform inventory
 
-Create a  [Publisher Account](https://publisher.xsolla.com/signup?store_type=sdk) with Xsolla to get started.
 
-Go to the [wiki](https://github.com/xsolla/store-android-sdk/wiki/Xsolla-Inventory-Android-SDK) to learn how to integrate Player Inventory using **Inventory Android SDK**.
+## Integration
+
+Before you integrate the library, you need to sign up to [Publisher Account](https://publisher.xsolla.com/signup?store_type=sdk) and set up a new project.
+
+The library is available in [Maven Central](https://search.maven.org/artifact/com.xsolla.android/inventory). To install it, add the following line to the dependencies section, where `<version_number>` is the required version of the Inventory library:
+
+```
+implementation 'com.xsolla.android:inventory:<version_number>'
+```
+
+More instructions are on the [Xsolla Developers portal](https://developers.xsolla.com/sdk/android/inventory/).
+
+
+## Usage
+
+To manage the features of Xsolla products, the library contains a set of classes that let you make requests to the [In-Game Store & Buy Button API](https://developers.xsolla.com/commerce-api/player-inventory).
+
+After installing and initializing the Store library, implement user authorization logic in your application using [SDK methods](https://developers.xsolla.com/sdk-code-references/android-store/#%5B.ext%2FXsolla+Inventory+SDK+for+Android%2F%2F%2FPointingToDeclaration%2F%5D%2FMain%2F0).
+
+
+## Additional resources
+
+
+
+* [Xsolla official website](https://xsolla.com/)
+* [Developers documentation](https://developers.xsolla.com/sdk/android/login/)
+* [Code reference](https://developers.xsolla.com/sdk-code-references/android-store/#%5B.ext%2FXsolla+Inventory+SDK+for+Android%2F%2F%2FPointingToDeclaration%2F%5D%2FMain%2F0)
+* [In-Game Store & Buy Button API](https://developers.xsolla.com/commerce-api/player-inventory)

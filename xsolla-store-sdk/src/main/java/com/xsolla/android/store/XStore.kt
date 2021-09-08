@@ -4,16 +4,19 @@ import android.os.Build
 import com.google.gson.JsonObject
 import com.xsolla.android.store.api.StoreApi
 import com.xsolla.android.store.callbacks.*
+import com.xsolla.android.store.callbacks.gamekeys.*
 import com.xsolla.android.store.entity.request.cart.FillCartItem
 import com.xsolla.android.store.entity.request.cart.FillCartWithItemsRequestBody
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody
 import com.xsolla.android.store.entity.request.coupon.CartIdRequest
 import com.xsolla.android.store.entity.request.coupon.RedeemCouponRequestBody
 import com.xsolla.android.store.entity.request.coupon.RedeemPromocodeRequestBody
+import com.xsolla.android.store.entity.request.gamekeys.RedeemGameCodeBody
 import com.xsolla.android.store.entity.request.payment.*
 import com.xsolla.android.store.entity.response.bundle.BundleItem
 import com.xsolla.android.store.entity.response.bundle.BundleListResponse
 import com.xsolla.android.store.entity.response.cart.CartResponse
+import com.xsolla.android.store.entity.response.gamekeys.*
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse
 import com.xsolla.android.store.entity.response.items.*
 import com.xsolla.android.store.entity.response.order.OrderResponse
@@ -608,6 +611,340 @@ class XStore private constructor(
                 })
         }
 
+        //----------     Game Keys     ----------
+
+        // Game Keys
+        //
+        // Catalog
+
+        /**
+         * Gets a games list for building a catalog.
+         *
+         * @param callback Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-games-list)
+         */
+        @JvmStatic
+        fun getGamesList(
+            callback:GetGamesListCallback,
+            limit: Int = 50,
+            offset: Int = 0,
+            locale: String? = null,
+            additionalFields: List<String>? = null,
+            country: String? = null
+        ){
+            getInstance().storeApi.getGamesList(
+                getInstance().projectId,
+                limit, offset, locale, country, additionalFields).enqueue(object : Callback<GameItemsResponse>{
+                override fun onResponse(
+                    call: Call<GameItemsResponse>,
+                    response: Response<GameItemsResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val gameListResponse = response.body()
+                        if (gameListResponse != null) {
+                            callback.onSuccess(gameListResponse)
+                        } else {
+                            callback.onError(null, "Empty response")
+                        }
+                    } else {
+                        callback.onError(null, getErrorMessage(response.errorBody()))
+                    }
+                }
+
+                override fun onFailure(call: Call<GameItemsResponse>, t: Throwable) {
+                    callback.onError(t, null)
+                }
+            })
+        }
+
+        /**
+         * Gets a games list from the specified group for building a catalog.
+         *
+         * @param externalId Group external ID
+         * @param callback  Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-games-group)
+         */
+        @JvmStatic
+        fun getGamesListByGroup(
+            callback:GetGamesListByGroupCallback,
+            externalId: String,
+            limit: Int = 50,
+            offset: Int = 0,
+            locale: String? = null,
+            additionalFields: List<String>? = null,
+            country: String? = null
+        ){
+            getInstance().storeApi.getGamesListBySpecifiedGroup(
+                getInstance().projectId,
+                externalId,
+                limit, offset, locale, country, additionalFields
+            ).enqueue(object :Callback<GameItemsResponse>{
+                override fun onResponse(
+                    call: Call<GameItemsResponse>,
+                    response: Response<GameItemsResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val gameListResponse = response.body()
+                        if (gameListResponse != null) {
+                            callback.onSuccess(gameListResponse)
+                        } else {
+                            callback.onError(null, "Empty response")
+                        }
+                    } else {
+                        callback.onError(null, getErrorMessage(response.errorBody()))
+                    }
+                }
+
+                override fun onFailure(call: Call<GameItemsResponse>, t: Throwable) {
+                    callback.onError(t, null)
+                }
+            })
+        }
+
+        /**
+         * Gets a game for the catalog.
+         *
+         * @param itemSku Item SKU.
+         * @param callback Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-game-by-sku)
+         */
+        @JvmStatic
+        fun getGameForCatalog(
+            callback:GetGameForCatalogCallback,
+            itemSku: String,
+            locale: String? = null,
+            additionalFields: List<String>? = null,
+            country: String? = null
+        ){
+            getInstance().storeApi.getGameForCatalog(
+                getInstance().projectId,
+                itemSku,
+                locale, additionalFields, country
+            ).enqueue(object : Callback<GameItemsResponse.GameItem>{
+                override fun onResponse(
+                    call: Call<GameItemsResponse.GameItem>,
+                    response: Response<GameItemsResponse.GameItem>
+                ) {
+                    if (response.isSuccessful) {
+                        val gameResponse = response.body()
+                        if (gameResponse != null) {
+                            callback.onSuccess(gameResponse)
+                        } else {
+                            callback.onError(null, "Empty response")
+                        }
+                    } else {
+                        callback.onError(null, getErrorMessage(response.errorBody()))
+                    }
+                }
+
+                override fun onFailure(call: Call<GameItemsResponse.GameItem>, t: Throwable) {
+                    callback.onError(t, null)
+                }
+            })
+        }
+
+        /**
+         * Gets a game key for the catalog.
+         *
+         * @param itemSku Item SKU.
+         * @param callback Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-game-key-by-sku)
+         */
+        @JvmStatic
+        fun getGameKeyForCatalog(
+            callback:GetGameKeyForCatalogCallback,
+            itemSku: String,
+            locale: String? = null,
+            additionalFields: List<String>? = null,
+            country: String? = null
+        ){
+            getInstance().storeApi.getGameKeyForCatalog(
+                getInstance().projectId,
+                itemSku, locale, additionalFields, country
+            ).enqueue(object :Callback<GameKeysResponse>{
+                override fun onResponse(
+                    call: Call<GameKeysResponse>,
+                    response: Response<GameKeysResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val keysResponse = response.body()
+                        if (keysResponse != null) {
+                            callback.onSuccess(keysResponse)
+                        } else {
+                            callback.onError(null, "Empty response")
+                        }
+                    } else {
+                        callback.onError(null, getErrorMessage(response.errorBody()))
+                    }
+                }
+
+                override fun onFailure(call: Call<GameKeysResponse>, t: Throwable) {
+                    callback.onError(t, null)
+                }
+            })
+        }
+
+        /**
+         * Gets a game key list from the specified group for building a catalog.
+         *
+         * @param externalId Group external ID.
+         * @param callback Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-game-keys-group)
+         */
+        @JvmStatic
+        fun getGameKeysListByGroup(
+            callback:GetGameKeysListByGroupCallback,
+            externalId: String,
+            limit: Int = 50,
+            offset: Int = 0,
+            locale: String? = null,
+            additionalFields: List<String>? = null,
+            country: String? = null
+        ){
+            getInstance().storeApi.getGameKeysListBySpecifiedGroup(
+                getInstance().projectId,
+                externalId,
+                limit, offset, locale, country, additionalFields
+
+            ).enqueue(object : Callback<GameKeysListByGroupResponse>{
+                override fun onResponse(
+                    call: Call<GameKeysListByGroupResponse>,
+                    response: Response<GameKeysListByGroupResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val keysResponse = response.body()
+                        if (keysResponse != null) {
+                            callback.onSuccess(keysResponse)
+                        } else {
+                            callback.onError(null, "Empty response")
+                        }
+                    } else {
+                        callback.onError(null, getErrorMessage(response.errorBody()))
+                    }
+                }
+
+                override fun onFailure(call: Call<GameKeysListByGroupResponse>, t: Throwable) {
+                    callback.onError(t, null)
+                }
+            })
+        }
+
+        /**
+         * Gets the list of available DRMs.
+         *
+         * @param callback Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-drm-list)
+         */
+        @JvmStatic
+        fun getDrmList(
+            callback:GetDrmListCallback,
+        ){
+            getInstance().storeApi.getDrmList(
+                getInstance().projectId
+            ).enqueue(object : Callback<DrmListResponse>{
+                override fun onResponse(
+                    call: Call<DrmListResponse>,
+                    response: Response<DrmListResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val drmResponse = response.body()
+                        if (drmResponse != null) {
+                            callback.onSuccess(drmResponse)
+                        } else {
+                            callback.onError(null, "Empty response")
+                        }
+                    } else {
+                        callback.onError(null, getErrorMessage(response.errorBody()))
+                    }
+                }
+
+                override fun onFailure(call: Call<DrmListResponse>, t: Throwable) {
+                    callback.onError(t, null)
+                }
+            })
+        }
+
+        // Game Keys
+        //
+        // Entitlement
+
+        /**
+         * Get the list of games owned by the user. The response will contain an array of games owned by a particular user.
+         *
+         * @param callback Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/entitlement/get-user-games)
+         */
+        @JvmStatic
+        fun getListOfOwnedGames(
+            callback:GetListOfOwnedGamesCallback,
+            limit: Int = 50,
+            offset: Int = 0,
+            isSandbox: Int = 1,
+            additionalFields: List<String>? = null,
+        ){
+
+            getInstance().storeApi.getListOfGamesOwned(
+                getInstance().projectId,
+                limit,
+                offset,
+                isSandbox,
+                additionalFields
+            ).enqueue(object : Callback<GamesOwnedResponse>{
+                override fun onResponse(
+                    call: Call<GamesOwnedResponse>,
+                    response: Response<GamesOwnedResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val gamesResponse = response.body()
+                        if (gamesResponse != null) {
+                            callback.onSuccess(gamesResponse)
+                        } else {
+                            callback.onError(null, "Empty response")
+                        }
+                    } else {
+                        callback.onError(null, getErrorMessage(response.errorBody()))
+                    }
+                }
+
+                override fun onFailure(call: Call<GamesOwnedResponse>, t: Throwable) {
+                    callback.onError(t, null)
+                }
+            })
+        }
+
+        /**
+         * Grants entitlement by a provided game code.
+         *
+         *
+         * @param callback status callback
+         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/order/get-order/)
+         */
+        @JvmStatic
+        fun redeemGameCode(
+            callback:RedeemGameCodeCallback,
+            code: String,
+            isSandbox: Boolean
+        ){
+            val body = RedeemGameCodeBody(code, isSandbox)
+            getInstance().storeApi.redeemGameCode(
+                getInstance().projectId,
+                body
+            ).enqueue(object : Callback<Void>{
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        callback.onSuccess()
+                    } else {
+                        callback.onError(null, getErrorMessage(response.errorBody()))
+                    }
+                }
+
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    callback.onError(t, null)
+                }
+            })
+        }
+
         //----------     Virtual Items & Currency     ----------
 
          // Virtual Items & Currency
@@ -1183,7 +1520,11 @@ class XStore private constructor(
         private fun getErrorMessage(errorBody: ResponseBody?): String {
             try {
                 val errorObject = JSONObject(errorBody!!.string())
-                return errorObject.getJSONObject("error").getString("description")
+                return if (errorObject.has("error")) {
+                    errorObject.getJSONObject("error").getString("description")
+                } else {
+                    errorObject.getString("errorMessage")
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }

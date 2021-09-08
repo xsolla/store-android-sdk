@@ -1,29 +1,29 @@
 package com.xsolla.android.customauth.ui.login
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
+import com.xsolla.android.appcore.extensions.openLink
 import com.xsolla.android.appcore.extensions.setClickableSpan
 import com.xsolla.android.customauth.R
 import com.xsolla.android.customauth.data.local.PrefManager
 import com.xsolla.android.customauth.data.remote.NetworkManager
 import com.xsolla.android.customauth.data.remote.RestService
+import com.xsolla.android.customauth.data.remote.dto.AuthRequest
 import com.xsolla.android.customauth.databinding.ActivityLoginBinding
 import com.xsolla.android.customauth.ui.store.StoreActivity
-import com.xsolla.android.appcore.extensions.openLink
-import com.xsolla.android.customauth.data.remote.dto.AuthRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class LoginActivity : AppCompatActivity(R.layout.activity_login) {
     private companion object {
-        private const val HOW_TO_URL = "https://developers.xsolla.com/sdk/android/use-xsolla-servers/how-tos/#android_sdk_use_xsolla_servers_how_to_use_partners_login_system"
+        private const val HOW_TO_URL = "https://developers.xsolla.com/sdk/android/how-tos/authentication/#android_sdk_how_to_use_partners_login_system"
         private const val BACKEND_URL = "https://github.com/xsolla/xsolla-sdk-backend"
     }
 

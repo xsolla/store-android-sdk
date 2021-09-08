@@ -10,15 +10,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.xsolla.android.appcore.databinding.FragmentCharacterPageBinding
+import com.xsolla.android.appcore.extensions.openInBrowser
+import com.xsolla.android.appcore.extensions.setClickableSpan
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.DeleteSwipeCallback
 import com.xsolla.android.storesdkexample.adapter.UserAttributesAdapter
-import com.xsolla.android.appcore.databinding.FragmentCharacterPageBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmCharacterPage
-import com.xsolla.android.appcore.extensions.openInBrowser
-import com.xsolla.android.appcore.extensions.setClickableSpan
 
 class CharacterPageFragment : BaseFragment() {
     companion object {
@@ -102,7 +102,7 @@ class CharacterPageFragment : BaseFragment() {
         }
     }
 
-    private fun openHowToForAttributes() = "https://developers.xsolla.com/sdk/game-engines/android/#sdk_use_xsolla_servers_how_to_use_user_attributes"
+    private fun openHowToForAttributes() = "https://developers.xsolla.com/sdk/android/how-tos/user-management/#android_sdk_how_to_use_user_attributes"
         .toUri()
         .openInBrowser(requireContext())
 

@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Widget.Xsolla.ActionButton" parent="">
-        <item name="android:textColor">@color/white_color</item>
+        <item name="android:textColor">@color/action_button_text_color</item>
         <item name="android:height">@dimen/action_button_height</item>
         <item name="android:layout_marginTop">@dimen/action_button_top_margin</item>
         <item name="android:layout_marginBottom">@dimen/action_button_bottom_margin</item>
@@ -23,11 +23,12 @@
 
     <style name="Widget.Xsolla.ActionButton.Small.Secondary" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:height">@dimen/secondary_action_button_height</item>
-        <item name="strokeColor">@color/light_state_gray_color</item>
+        <item name="strokeColor">@color/action_button_small_color</item>
         <item name="strokeWidth">@dimen/secondary_action_button_stroke_width</item>
         <item name="cornerRadius">0dp</item>
-        <item name="android:textColor">@color/light_state_gray_color</item>
+        <item name="android:textColor">@color/action_button_small_color</item>
         <item name="android:textSize">@dimen/secondary_action_button_text_size</item>
+        <item name="rippleColor">@color/white_color_20</item>
     </style>
 
     <style name="Widget.Xsolla.ActionButton.Text" parent="Widget.MaterialComponents.Button.TextButton">

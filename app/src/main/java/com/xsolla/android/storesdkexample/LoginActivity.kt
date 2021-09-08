@@ -18,6 +18,7 @@ class LoginActivity : AppCompatActivity(R.layout.activity_login) {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        // needed for google native
         supportFragmentManager.fragments.forEach { fragment ->
             fragment.onActivityResult(requestCode, resultCode, data)
             fragment.childFragmentManager.fragments.forEach { childFragment ->

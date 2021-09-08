@@ -7,6 +7,8 @@ import com.xsolla.android.appcore.SingleLiveEvent
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.callbacks.*
 import com.xsolla.android.store.entity.request.payment.PaymentOptions
+import com.xsolla.android.store.entity.request.payment.PaymentProjectSettings
+import com.xsolla.android.store.entity.request.payment.UiProjectSetting
 import com.xsolla.android.store.entity.response.cart.CartResponse
 import com.xsolla.android.store.entity.response.common.Price
 import com.xsolla.android.store.entity.response.order.OrderResponse
@@ -58,8 +60,8 @@ class VmCart(application: Application) : AndroidViewModel(application) {
 
     fun createOrder(onCreateOrder: (String) -> Unit) {
         val paymentOptions = PaymentOptions(
-            isSandbox = BuildConfig.IS_SANDBOX
-
+            isSandbox = BuildConfig.IS_SANDBOX,
+            settings = PaymentProjectSettings(UiProjectSetting(theme = "default_dark"))
         )
         XStore.createOrderFromCurrentCart(object : CreateOrderCallback {
             override fun onSuccess(response: CreateOrderResponse) {

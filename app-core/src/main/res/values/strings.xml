@@ -123,7 +123,35 @@
     <string name="coupon_received_items_placeholder">You received the following items:</string>
     <string name="coupon_redeem_another_button">Redeem another coupon</string>
     <string name="coupon_received_item_exp_period">Expiration in: %d %ss</string>
-
+    
+    <string name="login_more_login_options">More login options</string>
+    <string name="login_description_header">You can place these buttons instead of "More login options" button.</string>
+    <string name="login_description_footer" formatted="false">Username/password and "Log in with email" authorization options are only shown together
+        for purposes of demonstration.
+        Availability of authorization options depends on Login project settings in Xsolla Publisher Account.</string>
+    <string name="login_as_demo_user">Log in as demo user</string>
+    <string name="login_with_device_id">Log in with device id</string>
+    <string name="login_with_phone">Log in with phone</string>
+    <string name="login_passworless_auth">Log in with email</string>
+    <string name="login_phone_input_hint">Enter your phone</string>
+    <string name="login_email_input_hint">Enter your email</string>
+    <string name="login_send_code_button">Send code</string>
+    <string name="login_back_button">Back</string>
+    <string name="login_code_from_sms">Enter code from SMS</string>
+    <string name="login_code_from_email">Enter code from Email</string>
+    <string name="login_log_in">Log in</string>
+    <string name="login_code_expired_in">Code expires in:</string>
+    <string name="login_code_timer">%02d:%02d.</string>
+    <string name="login_code_expired">Code expired.</string>
+    <string name="login_resend_code">Resend code?</string>
+    <string name="login_description" >Restrictions: \n
+        1. The confirmation code is valid for 3 minutes. \n
+           \u0009\u0009 After 3 minutes, you will need to request a new \n
+           \u0009\u0009 confirmation code. \n
+        2. If you fail to submit the correct confirmation \n
+           \u0009\u0009 code 3 times, the code becomes invalid. \n
+        3. You can\'t request a confirmation code more \n
+           \u0009\u0009 than 3 times per minute. </string>
     <string name="promocode_hint">Enter your promocode here</string>
     <string name="promocode_placeholder">\tfor example, NEWGAMER2020</string>
     <string name="promocode_bonus_item_placeholder">BONUS ITEM</string>
