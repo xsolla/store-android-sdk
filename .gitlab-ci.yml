@@ -197,7 +197,7 @@ build doc:
     - /^v.*/
   script:
     - ./gradlew dokkaHtmlMultiModule
-    - cd build/dokka/htmlMultiModule/ && mv -- '-modules.html' index.html && zip -r ../../../build.zip *
+    - cd build/dokka/htmlMultiModule/ && zip -r ../../../build.zip *
   artifacts:
     expire_in: 24 hours
     paths:
