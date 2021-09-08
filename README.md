@@ -2,7 +2,7 @@
 
 Xsolla SDK for Android is a ready-to-use library for applications and games that allows you to easily embed [Xsolla services](https://developers.xsolla.com/#get_started).
 
-![android sdk image](https://cdn.xsolla.net/developers/v-release20210804v2-cross-product-update/images/sdk/android/android-ready-made-solution.png "android sdk image")
+![android sdk image](https://i.imgur.com/NshUN8S.png "android sdk image")
 
 
 The SDK includes the following libraries:
