@@ -4,6 +4,7 @@
     package="com.xsolla.android.storesdkexample">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
         android:allowBackup="true"
