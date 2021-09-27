@@ -10,5 +10,5 @@ object StoreUtils {
         return installer == MARKET_PACKAGE_NAME
     }
 
-    fun isXsollaCartAvailable(context: Context) = isAppInstalledFromGooglePlay(context)
+    fun isXsollaCartAvailable(context: Context) = !isAppInstalledFromGooglePlay(context)
 }

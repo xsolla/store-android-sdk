@@ -15,11 +15,11 @@ import com.xsolla.android.storesdkexample.StoreActivity
 
 abstract class BaseFragment : Fragment() {
     var mainToolbar: View? = null
-    lateinit var rootView: View
+    private lateinit var rootView: View
 
     abstract fun getLayout(): Int
 
-    open val toolbarOption: ToolbarOptions = ToolbarOptions(true, true)
+    open val toolbarOption: ToolbarOptions = ToolbarOptions(showBalance = true, showCart = true)
 
     abstract fun initUI()
 

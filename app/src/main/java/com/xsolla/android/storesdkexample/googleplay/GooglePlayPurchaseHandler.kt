@@ -59,6 +59,7 @@ class GooglePlayPurchaseHandler(
                 when (product.itemType) {
                     "consumable" -> handleConsumablePurchase(purchase)
                     "non_consumable" -> handleConsumablePurchase(purchase)
+                    "non_renewing_subscription" -> handleConsumablePurchase(purchase)
                 }
             }
             showMessage("Purchase was successful")

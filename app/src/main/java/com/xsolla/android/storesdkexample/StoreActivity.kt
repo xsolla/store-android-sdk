@@ -225,7 +225,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
             XLogin.logout()
             startLogin()
         }
-        if (showCartMenu) {
+        if (StoreUtils.isXsollaCartAvailable(this)) {
             findViewById<View>(R.id.itemCart).setOnClickListener {
                 if (vmCart.cartContent.value.isNullOrEmpty()) {
                     showSnack(getString(R.string.cart_message_empty))
