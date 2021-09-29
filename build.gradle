@@ -14,8 +14,11 @@ buildscript {
     ext.login_sdk_version_name = '2.0.0'
     ext.login_sdk_version_code = 17
 
-    ext.sample_app_version_name = '1.7.0'
-    ext.sample_app_version_code = 20
+    ext.sample_app_version_name = '1.8.1'
+    ext.sample_app_version_code = 22
+
+    ext.googleplay_sdk_version_name = "0.0.1"
+    ext.googleplay_sdk_version_code = 1
 
     ext.sdk_min = 21
     ext.sdk_target = 29
@@ -25,7 +28,6 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
         mavenCentral()
     }
     dependencies {

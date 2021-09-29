@@ -11,12 +11,13 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
+import com.xsolla.android.appcore.databinding.FragmentCatalogBinding
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.ViAdapter
-import com.xsolla.android.appcore.databinding.FragmentCatalogBinding
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
+import com.xsolla.android.storesdkexample.ui.vm.VmGooglePlay
 import com.xsolla.android.storesdkexample.util.BaseParcelable
 
 class ViPageFragment : Fragment(), PurchaseListener {
@@ -24,6 +25,7 @@ class ViPageFragment : Fragment(), PurchaseListener {
 
     private val vmCart: VmCart by activityViewModels()
     private val vmBalance: VmBalance by activityViewModels()
+    private val vmGooglePlay: VmGooglePlay by activityViewModels()
 
     companion object {
         const val ARG_ITEMS = "items"
@@ -51,7 +53,7 @@ class ViPageFragment : Fragment(), PurchaseListener {
                     ContextCompat.getDrawable(context, R.drawable.item_divider)?.let { setDrawable(it) }
                 })
                 layoutManager = linearLayoutManager
-                adapter = ViAdapter(it, vmCart, vmBalance, this@ViPageFragment)
+                adapter = ViAdapter(it, vmCart, vmBalance, vmGooglePlay, this@ViPageFragment)
             }
         }
     }
