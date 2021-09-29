@@ -9,16 +9,17 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import com.xsolla.android.googleplay.StoreUtils
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.StoreActivity
 
 abstract class BaseFragment : Fragment() {
     var mainToolbar: View? = null
-    lateinit var rootView: View
+    private lateinit var rootView: View
 
     abstract fun getLayout(): Int
 
-    open val toolbarOption: ToolbarOptions = ToolbarOptions(true, true)
+    open val toolbarOption: ToolbarOptions = ToolbarOptions(showBalance = true, showCart = true)
 
     abstract fun initUI()
 
@@ -34,7 +35,7 @@ abstract class BaseFragment : Fragment() {
         initUI()
 
         requireActivity().findViewById<View>(R.id.balanceLayout)?.isVisible = toolbarOption.showBalance
-        (requireActivity() as? StoreActivity)?.showCartMenu = toolbarOption.showCart
+        (requireActivity() as? StoreActivity)?.showCartMenu = toolbarOption.showCart && StoreUtils.isXsollaCartAvailable(view.context)
         requireActivity().invalidateOptionsMenu()
     }
 
