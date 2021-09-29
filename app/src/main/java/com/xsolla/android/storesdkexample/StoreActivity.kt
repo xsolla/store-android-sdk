@@ -21,17 +21,24 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingResult
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.appcore.databinding.ActivityStoreBinding
 import com.xsolla.android.appcore.extensions.setRateLimitedClickListener
+import com.xsolla.android.googleplay.StoreUtils
+import com.xsolla.android.googleplay.inventory.InventoryAdmin
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.RefreshTokenCallback
 import com.xsolla.android.store.XStore
+import com.xsolla.android.storesdkexample.googleplay.GooglePlayPurchaseHandler
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmCart
+import com.xsolla.android.storesdkexample.ui.vm.VmGooglePlay
 import com.xsolla.android.storesdkexample.ui.vm.VmProfile
 import com.xsolla.android.storesdkexample.ui.vm.base.ViewModelFactory
 import com.xsolla.android.storesdkexample.util.sumByLong
@@ -41,13 +48,17 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
     private val vmCart: VmCart by viewModels()
     private val vmBalance: VmBalance by viewModels()
+    private val vmGooglePlay: VmGooglePlay by viewModels()
     private val vmProfile: VmProfile by viewModels {
         ViewModelFactory(resources)
     }
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-    var showCartMenu = true
+    private lateinit var billingClient: BillingClient
+    private lateinit var googlePlayPurchaseHandler: GooglePlayPurchaseHandler
+
+    var showCartMenu = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +78,10 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
         initNavController()
         initDrawer()
         initVirtualBalance()
+
+        if (StoreUtils.isAppInstalledFromGooglePlay(this)) {
+            initGooglePlay()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -206,33 +221,42 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
             navController.navigate(R.id.nav_redeem_coupon)
             binding.root.closeDrawers()
         }
-        findViewById<View>(R.id.itemCart).setOnClickListener {
-            if (vmCart.cartContent.value.isNullOrEmpty()) {
-                showSnack(getString(R.string.cart_message_empty))
-            } else {
-                navController.navigate(R.id.nav_cart)
-                binding.root.closeDrawers()
-            }
-        }
         findViewById<View>(R.id.itemLogout).setOnClickListener {
             XLogin.logout()
             startLogin()
         }
-        vmCart.cartContent.observe(this, Observer {
-            val count = it.sumByLong { item -> item.quantity }
+        if (StoreUtils.isXsollaCartAvailable(this)) {
+            findViewById<View>(R.id.itemCart).setOnClickListener {
+                if (vmCart.cartContent.value.isNullOrEmpty()) {
+                    showSnack(getString(R.string.cart_message_empty))
+                } else {
+                    navController.navigate(R.id.nav_cart)
+                    binding.root.closeDrawers()
+                }
+            }
+            vmCart.cartContent.observe(this, Observer {
+                val count = it.sumByLong { item -> item.quantity }
 
+                val textCartCounter = binding.root.findViewById<TextView>(R.id.textCartCounter)
+                val bgCartCounter = binding.root.findViewById<View>(R.id.bgCartCounter)
+
+                textCartCounter.text = count.toString()
+                if (count == 0L) {
+                    bgCartCounter.visibility = View.GONE
+                    textCartCounter.visibility = View.GONE
+                } else {
+                    bgCartCounter.visibility = View.VISIBLE
+                    textCartCounter.visibility = View.VISIBLE
+                }
+            })
+        } else {
+            val itemCart = findViewById<View>(R.id.itemCart)
             val textCartCounter = binding.root.findViewById<TextView>(R.id.textCartCounter)
             val bgCartCounter = binding.root.findViewById<View>(R.id.bgCartCounter)
-
-            textCartCounter.text = count.toString()
-            if (count == 0L) {
-                bgCartCounter.visibility = View.GONE
-                textCartCounter.visibility = View.GONE
-            } else {
-                bgCartCounter.visibility = View.VISIBLE
-                textCartCounter.visibility = View.VISIBLE
-            }
-        })
+            itemCart.visibility = View.GONE
+            bgCartCounter.visibility = View.GONE
+            textCartCounter.visibility = View.GONE
+        }
     }
 
     private fun setDrawerData() {
@@ -279,5 +303,39 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
     private fun showSnack(message: String) {
         val rootView: View = findViewById(android.R.id.content)
         Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show()
+    }
+
+    private fun initGooglePlay() {
+        InventoryAdmin.init("https://us-central1-xsolla-sdk-demo.cloudfunctions.net")
+        googlePlayPurchaseHandler = GooglePlayPurchaseHandler(
+            this@StoreActivity,
+            this@StoreActivity::showSnack,
+            successGrantItemToUser = { vmBalance.updateVirtualBalance() }
+        )
+
+        billingClient = BillingClient.newBuilder(this)
+            .enablePendingPurchases()
+            .setListener(googlePlayPurchaseHandler)
+            .build()
+
+        billingClient.startConnection(object : BillingClientStateListener {
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    // The BillingClient is ready. You can query purchases here.
+                    vmGooglePlay.product.observe(this@StoreActivity) { product ->
+                        val userId = vmProfile.state.value?.id!!
+                        googlePlayPurchaseHandler.startPurchase(billingClient, product, userId)
+                    }
+                } else {
+                    showSnack(billingResult.debugMessage)
+                }
+            }
+
+            override fun onBillingServiceDisconnected() {
+                // Try to restart the connection on the next request to
+                // Google Play by calling the startConnection() method.
+                showSnack("Billing Client is not initialized")
+            }
+        })
     }
 }
