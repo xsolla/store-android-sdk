@@ -12,6 +12,8 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
@@ -28,6 +30,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.appcore.databinding.ActivityStoreBinding
+import com.xsolla.android.appcore.extensions.openInBrowser
 import com.xsolla.android.appcore.extensions.setRateLimitedClickListener
 import com.xsolla.android.googleplay.StoreUtils
 import com.xsolla.android.googleplay.inventory.InventoryAdmin
@@ -221,6 +224,11 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
             navController.navigate(R.id.nav_redeem_coupon)
             binding.root.closeDrawers()
         }
+        findViewById<View>(R.id.itemWebStore).setOnClickListener {
+            openWebStore()
+            binding.root.closeDrawers()
+        }
+        findViewById<View>(R.id.itemWebStore).isVisible = !StoreUtils.isAppInstalledFromGooglePlay(this)
         findViewById<View>(R.id.itemLogout).setOnClickListener {
             XLogin.logout()
             startLogin()
@@ -338,4 +346,9 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
             }
         })
     }
+
+    private fun openWebStore() =
+        "https://sitebuilder.xsolla.com/game/sdk-web-store-android/?token=${XLogin.token}&remember_me=false"
+            .toUri()
+            .openInBrowser(this)
 }
