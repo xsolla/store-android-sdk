@@ -27,7 +27,6 @@ import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmGooglePlay
-import com.xsolla.android.storesdkexample.util.ViewUtils
 
 class BundleFragment : BaseFragment(), PurchaseListener {
 
@@ -129,9 +128,9 @@ class BundleFragment : BaseFragment(), PurchaseListener {
             // real price
             if (!StoreUtils.isAppInstalledFromGooglePlay(requireContext())) {
                 binding.btBundleBuy.setOnClickListener { view ->
-                    ViewUtils.disable(view)
+                    view.isEnabled = false
                     vmPurchase.startPurchase(BuildConfig.IS_SANDBOX, args.bundle.sku!!, 1) {
-                        ViewUtils.enable(view)
+                        view.isEnabled = true
                     }
                 }
             } else {
@@ -142,18 +141,18 @@ class BundleFragment : BaseFragment(), PurchaseListener {
         } else {
             //buy via virtual price
             binding.btBundleBuy.setOnClickListener { v ->
-                ViewUtils.disable(v)
+                v.isEnabled = false
                 XStore.createOrderByVirtualCurrency(
                     object : CreateOrderByVirtualCurrencyCallback {
                         override fun onSuccess(response: CreateOrderByVirtualCurrencyResponse) {
                             this@BundleFragment.onSuccess()
-                            ViewUtils.enable(v)
+                            v.isEnabled = true
                             vmBalance.updateVirtualBalance()
                         }
 
                         override fun onError(throwable: Throwable?, errorMessage: String?) {
                             this@BundleFragment.onFailure(errorMessage ?: throwable?.javaClass?.name ?: "Error")
-                            ViewUtils.enable(v)
+                            v.isEnabled = true
                         }
                     },
                     args.bundle.sku!!, args.bundle.virtualPrices[0].sku!!

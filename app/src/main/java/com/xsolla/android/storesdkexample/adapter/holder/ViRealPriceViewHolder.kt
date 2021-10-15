@@ -17,7 +17,6 @@ import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.fragments.store.ViFragmentDirections
 import com.xsolla.android.storesdkexample.ui.fragments.store.VirtualItemUiEntity
-import com.xsolla.android.storesdkexample.util.ViewUtils
 import java.util.*
 
 class ViRealPriceViewHolder(
@@ -99,9 +98,9 @@ class ViRealPriceViewHolder(
         }
 
         binding.addToCartButton.setOnClickListener { view ->
-            ViewUtils.disable(view)
+            view.isEnabled = false
             vmPurchase.startPurchase(BuildConfig.IS_SANDBOX, item.sku!!, 1) {
-                ViewUtils.enable(view)
+                view.isEnabled = true
             }
         }
     }

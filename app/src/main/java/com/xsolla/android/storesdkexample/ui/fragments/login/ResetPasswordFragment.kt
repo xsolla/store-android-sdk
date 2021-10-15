@@ -3,12 +3,11 @@ package com.xsolla.android.storesdkexample.ui.fragments.login
 import android.text.Editable
 import android.text.TextWatcher
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.xsolla.android.appcore.databinding.FragmenResetPasswordBinding
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.ResetPasswordCallback
 import com.xsolla.android.storesdkexample.R
-import com.xsolla.android.appcore.databinding.FragmenResetPasswordBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
-import com.xsolla.android.storesdkexample.util.ViewUtils
 
 class ResetPasswordFragment : BaseFragment() {
 
@@ -34,19 +33,19 @@ class ResetPasswordFragment : BaseFragment() {
         })
 
         binding.resetPasswordButton.setOnClickListener { v ->
-            ViewUtils.disable(v)
+            v.isEnabled = false
             hideKeyboard()
             val username = binding.usernameInput.text.toString()
             XLogin.resetPassword(username, object : ResetPasswordCallback {
                 override fun onSuccess() {
                     showSnack("Password reset success. Check your email")
                     openLoginFragment()
-                    ViewUtils.enable(v)
+                    v.isEnabled = true
                 }
 
                 override fun onError(throwable: Throwable?, errorMessage: String?) {
                     showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
-                    ViewUtils.enable(v)
+                    v.isEnabled = true
                 }
 
             })

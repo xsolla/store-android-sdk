@@ -15,7 +15,6 @@ import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.ConsumeListener
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.vm.VmGooglePlay
-import com.xsolla.android.storesdkexample.util.ViewUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -97,9 +96,9 @@ class InventoryAdapter(
                 if (StoreUtils.isAppInstalledFromGooglePlay(parent.context)) {
                     vmGooglePlay.startPurchase(item.sku!!)
                 } else {
-                    ViewUtils.disable(view)
+                    view.isEnabled = false
                     vmPurchase.startPurchase(BuildConfig.IS_SANDBOX, item.sku!!, 1) {
-                        ViewUtils.enable(view)
+                        view.isEnabled = true
                     }
                 }
             }

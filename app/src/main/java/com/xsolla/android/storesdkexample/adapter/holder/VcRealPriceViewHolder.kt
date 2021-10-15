@@ -14,7 +14,6 @@ import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResp
 import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
-import com.xsolla.android.storesdkexample.util.ViewUtils
 
 class VcRealPriceViewHolder(
         inflater: LayoutInflater,
@@ -51,9 +50,9 @@ class VcRealPriceViewHolder(
         }
 
         binding.addToCartButton.setOnClickListener { view ->
-            ViewUtils.disable(view)
+            view.isEnabled = false
             vmPurchase.startPurchase(BuildConfig.IS_SANDBOX, item.sku!!, 1) {
-                ViewUtils.enable(view)
+                view.isEnabled = true
             }
         }
     }
