@@ -12,19 +12,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.appcore.databinding.FragmentCatalogBinding
+import com.xsolla.android.appcore.ui.vm.VmPurchase
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.VcAdapter
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
-import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.ui.vm.VmGooglePlay
 import com.xsolla.android.storesdkexample.util.BaseParcelable
 
 class VcPageFragment : Fragment(), PurchaseListener {
     private val binding: FragmentCatalogBinding by viewBinding()
 
-    private val vmCart: VmCart by activityViewModels()
+    private val vmPurchase: VmPurchase by activityViewModels()
     private val vmBalance: VmBalance by activityViewModels()
     private val vmGooglePlay: VmGooglePlay by activityViewModels()
 
@@ -41,27 +41,32 @@ class VcPageFragment : Fragment(), PurchaseListener {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_catalog, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val items = requireArguments().getParcelable<BaseParcelable>(ARG_ITEMS)?.value as? List<VirtualCurrencyPackageResponse.Item>
+        val items =
+            requireArguments().getParcelable<BaseParcelable>(ARG_ITEMS)?.value as? List<VirtualCurrencyPackageResponse.Item>
         items?.let {
             with(binding.catalogRecyclerView) {
                 val linearLayoutManager = LinearLayoutManager(context)
-                addItemDecoration(DividerItemDecoration(context, linearLayoutManager.orientation).apply {
-                    ContextCompat.getDrawable(context, R.drawable.item_divider)?.let { setDrawable(it) }
-                })
+                addItemDecoration(
+                    DividerItemDecoration(
+                        context,
+                        linearLayoutManager.orientation
+                    ).apply {
+                        ContextCompat.getDrawable(context, R.drawable.item_divider)
+                            ?.let { setDrawable(it) }
+                    })
                 layoutManager = linearLayoutManager
-                adapter = VcAdapter(it, vmCart, vmBalance, vmGooglePlay, this@VcPageFragment)
+                adapter = VcAdapter(it, vmPurchase, vmBalance, vmGooglePlay, this@VcPageFragment)
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        vmCart.updateCart()
     }
 
     override fun onSuccess() {

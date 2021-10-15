@@ -8,19 +8,18 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.appcore.databinding.ItemViRealPriceBinding
+import com.xsolla.android.appcore.ui.vm.VmPurchase
 import com.xsolla.android.appcore.utils.AmountUtils
-import com.xsolla.android.store.XStore
-import com.xsolla.android.store.callbacks.UpdateItemFromCurrentCartCallback
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
+import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
-import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.util.ViewUtils
 
 class VcRealPriceViewHolder(
         inflater: LayoutInflater,
         private val parent: ViewGroup,
-        private val vmCart: VmCart,
+        private val vmPurchase: VmPurchase,
         private val purchaseListener: PurchaseListener
 ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_vi_real_price, parent, false)) {
     private val binding = ItemViRealPriceBinding.bind(itemView)
@@ -51,22 +50,11 @@ class VcRealPriceViewHolder(
             binding.itemSaleDiscount.setBackgroundColor(ContextCompat.getColor(parent.context, R.color.cart_badge_color))
         }
 
-        binding.addToCartButton.setOnClickListener { v ->
-            ViewUtils.disable(v)
-            val cartContent = vmCart.cartContent.value
-            val quantity = cartContent?.find { it.sku == item.sku }?.quantity ?: 0
-            XStore.updateItemFromCurrentCart(object : UpdateItemFromCurrentCartCallback {
-                override fun onSuccess() {
-                    vmCart.updateCart()
-                    ViewUtils.enable(v)
-                }
-
-                override fun onError(throwable: Throwable?, errorMessage: String?) {
-                    purchaseListener.onFailure(errorMessage ?: throwable?.javaClass?.name ?: "Error")
-                    ViewUtils.enable(v)
-                }
-
-            }, item.sku!!, quantity + 1)
+        binding.addToCartButton.setOnClickListener { view ->
+            ViewUtils.disable(view)
+            vmPurchase.startPurchase(BuildConfig.IS_SANDBOX, item.sku!!, 1) {
+                ViewUtils.enable(view)
+            }
         }
     }
 

@@ -5,12 +5,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.xsolla.android.appcore.ui.vm.VmPurchase
 import com.xsolla.android.customauth.R
 import com.xsolla.android.customauth.databinding.FragmentCatalogBinding
 import com.xsolla.android.customauth.ui.BaseFragment
 import com.xsolla.android.customauth.ui.adapter.ViAdapter
 import com.xsolla.android.customauth.viewmodels.VmBalance
-import com.xsolla.android.customauth.viewmodels.VmCart
 
 class ViPageFragment : BaseFragment(), PurchaseListener {
     companion object {
@@ -26,7 +26,7 @@ class ViPageFragment : BaseFragment(), PurchaseListener {
     }
 
     private val binding: FragmentCatalogBinding by viewBinding()
-    private val vmCart: VmCart by activityViewModels()
+    private val vmPurchase: VmPurchase by activityViewModels()
     private val vmBalance: VmBalance by activityViewModels()
 
     override fun getLayout() = R.layout.fragment_catalog
@@ -35,10 +35,15 @@ class ViPageFragment : BaseFragment(), PurchaseListener {
         val items = requireArguments().getParcelableArrayList<VirtualItemUiEntity>(ARG_ITEMS)
         items?.let {
             with(binding.catalogRecyclerView) {
-                addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
-                    ContextCompat.getDrawable(context, R.drawable.item_divider)?.let { setDrawable(it) }
-                })
-                adapter = ViAdapter(it, vmCart, vmBalance, this@ViPageFragment)
+                addItemDecoration(
+                    DividerItemDecoration(
+                        context,
+                        DividerItemDecoration.VERTICAL
+                    ).apply {
+                        ContextCompat.getDrawable(context, R.drawable.item_divider)
+                            ?.let { setDrawable(it) }
+                    })
+                adapter = ViAdapter(it, vmPurchase, vmBalance, this@ViPageFragment)
             }
         }
     }

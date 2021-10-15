@@ -78,7 +78,6 @@
     <dimen name="catalog_item_old_price_text_size">16sp</dimen>
     <dimen name="catalog_item_additional_info_text_size">16sp</dimen>
     <dimen name="catalog_item_add_to_cart_button_size">40dp</dimen>
-    <dimen name="catalog_item_add_to_cart_button_corner_radius">4dp</dimen>
     <dimen name="catalog_item_add_to_cart_button_stroke_width">1dp</dimen>
 
     <dimen name="inventory_fragment_consume_button_height">40dp</dimen>
@@ -87,16 +86,6 @@
     <dimen name="inventory_fragment_consume_button_text_size">15sp</dimen>
     <dimen name="inventory_fragment_go_to_store_margin_vertical">24dp</dimen>
     <dimen name="inventory_fragment_go_to_store_margin_horizontal">20dp</dimen>
-
-    <dimen name="cart_fragment_action_button_left_margin">20dp</dimen>
-    <dimen name="cart_fragment_action_button_right_margin">20dp</dimen>
-    <dimen name="cart_fragment_clear_button_width">120dp</dimen>
-    <dimen name="cart_fragment_clear_button_height">26dp</dimen>
-    <dimen name="cart_fragment_clear_button_corner_radius">4dp</dimen>
-    <dimen name="cart_fragment_clear_button_stroke_width">1dp</dimen>
-    <dimen name="cart_fragment_clear_button_right_margin">20dp</dimen>
-    <dimen name="cart_fragment_clear_button_horizontal_padding">12dp</dimen>
-    <dimen name="cart_fragment_clear_button_text_size">15sp</dimen>
 
     <dimen name="fragment_consume_left_padding">20dp</dimen>
     <dimen name="fragment_consume_right_padding">20dp</dimen>

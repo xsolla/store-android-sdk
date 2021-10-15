@@ -5,18 +5,18 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.xsolla.android.appcore.ui.vm.VmPurchase
 import com.xsolla.android.customauth.R
 import com.xsolla.android.customauth.databinding.FragmentCatalogBinding
 import com.xsolla.android.customauth.ui.BaseFragment
 import com.xsolla.android.customauth.ui.adapter.VcAdapter
 import com.xsolla.android.customauth.viewmodels.VmBalance
-import com.xsolla.android.customauth.viewmodels.VmCart
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
 
 class VcPageFragment : BaseFragment(), PurchaseListener {
     private val binding: FragmentCatalogBinding by viewBinding()
 
-    private val vmCart: VmCart by activityViewModels()
+    private val vmPurchase: VmPurchase by activityViewModels()
     private val vmBalance: VmBalance by activityViewModels()
 
     companion object {
@@ -34,13 +34,19 @@ class VcPageFragment : BaseFragment(), PurchaseListener {
     override fun getLayout() = R.layout.fragment_catalog
 
     override fun initUI() {
-        val items = requireArguments().getParcelableArrayList<VirtualCurrencyPackageResponse.Item>(ARG_ITEMS)
+        val items =
+            requireArguments().getParcelableArrayList<VirtualCurrencyPackageResponse.Item>(ARG_ITEMS)
         items?.let {
             with(binding.catalogRecyclerView) {
-                addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
-                    ContextCompat.getDrawable(context, R.drawable.item_divider)?.let { setDrawable(it) }
-                })
-                adapter = VcAdapter(it, vmCart, vmBalance, this@VcPageFragment)
+                addItemDecoration(
+                    DividerItemDecoration(
+                        context,
+                        DividerItemDecoration.VERTICAL
+                    ).apply {
+                        ContextCompat.getDrawable(context, R.drawable.item_divider)
+                            ?.let { setDrawable(it) }
+                    })
+                adapter = VcAdapter(it, vmPurchase, vmBalance, this@VcPageFragment)
             }
         }
     }
