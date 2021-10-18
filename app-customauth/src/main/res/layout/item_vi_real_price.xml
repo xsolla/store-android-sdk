@@ -89,7 +89,7 @@
         style="@style/Widget.Xsolla.CatalogItem.AddToCartButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:icon="@drawable/ic_add_to_cart_icon"
+        app:icon="@drawable/ic_buy_button_icon"
         app:rippleColor="@color/white_color" />
 
     <TextView

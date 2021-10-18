@@ -38,19 +38,10 @@
     <string name="drawer_item_coupon">Redeem a coupon</string>
     <string name="drawer_item_webstore">Web Store</string>
     <string name="drawer_item_tutorial">Tutorial</string>
-    <string name="drawer_item_cart">Cart</string>
     <string name="drawer_item_account">Account</string>
     <string name="drawer_item_logout">Log out</string>
 
     <string name="inventory_placeholder">Your items appear here</string>
-
-    <string name="cart_fragment_checkout_button">Go to Checkout</string>
-    <string name="cart_fragment_continue_button">Back to store</string>
-    <string name="cart_fragment_clear_button">Clear All</string>
-    <string name="cart_message_empty">Your cart is empty</string>
-    <string name="cart_subtotal">Subtotal</string>
-    <string name="cart_discount">Discount</string>
-    <string name="cart_total">Total</string>
 
     <string name="friends_add_friends_button_text">+ ADD FRIENDS</string>
     <string name="friends_accept_friend_button">Accept</string>
@@ -155,8 +146,13 @@
     <string name="promocode_hint">Enter your promocode here</string>
     <string name="promocode_placeholder">\tfor example, NEWGAMER2020</string>
     <string name="promocode_bonus_item_placeholder">BONUS ITEM</string>
+
     <string name="buy_again">Buy again</string>
     <string name="buy_now_button">Buy now</string>
     <string name="preview">Preview</string>
+
+    <string name="payment_completed">Payment completed</string>
+    <string name="payment_cancelled">Payment cancelled</string>
+    <string name="payment_unknown">Payment error</string>
 
 </resources>

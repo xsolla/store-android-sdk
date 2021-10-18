@@ -12,18 +12,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.appcore.databinding.FragmentCatalogBinding
+import com.xsolla.android.appcore.ui.vm.VmPurchase
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.ViAdapter
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
-import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.ui.vm.VmGooglePlay
 import com.xsolla.android.storesdkexample.util.BaseParcelable
 
 class ViPageFragment : Fragment(), PurchaseListener {
     private val binding: FragmentCatalogBinding by viewBinding()
 
-    private val vmCart: VmCart by activityViewModels()
+    private val vmPurchase: VmPurchase by activityViewModels()
     private val vmBalance: VmBalance by activityViewModels()
     private val vmGooglePlay: VmGooglePlay by activityViewModels()
 
@@ -53,14 +53,9 @@ class ViPageFragment : Fragment(), PurchaseListener {
                     ContextCompat.getDrawable(context, R.drawable.item_divider)?.let { setDrawable(it) }
                 })
                 layoutManager = linearLayoutManager
-                adapter = ViAdapter(it, vmCart, vmBalance, vmGooglePlay, this@ViPageFragment)
+                adapter = ViAdapter(it, vmPurchase, vmBalance, vmGooglePlay, this@ViPageFragment)
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        vmCart.updateCart()
     }
 
     override fun onSuccess() {

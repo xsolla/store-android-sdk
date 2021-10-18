@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.appcore.utils.AmountUtils
 import com.xsolla.android.customauth.R
-import com.xsolla.android.customauth.ui.store.StoreActivity
 
 abstract class BaseFragment : Fragment() {
     lateinit var rootView: View
@@ -34,7 +33,6 @@ abstract class BaseFragment : Fragment() {
 
         requireActivity().findViewById<View>(R.id.mainToolbar).isVisible = toolbarOption.showMainToolbar
         requireActivity().findViewById<View>(R.id.balanceLayout).isVisible = toolbarOption.showBalance
-        (requireActivity() as? StoreActivity)?.showCartMenu = toolbarOption.showCart
         requireActivity().invalidateOptionsMenu()
     }
 
