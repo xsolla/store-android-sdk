@@ -20,7 +20,6 @@ import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.fragments.store.ViFragmentDirections
 import com.xsolla.android.storesdkexample.ui.fragments.store.VirtualItemUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
-import com.xsolla.android.storesdkexample.util.ViewUtils
 import java.util.*
 
 class ViVirtualPriceViewHolder(
@@ -120,17 +119,17 @@ class ViVirtualPriceViewHolder(
 
     private fun initBuyButton(item: VirtualItemUiEntity, virtualPrice: VirtualPrice) {
         binding.buyButton.setOnClickListener { v ->
-            ViewUtils.disable(v)
+            v.isEnabled = false
             XStore.createOrderByVirtualCurrency(object : CreateOrderByVirtualCurrencyCallback {
                 override fun onSuccess(response: CreateOrderByVirtualCurrencyResponse) {
                     vmBalance.updateVirtualBalance()
                     purchaseListener.showMessage("Purchased by Virtual currency")
-                    ViewUtils.enable(v)
+                    v.isEnabled = true
                 }
 
                 override fun onError(throwable: Throwable?, errorMessage: String?) {
                     purchaseListener.showMessage(errorMessage!!)
-                    ViewUtils.enable(v)
+                    v.isEnabled = true
                 }
             }, item.sku!!, virtualPrice.sku!!)
         }

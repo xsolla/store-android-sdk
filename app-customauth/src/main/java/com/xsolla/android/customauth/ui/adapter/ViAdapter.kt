@@ -7,27 +7,27 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.xsolla.android.appcore.ui.vm.VmPurchase
 import com.xsolla.android.appcore.utils.AmountUtils
+import com.xsolla.android.customauth.BuildConfig
 import com.xsolla.android.customauth.R
 import com.xsolla.android.customauth.databinding.ItemViRealPriceBinding
 import com.xsolla.android.customauth.databinding.ItemViVirtualPriceBinding
 import com.xsolla.android.customauth.ui.store.PurchaseListener
 import com.xsolla.android.customauth.ui.store.VirtualItemUiEntity
 import com.xsolla.android.customauth.viewmodels.VmBalance
-import com.xsolla.android.customauth.viewmodels.VmCart
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.callbacks.CreateOrderByVirtualCurrencyCallback
-import com.xsolla.android.store.callbacks.UpdateItemFromCurrentCartCallback
 import com.xsolla.android.store.entity.response.common.ExpirationPeriod
 import com.xsolla.android.store.entity.response.common.VirtualPrice
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse
 import java.util.*
 
 class ViAdapter(
-        private val items: List<VirtualItemUiEntity>,
-        private val vmCart: VmCart,
-        private val vmBalance: VmBalance,
-        private val purchaseListener: PurchaseListener
+    private val items: List<VirtualItemUiEntity>,
+    private val vmPurchase: VmPurchase,
+    private val vmBalance: VmBalance,
+    private val purchaseListener: PurchaseListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -46,8 +46,16 @@ class ViAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            REAL_PRICE -> ViRealPriceViewHolder(vmCart, purchaseListener, inflater.inflate(R.layout.item_vi_real_price, parent, false))
-            else -> ViVirtualPriceViewHolder(vmBalance, purchaseListener, inflater.inflate(R.layout.item_vi_virtual_price, parent, false))
+            REAL_PRICE -> ViRealPriceViewHolder(
+                vmPurchase,
+                purchaseListener,
+                inflater.inflate(R.layout.item_vi_real_price, parent, false)
+            )
+            else -> ViVirtualPriceViewHolder(
+                vmBalance,
+                purchaseListener,
+                inflater.inflate(R.layout.item_vi_virtual_price, parent, false)
+            )
         }
     }
 
@@ -63,9 +71,9 @@ class ViAdapter(
 }
 
 class ViRealPriceViewHolder(
-        private val vmCart: VmCart,
-        private val purchaseListener: PurchaseListener,
-        view: View
+    private val vmPurchase: VmPurchase,
+    private val purchaseListener: PurchaseListener,
+    view: View
 ) : RecyclerView.ViewHolder(view) {
 
     private val binding: ItemViRealPriceBinding = ItemViRealPriceBinding.bind(view)
@@ -105,34 +113,25 @@ class ViRealPriceViewHolder(
     private fun bindItemPrice(item: VirtualItemUiEntity) {
         val price = item.price
         if (price!!.getAmountDecimal() == price.getAmountWithoutDiscountDecimal() || price.getAmountWithoutDiscountDecimal() == null) {
-            binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
+            binding.itemPrice.text =
+                AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
             binding.itemOldPrice.visibility = View.INVISIBLE
             binding.itemSaleLabel.visibility = View.INVISIBLE
         } else {
             if (binding.itemOldPrice.isVisible && binding.itemSaleLabel.isVisible) {
-                binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
-                binding.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal())
+                binding.itemPrice.text =
+                    AmountUtils.prettyPrint(price.getAmountDecimal(), price.currency)
+                binding.itemOldPrice.text =
+                    AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal())
                 binding.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             }
         }
 
-        binding.addToCartButton.setOnClickListener { v ->
-            v.isEnabled = false
-            val cartContent = vmCart.cartContent.value
-            val quantity = cartContent?.find { it.sku == item.sku }?.quantity ?: 0
-            XStore.updateItemFromCurrentCart(object : UpdateItemFromCurrentCartCallback {
-
-                override fun onSuccess() {
-                    vmCart.updateCart()
-                    purchaseListener.onSuccess()
-                    v.isEnabled = true
-                }
-
-                override fun onError(throwable: Throwable?, errorMessage: String?) {
-                    purchaseListener.onFailure(errorMessage ?: throwable?.javaClass?.name ?: "Error")
-                    v.isEnabled = true
-                }
-            }, item.sku!!, quantity + 1)
+        binding.addToCartButton.setOnClickListener { view ->
+            view.isEnabled = false
+            vmPurchase.startPurchase(BuildConfig.IS_SANDBOX, item.sku!!, 1) {
+                view.isEnabled = true
+            }
         }
     }
 
@@ -156,9 +155,9 @@ class ViRealPriceViewHolder(
 }
 
 class ViVirtualPriceViewHolder(
-        private val vmBalance: VmBalance,
-        private val purchaseListener: PurchaseListener,
-        view: View
+    private val vmBalance: VmBalance,
+    private val purchaseListener: PurchaseListener,
+    view: View
 ) : RecyclerView.ViewHolder(view) {
 
     private val binding: ItemViVirtualPriceBinding = ItemViVirtualPriceBinding.bind(view)
@@ -209,7 +208,8 @@ class ViVirtualPriceViewHolder(
             binding.itemSaleLabel.visibility = View.INVISIBLE
         } else {
             binding.itemPrice.text = AmountUtils.prettyPrint(price.getAmountDecimal())
-            binding.itemOldPrice.text = AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal())
+            binding.itemOldPrice.text =
+                AmountUtils.prettyPrint(price.getAmountWithoutDiscountDecimal())
             binding.itemOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             binding.itemOldPrice.visibility = View.VISIBLE
             binding.itemSaleLabel.visibility = View.VISIBLE
@@ -245,7 +245,9 @@ class ViVirtualPriceViewHolder(
                 }
 
                 override fun onError(throwable: Throwable?, errorMessage: String?) {
-                    purchaseListener.showMessage(errorMessage ?: throwable?.javaClass?.name ?: "Error")
+                    purchaseListener.showMessage(
+                        errorMessage ?: throwable?.javaClass?.name ?: "Error"
+                    )
                     v.isEnabled = true
                 }
             }, item.sku!!, virtualPrice.sku!!)

@@ -3,7 +3,6 @@ package com.xsolla.android.storesdkexample
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -15,8 +14,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -32,24 +29,30 @@ import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.appcore.databinding.ActivityStoreBinding
 import com.xsolla.android.appcore.extensions.openInBrowser
 import com.xsolla.android.appcore.extensions.setRateLimitedClickListener
+import com.xsolla.android.appcore.ui.vm.VmPurchase
 import com.xsolla.android.googleplay.StoreUtils
 import com.xsolla.android.googleplay.inventory.InventoryAdmin
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.RefreshTokenCallback
+import com.xsolla.android.payments.XPayments
+import com.xsolla.android.payments.data.AccessToken
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.googleplay.GooglePlayPurchaseHandler
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
-import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.ui.vm.VmGooglePlay
 import com.xsolla.android.storesdkexample.ui.vm.VmProfile
 import com.xsolla.android.storesdkexample.ui.vm.base.ViewModelFactory
-import com.xsolla.android.storesdkexample.util.sumByLong
 
 class StoreActivity : AppCompatActivity(R.layout.activity_store) {
+
+    companion object {
+        private const val RC_PAYSTATION = 1
+    }
+
     private val binding: ActivityStoreBinding by viewBinding(R.id.drawer_layout)
 
-    private val vmCart: VmCart by viewModels()
+    private val vmPurchase: VmPurchase by viewModels()
     private val vmBalance: VmBalance by viewModels()
     private val vmGooglePlay: VmGooglePlay by viewModels()
     private val vmProfile: VmProfile by viewModels {
@@ -60,8 +63,6 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
     private lateinit var billingClient: BillingClient
     private lateinit var googlePlayPurchaseHandler: GooglePlayPurchaseHandler
-
-    var showCartMenu = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,16 +86,17 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
         if (StoreUtils.isAppInstalledFromGooglePlay(this)) {
             initGooglePlay()
         }
-    }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putBoolean("showCartMenu", showCartMenu)
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        showCartMenu = savedInstanceState.getBoolean("showCartMenu")
-        super.onRestoreInstanceState(savedInstanceState)
+        vmPurchase.paymentToken.observe(this) { token ->
+            val intent = XPayments.createIntentBuilder(this)
+                .accessToken(AccessToken(token))
+                .isSandbox(BuildConfig.IS_SANDBOX)
+                .build()
+            startActivityForResult(intent, RC_PAYSTATION)
+        }
+        vmPurchase.startPurchaseError.observe(this) { errorMessage ->
+            showSnack(errorMessage)
+        }
     }
 
     override fun onResume() {
@@ -107,7 +109,6 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
                         binding.lock.visibility = View.GONE
                         XStore.init(BuildConfig.PROJECT_ID, XLogin.token!!)
                         XInventory.init(BuildConfig.PROJECT_ID, XLogin.token!!)
-                        vmCart.updateCart()
                         vmBalance.updateVirtualBalance()
                         setDrawerData()
 
@@ -125,7 +126,6 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
         } else {
             XStore.init(BuildConfig.PROJECT_ID, XLogin.token!!)
             XInventory.init(BuildConfig.PROJECT_ID, XLogin.token!!)
-            vmCart.updateCart()
             vmBalance.updateVirtualBalance()
 
             setDrawerData()
@@ -135,55 +135,53 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
         findViewById<Toolbar>(R.id.mainToolbar).title = ""
     }
 
-    private fun initVirtualBalance() {
-        val balanceContainer: LinearLayout = findViewById(R.id.balanceContainer)
-        vmBalance.virtualBalance.observe(this, Observer { virtualBalanceList ->
-            balanceContainer.removeAllViews()
-                virtualBalanceList.forEach { item ->
-                    val balanceView = LayoutInflater.from(this).inflate(R.layout.item_balance, null)
-                    val balanceIcon = balanceView.findViewById<ImageView>(R.id.balanceIcon)
-                    val balanceAmount = balanceView.findViewById<TextView>(R.id.balanceAmount)
-
-                    Glide.with(this).load(item.imageUrl).into(balanceIcon)
-                    balanceAmount.text = item.amount.toString()
-                    balanceContainer.addView(balanceView, 0)
-                }
-        })
-        findViewById<Button>(R.id.chargeBalanceButton).setRateLimitedClickListener { findNavController(R.id.nav_host_fragment).navigate(R.id.nav_vc) }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_PAYSTATION) {
+            val (status, _) = XPayments.Result.fromResultIntent(data)
+            when (status) {
+                XPayments.Status.COMPLETED -> showSnack(getString(R.string.payment_completed))
+                XPayments.Status.CANCELLED -> showSnack(getString(R.string.payment_cancelled))
+                XPayments.Status.UNKNOWN -> showSnack(getString(R.string.payment_unknown))
+            }
+        }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (showCartMenu) {
-            menuInflater.inflate(R.menu.main, menu)
-            val cartView = menu.findItem(R.id.action_cart).actionView
-            vmCart.cartContent.observe(this, Observer { cartItems ->
-                val cartCounter = cartView.findViewById<TextView>(R.id.cart_badge)
-                val count = cartItems.sumByLong { item -> item.quantity }
-                cartCounter.text = count.toString()
-                if (count == 0L) {
-                    cartCounter.visibility = View.GONE
-                } else {
-                    cartCounter.visibility = View.VISIBLE
-                }
+    private fun initVirtualBalance() {
+        val balanceContainer: LinearLayout = findViewById(R.id.balanceContainer)
+        vmBalance.virtualBalance.observe(this, { virtualBalanceList ->
+            balanceContainer.removeAllViews()
+            virtualBalanceList.forEach { item ->
+                val balanceView = LayoutInflater.from(this).inflate(R.layout.item_balance, null)
+                val balanceIcon = balanceView.findViewById<ImageView>(R.id.balanceIcon)
+                val balanceAmount = balanceView.findViewById<TextView>(R.id.balanceAmount)
 
-                cartView.setOnClickListener {
-                    if (cartItems.isNotEmpty()) {
-                        findNavController(R.id.nav_host_fragment).navigate(R.id.nav_cart)
-                    } else {
-                        showSnack(getString(R.string.cart_message_empty))
-                    }
-                }
-            })
+                Glide.with(this).load(item.imageUrl).into(balanceIcon)
+                balanceAmount.text = item.amount.toString()
+                balanceContainer.addView(balanceView, 0)
+            }
+        })
+        findViewById<Button>(R.id.chargeBalanceButton).setRateLimitedClickListener {
+            findNavController(
+                R.id.nav_host_fragment
+            ).navigate(R.id.nav_vc)
         }
-
-        return true
     }
 
     private fun initNavController() {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_vi, R.id.nav_vc, R.id.nav_inventory, R.id.nav_friends, R.id.nav_character, R.id.nav_profile), drawerLayout)
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.nav_vi,
+                R.id.nav_vc,
+                R.id.nav_inventory,
+                R.id.nav_friends,
+                R.id.nav_character,
+                R.id.nav_profile
+            ), drawerLayout
+        )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
@@ -232,38 +230,6 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
         findViewById<View>(R.id.itemLogout).setOnClickListener {
             XLogin.logout()
             startLogin()
-        }
-        if (StoreUtils.isXsollaCartAvailable(this)) {
-            findViewById<View>(R.id.itemCart).setOnClickListener {
-                if (vmCart.cartContent.value.isNullOrEmpty()) {
-                    showSnack(getString(R.string.cart_message_empty))
-                } else {
-                    navController.navigate(R.id.nav_cart)
-                    binding.root.closeDrawers()
-                }
-            }
-            vmCart.cartContent.observe(this, Observer {
-                val count = it.sumByLong { item -> item.quantity }
-
-                val textCartCounter = binding.root.findViewById<TextView>(R.id.textCartCounter)
-                val bgCartCounter = binding.root.findViewById<View>(R.id.bgCartCounter)
-
-                textCartCounter.text = count.toString()
-                if (count == 0L) {
-                    bgCartCounter.visibility = View.GONE
-                    textCartCounter.visibility = View.GONE
-                } else {
-                    bgCartCounter.visibility = View.VISIBLE
-                    textCartCounter.visibility = View.VISIBLE
-                }
-            })
-        } else {
-            val itemCart = findViewById<View>(R.id.itemCart)
-            val textCartCounter = binding.root.findViewById<TextView>(R.id.textCartCounter)
-            val bgCartCounter = binding.root.findViewById<View>(R.id.bgCartCounter)
-            itemCart.visibility = View.GONE
-            bgCartCounter.visibility = View.GONE
-            textCartCounter.visibility = View.GONE
         }
     }
 
