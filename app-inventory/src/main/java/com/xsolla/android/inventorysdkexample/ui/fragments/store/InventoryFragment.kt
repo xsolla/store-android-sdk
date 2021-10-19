@@ -35,8 +35,9 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
                 ContextCompat.getDrawable(context, R.drawable.item_divider)?.let { setDrawable(it) }
             })
             layoutManager = linearLayoutManager
-            binding.goToStoreButton.setOnClickListener { openWebStore() }
         }
+        binding.refreshButton.setOnClickListener { loadInventory() }
+        binding.goToStoreButton.setOnClickListener { openWebStore() }
 
         inventoryAdapter = InventoryAdapter(listOf(), this)
         binding.recycler.adapter = inventoryAdapter
@@ -53,6 +54,10 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
             setupPlaceholderVisibility()
         }
 
+        loadInventory()
+    }
+
+    private fun loadInventory() {
         viewModel.getItems { showSnack(it) }
         viewModel.getSubscriptions { showSnack(it) }
     }

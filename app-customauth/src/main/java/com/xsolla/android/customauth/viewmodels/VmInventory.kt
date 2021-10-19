@@ -12,6 +12,9 @@ class VmInventory : ViewModel() {
     val inventory = MutableLiveData<List<InventoryResponse.Item>>(listOf())
     val subscriptions = MutableLiveData<List<SubscriptionsResponse.Item>>(listOf())
 
+    val inventorySize: Int
+        get() = inventory.value!!.size
+
     fun getItems(onFailure: (String) -> Unit) {
         XInventory.getInventory(object : GetInventoryCallback {
             override fun onSuccess(data: InventoryResponse) {
@@ -34,7 +37,6 @@ class VmInventory : ViewModel() {
             override fun onError(throwable: Throwable?, errorMessage: String?) {
                 onFailure(errorMessage ?: throwable?.javaClass?.name ?: "Error")
             }
-
         })
     }
 }

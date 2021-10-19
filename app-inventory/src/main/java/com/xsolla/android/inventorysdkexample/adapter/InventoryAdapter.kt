@@ -3,19 +3,20 @@ package com.xsolla.android.inventorysdkexample.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.xsolla.android.appcore.databinding.ItemInventoryBinding
 import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.inventorysdkexample.R
-import com.xsolla.android.appcore.databinding.ItemInventoryBinding
 import com.xsolla.android.inventorysdkexample.ui.fragments.store.ConsumeListener
 import java.text.SimpleDateFormat
 import java.util.*
 
 class InventoryAdapter(
-        var items: List<InventoryResponse.Item>,
-        private val consumeListener: ConsumeListener
+    var items: List<InventoryResponse.Item>,
+    private val consumeListener: ConsumeListener
 ) : RecyclerView.Adapter<InventoryAdapter.ViewHolder>() {
 
     private var subscriptions: List<SubscriptionsResponse.Item>? = null
@@ -39,8 +40,9 @@ class InventoryAdapter(
 
 
     inner class ViewHolder(
-            inflater: LayoutInflater,
-            parent: ViewGroup) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_inventory, parent, false)) {
+        inflater: LayoutInflater,
+        parent: ViewGroup
+    ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_inventory, parent, false)) {
 
         private val binding: ItemInventoryBinding = ItemInventoryBinding.bind(itemView)
 
@@ -54,27 +56,32 @@ class InventoryAdapter(
                 binding.itemQuantity.visibility = View.VISIBLE
             }
 
-            binding.itemExpiration.text = getExpirationText(item)
+            val subscription =
+                if (item.virtualItemType == InventoryResponse.Item.VirtualItemType.NON_RENEWING_SUBSCRIPTION) {
+                    subscriptions?.find { it.sku == item.sku }
+                } else {
+                    null
+                }
 
-            binding.consumeButton.visibility = if (item.remainingUses == 0L) View.INVISIBLE else View.VISIBLE
+            binding.itemExpiration.text = getExpirationText(subscription)
+
+            binding.consumeButton.visibility =
+                if (item.remainingUses == null || item.remainingUses == 0L) View.INVISIBLE else View.VISIBLE
             binding.consumeButton.setOnClickListener { consumeListener.onConsume(item) }
+
+            binding.buyAgainButton.isVisible = false
         }
 
-        private fun getExpirationText(item: InventoryResponse.Item): String? {
-            if (item.virtualItemType != InventoryResponse.Item.VirtualItemType.NON_RENEWING_SUBSCRIPTION) return null
-
-            subscriptions?.find { it.sku == item.sku }?.let {
-                return if (it.status == SubscriptionsResponse.Item.Status.ACTIVE) {
-                    val date = Date(it.expiredAt?.times(1000)!!)  //date *1000
-                    val sdf = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.US)
-                    val formattedDate = sdf.format(date)
-                    "Active until: $formattedDate"
-                } else {
-                    "Expired"
-                }
+        private fun getExpirationText(sub: SubscriptionsResponse.Item?): String? {
+            if (sub == null) return null
+            return if (sub.status == SubscriptionsResponse.Item.Status.ACTIVE) {
+                val date = Date(sub.expiredAt?.times(1000)!!)  //date *1000
+                val sdf = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.US)
+                val formattedDate = sdf.format(date)
+                "Active until: $formattedDate"
+            } else {
+                "Expired"
             }
-
-            return null
         }
 
     }

@@ -43,8 +43,9 @@ class InventoryFragment : BaseFragment(), ConsumeListener, PurchaseListener {
                         ?.let { setDrawable(it) }
                 })
             layoutManager = linearLayoutManager
-            binding.goToStoreButton.setOnClickListener { findNavController().navigate(R.id.nav_vi) }
         }
+        binding.refreshButton.setOnClickListener { loadInventory() }
+        binding.goToStoreButton.setOnClickListener { findNavController().navigate(R.id.nav_vi) }
 
         inventoryAdapter = InventoryAdapter(listOf(), this, this, vmPurchase, vmGooglePlay)
         binding.recycler.adapter = inventoryAdapter
@@ -52,15 +53,17 @@ class InventoryFragment : BaseFragment(), ConsumeListener, PurchaseListener {
         viewModel.inventory.observe(viewLifecycleOwner) {
             inventoryAdapter.items = it
             inventoryAdapter.notifyDataSetChanged()
-
             setupPlaceholderVisibility()
         }
         viewModel.subscriptions.observe(viewLifecycleOwner) {
             inventoryAdapter.setSubscriptions(it)
-
             setupPlaceholderVisibility()
         }
 
+        loadInventory()
+    }
+
+    private fun loadInventory() {
         viewModel.getItems { showSnack(it) }
         viewModel.getSubscriptions { showSnack(it) }
     }
