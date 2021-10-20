@@ -18,6 +18,7 @@ import com.xsolla.android.storesdkexample.adapter.InventoryAdapter
 import com.xsolla.android.storesdkexample.listener.ConsumeListener
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
+import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmGooglePlay
 import com.xsolla.android.storesdkexample.ui.vm.VmInventory
 
@@ -25,6 +26,7 @@ class InventoryFragment : BaseFragment(), ConsumeListener, PurchaseListener {
     private val binding: FragmentInventoryBinding by viewBinding()
 
     private val viewModel: VmInventory by activityViewModels()
+    private val vmBalance: VmBalance by activityViewModels()
     private val vmPurchase: VmPurchase by activityViewModels()
     private val vmGooglePlay: VmGooglePlay by activityViewModels()
     private lateinit var inventoryAdapter: InventoryAdapter
@@ -43,8 +45,9 @@ class InventoryFragment : BaseFragment(), ConsumeListener, PurchaseListener {
                         ?.let { setDrawable(it) }
                 })
             layoutManager = linearLayoutManager
-            binding.goToStoreButton.setOnClickListener { findNavController().navigate(R.id.nav_vi) }
         }
+        binding.refreshButton.setOnClickListener { loadInventory() }
+        binding.goToStoreButton.setOnClickListener { findNavController().navigate(R.id.nav_vi) }
 
         inventoryAdapter = InventoryAdapter(listOf(), this, this, vmPurchase, vmGooglePlay)
         binding.recycler.adapter = inventoryAdapter
@@ -52,17 +55,20 @@ class InventoryFragment : BaseFragment(), ConsumeListener, PurchaseListener {
         viewModel.inventory.observe(viewLifecycleOwner) {
             inventoryAdapter.items = it
             inventoryAdapter.notifyDataSetChanged()
-
             setupPlaceholderVisibility()
         }
         viewModel.subscriptions.observe(viewLifecycleOwner) {
             inventoryAdapter.setSubscriptions(it)
-
             setupPlaceholderVisibility()
         }
 
+        loadInventory()
+    }
+
+    private fun loadInventory() {
         viewModel.getItems { showSnack(it) }
         viewModel.getSubscriptions { showSnack(it) }
+        vmBalance.updateVirtualBalance()
     }
 
     override fun onConsume(item: InventoryResponse.Item) {

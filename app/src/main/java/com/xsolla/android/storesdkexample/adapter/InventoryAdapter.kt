@@ -3,6 +3,7 @@ package com.xsolla.android.storesdkexample.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.appcore.databinding.ItemInventoryBinding
@@ -19,11 +20,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class InventoryAdapter(
-        var items: List<InventoryResponse.Item>,
-        private val consumeListener: ConsumeListener,
-        private val purchaseListener: PurchaseListener,
-        private val vmPurchase: VmPurchase,
-        private val vmGooglePlay: VmGooglePlay
+    var items: List<InventoryResponse.Item>,
+    private val consumeListener: ConsumeListener,
+    private val purchaseListener: PurchaseListener,
+    private val vmPurchase: VmPurchase,
+    private val vmGooglePlay: VmGooglePlay
 ) : RecyclerView.Adapter<InventoryAdapter.ViewHolder>() {
 
     private var subscriptions: List<SubscriptionsResponse.Item>? = null
@@ -47,8 +48,8 @@ class InventoryAdapter(
 
 
     inner class ViewHolder(
-            inflater: LayoutInflater,
-            val parent: ViewGroup
+        inflater: LayoutInflater,
+        val parent: ViewGroup
     ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_inventory, parent, false)) {
         private val binding = ItemInventoryBinding.bind(itemView)
 
@@ -62,36 +63,21 @@ class InventoryAdapter(
                 binding.itemQuantity.visibility = View.VISIBLE
             }
 
-            binding.itemExpiration.text = getExpirationText(item)
-
-            binding.consumeButton.visibility = if (item.remainingUses == null || item.remainingUses == 0L) View.INVISIBLE else View.VISIBLE
-            binding.consumeButton.setOnClickListener { consumeListener.onConsume(item) }
-        }
-
-        private fun getExpirationText(item: InventoryResponse.Item): String? {
-            if (item.virtualItemType != InventoryResponse.Item.VirtualItemType.NON_RENEWING_SUBSCRIPTION) return null
-
-            subscriptions?.find { it.sku == item.sku }?.let {
-                return if (it.status == SubscriptionsResponse.Item.Status.ACTIVE) {
-                    binding.buyAgainButton.visibility = View.GONE
-                    val date = Date(it.expiredAt?.times(1000)!!)  //date *1000
-                    val sdf = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.US)
-                    val formattedDate = sdf.format(date)
-                    "Active until: $formattedDate"
-
-
+            val subscription =
+                if (item.virtualItemType == InventoryResponse.Item.VirtualItemType.NON_RENEWING_SUBSCRIPTION) {
+                    subscriptions?.find { it.sku == item.sku }
                 } else {
-
-                    buyAgainExpiredSubscription(item)
-                    "Expired"
+                    null
                 }
-            }
 
-            return null
-        }
+            binding.itemExpiration.text = getExpirationText(subscription)
 
-        private fun buyAgainExpiredSubscription(item: InventoryResponse.Item) {
-            binding.buyAgainButton.visibility = View.VISIBLE
+            binding.consumeButton.visibility =
+                if (item.remainingUses == null || item.remainingUses == 0L) View.INVISIBLE else View.VISIBLE
+            binding.consumeButton.setOnClickListener { consumeListener.onConsume(item) }
+
+            binding.buyAgainButton.isVisible =
+                subscription != null && subscription.status != SubscriptionsResponse.Item.Status.ACTIVE
             binding.buyAgainButton.setOnClickListener { view ->
                 if (StoreUtils.isAppInstalledFromGooglePlay(parent.context)) {
                     vmGooglePlay.startPurchase(item.sku!!)
@@ -101,6 +87,18 @@ class InventoryAdapter(
                         view.isEnabled = true
                     }
                 }
+            }
+        }
+
+        private fun getExpirationText(sub: SubscriptionsResponse.Item?): String? {
+            if (sub == null) return null
+            return if (sub.status == SubscriptionsResponse.Item.Status.ACTIVE) {
+                val date = Date(sub.expiredAt?.times(1000)!!)  //date *1000
+                val sdf = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.US)
+                val formattedDate = sdf.format(date)
+                "Active until: $formattedDate"
+            } else {
+                "Expired"
             }
         }
 
