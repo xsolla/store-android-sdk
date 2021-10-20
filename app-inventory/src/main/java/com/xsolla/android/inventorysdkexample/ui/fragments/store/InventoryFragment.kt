@@ -15,6 +15,7 @@ import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventorysdkexample.R
 import com.xsolla.android.inventorysdkexample.adapter.InventoryAdapter
 import com.xsolla.android.inventorysdkexample.ui.fragments.base.BaseFragment
+import com.xsolla.android.inventorysdkexample.ui.vm.VmBalance
 import com.xsolla.android.inventorysdkexample.ui.vm.VmInventory
 import com.xsolla.android.inventorysdkexample.util.extensions.openInBrowser
 import com.xsolla.android.login.XLogin
@@ -24,6 +25,7 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
     private val binding: FragmentInventoryBinding by viewBinding()
 
     private val viewModel: VmInventory by activityViewModels()
+    private val vmBalance: VmBalance by activityViewModels()
     private lateinit var inventoryAdapter: InventoryAdapter
 
     override fun getLayout() = R.layout.fragment_inventory
@@ -35,8 +37,9 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
                 ContextCompat.getDrawable(context, R.drawable.item_divider)?.let { setDrawable(it) }
             })
             layoutManager = linearLayoutManager
-            binding.goToStoreButton.setOnClickListener { openWebStore() }
         }
+        binding.refreshButton.setOnClickListener { loadInventory() }
+        binding.goToStoreButton.setOnClickListener { openWebStore() }
 
         inventoryAdapter = InventoryAdapter(listOf(), this)
         binding.recycler.adapter = inventoryAdapter
@@ -53,8 +56,13 @@ class InventoryFragment : BaseFragment(), ConsumeListener {
             setupPlaceholderVisibility()
         }
 
+        loadInventory()
+    }
+
+    private fun loadInventory() {
         viewModel.getItems { showSnack(it) }
         viewModel.getSubscriptions { showSnack(it) }
+        vmBalance.updateVirtualBalance()
     }
 
     private fun openWebStore() =

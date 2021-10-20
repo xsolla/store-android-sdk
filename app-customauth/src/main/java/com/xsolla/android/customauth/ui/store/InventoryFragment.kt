@@ -1,17 +1,18 @@
 package com.xsolla.android.customauth.ui.store
 
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.xsolla.android.appcore.databinding.FragmentInventoryBinding
 import com.xsolla.android.appcore.ui.vm.VmPurchase
 import com.xsolla.android.customauth.R
-import com.xsolla.android.customauth.databinding.FragmentInventoryBinding
 import com.xsolla.android.customauth.ui.BaseFragment
-import com.xsolla.android.customauth.ui.adapter.ConsumeListener
 import com.xsolla.android.customauth.ui.adapter.InventoryAdapter
+import com.xsolla.android.customauth.viewmodels.VmBalance
 import com.xsolla.android.customauth.viewmodels.VmInventory
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.inventory.callback.ConsumeItemCallback
@@ -20,25 +21,50 @@ import com.xsolla.android.inventory.entity.response.InventoryResponse
 
 class InventoryFragment : BaseFragment(), ConsumeListener, PurchaseListener {
     private val binding: FragmentInventoryBinding by viewBinding()
-    private val viewModel: VmInventory by viewModels()
-    private val vmPurchase: VmPurchase by activityViewModels()
 
-    private lateinit var adapter: InventoryAdapter
+    private val viewModel: VmInventory by activityViewModels()
+    private val vmBalance: VmBalance by activityViewModels()
+    private val vmPurchase: VmPurchase by activityViewModels()
+    private lateinit var inventoryAdapter: InventoryAdapter
 
     override fun getLayout() = R.layout.fragment_inventory
 
     override fun initUI() {
-        adapter = InventoryAdapter(listOf(), this, this, vmPurchase)
-        binding.recycler.adapter = adapter
-        binding.recycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
-            ContextCompat.getDrawable(requireContext(), R.drawable.item_divider)?.let { setDrawable(it) }
-        })
+        with(binding.recycler) {
+            val linearLayoutManager = LinearLayoutManager(context)
+            addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    linearLayoutManager.orientation
+                ).apply {
+                    ContextCompat.getDrawable(context, R.drawable.item_divider)
+                        ?.let { setDrawable(it) }
+                })
+            layoutManager = linearLayoutManager
+        }
+        binding.refreshButton.setOnClickListener { loadInventory() }
         binding.goToStoreButton.setOnClickListener { findNavController().navigate(R.id.nav_vi) }
 
-        viewModel.inventory.observe(viewLifecycleOwner) { adapter.submitList(it) }
-        viewModel.subscriptions.observe(viewLifecycleOwner) { adapter.setSubscriptions(it) }
+        inventoryAdapter = InventoryAdapter(listOf(), this, this, vmPurchase)
+        binding.recycler.adapter = inventoryAdapter
+
+        viewModel.inventory.observe(viewLifecycleOwner) {
+            inventoryAdapter.items = it
+            inventoryAdapter.notifyDataSetChanged()
+            setupPlaceholderVisibility()
+        }
+        viewModel.subscriptions.observe(viewLifecycleOwner) {
+            inventoryAdapter.setSubscriptions(it)
+            setupPlaceholderVisibility()
+        }
+
+        loadInventory()
+    }
+
+    private fun loadInventory() {
         viewModel.getItems { showSnack(it) }
         viewModel.getSubscriptions { showSnack(it) }
+        vmBalance.updateVirtualBalance()
     }
 
     override fun onConsume(item: InventoryResponse.Item) {
@@ -62,8 +88,9 @@ class InventoryFragment : BaseFragment(), ConsumeListener, PurchaseListener {
             override fun onSuccess() {
                 XInventory.getInventory(object : GetInventoryCallback {
                     override fun onSuccess(data: InventoryResponse) {
-                        val items = data.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
-                        adapter.submitList(items.toList())
+                        inventoryAdapter.items =
+                            data.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
+                        inventoryAdapter.notifyDataSetChanged()
                         showSnack("Item consumed")
                     }
 
@@ -78,4 +105,15 @@ class InventoryFragment : BaseFragment(), ConsumeListener, PurchaseListener {
             }
         })
     }
+
+    private fun setupPlaceholderVisibility() {
+        binding.noItemsPlaceholder.isVisible = viewModel.inventorySize == 0
+        binding.recycler.isVisible = viewModel.inventorySize != 0
+    }
+}
+
+interface ConsumeListener {
+    fun onConsume(item: InventoryResponse.Item)
+    fun onSuccess()
+    fun onFailure(errorMessage: String)
 }
