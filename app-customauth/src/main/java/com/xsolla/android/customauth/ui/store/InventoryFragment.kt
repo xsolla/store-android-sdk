@@ -12,6 +12,7 @@ import com.xsolla.android.appcore.ui.vm.VmPurchase
 import com.xsolla.android.customauth.R
 import com.xsolla.android.customauth.ui.BaseFragment
 import com.xsolla.android.customauth.ui.adapter.InventoryAdapter
+import com.xsolla.android.customauth.viewmodels.VmBalance
 import com.xsolla.android.customauth.viewmodels.VmInventory
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.inventory.callback.ConsumeItemCallback
@@ -22,6 +23,7 @@ class InventoryFragment : BaseFragment(), ConsumeListener, PurchaseListener {
     private val binding: FragmentInventoryBinding by viewBinding()
 
     private val viewModel: VmInventory by activityViewModels()
+    private val vmBalance: VmBalance by activityViewModels()
     private val vmPurchase: VmPurchase by activityViewModels()
     private lateinit var inventoryAdapter: InventoryAdapter
 
@@ -62,6 +64,7 @@ class InventoryFragment : BaseFragment(), ConsumeListener, PurchaseListener {
     private fun loadInventory() {
         viewModel.getItems { showSnack(it) }
         viewModel.getSubscriptions { showSnack(it) }
+        vmBalance.updateVirtualBalance()
     }
 
     override fun onConsume(item: InventoryResponse.Item) {
