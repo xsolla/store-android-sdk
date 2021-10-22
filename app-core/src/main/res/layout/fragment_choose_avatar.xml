@@ -80,9 +80,9 @@
             android:background="#B2000000"
             android:visibility="gone" />
 
-        <com.google.android.material.progressindicator.ProgressIndicator
+        <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/progress"
-            style="@style/Widget.MaterialComponents.ProgressIndicator.Linear.Indeterminate"
+            android:indeterminate="true"
             android:layout_width="0dp"
             android:layout_height="6dp"
             android:layout_marginTop="16dp"

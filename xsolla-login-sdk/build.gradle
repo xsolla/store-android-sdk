@@ -11,8 +11,6 @@ android {
     defaultConfig {
         minSdkVersion sdk_min
         targetSdkVersion sdk_target
-        versionCode login_sdk_version_code
-        versionName login_sdk_version_name
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -30,6 +28,7 @@ android {
     lintOptions {
         quiet true
         abortOnError true
+        checkDependencies true
     }
 
     testOptions {
@@ -40,25 +39,24 @@ android {
 }
 
 dependencies {
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.4'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.core:core-ktx:1.6.0'
     implementation "androidx.browser:browser:1.3.0"
 
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.robolectric:robolectric:4.4'
-    testImplementation 'androidx.test:core:1.3.0'
-    testImplementation 'com.facebook.android:facebook-login:11.2.0'
-    testImplementation 'com.google.android.gms:play-services-auth:18.0.0'
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "org.robolectric:robolectric:$robolectric_version"
+    testImplementation 'androidx.test:core:1.4.0'
+    testImplementation 'com.facebook.android:facebook-login:12.0.1'
+    testImplementation 'com.google.android.gms:play-services-auth:19.2.0'
     testImplementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.19'
     testImplementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compileOnly 'com.facebook.android:facebook-login:11.2.0'
-    compileOnly 'com.google.android.gms:play-services-auth:18.0.0'
+    compileOnly 'com.facebook.android:facebook-login:12.0.1'
+    compileOnly 'com.google.android.gms:play-services-auth:19.2.0'
     compileOnly 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.19'
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
 }

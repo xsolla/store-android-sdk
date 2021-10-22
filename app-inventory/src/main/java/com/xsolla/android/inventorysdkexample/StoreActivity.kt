@@ -47,6 +47,9 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
     private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        XInventory.init(BuildConfig.PROJECT_ID, XLogin.token ?: "")
+        XStore.init(BuildConfig.PROJECT_ID, XLogin.token ?: "")
+
         super.onCreate(savedInstanceState)
 
         if (XLogin.isTokenExpired(60)) {
@@ -54,9 +57,6 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
                 startLogin()
             }
         }
-
-        XInventory.init(BuildConfig.PROJECT_ID, XLogin.token ?: "")
-        XStore.init(BuildConfig.PROJECT_ID, XLogin.token ?: "")
 
         val toolbar: Toolbar = findViewById(R.id.mainToolbar)
         setSupportActionBar(toolbar)

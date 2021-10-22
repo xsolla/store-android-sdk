@@ -31,8 +31,7 @@ abstract class BaseFragment : Fragment() {
         AmountUtils.init(requireContext())
         initUI()
 
-        requireActivity().findViewById<View>(R.id.mainToolbar).isVisible = toolbarOption.showMainToolbar
-        requireActivity().findViewById<View>(R.id.balanceLayout).isVisible = toolbarOption.showBalance
+        requireActivity().findViewById<View>(R.id.balanceLayout)?.isVisible = toolbarOption.showBalance
         requireActivity().invalidateOptionsMenu()
     }
 

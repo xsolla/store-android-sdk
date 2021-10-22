@@ -65,6 +65,9 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
     private lateinit var googlePlayPurchaseHandler: GooglePlayPurchaseHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        XStore.init(BuildConfig.PROJECT_ID, XLogin.token ?: "")
+        XInventory.init(BuildConfig.PROJECT_ID, XLogin.token ?: "")
+
         super.onCreate(savedInstanceState)
 
         if (XLogin.isTokenExpired(60)) {
@@ -72,9 +75,6 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
                 startLogin()
             }
         }
-
-        XStore.init(BuildConfig.PROJECT_ID, XLogin.token ?: "")
-        XInventory.init(BuildConfig.PROJECT_ID, XLogin.token ?: "")
 
         val toolbar: Toolbar = findViewById(R.id.mainToolbar)
         setSupportActionBar(toolbar)
