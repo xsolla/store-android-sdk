@@ -60,6 +60,36 @@ lint:
       - app/build/reports/
       - app-inventory/build/reports/
       - app-customauth/build/reports/
+      - app-core/build/reports/
+      - xsolla-googleplay-sdk/build/reports/
+      - xsolla-inventory-sdk/build/reports/
+      - xsolla-login-sdk/build/reports/
+      - xsolla-login-sdk-facebook/build/reports/
+      - xsolla-login-sdk-google/build/reports/
+      - xsolla-login-sdk-qq/build/reports/
+      - xsolla-login-sdk-wechat/build/reports/
+      - xsolla-payments-sdk/build/reports/
+      - xsolla-store-sdk/build/reports/
+  cache:
+    key: ${CI_PROJECT_ID}
+    paths:
+      - .gradle/*
+
+dependency check:
+  tags:
+    - sdk
+  stage: lint
+  script:
+    - echo $OWASP_SUPPRESS >> owasp-suppress.xml
+    - ./gradlew dependencyCheckAnalyze
+  artifacts:
+    expire_in: 24 hours
+    paths:
+      - app/build/reports/
+      - app-inventory/build/reports/
+      - app-customauth/build/reports/
+      - app-core/build/reports
+      - xsolla-googleplay-sdk/build/reports/
       - xsolla-inventory-sdk/build/reports/
       - xsolla-login-sdk/build/reports/
       - xsolla-login-sdk-facebook/build/reports/
@@ -112,64 +142,64 @@ generateReleaseApp:
     paths:
       - artifacts
 
-publishLogin:
-  tags:
-    - sdk
-  stage: publish
-  when: manual
-  only:
-    - /^v.*/
-  script:
-    - ./gradlew :xsolla-login-sdk:bintrayUpload
-    - ./gradlew :xsolla-login-sdk-facebook:bintrayUpload
-    - ./gradlew :xsolla-login-sdk-google:bintrayUpload
-    - ./gradlew :xsolla-login-sdk-wechat:bintrayUpload
-  cache:
-    key: ${CI_PROJECT_ID}
-    paths:
-      - .gradle/*
-
-publishStore:
-  tags:
-    - sdk
-  stage: publish
-  when: manual
-  only:
-    - /^v.*/
-  script:
-    - ./gradlew :xsolla-store-sdk:bintrayUpload
-  cache:
-    key: ${CI_PROJECT_ID}
-    paths:
-      - .gradle/*
-
-publishInventory:
-  tags:
-    - sdk
-  stage: publish
-  when: manual
-  only:
-    - /^v.*/
-  script:
-    - ./gradlew :xsolla-inventory-sdk:bintrayUpload
-  cache:
-    key: ${CI_PROJECT_ID}
-    paths:
-      - .gradle/*
-
-publishPayments:
-  tags:
-    - sdk
-  stage: publish
-  when: manual
-  only:
-    - /^v.*/
-  script:
-    - ./gradlew :xsolla-payments-sdk:bintrayUpload
-  cache:
-    key: ${CI_PROJECT_ID}
-    paths:
-      - .gradle/*
+#publishLogin:
+#  tags:
+#    - sdk
+#  stage: publish
+#  when: manual
+#  only:
+#    - /^v.*/
+#  script:
+#    - ./gradlew :xsolla-login-sdk:bintrayUpload
+#    - ./gradlew :xsolla-login-sdk-facebook:bintrayUpload
+#    - ./gradlew :xsolla-login-sdk-google:bintrayUpload
+#    - ./gradlew :xsolla-login-sdk-wechat:bintrayUpload
+#  cache:
+#    key: ${CI_PROJECT_ID}
+#    paths:
+#      - .gradle/*
+#
+#publishStore:
+#  tags:
+#    - sdk
+#  stage: publish
+#  when: manual
+#  only:
+#    - /^v.*/
+#  script:
+#    - ./gradlew :xsolla-store-sdk:bintrayUpload
+#  cache:
+#    key: ${CI_PROJECT_ID}
+#    paths:
+#      - .gradle/*
+#
+#publishInventory:
+#  tags:
+#    - sdk
+#  stage: publish
+#  when: manual
+#  only:
+#    - /^v.*/
+#  script:
+#    - ./gradlew :xsolla-inventory-sdk:bintrayUpload
+#  cache:
+#    key: ${CI_PROJECT_ID}
+#    paths:
+#      - .gradle/*
+#
+#publishPayments:
+#  tags:
+#    - sdk
+#  stage: publish
+#  when: manual
+#  only:
+#    - /^v.*/
+#  script:
+#    - ./gradlew :xsolla-payments-sdk:bintrayUpload
+#  cache:
+#    key: ${CI_PROJECT_ID}
+#    paths:
+#      - .gradle/*
 
 build doc:
   tags:

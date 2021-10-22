@@ -30,6 +30,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.5"
         classpath 'org.jetbrains.dokka:dokka-gradle-plugin:1.4.20'
+        classpath 'org.owasp:dependency-check-gradle:6.4.1.1'
     }
 }
 
@@ -37,6 +38,15 @@ allprojects {
     repositories {
         google()
         jcenter()
+    }
+}
+
+subprojects {
+    apply plugin: 'org.owasp.dependencycheck'
+    dependencyCheck {
+        scanConfigurations += 'releaseCompileClasspath'
+        suppressionFiles = ["${rootDir}/owasp-suppress.xml"]
+        failBuildOnCVSS = 1
     }
 }
 

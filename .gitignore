@@ -9,3 +9,4 @@
 .externalNativeBuild
 .cxx
 /app/src/main/res/raw/credentials.json
+owasp-suppress.xml
