@@ -10,8 +10,6 @@ android {
     defaultConfig {
         minSdkVersion sdk_min
         targetSdkVersion sdk_target
-        versionCode login_sdk_version_code
-        versionName login_sdk_version_name
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -27,11 +25,12 @@ android {
     lintOptions {
         quiet true
         abortOnError true
+        checkDependencies true
     }
 }
 
 dependencies {
-    api 'com.google.android.gms:play-services-auth:18.0.0'
+    api 'com.google.android.gms:play-services-auth:19.2.0'
 }
 
 ext {

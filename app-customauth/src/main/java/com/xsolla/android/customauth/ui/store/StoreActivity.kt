@@ -45,11 +45,12 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        XStore.init(BuildConfig.PROJECT_ID, preferences.token!!)
+        XInventory.init(BuildConfig.PROJECT_ID, preferences.token!!)
+
         super.onCreate(savedInstanceState)
         setSupportActionBar(binding.appbar.mainToolbar)
 
-        XStore.init(BuildConfig.PROJECT_ID, preferences.token!!)
-        XInventory.init(BuildConfig.PROJECT_ID, preferences.token!!)
         balanceViewModel.updateVirtualBalance()
 
         initNavController()

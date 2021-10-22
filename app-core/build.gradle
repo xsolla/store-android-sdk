@@ -5,13 +5,10 @@ plugins {
 
 android {
     compileSdkVersion sdk_compile
-    buildToolsVersion "29.0.3"
 
     defaultConfig {
         minSdkVersion sdk_min
         targetSdkVersion sdk_target
-        versionCode sample_app_version_code
-        versionName sample_app_version_name
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -35,29 +32,33 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    lintOptions {
+        quiet true
+        abortOnError true
+        checkDependencies true
+    }
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation "androidx.core:core-ktx:1.3.2"
-    api 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation "androidx.core:core-ktx:1.6.0"
+    implementation 'com.google.code.gson:gson:2.8.8'
     api "androidx.preference:preference-ktx:1.1.1"
-    api 'androidx.constraintlayout:constraintlayout:2.0.4'
-    api 'com.google.android.material:material:1.3.0-alpha03'
-    api 'com.google.code.gson:gson:2.8.7'
+    api 'androidx.constraintlayout:constraintlayout:2.1.1'
+    api 'com.google.android.material:material:1.4.0'
 
     api "androidx.browser:browser:1.3.0"
 
-    api 'androidx.navigation:navigation-fragment-ktx:2.3.1'
-    api 'androidx.navigation:navigation-ui-ktx:2.3.1'
+    api 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    api 'androidx.navigation:navigation-ui-ktx:2.3.5'
 
-    api 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    api 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-    api 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    api 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+    api 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
 
-    api 'com.github.bumptech.glide:glide:4.11.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    api 'com.kirich1409.viewbindingpropertydelegate:viewbindingpropertydelegate:1.3.1'
+    api 'com.github.bumptech.glide:glide:4.12.0'
+    api 'com.github.kirich1409:viewbindingpropertydelegate:1.4.7'
 
     implementation project(":xsolla-store-sdk")
 }
