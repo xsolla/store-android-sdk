@@ -29,6 +29,14 @@
     <string name="privacy_policy">By continuing, you agree to be bound by our\n<u>Privacy Policy</u></string>
     <string name="purchased_placeholder">Purchased</string>
 
+    <string name="dev_menu_title">Developer settings</string>
+    <string name="dev_menu_oauth2_id">OAuth2 Client ID</string>
+    <string name="dev_menu_login_id">Login ID</string>
+    <string name="dev_menu_project_id">Project ID</string>
+    <string name="dev_menu_webshop_url">WebShop URL</string>
+    <string name="dev_menu_apply">Apply</string>
+    <string name="dev_menu_reset">Reset to defaults</string>
+
     <string name="drawer_item_character">Character</string>
     <string name="drawer_item_inventory">My inventory</string>
     <string name="drawer_item_friends">My friends</string>
