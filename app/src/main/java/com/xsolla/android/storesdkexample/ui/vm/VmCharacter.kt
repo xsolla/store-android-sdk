@@ -4,10 +4,10 @@ import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.xsolla.android.appcore.SingleLiveEvent
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.inventory.callback.ConsumeItemCallback
 import com.xsolla.android.inventory.entity.response.VirtualBalanceResponse
-import com.xsolla.android.appcore.SingleLiveEvent
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
 import com.xsolla.android.login.callback.GetUsersAttributesCallback
@@ -15,7 +15,7 @@ import com.xsolla.android.login.callback.UpdateUsersAttributesCallback
 import com.xsolla.android.login.entity.common.UserAttribute
 import com.xsolla.android.login.entity.common.UserAttributePermission
 import com.xsolla.android.login.entity.response.UserDetailsResponse
-import com.xsolla.android.storesdkexample.BuildConfig
+import com.xsolla.android.storesdkexample.data.local.DemoCredentialsManager
 import com.xsolla.android.storesdkexample.data.local.PrefManager
 import com.xsolla.android.storesdkexample.util.extensions.toUiEntity
 import kotlinx.android.parcel.Parcelize
@@ -54,7 +54,7 @@ class VmCharacterPage : ViewModel() {
     }
 
     private fun loadAllAttributes(userId: String) {
-        XLogin.getUsersAttributesFromClient(null, BuildConfig.PROJECT_ID, userId, true, object : GetUsersAttributesCallback {
+        XLogin.getUsersAttributesFromClient(null, DemoCredentialsManager.projectId, userId, true, object : GetUsersAttributesCallback {
             override fun onSuccess(data: List<UserAttribute>) {
                _readOnlyItems.value = data.toUiEntity()
             }
@@ -63,7 +63,7 @@ class VmCharacterPage : ViewModel() {
                 updateError(throwable, errorMessage)
             }
         })
-        XLogin.getUsersAttributesFromClient(null, BuildConfig.PROJECT_ID, userId, false, object : GetUsersAttributesCallback {
+        XLogin.getUsersAttributesFromClient(null, DemoCredentialsManager.projectId, userId, false, object : GetUsersAttributesCallback {
             override fun onSuccess(data: List<UserAttribute>) {
                 _editableItems.value = data.toUiEntity()
             }
@@ -75,7 +75,7 @@ class VmCharacterPage : ViewModel() {
     }
 
     fun deleteAttribute(attribute: UserAttributeUiEntity, onSuccess: () -> Unit = {}) {
-        XLogin.updateUsersAttributesFromClient(null, BuildConfig.PROJECT_ID, listOf(attribute.key), object : UpdateUsersAttributesCallback {
+        XLogin.updateUsersAttributesFromClient(null, DemoCredentialsManager.projectId, listOf(attribute.key), object : UpdateUsersAttributesCallback {
             override fun onSuccess() {
                 val updatedList = _editableItems.value!!.toMutableList().apply { remove(attribute) }
                 _editableItems.value = updatedList
@@ -90,7 +90,7 @@ class VmCharacterPage : ViewModel() {
     }
 
     fun saveAttribute(attribute: UserAttributeUiEntity, isEdit: Boolean, onSuccess: () -> Unit = {}) {
-        XLogin.updateUsersAttributesFromClient(listOf(UserAttribute(attribute.key, attribute.permission, attribute.value)), BuildConfig.PROJECT_ID, null, object : UpdateUsersAttributesCallback {
+        XLogin.updateUsersAttributesFromClient(listOf(UserAttribute(attribute.key, attribute.permission, attribute.value)), DemoCredentialsManager.projectId, null, object : UpdateUsersAttributesCallback {
             override fun onSuccess() {
                 if (isEdit) {
                     _editableItems.value = _editableItems.value!!.toMutableList().apply {
@@ -125,7 +125,7 @@ class VmCharacterPage : ViewModel() {
             removeAt(position)
         }
 
-        XLogin.updateUsersAttributesFromClient(null, BuildConfig.PROJECT_ID, listOf(item.key), object : UpdateUsersAttributesCallback {
+        XLogin.updateUsersAttributesFromClient(null, DemoCredentialsManager.projectId, listOf(item.key), object : UpdateUsersAttributesCallback {
             override fun onSuccess() {
 
             }

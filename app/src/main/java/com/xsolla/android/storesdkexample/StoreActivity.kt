@@ -1,6 +1,7 @@
 package com.xsolla.android.storesdkexample
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +39,7 @@ import com.xsolla.android.login.callback.RefreshTokenCallback
 import com.xsolla.android.payments.XPayments
 import com.xsolla.android.payments.data.AccessToken
 import com.xsolla.android.store.XStore
+import com.xsolla.android.storesdkexample.data.local.DemoCredentialsManager
 import com.xsolla.android.storesdkexample.googleplay.GooglePlayPurchaseHandler
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmGooglePlay
@@ -65,8 +67,8 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
     private lateinit var googlePlayPurchaseHandler: GooglePlayPurchaseHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        XStore.init(BuildConfig.PROJECT_ID, XLogin.token ?: "")
-        XInventory.init(BuildConfig.PROJECT_ID, XLogin.token ?: "")
+        XStore.init(DemoCredentialsManager.projectId, XLogin.token ?: "")
+        XInventory.init(DemoCredentialsManager.projectId, XLogin.token ?: "")
 
         super.onCreate(savedInstanceState)
 
@@ -107,8 +109,8 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
                 XLogin.refreshToken(object : RefreshTokenCallback {
                     override fun onSuccess() {
                         binding.lock.visibility = View.GONE
-                        XStore.init(BuildConfig.PROJECT_ID, XLogin.token!!)
-                        XInventory.init(BuildConfig.PROJECT_ID, XLogin.token!!)
+                        XStore.init(DemoCredentialsManager.projectId, XLogin.token!!)
+                        XInventory.init(DemoCredentialsManager.projectId, XLogin.token!!)
                         vmBalance.updateVirtualBalance()
                         setDrawerData()
 
@@ -124,8 +126,8 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
                 startLogin()
             }
         } else {
-            XStore.init(BuildConfig.PROJECT_ID, XLogin.token!!)
-            XInventory.init(BuildConfig.PROJECT_ID, XLogin.token!!)
+            XStore.init(DemoCredentialsManager.projectId, XLogin.token!!)
+            XInventory.init(DemoCredentialsManager.projectId, XLogin.token!!)
             vmBalance.updateVirtualBalance()
 
             setDrawerData()
@@ -226,7 +228,8 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
             openWebStore()
             binding.root.closeDrawers()
         }
-        findViewById<View>(R.id.itemWebStore).isVisible = !StoreUtils.isAppInstalledFromGooglePlay(this)
+        findViewById<View>(R.id.itemWebStore).isVisible =
+            !StoreUtils.isAppInstalledFromGooglePlay(this)
         findViewById<View>(R.id.itemLogout).setOnClickListener {
             XLogin.logout()
             startLogin()
@@ -313,8 +316,15 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
         })
     }
 
-    private fun openWebStore() =
-        "https://sitebuilder.xsolla.com/game/sdk-web-store-android/?token=${XLogin.token}&remember_me=false"
-            .toUri()
+    private fun openWebStore() {
+        val baseUri = DemoCredentialsManager.webshopUrl.toUri()
+        Uri.Builder()
+            .scheme(baseUri.scheme)
+            .authority(baseUri.authority)
+            .path(baseUri.path)
+            .encodedQuery("token=${XLogin.token}&remember_me=false")
+            .build()
             .openInBrowser(this)
+    }
+
 }
