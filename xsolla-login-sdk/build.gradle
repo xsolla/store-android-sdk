@@ -15,7 +15,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
 
-        buildConfigField "String", "VERSION_NAME", "\"$versionName\""
+        buildConfigField "String", "VERSION_NAME", "\"$login_sdk_version_name\""
     }
 
     buildTypes {
