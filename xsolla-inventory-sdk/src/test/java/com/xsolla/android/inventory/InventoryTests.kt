@@ -28,7 +28,7 @@ class InventoryTests {
         val latch = CountDownLatch(1)
         XInventory.getInventory(object : GetInventoryCallback {
             override fun onSuccess(data: InventoryResponse) {
-                success = data.items.isEmpty()
+                success = data.items.size == 1 && data.items[0].sku == itemInInventory
                 latch.countDown()
             }
 
@@ -37,7 +37,7 @@ class InventoryTests {
             }
         }, 25, 0)
         latch.await()
-        Assert.assertEquals(true, success)
+        Assert.assertTrue(success)
     }
 
     @Test
@@ -55,7 +55,7 @@ class InventoryTests {
             }
         })
         latch.await()
-        Assert.assertEquals(true, success)
+        Assert.assertTrue(success)
     }
 
     @Test
@@ -75,14 +75,58 @@ class InventoryTests {
             }
         })
         latch.await()
-        Assert.assertEquals(true, success)
+        Assert.assertTrue(success)
+    }
+
+
+    // Consume tests
+
+    @Test
+    fun consumeItem_Success() {
+        var success = false
+        val latch = CountDownLatch(1)
+        XInventory.consumeItem(itemForConsume, 2, null, object : ConsumeItemCallback {
+            override fun onSuccess() {
+                success = true
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                latch.countDown()
+            }
+
+        })
+        latch.await()
+        Assert.assertTrue(success)
     }
 
     @Test
-    fun consumeItem() {
+    fun consumeItem_Fail() {
+        var err = false
+        var msg: String? = null
+        val latch = CountDownLatch(1)
+        XInventory.consumeItem(itemForConsume, 1000000, null, object : ConsumeItemCallback {
+            override fun onSuccess() {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                err = true
+                msg = errorMessage
+                latch.countDown()
+            }
+
+        })
+        latch.await()
+        Assert.assertTrue(err)
+        Assert.assertTrue(msg?.startsWith("[0401-5004]: Could not find instance in inventory") ?: false)
+    }
+
+    @Test
+    fun consumeItemUnprocessable_Fail() {
         var success = false
         val latch = CountDownLatch(1)
-        XInventory.consumeItem(itemForConsume, 3, null, object : ConsumeItemCallback {
+        XInventory.consumeItem(itemForConsume, 2, "someId", object : ConsumeItemCallback {
             override fun onSuccess() {
                 latch.countDown()
             }
@@ -94,7 +138,7 @@ class InventoryTests {
 
         })
         latch.await()
-        Assert.assertEquals(true, success)
+        Assert.assertTrue(success)
     }
 
 }
