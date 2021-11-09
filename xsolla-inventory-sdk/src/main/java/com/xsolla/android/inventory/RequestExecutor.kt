@@ -1,5 +1,6 @@
 package com.xsolla.android.inventory
 
+import com.google.gson.GsonBuilder
 import com.xsolla.android.inventory.api.InventoryApi
 import com.xsolla.android.inventory.callback.ConsumeItemCallback
 import com.xsolla.android.inventory.callback.GetInventoryCallback
@@ -9,6 +10,8 @@ import com.xsolla.android.inventory.entity.request.ConsumeItemBody
 import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.inventory.entity.response.VirtualBalanceResponse
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import org.json.JSONException
 import org.json.JSONObject
@@ -108,11 +111,15 @@ class RequestExecutor(
 
     fun consumeItem(
         sku: String,
-        quantity: Long,
+        quantity: Long?,
         instanceId: String?,
         callback: ConsumeItemCallback
     ) {
-        val requestBody = ConsumeItemBody(sku, quantity, instanceId)
+        // This methods requires both quantity and instance_id to be explicitly presented in json body (even if nulls)
+        val consumeItemBody = ConsumeItemBody(sku, quantity, instanceId)
+        val jsonString: String = GsonBuilder().serializeNulls().create().toJson(consumeItemBody)
+        val requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString)
+
         inventoryApi.consumeItem(projectId, "android_standalone", requestBody).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
@@ -125,7 +132,6 @@ class RequestExecutor(
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 callback.onError(t, null)
             }
-
         })
     }
 
