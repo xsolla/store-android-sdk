@@ -194,6 +194,12 @@ interface LoginApi {
         @Body authUserSocialWithCodeBody: AuthUserSocialWithCodeBody
     ): Call<AuthSocialResponse>
 
+    @GET("/api/oauth2/logout")
+    fun oauthLogout(
+        @Header("authorization") authHeader: String,
+        @Query("sessions") sessions: String
+    ): Call<Void>
+
     //----------     Emails     ----------
 
 
