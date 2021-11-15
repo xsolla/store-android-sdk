@@ -11,6 +11,7 @@ import com.xsolla.android.store.entity.request.cart.UpdateItemBody
 import com.xsolla.android.store.entity.request.coupon.CartIdRequest
 import com.xsolla.android.store.entity.request.coupon.RedeemCouponRequestBody
 import com.xsolla.android.store.entity.request.coupon.RedeemPromocodeRequestBody
+import com.xsolla.android.store.entity.request.coupon.RemovePromocodeRequestBody
 import com.xsolla.android.store.entity.request.gamekeys.RedeemGameCodeBody
 import com.xsolla.android.store.entity.request.payment.*
 import com.xsolla.android.store.entity.response.bundle.BundleItem
@@ -275,6 +276,47 @@ class XStore private constructor(
         }
 
         /**
+         * Fills the specific cart with items.
+         * If the cart already has an item, the existing item will be replaced by the given value.
+         *
+         * @param cartId   cart ID
+         * @param items    list of items
+         * @param callback status callback
+         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/cart-fill/)
+         */
+        @JvmStatic
+        fun fillCartByIdWithItems(
+            callback: FillSpecificCartWithItemsCallback,
+            cartId: String,
+            items: List<FillCartItem>
+        ) {
+            val body = FillCartWithItemsRequestBody(items)
+            getInstance().storeApi.fillSpecificCartWithItems(getInstance().projectId, cartId, body)
+                .enqueue(object : Callback<CartResponse> {
+                    override fun onResponse(
+                        call: Call<CartResponse>,
+                        response: Response<CartResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val cartResponse = response.body()
+                            if (cartResponse != null) {
+                                callback.onSuccess(cartResponse)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<CartResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
          * Update an existing item or create the one in the cart via cart ID
          *
          * @param cartId   cart ID
@@ -424,7 +466,7 @@ class XStore private constructor(
             cartId: String,
             options: PaymentOptions? = null
         ) {
-            val body = CreateOrderRequestBody(options)
+            val body = CreateCartOrderRequestBody(options)
             getInstance().storeApi.createOrderFromCartById(getInstance().projectId, cartId, body)
                 .enqueue(object : Callback<CreateOrderResponse> {
                     override fun onResponse(
@@ -462,7 +504,7 @@ class XStore private constructor(
             callback: CreateOrderCallback,
             options: PaymentOptions? = null
         ) {
-            val body = CreateOrderRequestBody(options)
+            val body = CreateCartOrderRequestBody(options)
             getInstance().storeApi.createOrderFromCurrentCart(getInstance().projectId, body)
                 .enqueue(object : Callback<CreateOrderResponse> {
                     override fun onResponse(
@@ -492,6 +534,7 @@ class XStore private constructor(
          *
          * @param itemSku  item SKU
          * @param options  payment options
+         * @param quantity item quantity
          * @param callback status callback
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/payment/create-order-with-item/)
          */
@@ -500,9 +543,10 @@ class XStore private constructor(
         fun createOrderByItemSku(
             callback: CreateOrderCallback,
             itemSku: String,
-            options: PaymentOptions? = null
+            options: PaymentOptions? = null,
+            quantity: Long = 1
         ) {
-            val body = CreateOrderRequestBody(options)
+            val body = CreateSkuOrderRequestBody(quantity, options)
             getInstance().storeApi.createOrderByItemSku(getInstance().projectId, itemSku, body)
                 .enqueue(object : Callback<CreateOrderResponse> {
                     override fun onResponse(
@@ -1004,6 +1048,46 @@ class XStore private constructor(
         }
 
         /**
+         * Get a list of all virtual items for searching on client-side
+         *
+         * @param locale Response language. Two-letter lowercase language code per ISO-639-1
+         * @param callback status callback
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/virtual-items-currency/catalog/get-all-virtual-items/)
+         */
+        @JvmStatic
+        @JvmOverloads
+        fun getVirtualItemsShort(
+            callback: GetVirtualItemsShortCallback,
+            locale: String? = null
+        ) {
+            getInstance().storeApi.getVirtualItemsShort(
+                getInstance().projectId,
+                locale
+            )
+                .enqueue(object : Callback<VirtualItemsShortResponse> {
+                    override fun onResponse(
+                        call: Call<VirtualItemsShortResponse>,
+                        response: Response<VirtualItemsShortResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val virtualItemsShortResponse = response.body()
+                            if (virtualItemsShortResponse != null) {
+                                callback.onSuccess(virtualItemsShortResponse)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<VirtualItemsShortResponse>, t: Throwable) {
+                        callback.onError(throwable = t, errorMessage = null)
+                    }
+                })
+        }
+
+        /**
          * Get a virtual currency list for building a catalog
          *
          * @param callback status callback
@@ -1451,6 +1535,46 @@ class XStore private constructor(
             val cart = CartIdRequest(cartId)
             val body = RedeemPromocodeRequestBody(promocode, json, cart)
             getInstance().storeApi.redeemPromocode(getInstance().projectId, body)
+                .enqueue(object : Callback<CartResponse> {
+                    override fun onResponse(
+                        call: Call<CartResponse>,
+                        response: Response<CartResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val cartResponse = response.body()
+                            if (cartResponse != null) {
+                                callback.onSuccess(cartResponse)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<CartResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
+         * Removes a promo code from a cart.
+         * After the promo code is removed, the total price of all items in the cart will be recalculated without bonuses and discounts provided by a promo code.
+         *
+         * @param cartId   cart id. Default value is "current"
+         * @param callback status callback
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/promotions/promo-codes/remove-cart-promo-code)
+         */
+        @JvmStatic
+        @JvmOverloads
+        fun removePromocode(
+            callback: RemovePromocodeCallback,
+            cartId: String = "current"
+        ) {
+            val cart = CartIdRequest(cartId)
+            val body = RemovePromocodeRequestBody(cart)
+            getInstance().storeApi.removePromocode(getInstance().projectId, body)
                 .enqueue(object : Callback<CartResponse> {
                     override fun onResponse(
                         call: Call<CartResponse>,

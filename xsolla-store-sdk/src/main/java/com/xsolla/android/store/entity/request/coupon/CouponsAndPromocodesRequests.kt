@@ -19,4 +19,9 @@ data class RedeemPromocodeRequestBody(
     val cart: CartIdRequest = CartIdRequest("current")
 )
 
-data class CartIdRequest(val id: String = "current")
+data class RemovePromocodeRequestBody(
+    @SerializedName("cart")
+    val cart: CartIdRequest
+)
+
+data class CartIdRequest(val id: String)

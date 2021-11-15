@@ -763,6 +763,44 @@ class XLogin private constructor(
             }
         }
 
+        /**
+         * Logs the user out and deletes the user session according to the value of the sessions parameter
+         *
+         * @param sessions shows how the user is logged out and how the user session is deleted.
+         * The parameter has the following values:
+         * `sso` is used for deleting only the SSO user session.
+         * `all` is used for deleting the SSO user session and invalidating all access and refresh tokens.
+         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/auth/oauth-20/log-user-out/)
+         */
+        @JvmStatic
+        fun oauthLogout(
+            sessions: String,
+            callback: OauthLogoutCallback
+        ) {
+            val retrofitCallback: Callback<Void> = object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        callback.onSuccess()
+                    } else {
+                        callback.onError(null, getErrorMessage(response.errorBody()))
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    callback.onError(t, null)
+                }
+            }
+
+            if (!getInstance().useOauth) {
+                throw IllegalArgumentException("Method is not available for JWT authentication")
+            } else {
+                getInstance().loginApi.oauthLogout(
+                    "Bearer $token",
+                    sessions
+                ).enqueue(retrofitCallback)
+            }
+        }
+
         //----------     Emails     ----------
 
 

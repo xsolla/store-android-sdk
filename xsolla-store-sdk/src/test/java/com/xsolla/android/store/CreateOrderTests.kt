@@ -11,7 +11,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.CountDownLatch
 
 @RunWith(RobolectricTestRunner::class)
-class StoreTests {
+class CreateOrderTests {
 
     @Before
     fun initSdk() {
@@ -19,7 +19,7 @@ class StoreTests {
     }
 
     @Test
-    fun createOrderByItemSkuNoPaymentOptions() {
+    fun createOrderByItemSkuNoPaymentOptions_Success() {
         var psToken: String? = null
         var orderId: Int? = null
         var error = false
@@ -43,7 +43,7 @@ class StoreTests {
     }
 
     @Test
-    fun createOrderByItemSkuWithPaymentOptionsDefaultValues() {
+    fun createOrderByItemSkuWithPaymentOptionsDefaultValues_Success() {
         val paymentOptions = PaymentOptions(
             settings = PaymentProjectSettings(
                 ui = UiProjectSetting(),
@@ -75,7 +75,7 @@ class StoreTests {
     }
 
     @Test
-    fun createOrderByItemSkuWithCustomParams() {
+    fun createOrderByItemSkuWithCustomParams_Success() {
         val customParameters = CustomParameters.Builder()
             .addParam("someStringParam", CustomParameters.Value.String("someStringValue"))
             .addParam("someNumberParam", CustomParameters.Value.Number(123))
@@ -101,6 +101,52 @@ class StoreTests {
         Assert.assertFalse(error)
         Assert.assertFalse(psToken.isNullOrEmpty())
         Assert.assertFalse(orderId == null || orderId == 0)
+    }
+
+    @Test
+    fun createOrderByItemSkuWithQuantity_Success() {
+        var psToken: String? = null
+        var orderId: Int? = null
+        var error = false
+        val latch = CountDownLatch(1)
+        XStore.createOrderByItemSku(object : CreateOrderCallback {
+            override fun onSuccess(response: CreateOrderResponse) {
+                psToken = response.token
+                orderId = response.orderId
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                error = true
+                latch.countDown()
+            }
+        }, itemForOrderBySku, null, 5)
+        latch.await()
+        Assert.assertFalse(error)
+        Assert.assertFalse(psToken.isNullOrEmpty())
+        Assert.assertFalse(orderId == null || orderId == 0)
+    }
+
+    @Test
+    fun createOrderByItemSku_Fail() {
+        var msg: String? = null
+        var error = false
+        val latch = CountDownLatch(1)
+        val unknownSku = itemForOrderBySku + itemForOrderBySku
+        XStore.createOrderByItemSku(object : CreateOrderCallback {
+            override fun onSuccess(response: CreateOrderResponse) {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                msg = errorMessage
+                error = true
+                latch.countDown()
+            }
+        }, unknownSku)
+        latch.await()
+        Assert.assertTrue(error)
+        Assert.assertEquals("[0401-4001]: Item with sku = '$unknownSku' not found", msg)
     }
 
 }
