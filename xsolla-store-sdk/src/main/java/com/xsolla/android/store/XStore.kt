@@ -1,7 +1,10 @@
 package com.xsolla.android.store
 
+import android.net.Uri
 import android.os.Build
+import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.JsonSyntaxException
 import com.xsolla.android.store.api.StoreApi
 import com.xsolla.android.store.callbacks.*
 import com.xsolla.android.store.callbacks.gamekeys.*
@@ -21,18 +24,18 @@ import com.xsolla.android.store.entity.response.gamekeys.*
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse
 import com.xsolla.android.store.entity.response.items.*
 import com.xsolla.android.store.entity.response.order.OrderResponse
+import com.xsolla.android.store.entity.response.order.WsOrderResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse
 import com.xsolla.android.store.entity.response.payment.CreatePaymentTokenResponse
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
+import okhttp3.*
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 
 class XStore private constructor(
     private val projectId: Int,
@@ -41,6 +44,10 @@ class XStore private constructor(
 
     companion object {
         private const val STORE_HOST = "https://store.xsolla.com"
+
+        private const val ORDER_WS = "wss://store-ws.xsolla.com/sub/order/status"
+        private const val ORDER_WS_TIMEOUT_MS = 5 * 60 * 1000L // 5 min
+        private const val ORDER_POLL_TIMEOUT = 3 * 1000L // 3 sec
 
         private var instance: XStore? = null
 
@@ -653,6 +660,118 @@ class XStore private constructor(
                         callback.onError(t, null)
                     }
                 })
+        }
+
+        /**
+         * Subscribe to order status updates
+         *
+         * @param orderId  order ID
+         * @param listener status callback
+         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/order/get-order/)
+         */
+        @JvmStatic
+        fun getOrderStatus(
+            listener: OrderStatusListener,
+            orderId: String
+        ) {
+            val codeFinish = 4001
+            val codeTimeout = 4002
+            val codeBadResponse = 4003
+
+            val orderStatusTimer = Timer()
+            lateinit var orderStatusWebSocket: WebSocket
+
+            val webSocketListener = object : WebSocketListener() {
+                override fun onOpen(webSocket: WebSocket, response: okhttp3.Response) {
+                    orderStatusTimer.schedule(object : TimerTask() {
+                        override fun run() {
+                            orderStatusWebSocket.close(codeTimeout, null)
+                        }
+                    }, ORDER_WS_TIMEOUT_MS)
+                }
+
+                override fun onMessage(webSocket: WebSocket, text: String) {
+                    val response = try {
+                        Gson().fromJson(text, WsOrderResponse::class.java)
+                    } catch (e: JsonSyntaxException) {
+                        orderStatusTimer.cancel()
+                        orderStatusWebSocket.close(codeBadResponse, null)
+                        return
+                    }
+                    if (response.status in listOf(OrderResponse.Status.DONE, OrderResponse.Status.CANCELED)) {
+                        orderStatusTimer.cancel()
+                        orderStatusWebSocket.close(codeFinish, null)
+                    }
+                    listener.onStatusUpdate(response.status)
+                }
+
+                override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+                    orderStatusTimer.cancel()
+                    if (code != codeFinish) {
+                        startOrderShortPolling(listener, orderId)
+                    }
+                }
+
+                override fun onFailure(webSocket: WebSocket, t: Throwable, response: okhttp3.Response?) {
+                    t.printStackTrace()
+                    orderStatusTimer.cancel()
+                    startOrderShortPolling(listener, orderId)
+                }
+            }
+
+            val baseUri = Uri.parse(ORDER_WS)
+            val url = Uri.Builder()
+                .scheme(baseUri.scheme)
+                .authority(baseUri.authority)
+                .path(baseUri.path)
+                .appendQueryParameter("order_id", orderId)
+                .appendQueryParameter("project_id", getInstance().projectId.toString())
+                .build()
+                .toString()
+
+            val request = Request.Builder().url(url).build()
+            orderStatusWebSocket = OkHttpClient().newWebSocket(request, webSocketListener)
+        }
+
+        private fun startOrderShortPolling(
+            listener: OrderStatusListener,
+            orderId: String
+        ) {
+            val delayTimer = Timer()
+            lateinit var singleRunTask: Runnable
+
+            singleRunTask = Runnable {
+                getInstance().storeApi.getOrder(getInstance().projectId, orderId)
+                    .enqueue(object : Callback<OrderResponse> {
+                        override fun onResponse(
+                            call: Call<OrderResponse>,
+                            response: Response<OrderResponse>
+                        ) {
+                            val status = response.body()?.status
+                            if (response.isSuccessful && status != null) {
+                                if (status !in listOf(OrderResponse.Status.DONE, OrderResponse.Status.CANCELED)) {
+                                    delayTimer.schedule(object : TimerTask() {
+                                        override fun run() {
+                                            singleRunTask.run()
+                                        }
+                                    }, ORDER_POLL_TIMEOUT)
+                                }
+                                listener.onStatusUpdate(status)
+                            } else {
+                                listener.onFailure()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<OrderResponse>, t: Throwable) {
+                            delayTimer.schedule(object : TimerTask() {
+                                override fun run() {
+                                    singleRunTask.run()
+                                }
+                            }, ORDER_POLL_TIMEOUT)
+                        }
+                    })
+            }
+            singleRunTask.run()
         }
 
         //----------     Game Keys     ----------

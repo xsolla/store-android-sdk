@@ -50,3 +50,9 @@ data class OrderResponse(
         val currency: String? = null
     )
 }
+
+data class WsOrderResponse(
+    @SerializedName("order_id")
+    val orderId: Int,
+    val status: OrderResponse.Status
+)
