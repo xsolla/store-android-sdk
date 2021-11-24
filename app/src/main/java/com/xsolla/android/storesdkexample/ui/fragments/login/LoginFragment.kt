@@ -91,10 +91,10 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         }
 
         binding.baiduButton.setRateLimitedClickListener {
-            selectedSocialNetwork = SocialNetwork.BAIDU
+            selectedSocialNetwork = SocialNetwork.DISCORD
             XLogin.startSocialAuth(
                 this,
-                SocialNetwork.BAIDU,
+                SocialNetwork.DISCORD,
                 BuildConfig.WITH_LOGOUT,
                 startSocialCallback
             )
