@@ -41,6 +41,7 @@ Main features:
 		<li>YouTube</li>
 		</ul>
 </details>
+
 * email confirmation
 * password reset
 * user account
