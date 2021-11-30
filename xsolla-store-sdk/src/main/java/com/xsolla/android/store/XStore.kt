@@ -282,6 +282,7 @@ class XStore private constructor(
                 })
         }
 
+        //TextReview
         /**
          * Fills the specific cart with items.
          * If the cart already has an item, the existing item will be replaced by the given value.
@@ -662,6 +663,7 @@ class XStore private constructor(
                 })
         }
 
+        //TextReview
         /**
          * Subscribe to order status updates
          *
@@ -1166,6 +1168,7 @@ class XStore private constructor(
                 })
         }
 
+        //TextReview
         /**
          * Get a list of all virtual items for searching on client-side
          *
@@ -1677,6 +1680,7 @@ class XStore private constructor(
                 })
         }
 
+        //TextReview
         /**
          * Removes a promo code from a cart.
          * After the promo code is removed, the total price of all items in the cart will be recalculated without bonuses and discounts provided by a promo code.

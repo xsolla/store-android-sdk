@@ -763,6 +763,7 @@ class XLogin private constructor(
             }
         }
 
+        //TextReview
         /**
          * Logs the user out and deletes the user session according to the value of the sessions parameter
          *
