@@ -2,6 +2,12 @@ include:
   - project: 'sysadm-docker/ubuntu-sshclient'
     ref:     'master'
     file:    'gitlab-ci-template.yml'
+  - project: 'security/sast-helper'
+    ref: master
+    file: 'gitlab-ci.yml'
+
+variables:
+  SAST_EXPERIMENTAL_FEATURES: "true"
 
 image: circleci/android:api-30
 
@@ -10,6 +16,7 @@ stages:
   - build
   - lint
   - test
+  - sast_upload
   - publish
   - build_doc
   - deploy
