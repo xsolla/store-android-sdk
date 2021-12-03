@@ -1,4 +1,6 @@
 <resources>
+    <string name="app_name">Xsolla Inventory Demo</string>
+
     <string name="tutorial_1_title">
         Welcome to Xsolla Inventory SDK demo
     </string>

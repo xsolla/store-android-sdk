@@ -3,6 +3,7 @@ package com.xsolla.android.storesdkexample.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.xsolla.android.appcore.ui.vm.VmPurchase
 import com.xsolla.android.googleplay.StoreUtils
 import com.xsolla.android.store.entity.response.items.VirtualCurrencyPackageResponse
 import com.xsolla.android.storesdkexample.App
@@ -11,12 +12,11 @@ import com.xsolla.android.storesdkexample.adapter.holder.VcRealPriceViewHolder
 import com.xsolla.android.storesdkexample.adapter.holder.VcVirtualPriceViewHolder
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
-import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.ui.vm.VmGooglePlay
 
 class VcAdapter(
     private val items: List<VirtualCurrencyPackageResponse.Item>,
-    private val vmCart: VmCart,
+    private val vmPurchase: VmPurchase,
     private val vmBalance: VmBalance,
     private val vmGooglePlay: VmGooglePlay,
     private val purchaseListener: PurchaseListener
@@ -43,7 +43,7 @@ class VcAdapter(
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             GOOGLE_PLAY -> VcGooglePlayViewHolder(inflater, parent, vmGooglePlay)
-            REAL_PRICE -> VcRealPriceViewHolder(inflater, parent, vmCart, purchaseListener)
+            REAL_PRICE -> VcRealPriceViewHolder(inflater, parent, vmPurchase, purchaseListener)
             else -> VcVirtualPriceViewHolder(inflater, parent, vmBalance, purchaseListener)
         }
     }

@@ -11,13 +11,11 @@ android {
     defaultConfig {
         minSdkVersion sdk_min
         targetSdkVersion sdk_target
-        versionCode inventory_sdk_version_code
-        versionName inventory_sdk_version_name
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
 
-        buildConfigField "String", "VERSION_NAME", "\"$versionName\""
+        buildConfigField "String", "VERSION_NAME", "\"$inventory_sdk_version_name\""
     }
 
     buildTypes {
@@ -30,6 +28,7 @@ android {
     lintOptions {
         quiet true
         abortOnError true
+        checkDependencies true
     }
 
     testOptions {
@@ -40,12 +39,12 @@ android {
 }
 
 dependencies {
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.robolectric:robolectric:4.4'
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "org.robolectric:robolectric:$robolectric_version"
 }
 
 dokkaHtml.configure {

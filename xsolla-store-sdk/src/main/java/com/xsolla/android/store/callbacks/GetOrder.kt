@@ -6,3 +6,10 @@ interface GetOrderCallback {
     fun onSuccess(response: OrderResponse)
     fun onError(throwable: Throwable?, errorMessage: String?)
 }
+
+abstract class OrderStatusListener {
+    open fun onStatusUpdate(status: OrderResponse.Status) {
+    }
+    open fun onFailure() {
+    }
+}

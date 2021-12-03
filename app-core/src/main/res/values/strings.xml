@@ -25,8 +25,17 @@
     <string name="log_in_with_facebook_button">log in with facebook</string>
     <string name="forgot_your_password">Forgot your password?</string>
     <string name="go_to_store">Go to store</string>
+    <string name="refresh">Refresh</string>
     <string name="privacy_policy">By continuing, you agree to be bound by our\n<u>Privacy Policy</u></string>
     <string name="purchased_placeholder">Purchased</string>
+
+    <string name="dev_menu_title">Developer settings</string>
+    <string name="dev_menu_oauth2_id">OAuth2 Client ID</string>
+    <string name="dev_menu_login_id">Login ID</string>
+    <string name="dev_menu_project_id">Project ID</string>
+    <string name="dev_menu_webshop_url">WebShop URL</string>
+    <string name="dev_menu_apply">Apply</string>
+    <string name="dev_menu_reset">Reset to defaults</string>
 
     <string name="drawer_item_character">Character</string>
     <string name="drawer_item_inventory">My inventory</string>
@@ -36,21 +45,12 @@
     <string name="drawer_item_vc">Virtual currency</string>
     <string name="drawer_item_merchandise">Merchandise</string>
     <string name="drawer_item_coupon">Redeem a coupon</string>
-    <string name="drawer_item_webstore">Web Store</string>
+    <string name="drawer_item_webstore">Web Shop</string>
     <string name="drawer_item_tutorial">Tutorial</string>
-    <string name="drawer_item_cart">Cart</string>
     <string name="drawer_item_account">Account</string>
     <string name="drawer_item_logout">Log out</string>
 
     <string name="inventory_placeholder">Your items appear here</string>
-
-    <string name="cart_fragment_checkout_button">Go to Checkout</string>
-    <string name="cart_fragment_continue_button">Back to store</string>
-    <string name="cart_fragment_clear_button">Clear All</string>
-    <string name="cart_message_empty">Your cart is empty</string>
-    <string name="cart_subtotal">Subtotal</string>
-    <string name="cart_discount">Discount</string>
-    <string name="cart_total">Total</string>
 
     <string name="friends_add_friends_button_text">+ ADD FRIENDS</string>
     <string name="friends_accept_friend_button">Accept</string>
@@ -155,8 +155,13 @@
     <string name="promocode_hint">Enter your promocode here</string>
     <string name="promocode_placeholder">\tfor example, NEWGAMER2020</string>
     <string name="promocode_bonus_item_placeholder">BONUS ITEM</string>
+
     <string name="buy_again">Buy again</string>
     <string name="buy_now_button">Buy now</string>
     <string name="preview">Preview</string>
+
+    <string name="payment_completed">Payment completed</string>
+    <string name="payment_cancelled">Payment cancelled</string>
+    <string name="payment_unknown">Payment error</string>
 
 </resources>

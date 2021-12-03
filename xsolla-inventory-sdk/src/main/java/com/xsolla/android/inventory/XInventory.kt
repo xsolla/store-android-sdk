@@ -78,7 +78,6 @@ class XInventory private constructor(
          * @param callback Status callback.
          * @param limit Limit for the number of elements on the page in the range from 1 to 50.
          * @param offset Number of the element from which the list is generated (the count starts from 0).
-         * @param platform Publishing platform the user plays on.
          * @see [Inventory API Reference](https://developers.xsolla.com/commerce-api/player-inventory/client/get-user-inventory)
          */
         @JvmStatic
@@ -95,7 +94,6 @@ class XInventory private constructor(
          * Gets the current user’s virtual balance.
          *
          * @param callback Status callback.
-         * @param platform Publishing platform the user plays on.
          * @see [Inventory API Reference](https://developers.xsolla.com/commerce-api/player-inventory/client/get-user-virtual-balance)
          */
         @JvmStatic
@@ -109,7 +107,6 @@ class XInventory private constructor(
          * Gets the current list of user’s subscriptions.
          *
          * @param callback Status callback.
-         * @param platform Publishing platform the user plays on.
          * @see [Inventory API Reference](https://developers.xsolla.com/commerce-api/player-inventory/client/get-user-subscriptions)
          */
         @JvmStatic
@@ -127,13 +124,12 @@ class XInventory private constructor(
          * @param quantity   Item quantity. If an item is uncountable, should be null.
          * @param instanceId Instance item ID. If an item is countable, should be null.
          * @param callback   Status callback.
-         * @param platform Publishing platform the user plays on.
          * @see [Inventory API Reference](https://developers.xsolla.com/commerce-api/player-inventory/client/consume-item)
          */
         @JvmStatic
         fun consumeItem(
             sku: String,
-            quantity: Long,
+            quantity: Long?,
             instanceId: String?,
             callback: ConsumeItemCallback
         ) {

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Xsolla Game Commerce Demo</string>
+
     <string name="xsolla_payments_redirect_scheme">app</string>
     <string name="xsolla_payments_redirect_host">xsollaconfirm</string>
     <string name="xsolla_login_redirect_scheme">app</string>

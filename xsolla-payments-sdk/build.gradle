@@ -11,13 +11,11 @@ android {
     defaultConfig {
         minSdkVersion sdk_min
         targetSdkVersion sdk_target
-        versionCode payments_sdk_version_code
-        versionName payments_sdk_version_name
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
 
-        buildConfigField "String", "VERSION_NAME", "\"$versionName\""
+        buildConfigField "String", "VERSION_NAME", "\"$payments_sdk_version_name\""
     }
 
     buildTypes {
@@ -27,21 +25,17 @@ android {
         }
     }
 
-    kotlinOptions { jvmTarget = "1.8" }
-
     lintOptions {
         quiet true
         abortOnError true
+        checkDependencies true
     }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0'
-
-    implementation 'com.squareup.retrofit2:retrofit:2.6.4'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.4'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.core:core-ktx:1.6.0'
 
     implementation "androidx.browser:browser:1.3.0"
 }

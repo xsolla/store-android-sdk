@@ -12,28 +12,27 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.appcore.databinding.FragmentBundleBinding
+import com.xsolla.android.appcore.ui.vm.VmPurchase
 import com.xsolla.android.appcore.utils.AmountUtils
 import com.xsolla.android.googleplay.StoreUtils
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.callbacks.CreateOrderByVirtualCurrencyCallback
 import com.xsolla.android.store.callbacks.GetBundleCallback
-import com.xsolla.android.store.callbacks.UpdateItemFromCurrentCartCallback
 import com.xsolla.android.store.entity.response.bundle.BundleItem
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse
+import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.BundleAdapter
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
-import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.ui.vm.VmGooglePlay
-import com.xsolla.android.storesdkexample.util.ViewUtils
 
 class BundleFragment : BaseFragment(), PurchaseListener {
 
     private val binding: FragmentBundleBinding by viewBinding()
     private val args: BundleFragmentArgs by navArgs()
-    private val vmCart: VmCart by viewModels()
+    private val vmPurchase: VmPurchase by activityViewModels()
     private val vmBalance: VmBalance by viewModels()
     private val vmGooglePlay: VmGooglePlay by activityViewModels()
 
@@ -126,29 +125,13 @@ class BundleFragment : BaseFragment(), PurchaseListener {
 
     private fun bindBuyButton() {
         if (args.bundle.virtualPrices.isNullOrEmpty()) {
-            // real price - add to cart or buy via google play
-            if (StoreUtils.isXsollaCartAvailable(requireContext())) {
-                binding.btBundleBuy.setOnClickListener { v ->
-                    ViewUtils.disable(v)
-                    val cartContent = vmCart.cartContent.value
-                    val quantity =
-                        cartContent?.find { it.sku == args.bundle.sku }?.quantity ?: 0
-                    XStore.updateItemFromCurrentCart(
-                        object : UpdateItemFromCurrentCartCallback {
-                            override fun onSuccess() {
-                                vmCart.updateCart()
-                                this@BundleFragment.onSuccess()
-                                ViewUtils.enable(v)
-                            }
-
-                            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                                this@BundleFragment.onFailure(
-                                    errorMessage ?: "Error adding to cart"
-                                )
-                                ViewUtils.enable(v)
-                            }
-                        }, args.bundle.sku!!, quantity + 1
-                    )
+            // real price
+            if (!StoreUtils.isAppInstalledFromGooglePlay(requireContext())) {
+                binding.btBundleBuy.setOnClickListener { view ->
+                    view.isEnabled = false
+                    vmPurchase.startPurchase(BuildConfig.IS_SANDBOX, args.bundle.sku!!, 1) {
+                        view.isEnabled = true
+                    }
                 }
             } else {
                 binding.btBundleBuy.setOnClickListener {
@@ -158,18 +141,18 @@ class BundleFragment : BaseFragment(), PurchaseListener {
         } else {
             //buy via virtual price
             binding.btBundleBuy.setOnClickListener { v ->
-                ViewUtils.disable(v)
+                v.isEnabled = false
                 XStore.createOrderByVirtualCurrency(
                     object : CreateOrderByVirtualCurrencyCallback {
                         override fun onSuccess(response: CreateOrderByVirtualCurrencyResponse) {
                             this@BundleFragment.onSuccess()
-                            ViewUtils.enable(v)
+                            v.isEnabled = true
                             vmBalance.updateVirtualBalance()
                         }
 
                         override fun onError(throwable: Throwable?, errorMessage: String?) {
-                            this@BundleFragment.onFailure(errorMessage ?: "Error adding to cart")
-                            ViewUtils.enable(v)
+                            this@BundleFragment.onFailure(errorMessage ?: throwable?.javaClass?.name ?: "Error")
+                            v.isEnabled = true
                         }
                     },
                     args.bundle.sku!!, args.bundle.virtualPrices[0].sku!!

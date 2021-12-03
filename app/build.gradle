@@ -38,11 +38,12 @@ android {
 
         buildConfigField 'int', 'PROJECT_ID', '58917' // Replace to your Project ID
         buildConfigField 'String', 'LOGIN_ID', '"ba55b4f6-babf-11ea-a85b-42010aa80004"' // Replace to your project's Login ID
+        buildConfigField 'int', 'OAUTH_CLIENT_ID', '58' // Replace to your project's OAuth2 Client ID
         buildConfigField 'String', 'GOOGLE_CREDENTIAL', "\"${System.env.GOOGLE_SERVER_ID}\""
         buildConfigField 'String', 'FACEBOOK_CREDENTIAL', "\"${System.env.FACEBOOK_APP_ID}\""
         buildConfigField 'boolean', 'WITH_LOGOUT', 'false'
         buildConfigField 'boolean', 'USE_OAUTH', 'true'
-        buildConfigField 'int', 'OAUTH_CLIENT_ID', '58'
+        buildConfigField 'String', 'WEBSHOP_URL', '"https://sitebuilder.xsolla.com/game/sdk-web-store-android"'
 
         buildConfigField "String", "VERSION_NAME", "\"$versionName\""
     }
@@ -62,17 +63,11 @@ android {
             buildConfigField 'boolean', 'IS_SANDBOX', 'true'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
 
     lintOptions {
         quiet true
         abortOnError true
+        checkDependencies true
     }
 
 }
@@ -90,8 +85,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation 'com.android.billingclient:billing:3.0.0' //TODO try to update
-    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'com.android.billingclient:billing:3.0.0'
 }
 repositories {
     mavenCentral()

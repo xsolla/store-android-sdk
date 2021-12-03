@@ -1,7 +1,10 @@
 package com.xsolla.android.store
 
+import android.net.Uri
 import android.os.Build
+import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.JsonSyntaxException
 import com.xsolla.android.store.api.StoreApi
 import com.xsolla.android.store.callbacks.*
 import com.xsolla.android.store.callbacks.gamekeys.*
@@ -11,6 +14,7 @@ import com.xsolla.android.store.entity.request.cart.UpdateItemBody
 import com.xsolla.android.store.entity.request.coupon.CartIdRequest
 import com.xsolla.android.store.entity.request.coupon.RedeemCouponRequestBody
 import com.xsolla.android.store.entity.request.coupon.RedeemPromocodeRequestBody
+import com.xsolla.android.store.entity.request.coupon.RemovePromocodeRequestBody
 import com.xsolla.android.store.entity.request.gamekeys.RedeemGameCodeBody
 import com.xsolla.android.store.entity.request.payment.*
 import com.xsolla.android.store.entity.response.bundle.BundleItem
@@ -20,18 +24,18 @@ import com.xsolla.android.store.entity.response.gamekeys.*
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse
 import com.xsolla.android.store.entity.response.items.*
 import com.xsolla.android.store.entity.response.order.OrderResponse
+import com.xsolla.android.store.entity.response.order.WsOrderResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse
 import com.xsolla.android.store.entity.response.payment.CreatePaymentTokenResponse
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
+import okhttp3.*
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 
 class XStore private constructor(
     private val projectId: Int,
@@ -40,6 +44,10 @@ class XStore private constructor(
 
     companion object {
         private const val STORE_HOST = "https://store.xsolla.com"
+
+        private const val ORDER_WS = "wss://store-ws.xsolla.com/sub/order/status"
+        private const val ORDER_WS_TIMEOUT_MS = 5 * 60 * 1000L // 5 min
+        private const val ORDER_POLL_TIMEOUT = 3 * 1000L // 3 sec
 
         private var instance: XStore? = null
 
@@ -275,6 +283,47 @@ class XStore private constructor(
         }
 
         /**
+         * Fills the specific cart with items.
+         * If the cart already has an item, the existing item will be replaced by the given value.
+         *
+         * @param cartId   Cart ID.
+         * @param items    List of items.
+         * @param callback Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/cart-fill/)
+         */
+        @JvmStatic
+        fun fillCartByIdWithItems(
+            callback: FillSpecificCartWithItemsCallback,
+            cartId: String,
+            items: List<FillCartItem>
+        ) {
+            val body = FillCartWithItemsRequestBody(items)
+            getInstance().storeApi.fillSpecificCartWithItems(getInstance().projectId, cartId, body)
+                .enqueue(object : Callback<CartResponse> {
+                    override fun onResponse(
+                        call: Call<CartResponse>,
+                        response: Response<CartResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val cartResponse = response.body()
+                            if (cartResponse != null) {
+                                callback.onSuccess(cartResponse)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<CartResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
          * Update an existing item or create the one in the cart via cart ID
          *
          * @param cartId   cart ID
@@ -424,7 +473,7 @@ class XStore private constructor(
             cartId: String,
             options: PaymentOptions? = null
         ) {
-            val body = CreateOrderRequestBody(options)
+            val body = CreateCartOrderRequestBody(options)
             getInstance().storeApi.createOrderFromCartById(getInstance().projectId, cartId, body)
                 .enqueue(object : Callback<CreateOrderResponse> {
                     override fun onResponse(
@@ -462,7 +511,7 @@ class XStore private constructor(
             callback: CreateOrderCallback,
             options: PaymentOptions? = null
         ) {
-            val body = CreateOrderRequestBody(options)
+            val body = CreateCartOrderRequestBody(options)
             getInstance().storeApi.createOrderFromCurrentCart(getInstance().projectId, body)
                 .enqueue(object : Callback<CreateOrderResponse> {
                     override fun onResponse(
@@ -492,6 +541,7 @@ class XStore private constructor(
          *
          * @param itemSku  item SKU
          * @param options  payment options
+         * @param quantity item quantity
          * @param callback status callback
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/payment/create-order-with-item/)
          */
@@ -500,9 +550,10 @@ class XStore private constructor(
         fun createOrderByItemSku(
             callback: CreateOrderCallback,
             itemSku: String,
-            options: PaymentOptions? = null
+            options: PaymentOptions? = null,
+            quantity: Long = 1
         ) {
-            val body = CreateOrderRequestBody(options)
+            val body = CreateSkuOrderRequestBody(quantity, options)
             getInstance().storeApi.createOrderByItemSku(getInstance().projectId, itemSku, body)
                 .enqueue(object : Callback<CreateOrderResponse> {
                     override fun onResponse(
@@ -609,6 +660,118 @@ class XStore private constructor(
                         callback.onError(t, null)
                     }
                 })
+        }
+
+        /**
+         * Subscribes to order status updates.
+         *
+         * @param orderId  Order ID.
+         * @param listener Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/order/get-order/)
+         */
+        @JvmStatic
+        fun getOrderStatus(
+            listener: OrderStatusListener,
+            orderId: String
+        ) {
+            val codeFinish = 4001
+            val codeTimeout = 4002
+            val codeBadResponse = 4003
+
+            val orderStatusTimer = Timer()
+            lateinit var orderStatusWebSocket: WebSocket
+
+            val webSocketListener = object : WebSocketListener() {
+                override fun onOpen(webSocket: WebSocket, response: okhttp3.Response) {
+                    orderStatusTimer.schedule(object : TimerTask() {
+                        override fun run() {
+                            orderStatusWebSocket.close(codeTimeout, null)
+                        }
+                    }, ORDER_WS_TIMEOUT_MS)
+                }
+
+                override fun onMessage(webSocket: WebSocket, text: String) {
+                    val response = try {
+                        Gson().fromJson(text, WsOrderResponse::class.java)
+                    } catch (e: JsonSyntaxException) {
+                        orderStatusTimer.cancel()
+                        orderStatusWebSocket.close(codeBadResponse, null)
+                        return
+                    }
+                    if (response.status in listOf(OrderResponse.Status.DONE, OrderResponse.Status.CANCELED)) {
+                        orderStatusTimer.cancel()
+                        orderStatusWebSocket.close(codeFinish, null)
+                    }
+                    listener.onStatusUpdate(response.status)
+                }
+
+                override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+                    orderStatusTimer.cancel()
+                    if (code != codeFinish) {
+                        startOrderShortPolling(listener, orderId)
+                    }
+                }
+
+                override fun onFailure(webSocket: WebSocket, t: Throwable, response: okhttp3.Response?) {
+                    t.printStackTrace()
+                    orderStatusTimer.cancel()
+                    startOrderShortPolling(listener, orderId)
+                }
+            }
+
+            val baseUri = Uri.parse(ORDER_WS)
+            val url = Uri.Builder()
+                .scheme(baseUri.scheme)
+                .authority(baseUri.authority)
+                .path(baseUri.path)
+                .appendQueryParameter("order_id", orderId)
+                .appendQueryParameter("project_id", getInstance().projectId.toString())
+                .build()
+                .toString()
+
+            val request = Request.Builder().url(url).build()
+            orderStatusWebSocket = OkHttpClient().newWebSocket(request, webSocketListener)
+        }
+
+        private fun startOrderShortPolling(
+            listener: OrderStatusListener,
+            orderId: String
+        ) {
+            val delayTimer = Timer()
+            lateinit var singleRunTask: Runnable
+
+            singleRunTask = Runnable {
+                getInstance().storeApi.getOrder(getInstance().projectId, orderId)
+                    .enqueue(object : Callback<OrderResponse> {
+                        override fun onResponse(
+                            call: Call<OrderResponse>,
+                            response: Response<OrderResponse>
+                        ) {
+                            val status = response.body()?.status
+                            if (response.isSuccessful && status != null) {
+                                if (status !in listOf(OrderResponse.Status.DONE, OrderResponse.Status.CANCELED)) {
+                                    delayTimer.schedule(object : TimerTask() {
+                                        override fun run() {
+                                            singleRunTask.run()
+                                        }
+                                    }, ORDER_POLL_TIMEOUT)
+                                }
+                                listener.onStatusUpdate(status)
+                            } else {
+                                listener.onFailure()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<OrderResponse>, t: Throwable) {
+                            delayTimer.schedule(object : TimerTask() {
+                                override fun run() {
+                                    singleRunTask.run()
+                                }
+                            }, ORDER_POLL_TIMEOUT)
+                        }
+                    })
+            }
+            singleRunTask.run()
         }
 
         //----------     Game Keys     ----------
@@ -998,6 +1161,46 @@ class XStore private constructor(
                     }
 
                     override fun onFailure(call: Call<VirtualItemsResponse>, t: Throwable) {
+                        callback.onError(throwable = t, errorMessage = null)
+                    }
+                })
+        }
+
+        /**
+         * Gets a list of all virtual items for searching on the client-side
+         *
+         * @param locale Response language. Two-letter lowercase language code per ISO-639-1.
+         * @param callback Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/virtual-items-currency/catalog/get-all-virtual-items/)
+         */
+        @JvmStatic
+        @JvmOverloads
+        fun getVirtualItemsShort(
+            callback: GetVirtualItemsShortCallback,
+            locale: String? = null
+        ) {
+            getInstance().storeApi.getVirtualItemsShort(
+                getInstance().projectId,
+                locale
+            )
+                .enqueue(object : Callback<VirtualItemsShortResponse> {
+                    override fun onResponse(
+                        call: Call<VirtualItemsShortResponse>,
+                        response: Response<VirtualItemsShortResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val virtualItemsShortResponse = response.body()
+                            if (virtualItemsShortResponse != null) {
+                                callback.onSuccess(virtualItemsShortResponse)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<VirtualItemsShortResponse>, t: Throwable) {
                         callback.onError(throwable = t, errorMessage = null)
                     }
                 })
@@ -1451,6 +1654,46 @@ class XStore private constructor(
             val cart = CartIdRequest(cartId)
             val body = RedeemPromocodeRequestBody(promocode, json, cart)
             getInstance().storeApi.redeemPromocode(getInstance().projectId, body)
+                .enqueue(object : Callback<CartResponse> {
+                    override fun onResponse(
+                        call: Call<CartResponse>,
+                        response: Response<CartResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val cartResponse = response.body()
+                            if (cartResponse != null) {
+                                callback.onSuccess(cartResponse)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<CartResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
+         * Removes a promo code from a cart.
+         * After the promo code is removed, the total price of all items in the cart will be recalculated without bonuses and discounts provided by a promo code.
+         *
+         * @param cartId   Cart id. Default value is "current".
+         * @param callback Status callback.
+         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/promotions/promo-codes/remove-cart-promo-code)
+         */
+        @JvmStatic
+        @JvmOverloads
+        fun removePromocode(
+            callback: RemovePromocodeCallback,
+            cartId: String = "current"
+        ) {
+            val cart = CartIdRequest(cartId)
+            val body = RemovePromocodeRequestBody(cart)
+            getInstance().storeApi.removePromocode(getInstance().projectId, body)
                 .enqueue(object : Callback<CartResponse> {
                     override fun onResponse(
                         call: Call<CartResponse>,

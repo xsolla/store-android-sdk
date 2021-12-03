@@ -11,13 +11,9 @@ android {
     defaultConfig {
         minSdkVersion sdk_min
         targetSdkVersion sdk_target
-        versionCode googleplay_sdk_version_code
-        versionName googleplay_sdk_version_name
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
-
-        buildConfigField "String", "VERSION_NAME", "\"$versionName\""
     }
 
     buildTypes {
@@ -30,6 +26,7 @@ android {
     lintOptions {
         quiet true
         abortOnError true
+        checkDependencies true
     }
 
     testOptions {
@@ -42,11 +39,11 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.4'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.robolectric:robolectric:4.4'
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "org.robolectric:robolectric:$robolectric_version"
     testImplementation 'androidx.test:core:1.4.0'
 
 }

@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.9.0] - Demo Apps - 2022-11-30
+- Added 'Web Shop' button in demo
+- Removed cart from demo
+- Added refresh inventory button in demo
+- Updated dependencies
+
+## [2.1.0] - Login SDK - 2021-11-30
+- Added 'oauthLogout' method
+- Updated Facebook SDK version
+- Updated Google Play Services Auth SDK version
+- Updated dependencies
+
+## [1.0.3] - Inventory SDK - 2022-11-30
+- Fixed item consume method
+- Updated dependencies
+
+## [1.1.0] - Store SDK - 2021-11-30
+- Added new methods (getVirtualItemsShort, removePromocode)
+- Added checking order status using WebSocket
+- Updated 'createOrderByItemSku' method (added 'quantity' parameter)
+- Updated dependencies
+
+## [0.17.1] - Payments SDK - 2022-11-30
+- Updated dependencies
+
+
 ## [2.0.0] - Login SDK - 2021-09-03
 
 ### Added

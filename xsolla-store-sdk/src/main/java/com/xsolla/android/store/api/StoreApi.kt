@@ -4,9 +4,11 @@ import com.xsolla.android.store.entity.request.cart.FillCartWithItemsRequestBody
 import com.xsolla.android.store.entity.request.cart.UpdateItemBody
 import com.xsolla.android.store.entity.request.coupon.RedeemCouponRequestBody
 import com.xsolla.android.store.entity.request.coupon.RedeemPromocodeRequestBody
+import com.xsolla.android.store.entity.request.coupon.RemovePromocodeRequestBody
 import com.xsolla.android.store.entity.request.gamekeys.RedeemGameCodeBody
-import com.xsolla.android.store.entity.request.payment.CreateOrderRequestBody
+import com.xsolla.android.store.entity.request.payment.CreateCartOrderRequestBody
 import com.xsolla.android.store.entity.request.payment.CreatePaymentTokenBody
+import com.xsolla.android.store.entity.request.payment.CreateSkuOrderRequestBody
 import com.xsolla.android.store.entity.request.payment.CreateVirtualOrderRequestBody
 import com.xsolla.android.store.entity.response.bundle.BundleItem
 import com.xsolla.android.store.entity.response.bundle.BundleListResponse
@@ -105,20 +107,20 @@ interface StoreApi {
     fun createOrderFromCartById(
         @Path("project_id") projectId: Int,
         @Path("cart_id") cartId: String,
-        @Body body: CreateOrderRequestBody
+        @Body body: CreateCartOrderRequestBody
     ): Call<CreateOrderResponse>
 
     @POST("api/v2/project/{project_id}/payment/cart")
     fun createOrderFromCurrentCart(
         @Path("project_id") projectId: Int,
-        @Body body: CreateOrderRequestBody
+        @Body body: CreateCartOrderRequestBody
     ): Call<CreateOrderResponse>
 
     @POST("api/v2/project/{project_id}/payment/item/{item_sku}")
     fun createOrderByItemSku(
         @Path("project_id") projectId: Int,
         @Path("item_sku") itemSku: String,
-        @Body body: CreateOrderRequestBody
+        @Body body: CreateSkuOrderRequestBody
     ): Call<CreateOrderResponse>
 
     @POST("api/v2/project/{project_id}/payment")
@@ -234,6 +236,12 @@ interface StoreApi {
         @Query("country") country: String?
     ): Call<VirtualItemsResponse>
 
+    @GET("/api/v2/project/{project_id}/items/virtual_items/all")
+    fun getVirtualItemsShort(
+        @Path("project_id") projectId: Int,
+        @Query("locale") locale: String?
+    ): Call<VirtualItemsShortResponse>
+
     @GET("/api/v2/project/{project_id}/items/virtual_currency")
     fun getVirtualCurrency(
         @Path("project_id") projectId: Int,
@@ -331,6 +339,12 @@ interface StoreApi {
     fun redeemPromocode(
         @Path("project_id") projectId: Int,
         @Body body: RedeemPromocodeRequestBody
+    ): Call<CartResponse>
+
+    @PUT("api/v2/project/{project_id}/promocode/remove")
+    fun removePromocode(
+        @Path("project_id") projectId: Int,
+        @Body body: RemovePromocodeRequestBody
     ): Call<CartResponse>
 
     @GET("api/v2/project/{project_id}/promocode/code/{promocode_code}/rewards")

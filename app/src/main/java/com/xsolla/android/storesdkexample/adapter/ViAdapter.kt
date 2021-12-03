@@ -3,6 +3,7 @@ package com.xsolla.android.storesdkexample.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.xsolla.android.appcore.ui.vm.VmPurchase
 import com.xsolla.android.googleplay.StoreUtils
 import com.xsolla.android.storesdkexample.App
 import com.xsolla.android.storesdkexample.adapter.holder.ViGooglePlayViewHolder
@@ -11,12 +12,11 @@ import com.xsolla.android.storesdkexample.adapter.holder.ViVirtualPriceViewHolde
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.fragments.store.VirtualItemUiEntity
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
-import com.xsolla.android.storesdkexample.ui.vm.VmCart
 import com.xsolla.android.storesdkexample.ui.vm.VmGooglePlay
 
 class ViAdapter(
     private val items: List<VirtualItemUiEntity>,
-    private val vmCart: VmCart,
+    private val vmPurchase: VmPurchase,
     private val vmBalance: VmBalance,
     private val vmGooglePay: VmGooglePlay,
     private val purchaseListener: PurchaseListener
@@ -43,7 +43,7 @@ class ViAdapter(
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             GOOGLE_PLAY -> ViGooglePlayViewHolder(inflater, parent, vmGooglePay)
-            REAL_PRICE -> ViRealPriceViewHolder(inflater, parent, vmCart, purchaseListener)
+            REAL_PRICE -> ViRealPriceViewHolder(inflater, parent, vmPurchase, purchaseListener)
             else -> ViVirtualPriceViewHolder(inflater, parent, vmBalance, purchaseListener)
         }
     }

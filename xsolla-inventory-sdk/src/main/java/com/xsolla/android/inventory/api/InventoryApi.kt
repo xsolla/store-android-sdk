@@ -1,6 +1,5 @@
 package com.xsolla.android.inventory.api
 
-import com.xsolla.android.inventory.entity.request.ConsumeItemBody
 import com.xsolla.android.inventory.entity.response.InventoryResponse
 import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
 import com.xsolla.android.inventory.entity.response.VirtualBalanceResponse
@@ -40,7 +39,7 @@ interface InventoryApi {
     fun consumeItem(
             @Path("project_id") projectId: Int,
             @Query("platform") platform: String,
-            @Body body: ConsumeItemBody
+            @Body body: RequestBody
     ): Call<Void>
 
 }

@@ -2,39 +2,35 @@
 
 buildscript {
 
-    ext.payments_sdk_version_name = '0.17.0'
-    ext.payments_sdk_version_code = 14
-
-    ext.store_sdk_version_name = '1.0.0'
-    ext.store_sdk_version_code = 15
-
-    ext.inventory_sdk_version_name = '1.0.2'
-    ext.inventory_sdk_version_code = 3
-
-    ext.login_sdk_version_name = '2.0.0'
-    ext.login_sdk_version_code = 17
-
-    ext.sample_app_version_name = '1.8.1'
-    ext.sample_app_version_code = 22
+    ext.payments_sdk_version_name = '0.17.1'
+    ext.store_sdk_version_name = '1.1.0'
+    ext.inventory_sdk_version_name = '1.0.3'
+    ext.login_sdk_version_name = '2.1.0'
 
     ext.googleplay_sdk_version_name = "0.0.1"
-    ext.googleplay_sdk_version_code = 1
+
+    ext.sample_app_version_name = '1.9.0'
+    ext.sample_app_version_code = 23
 
     ext.sdk_min = 21
-    ext.sdk_target = 29
-    ext.sdk_compile = 29
+    ext.sdk_target = 30
+    ext.sdk_compile = 30
 
-    ext.kotlin_version = '1.4.21'
+    ext.kotlin_version = '1.5.31'
+    ext.retrofit_version = '2.9.0'
+    ext.junit_version = '4.13.2'
+    ext.robolectric_version = '4.6.1'
 
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.1'
+        classpath 'com.android.tools.build:gradle:7.0.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.1"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.5"
         classpath 'org.jetbrains.dokka:dokka-gradle-plugin:1.4.20'
+        classpath 'org.owasp:dependency-check-gradle:6.4.1.1'
     }
 }
 
@@ -42,6 +38,15 @@ allprojects {
     repositories {
         google()
         jcenter()
+    }
+}
+
+subprojects {
+    apply plugin: 'org.owasp.dependencycheck'
+    dependencyCheck {
+        scanConfigurations += 'releaseCompileClasspath'
+        suppressionFiles = ["${rootDir}/owasp-suppress.xml"]
+        failBuildOnCVSS = 1
     }
 }
 

@@ -127,7 +127,7 @@ object LoginSocial {
 
     private fun initFacebook(context: Context) {
         try {
-            FacebookSdk.setApplicationId(facebookAppId)
+            FacebookSdk.setApplicationId(facebookAppId!!)
             FacebookSdk.sdkInitialize(context)
             fbCallbackManager = CallbackManager.Factory.create()
             fbCallback = object : FacebookCallback<LoginResult> {
@@ -432,7 +432,7 @@ object LoginSocial {
         }
         if (socialNetwork == SocialNetwork.GOOGLE && googleAvailable) {
             googleCredentialFromIntent = null
-            val oneTapClient = Identity.getSignInClient(activity ?: fragment?.activity!!)
+            val oneTapClient = Identity.getSignInClient(activity ?: fragment!!.requireActivity())
             val oneTapRequest = BeginSignInRequest.builder()
                 .setGoogleIdTokenRequestOptions(
                     BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
@@ -445,8 +445,8 @@ object LoginSocial {
             oneTapClient.beginSignIn(oneTapRequest)
                 .addOnSuccessListener {
                     try {
-                        val currentActivity = activity ?: fragment?.requireActivity()
-                        currentActivity?.startIntentSenderForResult(
+                        val currentActivity = activity ?: fragment!!.requireActivity()
+                        currentActivity.startIntentSenderForResult(
                             it.pendingIntent.intentSender,
                             RC_AUTH_GOOGLE,
                             null,
@@ -469,7 +469,7 @@ object LoginSocial {
                 val intent = if (activity != null) {
                     Intent(activity, ActivityWechatProxy::class.java)
                 } else {
-                    Intent(fragment?.activity, ActivityWechatProxy::class.java)
+                    Intent(fragment!!.activity, ActivityWechatProxy::class.java)
                 }
                 intent.putExtra(ActivityWechatProxy.EXTRA_WECHAT_ID, wechatAppId)
                 activity?.startActivityForResult(intent, RC_AUTH_WECHAT)

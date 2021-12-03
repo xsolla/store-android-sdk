@@ -249,17 +249,19 @@ class LoginTests {
         val latch = CountDownLatch(1)
         var error = false
         var err: String? = null
-        XLogin.startAuthByMobilePhone(phoneNumber + phoneNumber, object : StartPasswordlessAuthCallback {
-            override fun onAuthStarted(data: StartPasswordlessAuthResponse) {
-                latch.countDown()
-            }
+        XLogin.startAuthByMobilePhone(
+            phoneNumber + phoneNumber,
+            object : StartPasswordlessAuthCallback {
+                override fun onAuthStarted(data: StartPasswordlessAuthResponse) {
+                    latch.countDown()
+                }
 
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                error = true
-                err = errorMessage
-                latch.countDown()
-            }
-        })
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    error = true
+                    err = errorMessage
+                    latch.countDown()
+                }
+            })
         latch.await()
         Assert.assertTrue(error)
         Assert.assertEquals("body.phone_number in body should match '^\\+(\\d){5,25}\$'", err)
@@ -299,17 +301,19 @@ class LoginTests {
         val latch = CountDownLatch(1)
         var error = false
         var err: String? = null
-        XLogin.startAuthByMobilePhone(phoneNumber + phoneNumber, object : StartPasswordlessAuthCallback {
-            override fun onAuthStarted(data: StartPasswordlessAuthResponse) {
-                latch.countDown()
-            }
+        XLogin.startAuthByMobilePhone(
+            phoneNumber + phoneNumber,
+            object : StartPasswordlessAuthCallback {
+                override fun onAuthStarted(data: StartPasswordlessAuthResponse) {
+                    latch.countDown()
+                }
 
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                error = true
-                err = errorMessage
-                latch.countDown()
-            }
-        })
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    error = true
+                    err = errorMessage
+                    latch.countDown()
+                }
+            })
         latch.await()
         Assert.assertTrue(error)
         Assert.assertEquals("body.phone_number in body should match '^\\+(\\d){5,25}\$'", err)
@@ -323,17 +327,21 @@ class LoginTests {
         val latch = CountDownLatch(1)
         var error = false
         var err: String? = null
-        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, operationId, object : CompletePasswordlessAuthCallback {
-            override fun onSuccess() {
-                latch.countDown()
-            }
+        XLogin.completeAuthByMobilePhone(
+            phoneNumber,
+            smsCode,
+            operationId,
+            object : CompletePasswordlessAuthCallback {
+                override fun onSuccess() {
+                    latch.countDown()
+                }
 
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                error = true
-                err = errorMessage
-                latch.countDown()
-            }
-        })
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    error = true
+                    err = errorMessage
+                    latch.countDown()
+                }
+            })
         latch.await()
         Assert.assertTrue(error)
         Assert.assertEquals("Wrong authorization code.", err)
@@ -347,20 +355,91 @@ class LoginTests {
         val latch = CountDownLatch(1)
         var error = false
         var err: String? = null
-        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, operationId, object : CompletePasswordlessAuthCallback {
+        XLogin.completeAuthByMobilePhone(
+            phoneNumber,
+            smsCode,
+            operationId,
+            object : CompletePasswordlessAuthCallback {
+                override fun onSuccess() {
+                    latch.countDown()
+                }
+
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    error = true
+                    err = errorMessage
+                    latch.countDown()
+                }
+            })
+        latch.await()
+        Assert.assertTrue(error)
+        Assert.assertEquals("Wrong authorization code.", err)
+    }
+
+    @Test
+    fun oauthLogoutSso_Success() {
+        initSdkOauth()
+        initLoggedInByPassword()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        XLogin.oauthLogout("sso", object : OauthLogoutCallback {
             override fun onSuccess() {
                 latch.countDown()
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
                 error = true
-                err = errorMessage
+                latch.countDown()
+            }
+        })
+        latch.await()
+        Assert.assertFalse(error)
+    }
+
+    @Test
+    fun oauthLogoutAll_Success() {
+        initSdkOauth()
+        initLoggedInByPassword()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        XLogin.oauthLogout("all", object : OauthLogoutCallback {
+            override fun onSuccess() {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                error = true
+                latch.countDown()
+            }
+        })
+        latch.await()
+        Assert.assertFalse(error)
+    }
+
+    @Test
+    fun oauthLogout_Fail() {
+        initSdkOauth()
+        initLoggedInByPassword()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        var msg: String? = null
+        val wrongArgument = "abc"
+        XLogin.oauthLogout(wrongArgument, object : OauthLogoutCallback {
+            override fun onSuccess() {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                msg = errorMessage
+                error = true
                 latch.countDown()
             }
         })
         latch.await()
         Assert.assertTrue(error)
-        Assert.assertEquals("Wrong authorization code.", err)
+        Assert.assertEquals("sessions in query should be one of [sso all]", msg)
     }
 
     @Ignore("for manual testing (needs correct sms code and phone number substitution)")
@@ -371,16 +450,20 @@ class LoginTests {
 
         val latch = CountDownLatch(1)
         var error = false
-        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, operationId, object : CompletePasswordlessAuthCallback {
-            override fun onSuccess() {
-                latch.countDown()
-            }
+        XLogin.completeAuthByMobilePhone(
+            phoneNumber,
+            smsCode,
+            operationId,
+            object : CompletePasswordlessAuthCallback {
+                override fun onSuccess() {
+                    latch.countDown()
+                }
 
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                error = true
-                latch.countDown()
-            }
-        })
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    error = true
+                    latch.countDown()
+                }
+            })
         latch.await()
         Assert.assertFalse(error)
         Assert.assertFalse(XLogin.token.isNullOrEmpty())
@@ -396,16 +479,20 @@ class LoginTests {
 
         val latch = CountDownLatch(1)
         var error = false
-        XLogin.completeAuthByMobilePhone(phoneNumber, smsCode, operationId, object : CompletePasswordlessAuthCallback {
-            override fun onSuccess() {
-                latch.countDown()
-            }
+        XLogin.completeAuthByMobilePhone(
+            phoneNumber,
+            smsCode,
+            operationId,
+            object : CompletePasswordlessAuthCallback {
+                override fun onSuccess() {
+                    latch.countDown()
+                }
 
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                error = true
-                latch.countDown()
-            }
-        })
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    error = true
+                    latch.countDown()
+                }
+            })
         latch.await()
         Assert.assertFalse(error)
         Assert.assertFalse(XLogin.token.isNullOrEmpty())
