@@ -764,9 +764,9 @@ class XLogin private constructor(
         }
 
         /**
-         * Logs the user out and deletes the user session according to the value of the sessions parameter
+         * Logs the user out and deletes the user session according to the value of the sessions parameter.
          *
-         * @param sessions shows how the user is logged out and how the user session is deleted.
+         * @param sessions Shows how the user is logged out and how the user session is deleted.
          * The parameter has the following values:
          * `sso` is used for deleting only the SSO user session.
          * `all` is used for deleting the SSO user session and invalidating all access and refresh tokens.

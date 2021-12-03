@@ -2,23 +2,51 @@ The Login library is used to integrate applications based on Android with [Xsoll
 
 Main features:
 
-
-* authentication via email or username and password
-* authentication via the following social networks:
-    * Google
-    * Facebook
-    * Twitter
-    * LinkedIn
-    * Naver
-    * Baidu
-    * WeChat
-    * QQ
 * sign-up
+* authentication via a device ID
+* authentication via an email address or username and password
+* passwordless authentication via an email address or phone number
+* authentication via social networks
+<details>
+<summary><b>See the full list of supported social networks</b></summary>
+    <ul>
+		<li>Amazon</li>
+		<li>Apple</li>
+		<li>Baidu</li>
+		<li>Battle.net</li>
+		<li>Discord</li>
+		<li>Facebook</li>
+		<li>GitHub</li>
+		<li>Google</li>
+		<li>Kakao</li>
+		<li>LinkedIn</li>
+		<li>MSN</li>
+		<li>Mail.ru</li>
+		<li>Microsoft</li>
+		<li>Naver</li>
+		<li>Odnoklassniki</li>
+		<li>PayPal</li>
+		<li>QQ</li>
+		<li>Reddit</li>
+		<li>Steam</li>
+		<li>Twitch.tv</li>
+		<li>Twitter</li>
+		<li>VK</li>
+		<li>Vimeo</li>
+		<li>WeChat</li>
+		<li>Weibo</li>
+		<li>Xbox Live</li>
+		<li>Yahoo</li>
+		<li>Yandex</li>
+		<li>YouTube</li>
+		</ul>
+</details>
+
 * email confirmation
 * password reset
+* user account
 * user attributes management
 * friend system
-* user account
 
 
 ## Integration

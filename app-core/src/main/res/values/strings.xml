@@ -45,7 +45,7 @@
     <string name="drawer_item_vc">Virtual currency</string>
     <string name="drawer_item_merchandise">Merchandise</string>
     <string name="drawer_item_coupon">Redeem a coupon</string>
-    <string name="drawer_item_webstore">Web Store</string>
+    <string name="drawer_item_webstore">Web Shop</string>
     <string name="drawer_item_tutorial">Tutorial</string>
     <string name="drawer_item_account">Account</string>
     <string name="drawer_item_logout">Log out</string>
