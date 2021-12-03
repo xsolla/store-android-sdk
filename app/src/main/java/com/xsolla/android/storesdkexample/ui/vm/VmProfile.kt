@@ -13,7 +13,6 @@ import com.xsolla.android.login.callback.UpdateCurrentUserPhoneCallback
 import com.xsolla.android.login.entity.response.GenderResponse
 import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.storesdkexample.R
-import java.util.Locale
 import java.util.regex.Pattern
 
 class VmProfile(private val resources: Resources) : ViewModel() {
@@ -58,7 +57,13 @@ class VmProfile(private val resources: Resources) : ViewModel() {
     }
 
     fun updateFields(newState: UserDetailsUi) {
-        val gender = newState.gender?.name?.toLowerCase(Locale.getDefault())?.first()?.toString()
+        val gender = when (newState.gender) {
+            Gender.Female -> "f"
+            Gender.Male -> "m"
+            Gender.Other -> "other"
+            Gender.PreferNotToAnswer -> "prefer not to answer"
+            null -> ""
+        }
         val birthday = newState.birthday
         XLogin.updateCurrentUserDetails(birthday, newState.firstName, gender, newState.lastName, newState.nickname, object : UpdateCurrentUserDetailsCallback {
             override fun onSuccess() {

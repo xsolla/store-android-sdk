@@ -286,9 +286,9 @@ class XStore private constructor(
          * Fills the specific cart with items.
          * If the cart already has an item, the existing item will be replaced by the given value.
          *
-         * @param cartId   cart ID
-         * @param items    list of items
-         * @param callback status callback
+         * @param cartId   Cart ID.
+         * @param items    List of items.
+         * @param callback Status callback.
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/cart-fill/)
          */
         @JvmStatic
@@ -663,10 +663,10 @@ class XStore private constructor(
         }
 
         /**
-         * Subscribe to order status updates
+         * Subscribes to order status updates.
          *
-         * @param orderId  order ID
-         * @param listener status callback
+         * @param orderId  Order ID.
+         * @param listener Status callback.
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/order/get-order/)
          */
         @JvmStatic
@@ -1167,10 +1167,10 @@ class XStore private constructor(
         }
 
         /**
-         * Get a list of all virtual items for searching on client-side
+         * Gets a list of all virtual items for searching on the client-side
          *
-         * @param locale Response language. Two-letter lowercase language code per ISO-639-1
-         * @param callback status callback
+         * @param locale Response language. Two-letter lowercase language code per ISO-639-1.
+         * @param callback Status callback.
          * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/virtual-items-currency/catalog/get-all-virtual-items/)
          */
         @JvmStatic
@@ -1681,8 +1681,8 @@ class XStore private constructor(
          * Removes a promo code from a cart.
          * After the promo code is removed, the total price of all items in the cart will be recalculated without bonuses and discounts provided by a promo code.
          *
-         * @param cartId   cart id. Default value is "current"
-         * @param callback status callback
+         * @param cartId   Cart id. Default value is "current".
+         * @param callback Status callback.
          * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/promotions/promo-codes/remove-cart-promo-code)
          */
         @JvmStatic

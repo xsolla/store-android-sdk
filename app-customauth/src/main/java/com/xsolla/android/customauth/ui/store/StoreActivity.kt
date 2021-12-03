@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -130,6 +131,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
             navController.navigate(R.id.nav_coupon)
             binding.root.close()
         }
+        findViewById<View>(R.id.itemWebStore).isVisible = false
         findViewById<View>(R.id.itemLogout).setOnClickListener { logout() }
     }
 

@@ -90,8 +90,14 @@ class LoginEnterCodeFragment : BaseFragment() {
                     }
                 }
                 when (type) {
-                    Type.EMAIL -> XLogin.startAuthByEmail(phoneOrEmail, callback)
-                    Type.PHONE -> XLogin.startAuthByMobilePhone(phoneOrEmail, callback)
+                    Type.EMAIL -> XLogin.startAuthByEmail(
+                        phoneOrEmail,
+                        callback = callback, sendLink = true, linkUrl = "app://xsollaconfirm"
+                    )
+                    Type.PHONE -> XLogin.startAuthByMobilePhone(
+                        phoneOrEmail,
+                        callback = callback, sendLink = true, linkUrl = "app://xsollaconfirm"
+                    )
                 }
             }
         }
@@ -109,6 +115,7 @@ class LoginEnterCodeFragment : BaseFragment() {
         })
 
         binding.btLogIn.setOnClickListener {
+            hideKeyboard()
             val code = binding.codeInput.text.toString()
             completeAuth(
                 type,
