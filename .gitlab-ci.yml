@@ -5,6 +5,9 @@ include:
   - project: 'security/sast-helper'
     ref: master
     file: 'gitlab-ci.yml'
+  - project: 'security/sca-helper'
+    ref: master
+    file: 'gitlab-ci.yml'
 
 variables:
   SAST_EXPERIMENTAL_FEATURES: "true"
@@ -16,7 +19,7 @@ stages:
   - build
   - lint
   - test
-  - sast_upload
+  - report_upload
   - publish
   - build_doc
   - deploy
@@ -253,3 +256,75 @@ stop doc:
   only:
     - /^v.*/
   dependencies: []
+
+Login-dep-track:
+  tags:
+    - sdk
+  extends:
+    - .sca-gen
+  stage: test
+  script:
+    - ./gradlew :xsolla-login-sdk:cyclonedxBom
+    - mv xsolla-login-sdk/build/reports/bom.xml bom.xml
+
+Login-dep-track-upload:
+  extends:
+    - .sca-upload
+  dependencies: [Login-dep-track]
+  needs: [Login-dep-track]
+  variables:
+    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_LOGIN_PROJECT_ID
+
+Inventory-dep-track:
+  tags:
+    - sdk
+  extends:
+    - .sca-gen
+  stage: test
+  script:
+    - ./gradlew :xsolla-inventory-sdk:cyclonedxBom
+    - mv xsolla-inventory-sdk/build/reports/bom.xml bom.xml
+
+Inventory-dep-track-upload:
+  extends:
+    - .sca-upload
+  dependencies: [Inventory-dep-track]
+  needs: [Inventory-dep-track]
+  variables:
+    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_INVENTORY_PROJECT_ID
+
+Payments-dep-track:
+  tags:
+    - sdk
+  extends:
+    - .sca-gen
+  stage: test
+  script:
+    - ./gradlew :xsolla-payments-sdk:cyclonedxBom
+    - mv xsolla-payments-sdk/build/reports/bom.xml bom.xml
+
+Payments-dep-track-upload:
+  extends:
+    - .sca-upload
+  dependencies: [Payments-dep-track]
+  needs: [Payments-dep-track]
+  variables:
+    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_PAYMENTS_PROJECT_ID
+
+Store-dep-track:
+  tags:
+    - sdk
+  extends:
+    - .sca-gen
+  stage: test
+  script:
+    - ./gradlew :xsolla-store-sdk:cyclonedxBom
+    - mv xsolla-store-sdk/build/reports/bom.xml bom.xml
+
+Store-dep-track-upload:
+  extends:
+    - .sca-upload
+  dependencies: [Store-dep-track]
+  needs: [Store-dep-track]
+  variables:
+    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_STORE_PROJECT_ID
