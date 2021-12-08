@@ -2,9 +2,6 @@ include:
   - project: 'sysadm-docker/ubuntu-sshclient'
     ref:     'master'
     file:    'gitlab-ci-template.yml'
-  - project: 'security/sast-helper'
-    ref: master
-    file: 'gitlab-ci.yml'
   - project: 'security/sca-helper'
     ref: master
     file: 'gitlab-ci.yml'
@@ -40,6 +37,14 @@ generate_keystore:
       - xsolla.keystore
       - signing.properties
     expire_in: 30 mins
+
+debug_sast:
+  tags:
+    - sdk
+  stage: generate_keystore
+  script:
+    - echo $SAST_DEFAULT_ANALYZERS
+    - echo $CI_PROJECT_REPOSITORY_LANGUAGES
 
 build:
   tags:
