@@ -5,6 +5,7 @@ include:
   - project: 'security/sca-helper'
     ref: master
     file: 'gitlab-ci.yml'
+  - template: Security/SAST.gitlab-ci.yml
 
 variables:
   SAST_EXPERIMENTAL_FEATURES: "true"
