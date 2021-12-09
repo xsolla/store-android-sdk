@@ -2,9 +2,6 @@ include:
   - project: 'sysadm-docker/ubuntu-sshclient'
     ref:     'master'
     file:    'gitlab-ci-template.yml'
-  - project: 'security/sast-helper'
-    ref: master
-    file: 'gitlab-ci.yml'
   - project: 'security/sca-helper'
     ref: master
     file: 'gitlab-ci.yml'
