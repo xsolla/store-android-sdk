@@ -71,30 +71,30 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         }
 
         binding.googleButton.setRateLimitedClickListener {
-            selectedSocialNetwork = SocialNetwork.YAHOO
+            selectedSocialNetwork = SocialNetwork.TWITCH
             XLogin.startSocialAuth(
                 this,
-                SocialNetwork.YAHOO,
+                SocialNetwork.TWITCH,
                 BuildConfig.WITH_LOGOUT,
                 startSocialCallback
             )
         }
 
         binding.facebookButton.setRateLimitedClickListener {
-            selectedSocialNetwork = SocialNetwork.VK
+            selectedSocialNetwork = SocialNetwork.STEAM
             XLogin.startSocialAuth(
                 this,
-                SocialNetwork.VK,
+                SocialNetwork.STEAM,
                 BuildConfig.WITH_LOGOUT,
                 startSocialCallback
             )
         }
 
         binding.baiduButton.setRateLimitedClickListener {
-            selectedSocialNetwork = SocialNetwork.VIMEO
+            selectedSocialNetwork = SocialNetwork.REDDIT
             XLogin.startSocialAuth(
                 this,
-                SocialNetwork.VIMEO,
+                SocialNetwork.REDDIT,
                 BuildConfig.WITH_LOGOUT,
                 startSocialCallback
             )
