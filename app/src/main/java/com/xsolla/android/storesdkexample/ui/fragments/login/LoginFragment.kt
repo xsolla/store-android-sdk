@@ -71,20 +71,20 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         }
 
         binding.googleButton.setRateLimitedClickListener {
-            selectedSocialNetwork = SocialNetwork.VK
+            selectedSocialNetwork = SocialNetwork.YOUTUBE
             XLogin.startSocialAuth(
                 this,
-                SocialNetwork.STEAM,
+                SocialNetwork.YOUTUBE,
                 BuildConfig.WITH_LOGOUT,
                 startSocialCallback
             )
         }
 
         binding.facebookButton.setRateLimitedClickListener {
-            selectedSocialNetwork = SocialNetwork.YAHOO
+            selectedSocialNetwork = SocialNetwork.XBOX
             XLogin.startSocialAuth(
                 this,
-                SocialNetwork.YAHOO,
+                SocialNetwork.XBOX,
                 BuildConfig.WITH_LOGOUT,
                 startSocialCallback
             )
