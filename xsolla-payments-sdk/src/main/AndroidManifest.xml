@@ -13,6 +13,7 @@
             android:name="com.xsolla.android.payments.ui.ActivityPaystationBrowserProxy"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
+            android:exported="true"
             android:theme="@style/xsolla_payments_Theme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -21,8 +22,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="@string/xsolla_payments_redirect_host"
-                    android:scheme="@string/xsolla_payments_redirect_scheme" />
+                    android:host="xpayment.${applicationId}"
+                    android:scheme="app" />
             </intent-filter>
         </activity>
         <activity
