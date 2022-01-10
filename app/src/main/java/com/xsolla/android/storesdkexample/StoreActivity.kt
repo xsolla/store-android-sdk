@@ -94,6 +94,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
                 .accessToken(AccessToken(token))
                 .isSandbox(BuildConfig.IS_SANDBOX)
                 .build()
+
             startActivityForResult(intent, RC_PAYSTATION)
         }
         vmPurchase.startPurchaseError.observe(this) { errorMessage ->
