@@ -3,7 +3,7 @@ include:
     ref:     'master'
     file:    'gitlab-ci-template.yml'
   - project: 'security/sast-helper'
-    ref: master
+    ref: SEC-976-add-analyzers
     file: 'gitlab-ci.yml'
   - project: 'security/sca-helper'
     ref: master
