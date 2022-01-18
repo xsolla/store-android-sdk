@@ -37,22 +37,20 @@ class App : Application() {
             googleServerId = BuildConfig.GOOGLE_CREDENTIAL
         )
 
-        if (BuildConfig.USE_OAUTH) {
-            val loginConfig = LoginConfig.OauthBuilder()
+        val loginConfig = if (BuildConfig.USE_OAUTH){
+            LoginConfig.OauthBuilder()
                 .setProjectId(DemoCredentialsManager.loginId)
                 .setOauthClientId(DemoCredentialsManager.oauthClientId)
                 .setSocialConfig(socialConfig)
                 .build()
-
-            XLogin.init(this, loginConfig)
         } else {
-            val loginConfig = LoginConfig.JwtBuilder()
+            LoginConfig.JwtBuilder()
                 .setProjectId(DemoCredentialsManager.loginId)
                 .setSocialConfig(socialConfig)
                 .build()
-
-            XLogin.init(this, loginConfig)
         }
+        XLogin.init(this, loginConfig)
+
     }
 
 }
