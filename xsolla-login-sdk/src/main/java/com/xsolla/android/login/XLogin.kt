@@ -146,8 +146,8 @@ class XLogin private constructor(
             val tokenUtils = TokenUtils(context)
 
             val callbackUrl = Uri.Builder()
-                .scheme(context.getString(R.string.xsolla_login_redirect_scheme))
-                .authority(context.getString(R.string.xsolla_login_redirect_host))
+                .scheme(loginConfig.redirectScheme ?: "app")
+                .authority(loginConfig.redirectHost ?: "xlogin.${context.packageName}")
                 .build()
                 .toString()
 
@@ -740,7 +740,12 @@ class XLogin private constructor(
                     promoEmailAgreement = promoEmailAgreement
                 )
                 getInstance().loginApi
-                    .registerUser(getInstance().projectId, getInstance().callbackUrl, payload, registerUserBody)
+                    .registerUser(
+                        getInstance().projectId,
+                        getInstance().callbackUrl,
+                        payload,
+                        registerUserBody
+                    )
                     .enqueue(retrofitCallback)
             } else {
                 val oauthRegisterUserBody = OauthRegisterUserBody(
@@ -889,7 +894,11 @@ class XLogin private constructor(
         ) {
             val resetPasswordBody = ResetPasswordBody(username!!)
             getInstance().loginApi
-                .resetPassword(getInstance().projectId, getInstance().callbackUrl, resetPasswordBody)
+                .resetPassword(
+                    getInstance().projectId,
+                    getInstance().callbackUrl,
+                    resetPasswordBody
+                )
                 .enqueue(object : Callback<Void?> {
                     override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
                         if (response.isSuccessful) {
@@ -1503,9 +1512,9 @@ class XLogin private constructor(
                     "Bearer $token",
                     afterUrl,
                     limit,
-                    type.name.toLowerCase(Locale.getDefault()),
-                    sortBy.name.toLowerCase(Locale.getDefault()),
-                    sortOrder.name.toLowerCase(Locale.getDefault())
+                    type.name.lowercase(),
+                    sortBy.name.lowercase(),
+                    sortOrder.name.lowercase()
                 )
                 .enqueue(object : Callback<UserFriendsResponse> {
                     override fun onResponse(
@@ -1545,7 +1554,10 @@ class XLogin private constructor(
             callback: UpdateCurrentUserFriendsCallback
         ) {
             val updateUserFriendsRequest =
-                UpdateUserFriendsRequest(action.name.toLowerCase(Locale.getDefault()), friendXsollaUserId)
+                UpdateUserFriendsRequest(
+                    action.name.lowercase(),
+                    friendXsollaUserId
+                )
             getInstance().loginApi
                 .updateFriends("Bearer $token", updateUserFriendsRequest)
                 .enqueue(object : Callback<Void> {
@@ -1585,7 +1597,7 @@ class XLogin private constructor(
             getInstance().loginApi
                 .getSocialFriends(
                     "Bearer $token",
-                    platform?.name?.toLowerCase(Locale.getDefault()),
+                    platform?.name?.lowercase(),
                     offset,
                     limit,
                     fromGameOnly
@@ -1624,7 +1636,10 @@ class XLogin private constructor(
         @JvmStatic
         fun updateSocialFriends(platform: FriendsPlatform?, callback: UpdateSocialFriendsCallback) {
             getInstance().loginApi
-                .updateSocialFriends("Bearer $token", platform?.name?.toLowerCase(Locale.getDefault()))
+                .updateSocialFriends(
+                    "Bearer $token",
+                    platform?.name?.lowercase()
+                )
                 .enqueue(object : Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if (response.isSuccessful) {
@@ -2008,7 +2023,10 @@ class XLogin private constructor(
             callback: UnlinkSocialNetworkCallback
         ) {
             getInstance().loginApi
-                .unlinkSocialNetwork("Bearer $token", platform.name.toLowerCase(Locale.getDefault()))
+                .unlinkSocialNetwork(
+                    "Bearer $token",
+                    platform.name.lowercase()
+                )
                 .enqueue(object : Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if (response.isSuccessful) {
@@ -2041,7 +2059,7 @@ class XLogin private constructor(
             val intent = Intent(context, ActivityAuthBrowserProxy::class.java)
             intent.putExtra(
                 ActivityAuth.ARG_AUTH_URL,
-                LOGIN_HOST + "/api/users/me/social_providers/" + socialNetwork.name.toLowerCase(Locale.getDefault()) + "/login_redirect"
+                LOGIN_HOST + "/api/users/me/social_providers/" + socialNetwork.name.lowercase() + "/login_redirect"
             )
             intent.putExtra(ActivityAuth.ARG_CALLBACK_URL, getInstance().callbackUrl)
             intent.putExtra(ActivityAuthWebView.ARG_TOKEN, token)
