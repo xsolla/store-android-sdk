@@ -16,11 +16,16 @@ class ActivityPaystationWebView : ActivityPaystation() {
     private lateinit var url: String
     private lateinit var webView: WebView
 
+    private lateinit var redirectScheme: String
+    private lateinit var redirectHost: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.xsolla_payments_activity_paystation)
         webView = findViewById(R.id.webview)
         url = intent.getStringExtra(ARG_URL)!!
+        redirectScheme = intent.getStringExtra(ARG_REDIRECT_SCHEME)!!
+        redirectHost = intent.getStringExtra(ARG_REDIRECT_HOST)!!
 
         configureWebView()
         webView.loadUrl(url)
@@ -42,9 +47,9 @@ class ActivityPaystationWebView : ActivityPaystation() {
         webView.settings.javaScriptEnabled = true
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(webView: WebView, url: String): Boolean {
-                val urlLower = url.toLowerCase()
+                val urlLower = url.lowercase()
 
-                if (url.startsWith(getString(R.string.xsolla_payments_redirect_scheme)))
+                if (urlLower.startsWith(redirectScheme))
                     return false
 
                 if (!(urlLower.startsWith("https:") || urlLower.startsWith("http:")))
@@ -55,8 +60,8 @@ class ActivityPaystationWebView : ActivityPaystation() {
 
             override fun doUpdateVisitedHistory(view: WebView, url: String, isReload: Boolean) {
                 val uri = Uri.parse(url)
-                if (uri.scheme == getString(R.string.xsolla_payments_redirect_scheme)
-                    && uri.authority == getString(R.string.xsolla_payments_redirect_host)
+                if (uri.scheme == redirectScheme
+                    && uri.host == redirectHost
                 ) {
                     val invoiceId = uri.getQueryParameter("invoice_id")
                     //hide error message

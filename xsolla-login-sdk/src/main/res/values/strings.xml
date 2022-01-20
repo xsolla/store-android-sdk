@@ -2,6 +2,4 @@
     <string name="facebook_app_id" tools:ignore="ResourceName" />
     <string name="fb_login_protocol_scheme" tools:ignore="ResourceName" />
     <string name="xsolla_login_google_server_client_id" tools:ignore="ResourceName" />
-    <string name="xsolla_login_redirect_scheme">app</string>
-    <string name="xsolla_login_redirect_host">example</string>
 </resources>
