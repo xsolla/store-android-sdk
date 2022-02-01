@@ -38,6 +38,7 @@ import com.xsolla.android.login.token.TokenUtils
 import com.xsolla.android.login.ui.ActivityAuth
 import com.xsolla.android.login.ui.ActivityAuth.Result.Companion.fromResultIntent
 import com.xsolla.android.login.ui.ActivityAuthBrowserProxy
+import com.xsolla.android.login.ui.ActivityAuthWebView
 import com.xsolla.android.login.ui.ActivityWechatProxy
 import com.xsolla.android.login.util.Utils
 import org.json.JSONObject
@@ -565,16 +566,16 @@ object LoginSocial {
 
     private fun openBrowserActivity(url: String, activity: Activity?, fragment: Fragment?) {
         val intent: Intent = if (activity != null) {
-            if (ActivityAuthBrowserProxy.checkAvailability(activity, url)) {
+            if (ActivityAuthBrowserProxy.checkAvailability(activity)) {
                 Intent(activity, ActivityAuthBrowserProxy::class.java)
             } else {
-                Intent(activity, ActivityAuth::class.java)
+                Intent(activity, ActivityAuthWebView::class.java)
             }
         } else {
-            if (ActivityAuthBrowserProxy.checkAvailability(fragment!!.requireContext(),url)){
-            Intent(fragment.context, ActivityAuthBrowserProxy::class.java)}
-            else{
-                Intent(activity, ActivityAuth::class.java)
+            if (ActivityAuthBrowserProxy.checkAvailability(fragment!!.requireContext())) {
+                Intent(fragment.context, ActivityAuthBrowserProxy::class.java)
+            } else {
+                Intent(fragment.context, ActivityAuthWebView::class.java)
             }
         }
         with(intent) {

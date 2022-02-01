@@ -9,9 +9,9 @@ import com.xsolla.android.login.ui.utils.BrowserUtils
 class ActivityAuthBrowserProxy : ActivityAuth() {
 
     companion object {
-        fun checkAvailability(context: Context, url: String) =
-            BrowserUtils.isBrowserAvailable(context, url)
-                    || BrowserUtils.isCustomTabsAvailable(context, url)
+        fun checkAvailability(context: Context) =
+            BrowserUtils.isPlainBrowserAvailable(context)
+                    || BrowserUtils.isCustomTabsBrowserAvailable(context)
     }
 
     private var needStartBrowser = false
@@ -38,10 +38,10 @@ class ActivityAuthBrowserProxy : ActivityAuth() {
     override fun onResume() {
         super.onResume()
         if (needStartBrowser) {
-            if (BrowserUtils.isCustomTabsAvailable(this, url)) {
-                BrowserUtils.launchCustomTab(this, url)
+            if (BrowserUtils.isCustomTabsBrowserAvailable(this)) {
+                BrowserUtils.launchCustomTabsBrowser(this, url)
             } else {
-                BrowserUtils.launchBrowser(this, url)
+                BrowserUtils.launchPlainBrowser(this, url)
             }
             needStartBrowser = false
         } else {

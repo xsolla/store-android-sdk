@@ -12,28 +12,45 @@ import com.xsolla.android.login.R
 
 object BrowserUtils {
 
-    fun isCustomTabsAvailable(context: Context, url: String): Boolean {
-        val pm = context.packageManager
-        val activityIntent = Intent()
+    private val allowedPlainBrowsers = listOf("com.android.chrome")
+    private val allowedCustomTabsBrowsers = listOf("com.android.chrome")
+
+    private fun getAvailablePlainBrowsers(context: Context): List<String> {
+        val browserIntent = Intent()
             .setAction(Intent.ACTION_VIEW)
-            .addCategory(Intent.CATEGORY_BROWSABLE)
-            .setData(Uri.parse(url))
-        val activities = pm.queryIntentActivities(activityIntent, 0)
-        for (info in activities) {
-            val serviceIntent = Intent()
-                .setAction(ACTION_CUSTOM_TABS_CONNECTION)
-                .setPackage(info.activityInfo.packageName)
-            if (pm.resolveService(serviceIntent, 0) != null) {
-                return true
-            }
+            .setData(Uri.parse("https://"))
+        val activities = context.packageManager.queryIntentActivities(browserIntent, 0)
+        val installedBrowsers = activities.map { it.activityInfo.packageName }
+        return allowedPlainBrowsers.filter { allowedBrowser ->
+            installedBrowsers.contains(allowedBrowser)
         }
-        return false
     }
 
-    fun isBrowserAvailable(context: Context, url: String) =
-        createBrowserIntent(url).resolveActivity(context.packageManager) != null
+    private fun getAvailableCustomTabsBrowsers(context: Context): List<String> {
+        val browserIntent = Intent()
+            .setAction(Intent.ACTION_VIEW)
+            .addCategory(Intent.CATEGORY_BROWSABLE)
+            .setData(Uri.parse("https://"))
+        val activities = context.packageManager.queryIntentActivities(browserIntent, 0)
+        val installedBrowsers = activities.map { it.activityInfo.packageName }
+        val allowedBrowsers = allowedCustomTabsBrowsers.filter { allowedBrowser ->
+            installedBrowsers.contains(allowedBrowser)
+        }
+        return allowedBrowsers.filter { packageName ->
+            val serviceIntent = Intent()
+                .setAction(ACTION_CUSTOM_TABS_CONNECTION)
+                .setPackage(packageName)
+            context.packageManager.resolveService(serviceIntent, 0) != null
+        }
+    }
 
-    fun launchCustomTab(context: Context, url: String) {
+    fun isCustomTabsBrowserAvailable(context: Context) =
+        getAvailableCustomTabsBrowsers(context).isNotEmpty()
+
+    fun isPlainBrowserAvailable(context: Context) =
+        getAvailablePlainBrowsers(context).isNotEmpty()
+
+    fun launchCustomTabsBrowser(context: Context, url: String) {
         val colorSchemeParams = CustomTabColorSchemeParams.Builder()
             .setNavigationBarColor(
                 ContextCompat.getColor(context, R.color.xsolla_login_chrome_tab)
@@ -54,15 +71,17 @@ object BrowserUtils {
             .setShowTitle(true)
             .setUrlBarHidingEnabled(true)
             .build()
+        intent.intent.`package` = getAvailableCustomTabsBrowsers(context).first()
 
         intent.launchUrl(context, Uri.parse(url))
     }
 
-    fun launchBrowser(activity: Activity, url: String) {
-        activity.startActivity(createBrowserIntent(url))
+    fun launchPlainBrowser(activity: Activity, url: String) {
+        val intent = Intent()
+            .setAction(Intent.ACTION_VIEW)
+            .setData(Uri.parse(url))
+            .setPackage(getAvailablePlainBrowsers(activity).first())
+        activity.startActivity(intent)
     }
-
-    private fun createBrowserIntent(url: String) =
-        Intent(Intent.ACTION_VIEW).setData(Uri.parse(url))
 
 }
