@@ -72,7 +72,7 @@ class XPayments {
         fun build(): Intent {
             val url = generateUrl()
             val intent = Intent()
-            intent.setClass(context, getActivityClass(url))
+            intent.setClass(context, getActivityClass())
             intent.putExtras(
                 bundleOf(
                     ActivityPaystation.ARG_URL to url,
@@ -83,11 +83,11 @@ class XPayments {
             return intent
         }
 
-        private fun getActivityClass(url: String) =
+        private fun getActivityClass() =
             if (useWebview) {
                 ActivityPaystationWebView::class.java
             } else {
-                if (ActivityPaystationBrowserProxy.checkAvailability(context, url)) {
+                if (ActivityPaystationBrowserProxy.checkAvailability(context)) {
                     ActivityPaystationBrowserProxy::class.java
                 } else {
                     Log.d(XPayments::class.java.simpleName, "Browser is not available")
