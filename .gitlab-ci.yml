@@ -85,33 +85,33 @@ lint:
     paths:
       - .gradle/*
 
-dependency check:
-  tags:
-    - sdk
-  stage: lint
-  script:
-    - echo $OWASP_SUPPRESS >> owasp-suppress.xml
-    - ./gradlew dependencyCheckAnalyze
-  artifacts:
-    expire_in: 24 hours
-    paths:
-      - app/build/reports/
-      - app-inventory/build/reports/
-      - app-customauth/build/reports/
-      - app-core/build/reports
-      - xsolla-googleplay-sdk/build/reports/
-      - xsolla-inventory-sdk/build/reports/
-      - xsolla-login-sdk/build/reports/
-      - xsolla-login-sdk-facebook/build/reports/
-      - xsolla-login-sdk-google/build/reports/
-      - xsolla-login-sdk-qq/build/reports/
-      - xsolla-login-sdk-wechat/build/reports/
-      - xsolla-payments-sdk/build/reports/
-      - xsolla-store-sdk/build/reports/
-  cache:
-    key: ${CI_PROJECT_ID}
-    paths:
-      - .gradle/*
+#dependency check:
+#  tags:
+#    - sdk
+#  stage: lint
+#  script:
+#    - echo $OWASP_SUPPRESS >> owasp-suppress.xml
+#    - ./gradlew dependencyCheckAnalyze
+#  artifacts:
+#    expire_in: 24 hours
+#    paths:
+#      - app/build/reports/
+#      - app-inventory/build/reports/
+#      - app-customauth/build/reports/
+#      - app-core/build/reports
+#      - xsolla-googleplay-sdk/build/reports/
+#      - xsolla-inventory-sdk/build/reports/
+#      - xsolla-login-sdk/build/reports/
+#      - xsolla-login-sdk-facebook/build/reports/
+#      - xsolla-login-sdk-google/build/reports/
+#      - xsolla-login-sdk-qq/build/reports/
+#      - xsolla-login-sdk-wechat/build/reports/
+#      - xsolla-payments-sdk/build/reports/
+#      - xsolla-store-sdk/build/reports/
+#  cache:
+#    key: ${CI_PROJECT_ID}
+#    paths:
+#      - .gradle/*
 
 test:
   tags:
