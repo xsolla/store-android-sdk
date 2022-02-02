@@ -1,6 +1,15 @@
 # Changelog
 
-## [1.9.0] - Demo Apps - 2022-11-30
+## [1.0.0] - Payments SDK - 2022-02-02
+- Updated deep links configuration mechanism
+- Updated browser selection algorithm
+
+## [3.0.0] - Login SDK - 2022-02-02
+- Updated deep links configuration mechanism
+- Updated browser selection algorithm
+
+
+## [1.9.0] - Demo Apps - 2021-11-30
 - Added 'Web Shop' button in demo
 - Removed cart from demo
 - Added refresh inventory button in demo
