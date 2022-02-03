@@ -39,7 +39,7 @@ generate_keystore:
     paths:
       - xsolla.keystore
       - signing.properties
-    expire_in: 300 mins
+    expire_in: 2 hours
 
 build:
   tags:
@@ -179,6 +179,7 @@ publishStore:
   only:
     - /^ci.*/
   script:
+    - echo $GPG_FILE | base64 -di > gpg.gpg
     - ./gradlew :xsolla-store-sdk:build -x test && ./gradlew :xsolla-store-sdk:publishReleasePublicationToSonatypeRepository
   cache:
     key: ${CI_PROJECT_ID}
@@ -193,6 +194,7 @@ publishInventory:
   only:
     - /^ci.*/
   script:
+    - echo $GPG_FILE | base64 -di > gpg.gpg
     - ./gradlew :xsolla-inventory-sdk:build -x test && ./gradlew :xsolla-inventory-sdk:publishReleasePublicationToSonatypeRepository
   cache:
     key: ${CI_PROJECT_ID}
@@ -207,6 +209,7 @@ publishPayments:
   only:
     - /^ci.*/
   script:
+    - echo $GPG_FILE | base64 -di > gpg.gpg
     - ./gradlew :xsolla-payments-sdk:build -x test && ./gradlew :xsolla-payments-sdk:publishReleasePublicationToSonatypeRepository
   cache:
     key: ${CI_PROJECT_ID}
