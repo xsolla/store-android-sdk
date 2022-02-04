@@ -25,7 +25,7 @@ stages:
   - deploy
   - linking
 
-generate_keystore:
+generate android keystore:
   tags:
     - sdk
   stage: generate_keystore
@@ -39,7 +39,26 @@ generate_keystore:
     paths:
       - xsolla.keystore
       - signing.properties
-    expire_in: 30 mins
+    expire_in: 2 hours
+
+generate maven keystore:
+  tags:
+    - sdk
+  stage: generate_keystore
+  only:
+    - /^v.*/
+  script:
+    - echo $GPG_FILE | base64 -di > gpg.gpg
+    - echo "signing.secretKeyRingFile=./../gpg.gpg" >> maven.properties
+    - echo "signing.keyId=$SIGNING_KEY_ID" >> maven.properties
+    - echo "signing.password=$SIGNING_PASSWORD" >> maven.properties
+    - echo "ossrhUsername=$OSSRH_USERNAME" >> maven.properties
+    - echo "ossrhPassword=$OSSRH_PASSWORD" >> maven.properties
+  artifacts:
+    paths:
+      - gpg.gpg
+      - maven.properties
+    expire_in: 2 hours
 
 build:
   tags:
@@ -152,64 +171,65 @@ generateReleaseApp:
     paths:
       - artifacts
 
-#publishLogin:
-#  tags:
-#    - sdk
-#  stage: publish
-#  when: manual
-#  only:
-#    - /^v.*/
-#  script:
-#    - ./gradlew :xsolla-login-sdk:bintrayUpload
-#    - ./gradlew :xsolla-login-sdk-facebook:bintrayUpload
-#    - ./gradlew :xsolla-login-sdk-google:bintrayUpload
-#    - ./gradlew :xsolla-login-sdk-wechat:bintrayUpload
-#  cache:
-#    key: ${CI_PROJECT_ID}
-#    paths:
-#      - .gradle/*
-#
-#publishStore:
-#  tags:
-#    - sdk
-#  stage: publish
-#  when: manual
-#  only:
-#    - /^v.*/
-#  script:
-#    - ./gradlew :xsolla-store-sdk:bintrayUpload
-#  cache:
-#    key: ${CI_PROJECT_ID}
-#    paths:
-#      - .gradle/*
-#
-#publishInventory:
-#  tags:
-#    - sdk
-#  stage: publish
-#  when: manual
-#  only:
-#    - /^v.*/
-#  script:
-#    - ./gradlew :xsolla-inventory-sdk:bintrayUpload
-#  cache:
-#    key: ${CI_PROJECT_ID}
-#    paths:
-#      - .gradle/*
-#
-#publishPayments:
-#  tags:
-#    - sdk
-#  stage: publish
-#  when: manual
-#  only:
-#    - /^v.*/
-#  script:
-#    - ./gradlew :xsolla-payments-sdk:bintrayUpload
-#  cache:
-#    key: ${CI_PROJECT_ID}
-#    paths:
-#      - .gradle/*
+publishLogin:
+  tags:
+    - sdk
+  stage: publish
+  when: manual
+  only:
+    - /^v.*/
+  script:
+    - ./gradlew :xsolla-login-sdk:build -x test && ./gradlew :xsolla-login-sdk:publishReleasePublicationToSonatypeRepository
+    - ./gradlew :xsolla-login-sdk-facebook:build -x test && ./gradlew :xsolla-login-sdk-facebook:publishReleasePublicationToSonatypeRepository
+    - ./gradlew :xsolla-login-sdk-google:build -x test && ./gradlew :xsolla-login-sdk-google:publishReleasePublicationToSonatypeRepository
+    - ./gradlew :xsolla-login-sdk-qq:build -x test && ./gradlew :xsolla-login-sdk-qq:publishReleasePublicationToSonatypeRepository
+    - ./gradlew :xsolla-login-sdk-wechat:build -x test && ./gradlew :xsolla-login-sdk-wechat:publishReleasePublicationToSonatypeRepository
+  cache:
+    key: ${CI_PROJECT_ID}
+    paths:
+      - .gradle/*
+
+publishStore:
+  tags:
+    - sdk
+  stage: publish
+  when: manual
+  only:
+    - /^v.*/
+  script:
+    - ./gradlew :xsolla-store-sdk:build -x test && ./gradlew :xsolla-store-sdk:publishReleasePublicationToSonatypeRepository
+  cache:
+    key: ${CI_PROJECT_ID}
+    paths:
+      - .gradle/*
+
+publishInventory:
+  tags:
+    - sdk
+  stage: publish
+  when: manual
+  only:
+    - /^v.*/
+  script:
+    - ./gradlew :xsolla-inventory-sdk:build -x test && ./gradlew :xsolla-inventory-sdk:publishReleasePublicationToSonatypeRepository
+  cache:
+    key: ${CI_PROJECT_ID}
+    paths:
+      - .gradle/*
+
+publishPayments:
+  tags:
+    - sdk
+  stage: publish
+  when: manual
+  only:
+    - /^v.*/
+  script:
+    - ./gradlew :xsolla-payments-sdk:build -x test && ./gradlew :xsolla-payments-sdk:publishReleasePublicationToSonatypeRepository
+  cache:
+    key: ${CI_PROJECT_ID}
+    paths:
+      - .gradle/*
 
 build doc:
   tags:
