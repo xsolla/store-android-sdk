@@ -211,6 +211,7 @@ publishInventory:
   only:
     - /^ci.*/
   script:
+    - ls -la
     - ./gradlew :xsolla-inventory-sdk:build -x test && ./gradlew :xsolla-inventory-sdk:publishReleasePublicationToSonatypeRepository
   cache:
     key: ${CI_PROJECT_ID}
