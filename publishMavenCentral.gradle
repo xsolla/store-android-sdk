@@ -14,12 +14,12 @@ artifacts {
 group = PUBLISH_GROUP_ID
 version = PUBLISH_VERSION
 
-//ext["signing.keyId"] = ''
-//ext["signing.password"] = ''
-//ext["signing.secretKeyRingFile"] = ''
-//ext["ossrhUsername"] = ''
-//ext["ossrhPassword"] = ''
-//
+ext["signing.keyId"] = ''
+ext["signing.password"] = ''
+ext["signing.secretKeyRingFile"] = ''
+ext["ossrhUsername"] = ''
+ext["ossrhPassword"] = ''
+
 File localPropertiesFile = project.rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
     Properties properties = new Properties()
