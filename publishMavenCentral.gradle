@@ -20,19 +20,13 @@ ext["signing.secretKeyRingFile"] = ''
 ext["ossrhUsername"] = ''
 ext["ossrhPassword"] = ''
 
-File localPropertiesFile = project.rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
+File mavenPropertiesFile = project.rootProject.file('maven.properties')
+if (mavenPropertiesFile.exists()) {
     Properties properties = new Properties()
-    properties.load(new FileInputStream(localPropertiesFile))
+    properties.load(new FileInputStream(mavenPropertiesFile))
     properties.each { name, value ->
         ext[name] = value
     }
-} else {
-    ext["signing.keyId"] = System.getenv('SIGNING_KEY_ID')
-    ext["signing.password"] = System.getenv('SIGNING_PASSWORD')
-    ext["signing.secretKeyRingFile"] = System.getenv('SIGNING_SECRET_KEY_RING_FILE')
-    ext["ossrhUsername"] = System.getenv('OSSRH_USERNAME')
-    ext["ossrhPassword"] = System.getenv('OSSRH_PASSWORD')
 }
 
 publishing {
