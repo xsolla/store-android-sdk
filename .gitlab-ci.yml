@@ -161,6 +161,11 @@ publishLogin:
     - /^ci.*/
   script:
     - echo $GPG_FILE | base64 -di > gpg.gpg
+    - echo "signing.secretKeyRingFile=./../gpg.gpg" > local.properties
+    - echo "signing.keyId=$SIGNING_KEY_ID" > local.properties
+    - echo "signing.password=$SIGNING_PASSWORD" > local.properties
+    - echo "ossrhUsername=$OSSRH_USERNAME" > local.properties
+    - echo "ossrhPassword=$OSSRH_PASSWORD" > local.properties
     - ./gradlew :xsolla-login-sdk:build -x test && ./gradlew :xsolla-login-sdk:publishReleasePublicationToSonatypeRepository
     - ./gradlew :xsolla-login-sdk-facebook:build -x test && ./gradlew :xsolla-login-sdk-facebook:publishReleasePublicationToSonatypeRepository
     - ./gradlew :xsolla-login-sdk-google:build -x test && ./gradlew :xsolla-login-sdk-google:publishReleasePublicationToSonatypeRepository
