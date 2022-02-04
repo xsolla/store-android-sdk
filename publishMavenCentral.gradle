@@ -20,10 +20,10 @@ ext["signing.secretKeyRingFile"] = ''
 ext["ossrhUsername"] = ''
 ext["ossrhPassword"] = ''
 
-File localPropertiesFile = project.rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
+File mavenPropertiesFile = project.rootProject.file('maven.properties')
+if (mavenPropertiesFile.exists()) {
     Properties properties = new Properties()
-    properties.load(new FileInputStream(localPropertiesFile))
+    properties.load(new FileInputStream(mavenPropertiesFile))
     properties.each { name, value ->
         ext[name] = value
     }
