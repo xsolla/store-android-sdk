@@ -5,7 +5,7 @@ import android.content.Context
 import com.xsolla.android.login.LoginConfig
 import com.xsolla.android.login.XLogin
 
-class App: Application() {
+class App : Application() {
 
     companion object {
         private var instance: App? = null
@@ -21,19 +21,16 @@ class App: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        if (BuildConfig.USE_OAUTH) {
-            val loginConfig = LoginConfig.OauthBuilder()
+        val loginConfig = if (BuildConfig.USE_OAUTH) {
+            LoginConfig.OauthBuilder()
                 .setProjectId(BuildConfig.LOGIN_ID)
                 .setOauthClientId(BuildConfig.OAUTH_CLIENT_ID)
                 .build()
-
-            XLogin.init(this, loginConfig)
         } else {
-            val loginConfig = LoginConfig.JwtBuilder()
+            LoginConfig.JwtBuilder()
                 .setProjectId(BuildConfig.LOGIN_ID)
                 .build()
-
-            XLogin.init(this, loginConfig)
         }
+        XLogin.init(this, loginConfig)
     }
 }

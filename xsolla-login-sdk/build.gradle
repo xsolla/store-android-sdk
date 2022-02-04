@@ -1,7 +1,10 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-parcelize'
-apply plugin: 'org.jetbrains.dokka'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-parcelize'
+    id 'org.jetbrains.dokka'
+    id "org.cyclonedx.bom" version "1.4.0"
+}
 
 android {
     compileSdkVersion sdk_compile
@@ -81,3 +84,7 @@ ext {
 apply from: "${rootDir}/publishMavenCentral.gradle"
 
 apply from: 'tests.gradle'
+
+cyclonedxBom {
+    includeConfigs += ["releaseCompileClasspath"]
+}

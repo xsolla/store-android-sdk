@@ -34,10 +34,15 @@ class XPayments {
         private var isSandbox: Boolean = true
         private var useWebview: Boolean = false
 
+        private var redirectScheme: String = "app" // the same is set at AndroidManifest.xml
+        private var redirectHost: String =
+            "xpayment.${context.packageName}" // the same is set at AndroidManifest.xml
+
         /**
          * Set a Pay Station access token
          */
         fun accessToken(accessToken: AccessToken) = apply { this.accessToken = accessToken }
+
         /**
          * Set the sandbox mode
          */
@@ -50,29 +55,45 @@ class XPayments {
         fun useWebview(useWebview: Boolean) = apply { this.useWebview = useWebview }
 
         /**
+         * Set the redirect uri scheme
+         */
+        fun setRedirectUriScheme(redirectScheme: String) =
+            apply { this.redirectScheme = redirectScheme.lowercase() }
+
+        /**
+         * Set the redirect uri host
+         */
+        fun setRedirectUriHost(redirectHost: String) =
+            apply { this.redirectHost = redirectHost.lowercase() }
+
+        /**
          * Build the intent
          */
         fun build(): Intent {
             val url = generateUrl()
             val intent = Intent()
-            intent.setClass(context, getActivityClass(url))
-            intent.putExtras(bundleOf(
-                    ActivityPaystation.ARG_URL to url
-            ))
+            intent.setClass(context, getActivityClass())
+            intent.putExtras(
+                bundleOf(
+                    ActivityPaystation.ARG_URL to url,
+                    ActivityPaystation.ARG_REDIRECT_SCHEME to redirectScheme,
+                    ActivityPaystation.ARG_REDIRECT_HOST to redirectHost
+                )
+            )
             return intent
         }
 
-        private fun getActivityClass(url: String) =
-                if (useWebview) {
-                    ActivityPaystationWebView::class.java
+        private fun getActivityClass() =
+            if (useWebview) {
+                ActivityPaystationWebView::class.java
+            } else {
+                if (ActivityPaystationBrowserProxy.checkAvailability(context)) {
+                    ActivityPaystationBrowserProxy::class.java
                 } else {
-                    if (ActivityPaystationBrowserProxy.checkAvailability(context, url)) {
-                        ActivityPaystationBrowserProxy::class.java
-                    } else {
-                        Log.d(XPayments::class.java.simpleName, "Browser is not available")
-                        ActivityPaystationWebView::class.java
-                    }
+                    Log.d(XPayments::class.java.simpleName, "Browser is not available")
+                    ActivityPaystationWebView::class.java
                 }
+            }
 
         private fun generateUrl(): String {
             accessToken?.let {
@@ -96,8 +117,8 @@ class XPayments {
              */
             @JvmStatic
             fun fromResultIntent(intent: Intent?): Result =
-                    intent?.getParcelableExtra(ActivityPaystation.RESULT)
-                            ?: Result(Status.UNKNOWN, null)
+                intent?.getParcelableExtra(ActivityPaystation.RESULT)
+                    ?: Result(Status.UNKNOWN, null)
         }
     }
 
@@ -109,6 +130,7 @@ class XPayments {
          * User completed a flow and returned back
          */
         COMPLETED,
+
         /**
          * User cancelled a flow
          */
