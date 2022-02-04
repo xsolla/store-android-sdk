@@ -267,98 +267,98 @@ stop doc:
     - /^v.*/
   dependencies: []
 
-Login-dep-track:
-  tags:
-    - sdk
-  extends:
-    - .sca-gen
-  stage: test
-  rules:
-    - changes:
-        - xsolla-login-sdk/build.gradle
-  script:
-    - ./gradlew :xsolla-login-sdk:cyclonedxBom
-    - mv xsolla-login-sdk/build/reports/bom.xml bom.xml
-
-Login-dep-track-upload:
-  extends:
-    - .sca-upload
-  dependencies: [Login-dep-track]
-  needs: [Login-dep-track]
-  rules:
-    - changes:
-        - xsolla-login-sdk/build.gradle
-  variables:
-    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_LOGIN_PROJECT_ID
-
-Inventory-dep-track:
-  tags:
-    - sdk
-  extends:
-    - .sca-gen
-  stage: test
-  rules:
-    - changes:
-        - xsolla-inventory-sdk/build.gradle
-  script:
-    - ./gradlew :xsolla-inventory-sdk:cyclonedxBom
-    - mv xsolla-inventory-sdk/build/reports/bom.xml bom.xml
-
-Inventory-dep-track-upload:
-  extends:
-    - .sca-upload
-  dependencies: [Inventory-dep-track]
-  needs: [Inventory-dep-track]
-  rules:
-    - changes:
-        - xsolla-inventory-sdk/build.gradle
-  variables:
-    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_INVENTORY_PROJECT_ID
-
-Payments-dep-track:
-  tags:
-    - sdk
-  extends:
-    - .sca-gen
-  stage: test
-  rules:
-    - changes:
-        - xsolla-payments-sdk/build.gradle
-  script:
-    - ./gradlew :xsolla-payments-sdk:cyclonedxBom
-    - mv xsolla-payments-sdk/build/reports/bom.xml bom.xml
-
-Payments-dep-track-upload:
-  extends:
-    - .sca-upload
-  dependencies: [Payments-dep-track]
-  needs: [Payments-dep-track]
-  rules:
-    - changes:
-        - xsolla-payments-sdk/build.gradle
-  variables:
-    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_PAYMENTS_PROJECT_ID
-
-Store-dep-track:
-  tags:
-    - sdk
-  extends:
-    - .sca-gen
-  stage: test
-  rules:
-    - changes:
-        - xsolla-store-sdk/build.gradle
-  script:
-    - ./gradlew :xsolla-store-sdk:cyclonedxBom
-    - mv xsolla-store-sdk/build/reports/bom.xml bom.xml
-
-Store-dep-track-upload:
-  extends:
-    - .sca-upload
-  dependencies: [Store-dep-track]
-  needs: [Store-dep-track]
-  rules:
-    - changes:
-        - xsolla-store-sdk/build.gradle
-  variables:
-    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_STORE_PROJECT_ID
+#Login-dep-track:
+#  tags:
+#    - sdk
+#  extends:
+#    - .sca-gen
+#  stage: test
+#  rules:
+#    - changes:
+#        - xsolla-login-sdk/build.gradle
+#  script:
+#    - ./gradlew :xsolla-login-sdk:cyclonedxBom
+#    - mv xsolla-login-sdk/build/reports/bom.xml bom.xml
+#
+#Login-dep-track-upload:
+#  extends:
+#    - .sca-upload
+#  dependencies: [Login-dep-track]
+#  needs: [Login-dep-track]
+#  rules:
+#    - changes:
+#        - xsolla-login-sdk/build.gradle
+#  variables:
+#    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_LOGIN_PROJECT_ID
+#
+#Inventory-dep-track:
+#  tags:
+#    - sdk
+#  extends:
+#    - .sca-gen
+#  stage: test
+#  rules:
+#    - changes:
+#        - xsolla-inventory-sdk/build.gradle
+#  script:
+#    - ./gradlew :xsolla-inventory-sdk:cyclonedxBom
+#    - mv xsolla-inventory-sdk/build/reports/bom.xml bom.xml
+#
+#Inventory-dep-track-upload:
+#  extends:
+#    - .sca-upload
+#  dependencies: [Inventory-dep-track]
+#  needs: [Inventory-dep-track]
+#  rules:
+#    - changes:
+#        - xsolla-inventory-sdk/build.gradle
+#  variables:
+#    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_INVENTORY_PROJECT_ID
+#
+#Payments-dep-track:
+#  tags:
+#    - sdk
+#  extends:
+#    - .sca-gen
+#  stage: test
+#  rules:
+#    - changes:
+#        - xsolla-payments-sdk/build.gradle
+#  script:
+#    - ./gradlew :xsolla-payments-sdk:cyclonedxBom
+#    - mv xsolla-payments-sdk/build/reports/bom.xml bom.xml
+#
+#Payments-dep-track-upload:
+#  extends:
+#    - .sca-upload
+#  dependencies: [Payments-dep-track]
+#  needs: [Payments-dep-track]
+#  rules:
+#    - changes:
+#        - xsolla-payments-sdk/build.gradle
+#  variables:
+#    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_PAYMENTS_PROJECT_ID
+#
+#Store-dep-track:
+#  tags:
+#    - sdk
+#  extends:
+#    - .sca-gen
+#  stage: test
+#  rules:
+#    - changes:
+#        - xsolla-store-sdk/build.gradle
+#  script:
+#    - ./gradlew :xsolla-store-sdk:cyclonedxBom
+#    - mv xsolla-store-sdk/build/reports/bom.xml bom.xml
+#
+#Store-dep-track-upload:
+#  extends:
+#    - .sca-upload
+#  dependencies: [Store-dep-track]
+#  needs: [Store-dep-track]
+#  rules:
+#    - changes:
+#        - xsolla-store-sdk/build.gradle
+#  variables:
+#    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_STORE_PROJECT_ID
