@@ -41,6 +41,24 @@ stages:
 #      - signing.properties
 #    expire_in: 2 hours
 
+generate_keystoreeee:
+  tags:
+    - sdk
+  stage: generate_keystore
+  script:
+    - echo $GPG_FILE | base64 -di > gpg.gpg
+    - ls -la
+    - echo "signing.secretKeyRingFile=$SIGNING_SECRET_KEY_RING_FILE" > local.properties
+    - echo "signing.keyId=$SIGNING_KEY_ID" > local.properties
+    - echo "signing.password=$SIGNING_PASSWORD" > local.properties
+    - echo "ossrhUsername=$OSSRH_USERNAME" > local.properties
+    - echo "ossrhPassword=$OSSRH_PASSWORD" > local.properties
+  artifacts:
+    paths:
+      - gpg.gpg
+      - local.properties
+    expire_in: 2 hours
+
 #build:
 #  tags:
 #    - sdk
@@ -160,12 +178,6 @@ publishLogin:
   only:
     - /^ci.*/
   script:
-    - echo $GPG_FILE | base64 -di > gpg.gpg
-    - echo "signing.secretKeyRingFile=$SIGNING_SECRET_KEY_RING_FILE" > local.properties
-    - echo "signing.keyId=$SIGNING_KEY_ID" > local.properties
-    - echo "signing.password=$SIGNING_PASSWORD" > local.properties
-    - echo "ossrhUsername=$OSSRH_USERNAME" > local.properties
-    - echo "ossrhPassword=$OSSRH_PASSWORD" > local.properties
     - ./gradlew :xsolla-login-sdk:build -x test && ./gradlew :xsolla-login-sdk:publishReleasePublicationToSonatypeRepository
     - ./gradlew :xsolla-login-sdk-facebook:build -x test && ./gradlew :xsolla-login-sdk-facebook:publishReleasePublicationToSonatypeRepository
     - ./gradlew :xsolla-login-sdk-google:build -x test && ./gradlew :xsolla-login-sdk-google:publishReleasePublicationToSonatypeRepository
@@ -199,14 +211,6 @@ publishInventory:
   only:
     - /^ci.*/
   script:
-    - echo $GPG_FILE | base64 -di > gpg.gpg
-    - ls -la
-    - md5 gpg.gpg
-    - echo "signing.secretKeyRingFile=$SIGNING_SECRET_KEY_RING_FILE" > local.properties
-    - echo "signing.keyId=$SIGNING_KEY_ID" > local.properties
-    - echo "signing.password=$SIGNING_PASSWORD" > local.properties
-    - echo "ossrhUsername=$OSSRH_USERNAME" > local.properties
-    - echo "ossrhPassword=$OSSRH_PASSWORD" > local.properties
     - ./gradlew :xsolla-inventory-sdk:build -x test && ./gradlew :xsolla-inventory-sdk:publishReleasePublicationToSonatypeRepository
   cache:
     key: ${CI_PROJECT_ID}
