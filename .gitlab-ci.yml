@@ -2,12 +2,12 @@ include:
   - project: 'sysadm-docker/ubuntu-sshclient'
     ref:     'master'
     file:    'gitlab-ci-template.yml'
-#  - project: 'security/sast-helper'
-#    ref: master
-#    file: 'gitlab-ci.yml'
-#  - project: 'security/sca-helper'
-#    ref: master
-#    file: 'gitlab-ci.yml'
+  - project: 'security/sast-helper'
+    ref: master
+    file: 'gitlab-ci.yml'
+  - project: 'security/sca-helper'
+    ref: master
+    file: 'gitlab-ci.yml'
 
 variables:
   SAST_EXPERIMENTAL_FEATURES: "true"
@@ -25,30 +25,31 @@ stages:
   - deploy
   - linking
 
-#generate_keystore:
-#  tags:
-#    - sdk
-#  stage: generate_keystore
-#  script:
-#    - echo $STORE_FILE | base64 -di > xsolla.keystore
-#    - echo "keystorePath=../xsolla.keystore" > signing.properties
-#    - echo "keystorePassword=$STORE_PASSWORD" >> signing.properties
-#    - echo "keyAlias=$KEY_ALIAS" >> signing.properties
-#    - echo "keyPassword=$KEY_PASSWORD" >> signing.properties
-#  artifacts:
-#    paths:
-#      - xsolla.keystore
-#      - signing.properties
-#    expire_in: 2 hours
-
-generate_keystoreeee:
+generate android keystore:
   tags:
     - sdk
   stage: generate_keystore
   script:
+    - echo $STORE_FILE | base64 -di > xsolla.keystore
+    - echo "keystorePath=../xsolla.keystore" > signing.properties
+    - echo "keystorePassword=$STORE_PASSWORD" >> signing.properties
+    - echo "keyAlias=$KEY_ALIAS" >> signing.properties
+    - echo "keyPassword=$KEY_PASSWORD" >> signing.properties
+  artifacts:
+    paths:
+      - xsolla.keystore
+      - signing.properties
+    expire_in: 2 hours
+
+generate maven keystore:
+  tags:
+    - sdk
+  stage: generate_keystore
+  only:
+    - /^ci.*/
+  script:
     - echo $GPG_FILE | base64 -di > gpg.gpg
-    - ls -la
-    - echo "signing.secretKeyRingFile=$SIGNING_SECRET_KEY_RING_FILE" >> local.properties
+    - echo "signing.secretKeyRingFile=./../gpg.gpg" >> local.properties
     - echo "signing.keyId=$SIGNING_KEY_ID" >> local.properties
     - echo "signing.password=$SIGNING_PASSWORD" >> local.properties
     - echo "ossrhUsername=$OSSRH_USERNAME" >> local.properties
@@ -59,116 +60,116 @@ generate_keystoreeee:
       - local.properties
     expire_in: 2 hours
 
-#build:
-#  tags:
-#    - sdk
-#  stage: build
-#  script:
-#    - ./gradlew assembleRelease
-#  artifacts:
-#    expire_in: 2 hours
-#    paths:
-#      - app/build/outputs/
-#      - app-inventory/build/outputs/
-#      - app-customauth/build/outputs/
-#  cache:
-#    key: ${CI_PROJECT_ID}
-#    paths:
-#      - .gradle/*
+build:
+  tags:
+    - sdk
+  stage: build
+  script:
+    - ./gradlew assembleRelease
+  artifacts:
+    expire_in: 2 hours
+    paths:
+      - app/build/outputs/
+      - app-inventory/build/outputs/
+      - app-customauth/build/outputs/
+  cache:
+    key: ${CI_PROJECT_ID}
+    paths:
+      - .gradle/*
 
-#lint:
-#  tags:
-#    - sdk
-#  stage: lint
-#  script:
-#    - ./gradlew lint
-#  artifacts:
-#    expire_in: 24 hours
-#    paths:
-#      - app/build/reports/
-#      - app-inventory/build/reports/
-#      - app-customauth/build/reports/
-#      - app-core/build/reports/
-#      - xsolla-googleplay-sdk/build/reports/
-#      - xsolla-inventory-sdk/build/reports/
-#      - xsolla-login-sdk/build/reports/
-#      - xsolla-login-sdk-facebook/build/reports/
-#      - xsolla-login-sdk-google/build/reports/
-#      - xsolla-login-sdk-qq/build/reports/
-#      - xsolla-login-sdk-wechat/build/reports/
-#      - xsolla-payments-sdk/build/reports/
-#      - xsolla-store-sdk/build/reports/
-#  cache:
-#    key: ${CI_PROJECT_ID}
-#    paths:
-#      - .gradle/*
-#
-#dependency check:
-#  tags:
-#    - sdk
-#  stage: lint
-#  script:
-#    - echo $OWASP_SUPPRESS >> owasp-suppress.xml
-#    - ./gradlew dependencyCheckAnalyze
-#  artifacts:
-#    expire_in: 24 hours
-#    paths:
-#      - app/build/reports/
-#      - app-inventory/build/reports/
-#      - app-customauth/build/reports/
-#      - app-core/build/reports
-#      - xsolla-googleplay-sdk/build/reports/
-#      - xsolla-inventory-sdk/build/reports/
-#      - xsolla-login-sdk/build/reports/
-#      - xsolla-login-sdk-facebook/build/reports/
-#      - xsolla-login-sdk-google/build/reports/
-#      - xsolla-login-sdk-qq/build/reports/
-#      - xsolla-login-sdk-wechat/build/reports/
-#      - xsolla-payments-sdk/build/reports/
-#      - xsolla-store-sdk/build/reports/
-#  cache:
-#    key: ${CI_PROJECT_ID}
-#    paths:
-#      - .gradle/*
+lint:
+  tags:
+    - sdk
+  stage: lint
+  script:
+    - ./gradlew lint
+  artifacts:
+    expire_in: 24 hours
+    paths:
+      - app/build/reports/
+      - app-inventory/build/reports/
+      - app-customauth/build/reports/
+      - app-core/build/reports/
+      - xsolla-googleplay-sdk/build/reports/
+      - xsolla-inventory-sdk/build/reports/
+      - xsolla-login-sdk/build/reports/
+      - xsolla-login-sdk-facebook/build/reports/
+      - xsolla-login-sdk-google/build/reports/
+      - xsolla-login-sdk-qq/build/reports/
+      - xsolla-login-sdk-wechat/build/reports/
+      - xsolla-payments-sdk/build/reports/
+      - xsolla-store-sdk/build/reports/
+  cache:
+    key: ${CI_PROJECT_ID}
+    paths:
+      - .gradle/*
 
-#test:
-#  tags:
-#    - sdk
-#  stage: test
-#  script:
-#    - ./gradlew :xsolla-login-sdk:setupTestVariables && ./gradlew :xsolla-login-sdk:test
-#    - ./gradlew :xsolla-store-sdk:setupTestVariables && ./gradlew :xsolla-store-sdk:test
-#    - ./gradlew :xsolla-inventory-sdk:setupTestVariables && ./gradlew :xsolla-inventory-sdk:test
-#  artifacts:
-#    expire_in: 24 hours
-#    paths:
-#      - xsolla-login-sdk/build/reports/
-#      - xsolla-store-sdk/build/reports/
-#      - xsolla-inventory-sdk/build/reports/
-#  cache:
-#    key: ${CI_PROJECT_ID}
-#    paths:
-#      - .gradle/*
+dependency check:
+  tags:
+    - sdk
+  stage: lint
+  script:
+    - echo $OWASP_SUPPRESS >> owasp-suppress.xml
+    - ./gradlew dependencyCheckAnalyze
+  artifacts:
+    expire_in: 24 hours
+    paths:
+      - app/build/reports/
+      - app-inventory/build/reports/
+      - app-customauth/build/reports/
+      - app-core/build/reports
+      - xsolla-googleplay-sdk/build/reports/
+      - xsolla-inventory-sdk/build/reports/
+      - xsolla-login-sdk/build/reports/
+      - xsolla-login-sdk-facebook/build/reports/
+      - xsolla-login-sdk-google/build/reports/
+      - xsolla-login-sdk-qq/build/reports/
+      - xsolla-login-sdk-wechat/build/reports/
+      - xsolla-payments-sdk/build/reports/
+      - xsolla-store-sdk/build/reports/
+  cache:
+    key: ${CI_PROJECT_ID}
+    paths:
+      - .gradle/*
 
-#generateReleaseApp:
-#  tags:
-#    - sdk
-#  stage: publish
-#  before_script:
-#    - mkdir -p artifacts
-#    - touch ./artifacts/info.txt
-#    - echo "Build date          $(date)"                >> ./artifacts/info.txt
-#    - echo "Git tag             ${CI_COMMIT_REF_NAME}"  >> ./artifacts/info.txt
-#    - echo "Git commit          ${CI_COMMIT_SHA}"       >> ./artifacts/info.txt
-#    - echo "Gitlab pipeline     ${CI_PIPELINE_ID}"      >> ./artifacts/info.txt
-#  script:
-#    - mv app/build/outputs/apk/release/app-release.apk ./artifacts/SampleApp-Default.apk
-#    - mv app-inventory/build/outputs/apk/release/app-inventory-release.apk ./artifacts/SampleApp-Inventory.apk
-#    - mv app-customauth/build/outputs/apk/release/app-customauth-release.apk ./artifacts/SampleApp-Customauth.apk
-#  artifacts:
-#    expire_in: 24 hours
-#    paths:
-#      - artifacts
+test:
+  tags:
+    - sdk
+  stage: test
+  script:
+    - ./gradlew :xsolla-login-sdk:setupTestVariables && ./gradlew :xsolla-login-sdk:test
+    - ./gradlew :xsolla-store-sdk:setupTestVariables && ./gradlew :xsolla-store-sdk:test
+    - ./gradlew :xsolla-inventory-sdk:setupTestVariables && ./gradlew :xsolla-inventory-sdk:test
+  artifacts:
+    expire_in: 24 hours
+    paths:
+      - xsolla-login-sdk/build/reports/
+      - xsolla-store-sdk/build/reports/
+      - xsolla-inventory-sdk/build/reports/
+  cache:
+    key: ${CI_PROJECT_ID}
+    paths:
+      - .gradle/*
+
+generateReleaseApp:
+  tags:
+    - sdk
+  stage: publish
+  before_script:
+    - mkdir -p artifacts
+    - touch ./artifacts/info.txt
+    - echo "Build date          $(date)"                >> ./artifacts/info.txt
+    - echo "Git tag             ${CI_COMMIT_REF_NAME}"  >> ./artifacts/info.txt
+    - echo "Git commit          ${CI_COMMIT_SHA}"       >> ./artifacts/info.txt
+    - echo "Gitlab pipeline     ${CI_PIPELINE_ID}"      >> ./artifacts/info.txt
+  script:
+    - mv app/build/outputs/apk/release/app-release.apk ./artifacts/SampleApp-Default.apk
+    - mv app-inventory/build/outputs/apk/release/app-inventory-release.apk ./artifacts/SampleApp-Inventory.apk
+    - mv app-customauth/build/outputs/apk/release/app-customauth-release.apk ./artifacts/SampleApp-Customauth.apk
+  artifacts:
+    expire_in: 24 hours
+    paths:
+      - artifacts
 
 publishLogin:
   tags:
@@ -196,7 +197,6 @@ publishStore:
   only:
     - /^ci.*/
   script:
-    - echo $GPG_FILE | base64 -di > gpg.gpg
     - ./gradlew :xsolla-store-sdk:build -x test && ./gradlew :xsolla-store-sdk:publishReleasePublicationToSonatypeRepository
   cache:
     key: ${CI_PROJECT_ID}
@@ -211,7 +211,6 @@ publishInventory:
   only:
     - /^ci.*/
   script:
-    - ls -la
     - ./gradlew :xsolla-inventory-sdk:build -x test && ./gradlew :xsolla-inventory-sdk:publishReleasePublicationToSonatypeRepository
   cache:
     key: ${CI_PROJECT_ID}
@@ -226,7 +225,6 @@ publishPayments:
   only:
     - /^ci.*/
   script:
-    - echo $GPG_FILE | base64 -di > gpg.gpg
     - ./gradlew :xsolla-payments-sdk:build -x test && ./gradlew :xsolla-payments-sdk:publishReleasePublicationToSonatypeRepository
   cache:
     key: ${CI_PROJECT_ID}
@@ -279,98 +277,98 @@ stop doc:
     - /^v.*/
   dependencies: []
 
-#Login-dep-track:
-#  tags:
-#    - sdk
-#  extends:
-#    - .sca-gen
-#  stage: test
-#  rules:
-#    - changes:
-#        - xsolla-login-sdk/build.gradle
-#  script:
-#    - ./gradlew :xsolla-login-sdk:cyclonedxBom
-#    - mv xsolla-login-sdk/build/reports/bom.xml bom.xml
-#
-#Login-dep-track-upload:
-#  extends:
-#    - .sca-upload
-#  dependencies: [Login-dep-track]
-#  needs: [Login-dep-track]
-#  rules:
-#    - changes:
-#        - xsolla-login-sdk/build.gradle
-#  variables:
-#    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_LOGIN_PROJECT_ID
-#
-#Inventory-dep-track:
-#  tags:
-#    - sdk
-#  extends:
-#    - .sca-gen
-#  stage: test
-#  rules:
-#    - changes:
-#        - xsolla-inventory-sdk/build.gradle
-#  script:
-#    - ./gradlew :xsolla-inventory-sdk:cyclonedxBom
-#    - mv xsolla-inventory-sdk/build/reports/bom.xml bom.xml
-#
-#Inventory-dep-track-upload:
-#  extends:
-#    - .sca-upload
-#  dependencies: [Inventory-dep-track]
-#  needs: [Inventory-dep-track]
-#  rules:
-#    - changes:
-#        - xsolla-inventory-sdk/build.gradle
-#  variables:
-#    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_INVENTORY_PROJECT_ID
-#
-#Payments-dep-track:
-#  tags:
-#    - sdk
-#  extends:
-#    - .sca-gen
-#  stage: test
-#  rules:
-#    - changes:
-#        - xsolla-payments-sdk/build.gradle
-#  script:
-#    - ./gradlew :xsolla-payments-sdk:cyclonedxBom
-#    - mv xsolla-payments-sdk/build/reports/bom.xml bom.xml
-#
-#Payments-dep-track-upload:
-#  extends:
-#    - .sca-upload
-#  dependencies: [Payments-dep-track]
-#  needs: [Payments-dep-track]
-#  rules:
-#    - changes:
-#        - xsolla-payments-sdk/build.gradle
-#  variables:
-#    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_PAYMENTS_PROJECT_ID
-#
-#Store-dep-track:
-#  tags:
-#    - sdk
-#  extends:
-#    - .sca-gen
-#  stage: test
-#  rules:
-#    - changes:
-#        - xsolla-store-sdk/build.gradle
-#  script:
-#    - ./gradlew :xsolla-store-sdk:cyclonedxBom
-#    - mv xsolla-store-sdk/build/reports/bom.xml bom.xml
-#
-#Store-dep-track-upload:
-#  extends:
-#    - .sca-upload
-#  dependencies: [Store-dep-track]
-#  needs: [Store-dep-track]
-#  rules:
-#    - changes:
-#        - xsolla-store-sdk/build.gradle
-#  variables:
-#    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_STORE_PROJECT_ID
+Login-dep-track:
+  tags:
+    - sdk
+  extends:
+    - .sca-gen
+  stage: test
+  rules:
+    - changes:
+        - xsolla-login-sdk/build.gradle
+  script:
+    - ./gradlew :xsolla-login-sdk:cyclonedxBom
+    - mv xsolla-login-sdk/build/reports/bom.xml bom.xml
+
+Login-dep-track-upload:
+  extends:
+    - .sca-upload
+  dependencies: [Login-dep-track]
+  needs: [Login-dep-track]
+  rules:
+    - changes:
+        - xsolla-login-sdk/build.gradle
+  variables:
+    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_LOGIN_PROJECT_ID
+
+Inventory-dep-track:
+  tags:
+    - sdk
+  extends:
+    - .sca-gen
+  stage: test
+  rules:
+    - changes:
+        - xsolla-inventory-sdk/build.gradle
+  script:
+    - ./gradlew :xsolla-inventory-sdk:cyclonedxBom
+    - mv xsolla-inventory-sdk/build/reports/bom.xml bom.xml
+
+Inventory-dep-track-upload:
+  extends:
+    - .sca-upload
+  dependencies: [Inventory-dep-track]
+  needs: [Inventory-dep-track]
+  rules:
+    - changes:
+        - xsolla-inventory-sdk/build.gradle
+  variables:
+    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_INVENTORY_PROJECT_ID
+
+Payments-dep-track:
+  tags:
+    - sdk
+  extends:
+    - .sca-gen
+  stage: test
+  rules:
+    - changes:
+        - xsolla-payments-sdk/build.gradle
+  script:
+    - ./gradlew :xsolla-payments-sdk:cyclonedxBom
+    - mv xsolla-payments-sdk/build/reports/bom.xml bom.xml
+
+Payments-dep-track-upload:
+  extends:
+    - .sca-upload
+  dependencies: [Payments-dep-track]
+  needs: [Payments-dep-track]
+  rules:
+    - changes:
+        - xsolla-payments-sdk/build.gradle
+  variables:
+    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_PAYMENTS_PROJECT_ID
+
+Store-dep-track:
+  tags:
+    - sdk
+  extends:
+    - .sca-gen
+  stage: test
+  rules:
+    - changes:
+        - xsolla-store-sdk/build.gradle
+  script:
+    - ./gradlew :xsolla-store-sdk:cyclonedxBom
+    - mv xsolla-store-sdk/build/reports/bom.xml bom.xml
+
+Store-dep-track-upload:
+  extends:
+    - .sca-upload
+  dependencies: [Store-dep-track]
+  needs: [Store-dep-track]
+  rules:
+    - changes:
+        - xsolla-store-sdk/build.gradle
+  variables:
+    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_STORE_PROJECT_ID
