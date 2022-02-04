@@ -200,6 +200,8 @@ publishInventory:
     - /^ci.*/
   script:
     - echo $GPG_FILE | base64 -di > gpg.gpg
+    - ls -la
+    - md5 gpg.gpg
     - echo "signing.secretKeyRingFile=$SIGNING_SECRET_KEY_RING_FILE" > local.properties
     - echo "signing.keyId=$SIGNING_KEY_ID" > local.properties
     - echo "signing.password=$SIGNING_PASSWORD" > local.properties
