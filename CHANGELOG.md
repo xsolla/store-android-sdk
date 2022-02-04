@@ -1,10 +1,10 @@
 # Changelog
 
-## [1.0.0] - Payments SDK - 2022-02-02
+## [1.0.0] - Payments SDK - 2022-02-04
 - Updated deep links configuration mechanism
 - Updated browser selection algorithm
 
-## [3.0.0] - Login SDK - 2022-02-02
+## [3.0.0] - Login SDK - 2022-02-04
 - Updated deep links configuration mechanism
 - Updated browser selection algorithm
 
