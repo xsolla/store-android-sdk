@@ -25,132 +25,132 @@ stages:
   - deploy
   - linking
 
-generate_keystore:
-  tags:
-    - sdk
-  stage: generate_keystore
-  script:
-    - echo $STORE_FILE | base64 -di > xsolla.keystore
-    - echo "keystorePath=../xsolla.keystore" > signing.properties
-    - echo "keystorePassword=$STORE_PASSWORD" >> signing.properties
-    - echo "keyAlias=$KEY_ALIAS" >> signing.properties
-    - echo "keyPassword=$KEY_PASSWORD" >> signing.properties
-  artifacts:
-    paths:
-      - xsolla.keystore
-      - signing.properties
-    expire_in: 2 hours
+#generate_keystore:
+#  tags:
+#    - sdk
+#  stage: generate_keystore
+#  script:
+#    - echo $STORE_FILE | base64 -di > xsolla.keystore
+#    - echo "keystorePath=../xsolla.keystore" > signing.properties
+#    - echo "keystorePassword=$STORE_PASSWORD" >> signing.properties
+#    - echo "keyAlias=$KEY_ALIAS" >> signing.properties
+#    - echo "keyPassword=$KEY_PASSWORD" >> signing.properties
+#  artifacts:
+#    paths:
+#      - xsolla.keystore
+#      - signing.properties
+#    expire_in: 2 hours
 
-build:
-  tags:
-    - sdk
-  stage: build
-  script:
-    - ./gradlew assembleRelease
-  artifacts:
-    expire_in: 2 hours
-    paths:
-      - app/build/outputs/
-      - app-inventory/build/outputs/
-      - app-customauth/build/outputs/
-  cache:
-    key: ${CI_PROJECT_ID}
-    paths:
-      - .gradle/*
+#build:
+#  tags:
+#    - sdk
+#  stage: build
+#  script:
+#    - ./gradlew assembleRelease
+#  artifacts:
+#    expire_in: 2 hours
+#    paths:
+#      - app/build/outputs/
+#      - app-inventory/build/outputs/
+#      - app-customauth/build/outputs/
+#  cache:
+#    key: ${CI_PROJECT_ID}
+#    paths:
+#      - .gradle/*
 
-lint:
-  tags:
-    - sdk
-  stage: lint
-  script:
-    - ./gradlew lint
-  artifacts:
-    expire_in: 24 hours
-    paths:
-      - app/build/reports/
-      - app-inventory/build/reports/
-      - app-customauth/build/reports/
-      - app-core/build/reports/
-      - xsolla-googleplay-sdk/build/reports/
-      - xsolla-inventory-sdk/build/reports/
-      - xsolla-login-sdk/build/reports/
-      - xsolla-login-sdk-facebook/build/reports/
-      - xsolla-login-sdk-google/build/reports/
-      - xsolla-login-sdk-qq/build/reports/
-      - xsolla-login-sdk-wechat/build/reports/
-      - xsolla-payments-sdk/build/reports/
-      - xsolla-store-sdk/build/reports/
-  cache:
-    key: ${CI_PROJECT_ID}
-    paths:
-      - .gradle/*
+#lint:
+#  tags:
+#    - sdk
+#  stage: lint
+#  script:
+#    - ./gradlew lint
+#  artifacts:
+#    expire_in: 24 hours
+#    paths:
+#      - app/build/reports/
+#      - app-inventory/build/reports/
+#      - app-customauth/build/reports/
+#      - app-core/build/reports/
+#      - xsolla-googleplay-sdk/build/reports/
+#      - xsolla-inventory-sdk/build/reports/
+#      - xsolla-login-sdk/build/reports/
+#      - xsolla-login-sdk-facebook/build/reports/
+#      - xsolla-login-sdk-google/build/reports/
+#      - xsolla-login-sdk-qq/build/reports/
+#      - xsolla-login-sdk-wechat/build/reports/
+#      - xsolla-payments-sdk/build/reports/
+#      - xsolla-store-sdk/build/reports/
+#  cache:
+#    key: ${CI_PROJECT_ID}
+#    paths:
+#      - .gradle/*
+#
+#dependency check:
+#  tags:
+#    - sdk
+#  stage: lint
+#  script:
+#    - echo $OWASP_SUPPRESS >> owasp-suppress.xml
+#    - ./gradlew dependencyCheckAnalyze
+#  artifacts:
+#    expire_in: 24 hours
+#    paths:
+#      - app/build/reports/
+#      - app-inventory/build/reports/
+#      - app-customauth/build/reports/
+#      - app-core/build/reports
+#      - xsolla-googleplay-sdk/build/reports/
+#      - xsolla-inventory-sdk/build/reports/
+#      - xsolla-login-sdk/build/reports/
+#      - xsolla-login-sdk-facebook/build/reports/
+#      - xsolla-login-sdk-google/build/reports/
+#      - xsolla-login-sdk-qq/build/reports/
+#      - xsolla-login-sdk-wechat/build/reports/
+#      - xsolla-payments-sdk/build/reports/
+#      - xsolla-store-sdk/build/reports/
+#  cache:
+#    key: ${CI_PROJECT_ID}
+#    paths:
+#      - .gradle/*
 
-dependency check:
-  tags:
-    - sdk
-  stage: lint
-  script:
-    - echo $OWASP_SUPPRESS >> owasp-suppress.xml
-    - ./gradlew dependencyCheckAnalyze
-  artifacts:
-    expire_in: 24 hours
-    paths:
-      - app/build/reports/
-      - app-inventory/build/reports/
-      - app-customauth/build/reports/
-      - app-core/build/reports
-      - xsolla-googleplay-sdk/build/reports/
-      - xsolla-inventory-sdk/build/reports/
-      - xsolla-login-sdk/build/reports/
-      - xsolla-login-sdk-facebook/build/reports/
-      - xsolla-login-sdk-google/build/reports/
-      - xsolla-login-sdk-qq/build/reports/
-      - xsolla-login-sdk-wechat/build/reports/
-      - xsolla-payments-sdk/build/reports/
-      - xsolla-store-sdk/build/reports/
-  cache:
-    key: ${CI_PROJECT_ID}
-    paths:
-      - .gradle/*
+#test:
+#  tags:
+#    - sdk
+#  stage: test
+#  script:
+#    - ./gradlew :xsolla-login-sdk:setupTestVariables && ./gradlew :xsolla-login-sdk:test
+#    - ./gradlew :xsolla-store-sdk:setupTestVariables && ./gradlew :xsolla-store-sdk:test
+#    - ./gradlew :xsolla-inventory-sdk:setupTestVariables && ./gradlew :xsolla-inventory-sdk:test
+#  artifacts:
+#    expire_in: 24 hours
+#    paths:
+#      - xsolla-login-sdk/build/reports/
+#      - xsolla-store-sdk/build/reports/
+#      - xsolla-inventory-sdk/build/reports/
+#  cache:
+#    key: ${CI_PROJECT_ID}
+#    paths:
+#      - .gradle/*
 
-test:
-  tags:
-    - sdk
-  stage: test
-  script:
-    - ./gradlew :xsolla-login-sdk:setupTestVariables && ./gradlew :xsolla-login-sdk:test
-    - ./gradlew :xsolla-store-sdk:setupTestVariables && ./gradlew :xsolla-store-sdk:test
-    - ./gradlew :xsolla-inventory-sdk:setupTestVariables && ./gradlew :xsolla-inventory-sdk:test
-  artifacts:
-    expire_in: 24 hours
-    paths:
-      - xsolla-login-sdk/build/reports/
-      - xsolla-store-sdk/build/reports/
-      - xsolla-inventory-sdk/build/reports/
-  cache:
-    key: ${CI_PROJECT_ID}
-    paths:
-      - .gradle/*
-
-generateReleaseApp:
-  tags:
-    - sdk
-  stage: publish
-  before_script:
-    - mkdir -p artifacts
-    - touch ./artifacts/info.txt
-    - echo "Build date          $(date)"                >> ./artifacts/info.txt
-    - echo "Git tag             ${CI_COMMIT_REF_NAME}"  >> ./artifacts/info.txt
-    - echo "Git commit          ${CI_COMMIT_SHA}"       >> ./artifacts/info.txt
-    - echo "Gitlab pipeline     ${CI_PIPELINE_ID}"      >> ./artifacts/info.txt
-  script:
-    - mv app/build/outputs/apk/release/app-release.apk ./artifacts/SampleApp-Default.apk
-    - mv app-inventory/build/outputs/apk/release/app-inventory-release.apk ./artifacts/SampleApp-Inventory.apk
-    - mv app-customauth/build/outputs/apk/release/app-customauth-release.apk ./artifacts/SampleApp-Customauth.apk
-  artifacts:
-    expire_in: 24 hours
-    paths:
-      - artifacts
+#generateReleaseApp:
+#  tags:
+#    - sdk
+#  stage: publish
+#  before_script:
+#    - mkdir -p artifacts
+#    - touch ./artifacts/info.txt
+#    - echo "Build date          $(date)"                >> ./artifacts/info.txt
+#    - echo "Git tag             ${CI_COMMIT_REF_NAME}"  >> ./artifacts/info.txt
+#    - echo "Git commit          ${CI_COMMIT_SHA}"       >> ./artifacts/info.txt
+#    - echo "Gitlab pipeline     ${CI_PIPELINE_ID}"      >> ./artifacts/info.txt
+#  script:
+#    - mv app/build/outputs/apk/release/app-release.apk ./artifacts/SampleApp-Default.apk
+#    - mv app-inventory/build/outputs/apk/release/app-inventory-release.apk ./artifacts/SampleApp-Inventory.apk
+#    - mv app-customauth/build/outputs/apk/release/app-customauth-release.apk ./artifacts/SampleApp-Customauth.apk
+#  artifacts:
+#    expire_in: 24 hours
+#    paths:
+#      - artifacts
 
 publishLogin:
   tags:
