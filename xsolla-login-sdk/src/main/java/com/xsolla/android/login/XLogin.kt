@@ -2071,7 +2071,6 @@ class XLogin private constructor(
             return intent
         }
 
-        //textreview
         /**
          * Starts linking the social network to current user account
          *
@@ -2089,7 +2088,6 @@ class XLogin private constructor(
             startSocialLinking(socialNetwork, activity, null, callback)
         }
 
-        //textreview
         /**
          * Starts linking the social network to current user account
          *
@@ -2117,7 +2115,6 @@ class XLogin private constructor(
             loginSocial.startLinking(activity, fragment, socialNetwork, callback)
         }
 
-        //textreview
         /**
          * Finishes linking the social network to current user account
          *
