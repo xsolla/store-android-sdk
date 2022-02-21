@@ -106,7 +106,7 @@ class ViGooglePlayViewHolder(
             sb.append("Expiration: ")
             sb.append(expirationPeriod.value)
             sb.append(' ')
-            sb.append(expirationPeriod.type.name.toLowerCase())
+            sb.append(expirationPeriod.type.name.lowercase())
             if (expirationPeriod.value != 1) {
                 sb.append('s')
             }

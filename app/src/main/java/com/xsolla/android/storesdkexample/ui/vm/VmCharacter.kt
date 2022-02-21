@@ -18,7 +18,7 @@ import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.storesdkexample.data.local.DemoCredentialsManager
 import com.xsolla.android.storesdkexample.data.local.PrefManager
 import com.xsolla.android.storesdkexample.util.extensions.toUiEntity
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 class VmCharacterPage : ViewModel() {
     private companion object {

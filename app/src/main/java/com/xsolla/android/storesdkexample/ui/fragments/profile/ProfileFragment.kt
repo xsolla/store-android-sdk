@@ -206,7 +206,7 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun clearValidations() {
-        fieldsWithPossibleError.forEach { it?.isErrorEnabled = false }
+        fieldsWithPossibleError.forEach { it.isErrorEnabled = false }
     }
 
     // Not DatePickerDialog from Android SDK due to colors problems

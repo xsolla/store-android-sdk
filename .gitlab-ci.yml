@@ -12,7 +12,7 @@ include:
 variables:
   SAST_EXPERIMENTAL_FEATURES: "true"
 
-image: circleci/android:api-30
+image: cimg/android:2022.01
 
 stages:
   - generate_keystore
@@ -141,11 +141,17 @@ test:
     - ./gradlew :xsolla-store-sdk:setupTestVariables && ./gradlew :xsolla-store-sdk:test
     - ./gradlew :xsolla-inventory-sdk:setupTestVariables && ./gradlew :xsolla-inventory-sdk:test
   artifacts:
+    when: always
     expire_in: 24 hours
     paths:
       - xsolla-login-sdk/build/reports/
       - xsolla-store-sdk/build/reports/
       - xsolla-inventory-sdk/build/reports/
+    reports:
+      junit:
+        - xsolla-login-sdk/build/test-results/testReleaseUnitTest/TEST-*.xml
+        - xsolla-store-sdk/build/test-results/testReleaseUnitTest/TEST-*.xml
+        - xsolla-inventory-sdk/build/test-results/testReleaseUnitTest/TEST-*.xml
   cache:
     key: ${CI_PROJECT_ID}
     paths:

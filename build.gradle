@@ -13,20 +13,20 @@ buildscript {
     ext.sample_app_version_code = 24
 
     ext.sdk_min = 21
-    ext.sdk_target = 30
-    ext.sdk_compile = 30
+    ext.sdk_target = 31
+    ext.sdk_compile = 31
 
-    ext.kotlin_version = '1.5.31'
+    ext.kotlin_version = '1.6.10'
     ext.retrofit_version = '2.9.0'
     ext.junit_version = '4.13.2'
-    ext.robolectric_version = '4.6.1'
+    ext.robolectric_version = '4.7.3'
 
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath 'com.android.tools.build:gradle:7.0.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.5"
         classpath 'org.jetbrains.dokka:dokka-gradle-plugin:1.4.20'
