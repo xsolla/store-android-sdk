@@ -28,7 +28,9 @@ import com.tencent.tauth.UiError
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.api.LoginApi
 import com.xsolla.android.login.callback.FinishSocialCallback
+import com.xsolla.android.login.callback.FinishSocialLinkingCallback
 import com.xsolla.android.login.callback.StartSocialCallback
+import com.xsolla.android.login.callback.StartSocialLinkingCallback
 import com.xsolla.android.login.entity.request.AuthUserSocialBody
 import com.xsolla.android.login.entity.request.AuthUserSocialWithCodeBody
 import com.xsolla.android.login.entity.request.OauthGetCodeBySocialTokenBody
@@ -49,6 +51,7 @@ import java.util.*
 
 object LoginSocial {
 
+    private const val RC_LINKING_WEBVIEW = 39999
     private const val RC_AUTH_WEBVIEW = 31000
 
     private const val RC_AUTH_GOOGLE = 31001
@@ -516,7 +519,7 @@ object LoginSocial {
                                 callback.onError(null, "Empty response")
                                 return
                             }
-                            openBrowserActivity(url, activity, fragment)
+                            openBrowserActivity(isLinking = false, url, activity, fragment)
                             callback.onAuthStarted()
                         } else {
                             callback.onError(null, Utils.getErrorMessage(response.errorBody()))
@@ -547,7 +550,7 @@ object LoginSocial {
                                 callback.onError(null, "Empty response")
                                 return
                             }
-                            openBrowserActivity(url, activity, fragment)
+                            openBrowserActivity(isLinking = false, url, activity, fragment)
                             callback.onAuthStarted()
                         } else {
                             callback.onError(null, Utils.getErrorMessage(response.errorBody()))
@@ -564,7 +567,12 @@ object LoginSocial {
         }
     }
 
-    private fun openBrowserActivity(url: String, activity: Activity?, fragment: Fragment?) {
+    private fun openBrowserActivity(
+        isLinking: Boolean,
+        url: String,
+        activity: Activity?,
+        fragment: Fragment?
+    ) {
         val intent: Intent = if (activity != null) {
             if (ActivityAuthBrowserProxy.checkAvailability(activity)) {
                 Intent(activity, ActivityAuthBrowserProxy::class.java)
@@ -581,11 +589,12 @@ object LoginSocial {
         with(intent) {
             putExtra(ActivityAuth.ARG_AUTH_URL, url)
             putExtra(ActivityAuth.ARG_CALLBACK_URL, callbackUrl)
+            putExtra(ActivityAuth.ARG_IS_LINKING, isLinking)
         }
         if (activity != null) {
-            activity.startActivityForResult(intent, RC_AUTH_WEBVIEW)
+            activity.startActivityForResult(intent, if (isLinking) RC_LINKING_WEBVIEW else RC_AUTH_WEBVIEW)
         } else {
-            fragment!!.startActivityForResult(intent, RC_AUTH_WEBVIEW)
+            fragment!!.startActivityForResult(intent, if (isLinking) RC_LINKING_WEBVIEW else RC_AUTH_WEBVIEW)
         }
     }
 
@@ -763,6 +772,56 @@ object LoginSocial {
                         callback.invoke(t, null)
                     }
                 })
+        }
+    }
+
+    fun startLinking(
+        activity: Activity?,
+        fragment: Fragment?,
+        socialNetwork: SocialNetworkForLinking,
+        callback: StartSocialLinkingCallback?
+    ) {
+        loginApi.getUrlToLinkSocialNetworkToAccount(
+            "Bearer ${XLogin.token}",
+            socialNetwork.name.lowercase(),
+            callbackUrl
+        ).enqueue(object : Callback<UrlToLinkSocialNetworkResponse> {
+            override fun onResponse(
+                call: Call<UrlToLinkSocialNetworkResponse>,
+                response: Response<UrlToLinkSocialNetworkResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val url = response.body()?.url
+                    if (url == null) {
+                        callback?.onError(null, "Empty response")
+                        return
+                    }
+                    openBrowserActivity(isLinking = true, url, activity, fragment)
+                    callback?.onLinkingStarted()
+                } else {
+                    callback?.onError(null, Utils.getErrorMessage(response.errorBody()))
+                }
+            }
+
+            override fun onFailure(call: Call<UrlToLinkSocialNetworkResponse>, t: Throwable) {
+                callback?.onError(t, null)
+            }
+        })
+    }
+
+    fun finishSocialLinking(
+        activityResultRequestCode: Int,
+        activityResultCode: Int,
+        activityResultData: Intent?,
+        callback: FinishSocialLinkingCallback?
+    ) {
+        if (activityResultRequestCode == RC_LINKING_WEBVIEW) {
+            val (status, _, _, error) = fromResultIntent(activityResultData)
+            when (status) {
+                ActivityAuth.Status.SUCCESS -> callback?.onLinkingSuccess()
+                ActivityAuth.Status.CANCELLED -> callback?.onLinkingCancelled()
+                ActivityAuth.Status.ERROR -> callback?.onLinkingError(null, error!!)
+            }
         }
     }
 

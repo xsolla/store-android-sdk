@@ -1,6 +1,5 @@
 package com.xsolla.android.storesdkexample.ui.fragments.friends
 
-import android.app.Activity
 import android.content.Intent
 import android.widget.ImageView
 import androidx.core.view.isGone
@@ -16,15 +15,14 @@ import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.AddFriendsAdapter
 import com.xsolla.android.storesdkexample.adapter.SocialFriendsAdapter
 import com.xsolla.android.appcore.databinding.FragmentAddFriendsBinding
+import com.xsolla.android.login.callback.FinishSocialLinkingCallback
+import com.xsolla.android.login.callback.StartSocialLinkingCallback
+import com.xsolla.android.login.callback.UnlinkSocialNetworkCallback
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmAddFriends
 import com.xsolla.android.storesdkexample.ui.vm.VmSocialFriends
 
 class AddFriendsFragment : BaseFragment() {
-
-    private companion object {
-        private const val RC_LINKING = 33
-    }
 
     private val binding: FragmentAddFriendsBinding by viewBinding()
 
@@ -42,27 +40,84 @@ class AddFriendsFragment : BaseFragment() {
 
     override fun initUI() {
         socialNetworksIcons = mapOf(
-                SocialNetworkForLinking.FACEBOOK to Triple(R.drawable.ic_linking_facebook_add, R.drawable.ic_linking_facebook_added, binding.iconFacebook),
-                SocialNetworkForLinking.VK to Triple(R.drawable.ic_linking_vk_add, R.drawable.ic_linking_vk_added, binding.iconVk),
-                SocialNetworkForLinking.TWITTER to Triple(R.drawable.ic_linking_twitter_add, R.drawable.ic_linking_twitter_added, binding.iconTwitter)
+            SocialNetworkForLinking.FACEBOOK to Triple(
+                R.drawable.ic_linking_facebook_add,
+                R.drawable.ic_linking_facebook_added,
+                binding.iconFacebook
+            ),
+            SocialNetworkForLinking.VK to Triple(
+                R.drawable.ic_linking_vk_add,
+                R.drawable.ic_linking_vk_added,
+                binding.iconVk
+            ),
+            SocialNetworkForLinking.TWITTER to Triple(
+                R.drawable.ic_linking_twitter_add,
+                R.drawable.ic_linking_twitter_added,
+                binding.iconTwitter
+            )
         )
         searchAdapter = AddFriendsAdapter(
-                { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.FRIEND_REMOVE) },
-                { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.BLOCK) },
-                {},
-                { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.FRIEND_REQUEST_APPROVE) },
-                { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.FRIEND_REQUEST_DENY) },
-                { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.FRIEND_REQUEST_CANCEL) },
-                { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.FRIEND_REQUEST_ADD) }
+            { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.FRIEND_REMOVE) },
+            { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.BLOCK) },
+            {},
+            {
+                vmAddFriends.updateFriendship(
+                    it,
+                    UpdateUserFriendsRequestAction.FRIEND_REQUEST_APPROVE
+                )
+            },
+            {
+                vmAddFriends.updateFriendship(
+                    it,
+                    UpdateUserFriendsRequestAction.FRIEND_REQUEST_DENY
+                )
+            },
+            {
+                vmAddFriends.updateFriendship(
+                    it,
+                    UpdateUserFriendsRequestAction.FRIEND_REQUEST_CANCEL
+                )
+            },
+            { vmAddFriends.updateFriendship(it, UpdateUserFriendsRequestAction.FRIEND_REQUEST_ADD) }
         )
         socialFriendsAdapter = SocialFriendsAdapter(
-                { vmSocialFriends.updateFriendship(it.toFriendUiEntity(), UpdateUserFriendsRequestAction.FRIEND_REMOVE) },
-                { vmSocialFriends.updateFriendship(it.toFriendUiEntity(), UpdateUserFriendsRequestAction.BLOCK) },
-                {},
-                { vmSocialFriends.updateFriendship(it.toFriendUiEntity(), UpdateUserFriendsRequestAction.FRIEND_REQUEST_APPROVE) },
-                { vmSocialFriends.updateFriendship(it.toFriendUiEntity(), UpdateUserFriendsRequestAction.FRIEND_REQUEST_DENY) },
-                { vmSocialFriends.updateFriendship(it.toFriendUiEntity(), UpdateUserFriendsRequestAction.FRIEND_REQUEST_CANCEL) },
-                { vmSocialFriends.updateFriendship(it.toFriendUiEntity(), UpdateUserFriendsRequestAction.FRIEND_REQUEST_ADD) }
+            {
+                vmSocialFriends.updateFriendship(
+                    it.toFriendUiEntity(),
+                    UpdateUserFriendsRequestAction.FRIEND_REMOVE
+                )
+            },
+            {
+                vmSocialFriends.updateFriendship(
+                    it.toFriendUiEntity(),
+                    UpdateUserFriendsRequestAction.BLOCK
+                )
+            },
+            {},
+            {
+                vmSocialFriends.updateFriendship(
+                    it.toFriendUiEntity(),
+                    UpdateUserFriendsRequestAction.FRIEND_REQUEST_APPROVE
+                )
+            },
+            {
+                vmSocialFriends.updateFriendship(
+                    it.toFriendUiEntity(),
+                    UpdateUserFriendsRequestAction.FRIEND_REQUEST_DENY
+                )
+            },
+            {
+                vmSocialFriends.updateFriendship(
+                    it.toFriendUiEntity(),
+                    UpdateUserFriendsRequestAction.FRIEND_REQUEST_CANCEL
+                )
+            },
+            {
+                vmSocialFriends.updateFriendship(
+                    it.toFriendUiEntity(),
+                    UpdateUserFriendsRequestAction.FRIEND_REQUEST_ADD
+                )
+            }
         )
         binding.searchInput.addTextChangedListener {
             vmAddFriends.currentSearchQuery.value = it?.toString() ?: ""
@@ -99,28 +154,49 @@ class AddFriendsFragment : BaseFragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_LINKING) {
-            if (resultCode == Activity.RESULT_OK) {
-                vmSocialFriends.loadLinkedSocialAccounts()
-                vmSocialFriends.updateSocialFriends()
-            } else {
-                showSnack(getString(R.string.add_friends_linking_error))
+        XLogin.finishSocialLinking(
+            requestCode,
+            resultCode,
+            data,
+            object : FinishSocialLinkingCallback {
+                override fun onLinkingSuccess() {
+                    vmSocialFriends.loadLinkedSocialAccounts()
+                    vmSocialFriends.loadAllSocialFriends()
+                    showSnack("Linking success")
+                }
+
+                override fun onLinkingCancelled() {
+                    showSnack("Linking cancelled")
+                }
+
+                override fun onLinkingError(throwable: Throwable?, errorMessage: String?) {
+                    showSnack("Linking error")
+                }
             }
-        }
+        )
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun initSocialButtons(list: List<SocialNetworkForLinking?>) {
         for (socialNetwork in SocialNetworkForLinking.values()) {
             val info = socialNetworksIcons.getValue(socialNetwork)
             if (socialNetwork in list) {
-                info.third.setRateLimitedClickListener { }
+                info.third.setRateLimitedClickListener {}
                 info.third.setImageResource(info.second)
             } else {
                 info.third.setRateLimitedClickListener {
-                    startActivityForResult(
-                            XLogin.createSocialAccountLinkingIntent(requireContext(), socialNetwork),
-                            RC_LINKING
+                    XLogin.startSocialLinking(
+                        socialNetwork,
+                        fragment = this,
+                        callback = object : StartSocialLinkingCallback {
+                            override fun onLinkingStarted() {
+                            }
+
+                            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                                showSnack(getString(R.string.add_friends_linking_error))
+                            }
+
+                        }
                     )
                 }
                 info.third.setImageResource(info.first)
@@ -152,10 +228,10 @@ class AddFriendsFragment : BaseFragment() {
 
     private fun setEmptyTextVisibility() {
         binding.recyclerEmpty.isVisible =
-                vmAddFriends.currentSearchQuery.value.isNullOrBlank() &&
-                        vmSocialFriends.socialFriendsList.value.isNullOrEmpty() ||
-                        !vmAddFriends.currentSearchQuery.value.isNullOrBlank() &&
-                        vmAddFriends.searchResultList.value.isNullOrEmpty()
+            vmAddFriends.currentSearchQuery.value.isNullOrBlank() &&
+                    vmSocialFriends.socialFriendsList.value.isNullOrEmpty() ||
+                    !vmAddFriends.currentSearchQuery.value.isNullOrBlank() &&
+                    vmAddFriends.searchResultList.value.isNullOrEmpty()
     }
 
 }

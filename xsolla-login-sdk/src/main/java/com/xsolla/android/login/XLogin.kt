@@ -21,7 +21,6 @@ import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.login.social.SocialNetworkForLinking
 import com.xsolla.android.login.token.TokenUtils
 import com.xsolla.android.login.ui.ActivityAuth
-import com.xsolla.android.login.ui.ActivityAuthBrowserProxy
 import com.xsolla.android.login.ui.ActivityAuthWebView
 import com.xsolla.android.login.unity.UnityProxyActivity
 import com.xsolla.android.login.util.Utils
@@ -33,6 +32,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
+import java.net.URLEncoder
 import java.util.*
 
 /**
@@ -1495,7 +1495,7 @@ class XLogin private constructor(
          * @param sortBy                    condition for sorting the users
          * @param sortOrder                 condition for sorting the list of the users
          * @param callback                  callback with friends' relationships and pagination params
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-friends/get-users-friends)
+         * @see [Login API Reference](https://developers.xsolla.com/api/login/operation/get-users-friends/)
          */
         @JvmStatic
         @JvmOverloads
@@ -1505,7 +1505,7 @@ class XLogin private constructor(
             sortBy: UserFriendsRequestSortBy,
             sortOrder: UserFriendsRequestSortOrder,
             callback: GetCurrentUserFriendsCallback,
-            @IntRange(from = 1, to = 50) limit: Int = 50,
+            @IntRange(from = 1, to = 50) limit: Int = 20,
         ) {
             getInstance().loginApi
                 .getUserFriends(
@@ -1583,7 +1583,7 @@ class XLogin private constructor(
          * @param limit              maximum number of friends that are returned at a time
          * @param fromGameOnly       shows whether the social friends are from your game
          * @param callback           callback with social friends
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/users/get-users-friends)
+         * @see [Login API Reference](https://developers.xsolla.com/api/login/operation/get-social-account-friends/)
          */
         @JvmStatic
         @JvmOverloads
@@ -1592,7 +1592,7 @@ class XLogin private constructor(
             fromGameOnly: Boolean,
             callback: GetSocialFriendsCallback,
             offset: Int = 0,
-            @IntRange(from = 1, to = 50) limit: Int = 50,
+            @IntRange(from = 1, to = 500) limit: Int = 500,
         ) {
             getInstance().loginApi
                 .getSocialFriends(
@@ -1663,7 +1663,7 @@ class XLogin private constructor(
          * @param offset             number of the elements from which the list is generated
          * @param limit              maximum number of users that are returned at a time
          * @param callback           callback with users
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/users/search-users-by-nickname)
+         * @see [Login API Reference](https://developers.xsolla.com/api/login/operation/search-users-by-nickname/)
          */
         @JvmStatic
         @JvmOverloads
@@ -1671,7 +1671,7 @@ class XLogin private constructor(
             nickname: String?,
             callback: SearchUsersByNicknameCallback,
             offset: Int = 0,
-            @IntRange(from = 1, to = 50) limit: Int = 50
+            @IntRange(from = 1, to = 100) limit: Int = 100
         ) {
             getInstance().loginApi
                 .searchUsersByNickname("Bearer $token", nickname!!, offset, limit)
@@ -2051,20 +2051,95 @@ class XLogin private constructor(
          * @return                       intent that you can use for open activity for result
          * @see [User Account API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/social-networks/link-social-network-to-account)
          */
+        @Deprecated("Use startSocialLinking method instead")
         @JvmStatic
         fun createSocialAccountLinkingIntent(
             context: Context,
             socialNetwork: SocialNetworkForLinking
         ): Intent {
-            val intent = Intent(context, ActivityAuthBrowserProxy::class.java)
+            val intent = Intent(context, ActivityAuthWebView::class.java)
             intent.putExtra(
                 ActivityAuth.ARG_AUTH_URL,
-                LOGIN_HOST + "/api/users/me/social_providers/" + socialNetwork.name.lowercase() + "/login_redirect"
+                LOGIN_HOST + "/api/users/me/social_providers/" +
+                        socialNetwork.name.lowercase() +
+                        "/login_redirect?login_url=" +
+                        URLEncoder.encode(getInstance().callbackUrl)
             )
             intent.putExtra(ActivityAuth.ARG_CALLBACK_URL, getInstance().callbackUrl)
             intent.putExtra(ActivityAuthWebView.ARG_TOKEN, token)
+            intent.putExtra(ActivityAuth.ARG_IS_LINKING, true)
             return intent
+        }
 
+        //textreview
+        /**
+         * Starts linking the social network to current user account
+         *
+         * @param activity      current activity
+         * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
+         * @param callback      status callback
+         * @see [Login API Reference](https://developers.xsolla.com/api/login/operation/get-url-to-link-social-network-to-account/)
+         */
+        @JvmStatic
+        fun startSocialLinking(
+            socialNetwork: SocialNetworkForLinking,
+            activity: Activity? = null,
+            callback: StartSocialLinkingCallback?
+        ) {
+            startSocialLinking(socialNetwork, activity, null, callback)
+        }
+
+        //textreview
+        /**
+         * Starts linking the social network to current user account
+         *
+         * @param fragment      current fragment
+         * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
+         * @param callback      status callback
+         * @see [Login API Reference](https://developers.xsolla.com/api/login/operation/get-url-to-link-social-network-to-account/)
+         */
+        @JvmStatic
+        fun startSocialLinking(
+            socialNetwork: SocialNetworkForLinking,
+            fragment: Fragment? = null,
+            callback: StartSocialLinkingCallback?
+        ) {
+            startSocialLinking(socialNetwork, null, fragment, callback)
+        }
+
+        @JvmStatic
+        private fun startSocialLinking(
+            socialNetwork: SocialNetworkForLinking,
+            activity: Activity? = null,
+            fragment: Fragment? = null,
+            callback: StartSocialLinkingCallback?
+        ) {
+            loginSocial.startLinking(activity, fragment, socialNetwork, callback)
+        }
+
+        //textreview
+        /**
+         * Finishes linking the social network to current user account
+         *
+         * @param activityResultRequestCode request code from onActivityResult
+         * @param activityResultCode        result code from onActivityResult
+         * @param activityResultData        data from onActivityResult
+         * @param callback                  status callback
+         * @see [Login API Reference](https://developers.xsolla.com/api/login/operation/get-url-to-link-social-network-to-account/)
+         */
+        @JvmStatic
+        fun finishSocialLinking(
+            activityResultRequestCode: Int,
+            activityResultCode: Int,
+            activityResultData: Intent?,
+            callback: FinishSocialLinkingCallback?
+        ) {
+            loginSocial.finishSocialLinking(
+                activityResultRequestCode,
+                activityResultCode,
+                activityResultData,
+                callback
+            )
         }
 
         /**

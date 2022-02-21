@@ -13,11 +13,7 @@ import com.xsolla.android.login.token.TokenUtils
 class ActivityAuthWebView : ActivityAuth() {
 
     companion object {
-        const val ARG_AUTH_URL = "auth_url"
-        const val ARG_CALLBACK_URL = "callback_url"
-        const val ARG_TOKEN = "token" // for linking
-
-        const val RESULT = "result"
+        const val ARG_TOKEN = "token" // for deprecated linking method
 
         private const val USER_AGENT_GOOGLE =
             "Mozilla/5.0 (Linux; Android 10; Redmi Note 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Mobile Safari/537.36"
@@ -97,7 +93,8 @@ class ActivityAuthWebView : ActivityAuth() {
     private fun handleCallbackUrlRedirect(url: String) {
         val code = TokenUtils.getCodeFromUrl(url)
         val token = TokenUtils.getTokenFromUrl(url)
-        if (code == null && token == null) {
+        val isLinking = intent.getBooleanExtra(ARG_IS_LINKING, false)
+        if (!isLinking && code == null && token == null) {
             finishWithResult(
                 Activity.RESULT_OK,
                 Result(Status.ERROR, null, null, "Code or token not found")
