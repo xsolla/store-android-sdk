@@ -40,7 +40,6 @@ android {
         buildConfigField 'String', 'LOGIN_ID', '"026201e3-7e40-11ea-a85b-42010aa80004"' // Replace to your project's Login ID
         buildConfigField 'int', 'OAUTH_CLIENT_ID', '57' // Replace to your project's OAuth2 Client ID
         buildConfigField 'String', 'GOOGLE_CREDENTIAL', "\"${System.env.GOOGLE_SERVER_ID}\""
-        buildConfigField 'String', 'FACEBOOK_CREDENTIAL', "\"${System.env.FACEBOOK_APP_ID}\""
         buildConfigField 'boolean', 'WITH_LOGOUT', 'false'
         buildConfigField 'boolean', 'USE_OAUTH', 'true'
         buildConfigField 'String', 'WEBSHOP_URL', '"https://sitebuilder.xsolla.com/game/sdk-web-store"'
@@ -76,7 +75,6 @@ dependencies {
     implementation project(":app-core")
 
     implementation project(":xsolla-login-sdk")
-    implementation project(":xsolla-login-sdk-facebook")
     implementation project(":xsolla-login-sdk-google")
     implementation project(":xsolla-store-sdk")
     implementation project(":xsolla-inventory-sdk")

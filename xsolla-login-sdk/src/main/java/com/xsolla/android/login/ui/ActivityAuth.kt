@@ -10,6 +10,8 @@ abstract class ActivityAuth : AppCompatActivity() {
         const val ARG_AUTH_URL = "auth_url"
         const val ARG_CALLBACK_URL = "callback_url"
 
+        const val ARG_IS_LINKING = "is_linking"
+
         const val RESULT = "result"
     }
 
@@ -23,7 +25,7 @@ abstract class ActivityAuth : AppCompatActivity() {
         companion object {
             @JvmStatic
             fun fromResultIntent(intent: Intent?): Result =
-                intent?.getParcelableExtra(ActivityAuthWebView.RESULT)
+                intent?.getParcelableExtra(RESULT)
                     ?: Result(Status.ERROR, null, null, "Unknown")
         }
     }

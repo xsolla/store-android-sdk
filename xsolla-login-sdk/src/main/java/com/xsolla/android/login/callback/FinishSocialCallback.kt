@@ -5,3 +5,9 @@ interface FinishSocialCallback {
     fun onAuthCancelled()
     fun onAuthError(throwable: Throwable?, errorMessage: String?)
 }
+
+interface FinishSocialLinkingCallback {
+    fun onLinkingSuccess()
+    fun onLinkingCancelled()
+    fun onLinkingError(throwable: Throwable?, errorMessage: String?)
+}

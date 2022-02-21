@@ -110,7 +110,7 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
                 throwable?.printStackTrace()
                 hasError.value = errorMessage ?: throwable?.javaClass?.name ?: "Failure"
             }
-        }, VmAddFriends.REQUEST_OFFSET, VmAddFriends.REQUEST_LIMIT)
+        }, VmAddFriends.REQUEST_OFFSET, VmAddFriends.REQUEST_SOCIAL_LIMIT)
     }
 
     private fun findRelationship(xsollaId: String): FriendsRelationship {
