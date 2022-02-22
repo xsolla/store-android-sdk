@@ -38,7 +38,7 @@ class RedeemCouponItemsAdapter(
             val expirationPeriod = item.inventoryOption?.expirationPeriod
             if (expirationPeriod != null) {
                 binding.expirationPeriod.isVisible = true
-                binding.expirationPeriod.text = itemView.context.getString(R.string.coupon_received_item_exp_period, expirationPeriod.value, expirationPeriod.type.name.toLowerCase())
+                binding.expirationPeriod.text = itemView.context.getString(R.string.coupon_received_item_exp_period, expirationPeriod.value, expirationPeriod.type.name.lowercase())
             } else {
                 binding.expirationPeriod.isGone = true
             }

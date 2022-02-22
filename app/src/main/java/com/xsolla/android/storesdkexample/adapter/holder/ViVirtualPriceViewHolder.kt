@@ -109,7 +109,7 @@ class ViVirtualPriceViewHolder(
             sb.append("Expiration in ")
             sb.append(expirationPeriod.value)
             sb.append(' ')
-            sb.append(expirationPeriod.type.name.toLowerCase(Locale.getDefault()))
+            sb.append(expirationPeriod.type.name.lowercase(Locale.getDefault()))
             if (expirationPeriod.value != 1) {
                 sb.append('s')
             }

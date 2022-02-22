@@ -27,7 +27,8 @@ class VmAddFriends(application: Application) : AndroidViewModel(application) {
         private const val SEARCH_MIN_LENGTH = 3
         private const val SEARCH_DELAY = 1000L // Login API has a limit of 1rps for search
         const val REQUEST_OFFSET = 0
-        const val REQUEST_LIMIT = 50
+        const val REQUEST_SOCIAL_LIMIT = 500
+        const val REQUEST_SEARCH_LIMIT = 100
 
         const val MAX_LIMIT_FOR_LOADING_FRIENDS = 50
     }
@@ -109,7 +110,7 @@ class VmAddFriends(application: Application) : AndroidViewModel(application) {
                 throwable?.printStackTrace()
             }
 
-        }, REQUEST_OFFSET, REQUEST_LIMIT)
+        }, REQUEST_OFFSET, REQUEST_SEARCH_LIMIT)
     }
 
     fun loadAllFriends() {

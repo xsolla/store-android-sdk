@@ -47,6 +47,7 @@ class ActivityPaystationBrowserProxy : ActivityPaystation() {
 
     override fun onResume() {
         super.onResume()
+        if (isFinishing) return
         if (needStartBrowser) {
             if (BrowserUtils.isCustomTabsBrowserAvailable(this)) {
                 BrowserUtils.launchCustomTabsBrowser(this, url)

@@ -37,6 +37,7 @@ class ActivityAuthBrowserProxy : ActivityAuth() {
 
     override fun onResume() {
         super.onResume()
+        if (isFinishing) return
         if (needStartBrowser) {
             if (BrowserUtils.isCustomTabsBrowserAvailable(this)) {
                 BrowserUtils.launchCustomTabsBrowser(this, url)
@@ -66,13 +67,18 @@ class ActivityAuthBrowserProxy : ActivityAuth() {
         }
         val token = uri.getQueryParameter("token")
         val code = uri.getQueryParameter("code")
-        finishWithResult(
-            Activity.RESULT_OK,
-            Result(
-                Status.SUCCESS,
-                token, code, null
+        val isLinking = intent.getBooleanExtra(ARG_IS_LINKING, false)
+        if (!isLinking && code == null && token == null) {
+            finishWithResult(
+                Activity.RESULT_OK,
+                Result(Status.ERROR, null, null, "Code or token not found")
             )
-        )
+        } else {
+            finishWithResult(
+                Activity.RESULT_OK,
+                Result(Status.SUCCESS, token, code, null)
+            )
+        }
     }
 
     private fun finishWithResult(resultCode: Int, resultData: Result) {

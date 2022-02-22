@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.1] - Payments SDK - 2022-02-21
+- Updated target sdk version to 31
+- Fixed a bug with status after payment completion
+
+## [1.1.1] - Store SDK - 2022-02-21
+- Updated target sdk version to 31
+
+## [1.0.4] - Inventory SDK - 2022-02-21
+- Updated target sdk version to 31
+
+## [3.1.0] - Login SDK - 2022-02-21
+- Updated target sdk version to 31
+- Added new methods for social account linking
+- Fixed a bug with status after sign in completion
+
+
 ## [1.0.0] - Payments SDK - 2022-02-04
 - Updated deep links configuration mechanism
 - Updated browser selection algorithm

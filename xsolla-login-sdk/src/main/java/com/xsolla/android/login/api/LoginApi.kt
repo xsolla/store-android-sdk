@@ -430,7 +430,7 @@ interface LoginApi {
         @Header("authorization") authHeader: String,
         @Path("providerName") providerName: String,
         @Query("login_url") urlRedirect: String
-    ): Call<String>
+    ): Call<UrlToLinkSocialNetworkResponse>
 
     @DELETE("/api/users/me/social_providers/{providerName}")
     fun unlinkSocialNetwork(
