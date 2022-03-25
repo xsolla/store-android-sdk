@@ -97,7 +97,7 @@ class XPayments {
 
         private fun generateUrl(): String {
             accessToken?.let {
-                return "https://${getServer()}/paystation3/?access_token=${it.token}"
+                return "https://${getServer()}/paystation3/mobile/payment/?access_token=${it.token}&additional=eyJwaWQiOjEzODB9"
             }
             throw IllegalArgumentException("access token isn't specified")
         }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xsolla.android.nativepaymentssdk">
+
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+
+    <application>
+        <activity
+            android:name="com.xsolla.android.nativepaymentssdk.ui.activity.PaymentActivity"
+            android:exported="false"
+            android:theme="@style/xsolla_native_payments_Theme.Transparent"/>
+    </application>
+
+</manifest>

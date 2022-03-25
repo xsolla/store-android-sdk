@@ -36,8 +36,7 @@ import com.xsolla.android.googleplay.inventory.InventoryAdmin
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.RefreshTokenCallback
-import com.xsolla.android.payments.XPayments
-import com.xsolla.android.payments.data.AccessToken
+import com.xsolla.android.nativepaymentssdk.XPaystation
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.data.local.DemoCredentialsManager
 import com.xsolla.android.storesdkexample.googleplay.GooglePlayPurchaseHandler
@@ -90,9 +89,8 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
         }
 
         vmPurchase.paymentToken.observe(this) { token ->
-            val intent = XPayments.createIntentBuilder(this)
-                .accessToken(AccessToken(token))
-                .isSandbox(BuildConfig.IS_SANDBOX)
+            val intent = XPaystation.createIntentBuilder(this)
+                .accessToken(token)
                 .build()
             startActivityForResult(intent, RC_PAYSTATION)
         }
@@ -140,11 +138,11 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_PAYSTATION) {
-            val (status, _) = XPayments.Result.fromResultIntent(data)
+            val (status) = XPaystation.Result.fromResultIntent(data)
             when (status) {
-                XPayments.Status.COMPLETED -> showSnack(getString(R.string.payment_completed))
-                XPayments.Status.CANCELLED -> showSnack(getString(R.string.payment_cancelled))
-                XPayments.Status.UNKNOWN -> showSnack(getString(R.string.payment_unknown))
+                XPaystation.Status.COMPLETED -> showSnack(getString(R.string.payment_completed))
+                XPaystation.Status.CANCELLED -> showSnack(getString(R.string.payment_cancelled))
+                XPaystation.Status.UNKNOWN -> showSnack(getString(R.string.payment_unknown))
             }
         }
     }

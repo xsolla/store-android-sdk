@@ -36,7 +36,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary true
 
-        buildConfigField 'int', 'PROJECT_ID', '77640' // Replace to your Project ID
+        buildConfigField 'int', 'PROJECT_ID', '185446' // Replace to your Project ID
         buildConfigField 'String', 'LOGIN_ID', '"026201e3-7e40-11ea-a85b-42010aa80004"' // Replace to your project's Login ID
         buildConfigField 'int', 'OAUTH_CLIENT_ID', '57' // Replace to your project's OAuth2 Client ID
         buildConfigField 'String', 'GOOGLE_CREDENTIAL', "\"${System.env.GOOGLE_SERVER_ID}\""
@@ -53,13 +53,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
-            buildConfigField 'boolean', 'IS_SANDBOX', 'true'
+            buildConfigField 'boolean', 'IS_SANDBOX', 'false'
         }
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
-            buildConfigField 'boolean', 'IS_SANDBOX', 'true'
+            buildConfigField 'boolean', 'IS_SANDBOX', 'false'
         }
     }
 
@@ -80,6 +80,8 @@ dependencies {
     implementation project(":xsolla-inventory-sdk")
     implementation project(":xsolla-payments-sdk")
     implementation project(":xsolla-googleplay-sdk")
+
+    implementation project(":native-payments-sdk")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 

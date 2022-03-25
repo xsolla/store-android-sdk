@@ -1,0 +1,77 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-parcelize'
+    id 'org.jetbrains.dokka'
+    id "org.cyclonedx.bom" version "1.4.0"
+}
+
+android {
+    compileSdkVersion sdk_compile
+
+    resourcePrefix 'xsolla_native_payments_'
+
+    defaultConfig {
+        minSdkVersion sdk_min
+        targetSdkVersion sdk_target
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        quiet true
+        abortOnError true
+        checkDependencies true
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.activity:activity-ktx:1.4.0'
+    implementation 'androidx.fragment:fragment-ktx:1.4.1'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation 'com.github.bumptech.glide:glide:4.13.0'
+
+    implementation "androidx.biometric:biometric:1.1.0"
+
+    implementation "io.ktor:ktor-client-cio:1.6.7"
+    implementation "io.ktor:ktor-client-logging:1.6.7"
+    implementation "ch.qos.logback:logback-classic:1.2.10"
+
+    implementation project(":xsolla-payments-sdk")
+}
+
+//dokkaHtml.configure {
+//    dokkaSourceSets {
+//        named("main") {
+//            noAndroidSdkLink.set(false)
+//            moduleName.set("Xsolla Payments SDK for Android")
+//            includes.from("Module.md")
+//        }
+//    }
+//}
+
+//ext {
+//    PUBLISH_GROUP_ID = 'com.xsolla.android'
+//    PUBLISH_ARTIFACT_ID = 'payments'
+//    PUBLISH_VERSION = payments_sdk_version_name
+//    PUBLISH_NAME = 'Xsolla Payments SDK for Android'
+//    PUBLISH_DESCRIPTION = 'Xsolla Payments SDK for Android allows partners to monetize their product by providing users with a convenient UI to pay for in-game purchases in the game store'
+//}
+//
+//apply from: "${rootDir}/publishMavenCentral.gradle"
+
+cyclonedxBom {
+    includeConfigs += ["releaseCompileClasspath"]
+}
