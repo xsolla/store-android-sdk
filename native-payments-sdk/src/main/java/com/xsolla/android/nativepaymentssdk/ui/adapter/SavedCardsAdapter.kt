@@ -1,6 +1,5 @@
 package com.xsolla.android.nativepaymentssdk.ui.adapter
 
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.nativepaymentssdk.R
 import com.xsolla.android.nativepaymentssdk.vm.VmPayment
-import java.net.URL
-
 
 class SavedCardsAdapter(
     private val dataSet: List<VmPayment.CardInfo>,

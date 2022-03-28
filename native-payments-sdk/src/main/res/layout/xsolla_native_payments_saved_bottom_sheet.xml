@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2D2F47">
+    android:background="#061325">
 
     <TextView
         android:id="@+id/xsolla_native_payments_title"
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="Payment methods"
-        android:textColor="#DEFFFFFF"
+        android:textColor="#fafafa"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,10 +23,13 @@
         android:id="@+id/xsolla_native_payments_subtitle1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:text="Saved payment methods"
         android:textAllCaps="true"
-        android:textColor="#DEFFFFFF"
+        android:textColor="#505c6b"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/xsolla_native_payments_title" />
@@ -42,15 +45,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/xsolla_native_payments_subtitle1"
-        tools:itemCount="2"
+        tools:itemCount="1"
         tools:listitem="@layout/xsolla_native_payments_card_preview" />
+
+    <TextView
+        android:id="@+id/xsolla_native_payments_no_saved_placeholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="You have no saved methods"
+        android:textColor="#505c6b"
+        android:textSize="14sp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintTop_toTopOf="@id/xsolla_native_payments_recycler"
+        app:layout_constraintBottom_toBottomOf="@id/xsolla_native_payments_recycler"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <ProgressBar
         android:id="@+id/xsolla_native_payments_progress_get_saved"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminate="true"
-        android:indeterminateTint="#99FFFFFF"
+        android:indeterminateTint="#505c6b"
         app:layout_constraintBottom_toBottomOf="@id/xsolla_native_payments_recycler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,10 +78,13 @@
         android:id="@+id/xsolla_native_payments_subtitle2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:text="New payment methods"
         android:textAllCaps="true"
-        android:textColor="#DEFFFFFF"
+        android:textColor="#505c6b"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/xsolla_native_payments_recycler" />
@@ -71,12 +92,12 @@
     <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/xsolla_native_payments_card_new_card"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="70dp"
         android:layout_gravity="center"
         android:layout_margin="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/xsolla_native_payments_subtitle2"
-        card_view:cardBackgroundColor="#848EB1"
+        card_view:cardBackgroundColor="#121a2b"
         card_view:cardCornerRadius="4dp">
 
         <LinearLayout
@@ -87,7 +108,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:background="#131525"/>
+                android:background="#151f31"/>
             
             <LinearLayout
                 android:layout_width="0dp"
@@ -100,15 +121,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#DEFFFFFF"
+                    android:textColor="#fafafa"
                     android:textSize="16sp"
-                    android:textStyle="bold"
                     android:text="New card" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#99FFFFFF"
+                    android:textColor="#505c6b"
                     android:textSize="16sp"
                     android:text="Click to make a payment" />
 
@@ -123,10 +143,10 @@
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="40dp"
         android:text="Cancel payment"
         android:textAllCaps="true"
-        android:textColor="#DEFFFFFF"
+        android:textColor="#7e818b"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -142,7 +162,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminate="true"
-        android:indeterminateTint="#99FFFFFF"
+        android:indeterminateTint="#7e818b"
         app:layout_constraintBottom_toBottomOf="@+id/xsolla_native_payments_button_cancel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

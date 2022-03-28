@@ -27,8 +27,6 @@ class SavedPaymentBottomSheet : BottomSheetDialogFragment() {
         inflater.inflate(R.layout.xsolla_native_payments_saved_bottom_sheet, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        view.findViewById<RecyclerView>(R.id.xsolla_native_payments_recycler).addItemDecoration(DividerItemDecoration(
-            context, DividerItemDecoration.VERTICAL))
         view.findViewById<View>(R.id.xsolla_native_payments_button_cancel).setOnClickListener {
             dismiss()
         }
@@ -52,15 +50,19 @@ class SavedPaymentBottomSheet : BottomSheetDialogFragment() {
         }
         vmPayment.savedCards.observe(viewLifecycleOwner) {
             it?.let {
-                view.findViewById<RecyclerView>(R.id.xsolla_native_payments_recycler)
-                    .adapter = SavedCardsAdapter(it, activity as SavedCardsAdapter.CardClickListener)
+                if (it.isEmpty()) {
+                    view.findViewById<View>(R.id.xsolla_native_payments_no_saved_placeholder).visibility = View.VISIBLE
+                } else {
+                    view.findViewById<RecyclerView>(R.id.xsolla_native_payments_recycler)
+                        .adapter = SavedCardsAdapter(it, activity as SavedCardsAdapter.CardClickListener)
+                }
             }
         }
         vmPayment.loadSavedMethods()
     }
 
-    override fun onCancel(dialog: DialogInterface) {
-        super.onCancel(dialog)
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
         (activity as CancelListener).onCancel()
     }
 
