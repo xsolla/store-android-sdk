@@ -1,5 +1,5 @@
 Xsolla Store SDK for Android
-Copyright 2021 Xsolla (USA), Inc.
+Copyright 2022 Xsolla (USA), Inc.
 
 This product includes software developed at
 Xsolla (USA), Inc. (https://xsolla.com/).
