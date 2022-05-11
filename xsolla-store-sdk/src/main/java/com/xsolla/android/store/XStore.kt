@@ -28,6 +28,7 @@ import com.xsolla.android.store.entity.response.order.WsOrderResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse
 import com.xsolla.android.store.entity.response.payment.CreatePaymentTokenResponse
+import com.xsolla.android.store.util.EngineUtils
 import okhttp3.*
 import org.json.JSONObject
 import retrofit2.Call
@@ -74,6 +75,7 @@ class XStore private constructor(
                     .addHeader("X-ENGINE-V", Build.VERSION.RELEASE)
                     .addHeader("X-SDK", "STORE")
                     .addHeader("X-SDK-V", BuildConfig.VERSION_NAME)
+                    .addHeader("X-GAMEENGINE-SPEC", EngineUtils.engineSpec)
                     .url(
                         originalRequest.url().newBuilder()
                             .addQueryParameter("engine", "android")

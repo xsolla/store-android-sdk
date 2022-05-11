@@ -6,6 +6,7 @@ import com.xsolla.android.inventory.callback.ConsumeItemCallback
 import com.xsolla.android.inventory.callback.GetInventoryCallback
 import com.xsolla.android.inventory.callback.GetSubscriptionsCallback
 import com.xsolla.android.inventory.callback.GetVirtualBalanceCallback
+import com.xsolla.android.inventory.util.EngineUtils
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -39,6 +40,7 @@ class XInventory private constructor(
                     .addHeader("X-ENGINE-V", Build.VERSION.RELEASE)
                     .addHeader("X-SDK", "STORE")
                     .addHeader("X-SDK-V", BuildConfig.VERSION_NAME)
+                    .addHeader("X-GAMEENGINE-SPEC", EngineUtils.engineSpec)
                     .url(
                         originalRequest.url().newBuilder()
                             .addQueryParameter("engine", "android")
