@@ -23,6 +23,7 @@ import com.xsolla.android.login.token.TokenUtils
 import com.xsolla.android.login.ui.ActivityAuth
 import com.xsolla.android.login.ui.ActivityAuthWebView
 import com.xsolla.android.login.unity.UnityProxyActivity
+import com.xsolla.android.login.util.EngineUtils
 import com.xsolla.android.login.util.Utils
 import okhttp3.*
 import org.json.JSONObject
@@ -121,6 +122,7 @@ class XLogin private constructor(
                     .addHeader("X-ENGINE-V", Build.VERSION.RELEASE)
                     .addHeader("X-SDK", "LOGIN")
                     .addHeader("X-SDK-V", BuildConfig.VERSION_NAME)
+                    .addHeader("X-GAMEENGINE-SPEC", EngineUtils.engineSpec)
                     .url(
                         originalRequest.url().newBuilder()
                             .addQueryParameter("engine", "android")
