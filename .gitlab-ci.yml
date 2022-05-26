@@ -70,8 +70,6 @@ build:
     expire_in: 2 hours
     paths:
       - app/build/outputs/
-      - app-inventory/build/outputs/
-      - app-customauth/build/outputs/
   cache:
     key: ${CI_PROJECT_ID}
     paths:
@@ -87,8 +85,6 @@ lint:
     expire_in: 24 hours
     paths:
       - app/build/reports/
-      - app-inventory/build/reports/
-      - app-customauth/build/reports/
       - app-core/build/reports/
       - xsolla-googleplay-sdk/build/reports/
       - xsolla-inventory-sdk/build/reports/
@@ -115,8 +111,6 @@ lint:
 #    expire_in: 24 hours
 #    paths:
 #      - app/build/reports/
-#      - app-inventory/build/reports/
-#      - app-customauth/build/reports/
 #      - app-core/build/reports
 #      - xsolla-googleplay-sdk/build/reports/
 #      - xsolla-inventory-sdk/build/reports/
@@ -170,8 +164,6 @@ generateReleaseApp:
     - echo "Gitlab pipeline     ${CI_PIPELINE_ID}"      >> ./artifacts/info.txt
   script:
     - mv app/build/outputs/apk/release/app-release.apk ./artifacts/SampleApp-Default.apk
-    - mv app-inventory/build/outputs/apk/release/app-inventory-release.apk ./artifacts/SampleApp-Inventory.apk
-    - mv app-customauth/build/outputs/apk/release/app-customauth-release.apk ./artifacts/SampleApp-Customauth.apk
   artifacts:
     expire_in: 24 hours
     paths:
