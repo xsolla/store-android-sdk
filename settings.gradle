@@ -1,7 +1,5 @@
 include ':app-core'
 include ':app'
-include ':app-inventory'
-include ':app-customauth'
 include ':xsolla-login-sdk'
 include ':xsolla-login-sdk-facebook'
 include ':xsolla-login-sdk-google'
