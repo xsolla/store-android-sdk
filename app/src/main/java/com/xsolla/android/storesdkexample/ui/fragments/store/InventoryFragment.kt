@@ -57,8 +57,8 @@ class InventoryFragment : BaseFragment(), ConsumeListener, PurchaseListener {
             inventoryAdapter.notifyDataSetChanged()
             setupPlaceholderVisibility()
         }
-        viewModel.subscriptions.observe(viewLifecycleOwner) {
-            inventoryAdapter.setSubscriptions(it)
+        viewModel.timeLimitedItems.observe(viewLifecycleOwner) {
+            inventoryAdapter.setTimeLimitedItems(it)
             setupPlaceholderVisibility()
         }
 
@@ -67,7 +67,7 @@ class InventoryFragment : BaseFragment(), ConsumeListener, PurchaseListener {
 
     private fun loadInventory() {
         viewModel.getItems { showSnack(it) }
-        viewModel.getSubscriptions { showSnack(it) }
+        viewModel.getTimeLimitedItems { showSnack(it) }
         vmBalance.updateVirtualBalance()
     }
 

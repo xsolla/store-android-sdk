@@ -2,7 +2,7 @@ package com.xsolla.android.inventory.entity.response
 
 import com.google.gson.annotations.SerializedName
 
-data class SubscriptionsResponse(val items: List<Item> = emptyList()) {
+data class TimeLimitedItemsResponse(val items: List<Item> = emptyList()) {
     data class Item(
         val sku: String? = null,
         val type: Type? = null,

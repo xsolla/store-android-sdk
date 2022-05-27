@@ -37,7 +37,7 @@ data class InventoryResponse(val items: List<Item> = emptyList()) {
             @SerializedName("non_consumable")
             NON_CONSUMABLE,
             @SerializedName("non_renewing_subscription")
-            NON_RENEWING_SUBSCRIPTION
+            TIME_LIMITED_ITEM
         }
     }
 }
