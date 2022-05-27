@@ -10,7 +10,7 @@ import com.xsolla.android.appcore.databinding.ItemInventoryBinding
 import com.xsolla.android.appcore.ui.vm.VmPurchase
 import com.xsolla.android.googleplay.StoreUtils
 import com.xsolla.android.inventory.entity.response.InventoryResponse
-import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
+import com.xsolla.android.inventory.entity.response.TimeLimitedItemsResponse
 import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.ConsumeListener
@@ -27,10 +27,10 @@ class InventoryAdapter(
     private val vmGooglePlay: VmGooglePlay
 ) : RecyclerView.Adapter<InventoryAdapter.ViewHolder>() {
 
-    private var subscriptions: List<SubscriptionsResponse.Item>? = null
+    private var timeLimitedItems: List<TimeLimitedItemsResponse.Item>? = null
 
-    fun setSubscriptions(subscriptions: List<SubscriptionsResponse.Item>?) {
-        this.subscriptions = subscriptions
+    fun setTimeLimitedItems(timeLimitedItems: List<TimeLimitedItemsResponse.Item>?) {
+        this.timeLimitedItems = timeLimitedItems
         notifyDataSetChanged()
     }
 
@@ -57,27 +57,27 @@ class InventoryAdapter(
             Glide.with(itemView).load(item.imageUrl).into(binding.itemIcon)
             binding.itemName.text = item.name
             binding.itemQuantity.text = item.quantity.toString()
-            if (item.virtualItemType == InventoryResponse.Item.VirtualItemType.NON_RENEWING_SUBSCRIPTION) {
+            if (item.virtualItemType == InventoryResponse.Item.VirtualItemType.TIME_LIMITED_ITEM) {
                 binding.itemQuantity.visibility = View.INVISIBLE
             } else {
                 binding.itemQuantity.visibility = View.VISIBLE
             }
 
-            val subscription =
-                if (item.virtualItemType == InventoryResponse.Item.VirtualItemType.NON_RENEWING_SUBSCRIPTION) {
-                    subscriptions?.find { it.sku == item.sku }
+            val timeLimitedItem =
+                if (item.virtualItemType == InventoryResponse.Item.VirtualItemType.TIME_LIMITED_ITEM) {
+                    timeLimitedItems?.find { it.sku == item.sku }
                 } else {
                     null
                 }
 
-            binding.itemExpiration.text = getExpirationText(subscription)
+            binding.itemExpiration.text = getExpirationText(timeLimitedItem)
 
             binding.consumeButton.visibility =
                 if (item.remainingUses == null || item.remainingUses == 0L) View.INVISIBLE else View.VISIBLE
             binding.consumeButton.setOnClickListener { consumeListener.onConsume(item) }
 
             binding.buyAgainButton.isVisible =
-                subscription != null && subscription.status != SubscriptionsResponse.Item.Status.ACTIVE
+                timeLimitedItem != null && timeLimitedItem.status != TimeLimitedItemsResponse.Item.Status.ACTIVE
             binding.buyAgainButton.setOnClickListener { view ->
                 if (StoreUtils.isAppInstalledFromGooglePlay(parent.context)) {
                     vmGooglePlay.startPurchase(item.sku!!)
@@ -90,9 +90,9 @@ class InventoryAdapter(
             }
         }
 
-        private fun getExpirationText(sub: SubscriptionsResponse.Item?): String? {
+        private fun getExpirationText(sub: TimeLimitedItemsResponse.Item?): String? {
             if (sub == null) return null
-            return if (sub.status == SubscriptionsResponse.Item.Status.ACTIVE) {
+            return if (sub.status == TimeLimitedItemsResponse.Item.Status.ACTIVE) {
                 val date = Date(sub.expiredAt?.times(1000)!!)  //date *1000
                 val sdf = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.US)
                 val formattedDate = sdf.format(date)

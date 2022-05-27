@@ -4,11 +4,11 @@ import com.google.gson.GsonBuilder
 import com.xsolla.android.inventory.api.InventoryApi
 import com.xsolla.android.inventory.callback.ConsumeItemCallback
 import com.xsolla.android.inventory.callback.GetInventoryCallback
-import com.xsolla.android.inventory.callback.GetSubscriptionsCallback
+import com.xsolla.android.inventory.callback.GetTimeLimitedItemsCallback
 import com.xsolla.android.inventory.callback.GetVirtualBalanceCallback
 import com.xsolla.android.inventory.entity.request.ConsumeItemBody
 import com.xsolla.android.inventory.entity.response.InventoryResponse
-import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
+import com.xsolla.android.inventory.entity.response.TimeLimitedItemsResponse
 import com.xsolla.android.inventory.entity.response.VirtualBalanceResponse
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -81,19 +81,19 @@ class RequestExecutor(
             })
     }
 
-    fun getSubscriptions(
-        callback: GetSubscriptionsCallback
+    fun getTimeLimitedItems(
+        callback: GetTimeLimitedItemsCallback
     ) {
-        inventoryApi.getSubscriptions(projectId, "android_standalone")
-            .enqueue(object : Callback<SubscriptionsResponse> {
+        inventoryApi.getTimeLimitedItems(projectId, "android_standalone")
+            .enqueue(object : Callback<TimeLimitedItemsResponse> {
                 override fun onResponse(
-                    call: Call<SubscriptionsResponse>,
-                    response: Response<SubscriptionsResponse>
+                    call: Call<TimeLimitedItemsResponse>,
+                    response: Response<TimeLimitedItemsResponse>
                 ) {
                     if (response.isSuccessful) {
-                        val subscriptions = response.body()
-                        if (subscriptions != null) {
-                            callback.onSuccess(subscriptions)
+                        val timeLimitedItems = response.body()
+                        if (timeLimitedItems != null) {
+                            callback.onSuccess(timeLimitedItems)
                         } else {
                             callback.onError(null, "Empty response")
                         }
@@ -102,7 +102,7 @@ class RequestExecutor(
                     }
                 }
 
-                override fun onFailure(call: Call<SubscriptionsResponse>, t: Throwable) {
+                override fun onFailure(call: Call<TimeLimitedItemsResponse>, t: Throwable) {
                     callback.onError(t, null)
                 }
             })

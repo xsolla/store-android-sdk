@@ -2,10 +2,10 @@ package com.xsolla.android.inventory
 
 import com.xsolla.android.inventory.callback.ConsumeItemCallback
 import com.xsolla.android.inventory.callback.GetInventoryCallback
-import com.xsolla.android.inventory.callback.GetSubscriptionsCallback
+import com.xsolla.android.inventory.callback.GetTimeLimitedItemsCallback
 import com.xsolla.android.inventory.callback.GetVirtualBalanceCallback
 import com.xsolla.android.inventory.entity.response.InventoryResponse
-import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
+import com.xsolla.android.inventory.entity.response.TimeLimitedItemsResponse
 import com.xsolla.android.inventory.entity.response.VirtualBalanceResponse
 import org.junit.Assert
 import org.junit.Before
@@ -59,14 +59,14 @@ class InventoryTests {
     }
 
     @Test
-    fun getSubscriptions() {
+    fun getTimeLimitedItems() {
         var success = false
         val latch = CountDownLatch(1)
-        XInventory.getSubscriptions(object : GetSubscriptionsCallback {
-            override fun onSuccess(data: SubscriptionsResponse) {
+        XInventory.getTimeLimitedItems(object : GetTimeLimitedItemsCallback {
+            override fun onSuccess(data: TimeLimitedItemsResponse) {
                 success = true
                 success = success && data.items.size == 1
-                success = success && data.items[0].sku == subscriptionSku
+                success = success && data.items[0].sku == timeLimitedItemSku
                 latch.countDown()
             }
 

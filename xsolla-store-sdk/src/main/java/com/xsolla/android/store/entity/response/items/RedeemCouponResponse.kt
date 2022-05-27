@@ -36,6 +36,6 @@ class RedeemCouponResponse(val items: List<Item> = emptyList()) {
         NON_CONSUMABLE,
 
         @SerializedName("non_renewing_subscription")
-        NON_RENEWING_SUBSCRIPTION
+        TIME_LIMITED_ITEM
     }
 }

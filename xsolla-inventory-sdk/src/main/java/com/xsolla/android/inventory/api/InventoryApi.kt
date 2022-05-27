@@ -1,7 +1,7 @@
 package com.xsolla.android.inventory.api
 
 import com.xsolla.android.inventory.entity.response.InventoryResponse
-import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
+import com.xsolla.android.inventory.entity.response.TimeLimitedItemsResponse
 import com.xsolla.android.inventory.entity.response.VirtualBalanceResponse
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -30,10 +30,10 @@ interface InventoryApi {
     ): Call<VirtualBalanceResponse>
 
     @GET("api/v2/project/{project_id}/user/subscriptions")
-    fun getSubscriptions(
+    fun getTimeLimitedItems(
             @Path("project_id") projectId: Int,
             @Query("platform") platform: String
-    ): Call<SubscriptionsResponse>
+    ): Call<TimeLimitedItemsResponse>
 
     @POST("api/v2/project/{project_id}/user/inventory/item/consume")
     fun consumeItem(
