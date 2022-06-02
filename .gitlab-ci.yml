@@ -27,7 +27,7 @@ stages:
 
 generate android keystore:
   tags:
-    - sdk
+    - devops
   stage: generate_keystore
   script:
     - echo $STORE_FILE | base64 -di > xsolla.keystore
@@ -43,7 +43,7 @@ generate android keystore:
 
 generate maven keystore:
   tags:
-    - sdk
+    - devops
   stage: generate_keystore
   only:
     - /^v.*/
@@ -62,7 +62,7 @@ generate maven keystore:
 
 build:
   tags:
-    - sdk
+    - devops
   stage: build
   script:
     - ./gradlew assembleRelease
@@ -77,7 +77,7 @@ build:
 
 lint:
   tags:
-    - sdk
+    - devops
   stage: lint
   script:
     - ./gradlew lint
@@ -102,7 +102,7 @@ lint:
 
 #dependency check:
 #  tags:
-#    - sdk
+#    - devops
 #  stage: lint
 #  script:
 #    - echo $OWASP_SUPPRESS >> owasp-suppress.xml
@@ -128,7 +128,7 @@ lint:
 
 test:
   tags:
-    - sdk
+    - devops
   stage: test
   script:
     - ./gradlew :xsolla-login-sdk:setupTestVariables && ./gradlew :xsolla-login-sdk:test
@@ -153,7 +153,7 @@ test:
 
 generateReleaseApp:
   tags:
-    - sdk
+    - devops
   stage: publish
   before_script:
     - mkdir -p artifacts
@@ -171,7 +171,7 @@ generateReleaseApp:
 
 publishLogin:
   tags:
-    - sdk
+    - devops
   stage: publish
   when: manual
   only:
@@ -189,7 +189,7 @@ publishLogin:
 
 publishStore:
   tags:
-    - sdk
+    - devops
   stage: publish
   when: manual
   only:
@@ -203,7 +203,7 @@ publishStore:
 
 publishInventory:
   tags:
-    - sdk
+    - devops
   stage: publish
   when: manual
   only:
@@ -217,7 +217,7 @@ publishInventory:
 
 publishPayments:
   tags:
-    - sdk
+    - devops
   stage: publish
   when: manual
   only:
@@ -231,7 +231,7 @@ publishPayments:
 
 build doc:
   tags:
-    - sdk
+    - devops
   stage: build_doc
   only:
     - /^v.*/
@@ -277,7 +277,7 @@ stop doc:
 
 Login-dep-track:
   tags:
-    - sdk
+    - devops
   extends:
     - .sca-gen
   stage: test
@@ -301,7 +301,7 @@ Login-dep-track-upload:
 
 Inventory-dep-track:
   tags:
-    - sdk
+    - devops
   extends:
     - .sca-gen
   stage: test
@@ -325,7 +325,7 @@ Inventory-dep-track-upload:
 
 Payments-dep-track:
   tags:
-    - sdk
+    - devops
   extends:
     - .sca-gen
   stage: test
@@ -349,7 +349,7 @@ Payments-dep-track-upload:
 
 Store-dep-track:
   tags:
-    - sdk
+    - devops
   extends:
     - .sca-gen
   stage: test
