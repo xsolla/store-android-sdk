@@ -15,7 +15,6 @@ data class PurchaseObject(
     val checkout: PurchaseObjectCheckout? = null,
     val items: List<PurchaseObjectItem>? = null,
     val description: PurchaseObjectDescription?= null
-
 )
 
 data class PurchaseObjectCheckout(
