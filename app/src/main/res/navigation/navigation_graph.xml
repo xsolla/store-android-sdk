@@ -97,7 +97,7 @@
         android:name="com.xsolla.android.storesdkexample.ui.fragments.store.BundleFragment"
         android:label="BundleFragment" >
         <argument
-            android:name="bundle"
+            android:name="xbundle"
             app:argType="com.xsolla.android.storesdkexample.ui.fragments.store.VirtualItemUiEntity" />
     </fragment>
 

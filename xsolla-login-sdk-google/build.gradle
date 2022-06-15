@@ -30,7 +30,7 @@ android {
 }
 
 dependencies {
-    api 'com.google.android.gms:play-services-auth:19.2.0'
+    api 'com.google.android.gms:play-services-auth:20.2.0'
 }
 
 ext {

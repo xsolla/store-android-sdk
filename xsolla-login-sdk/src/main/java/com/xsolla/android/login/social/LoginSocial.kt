@@ -429,7 +429,7 @@ object LoginSocial {
             if (activity != null) {
                 LoginManager.getInstance().logIn(activity, ArrayList())
             } else {
-                LoginManager.getInstance().logIn(fragment, ArrayList())
+                LoginManager.getInstance().logIn(fragment!!, ArrayList())
             }
             callback.invoke(true)
             return

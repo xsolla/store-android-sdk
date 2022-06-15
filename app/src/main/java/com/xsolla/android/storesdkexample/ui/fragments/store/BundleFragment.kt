@@ -74,17 +74,17 @@ class BundleFragment : BaseFragment(), PurchaseListener {
                 showSnackBar("Error getting a bundle from server")
             }
 
-        }, args.bundle.sku!!)
+        }, args.xbundle.sku!!)
     }
 
     private fun bindBundleFields() {
 
-        if (args.bundle.virtualPrices.isEmpty()) {
+        if (args.xbundle.virtualPrices.isEmpty()) {
             //set bundle REAL PRICE
-            val price = args.bundle.price
+            val price = args.xbundle.price
             binding.itemVirtualPriceIcon.visibility = View.GONE
-            binding.tvBundleName.text = args.bundle.name
-            Glide.with(this).load(args.bundle.imageUrl).into(binding.ivBundlePreview)
+            binding.tvBundleName.text = args.xbundle.name
+            Glide.with(this).load(args.xbundle.imageUrl).into(binding.ivBundlePreview)
             if (price!!.getAmountDecimal() == price.getAmountWithoutDiscountDecimal()) {
                 //if no discounts active
                 binding.tvBundlePrice.text =
@@ -99,14 +99,14 @@ class BundleFragment : BaseFragment(), PurchaseListener {
                 binding.tvBundleOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                 binding.tvBundleOldPrice.visibility = View.VISIBLE
             }
-            binding.tvBundleDescription.text = args.bundle.description
+            binding.tvBundleDescription.text = args.xbundle.description
         } else {
             //set bundle VIRTUAL PRICE
             binding.itemVirtualPriceIcon.visibility = View.VISIBLE
-            val price = args.bundle.virtualPrices[0]
+            val price = args.xbundle.virtualPrices[0]
             Glide.with(this).load(price.imageUrl).into(binding.itemVirtualPriceIcon)
-            binding.tvBundleName.text = args.bundle.name
-            Glide.with(this).load(args.bundle.imageUrl).into(binding.ivBundlePreview)
+            binding.tvBundleName.text = args.xbundle.name
+            Glide.with(this).load(args.xbundle.imageUrl).into(binding.ivBundlePreview)
             if (price.getAmountDecimal() == price.getAmountWithoutDiscountDecimal() || price.calculatedPrice?.amountWithoutDiscount == null) {
                 //if no discounts active
                 binding.tvBundlePrice.text = AmountUtils.prettyPrint(price.getAmountDecimal()!!)
@@ -119,23 +119,23 @@ class BundleFragment : BaseFragment(), PurchaseListener {
                 binding.tvBundleOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                 binding.tvBundleOldPrice.visibility = View.VISIBLE
             }
-            binding.tvBundleDescription.text = args.bundle.description
+            binding.tvBundleDescription.text = args.xbundle.description
         }
     }
 
     private fun bindBuyButton() {
-        if (args.bundle.virtualPrices.isNullOrEmpty()) {
+        if (args.xbundle.virtualPrices.isNullOrEmpty()) {
             // real price
             if (!StoreUtils.isAppInstalledFromGooglePlay(requireContext())) {
                 binding.btBundleBuy.setOnClickListener { view ->
                     view.isEnabled = false
-                    vmPurchase.startPurchase(BuildConfig.IS_SANDBOX, args.bundle.sku!!, 1) {
+                    vmPurchase.startPurchase(BuildConfig.IS_SANDBOX, args.xbundle.sku!!, 1) {
                         view.isEnabled = true
                     }
                 }
             } else {
                 binding.btBundleBuy.setOnClickListener {
-                    vmGooglePlay.startPurchase(args.bundle.sku!!)
+                    vmGooglePlay.startPurchase(args.xbundle.sku!!)
                 }
             }
         } else {
@@ -155,7 +155,7 @@ class BundleFragment : BaseFragment(), PurchaseListener {
                             v.isEnabled = true
                         }
                     },
-                    args.bundle.sku!!, args.bundle.virtualPrices[0].sku!!
+                    args.xbundle.sku!!, args.xbundle.virtualPrices[0].sku!!
                 )
             }
         }
