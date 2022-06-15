@@ -38,11 +38,6 @@ Xsolla offers the necessary tools to help you build and grow your gaming busines
 [See the LICENSE file](https://github.com/xsolla/store-android-sdk/blob/master/LICENSE-2.0.txt).
 
 
-## Community
-
-[Join our Discord server](https://discord.gg/auNFyzZx96) and connect with the Xsolla team and developers who use Xsolla products.
-
-
 ## Additional resources
 
 * [Xsolla official website](https://xsolla.com/)
