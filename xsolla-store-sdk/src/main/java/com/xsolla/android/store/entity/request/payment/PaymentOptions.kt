@@ -8,14 +8,14 @@ data class PaymentOptions(
     val locale: String? = null,
     @SerializedName("is_sandbox")
     val isSandbox: Boolean = true,
-    val settings: PaymentProjectSettings? = null,
+    val settings: PaymentProjectSettings? = PaymentProjectSettings(),
     @SerializedName("custom_parameters")
     val customParameters: CustomParameters? = null
 )
 
 
 data class PaymentProjectSettings(
-    val ui: UiProjectSetting?,
+    val ui: UiProjectSetting? = UiProjectSetting(),
     @SerializedName("payment_method")
     val paymentMethod: Int? = null,
     @SerializedName("return_url")
@@ -26,18 +26,18 @@ data class PaymentProjectSettings(
 
 data class SettingsRedirectPolicy(
     @SerializedName("redirect_conditions")
-    val redirectConditions: String = "none",
-    val delay: Int = 0,
+    val redirectConditions: String? = null,
+    val delay: Int? = null,
     @SerializedName("status_for_manual_redirection")
-    val statusForManualRedirection: String = "none",
+    val statusForManualRedirection: String? = null,
     @SerializedName("redirect_button_caption")
     val redirectButtonCaption: String? = null
 )
 
 data class UiProjectSetting(
-    val size: String = "medium",
-    val theme: String = "default_dark",
-    val version: String = "mobile",
+    val size: String? = null,
+    val theme: String? = "ps4-default-dark",
+    val version: String? = null,
     val desktop: DesktopSettings? = null,
     val mobile: MobileSettings? = null,
     @SerializedName("license_url")
@@ -53,30 +53,32 @@ data class MobileSettings(
     val footer: UiDesktopProjectSettingFooter? = null
 )
 
-class UiDesktopProjectSettingFooter(
+data class UiDesktopProjectSettingFooter(
     @SerializedName("is_visible")
-    val isVisible: Boolean
+    val isVisible: Boolean? = null
 )
 
-class UiMobileProjectSettingHeader(
+data class UiMobileProjectSettingHeader(
     @SerializedName("close_button")
-    val closeButton: Boolean
+    val closeButton: Boolean? = null
 )
 
-data class DesktopSettings(val header: UiDesktopProjectSettingHeader)
+data class DesktopSettings(
+    val header: UiDesktopProjectSettingHeader
+)
 
 data class UiDesktopProjectSettingHeader(
     @SerializedName("is_visible")
-    val isVisible: Boolean,
+    val isVisible: Boolean? = null,
     @SerializedName("visible_logo")
-    val visibleLogo: Boolean,
+    val visibleLogo: Boolean? = null,
     @SerializedName("visible_name")
-    val visibleName: Boolean,
+    val visibleName: Boolean? = null,
     @SerializedName("visible_purchase")
-    val visiblePurchase: Boolean,
-    val type: String,
+    val visiblePurchase: Boolean? = null,
+    val type: String? = null,
     @SerializedName("close_button")
-    val closeButton: Boolean
+    val closeButton: Boolean? = null
 )
 
 class CustomParameters private constructor(private val parameters: Map<String, Value>) {
@@ -113,6 +115,7 @@ class CustomParameters private constructor(private val parameters: Map<String, V
                 this.addProperty(key, value)
             }
         }
+
     private fun JsonObject.addProperty(key: String, value: Value) =
         when (value) {
             is Value.String -> {

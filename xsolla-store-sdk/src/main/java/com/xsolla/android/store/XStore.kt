@@ -473,7 +473,7 @@ class XStore private constructor(
         fun createOrderFromCartById(
             callback: CreateOrderCallback,
             cartId: String,
-            options: PaymentOptions? = null
+            options: PaymentOptions? = PaymentOptions()
         ) {
             val body = CreateCartOrderRequestBody(options)
             getInstance().storeApi.createOrderFromCartById(getInstance().projectId, cartId, body)
@@ -511,7 +511,7 @@ class XStore private constructor(
         @JvmOverloads
         fun createOrderFromCurrentCart(
             callback: CreateOrderCallback,
-            options: PaymentOptions? = null
+            options: PaymentOptions? = PaymentOptions()
         ) {
             val body = CreateCartOrderRequestBody(options)
             getInstance().storeApi.createOrderFromCurrentCart(getInstance().projectId, body)
@@ -552,7 +552,7 @@ class XStore private constructor(
         fun createOrderByItemSku(
             callback: CreateOrderCallback,
             itemSku: String,
-            options: PaymentOptions? = null,
+            options: PaymentOptions? = PaymentOptions(),
             quantity: Long = 1
         ) {
             val body = CreateSkuOrderRequestBody(quantity, options)

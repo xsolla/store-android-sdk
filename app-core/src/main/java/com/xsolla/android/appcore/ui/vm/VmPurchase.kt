@@ -20,7 +20,6 @@ class VmPurchase(app: Application) : AndroidViewModel(app) {
         val paymentOptions = PaymentOptions(
             isSandbox = isSandbox,
             settings = PaymentProjectSettings(
-                ui = UiProjectSetting(theme = "default_dark"),
                 returnUrl = "app://xpayment.${getApplication<Application>().packageName}",
                 redirectPolicy = SettingsRedirectPolicy(
                     redirectConditions = "any",
