@@ -1,293 +1,300 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/login_activity_padding">
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/twitterButton"
-        style="@style/Widget.Xsolla.SocialButton.Twitter.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@+id/linkedinButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:padding="@dimen/login_activity_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/linkedinButton"
-        style="@style/Widget.Xsolla.SocialButton.Linkedin.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/twitterButton"
-        app:layout_constraintEnd_toStartOf="@+id/battlenetButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/twitterButton"
-        app:layout_constraintTop_toTopOf="@+id/twitterButton" />
+        <Button
+            android:id="@+id/twitterButton"
+            style="@style/Widget.Xsolla.SocialButton.Twitter.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/linkedinButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/battlenetButton"
-        style="@style/Widget.Xsolla.SocialButton.Battlenet.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/twitterButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/linkedinButton"
-        app:layout_constraintTop_toTopOf="@+id/twitterButton" />
+        <Button
+            android:id="@+id/linkedinButton"
+            style="@style/Widget.Xsolla.SocialButton.Linkedin.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/twitterButton"
+            app:layout_constraintEnd_toStartOf="@+id/battlenetButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/twitterButton"
+            app:layout_constraintTop_toTopOf="@+id/twitterButton" />
 
-    <Button
-        android:id="@+id/discordButton"
-        style="@style/Widget.Xsolla.SocialButton.Discord.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/githubButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/twitterButton" />
+        <Button
+            android:id="@+id/battlenetButton"
+            style="@style/Widget.Xsolla.SocialButton.Battlenet.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/twitterButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/linkedinButton"
+            app:layout_constraintTop_toTopOf="@+id/twitterButton" />
 
-    <Button
-        android:id="@+id/githubButton"
-        style="@style/Widget.Xsolla.SocialButton.Github.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/discordButton"
-        app:layout_constraintEnd_toStartOf="@+id/kakaoButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/discordButton"
-        app:layout_constraintTop_toTopOf="@+id/discordButton" />
+        <Button
+            android:id="@+id/discordButton"
+            style="@style/Widget.Xsolla.SocialButton.Discord.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toStartOf="@+id/githubButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/twitterButton" />
 
-    <Button
-        android:id="@+id/kakaoButton"
-        style="@style/Widget.Xsolla.SocialButton.Kakao.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/discordButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/githubButton"
-        app:layout_constraintTop_toTopOf="@+id/discordButton" />
+        <Button
+            android:id="@+id/githubButton"
+            style="@style/Widget.Xsolla.SocialButton.Github.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/discordButton"
+            app:layout_constraintEnd_toStartOf="@+id/kakaoButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/discordButton"
+            app:layout_constraintTop_toTopOf="@+id/discordButton" />
 
-    <Button
-        android:id="@+id/qqButton"
-        style="@style/Widget.Xsolla.SocialButton.Qq.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/redditButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/discordButton" />
+        <Button
+            android:id="@+id/kakaoButton"
+            style="@style/Widget.Xsolla.SocialButton.Kakao.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/discordButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/githubButton"
+            app:layout_constraintTop_toTopOf="@+id/discordButton" />
 
-    <Button
-        android:id="@+id/redditButton"
-        style="@style/Widget.Xsolla.SocialButton.Reddit.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/qqButton"
-        app:layout_constraintEnd_toStartOf="@+id/steamButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/qqButton"
-        app:layout_constraintTop_toTopOf="@+id/qqButton" />
+        <Button
+            android:id="@+id/qqButton"
+            style="@style/Widget.Xsolla.SocialButton.Qq.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toStartOf="@+id/redditButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/discordButton" />
 
-    <Button
-        android:id="@+id/steamButton"
-        style="@style/Widget.Xsolla.SocialButton.Steam.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/qqButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/redditButton"
-        app:layout_constraintTop_toTopOf="@+id/qqButton" />
+        <Button
+            android:id="@+id/redditButton"
+            style="@style/Widget.Xsolla.SocialButton.Reddit.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/qqButton"
+            app:layout_constraintEnd_toStartOf="@+id/steamButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/qqButton"
+            app:layout_constraintTop_toTopOf="@+id/qqButton" />
 
-    <Button
-        android:id="@+id/twitchButton"
-        style="@style/Widget.Xsolla.SocialButton.Twitch.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/vkButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/qqButton" />
+        <Button
+            android:id="@+id/steamButton"
+            style="@style/Widget.Xsolla.SocialButton.Steam.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/qqButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/redditButton"
+            app:layout_constraintTop_toTopOf="@+id/qqButton" />
 
-    <Button
-        android:id="@+id/vkButton"
-        style="@style/Widget.Xsolla.SocialButton.Vk.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/twitchButton"
-        app:layout_constraintEnd_toStartOf="@+id/vimeoButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/twitchButton"
-        app:layout_constraintTop_toTopOf="@+id/twitchButton" />
+        <Button
+            android:id="@+id/twitchButton"
+            style="@style/Widget.Xsolla.SocialButton.Twitch.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toStartOf="@+id/vkButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/qqButton" />
 
-    <Button
-        android:id="@+id/vimeoButton"
-        style="@style/Widget.Xsolla.SocialButton.Vimeo.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/twitchButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/vkButton"
-        app:layout_constraintTop_toTopOf="@+id/twitchButton" />
+        <Button
+            android:id="@+id/vkButton"
+            style="@style/Widget.Xsolla.SocialButton.Vk.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/twitchButton"
+            app:layout_constraintEnd_toStartOf="@+id/vimeoButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/twitchButton"
+            app:layout_constraintTop_toTopOf="@+id/twitchButton" />
 
-    <Button
-        android:id="@+id/wechatButton"
-        style="@style/Widget.Xsolla.SocialButton.Wechat.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/weiboButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/twitchButton" />
+        <Button
+            android:id="@+id/vimeoButton"
+            style="@style/Widget.Xsolla.SocialButton.Vimeo.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/twitchButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/vkButton"
+            app:layout_constraintTop_toTopOf="@+id/twitchButton" />
 
-    <Button
-        android:id="@+id/weiboButton"
-        style="@style/Widget.Xsolla.SocialButton.Weibo.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/wechatButton"
-        app:layout_constraintEnd_toStartOf="@+id/yahooButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/wechatButton"
-        app:layout_constraintTop_toTopOf="@+id/wechatButton" />
+        <Button
+            android:id="@+id/wechatButton"
+            style="@style/Widget.Xsolla.SocialButton.Wechat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toStartOf="@+id/weiboButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/twitchButton" />
 
-    <Button
-        android:id="@+id/yahooButton"
-        style="@style/Widget.Xsolla.SocialButton.Yahoo.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/wechatButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/weiboButton"
-        app:layout_constraintTop_toTopOf="@+id/wechatButton" />
+        <Button
+            android:id="@+id/weiboButton"
+            style="@style/Widget.Xsolla.SocialButton.Weibo.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/wechatButton"
+            app:layout_constraintEnd_toStartOf="@+id/yahooButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/wechatButton"
+            app:layout_constraintTop_toTopOf="@+id/wechatButton" />
 
-    <Button
-        android:id="@+id/yandexButton"
-        style="@style/Widget.Xsolla.SocialButton.Yandex.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/youtubeButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wechatButton" />
+        <Button
+            android:id="@+id/yahooButton"
+            style="@style/Widget.Xsolla.SocialButton.Yahoo.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/wechatButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/weiboButton"
+            app:layout_constraintTop_toTopOf="@+id/wechatButton" />
 
-    <Button
-        android:id="@+id/youtubeButton"
-        style="@style/Widget.Xsolla.SocialButton.Youtube.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/yandexButton"
-        app:layout_constraintEnd_toStartOf="@+id/xboxButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/yandexButton"
-        app:layout_constraintTop_toTopOf="@+id/yandexButton" />
+        <Button
+            android:id="@+id/yandexButton"
+            style="@style/Widget.Xsolla.SocialButton.Yandex.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toStartOf="@+id/youtubeButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wechatButton" />
 
-    <Button
-        android:id="@+id/xboxButton"
-        style="@style/Widget.Xsolla.SocialButton.Xbox.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/yandexButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/youtubeButton"
-        app:layout_constraintTop_toTopOf="@+id/yandexButton" />
+        <Button
+            android:id="@+id/youtubeButton"
+            style="@style/Widget.Xsolla.SocialButton.Youtube.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/yandexButton"
+            app:layout_constraintEnd_toStartOf="@+id/xboxButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/yandexButton"
+            app:layout_constraintTop_toTopOf="@+id/yandexButton" />
 
-    <Button
-        android:id="@+id/msnButton"
-        style="@style/Widget.Xsolla.SocialButton.Msn.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/okButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/yandexButton" />
+        <Button
+            android:id="@+id/xboxButton"
+            style="@style/Widget.Xsolla.SocialButton.Xbox.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/yandexButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/youtubeButton"
+            app:layout_constraintTop_toTopOf="@+id/yandexButton" />
 
-    <Button
-        android:id="@+id/okButton"
-        style="@style/Widget.Xsolla.SocialButton.Ok.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/msnButton"
-        app:layout_constraintEnd_toStartOf="@+id/paypalButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/msnButton"
-        app:layout_constraintTop_toTopOf="@+id/msnButton" />
+        <Button
+            android:id="@+id/msnButton"
+            style="@style/Widget.Xsolla.SocialButton.Msn.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toStartOf="@+id/okButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/yandexButton" />
 
-    <Button
-        android:id="@+id/paypalButton"
-        style="@style/Widget.Xsolla.SocialButton.Paypal.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/msnButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/okButton"
-        app:layout_constraintTop_toTopOf="@+id/msnButton" />
+        <Button
+            android:id="@+id/okButton"
+            style="@style/Widget.Xsolla.SocialButton.Ok.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/msnButton"
+            app:layout_constraintEnd_toStartOf="@+id/paypalButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/msnButton"
+            app:layout_constraintTop_toTopOf="@+id/msnButton" />
 
-    <Button
-        android:id="@+id/naverButton"
-        style="@style/Widget.Xsolla.SocialButton.Naver.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/appleButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/msnButton" />
+        <Button
+            android:id="@+id/paypalButton"
+            style="@style/Widget.Xsolla.SocialButton.Paypal.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/msnButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/okButton"
+            app:layout_constraintTop_toTopOf="@+id/msnButton" />
 
-    <Button
-        android:id="@+id/appleButton"
-        style="@style/Widget.Xsolla.SocialButton.Apple.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/naverButton"
-        app:layout_constraintEnd_toStartOf="@+id/amazonButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/naverButton"
-        app:layout_constraintTop_toTopOf="@+id/naverButton" />
+        <Button
+            android:id="@+id/naverButton"
+            style="@style/Widget.Xsolla.SocialButton.Naver.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toStartOf="@+id/appleButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/msnButton" />
 
-    <Button
-        android:id="@+id/amazonButton"
-        style="@style/Widget.Xsolla.SocialButton.Amazon.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/naverButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/appleButton"
-        app:layout_constraintTop_toTopOf="@+id/naverButton" />
+        <Button
+            android:id="@+id/appleButton"
+            style="@style/Widget.Xsolla.SocialButton.Apple.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/naverButton"
+            app:layout_constraintEnd_toStartOf="@+id/amazonButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/naverButton"
+            app:layout_constraintTop_toTopOf="@+id/naverButton" />
 
-    <Button
-        android:id="@+id/mailruButton"
-        style="@style/Widget.Xsolla.SocialButton.Mailru.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/microsoftButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/naverButton" />
+        <Button
+            android:id="@+id/amazonButton"
+            style="@style/Widget.Xsolla.SocialButton.Amazon.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/naverButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/appleButton"
+            app:layout_constraintTop_toTopOf="@+id/naverButton" />
 
-    <Button
-        android:id="@+id/microsoftButton"
-        style="@style/Widget.Xsolla.SocialButton.Microsoft.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/mailruButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/mailruButton"
-        app:layout_constraintTop_toTopOf="@+id/mailruButton" />
+        <Button
+            android:id="@+id/mailruButton"
+            style="@style/Widget.Xsolla.SocialButton.Mailru.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toStartOf="@+id/microsoftButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/naverButton" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/microsoftButton"
+            style="@style/Widget.Xsolla.SocialButton.Microsoft.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/mailruButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mailruButton"
+            app:layout_constraintTop_toTopOf="@+id/mailruButton" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
