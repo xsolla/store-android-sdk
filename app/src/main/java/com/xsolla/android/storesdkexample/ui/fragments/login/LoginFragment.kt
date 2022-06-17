@@ -248,27 +248,44 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         }
     }
 
+    private val map = mapOf(
+        LoginBottomSheet.SocialNetworks.TWITTER to SocialNetwork.TWITTER,
+        LoginBottomSheet.SocialNetworks.LINKEDIN to SocialNetwork.LINKEDIN,
+        LoginBottomSheet.SocialNetworks.BATTLENET to SocialNetwork.BATTLENET,
+        LoginBottomSheet.SocialNetworks.DISCORD to SocialNetwork.DISCORD,
+        LoginBottomSheet.SocialNetworks.GITHUB to SocialNetwork.GITHUB,
+        LoginBottomSheet.SocialNetworks.KAKAO to SocialNetwork.KAKAO,
+        LoginBottomSheet.SocialNetworks.QQ to SocialNetwork.QQ,
+        LoginBottomSheet.SocialNetworks.REDDIT to SocialNetwork.REDDIT,
+        LoginBottomSheet.SocialNetworks.STEAM to SocialNetwork.STEAM,
+        LoginBottomSheet.SocialNetworks.TWITCH to SocialNetwork.TWITCH,
+        LoginBottomSheet.SocialNetworks.VK to SocialNetwork.VK,
+        LoginBottomSheet.SocialNetworks.VIMEO to SocialNetwork.VIMEO,
+        LoginBottomSheet.SocialNetworks.WECHAT to SocialNetwork.WECHAT,
+        LoginBottomSheet.SocialNetworks.WEIBO to SocialNetwork.WEIBO,
+        LoginBottomSheet.SocialNetworks.YAHOO to SocialNetwork.YAHOO,
+        LoginBottomSheet.SocialNetworks.YANDEX to SocialNetwork.YANDEX,
+        LoginBottomSheet.SocialNetworks.YOUTUBE to SocialNetwork.YOUTUBE,
+        LoginBottomSheet.SocialNetworks.XBOX to SocialNetwork.XBOX,
+        LoginBottomSheet.SocialNetworks.MSN to SocialNetwork.MSN,
+        LoginBottomSheet.SocialNetworks.OK to SocialNetwork.OK,
+        LoginBottomSheet.SocialNetworks.PAYPAL to SocialNetwork.PAYPAL,
+        LoginBottomSheet.SocialNetworks.NAVER to SocialNetwork.NAVER,
+        LoginBottomSheet.SocialNetworks.APPLE to SocialNetwork.APPLE,
+        LoginBottomSheet.SocialNetworks.AMAZON to SocialNetwork.AMAZON,
+        LoginBottomSheet.SocialNetworks.MAILRU to SocialNetwork.MAILRU,
+        LoginBottomSheet.SocialNetworks.MICROSOFT to SocialNetwork.MICROSOFT,
+    )
+
     override fun onSocialClicked(socialNetwork: LoginBottomSheet.SocialNetworks) {
-        when (socialNetwork) {
-            LoginBottomSheet.SocialNetworks.TWITTER -> {
-                selectedSocialNetwork = SocialNetwork.TWITTER
-                XLogin.startSocialAuth(
-                    this,
-                    SocialNetwork.TWITTER,
-                    BuildConfig.WITH_LOGOUT,
-                    startSocialCallback
-                )
-            }
-            LoginBottomSheet.SocialNetworks.LINKEDIN -> {
-                selectedSocialNetwork = SocialNetwork.LINKEDIN
-                XLogin.startSocialAuth(
-                    this,
-                    SocialNetwork.LINKEDIN,
-                    BuildConfig.WITH_LOGOUT,
-                    startSocialCallback
-                )
-            }
-        }
+        val loginSocialNetwork = map[socialNetwork]
+        selectedSocialNetwork = loginSocialNetwork
+        XLogin.startSocialAuth(
+            this,
+            loginSocialNetwork,
+            BuildConfig.WITH_LOGOUT,
+            startSocialCallback
+        )
     }
 
 }
