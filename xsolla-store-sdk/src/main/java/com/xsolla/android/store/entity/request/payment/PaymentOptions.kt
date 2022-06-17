@@ -26,10 +26,10 @@ data class PaymentProjectSettings(
 
 data class SettingsRedirectPolicy(
     @SerializedName("redirect_conditions")
-    val redirectConditions: String? = null,
-    val delay: Int? = null,
+    val redirectConditions: String = "none",
+    val delay: Int = 0,
     @SerializedName("status_for_manual_redirection")
-    val statusForManualRedirection: String? = null,
+    val statusForManualRedirection: String = "none",
     @SerializedName("redirect_button_caption")
     val redirectButtonCaption: String? = null
 )
@@ -48,19 +48,19 @@ data class UiProjectSetting(
 )
 
 data class MobileSettings(
-    val mode: String? = null,
-    val header: UiMobileProjectSettingHeader? = null,
-    val footer: UiDesktopProjectSettingFooter? = null
+    val mode: String,
+    val header: UiMobileProjectSettingHeader,
+    val footer: UiDesktopProjectSettingFooter,
 )
 
 data class UiDesktopProjectSettingFooter(
     @SerializedName("is_visible")
-    val isVisible: Boolean? = null
+    val isVisible: Boolean
 )
 
 data class UiMobileProjectSettingHeader(
     @SerializedName("close_button")
-    val closeButton: Boolean? = null
+    val closeButton: Boolean
 )
 
 data class DesktopSettings(
@@ -69,16 +69,16 @@ data class DesktopSettings(
 
 data class UiDesktopProjectSettingHeader(
     @SerializedName("is_visible")
-    val isVisible: Boolean? = null,
+    val isVisible: Boolean,
     @SerializedName("visible_logo")
-    val visibleLogo: Boolean? = null,
+    val visibleLogo: Boolean,
     @SerializedName("visible_name")
-    val visibleName: Boolean? = null,
+    val visibleName: Boolean,
     @SerializedName("visible_purchase")
-    val visiblePurchase: Boolean? = null,
-    val type: String? = null,
+    val visiblePurchase: Boolean,
+    val type: String,
     @SerializedName("close_button")
-    val closeButton: Boolean? = null
+    val closeButton: Boolean,
 )
 
 class CustomParameters private constructor(private val parameters: Map<String, Value>) {
