@@ -1,7 +1,14 @@
 package com.xsolla.android.store
 
 val itemsInCatalog = listOf("airplane", "premium_access")
+val virtualCurrenciesInCatalog = listOf("gold")
+val virtualCurrencyPackagesInCatalog = listOf("g1", "g1000")
+
 const val itemForOrderBySku = "airplane"
+const val itemForOrderByCurrency = "airplane"
+const val virtualCurrencyForOrderByCurrency = "gold"
+
+const val itemForCart = "airplane"
 
 const val gameSku = "simgame"
 const val gameKey = "key1"

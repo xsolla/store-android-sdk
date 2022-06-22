@@ -55,16 +55,108 @@
         <item name="icon">@drawable/ic_baidu</item>
     </style>
 
-    <style name="Widget.Xsolla.SocialButton.Naver.Small" parent="Widget.Xsolla.SocialButton.Small">
-        <item name="icon">@drawable/ic_naver</item>
-    </style>
-
     <style name="Widget.Xsolla.SocialButton.Linkedin.Small" parent="Widget.Xsolla.SocialButton.Small">
         <item name="icon">@drawable/ic_linkedin</item>
     </style>
 
     <style name="Widget.Xsolla.SocialButton.More.Small" parent="Widget.Xsolla.SocialButton.Small">
         <item name="icon">@drawable/ic_social_more</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Battlenet.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_battlenet</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Discord.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_discord</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Github.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_github</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Kakao.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_kakao</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Qq.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_qq</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Reddit.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_reddit</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Steam.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_steam</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Twitch.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_twitch</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Vimeo.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_vimeo</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Vk.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_vk</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Wechat.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_wechat</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Weibo.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_weibo</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Yahoo.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_yahoo</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Yandex.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_yandex</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Youtube.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_youtube</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Xbox.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_xbox</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Msn.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_msn</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Ok.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_ok</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Paypal.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_paypal</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Naver.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_naver</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Apple.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_apple</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Amazon.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_amazon</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Mailru.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_mailru</item>
+    </style>
+
+    <style name="Widget.Xsolla.SocialButton.Microsoft.Small" parent="Widget.Xsolla.SocialButton.Small">
+        <item name="icon">@drawable/ic_microsoft</item>
     </style>
 
 </resources>

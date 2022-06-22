@@ -1,5 +1,39 @@
 # Changelog
 
+## [1.0.2] - Payments SDK - 2022-06-22
+### Changed
+- Updated dependencies
+
+## [2.0.0] - Store SDK - 2022-06-22
+### Added
+- Improved test coverage
+### Changed
+- Subscriptions renamed to time limited items
+- Updated dependencies
+- ps4-default-dark set as default theme for order creation
+
+## [2.0.0] - Inventory SDK - 2022-06-22
+### Added
+- Improved test coverage
+### Changed
+- Subscriptions renamed to time limited items
+- Updated dependencies
+
+## [3.1.1] - Login SDK - 2022-06-22
+### Added
+- Improved test coverage
+### Changed
+- Updated dependencies
+
+## [2.0.0] - Demo Apps - 2022-06-22
+### Added
+- More social authentication providers
+### Changed
+- Updated dependencies
+### Removed
+- Inventory and Custom Auth Demo
+
+
 ## [1.0.1] - Payments SDK - 2022-02-21
 - Updated target sdk version to 31
 - Fixed a bug with status after payment completion

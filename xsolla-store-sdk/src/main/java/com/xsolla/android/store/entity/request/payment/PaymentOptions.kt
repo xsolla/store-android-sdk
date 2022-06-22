@@ -8,14 +8,14 @@ data class PaymentOptions(
     val locale: String? = null,
     @SerializedName("is_sandbox")
     val isSandbox: Boolean = true,
-    val settings: PaymentProjectSettings? = null,
+    val settings: PaymentProjectSettings? = PaymentProjectSettings(),
     @SerializedName("custom_parameters")
     val customParameters: CustomParameters? = null
 )
 
 
 data class PaymentProjectSettings(
-    val ui: UiProjectSetting?,
+    val ui: UiProjectSetting? = UiProjectSetting(),
     @SerializedName("payment_method")
     val paymentMethod: Int? = null,
     @SerializedName("return_url")
@@ -35,9 +35,9 @@ data class SettingsRedirectPolicy(
 )
 
 data class UiProjectSetting(
-    val size: String = "medium",
-    val theme: String = "default_dark",
-    val version: String = "mobile",
+    val size: String? = null,
+    val theme: String? = "ps4-default-dark",
+    val version: String? = null,
     val desktop: DesktopSettings? = null,
     val mobile: MobileSettings? = null,
     @SerializedName("license_url")
@@ -48,22 +48,24 @@ data class UiProjectSetting(
 )
 
 data class MobileSettings(
-    val mode: String? = null,
-    val header: UiMobileProjectSettingHeader? = null,
-    val footer: UiDesktopProjectSettingFooter? = null
+    val mode: String,
+    val header: UiMobileProjectSettingHeader,
+    val footer: UiDesktopProjectSettingFooter,
 )
 
-class UiDesktopProjectSettingFooter(
+data class UiDesktopProjectSettingFooter(
     @SerializedName("is_visible")
     val isVisible: Boolean
 )
 
-class UiMobileProjectSettingHeader(
+data class UiMobileProjectSettingHeader(
     @SerializedName("close_button")
     val closeButton: Boolean
 )
 
-data class DesktopSettings(val header: UiDesktopProjectSettingHeader)
+data class DesktopSettings(
+    val header: UiDesktopProjectSettingHeader
+)
 
 data class UiDesktopProjectSettingHeader(
     @SerializedName("is_visible")
@@ -76,7 +78,7 @@ data class UiDesktopProjectSettingHeader(
     val visiblePurchase: Boolean,
     val type: String,
     @SerializedName("close_button")
-    val closeButton: Boolean
+    val closeButton: Boolean,
 )
 
 class CustomParameters private constructor(private val parameters: Map<String, Value>) {
@@ -113,6 +115,7 @@ class CustomParameters private constructor(private val parameters: Map<String, V
                 this.addProperty(key, value)
             }
         }
+
     private fun JsonObject.addProperty(key: String, value: Value) =
         when (value) {
             is Value.String -> {

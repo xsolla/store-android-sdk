@@ -4,8 +4,9 @@ import android.os.Build
 import com.xsolla.android.inventory.api.InventoryApi
 import com.xsolla.android.inventory.callback.ConsumeItemCallback
 import com.xsolla.android.inventory.callback.GetInventoryCallback
-import com.xsolla.android.inventory.callback.GetSubscriptionsCallback
+import com.xsolla.android.inventory.callback.GetTimeLimitedItemsCallback
 import com.xsolla.android.inventory.callback.GetVirtualBalanceCallback
+import com.xsolla.android.inventory.util.EngineUtils
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -39,6 +40,7 @@ class XInventory private constructor(
                     .addHeader("X-ENGINE-V", Build.VERSION.RELEASE)
                     .addHeader("X-SDK", "STORE")
                     .addHeader("X-SDK-V", BuildConfig.VERSION_NAME)
+                    .addHeader("X-GAMEENGINE-SPEC", EngineUtils.engineSpec)
                     .url(
                         originalRequest.url().newBuilder()
                             .addQueryParameter("engine", "android")
@@ -104,16 +106,16 @@ class XInventory private constructor(
         }
 
         /**
-         * Gets the current list of user’s subscriptions.
+         * Gets the current list of user’s time limited items.
          *
          * @param callback Status callback.
          * @see [Inventory API Reference](https://developers.xsolla.com/commerce-api/player-inventory/client/get-user-subscriptions)
          */
         @JvmStatic
-        fun getSubscriptions(
-            callback: GetSubscriptionsCallback
+        fun getTimeLimitedItems(
+            callback: GetTimeLimitedItemsCallback
         ) {
-            getRequestExecutor().getSubscriptions(callback)
+            getRequestExecutor().getTimeLimitedItems(callback)
         }
 
 

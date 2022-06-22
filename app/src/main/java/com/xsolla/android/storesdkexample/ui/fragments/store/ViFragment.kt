@@ -7,9 +7,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.xsolla.android.appcore.databinding.FragmentViBinding
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.inventory.callback.GetInventoryCallback
-import com.xsolla.android.inventory.callback.GetSubscriptionsCallback
+import com.xsolla.android.inventory.callback.GetTimeLimitedItemsCallback
 import com.xsolla.android.inventory.entity.response.InventoryResponse
-import com.xsolla.android.inventory.entity.response.SubscriptionsResponse
+import com.xsolla.android.inventory.entity.response.TimeLimitedItemsResponse
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.callbacks.GetBundleListCallback
 import com.xsolla.android.store.callbacks.GetVirtualItemsCallback
@@ -48,7 +48,7 @@ class ViFragment : BaseFragment() {
 
                 val items = data.items.filter { item -> item.type == InventoryResponse.Item.Type.VIRTUAL_GOOD }
                 inventoryViewModel.inventory.value = items
-                getSubscriptions()
+                getTimeLimitedItems()
                 getBundles(items)
             }
 
@@ -58,10 +58,10 @@ class ViFragment : BaseFragment() {
         })
     }
 
-    private fun getSubscriptions() {
-        XInventory.getSubscriptions(object : GetSubscriptionsCallback {
-            override fun onSuccess(data: SubscriptionsResponse) {
-                inventoryViewModel.subscriptions.value = data.items
+    private fun getTimeLimitedItems() {
+        XInventory.getTimeLimitedItems(object : GetTimeLimitedItemsCallback {
+            override fun onSuccess(data: TimeLimitedItemsResponse) {
+                inventoryViewModel.timeLimitedItems.value = data.items
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {

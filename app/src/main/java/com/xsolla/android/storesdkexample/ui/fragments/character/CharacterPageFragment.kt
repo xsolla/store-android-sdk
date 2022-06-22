@@ -49,12 +49,20 @@ class CharacterPageFragment : BaseFragment() {
     override fun initUI() {
         adapter = UserAttributesAdapter(
             onEditOptionClick = {
-                findNavController().navigate(R.id.fragment_edit_attribute, EditAttributeFragmentArgs(true, it.item).toBundle())
+                val args = bundleOf (
+                    "isEdit" to true,
+                    "attribute" to it.item
+                )
+                findNavController().navigate(R.id.fragment_edit_attribute, args)
             },
             onDeleteOptionClick = { viewModel.deleteAttribute(it.item) },
             onDeleteOptionClickByPosition = { viewModel.deleteAttributeBySwipe(it) },
             onAddAttributeButtonClick = {
-                findNavController().navigate(R.id.fragment_edit_attribute, EditAttributeFragmentArgs(false, null).toBundle())
+                val args = bundleOf (
+                    "isEdit" to false,
+                    "attribute" to null
+                )
+                findNavController().navigate(R.id.fragment_edit_attribute, args)
             },
             onDocumentationClick = { openHowToForAttributes() }
         )
@@ -89,7 +97,11 @@ class CharacterPageFragment : BaseFragment() {
         binding.noItemsPlaceholder.setText(if (readOnly) R.string.character_read_only_attributes_placeholder else R.string.character_editable_attributes_placeholder)
         binding.addAttributeButton.isVisible = items.isEmpty() && !readOnly
         binding.addAttributeButton.setOnClickListener {
-            findNavController().navigate(R.id.fragment_edit_attribute, EditAttributeFragmentArgs(false, null).toBundle())
+            val args = bundleOf (
+                "isEdit" to false,
+                "attribute" to null
+            )
+            findNavController().navigate(R.id.fragment_edit_attribute, args)
         }
 
         if (readOnly) {

@@ -2,33 +2,39 @@
 
 buildscript {
 
-    ext.payments_sdk_version_name = '1.0.1'
-    ext.store_sdk_version_name = '1.1.1'
-    ext.inventory_sdk_version_name = '1.0.4'
-    ext.login_sdk_version_name = '3.1.0'
+    ext.payments_sdk_version_name = '1.0.2'
+    ext.store_sdk_version_name = '2.0.0'
+    ext.inventory_sdk_version_name = '2.0.0'
+    ext.login_sdk_version_name = '3.1.1'
 
     ext.googleplay_sdk_version_name = "0.0.1"
 
-    ext.sample_app_version_name = '1.9.2'
-    ext.sample_app_version_code = 25
+    ext.sample_app_version_name = '2.0.0'
+    ext.sample_app_version_code = 26
 
     ext.sdk_min = 21
     ext.sdk_target = 31
     ext.sdk_compile = 31
 
-    ext.kotlin_version = '1.6.10'
+    ext.kotlin_version = '1.7.0'
     ext.retrofit_version = '2.9.0'
+
     ext.junit_version = '4.13.2'
-    ext.robolectric_version = '4.7.3'
+    ext.robolectric_version = '4.8.1'
+    ext.androidx_test_core = '1.4.0'
+
+    ext.androidx_appcompat_version = '1.4.2'
+    ext.androidx_core_ktx = '1.8.0'
+    ext.androidx_browser = '1.4.0'
 
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath 'com.android.tools.build:gradle:7.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.5"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.4.2"
         classpath 'org.jetbrains.dokka:dokka-gradle-plugin:1.4.20'
         classpath 'org.owasp:dependency-check-gradle:6.4.1.1'
     }

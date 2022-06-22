@@ -74,7 +74,7 @@ enum class VirtualItemType {
     NON_CONSUMABLE,
 
     @SerializedName("non_renewing_subscription")
-    NON_RENEWING_SUBSCRIPTION
+    TIME_LIMITED_ITEM
 }
 
 data class BundleContent(
