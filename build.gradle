@@ -2,15 +2,15 @@
 
 buildscript {
 
-    ext.payments_sdk_version_name = '1.0.1'
-    ext.store_sdk_version_name = '1.1.1'
-    ext.inventory_sdk_version_name = '1.0.4'
-    ext.login_sdk_version_name = '3.1.0'
+    ext.payments_sdk_version_name = '1.0.2'
+    ext.store_sdk_version_name = '2.0.0'
+    ext.inventory_sdk_version_name = '2.0.0'
+    ext.login_sdk_version_name = '3.1.1'
 
     ext.googleplay_sdk_version_name = "0.0.1"
 
-    ext.sample_app_version_name = '1.9.2'
-    ext.sample_app_version_code = 25
+    ext.sample_app_version_name = '2.0.0'
+    ext.sample_app_version_code = 26
 
     ext.sdk_min = 21
     ext.sdk_target = 31
