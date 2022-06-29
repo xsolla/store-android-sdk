@@ -4,8 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragments.character.EditAttributeFragment">
+    android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/attributeToolbar"
@@ -31,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:text="@string/character_edit_attribute_title" />
+            android:text="@string/attributes_edit_attribute_title" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -43,7 +42,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:hint="@string/character_edit_attribute_key_hint"
+        android:hint="@string/attributes_edit_attribute_key_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/attributeToolbar">
@@ -65,7 +64,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        android:hint="@string/character_edit_attribute_value_hint"
+        android:hint="@string/attributes_edit_attribute_value_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/attributeKeyLayout">
@@ -86,7 +85,7 @@
         android:gravity="start|center_vertical"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
-        android:text="@string/character_edit_attribute_remove_button"
+        android:text="@string/attributes_edit_attribute_remove_button"
         android:textColor="@color/light_state_gray_color"
         app:layout_constraintStart_toStartOf="@id/attributeValueLayout"
         app:layout_constraintEnd_toStartOf="@id/saveButton"
@@ -98,7 +97,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="@string/character_edit_attribute_save_button"
+        android:text="@string/attributes_edit_attribute_save_button"
         app:layout_constraintEnd_toEndOf="@id/attributeValueLayout"
         app:layout_constraintTop_toBottomOf="@id/attributeValueLayout" />
 

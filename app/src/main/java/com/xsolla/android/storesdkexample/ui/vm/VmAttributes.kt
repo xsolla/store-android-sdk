@@ -5,25 +5,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.xsolla.android.appcore.SingleLiveEvent
-import com.xsolla.android.inventory.XInventory
-import com.xsolla.android.inventory.callback.ConsumeItemCallback
 import com.xsolla.android.inventory.entity.response.VirtualBalanceResponse
 import com.xsolla.android.login.XLogin
-import com.xsolla.android.login.callback.GetCurrentUserDetailsCallback
 import com.xsolla.android.login.callback.GetUsersAttributesCallback
 import com.xsolla.android.login.callback.UpdateUsersAttributesCallback
 import com.xsolla.android.login.entity.common.UserAttribute
 import com.xsolla.android.login.entity.common.UserAttributePermission
-import com.xsolla.android.login.entity.response.UserDetailsResponse
 import com.xsolla.android.storesdkexample.data.local.DemoCredentialsManager
-import com.xsolla.android.storesdkexample.data.local.PrefManager
 import com.xsolla.android.storesdkexample.util.extensions.toUiEntity
 import kotlinx.parcelize.Parcelize
 
-class VmCharacterPage : ViewModel() {
-    private companion object {
-        private const val QUANTITY = 200L
-    }
+class VmAttributesPage : ViewModel() {
 
     private val _editableItems = MutableLiveData<List<UserAttributeUiEntity>>(listOf())
     private val _readOnlyItems = MutableLiveData<List<UserAttributeUiEntity>>(listOf())
@@ -31,30 +23,11 @@ class VmCharacterPage : ViewModel() {
     val readOnlyItems: LiveData<List<UserAttributeUiEntity>> = _readOnlyItems
 
     val error = SingleLiveEvent<UserAttributeError>()
-    val userInformation = SingleLiveEvent<UserInformation>()
 
     var virtualCurrency: VirtualBalanceResponse.Item? = null
 
-    init {
-        userInformation.value = UserInformation(id = "", nickname = "Nickname", avatar = null)
-    }
-
-    fun getUserDetailsAndAttributes() {
-        XLogin.getCurrentUserDetails(object : GetCurrentUserDetailsCallback {
-            override fun onSuccess(data: UserDetailsResponse) {
-                val nickname = data.nickname ?: data.name ?: data.firstName ?: data.lastName ?: "Nickname"
-                userInformation.value = userInformation.value!!.copy(id = data.id, nickname = nickname, avatar = data.picture)
-                loadAllAttributes(data.id)
-            }
-
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                updateError(throwable, errorMessage)
-            }
-        })
-    }
-
-    private fun loadAllAttributes(userId: String) {
-        XLogin.getUsersAttributesFromClient(null, DemoCredentialsManager.projectId, userId, true, object : GetUsersAttributesCallback {
+    fun loadAllAttributes() {
+        XLogin.getUsersAttributesFromClient(null, DemoCredentialsManager.projectId, null, true, object : GetUsersAttributesCallback {
             override fun onSuccess(data: List<UserAttribute>) {
                _readOnlyItems.value = data.toUiEntity()
             }
@@ -63,7 +36,7 @@ class VmCharacterPage : ViewModel() {
                 updateError(throwable, errorMessage)
             }
         })
-        XLogin.getUsersAttributesFromClient(null, DemoCredentialsManager.projectId, userId, false, object : GetUsersAttributesCallback {
+        XLogin.getUsersAttributesFromClient(null, DemoCredentialsManager.projectId, null, false, object : GetUsersAttributesCallback {
             override fun onSuccess(data: List<UserAttribute>) {
                 _editableItems.value = data.toUiEntity()
             }
@@ -139,25 +112,6 @@ class VmCharacterPage : ViewModel() {
         })
     }
 
-    fun levelUp(onSuccessConsume: () -> Unit) {
-        if (virtualCurrency == null) {
-            error.value = UserAttributeError("You have no virtual currencies")
-            return
-        }
-
-        XInventory.consumeItem(virtualCurrency!!.sku!!, QUANTITY, null, object : ConsumeItemCallback {
-            override fun onSuccess() {
-                val userId = userInformation.value!!.id
-                PrefManager.setUserLevel(userId, PrefManager.getUserLevel(userId) + 1)
-                onSuccessConsume()
-            }
-
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                updateError(throwable, errorMessage)
-            }
-        })
-    }
-
     private fun updateError(throwable: Throwable?, errorMessage: String?) {
         val message = throwable?.message ?: errorMessage ?: "Failure"
         error.value = UserAttributeError(message)
@@ -171,7 +125,5 @@ data class UserAttributeUiEntity(
     val permission: UserAttributePermission,
     val value: String
 ) : Parcelable
-
-data class UserInformation(val id: String, val avatar: String?, val nickname: String)
 
 data class UserAttributeError(val message: String)
