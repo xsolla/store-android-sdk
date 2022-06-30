@@ -18,10 +18,7 @@ import com.xsolla.android.login.jwt.JWT
 import com.xsolla.android.login.social.FriendsPlatform
 import com.xsolla.android.login.social.LoginSocial
 import com.xsolla.android.login.social.SocialNetwork
-import com.xsolla.android.login.social.SocialNetworkForLinking
 import com.xsolla.android.login.token.TokenUtils
-import com.xsolla.android.login.ui.ActivityAuth
-import com.xsolla.android.login.ui.ActivityAuthWebView
 import com.xsolla.android.login.unity.UnityProxyActivity
 import com.xsolla.android.login.util.EngineUtils
 import com.xsolla.android.login.util.Utils
@@ -33,7 +30,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
-import java.net.URLEncoder
 import java.util.*
 
 /**
@@ -2016,18 +2012,18 @@ class XLogin private constructor(
         /**
          * Unlinks social network from current user account.
          *
-         * @param platform       social network for decoupling
+         * @param socialNetwork  social network for decoupling
          * @param callback       callback that indicates the success of failure of an action
          */
         @JvmStatic
         fun unlinkSocialNetwork(
-            platform: SocialNetworkForLinking,
+            socialNetwork: SocialNetwork,
             callback: UnlinkSocialNetworkCallback
         ) {
             getInstance().loginApi
                 .unlinkSocialNetwork(
                     "Bearer $token",
-                    platform.name.lowercase()
+                    socialNetwork.providerName
                 )
                 .enqueue(object : Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -2044,35 +2040,6 @@ class XLogin private constructor(
                 })
         }
 
-
-        /**
-         * Links the social network, which is used by the player for authentication, to the user account.
-         *
-         * @param context                activity/fragment or any view context
-         * @param socialNetwork          social network for linking
-         * @return                       intent that you can use for open activity for result
-         * @see [User Account API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/social-networks/link-social-network-to-account)
-         */
-        @Deprecated("Use startSocialLinking method instead")
-        @JvmStatic
-        fun createSocialAccountLinkingIntent(
-            context: Context,
-            socialNetwork: SocialNetworkForLinking
-        ): Intent {
-            val intent = Intent(context, ActivityAuthWebView::class.java)
-            intent.putExtra(
-                ActivityAuth.ARG_AUTH_URL,
-                LOGIN_HOST + "/api/users/me/social_providers/" +
-                        socialNetwork.name.lowercase() +
-                        "/login_redirect?login_url=" +
-                        URLEncoder.encode(getInstance().callbackUrl)
-            )
-            intent.putExtra(ActivityAuth.ARG_CALLBACK_URL, getInstance().callbackUrl)
-            intent.putExtra(ActivityAuthWebView.ARG_TOKEN, token)
-            intent.putExtra(ActivityAuth.ARG_IS_LINKING, true)
-            return intent
-        }
-
         /**
          * Starts linking the social network to current user account
          *
@@ -2083,7 +2050,7 @@ class XLogin private constructor(
          */
         @JvmStatic
         fun startSocialLinking(
-            socialNetwork: SocialNetworkForLinking,
+            socialNetwork: SocialNetwork,
             activity: Activity? = null,
             callback: StartSocialLinkingCallback?
         ) {
@@ -2100,7 +2067,7 @@ class XLogin private constructor(
          */
         @JvmStatic
         fun startSocialLinking(
-            socialNetwork: SocialNetworkForLinking,
+            socialNetwork: SocialNetwork,
             fragment: Fragment? = null,
             callback: StartSocialLinkingCallback?
         ) {
@@ -2109,7 +2076,7 @@ class XLogin private constructor(
 
         @JvmStatic
         private fun startSocialLinking(
-            socialNetwork: SocialNetworkForLinking,
+            socialNetwork: SocialNetwork,
             activity: Activity? = null,
             fragment: Fragment? = null,
             callback: StartSocialLinkingCallback?

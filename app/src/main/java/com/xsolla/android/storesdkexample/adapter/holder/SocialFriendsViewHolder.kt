@@ -7,9 +7,9 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.xsolla.android.login.social.SocialNetworkForLinking
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.appcore.databinding.ItemFriendBinding
+import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.storesdkexample.ui.vm.FriendsRelationship
 import com.xsolla.android.storesdkexample.ui.vm.VmSocialFriends
 
@@ -151,9 +151,9 @@ class SocialFriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private fun configureFriendsInPlaceholder(item: VmSocialFriends.SocialFriendUiEntity) {
         binding.friendsInPlaceholder.isVisible = true
 
-        binding.friendsInIconFacebook.isVisible = item.fromPlatform.contains(SocialNetworkForLinking.FACEBOOK)
-        binding.friendsInIconTwitter.isVisible = item.fromPlatform.contains(SocialNetworkForLinking.TWITTER)
-        binding.friendsInIconVk.isVisible = item.fromPlatform.contains(SocialNetworkForLinking.VK)
+        binding.friendsInIconFacebook.isVisible = item.fromPlatform.contains(SocialNetwork.FACEBOOK)
+        binding.friendsInIconTwitter.isVisible = item.fromPlatform.contains(SocialNetwork.TWITTER)
+        binding.friendsInIconVk.isVisible = item.fromPlatform.contains(SocialNetwork.VK)
 
     }
 }

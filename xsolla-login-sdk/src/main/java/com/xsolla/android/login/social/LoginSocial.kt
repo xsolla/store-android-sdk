@@ -778,12 +778,12 @@ object LoginSocial {
     fun startLinking(
         activity: Activity?,
         fragment: Fragment?,
-        socialNetwork: SocialNetworkForLinking,
+        socialNetwork: SocialNetwork,
         callback: StartSocialLinkingCallback?
     ) {
         loginApi.getUrlToLinkSocialNetworkToAccount(
             "Bearer ${XLogin.token}",
-            socialNetwork.name.lowercase(),
+            socialNetwork.providerName,
             callbackUrl
         ).enqueue(object : Callback<UrlToLinkSocialNetworkResponse> {
             override fun onResponse(

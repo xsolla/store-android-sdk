@@ -15,7 +15,7 @@ import com.xsolla.android.login.entity.response.LinkedSocialNetworkResponse
 import com.xsolla.android.login.entity.response.SocialFriendsResponse
 import com.xsolla.android.login.entity.response.UserFriendsResponse
 import com.xsolla.android.login.social.FriendsPlatform
-import com.xsolla.android.login.social.SocialNetworkForLinking
+import com.xsolla.android.login.social.SocialNetwork
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
@@ -23,7 +23,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class VmSocialFriends(application: Application) : AndroidViewModel(application) {
 
-    val linkedSocialNetworks = MutableLiveData<List<SocialNetworkForLinking?>>(listOf())
+    val linkedSocialNetworks = MutableLiveData<List<SocialNetwork?>>(listOf())
 
     val socialFriendsList = MutableLiveData<List<SocialFriendUiEntity>>(listOf())
 
@@ -125,7 +125,7 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
     fun loadLinkedSocialAccounts() {
         XLogin.getLinkedSocialNetworks(object : LinkedSocialNetworksCallback {
             override fun onSuccess(data: List<LinkedSocialNetworkResponse>) {
-                linkedSocialNetworks.value = data.map { it.provider }
+                linkedSocialNetworks.value = data.map { it.socialNetwork }
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
@@ -171,7 +171,7 @@ class VmSocialFriends(application: Application) : AndroidViewModel(application) 
             val relationship: FriendsRelationship?,
             val imageUrl: String?,
             val nickname: String,
-            val fromPlatform: List<SocialNetworkForLinking>
+            val fromPlatform: List<SocialNetwork?>
     ) {
         fun toFriendUiEntity(): FriendUiEntity =
                 FriendUiEntity(xsollaId ?: "", imageUrl, false, nickname, relationship ?: FriendsRelationship.NONE)
