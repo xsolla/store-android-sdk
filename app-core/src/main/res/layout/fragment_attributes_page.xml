@@ -4,13 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragments.character.CharacterPageFragment">
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/attributesRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="8dp"
+        android:clipToPadding="false"
         android:fadeScrollbars="false"
         android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -35,7 +36,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
-            android:text="@string/character_read_only_attributes_footer"
+            android:text="@string/attributes_read_only_attributes_footer"
             android:textAlignment="center"
             android:textColor="?attr/colorOnSurface" />
 
@@ -46,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
-            android:text="@string/character_editable_attributes_footer" />
+            android:text="@string/attributes_editable_attributes_footer" />
     </LinearLayout>
 
 </FrameLayout>

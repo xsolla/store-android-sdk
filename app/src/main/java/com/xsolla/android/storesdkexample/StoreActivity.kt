@@ -180,7 +180,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
                 R.id.nav_vc,
                 R.id.nav_inventory,
                 R.id.nav_friends,
-                R.id.nav_character,
+                R.id.nav_attributes,
                 R.id.nav_profile
             ), drawerLayout
         )
@@ -204,8 +204,8 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
             navController.navigate(R.id.nav_inventory)
             binding.root.closeDrawers()
         }
-        findViewById<View>(R.id.itemCharacter).setOnClickListener {
-            navController.navigate(R.id.nav_character)
+        findViewById<View>(R.id.itemAttributes).setOnClickListener {
+            navController.navigate(R.id.nav_attributes)
             binding.root.closeDrawers()
         }
         findViewById<View>(R.id.itemFriends).setOnClickListener {

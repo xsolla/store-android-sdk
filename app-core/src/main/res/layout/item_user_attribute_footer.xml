@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:text="@string/character_read_only_attributes_footer"
+        android:text="@string/attributes_read_only_attributes_footer"
         android:textColor="?attr/colorOnSurface"
         android:visibility="gone"
         tools:visibility="visible" />
@@ -26,7 +26,7 @@
         style="@style/Widget.Xsolla.ActionButton.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/character_editable_attributes_footer"
+        android:text="@string/attributes_editable_attributes_footer"
         android:visibility="gone" />
 
 </LinearLayout>
