@@ -7,17 +7,16 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.xsolla.android.appcore.databinding.FragmentAddFriendsBinding
 import com.xsolla.android.appcore.extensions.setRateLimitedClickListener
 import com.xsolla.android.login.XLogin
+import com.xsolla.android.login.callback.FinishSocialLinkingCallback
+import com.xsolla.android.login.callback.StartSocialLinkingCallback
 import com.xsolla.android.login.entity.request.UpdateUserFriendsRequestAction
-import com.xsolla.android.login.social.SocialNetworkForLinking
+import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.adapter.AddFriendsAdapter
 import com.xsolla.android.storesdkexample.adapter.SocialFriendsAdapter
-import com.xsolla.android.appcore.databinding.FragmentAddFriendsBinding
-import com.xsolla.android.login.callback.FinishSocialLinkingCallback
-import com.xsolla.android.login.callback.StartSocialLinkingCallback
-import com.xsolla.android.login.callback.UnlinkSocialNetworkCallback
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmAddFriends
 import com.xsolla.android.storesdkexample.ui.vm.VmSocialFriends
@@ -26,7 +25,7 @@ class AddFriendsFragment : BaseFragment() {
 
     private val binding: FragmentAddFriendsBinding by viewBinding()
 
-    private lateinit var socialNetworksIcons: Map<SocialNetworkForLinking, Triple<Int, Int, ImageView>>
+    private lateinit var socialNetworksIcons: Map<SocialNetwork, Triple<Int, Int, ImageView>>
 
     private val vmAddFriends: VmAddFriends by viewModels()
     private val vmSocialFriends: VmSocialFriends by viewModels()
@@ -40,17 +39,17 @@ class AddFriendsFragment : BaseFragment() {
 
     override fun initUI() {
         socialNetworksIcons = mapOf(
-            SocialNetworkForLinking.FACEBOOK to Triple(
+            SocialNetwork.FACEBOOK to Triple(
                 R.drawable.ic_linking_facebook_add,
                 R.drawable.ic_linking_facebook_added,
                 binding.iconFacebook
             ),
-            SocialNetworkForLinking.VK to Triple(
+            SocialNetwork.VK to Triple(
                 R.drawable.ic_linking_vk_add,
                 R.drawable.ic_linking_vk_added,
                 binding.iconVk
             ),
-            SocialNetworkForLinking.TWITTER to Triple(
+            SocialNetwork.TWITTER to Triple(
                 R.drawable.ic_linking_twitter_add,
                 R.drawable.ic_linking_twitter_added,
                 binding.iconTwitter
@@ -177,8 +176,10 @@ class AddFriendsFragment : BaseFragment() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun initSocialButtons(list: List<SocialNetworkForLinking?>) {
-        for (socialNetwork in SocialNetworkForLinking.values()) {
+    private fun initSocialButtons(list: List<SocialNetwork?>) {
+        val socialNetworksForFriends =
+            listOf(SocialNetwork.FACEBOOK, SocialNetwork.VK, SocialNetwork.TWITTER)
+        for (socialNetwork in socialNetworksForFriends) {
             val info = socialNetworksIcons.getValue(socialNetwork)
             if (socialNetwork in list) {
                 info.third.setRateLimitedClickListener {}

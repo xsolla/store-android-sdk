@@ -1,34 +1,95 @@
 package com.xsolla.android.login.social
 
+import com.google.gson.annotations.SerializedName
+
 enum class SocialNetwork(val providerName: String) {
-    GOOGLE("google"),//+
-    FACEBOOK("facebook"),//+
-    TWITTER("twitter"),//+
-    LINKEDIN("linkedin"),//+
-    NAVER("naver"),//+
-    BAIDU("baidu"),//+
-    AMAZON("amazon"),//+
-    APPLE("apple"),//+
-    BATTLENET("battlenet"),//+
-    DISCORD("discord"),//+
-    GITHUB("github"),//+
-    KAKAO("kakao"),//+
+    @SerializedName("google")
+    GOOGLE("google"),
+
+    @SerializedName("facebook")
+    FACEBOOK("facebook"),
+
+    @SerializedName("twitter")
+    TWITTER("twitter"),
+
+    @SerializedName("linkedin")
+    LINKEDIN("linkedin"),
+
+    @SerializedName("naver")
+    NAVER("naver"),
+
+    @SerializedName("baidu")
+    BAIDU("baidu"),
+
+    @SerializedName("amazon")
+    AMAZON("amazon"),
+
+    @SerializedName("apple")
+    APPLE("apple"),
+
+    @SerializedName("battlenet")
+    BATTLENET("battlenet"),
+
+    @SerializedName("discord")
+    DISCORD("discord"),
+
+    @SerializedName("github")
+    GITHUB("github"),
+
+    @SerializedName("kakao")
+    KAKAO("kakao"),
+
+    @SerializedName("mailru")
     MAILRU("mailru"),
+
+    @SerializedName("microsoft")
     MICROSOFT("microsoft"),
-    MSN("msn"),//+
-    OK("ok"),//+
-    PAYPAL("paypal"),//+
-    PSN("psn"), // nonono
-    QQ("qq"),//+
-    REDDIT("reddit"),//+
-    STEAM("steam"),//+
-    TWITCH("twitch"),//+
-    VIMEO("vimeo"),//+
-    VK("vk"),//+
-    WECHAT("wechat"),//+
-    WEIBO("weibo"),//+
-    YAHOO("yahoo"),//+
-    YANDEX("yandex"),//+
-    YOUTUBE("youtube"),//+
-    XBOX("xbox");//+
+
+    @SerializedName("msn")
+    MSN("msn"),
+
+    @SerializedName("ok")
+    OK("ok"),
+
+    @SerializedName("paypal")
+    PAYPAL("paypal"),
+
+    @SerializedName("psn")
+    PSN("psn"),
+
+    @SerializedName("qq")
+    QQ("qq"),
+
+    @SerializedName("reddit")
+    REDDIT("reddit"),
+
+    @SerializedName("steam")
+    STEAM("steam"),
+
+    @SerializedName("twitch")
+    TWITCH("twitch"),
+
+    @SerializedName("vimeo")
+    VIMEO("vimeo"),
+
+    @SerializedName("vk")
+    VK("vk"),
+
+    @SerializedName("wechat")
+    WECHAT("wechat"),
+
+    @SerializedName("weibo")
+    WEIBO("weibo"),
+
+    @SerializedName("yahoo")
+    YAHOO("yahoo"),
+
+    @SerializedName("yandex")
+    YANDEX("yandex"),
+
+    @SerializedName("youtube")
+    YOUTUBE("youtube"),
+
+    @SerializedName("xbox")
+    XBOX("xbox");
 }

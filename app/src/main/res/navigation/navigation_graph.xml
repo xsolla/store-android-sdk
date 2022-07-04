@@ -34,12 +34,12 @@
         android:label=""
         tools:layout="@layout/fragment_consume" />
     <fragment
-        android:id="@+id/nav_character"
-        android:name="com.xsolla.android.storesdkexample.ui.fragments.character.CharacterFragment"
-        tools:layout="@layout/fragment_character" />
+        android:id="@+id/nav_attributes"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.attributes.AttributesFragment"
+        tools:layout="@layout/fragment_attributes" />
     <fragment
         android:id="@+id/fragment_edit_attribute"
-        android:name="com.xsolla.android.storesdkexample.ui.fragments.character.EditAttributeFragment"
+        android:name="com.xsolla.android.storesdkexample.ui.fragments.attributes.EditAttributeFragment"
         tools:layout="@layout/fragment_edit_attribute" >
         <argument
             android:name="isEdit"

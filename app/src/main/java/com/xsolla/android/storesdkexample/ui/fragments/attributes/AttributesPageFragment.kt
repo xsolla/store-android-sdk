@@ -1,4 +1,4 @@
-package com.xsolla.android.storesdkexample.ui.fragments.character
+package com.xsolla.android.storesdkexample.ui.fragments.attributes
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -10,7 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.xsolla.android.appcore.databinding.FragmentCharacterPageBinding
+import com.xsolla.android.appcore.databinding.FragmentAttributesPageBinding
 import com.xsolla.android.appcore.extensions.openInBrowser
 import com.xsolla.android.appcore.extensions.setClickableSpan
 import com.xsolla.android.storesdkexample.R
@@ -18,28 +18,28 @@ import com.xsolla.android.storesdkexample.adapter.DeleteSwipeCallback
 import com.xsolla.android.storesdkexample.adapter.UserAttributesAdapter
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity
-import com.xsolla.android.storesdkexample.ui.vm.VmCharacterPage
+import com.xsolla.android.storesdkexample.ui.vm.VmAttributesPage
 
-class CharacterPageFragment : BaseFragment() {
+class AttributesPageFragment : BaseFragment() {
     companion object {
         private const val EXTRA_READ_ONLY = "ExtraReadOnly"
 
-        fun newInstance(readOnly: Boolean): CharacterPageFragment {
-            return CharacterPageFragment().apply {
+        fun newInstance(readOnly: Boolean): AttributesPageFragment {
+            return AttributesPageFragment().apply {
                 arguments = bundleOf(EXTRA_READ_ONLY to readOnly)
             }
         }
     }
 
-    private val binding: FragmentCharacterPageBinding by viewBinding()
+    private val binding: FragmentAttributesPageBinding by viewBinding()
 
     private lateinit var adapter: UserAttributesAdapter
 
     private var readOnly: Boolean = false
 
-    private val viewModel: VmCharacterPage by activityViewModels()
+    private val viewModel: VmAttributesPage by activityViewModels()
 
-    override fun getLayout() = R.layout.fragment_character_page
+    override fun getLayout() = R.layout.fragment_attributes_page
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,7 +94,7 @@ class CharacterPageFragment : BaseFragment() {
     private fun configurePlaceholderAndVisibilities(items: List<UserAttributeUiEntity>, readOnly: Boolean) {
         binding.attributesRecycler.isVisible = items.isNotEmpty()
         binding.noItemsLayout.isVisible = items.isEmpty()
-        binding.noItemsPlaceholder.setText(if (readOnly) R.string.character_read_only_attributes_placeholder else R.string.character_editable_attributes_placeholder)
+        binding.noItemsPlaceholder.setText(if (readOnly) R.string.attributes_read_only_attributes_placeholder else R.string.attributes_editable_attributes_placeholder)
         binding.addAttributeButton.isVisible = items.isEmpty() && !readOnly
         binding.addAttributeButton.setOnClickListener {
             val args = bundleOf (

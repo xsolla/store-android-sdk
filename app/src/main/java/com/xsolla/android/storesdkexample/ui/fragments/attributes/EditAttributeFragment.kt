@@ -1,4 +1,4 @@
-package com.xsolla.android.storesdkexample.ui.fragments.character
+package com.xsolla.android.storesdkexample.ui.fragments.attributes
 
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -12,14 +12,14 @@ import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.appcore.databinding.FragmentEditAttributeBinding
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.UserAttributeUiEntity
-import com.xsolla.android.storesdkexample.ui.vm.VmCharacterPage
+import com.xsolla.android.storesdkexample.ui.vm.VmAttributesPage
 
 class EditAttributeFragment : BaseFragment() {
 
     private val binding: FragmentEditAttributeBinding by viewBinding()
 
     private val args: EditAttributeFragmentArgs by navArgs()
-    private val viewModel: VmCharacterPage by activityViewModels()
+    private val viewModel: VmAttributesPage by activityViewModels()
 
     override fun getLayout() = R.layout.fragment_edit_attribute
 
@@ -57,7 +57,7 @@ class EditAttributeFragment : BaseFragment() {
                 viewModel.deleteAttribute(attribute, ::navigateUp)
             }
         } else {
-            binding.removeDiscardButton.setText(R.string.character_edit_attribute_discard_button)
+            binding.removeDiscardButton.setText(R.string.attributes_edit_attribute_discard_button)
             binding.removeDiscardButton.setOnClickListener { navigateUp() }
             binding.saveButton.setOnClickListener {
                 val key = binding.attributeKeyInput.text?.toString()
