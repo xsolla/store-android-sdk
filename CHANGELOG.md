@@ -1,5 +1,14 @@
 # Changelog
 
+## [4.0.0] - Login SDK - 2022-07-04
+### Changed
+- List of social networks available for linking is equal to the list of them for authentication
+
+## [2.1.0] - Demo Apps - 2022-07-04
+### Removed
+- Character and Level Up functionality
+
+
 ## [1.0.2] - Payments SDK - 2022-06-22
 ### Changed
 - Updated dependencies
