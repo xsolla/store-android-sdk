@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.xsolla.android.login.ui.utils.BrowserUtils
 
-class ActivityAuthBrowserProxy : ActivityAuth() {
+internal class ActivityAuthBrowserProxy : ActivityAuth() {
 
     companion object {
         fun checkAvailability(context: Context) =

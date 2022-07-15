@@ -5,7 +5,7 @@ import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.parcelize.Parcelize
 
-abstract class ActivityAuth : AppCompatActivity() {
+internal abstract class ActivityAuth : AppCompatActivity() {
     companion object {
         const val ARG_AUTH_URL = "auth_url"
         const val ARG_CALLBACK_URL = "callback_url"

@@ -1,12 +1,12 @@
 package com.xsolla.android.login
 
 class LoginConfig private constructor(
-    val projectId: String,
-    val oauthClientId: Int,
-    val socialConfig: XLogin.SocialConfig? = null,
-    val useOauth: Boolean,
-    val redirectScheme: String?,
-    val redirectHost: String?
+    internal val projectId: String,
+    internal val oauthClientId: Int,
+    internal val socialConfig: XLogin.SocialConfig? = null,
+    internal val useOauth: Boolean,
+    internal val redirectScheme: String?,
+    internal val redirectHost: String?
 ) {
     class OauthBuilder {
         private var projectId: String? = null

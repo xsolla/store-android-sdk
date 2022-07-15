@@ -2,7 +2,7 @@ package com.xsolla.android.login.entity.request
 
 import com.google.gson.annotations.SerializedName
 
-data class RegisterUserBody(
+internal data class RegisterUserBody(
     val email: String,
     val password: String,
     val username: String,
@@ -13,7 +13,7 @@ data class RegisterUserBody(
     val promoEmailAgreement: Int? = null,
 )
 
-data class RegisterUserBodyFields(
+internal data class RegisterUserBodyFields(
     val username: String,
     @SerializedName("given_name")
     val firstName: String,

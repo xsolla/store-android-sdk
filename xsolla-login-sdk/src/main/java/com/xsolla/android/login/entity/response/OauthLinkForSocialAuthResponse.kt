@@ -1,5 +1,5 @@
 package com.xsolla.android.login.entity.response
 
-data class OauthLinkForSocialAuthResponse(
+internal data class OauthLinkForSocialAuthResponse(
         val url: String
 )

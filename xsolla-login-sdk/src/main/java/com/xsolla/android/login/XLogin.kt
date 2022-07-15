@@ -66,6 +66,7 @@ class XLogin private constructor(
         val qqAppId: String? = null
     )
 
+    @Deprecated("")
     object Unity {
         @JvmStatic
         fun authSocial(activity: Activity, socialNetwork: SocialNetwork, withLogout: Boolean) {
