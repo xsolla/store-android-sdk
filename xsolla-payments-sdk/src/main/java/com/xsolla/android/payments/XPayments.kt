@@ -21,8 +21,8 @@ import java.lang.StringBuilder
 class XPayments {
 
     companion object {
-        const val SERVER_PROD = "secure.xsolla.com"
-        const val SERVER_SANDBOX = "sandbox-secure.xsolla.com"
+        internal const val SERVER_PROD = "secure.xsolla.com"
+        internal const val SERVER_SANDBOX = "sandbox-secure.xsolla.com"
 
         /**
          * Create builder for the Pay Station intent

@@ -1,6 +1,6 @@
 package com.xsolla.android.store.util
 
-object EngineUtils {
+internal object EngineUtils {
     @JvmStatic
     var engineSpec = ""
 }

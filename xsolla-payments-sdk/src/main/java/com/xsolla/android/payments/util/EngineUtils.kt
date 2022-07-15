@@ -1,6 +1,6 @@
 package com.xsolla.android.payments.util
 
-object EngineUtils {
+internal object EngineUtils {
     @JvmStatic
     var engineSpec = ""
 }

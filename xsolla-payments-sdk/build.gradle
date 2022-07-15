@@ -48,6 +48,16 @@ dokkaHtmlPartial {
     dokkaSourceSets {
         main {
             includes.from("Module.md")
+            documentedVisibilities.set(
+                    [org.jetbrains.dokka.DokkaConfiguration.Visibility.PUBLIC]
+            )
+            sourceLink {
+                localDirectory.set(file("src/main/java"))
+                remoteUrl.set(new URL(
+                        "https://github.com/xsolla/store-android-sdk/tree/master/xsolla-payments-sdk/src/main/java"))
+                remoteLineSuffix.set("#L")
+            }
+            displayName.set("Payments SDK")
         }
     }
 }
