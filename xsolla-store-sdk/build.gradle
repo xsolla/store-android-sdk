@@ -50,10 +50,10 @@ dependencies {
     testImplementation "org.robolectric:robolectric:$robolectric_version"
 }
 
-dokkaHtml.configure {
+dokkaHtmlPartial {
+    moduleName.set("Xsolla Store SDK for Android")
     dokkaSourceSets {
-        named("main") {
-            moduleName.set("Xsolla Store SDK for Android")
+        main {
             includes.from("Module.md")
         }
     }

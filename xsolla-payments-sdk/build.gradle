@@ -43,11 +43,10 @@ dependencies {
     implementation "androidx.browser:browser:$androidx_browser"
 }
 
-dokkaHtml.configure {
+dokkaHtmlPartial {
+    moduleName.set("Xsolla Payments SDK for Android")
     dokkaSourceSets {
-        named("main") {
-            noAndroidSdkLink.set(false)
-            moduleName.set("Xsolla Payments SDK for Android")
+        main {
             includes.from("Module.md")
         }
     }
