@@ -2,7 +2,7 @@ package com.xsolla.android.payments.ui
 
 import androidx.appcompat.app.AppCompatActivity
 
-abstract class ActivityPaystation : AppCompatActivity() {
+internal abstract class ActivityPaystation : AppCompatActivity() {
     companion object {
         const val ARG_URL = "url"
         const val ARG_REDIRECT_SCHEME = "redirect_scheme"

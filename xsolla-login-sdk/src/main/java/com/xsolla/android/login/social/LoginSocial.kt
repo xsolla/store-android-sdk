@@ -49,7 +49,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
-object LoginSocial {
+internal object LoginSocial {
 
     private const val RC_LINKING_WEBVIEW = 39999
     private const val RC_AUTH_WEBVIEW = 31000

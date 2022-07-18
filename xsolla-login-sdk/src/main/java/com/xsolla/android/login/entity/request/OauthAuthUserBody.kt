@@ -1,6 +1,6 @@
 package com.xsolla.android.login.entity.request
 
-data class OauthAuthUserBody(
+internal data class OauthAuthUserBody(
         val username: String,
         val password: String
 )

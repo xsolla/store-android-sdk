@@ -1,6 +1,6 @@
 package com.xsolla.android.login.unity
 
-object UnityUtils {
+internal object UnityUtils {
 
     private lateinit var unityPlayer: Class<*>
 

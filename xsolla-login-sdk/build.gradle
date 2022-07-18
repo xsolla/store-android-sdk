@@ -64,11 +64,22 @@ dependencies {
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
 }
 
-dokkaHtml.configure {
+dokkaHtmlPartial {
+    moduleName.set("Xsolla Login SDK for Android")
     dokkaSourceSets {
-        named("main") {
-            moduleName.set("Xsolla Login SDK for Android")
+        main {
             includes.from("Module.md")
+            documentedVisibilities.set(
+                    [org.jetbrains.dokka.DokkaConfiguration.Visibility.PUBLIC]
+            )
+            skipDeprecated.set(true)
+            sourceLink {
+                localDirectory.set(file("src/main/java"))
+                remoteUrl.set(new URL(
+                        "https://github.com/xsolla/store-android-sdk/tree/master/xsolla-login-sdk/src/main/java"))
+                remoteLineSuffix.set("#L")
+            }
+            displayName.set("Login SDK")
         }
     }
 }

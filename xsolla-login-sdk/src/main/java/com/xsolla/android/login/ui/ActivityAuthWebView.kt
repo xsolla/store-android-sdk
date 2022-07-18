@@ -10,7 +10,7 @@ import android.widget.ImageView
 import com.xsolla.android.login.R
 import com.xsolla.android.login.token.TokenUtils
 
-class ActivityAuthWebView : ActivityAuth() {
+internal class ActivityAuthWebView : ActivityAuth() {
 
     companion object {
         const val ARG_TOKEN = "token" // for deprecated linking method

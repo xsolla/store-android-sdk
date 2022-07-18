@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
-apply plugin: 'org.jetbrains.dokka'
 
 android {
     compileSdkVersion sdk_compile
@@ -46,15 +45,6 @@ dependencies {
     testImplementation "org.robolectric:robolectric:$robolectric_version"
     testImplementation "androidx.test:core:$androidx_test_core"
 
-}
-
-dokkaHtml.configure {
-    dokkaSourceSets {
-        named("main") {
-            moduleName.set("Xsolla SDK with Google Play integration for Android")
-            includes.from("Module.md")
-        }
-    }
 }
 
 ext {

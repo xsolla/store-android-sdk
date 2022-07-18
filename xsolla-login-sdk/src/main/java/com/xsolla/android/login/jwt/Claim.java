@@ -1,11 +1,9 @@
 package com.xsolla.android.login.jwt;
 
-
 import java.util.Date;
 import java.util.List;
 
 public interface Claim {
-
 
     Boolean asBoolean();
 

@@ -3,7 +3,7 @@ package com.xsolla.android.login.entity.request
 import com.google.gson.annotations.SerializedName
 import com.xsolla.android.login.entity.common.UserAttribute
 
-data class GetUsersAttributesFromClientRequest(
+internal data class GetUsersAttributesFromClientRequest(
     val keys: List<String> = emptyList(),
     @SerializedName("publisher_project_id")
     val publisherProjectId: Int? = null,
@@ -11,7 +11,7 @@ data class GetUsersAttributesFromClientRequest(
     val userId: String? = null
 )
 
-data class UpdateUsersAttributesFromClientRequest(
+internal data class UpdateUsersAttributesFromClientRequest(
     val attributes: List<UserAttribute> = emptyList(),
     @SerializedName("publisher_project_id")
     val publisherProjectId: Int? = null,

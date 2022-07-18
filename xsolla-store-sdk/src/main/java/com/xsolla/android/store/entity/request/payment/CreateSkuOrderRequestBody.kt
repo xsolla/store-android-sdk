@@ -3,7 +3,7 @@ package com.xsolla.android.store.entity.request.payment
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 
-class CreateSkuOrderRequestBody private constructor(
+internal class CreateSkuOrderRequestBody private constructor(
     val currency: String,
     val locale: String,
     val sandbox: Boolean,

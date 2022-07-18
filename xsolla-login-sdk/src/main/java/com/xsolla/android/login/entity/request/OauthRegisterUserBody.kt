@@ -2,7 +2,7 @@ package com.xsolla.android.login.entity.request
 
 import com.google.gson.annotations.SerializedName
 
-data class OauthRegisterUserBody(
+internal data class OauthRegisterUserBody(
         val username: String,
         val email: String,
         val password: String,

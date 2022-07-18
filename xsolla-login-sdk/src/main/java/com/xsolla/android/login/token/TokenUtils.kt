@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import com.xsolla.android.login.jwt.JWT
 
-class TokenUtils(context: Context) {
+internal class TokenUtils(context: Context) {
 
     private val preferences: SharedPreferences = context.applicationContext.getSharedPreferences(PREFS_FILE_NAME, Context.MODE_PRIVATE)
 
