@@ -7,7 +7,7 @@ import android.os.Bundle
 import com.xsolla.android.payments.XPayments
 import com.xsolla.android.payments.ui.utils.BrowserUtils
 
-class ActivityPaystationBrowserProxy : ActivityPaystation() {
+internal class ActivityPaystationBrowserProxy : ActivityPaystation() {
 
     companion object {
         fun checkAvailability(context: Context) =

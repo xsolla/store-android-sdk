@@ -2,7 +2,7 @@ package com.xsolla.android.login.entity.request
 
 import com.google.gson.annotations.SerializedName
 
-data class AuthUserBody(
+internal data class AuthUserBody(
     val username: String,
     val password: String,
     @SerializedName("remember_me")

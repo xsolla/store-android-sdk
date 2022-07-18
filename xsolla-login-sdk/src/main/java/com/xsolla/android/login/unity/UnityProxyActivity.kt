@@ -8,7 +8,7 @@ import com.xsolla.android.login.callback.FinishSocialCallback
 import com.xsolla.android.login.callback.StartSocialCallback
 import com.xsolla.android.login.social.SocialNetwork
 
-class UnityProxyActivity : Activity() {
+internal class UnityProxyActivity : Activity() {
 
     companion object {
         const val ARG_SOCIAL_NETWORK = "social_network"

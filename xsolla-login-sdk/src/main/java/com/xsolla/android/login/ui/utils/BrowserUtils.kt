@@ -10,7 +10,7 @@ import androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTI
 import androidx.core.content.ContextCompat
 import com.xsolla.android.login.R
 
-object BrowserUtils {
+internal object BrowserUtils {
 
     private val allowedPlainBrowsers = listOf("com.android.chrome")
     private val allowedCustomTabsBrowsers = listOf("com.android.chrome")

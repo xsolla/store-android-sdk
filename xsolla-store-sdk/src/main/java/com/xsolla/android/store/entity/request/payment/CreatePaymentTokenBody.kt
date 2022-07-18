@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.xsolla.android.store.entity.response.common.Price
 import org.json.JSONObject
 
-data class CreatePaymentTokenBody(
+internal data class CreatePaymentTokenBody(
     val settings: PaymentTokenBodySettings?,
     @SerializedName("custom_parameters")
     val customParameters: JSONObject?,

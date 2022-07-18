@@ -7,7 +7,7 @@ import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import java.util.*
 
-class ActivityWechatProxy : Activity() {
+internal class ActivityWechatProxy : Activity() {
 
     companion object {
         const val EXTRA_WECHAT_ID = "EXTRA_WECHAT_ID"
