@@ -1,6 +1,7 @@
 package com.xsolla.android.storesdkexample.ui.fragments.store
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import androidx.fragment.app.activityViewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -186,6 +187,7 @@ class ViFragment : BaseFragment() {
     }
 }
 
+@Keep
 @Parcelize
 data class VirtualItemUiEntity(
         val sku: String? = null,
