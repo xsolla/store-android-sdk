@@ -1,6 +1,7 @@
 package com.xsolla.android.storesdkexample.ui.vm
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -119,6 +120,7 @@ class VmAttributesPage : ViewModel() {
 }
 
 // duplicate due to Parcelable implementation
+@Keep
 @Parcelize
 data class UserAttributeUiEntity(
     val key: String,

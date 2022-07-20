@@ -43,23 +43,20 @@ android {
         buildConfigField 'boolean', 'WITH_LOGOUT', 'false'
         buildConfigField 'boolean', 'USE_OAUTH', 'true'
         buildConfigField 'String', 'WEBSHOP_URL', '"https://sitebuilder.xsolla.com/game/sdk-web-store"'
+        buildConfigField 'boolean', 'IS_SANDBOX', 'true'
 
         buildConfigField "String", "VERSION_NAME", "\"$versionName\""
     }
     buildTypes {
         release {
             signingConfig signingConfigs.release
-
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-            buildConfigField 'boolean', 'IS_SANDBOX', 'true'
         }
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-            buildConfigField 'boolean', 'IS_SANDBOX', 'true'
         }
     }
 

@@ -1,0 +1,1 @@
+-keep class com.xsolla.android.googleplay.inventory.entity.** {*;}
