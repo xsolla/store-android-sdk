@@ -1,0 +1,1 @@
+-keep class com.xsolla.android.inventory.entity.** {*;}
