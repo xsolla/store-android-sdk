@@ -169,7 +169,7 @@ class AddFriendsFragment : BaseFragment() {
                 }
 
                 override fun onLinkingError(throwable: Throwable?, errorMessage: String?) {
-                    showSnack("Linking error")
+                    showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Unknown error")
                 }
             }
         )

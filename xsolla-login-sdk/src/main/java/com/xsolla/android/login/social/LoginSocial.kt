@@ -519,7 +519,7 @@ internal object LoginSocial {
                                 callback.onError(null, "Empty response")
                                 return
                             }
-                            openBrowserActivity(isLinking = false, url, activity, fragment)
+                            openBrowserActivity(isLinking = false, url, socialNetwork, activity, fragment)
                             callback.onAuthStarted()
                         } else {
                             callback.onError(null, Utils.getErrorMessage(response.errorBody()))
@@ -550,7 +550,7 @@ internal object LoginSocial {
                                 callback.onError(null, "Empty response")
                                 return
                             }
-                            openBrowserActivity(isLinking = false, url, activity, fragment)
+                            openBrowserActivity(isLinking = false, url, socialNetwork, activity, fragment)
                             callback.onAuthStarted()
                         } else {
                             callback.onError(null, Utils.getErrorMessage(response.errorBody()))
@@ -570,6 +570,7 @@ internal object LoginSocial {
     private fun openBrowserActivity(
         isLinking: Boolean,
         url: String,
+        socialNetwork: SocialNetwork,
         activity: Activity?,
         fragment: Fragment?
     ) {
@@ -590,6 +591,7 @@ internal object LoginSocial {
             putExtra(ActivityAuth.ARG_AUTH_URL, url)
             putExtra(ActivityAuth.ARG_CALLBACK_URL, callbackUrl)
             putExtra(ActivityAuth.ARG_IS_LINKING, isLinking)
+            putExtra(ActivityAuth.ARG_SOCIAL_NETWORK, socialNetwork)
         }
         if (activity != null) {
             activity.startActivityForResult(intent, if (isLinking) RC_LINKING_WEBVIEW else RC_AUTH_WEBVIEW)
@@ -796,7 +798,7 @@ internal object LoginSocial {
                         callback?.onError(null, "Empty response")
                         return
                     }
-                    openBrowserActivity(isLinking = true, url, activity, fragment)
+                    openBrowserActivity(isLinking = true, url, socialNetwork, activity, fragment)
                     callback?.onLinkingStarted()
                 } else {
                     callback?.onError(null, Utils.getErrorMessage(response.errorBody()))
