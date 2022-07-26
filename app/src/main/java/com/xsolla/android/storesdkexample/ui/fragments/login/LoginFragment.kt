@@ -228,7 +228,7 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         }
 
         override fun onAuthError(throwable: Throwable?, errorMessage: String?) {
-            showSnack(throwable?.javaClass?.name ?: throwable?.localizedMessage ?: "Error")
+            showSnack(throwable?.javaClass?.name ?: throwable?.localizedMessage ?: errorMessage?: "Error")
         }
     }
 

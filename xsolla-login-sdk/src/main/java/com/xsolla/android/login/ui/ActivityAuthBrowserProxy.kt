@@ -52,39 +52,18 @@ internal class ActivityAuthBrowserProxy : ActivityAuth() {
                     Status.CANCELLED,
                     null,
                     null,
-                    "Code or token not found")
+                    null)
             )
         }
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        setIntent(intent)
         val uri = intent?.data
         if (uri == null) {
             finish()
             return
         }
-        val token = uri.getQueryParameter("token")
-        val code = uri.getQueryParameter("code")
-        val isLinking = intent.getBooleanExtra(ARG_IS_LINKING, false)
-        if (!isLinking && code == null && token == null) {
-            finishWithResult(
-                Activity.RESULT_OK,
-                Result(Status.ERROR, null, null, "Code or token not found")
-            )
-        } else {
-            finishWithResult(
-                Activity.RESULT_OK,
-                Result(Status.SUCCESS, token, code, null)
-            )
-        }
-    }
-
-    private fun finishWithResult(resultCode: Int, resultData: Result) {
-        val intent = Intent()
-        intent.putExtra(RESULT, resultData)
-        setResult(resultCode, intent)
-        finish()
+        handleCallbackUrlRedirect(uri)
     }
 }
