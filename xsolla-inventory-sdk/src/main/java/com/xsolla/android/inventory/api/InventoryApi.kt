@@ -29,7 +29,7 @@ internal interface InventoryApi {
             @Query("platform") platform: String
     ): Call<VirtualBalanceResponse>
 
-    @GET("api/v2/project/{project_id}/user/subscriptions")
+    @GET("api/v2/project/{project_id}/user/time_limited_items")
     fun getTimeLimitedItems(
             @Path("project_id") projectId: Int,
             @Query("platform") platform: String
