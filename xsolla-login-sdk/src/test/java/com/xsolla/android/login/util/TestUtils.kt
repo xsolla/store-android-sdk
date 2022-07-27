@@ -23,15 +23,6 @@ object TestUtils {
         XLogin.init(ApplicationProvider.getApplicationContext(), loginConfig)
     }
 
-    fun initSdkJwt() {
-        val loginConfig = LoginConfig.JwtBuilder()
-            .setProjectId(projectId)
-            .setRedirectUriScheme("app")
-            .setRedirectUriHost("example")
-            .build()
-        XLogin.init(ApplicationProvider.getApplicationContext(), loginConfig)
-    }
-
     // Init for different auth states
 
     fun initLoggedOut() {

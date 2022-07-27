@@ -72,7 +72,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
         super.onCreate(savedInstanceState)
 
-        if (XLogin.isTokenExpired(60)) {
+        if (XLogin.isTokenExpired()) {
             if (!XLogin.canRefreshToken()) {
                 startLogin()
             }
@@ -103,7 +103,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
     override fun onResume() {
         super.onResume()
-        if (XLogin.isTokenExpired(60)) {
+        if (XLogin.isTokenExpired()) {
             if (XLogin.canRefreshToken()) {
                 binding.lock.visibility = View.VISIBLE
                 XLogin.refreshToken(object : RefreshTokenCallback {
@@ -151,7 +151,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
     private fun initVirtualBalance() {
         val balanceContainer: LinearLayout = findViewById(R.id.balanceContainer)
-        vmBalance.virtualBalance.observe(this, { virtualBalanceList ->
+        vmBalance.virtualBalance.observe(this) { virtualBalanceList ->
             balanceContainer.removeAllViews()
             virtualBalanceList.forEach { item ->
                 val balanceView = LayoutInflater.from(this).inflate(R.layout.item_balance, null)
@@ -162,7 +162,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
                 balanceAmount.text = item.amount.toString()
                 balanceContainer.addView(balanceView, 0)
             }
-        })
+        }
         findViewById<Button>(R.id.chargeBalanceButton).setRateLimitedClickListener {
             findNavController(
                 R.id.nav_host_fragment

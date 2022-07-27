@@ -1,5 +1,6 @@
 package com.xsolla.android.login.jwt;
 
+@Deprecated
 public class DecodeException extends RuntimeException {
 
     DecodeException(String message) {
