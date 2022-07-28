@@ -75,7 +75,6 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
             XLogin.startSocialAuth(
                 this,
                 SocialNetwork.GOOGLE,
-                BuildConfig.WITH_LOGOUT,
                 startSocialCallback
             )
         }
@@ -85,7 +84,6 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
             XLogin.startSocialAuth(
                 this,
                 SocialNetwork.FACEBOOK,
-                BuildConfig.WITH_LOGOUT,
                 startSocialCallback
             )
         }
@@ -95,7 +93,6 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
             XLogin.startSocialAuth(
                 this,
                 SocialNetwork.BAIDU,
-                BuildConfig.WITH_LOGOUT,
                 startSocialCallback
             )
         }
@@ -168,7 +165,7 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
                 binding.moreLoginOptionsButton.isEnabled = true
             }
 
-        }, BuildConfig.WITH_LOGOUT)
+        })
     }
 
     private fun resetPassword() {
@@ -200,7 +197,6 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
             requestCode,
             resultCode,
             data,
-            BuildConfig.WITH_LOGOUT,
             finishSocialCallback
         )
         super.onActivityResult(requestCode, resultCode, data)
@@ -283,7 +279,6 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
         XLogin.startSocialAuth(
             this,
             loginSocialNetwork,
-            BuildConfig.WITH_LOGOUT,
             startSocialCallback
         )
     }

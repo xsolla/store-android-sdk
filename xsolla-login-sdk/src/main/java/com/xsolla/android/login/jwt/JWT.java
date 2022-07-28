@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 @SuppressWarnings("ALL")
 public class JWT implements Parcelable {
 

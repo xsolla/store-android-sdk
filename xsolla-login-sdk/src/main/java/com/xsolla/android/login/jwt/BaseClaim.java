@@ -1,11 +1,11 @@
 package com.xsolla.android.login.jwt;
 
-
 import java.lang.reflect.Array;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+@Deprecated
 class BaseClaim implements Claim {
 
     @Override

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Deprecated
 class ClaimImpl extends BaseClaim {
 
     private final JsonElement value;

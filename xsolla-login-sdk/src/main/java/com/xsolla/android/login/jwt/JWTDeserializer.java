@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 class JWTDeserializer implements JsonDeserializer<JWTPayload> {
     @Override
     public JWTPayload deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {

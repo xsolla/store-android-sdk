@@ -3,7 +3,6 @@ package com.xsolla.android.login
 import com.xsolla.android.login.callback.OauthLogoutCallback
 import com.xsolla.android.login.callback.RefreshTokenCallback
 import com.xsolla.android.login.util.TestUtils.initLoggedInByPassword
-import com.xsolla.android.login.util.TestUtils.initSdkJwt
 import com.xsolla.android.login.util.TestUtils.initSdkOauth
 import org.junit.Assert
 import org.junit.Test
@@ -106,26 +105,6 @@ class OauthTests {
 
         val newToken = XLogin.token
         Assert.assertNotEquals(oldToken, newToken)
-    }
-
-    @Test
-    fun oauthRefresh_Fail() {
-        initSdkJwt()
-        initLoggedInByPassword()
-
-        Assert.assertFalse(XLogin.canRefreshToken())
-
-        try {
-            XLogin.refreshToken(object : RefreshTokenCallback {
-                override fun onSuccess() {
-                }
-
-                override fun onError(throwable: Throwable?, errorMessage: String?) {
-                }
-            })
-            Assert.fail()
-        } catch (e: IllegalArgumentException) {
-        }
     }
 
 }

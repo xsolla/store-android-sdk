@@ -10,91 +10,9 @@ import retrofit2.http.*
 internal interface LoginApi {
     //----------    Authentication      ----------
 
-    //
-    // Authentication
-    //
-    // JWT
-
-    @POST("/api/login")
-    fun login(
-        @Query("projectId") projectId: String,
-        @Query("login_url") loginUrl: String?,
-        @Query("payload") payload: String?,
-        @Query("with_logout") withLogout: String,
-        @Body authUserBody: AuthUserBody
-    ): Call<AuthResponse>
-
-    @POST("/api/login/device/{device_type}")
-    fun authViaDeviceId(
-        @Path("device_type") deviceType: String,
-        @Query("projectId") projectId: String,
-        @Query("payload") payload: String?,
-        @Query("with_logout") withLogout: String,
-        @Body loginByDeviceIdBody: AuthViaDeviceIdBody
-    ): Call<AuthViaIdResponse>
-
-    @POST("api/login/phone/confirm")
-    fun completeAuthByPhone(
-        @Query("projectId") projectId: String,
-        @Body completeAuthByPhoneBody: CompleteAuthByPhoneBody
-    ): Call<AuthResponse>
-
-    @POST("api/login/phone/request")
-    fun startAuthByPhone(
-        @Query("projectId") projectId: String,
-        @Query("login_url") loginUrl: String,
-        @Query("payload") payload: String?,
-        @Query("with_logout") withLogout: String,
-        @Body startAuthByPhoneBody: StartAuthByPhoneBody
-    ): Call<StartPasswordlessAuthResponse>
-
-    @POST("api/login/email/confirm")
-    fun completeAuthByEmail(
-        @Query("projectId") projectId: String,
-        @Body completeAuthByEmailBody: CompleteAuthByEmailBody
-    ): Call<AuthResponse>
-
-    @POST("api/login/email/request")
-    fun startAuthByEmail(
-        @Query("projectId") projectId: String,
-        @Query("login_url") loginUrl: String,
-        @Query("payload") payload: String?,
-        @Query("with_logout") withLogout: String,
-        @Body startAuthByEmailBody: StartAuthByEmailBody
-    ): Call<StartPasswordlessAuthResponse>
-
-    @GET("/api/social/{providerName}/login_url")
-    fun getLinkForSocialAuth(
-        @Path("providerName") providerName: String,
-        @Query("projectId") projectId: String,
-        @Query("login_url") loginUrl: String?,
-        @Query("fields") fields: List<String>?,
-        @Query("payload") payload: String?,
-        @Query("with_logout") withLogout: String
-    ): Call<LinkForSocialAuthResponse>
-
-    @POST("/api/social/{providerName}/login_with_token")
-    fun authViaAccessTokenOfSocialNetwork(
-        @Path("providerName") providerName: String,
-        @Query("projectId") projectId: String,
-        @Query("payload") payload: String?,
-        @Query("with_logout") withLogout: String,
-        @Body authUserSocialBody: AuthUserSocialBody
-    ): Call<AuthSocialResponse>
-
-    @POST("/api/user")
-    fun registerUser(
-        @Query("projectId") projectId: String,
-        @Query("login_url") loginUrl: String?,
-        @Query("payload") payload: String?,
-        @Body registerUserBody: RegisterUserBody
-    ): Call<Void>
-
-
     //Authentication
     //
     //OAuth 2.0
-
 
     @POST("/api/oauth2/login/token")
     fun oauthLogin(
@@ -186,14 +104,6 @@ internal interface LoginApi {
         @Body body: OauthRegisterUserBody
     ): Call<Void>
 
-    @POST("/api/social/mobile/{providerName}/login_with_code")
-    fun loginSocialWithOauthCode(
-        @Path("providerName") providerName: String,
-        @Query("projectId") projectId: String,
-        @Query("with_logout") withLogout: String,
-        @Body authUserSocialWithCodeBody: AuthUserSocialWithCodeBody
-    ): Call<AuthSocialResponse>
-
     @GET("/api/oauth2/logout")
     fun oauthLogout(
         @Header("authorization") authHeader: String,
@@ -201,20 +111,6 @@ internal interface LoginApi {
     ): Call<Void>
 
     //----------     Emails     ----------
-
-
-    // Emails
-    //
-    // JWT
-
-    @POST("/user/resend_confirmation_link")
-    fun resendAccountConfirmationEmail(
-        @Query("projectId") projectId: String,
-        @Query("login_url") loginUrl: String?,
-        @Query("payload") payload: String?,
-        @Body body: ResendAccountConfirmationEmailBody
-    ): Call<Void>
-
 
     // Emails
     //
@@ -304,10 +200,6 @@ internal interface LoginApi {
         @Header("authorization") authHeader: String,
         @Path("id") id: Int
     ): Call<Void>
-
-    // User Account
-    //
-    // MFA
 
     //User Account
     //

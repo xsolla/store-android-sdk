@@ -5,7 +5,6 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.appcore.databinding.FragmentMoreLogInOptionsBinding
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.AuthCallback
-import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.StoreActivity
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
@@ -60,7 +59,7 @@ class MoreLoginOptionsFragment : BaseFragment() {
                     binding.bnLoginAsDemoUser.isEnabled = true
                 }
 
-            }, BuildConfig.WITH_LOGOUT)
+            })
         }
     }
 }
