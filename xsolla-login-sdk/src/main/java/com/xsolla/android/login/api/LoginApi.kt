@@ -101,6 +101,7 @@ internal interface LoginApi {
         @Query("scope") scope: String,
         @Query("state") state: String,
         @Query("redirect_uri") redirectUri: String,
+        @Query("locale") locale: String?,
         @Body body: OauthRegisterUserBody
     ): Call<Void>
 
@@ -116,11 +117,12 @@ internal interface LoginApi {
     //
     // OAuth 2.0
 
-    @POST("/oauth2/user/resend_confirmation_link")
+    @POST("/api/oauth2/user/resend_confirmation_link")
     fun oauthResendAccountConfirmationEmail(
         @Query("client_id") clientId: Int,
         @Query("redirect_uri") redirectUri: String?,
         @Query("state") state: String,
+        @Query("locale") locale: String?,
         @Body body: ResendAccountConfirmationEmailBody
     ): Call<Void>
 
@@ -134,6 +136,7 @@ internal interface LoginApi {
     fun resetPassword(
         @Query("projectId") projectId: String,
         @Query("login_url") loginUrl: String?,
+        @Query("locale") locale: String?,
         @Body resetPasswordBody: ResetPasswordBody
     ): Call<Void>
 
