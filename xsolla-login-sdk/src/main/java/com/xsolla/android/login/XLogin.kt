@@ -512,10 +512,13 @@ class XLogin private constructor(
         /**
          * Register a new user
          *
-         * @param username new user's username
-         * @param email    new user's email
-         * @param password new user's password
-         * @param callback status callback
+         * @param username New user's username
+         * @param email New user's email
+         * @param password New user's password
+         * @param callback Status callback
+         * @param acceptConsent Whether the user gave consent to processing of their personal data.
+         * @param promoEmailAgreement User consent to receive the newsletter.
+         * @param locale Language of the email sent after this call in the <language code>_<country code> format where language code is language code in the ISO 639-1 format, country code is country/region code in the ISO 3166-1 alpha-2 format.
          *
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-register-a-new-user)
          */
@@ -527,7 +530,8 @@ class XLogin private constructor(
             password: String,
             callback: RegisterCallback,
             acceptConsent: Boolean? = null,
-            promoEmailAgreement: Int? = null
+            promoEmailAgreement: Int? = null,
+            locale: String? = null
         ) {
             val retrofitCallback: Callback<Void> = object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -556,7 +560,8 @@ class XLogin private constructor(
                     "offline",
                     UUID.randomUUID().toString(),
                     getInstance().callbackUrl,
-                    oauthRegisterUserBody
+                    locale,
+                    oauthRegisterUserBody,
                 )
                 .enqueue(retrofitCallback)
         }
@@ -601,18 +606,23 @@ class XLogin private constructor(
          *
          * @param username Username or user email address.
          * @param callback Status callback.
+         * @param locale Language of the email sent after this call in the <language code>_<country code> format where language code is language code in the ISO 639-1 format, country code is country/region code in the ISO 3166-1 alpha-2 format.
+         *
          * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/emails/oauth-20/oauth-20-resend-account-confirmation-email)
          */
         @JvmStatic
+        @JvmOverloads
         fun resendAccountConfirmationEmail(
             username: String,
-            callback: ResendAccountConfirmationEmailCallback
+            callback: ResendAccountConfirmationEmailCallback,
+            locale: String? = null
         ) {
             val body = ResendAccountConfirmationEmailBody(username)
             getInstance().loginApi.oauthResendAccountConfirmationEmail(
                 getInstance().oauthClientId,
                 getInstance().callbackUrl,
                 UUID.randomUUID().toString(),
+                locale,
                 body
             ).enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -640,18 +650,23 @@ class XLogin private constructor(
          *
          * @param username user's username
          * @param callback status callback
+         * @param locale Language of the email sent after this call in the <language code>_<country code> format where language code is language code in the ISO 639-1 format, country code is country/region code in the ISO 3166-1 alpha-2 format.
+         *
          * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/general/reset-password)
          */
         @JvmStatic
+        @JvmOverloads
         fun resetPassword(
             username: String?,
-            callback: ResetPasswordCallback
+            callback: ResetPasswordCallback,
+            locale: String? = null
         ) {
             val resetPasswordBody = ResetPasswordBody(username!!)
             getInstance().loginApi
                 .resetPassword(
                     getInstance().projectId,
                     getInstance().callbackUrl,
+                    locale,
                     resetPasswordBody
                 )
                 .enqueue(object : Callback<Void?> {

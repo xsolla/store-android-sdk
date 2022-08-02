@@ -1,6 +1,7 @@
 package com.xsolla.android.login
 
 import com.xsolla.android.login.callback.RegisterCallback
+import com.xsolla.android.login.callback.ResendAccountConfirmationEmailCallback
 import com.xsolla.android.login.util.TestUtils.initLoggedOut
 import com.xsolla.android.login.util.TestUtils.initSdkOauth
 import org.junit.Assert
@@ -36,6 +37,75 @@ class RegistrationTests {
                 }
             }
         )
+        latch.await()
+        Assert.assertFalse(error)
+    }
+
+    @Test
+    fun registerOauthWithLocale_Success() {
+        initSdkOauth()
+        initLoggedOut()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        XLogin.register(
+            UUID.randomUUID().toString(),
+            "${UUID.randomUUID()}@gmail.com",
+            UUID.randomUUID().toString(),
+            object : RegisterCallback {
+                override fun onSuccess() {
+                    latch.countDown()
+                }
+
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    error = true
+                    latch.countDown()
+                }
+            },
+            locale = "zh_CN"
+        )
+        latch.await()
+        Assert.assertFalse(error)
+    }
+
+    @Test
+    fun resendAccountConfirmationEmail_Success() {
+        initSdkOauth()
+        initLoggedOut()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        XLogin.resendAccountConfirmationEmail(username, object : ResendAccountConfirmationEmailCallback {
+            override fun onSuccess() {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                error = true
+                latch.countDown()
+            }
+        })
+        latch.await()
+        Assert.assertFalse(error)
+    }
+
+    @Test
+    fun resendAccountConfirmationEmailWithLocale_Success() {
+        initSdkOauth()
+        initLoggedOut()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        XLogin.resendAccountConfirmationEmail(username, object : ResendAccountConfirmationEmailCallback {
+            override fun onSuccess() {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                error = true
+                latch.countDown()
+            }
+        }, locale = "zh_CN")
         latch.await()
         Assert.assertFalse(error)
     }
