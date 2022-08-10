@@ -28,7 +28,7 @@ class VmAttributesPage : ViewModel() {
     var virtualCurrency: VirtualBalanceResponse.Item? = null
 
     fun loadAllAttributes() {
-        XLogin.getUsersAttributesFromClient(null, DemoCredentialsManager.projectId, null, true, object : GetUsersAttributesCallback {
+        XLogin.getUsersAttributesFromClient(null, null, null, true, object : GetUsersAttributesCallback {
             override fun onSuccess(data: List<UserAttribute>) {
                _readOnlyItems.value = data.toUiEntity()
             }
@@ -37,7 +37,7 @@ class VmAttributesPage : ViewModel() {
                 updateError(throwable, errorMessage)
             }
         })
-        XLogin.getUsersAttributesFromClient(null, DemoCredentialsManager.projectId, null, false, object : GetUsersAttributesCallback {
+        XLogin.getUsersAttributesFromClient(null, null, null, false, object : GetUsersAttributesCallback {
             override fun onSuccess(data: List<UserAttribute>) {
                 _editableItems.value = data.toUiEntity()
             }
