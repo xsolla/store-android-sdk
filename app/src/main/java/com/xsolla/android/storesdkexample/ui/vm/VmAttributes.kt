@@ -49,7 +49,7 @@ class VmAttributesPage : ViewModel() {
     }
 
     fun deleteAttribute(attribute: UserAttributeUiEntity, onSuccess: () -> Unit = {}) {
-        XLogin.updateUsersAttributesFromClient(null, DemoCredentialsManager.projectId, listOf(attribute.key), object : UpdateUsersAttributesCallback {
+        XLogin.updateUsersAttributesFromClient(null, null, listOf(attribute.key), object : UpdateUsersAttributesCallback {
             override fun onSuccess() {
                 val updatedList = _editableItems.value!!.toMutableList().apply { remove(attribute) }
                 _editableItems.value = updatedList
@@ -64,7 +64,7 @@ class VmAttributesPage : ViewModel() {
     }
 
     fun saveAttribute(attribute: UserAttributeUiEntity, isEdit: Boolean, onSuccess: () -> Unit = {}) {
-        XLogin.updateUsersAttributesFromClient(listOf(UserAttribute(attribute.key, attribute.permission, attribute.value)), DemoCredentialsManager.projectId, null, object : UpdateUsersAttributesCallback {
+        XLogin.updateUsersAttributesFromClient(listOf(UserAttribute(attribute.key, attribute.permission, attribute.value)), null, null, object : UpdateUsersAttributesCallback {
             override fun onSuccess() {
                 if (isEdit) {
                     _editableItems.value = _editableItems.value!!.toMutableList().apply {
@@ -99,7 +99,7 @@ class VmAttributesPage : ViewModel() {
             removeAt(position)
         }
 
-        XLogin.updateUsersAttributesFromClient(null, DemoCredentialsManager.projectId, listOf(item.key), object : UpdateUsersAttributesCallback {
+        XLogin.updateUsersAttributesFromClient(null, null, listOf(item.key), object : UpdateUsersAttributesCallback {
             override fun onSuccess() {
 
             }
