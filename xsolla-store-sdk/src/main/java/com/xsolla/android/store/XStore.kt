@@ -59,6 +59,7 @@ class XStore private constructor(
             return instance!!
         }
 
+        //textreview
         /**
          * Initialize SDK
          *
@@ -71,6 +72,7 @@ class XStore private constructor(
             initInternal(projectId, token)
         }
 
+        //textreview
         /**
          * Set authentication token
          *
