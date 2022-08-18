@@ -59,18 +59,38 @@ class XStore private constructor(
             return instance!!
         }
 
+        //textreview
         /**
          * Initialize SDK
          *
-         * @param projectId      Project ID from Publisher Account
-         * @param token  Xsolla Login token or Xsolla Paystation access token
+         * @param projectId Project ID from Publisher Account
+         * @param token Xsolla Login token
          */
         @JvmStatic
-        fun init(projectId: Int, token: String) {
+        @JvmOverloads
+        fun init(projectId: Int, token: String? = null) {
+            initInternal(projectId, token)
+        }
+
+        //textreview
+        /**
+         * Set authentication token
+         *
+         * @param token Xsolla Login token
+          */
+        @JvmStatic
+        fun setAuthToken(token: String) {
+            initInternal(getInstance().projectId, token)
+        }
+
+        private fun initInternal(projectId: Int, token: String?) {
             val interceptor = Interceptor { chain ->
                 val originalRequest = chain.request()
                 val builder = originalRequest.newBuilder()
-                    .addHeader("Authorization", "Bearer $token")
+                if (token != null) {
+                    builder.addHeader("Authorization", "Bearer $token")
+                }
+                builder
                     .addHeader("X-ENGINE", "ANDROID")
                     .addHeader("X-ENGINE-V", Build.VERSION.RELEASE)
                     .addHeader("X-SDK", "STORE")
