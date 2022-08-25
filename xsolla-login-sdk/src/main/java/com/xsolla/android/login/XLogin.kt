@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import androidx.annotation.IntRange
 import androidx.fragment.app.Fragment
@@ -21,7 +23,11 @@ import com.xsolla.android.login.token.TokenUtils
 import com.xsolla.android.login.unity.UnityProxyActivity
 import com.xsolla.android.login.util.EngineUtils
 import com.xsolla.android.login.util.Utils
+import com.xsolla.lib_login.XLoginApi
+import com.xsolla.lib_login.entity.request.PasswordAuthBody
+import kotlinx.coroutines.runBlocking
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -113,7 +119,7 @@ class XLogin private constructor(
                     .addHeader("X-SDK-V", BuildConfig.VERSION_NAME)
                     .addHeader("X-GAMEENGINE-SPEC", EngineUtils.engineSpec)
                     .url(
-                        originalRequest.url().newBuilder()
+                        originalRequest.url.newBuilder()
                             .addQueryParameter("engine", "android")
                             .addQueryParameter("engine_v", Build.VERSION.RELEASE)
                             .addQueryParameter("sdk", "login")
@@ -180,37 +186,63 @@ class XLogin private constructor(
             password: String,
             callback: AuthCallback
         ) {
-            val oauthAuthUserBody = OauthAuthUserBody(username, password)
-            getInstance().loginApi
-                .oauthLogin(getInstance().oauthClientId, "offline", oauthAuthUserBody)
-                .enqueue(object : Callback<OauthAuthResponse?> {
-                    override fun onResponse(
-                        call: Call<OauthAuthResponse?>,
-                        response: Response<OauthAuthResponse?>
-                    ) {
-                        if (response.isSuccessful) {
-                            val oauthAuthResponse = response.body()
-                            if (oauthAuthResponse != null) {
-                                val accessToken = oauthAuthResponse.accessToken
-                                val refreshToken = oauthAuthResponse.refreshToken
-                                val expiresIn = oauthAuthResponse.expiresIn
-                                getInstance().tokenUtils.oauthAccessToken = accessToken
-                                getInstance().tokenUtils.oauthRefreshToken = refreshToken
-                                getInstance().tokenUtils.oauthExpireTimeUnixSec =
-                                    System.currentTimeMillis() / 1000 + expiresIn
-                                callback.onSuccess()
-                            } else {
-                                callback.onError(null, "Empty response")
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+            Thread {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.oauthLogin(
+                            getInstance().oauthClientId,
+                            "offline",
+                            PasswordAuthBody(username, password)
+                        )
+                        val accessToken = res.accessToken
+                        val refreshToken = res.refreshToken
+                        val expiresIn = res.expiresIn
+                        getInstance().tokenUtils.oauthAccessToken = accessToken
+                        getInstance().tokenUtils.oauthRefreshToken = refreshToken
+                        getInstance().tokenUtils.oauthExpireTimeUnixSec =
+                            System.currentTimeMillis() / 1000 + expiresIn
+                        Handler(Looper.getMainLooper()).post {
+                            callback.onSuccess()
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Handler(Looper.getMainLooper()).post {
+                            callback.onError(e, null)
                         }
                     }
-
-                    override fun onFailure(call: Call<OauthAuthResponse?>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }.start()
+//            val oauthAuthUserBody = OauthAuthUserBody(username, password)
+//            getInstance().loginApi
+//                .oauthLogin(getInstance().oauthClientId, "offline", oauthAuthUserBody)
+//                .enqueue(object : Callback<OauthAuthResponse?> {
+//                    override fun onResponse(
+//                        call: Call<OauthAuthResponse?>,
+//                        response: Response<OauthAuthResponse?>
+//                    ) {
+//                        if (response.isSuccessful) {
+//                            val oauthAuthResponse = response.body()
+//                            if (oauthAuthResponse != null) {
+//                                val accessToken = oauthAuthResponse.accessToken
+//                                val refreshToken = oauthAuthResponse.refreshToken
+//                                val expiresIn = oauthAuthResponse.expiresIn
+//                                getInstance().tokenUtils.oauthAccessToken = accessToken
+//                                getInstance().tokenUtils.oauthRefreshToken = refreshToken
+//                                getInstance().tokenUtils.oauthExpireTimeUnixSec =
+//                                    System.currentTimeMillis() / 1000 + expiresIn
+//                                callback.onSuccess()
+//                            } else {
+//                                callback.onError(null, "Empty response")
+//                            }
+//                        } else {
+//                            callback.onError(null, getErrorMessage(response.errorBody()))
+//                        }
+//                    }
+//
+//                    override fun onFailure(call: Call<OauthAuthResponse?>, t: Throwable) {
+//                        callback.onError(t, null)
+//                    }
+//                })
         }
 
         /**
@@ -1225,7 +1257,7 @@ class XLogin private constructor(
             val part = MultipartBody.Part.createFormData(
                 "picture",
                 file.name,
-                RequestBody.create(MediaType.parse("image/*"), file)
+                RequestBody.create("image/*".toMediaTypeOrNull(), file)
             )
             getInstance().loginApi
                 .uploadUserPicture("Bearer $token", part)
