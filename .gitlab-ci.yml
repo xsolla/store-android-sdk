@@ -75,30 +75,30 @@ build:
     paths:
       - .gradle/*
 
-lint:
-  tags:
-    - devops
-  stage: lint
-  script:
-    - ./gradlew lint
-  artifacts:
-    expire_in: 24 hours
-    paths:
-      - app/build/reports/
-      - app-core/build/reports/
-      - xsolla-googleplay-sdk/build/reports/
-      - xsolla-inventory-sdk/build/reports/
-      - xsolla-login-sdk/build/reports/
-      - xsolla-login-sdk-facebook/build/reports/
-      - xsolla-login-sdk-google/build/reports/
-      - xsolla-login-sdk-qq/build/reports/
-      - xsolla-login-sdk-wechat/build/reports/
-      - xsolla-payments-sdk/build/reports/
-      - xsolla-store-sdk/build/reports/
-  cache:
-    key: ${CI_PROJECT_ID}
-    paths:
-      - .gradle/*
+#lint:
+#  tags:
+#    - devops
+#  stage: lint
+#  script:
+#    - ./gradlew lint
+#  artifacts:
+#    expire_in: 24 hours
+#    paths:
+#      - app/build/reports/
+#      - app-core/build/reports/
+#      - xsolla-googleplay-sdk/build/reports/
+#      - xsolla-inventory-sdk/build/reports/
+#      - xsolla-login-sdk/build/reports/
+#      - xsolla-login-sdk-facebook/build/reports/
+#      - xsolla-login-sdk-google/build/reports/
+#      - xsolla-login-sdk-qq/build/reports/
+#      - xsolla-login-sdk-wechat/build/reports/
+#      - xsolla-payments-sdk/build/reports/
+#      - xsolla-store-sdk/build/reports/
+#  cache:
+#    key: ${CI_PROJECT_ID}
+#    paths:
+#      - .gradle/*
 
 #dependency check:
 #  tags:
@@ -126,62 +126,62 @@ lint:
 #    paths:
 #      - .gradle/*
 
-Inventory Test:
-  tags:
-    - devops
-  stage: test
-  script:
-    - ./gradlew :xsolla-inventory-sdk:setupTestVariables && ./gradlew :xsolla-inventory-sdk:test
-  artifacts:
-    when: always
-    expire_in: 24 hours
-    paths:
-      - xsolla-inventory-sdk/build/reports/
-    reports:
-      junit:
-        - xsolla-inventory-sdk/build/test-results/testReleaseUnitTest/TEST-*.xml
-  cache:
-    key: ${CI_PROJECT_ID}
-    paths:
-      - .gradle/*
+#Inventory Test:
+#  tags:
+#    - devops
+#  stage: test
+#  script:
+#    - ./gradlew :xsolla-inventory-sdk:setupTestVariables && ./gradlew :xsolla-inventory-sdk:test
+#  artifacts:
+#    when: always
+#    expire_in: 24 hours
+#    paths:
+#      - xsolla-inventory-sdk/build/reports/
+#    reports:
+#      junit:
+#        - xsolla-inventory-sdk/build/test-results/testReleaseUnitTest/TEST-*.xml
+#  cache:
+#    key: ${CI_PROJECT_ID}
+#    paths:
+#      - .gradle/*
 
-Login Test:
-  tags:
-    - devops
-  stage: test
-  script:
-    - ./gradlew :xsolla-login-sdk:setupTestVariables && ./gradlew :xsolla-login-sdk:test
-  artifacts:
-    when: always
-    expire_in: 24 hours
-    paths:
-      - xsolla-login-sdk/build/reports/
-    reports:
-      junit:
-        - xsolla-login-sdk/build/test-results/testReleaseUnitTest/TEST-*.xml
-  cache:
-    key: ${CI_PROJECT_ID}
-    paths:
-      - .gradle/*
+#Login Test:
+#  tags:
+#    - devops
+#  stage: test
+#  script:
+#    - ./gradlew :xsolla-login-sdk:setupTestVariables && ./gradlew :xsolla-login-sdk:test
+#  artifacts:
+#    when: always
+#    expire_in: 24 hours
+#    paths:
+#      - xsolla-login-sdk/build/reports/
+#    reports:
+#      junit:
+#        - xsolla-login-sdk/build/test-results/testReleaseUnitTest/TEST-*.xml
+#  cache:
+#    key: ${CI_PROJECT_ID}
+#    paths:
+#      - .gradle/*
 
-Store Test:
-  tags:
-    - devops
-  stage: test
-  script:
-    - ./gradlew :xsolla-store-sdk:setupTestVariables && ./gradlew :xsolla-store-sdk:test
-  artifacts:
-    when: always
-    expire_in: 24 hours
-    paths:
-      - xsolla-store-sdk/build/reports/
-    reports:
-      junit:
-        - xsolla-store-sdk/build/test-results/testReleaseUnitTest/TEST-*.xml
-  cache:
-    key: ${CI_PROJECT_ID}
-    paths:
-      - .gradle/*
+#Store Test:
+#  tags:
+#    - devops
+#  stage: test
+#  script:
+#    - ./gradlew :xsolla-store-sdk:setupTestVariables && ./gradlew :xsolla-store-sdk:test
+#  artifacts:
+#    when: always
+#    expire_in: 24 hours
+#    paths:
+#      - xsolla-store-sdk/build/reports/
+#    reports:
+#      junit:
+#        - xsolla-store-sdk/build/test-results/testReleaseUnitTest/TEST-*.xml
+#  cache:
+#    key: ${CI_PROJECT_ID}
+#    paths:
+#      - .gradle/*
 
 generateReleaseApp:
   tags:
