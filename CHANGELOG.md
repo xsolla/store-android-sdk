@@ -1,5 +1,35 @@
 # Changelog
 
+## [5.0.0] - Login SDK - 2022-09-06
+### Added
+- Consumer ProGuard rules
+- locale argument for methods triggering email sending
+### Changed
+- Social authentication error parsing fixed
+### Removed
+- JWT authentication
+
+## [2.1.0] - Store SDK - 2022-09-06
+### Added
+- Consumer ProGuard rules
+- Unauthenticated mode
+
+## [2.0.1] - Inventory SDK - 2022-09-06
+### Added
+- Consumer ProGuard rules
+
+## [1.0.3] - Payments SDK - 2022-09-06
+### Added
+- Consumer ProGuard rules
+
+## [2.1.1] - Demo Apps - 2022-09-06
+### Added
+- Demo user generation
+### Changed
+- Minor UI bugs fixed
+- Obfuscation and shrinking enabled
+
+
 ## [4.0.0] - Login SDK - 2022-07-04
 ### Changed
 - List of social networks available for linking is equal to the list of them for authentication
