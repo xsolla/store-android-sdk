@@ -20,7 +20,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-class RequestExecutor(
+internal class RequestExecutor(
     private val projectId: Int,
     private val inventoryApi: InventoryApi
 ) {

@@ -11,7 +11,6 @@ import com.xsolla.android.login.entity.response.UsersDevicesResponse
 import com.xsolla.android.login.util.TestUtils.initLoggedInByDeviceId
 import com.xsolla.android.login.util.TestUtils.initLoggedInByPassword
 import com.xsolla.android.login.util.TestUtils.initLoggedOut
-import com.xsolla.android.login.util.TestUtils.initSdkJwt
 import com.xsolla.android.login.util.TestUtils.initSdkOauth
 import org.junit.Assert
 import org.junit.Test
@@ -21,33 +20,6 @@ import java.util.concurrent.CountDownLatch
 
 @RunWith(RobolectricTestRunner::class)
 class AuthByDeviceIdTests {
-
-    @Test
-    fun authenticateViaDeviceIdJwt() {
-        initSdkJwt()
-        initLoggedOut()
-
-        val context: Context = ApplicationProvider.getApplicationContext()
-        Settings.Secure.putString(context.contentResolver, Settings.Secure.ANDROID_ID, deviceId)
-
-        val latch = CountDownLatch(1)
-        var error = false
-        XLogin.authenticateViaDeviceId(object : AuthViaDeviceIdCallback {
-            override fun onSuccess() {
-                latch.countDown()
-            }
-
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                error = true
-                latch.countDown()
-            }
-        })
-        latch.await()
-        Assert.assertFalse(error)
-        Assert.assertFalse(XLogin.token.isNullOrEmpty())
-        Assert.assertFalse(XLogin.canRefreshToken())
-        Assert.assertFalse(XLogin.isTokenExpired(60))
-    }
 
     @Test
     fun authenticateViaDeviceIdOauth() {
@@ -73,7 +45,7 @@ class AuthByDeviceIdTests {
         Assert.assertFalse(error)
         Assert.assertFalse(XLogin.token.isNullOrEmpty())
         Assert.assertTrue(XLogin.canRefreshToken())
-        Assert.assertFalse(XLogin.isTokenExpired(60))
+        Assert.assertFalse(XLogin.isTokenExpired())
     }
 
     @Test

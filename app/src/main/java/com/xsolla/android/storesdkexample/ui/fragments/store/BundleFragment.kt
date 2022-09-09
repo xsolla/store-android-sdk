@@ -37,6 +37,9 @@ class BundleFragment : BaseFragment(), PurchaseListener {
     private val vmGooglePlay: VmGooglePlay by activityViewModels()
 
     override fun getLayout(): Int = R.layout.fragment_bundle
+
+    override val toolbarOption: ToolbarOptions = ToolbarOptions(showBalance = false, showCart = false)
+
     override fun initUI() {
         bindBundleFields()
         bindBuyButton()

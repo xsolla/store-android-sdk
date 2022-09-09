@@ -7,94 +7,12 @@ import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
 
-interface LoginApi {
+internal interface LoginApi {
     //----------    Authentication      ----------
-
-    //
-    // Authentication
-    //
-    // JWT
-
-    @POST("/api/login")
-    fun login(
-        @Query("projectId") projectId: String,
-        @Query("login_url") loginUrl: String?,
-        @Query("payload") payload: String?,
-        @Query("with_logout") withLogout: String,
-        @Body authUserBody: AuthUserBody
-    ): Call<AuthResponse>
-
-    @POST("/api/login/device/{device_type}")
-    fun authViaDeviceId(
-        @Path("device_type") deviceType: String,
-        @Query("projectId") projectId: String,
-        @Query("payload") payload: String?,
-        @Query("with_logout") withLogout: String,
-        @Body loginByDeviceIdBody: AuthViaDeviceIdBody
-    ): Call<AuthViaIdResponse>
-
-    @POST("api/login/phone/confirm")
-    fun completeAuthByPhone(
-        @Query("projectId") projectId: String,
-        @Body completeAuthByPhoneBody: CompleteAuthByPhoneBody
-    ): Call<AuthResponse>
-
-    @POST("api/login/phone/request")
-    fun startAuthByPhone(
-        @Query("projectId") projectId: String,
-        @Query("login_url") loginUrl: String,
-        @Query("payload") payload: String?,
-        @Query("with_logout") withLogout: String,
-        @Body startAuthByPhoneBody: StartAuthByPhoneBody
-    ): Call<StartPasswordlessAuthResponse>
-
-    @POST("api/login/email/confirm")
-    fun completeAuthByEmail(
-        @Query("projectId") projectId: String,
-        @Body completeAuthByEmailBody: CompleteAuthByEmailBody
-    ): Call<AuthResponse>
-
-    @POST("api/login/email/request")
-    fun startAuthByEmail(
-        @Query("projectId") projectId: String,
-        @Query("login_url") loginUrl: String,
-        @Query("payload") payload: String?,
-        @Query("with_logout") withLogout: String,
-        @Body startAuthByEmailBody: StartAuthByEmailBody
-    ): Call<StartPasswordlessAuthResponse>
-
-    @GET("/api/social/{providerName}/login_url")
-    fun getLinkForSocialAuth(
-        @Path("providerName") providerName: String,
-        @Query("projectId") projectId: String,
-        @Query("login_url") loginUrl: String?,
-        @Query("fields") fields: List<String>?,
-        @Query("payload") payload: String?,
-        @Query("with_logout") withLogout: String
-    ): Call<LinkForSocialAuthResponse>
-
-    @POST("/api/social/{providerName}/login_with_token")
-    fun authViaAccessTokenOfSocialNetwork(
-        @Path("providerName") providerName: String,
-        @Query("projectId") projectId: String,
-        @Query("payload") payload: String?,
-        @Query("with_logout") withLogout: String,
-        @Body authUserSocialBody: AuthUserSocialBody
-    ): Call<AuthSocialResponse>
-
-    @POST("/api/user")
-    fun registerUser(
-        @Query("projectId") projectId: String,
-        @Query("login_url") loginUrl: String?,
-        @Query("payload") payload: String?,
-        @Body registerUserBody: RegisterUserBody
-    ): Call<Void>
-
 
     //Authentication
     //
     //OAuth 2.0
-
 
     @POST("/api/oauth2/login/token")
     fun oauthLogin(
@@ -183,16 +101,9 @@ interface LoginApi {
         @Query("scope") scope: String,
         @Query("state") state: String,
         @Query("redirect_uri") redirectUri: String,
+        @Query("locale") locale: String?,
         @Body body: OauthRegisterUserBody
     ): Call<Void>
-
-    @POST("/api/social/mobile/{providerName}/login_with_code")
-    fun loginSocialWithOauthCode(
-        @Path("providerName") providerName: String,
-        @Query("projectId") projectId: String,
-        @Query("with_logout") withLogout: String,
-        @Body authUserSocialWithCodeBody: AuthUserSocialWithCodeBody
-    ): Call<AuthSocialResponse>
 
     @GET("/api/oauth2/logout")
     fun oauthLogout(
@@ -202,29 +113,16 @@ interface LoginApi {
 
     //----------     Emails     ----------
 
-
-    // Emails
-    //
-    // JWT
-
-    @POST("/user/resend_confirmation_link")
-    fun resendAccountConfirmationEmail(
-        @Query("projectId") projectId: String,
-        @Query("login_url") loginUrl: String?,
-        @Query("payload") payload: String?,
-        @Body body: ResendAccountConfirmationEmailBody
-    ): Call<Void>
-
-
     // Emails
     //
     // OAuth 2.0
 
-    @POST("/oauth2/user/resend_confirmation_link")
+    @POST("/api/oauth2/user/resend_confirmation_link")
     fun oauthResendAccountConfirmationEmail(
         @Query("client_id") clientId: Int,
         @Query("redirect_uri") redirectUri: String?,
         @Query("state") state: String,
+        @Query("locale") locale: String?,
         @Body body: ResendAccountConfirmationEmailBody
     ): Call<Void>
 
@@ -238,6 +136,7 @@ interface LoginApi {
     fun resetPassword(
         @Query("projectId") projectId: String,
         @Query("login_url") loginUrl: String?,
+        @Query("locale") locale: String?,
         @Body resetPasswordBody: ResetPasswordBody
     ): Call<Void>
 
@@ -304,10 +203,6 @@ interface LoginApi {
         @Header("authorization") authHeader: String,
         @Path("id") id: Int
     ): Call<Void>
-
-    // User Account
-    //
-    // MFA
 
     //User Account
     //

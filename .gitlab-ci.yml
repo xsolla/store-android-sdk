@@ -12,7 +12,7 @@ include:
 variables:
   SAST_EXPERIMENTAL_FEATURES: "true"
 
-image: cimg/android:2022.01
+image: $CI_IMAGE
 
 stages:
   - generate_keystore
@@ -269,7 +269,7 @@ build doc:
     - /^v.*/
   script:
     - ./gradlew dokkaHtmlMultiModule
-    - cd build/dokka/htmlMultiModule/ && mv -- '-modules.html' index.html && zip -r ../../../build.zip *
+    - cd build/dokka/htmlMultiModule/ && zip -r ../../../build.zip *
   artifacts:
     expire_in: 24 hours
     paths:

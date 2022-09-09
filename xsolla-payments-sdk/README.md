@@ -8,38 +8,20 @@ Main features:
 * payment UI localized in 20 languages
 * purchase refund
 
+## Integration
 
-## Integration options
+Before you integrate the library, sign up to [Publisher Account](https://publisher.xsolla.com/signup?store_type=sdk) and set up a new project.
 
-The following integration options are available:
-<table>
-  <tr>
-   <td>
-<h3  style="text-align: center">
-<img src="https://i.imgur.com/3bdXcuv.png" width="50" >
-</h3>
-<h3 style="text-align: center">Use Xsolla servers</h3>
-   </td>
-   <td>
-<h3 style="text-align: center">
-<img src="https://i.imgur.com/eGmKMPX.png" width="50" >
-</h3>
-<h3 style="text-align: center">Use your server</h3>
-   </td>
-  </tr>
-  <tr>
-   <td>Choose this option if you want a ready-made server solution for monetization and in-game items management. After integration of the SDK, you can use <a href="https://developers.xsolla.com/doc/login/">Xsolla Login</a>, <a href="https://developers.xsolla.com/doc/in-game-store/">In-Game Store</a>, <a href="https://developers.xsolla.com/doc/in-game-store/features/player-inventory/">Player Inventory</a>, and <a href="https://developers.xsolla.com/doc/pay-station/">Xsolla Pay Station</a>.
-   </td>
-   <td>Choose this option if you have already implemented the game logic for authentication, in-game store, and player inventory on your servers and want to use <a href="https://developers.xsolla.com/doc/pay-station/">Xsolla Pay Station</a>.
-   </td>
-  </tr>
-  <tr>
-   <td><a href="https://developers.xsolla.com/sdk/android/payments/use-xsolla-servers/">Get started →</a> 
-   </td>
-   <td><a href="https://developers.xsolla.com/sdk/android/payments/use-your-server-side/">Get started →</a>
-   </td>
-  </tr>
-</table>
+The library is available in [Maven Central](https://search.maven.org/artifact/com.xsolla.android/payments). To install it, add the following line to the dependencies section where `<version_number>` is the required version of the Payments library:
+
+```
+implementation 'com.xsolla.android:payments:<version_number>'
+```
+
+
+More instructions are on the [Xsolla Developers portal](https://developers.xsolla.com/sdk/android/payments/).
+
+
 
 ## Usage
 

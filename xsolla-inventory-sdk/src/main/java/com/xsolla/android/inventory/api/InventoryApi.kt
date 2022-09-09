@@ -7,7 +7,7 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
-interface InventoryApi {
+internal interface InventoryApi {
 
     //----------     Player Inventory     ----------
 
@@ -29,7 +29,7 @@ interface InventoryApi {
             @Query("platform") platform: String
     ): Call<VirtualBalanceResponse>
 
-    @GET("api/v2/project/{project_id}/user/subscriptions")
+    @GET("api/v2/project/{project_id}/user/time_limited_items")
     fun getTimeLimitedItems(
             @Path("project_id") projectId: Int,
             @Query("platform") platform: String

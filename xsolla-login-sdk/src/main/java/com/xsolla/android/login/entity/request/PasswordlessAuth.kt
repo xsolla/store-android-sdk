@@ -2,7 +2,7 @@ package com.xsolla.android.login.entity.request
 
 import com.google.gson.annotations.SerializedName
 
-data class StartAuthByPhoneBody(
+internal data class StartAuthByPhoneBody(
     @SerializedName("link_url")
     val linkUrl: String?,
     @SerializedName("phone_number")
@@ -11,7 +11,7 @@ data class StartAuthByPhoneBody(
     val sendLink: Boolean
 )
 
-data class CompleteAuthByPhoneBody(
+internal data class CompleteAuthByPhoneBody(
     @SerializedName("code")
     val code: String,
     @SerializedName("operation_id")
@@ -20,7 +20,7 @@ data class CompleteAuthByPhoneBody(
     val phoneNumber: String
 )
 
-data class StartAuthByEmailBody(
+internal data class StartAuthByEmailBody(
     @SerializedName("link_url")
     val linkUrl: String?,
     val email: String,
@@ -28,7 +28,7 @@ data class StartAuthByEmailBody(
     val sendLink: Boolean
 )
 
-data class CompleteAuthByEmailBody(
+internal data class CompleteAuthByEmailBody(
     @SerializedName("code")
     val code: String,
     @SerializedName("operation_id")

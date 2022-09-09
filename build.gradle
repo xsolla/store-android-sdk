@@ -2,15 +2,15 @@
 
 buildscript {
 
-    ext.payments_sdk_version_name = '1.0.2'
-    ext.store_sdk_version_name = '2.0.0'
-    ext.inventory_sdk_version_name = '2.0.0'
-    ext.login_sdk_version_name = '4.0.0'
+    ext.payments_sdk_version_name = '1.0.3'
+    ext.store_sdk_version_name = '2.1.0'
+    ext.inventory_sdk_version_name = '2.0.1'
+    ext.login_sdk_version_name = '5.0.0'
 
     ext.googleplay_sdk_version_name = "0.0.1"
 
-    ext.sample_app_version_name = '2.1.0'
-    ext.sample_app_version_code = 27
+    ext.sample_app_version_name = '2.1.1'
+    ext.sample_app_version_code = 28
 
     ext.sdk_min = 21
     ext.sdk_target = 31
@@ -35,7 +35,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:7.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.4.2"
-        classpath 'org.jetbrains.dokka:dokka-gradle-plugin:1.4.20'
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$kotlin_version"
         classpath 'org.owasp:dependency-check-gradle:6.4.1.1'
     }
 }

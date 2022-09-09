@@ -3,7 +3,7 @@ package com.xsolla.android.store.entity.request.payment
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 
-class CreateCartOrderRequestBody private constructor(
+internal class CreateCartOrderRequestBody private constructor(
     val currency: String,
     val locale: String,
     val sandbox: Boolean,

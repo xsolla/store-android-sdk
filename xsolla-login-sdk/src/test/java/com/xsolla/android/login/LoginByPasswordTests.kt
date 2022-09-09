@@ -1,7 +1,10 @@
 package com.xsolla.android.login
 
 import com.xsolla.android.login.callback.AuthCallback
-import com.xsolla.android.login.util.TestUtils
+import com.xsolla.android.login.callback.ResetPasswordCallback
+import com.xsolla.android.login.util.TestUtils.initLoggedInByPassword
+import com.xsolla.android.login.util.TestUtils.initLoggedOut
+import com.xsolla.android.login.util.TestUtils.initSdkOauth
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,8 +16,8 @@ class LoginByPasswordTests {
 
     @Test
     fun loginOauth_Success() {
-        TestUtils.initSdkOauth()
-        TestUtils.initLoggedOut()
+        initSdkOauth()
+        initLoggedOut()
 
         val latch = CountDownLatch(1)
         var error = false
@@ -35,54 +38,8 @@ class LoginByPasswordTests {
 
     @Test
     fun loginOauth_Fail() {
-        TestUtils.initSdkOauth()
-        TestUtils.initLoggedOut()
-
-        val latch = CountDownLatch(1)
-        var error = false
-        var msg: String? = null
-        XLogin.login(username, password + password, object : AuthCallback {
-            override fun onSuccess() {
-                latch.countDown()
-            }
-
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                error = true
-                msg = errorMessage
-                latch.countDown()
-            }
-        })
-        latch.await()
-        Assert.assertTrue(error)
-        Assert.assertEquals("Wrong username or password.", msg)
-    }
-
-    @Test
-    fun loginJwt_Success() {
-        TestUtils.initSdkJwt()
-        TestUtils.initLoggedOut()
-
-        val latch = CountDownLatch(1)
-        var error = false
-        XLogin.login(username, password, object : AuthCallback {
-            override fun onSuccess() {
-                latch.countDown()
-            }
-
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                error = true
-                latch.countDown()
-            }
-        })
-        latch.await()
-        Assert.assertFalse(error)
-        Assert.assertNotNull(XLogin.token)
-    }
-
-    @Test
-    fun loginJwt_Fail() {
-        TestUtils.initSdkJwt()
-        TestUtils.initLoggedOut()
+        initSdkOauth()
+        initLoggedOut()
 
         val latch = CountDownLatch(1)
         var error = false
@@ -105,8 +62,8 @@ class LoginByPasswordTests {
 
     @Test
     fun logoutOauth_Success() {
-        TestUtils.initSdkOauth()
-        TestUtils.initLoggedInByPassword()
+        initSdkOauth()
+        initLoggedInByPassword()
 
         Assert.assertNotNull(XLogin.token)
         XLogin.logout()
@@ -114,13 +71,45 @@ class LoginByPasswordTests {
     }
 
     @Test
-    fun logoutJwt_Success() {
-        TestUtils.initSdkJwt()
-        TestUtils.initLoggedInByPassword()
+    fun resetPassword_Success() {
+        initSdkOauth()
+        initLoggedOut()
 
-        Assert.assertNotNull(XLogin.token)
-        XLogin.logout()
-        Assert.assertNull(XLogin.token)
+        val latch = CountDownLatch(1)
+        var error = false
+        XLogin.resetPassword(username, object : ResetPasswordCallback {
+            override fun onSuccess() {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                error = true
+                latch.countDown()
+            }
+        })
+        latch.await()
+        Assert.assertFalse(error)
+    }
+
+    @Test
+    fun resetPasswordWithLocale_Success() {
+        initSdkOauth()
+        initLoggedOut()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        XLogin.resetPassword(username, object : ResetPasswordCallback {
+            override fun onSuccess() {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                error = true
+                latch.countDown()
+            }
+        }, "zh_CN")
+        latch.await()
+        Assert.assertFalse(error)
     }
 
 }

@@ -1,12 +1,11 @@
 package com.xsolla.android.login
 
 class LoginConfig private constructor(
-    val projectId: String,
-    val oauthClientId: Int,
-    val socialConfig: XLogin.SocialConfig? = null,
-    val useOauth: Boolean,
-    val redirectScheme: String?,
-    val redirectHost: String?
+    internal val projectId: String,
+    internal val oauthClientId: Int,
+    internal val socialConfig: XLogin.SocialConfig? = null,
+    internal val redirectScheme: String?,
+    internal val redirectHost: String?
 ) {
     class OauthBuilder {
         private var projectId: String? = null
@@ -53,46 +52,9 @@ class LoginConfig private constructor(
                 projectId!!,
                 oauthClientId!!,
                 socialConfig,
-                true,
                 redirectScheme,
                 redirectHost
             )
-        }
-    }
-
-    class JwtBuilder {
-        private var projectId: String? = null
-        private var socialConfig: XLogin.SocialConfig? = null
-
-        private var redirectScheme: String? = null
-        private var redirectHost: String? = null
-
-        fun setProjectId(projectId: String): JwtBuilder {
-            this.projectId = projectId
-            return this
-        }
-
-        fun setSocialConfig(socialConfig: XLogin.SocialConfig): JwtBuilder {
-            this.socialConfig = socialConfig
-            return this
-        }
-
-        fun setRedirectUriScheme(redirectScheme: String): JwtBuilder {
-            this.redirectScheme = redirectScheme.lowercase()
-            return this
-        }
-
-        fun setRedirectUriHost(redirectHost: String): JwtBuilder {
-            this.redirectHost = redirectHost.lowercase()
-            return this
-        }
-
-        fun build(): LoginConfig {
-            if (projectId == null) {
-                throw IllegalStateException("Project ID is required for initialization Xsolla Login")
-            }
-
-            return LoginConfig(projectId!!, 0, socialConfig, false, redirectScheme, redirectHost)
         }
     }
 }

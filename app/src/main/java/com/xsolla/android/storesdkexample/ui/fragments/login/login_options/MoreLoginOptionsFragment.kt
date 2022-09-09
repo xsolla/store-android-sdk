@@ -1,14 +1,17 @@
 package com.xsolla.android.storesdkexample.ui.fragments.login.login_options
 
 import android.content.Intent
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.appcore.databinding.FragmentMoreLogInOptionsBinding
-import com.xsolla.android.login.XLogin
-import com.xsolla.android.login.callback.AuthCallback
-import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.StoreActivity
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
+import com.xsolla.android.storesdkexample.util.login.loginAsDemoUser
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MoreLoginOptionsFragment : BaseFragment() {
 
@@ -45,22 +48,22 @@ class MoreLoginOptionsFragment : BaseFragment() {
                 .commit()
         }
         binding.bnLoginAsDemoUser.setOnClickListener {
-            binding.bnLoginAsDemoUser.isEnabled = false
-
-            XLogin.login("xsolla", "xsolla", object : AuthCallback {
-                override fun onSuccess() {
-                    val intent = Intent(requireActivity(), StoreActivity::class.java)
-                    startActivity(intent)
-                    activity?.finish()
-                    binding.bnLoginAsDemoUser.isEnabled = true
+            binding.loader.isVisible = true
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    val error = loginAsDemoUser(requireContext())
+                    withContext(Dispatchers.Main) {
+                        binding.loader.isVisible = false
+                        if (error != null) {
+                            showSnack(error)
+                        } else {
+                            val intent = Intent(requireActivity(), StoreActivity::class.java)
+                            startActivity(intent)
+                            activity?.finish()
+                        }
+                    }
                 }
-
-                override fun onError(throwable: Throwable?, errorMessage: String?) {
-                    showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
-                    binding.bnLoginAsDemoUser.isEnabled = true
-                }
-
-            }, BuildConfig.WITH_LOGOUT)
+            }
         }
     }
 }

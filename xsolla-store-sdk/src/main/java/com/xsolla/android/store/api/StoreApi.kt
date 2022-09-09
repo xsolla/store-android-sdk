@@ -23,7 +23,7 @@ import com.xsolla.android.store.entity.response.payment.CreatePaymentTokenRespon
 import retrofit2.Call
 import retrofit2.http.*
 
-interface StoreApi {
+internal interface StoreApi {
 
     //----------     Cart & Payment     ----------
 

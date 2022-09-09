@@ -1,8 +1,8 @@
 package com.xsolla.android.login
 
 import com.xsolla.android.login.callback.RegisterCallback
+import com.xsolla.android.login.callback.ResendAccountConfirmationEmailCallback
 import com.xsolla.android.login.util.TestUtils.initLoggedOut
-import com.xsolla.android.login.util.TestUtils.initSdkJwt
 import com.xsolla.android.login.util.TestUtils.initSdkOauth
 import org.junit.Assert
 import org.junit.Test
@@ -14,10 +14,10 @@ import java.util.concurrent.CountDownLatch
 @RunWith(RobolectricTestRunner::class)
 class RegistrationTests {
 
-    //TODO check payload, acceptConsent, promoEmailAgreement and fail scenarios
+    //TODO check acceptConsent, promoEmailAgreement and fail scenarios
     @Test
-    fun registerJwt_Success() {
-        initSdkJwt()
+    fun registerOauth_Success() {
+        initSdkOauth()
         initLoggedOut()
 
         val latch = CountDownLatch(1)
@@ -42,7 +42,7 @@ class RegistrationTests {
     }
 
     @Test
-    fun registerOauth_Success() {
+    fun registerOauthWithLocale_Success() {
         initSdkOauth()
         initLoggedOut()
 
@@ -61,8 +61,51 @@ class RegistrationTests {
                     error = true
                     latch.countDown()
                 }
-            }
+            },
+            locale = "zh_CN"
         )
+        latch.await()
+        Assert.assertFalse(error)
+    }
+
+    @Test
+    fun resendAccountConfirmationEmail_Success() {
+        initSdkOauth()
+        initLoggedOut()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        XLogin.resendAccountConfirmationEmail(username, object : ResendAccountConfirmationEmailCallback {
+            override fun onSuccess() {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                error = true
+                latch.countDown()
+            }
+        })
+        latch.await()
+        Assert.assertFalse(error)
+    }
+
+    @Test
+    fun resendAccountConfirmationEmailWithLocale_Success() {
+        initSdkOauth()
+        initLoggedOut()
+
+        val latch = CountDownLatch(1)
+        var error = false
+        XLogin.resendAccountConfirmationEmail(username, object : ResendAccountConfirmationEmailCallback {
+            override fun onSuccess() {
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                error = true
+                latch.countDown()
+            }
+        }, locale = "zh_CN")
         latch.await()
         Assert.assertFalse(error)
     }

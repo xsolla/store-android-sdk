@@ -2,8 +2,7 @@ package com.xsolla.android.login.entity.request
 
 import com.google.gson.annotations.SerializedName
 
-
-data class LinkEmailPasswordBody(
+internal data class LinkEmailPasswordBody(
     val email: String,
     val password: String,
     @SerializedName("promo_email_agreement")

@@ -11,7 +11,7 @@ import android.webkit.WebViewClient
 import com.xsolla.android.payments.R
 import com.xsolla.android.payments.XPayments
 
-class ActivityPaystationWebView : ActivityPaystation() {
+internal class ActivityPaystationWebView : ActivityPaystation() {
 
     private lateinit var url: String
     private lateinit var webView: WebView

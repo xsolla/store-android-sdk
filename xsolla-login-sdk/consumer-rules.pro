@@ -1,0 +1,3 @@
+-keep class com.xsolla.android.login.entity.** {*;}
+-keep class com.xsolla.android.login.social.SocialNetwork {*;}
+-keep class com.xsolla.android.login.social.FriendsPlatform {*;}
