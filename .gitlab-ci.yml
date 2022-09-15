@@ -5,16 +5,14 @@ image: $CI_IMAGE
 
 stages:
   - build_doc
-  - deploy
-  - linking
 
 build doc:
   tags:
     - devops
   stage: build_doc
   script:
-    - ./gradlew dokkaHtmlMultiModule
-    - cd build/dokka/htmlMultiModule/ && zip -r ../../../build.zip *
+    - uname -r
+    - cat /etc/os-release
   artifacts:
     expire_in: 24 hours
     paths:
