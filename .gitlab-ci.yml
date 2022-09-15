@@ -11,10 +11,6 @@ build doc:
     - devops
   stage: build_doc
   script:
-    - sudo apt update
-    - sudo apt install nodejs
-    - node -v
-    - sudo apt install npm
     - ./gradlew dokkaHtmlMultiModule
     - ls build/dokka/htmlMultiModule -a
     - git clone https://$GITHUB_ACCESS_TOKEN@github.com/xsolla/sdk-reference-parser-android.git
@@ -26,7 +22,13 @@ build doc:
     - cd sdk-reference-parser-android
     - ls -a
     - ls src -a
-    - npm install
+    - sudo apt update
+    - sudo apt install nodejs
+    - node -v
+    - sudo apt install npm
+    - sudo npm cache clean -f
+    - sudo npm install -g n
+    - sudo n stable
     - npm start
     - ls dist -a
     - cd dist && zip -r $CI_PROJECT_DIR/build.zip * >/dev/null
