@@ -18,9 +18,10 @@ build doc:
     - mv -v build/dokka/htmlMultiModule/* sdk-reference-parser-android/src/
     - ls sdk-reference-parser-android/src -a
     - cd sdk-reference-parser-android
-    - sudo apt update && sudo apt upgrade
-    - curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-    - sudo apt install -y nodejs
+    - sudo apt update
+    - sudo apt-get install curl 
+    - curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash - 
+    - sudo apt install nodejs 
     - node -v
     - npm -v
     - npm install
