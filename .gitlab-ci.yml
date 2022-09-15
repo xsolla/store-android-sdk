@@ -12,15 +12,15 @@ build doc:
   stage: build_doc
   script:
     - ./gradlew dokkaHtmlMultiModule
+    - apk update && apk add nodejs npm
     - git clone https://$GITHUB_ACCESS_TOKEN@github.com/xsolla/sdk-reference-parser-android.git
     - mkdir -p sdk-reference-parser-android/src
     - mkdir -p sdk-reference-parser-android/dist
     - mv build/dokka/htmlMultiModule/ sdk-reference-parser-android/src
     - cd sdk-reference-parser-android
-    - ls -a
+    - ls src -a
     - npm install
     - npm start
-    - ls -a
     - ls dist -a
     - cd dist && zip -r $CI_PROJECT_DIR/build.zip * >/dev/null
     - ls $CI_PROJECT_DIR -a
