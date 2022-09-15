@@ -25,6 +25,8 @@ build doc:
     - node -v
     - npm -v
     - npm install
+    - ls -a
+    - ls src -a
     - npm start
     - ls dist -a
     - cd dist && zip -r $CI_PROJECT_DIR/build.zip * >/dev/null
