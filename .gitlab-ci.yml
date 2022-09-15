@@ -11,8 +11,19 @@ build doc:
     - devops
   stage: build_doc
   script:
-    - uname -r
-    - cat /etc/os-release
+    - ./gradlew dokkaHtmlMultiModule
+    - git clone https://$GITHUB_ACCESS_TOKEN@github.com/xsolla/sdk-reference-parser-android.git
+    - mkdir -p sdk-reference-parser-android/src
+    - mkdir -p sdk-reference-parser-android/dist
+    - mv build/dokka/htmlMultiModule/ sdk-reference-parser-android/src
+    - cd sdk-reference-parser-android
+    - ls -a
+    - npm install
+    - npm start
+    - ls -a
+    - ls dist -a
+    - cd dist && zip -r $CI_PROJECT_DIR/build.zip * >/dev/null
+    - ls $CI_PROJECT_DIR -a
   artifacts:
     expire_in: 24 hours
     paths:
