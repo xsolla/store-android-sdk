@@ -1,3 +1,8 @@
+include:
+  - project: 'sysadm-docker/ubuntu-sshclient'
+    ref:     'master'
+    file:    'gitlab-ci-template.yml'
+
 variables:
   SAST_EXPERIMENTAL_FEATURES: "true"
 
@@ -5,6 +10,8 @@ image: $CI_IMAGE
 
 stages:
   - build_doc
+  - deploy
+  - linking
 
 build doc:
   tags:
@@ -28,3 +35,35 @@ build doc:
     expire_in: 24 hours
     paths:
       - build.zip
+
+deploy doc:
+  stage: deploy
+  extends:      .deploy doc
+  only:
+    - /^v.*/
+  dependencies:
+    - build doc
+  environment:
+    name: doc/$CI_COMMIT_REF_SLUG
+    url: https://$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME.doc.srv.local/$URL_SLUG
+    on_stop: stop doc
+  when: manual
+
+current doc:
+  extends:      .current doc
+  only:
+    - /^v.*/
+  dependencies:
+    - deploy doc
+  environment:
+    name: doc/current
+    url: https://developers.xsolla.com/sdk-code-references/android-store
+
+stop doc:
+  extends:      .stop doc
+  environment:
+    name: doc/$CI_COMMIT_REF_SLUG
+    action: stop
+  only:
+    - /^v.*/
+  dependencies: []
