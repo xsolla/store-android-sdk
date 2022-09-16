@@ -17,6 +17,8 @@ build doc:
   tags:
     - devops
   stage: build_doc
+  only:
+    - /^v.*/
   script:
     - ./gradlew dokkaHtmlMultiModule
     - git clone https://$GITHUB_ACCESS_TOKEN@github.com/xsolla/sdk-reference-parser-android.git
