@@ -16,19 +16,13 @@ build doc:
     - mkdir -p sdk-reference-parser-android/src/htmlMultiModule
     - mkdir -p sdk-reference-parser-android/dist
     - mv -v build/dokka/htmlMultiModule/* sdk-reference-parser-android/src/htmlMultiModule
-    - ls sdk-reference-parser-android/src -a
     - cd sdk-reference-parser-android
     - sudo apt update
     - sudo apt-get install curl 
     - curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash - 
     - sudo apt install nodejs 
-    - node -v
-    - npm -v
     - npm install
-    - ls -a
-    - ls dist -a
     - npm start
-    - ls dist -a
     - cd dist && zip -r $CI_PROJECT_DIR/build.zip * >/dev/null
     - ls $CI_PROJECT_DIR -a
   artifacts:
