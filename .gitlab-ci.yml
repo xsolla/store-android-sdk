@@ -269,7 +269,19 @@ build doc:
     - /^v.*/
   script:
     - ./gradlew dokkaHtmlMultiModule
-    - cd build/dokka/htmlMultiModule/ && zip -r ../../../build.zip *
+    - git clone https://$GITHUB_ACCESS_TOKEN@github.com/xsolla/sdk-reference-parser-android.git
+    - mkdir -p sdk-reference-parser-android/src/htmlMultiModule
+    - mkdir -p sdk-reference-parser-android/dist
+    - mv -v build/dokka/htmlMultiModule/* sdk-reference-parser-android/src/htmlMultiModule
+    - cd sdk-reference-parser-android
+    - sudo apt update
+    - sudo apt-get install curl 
+    - curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash - 
+    - sudo apt install nodejs 
+    - npm install
+    - npm start
+    - mv -v dist/htmlMultiModule/* dist >/dev/null
+    - cd dist && zip -r $CI_PROJECT_DIR/build.zip * >/dev/null
   artifacts:
     expire_in: 24 hours
     paths:
