@@ -32,7 +32,7 @@ build doc:
     - sudo apt install nodejs 
     - npm install
     - npm start
-    - cd dist/htmlMultiModule && zip -r $CI_PROJECT_DIR/build.zip * >/dev/null
+    - cd dist && zip -r $CI_PROJECT_DIR/build.zip * >/dev/null
   artifacts:
     expire_in: 24 hours
     paths:
