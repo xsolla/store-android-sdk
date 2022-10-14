@@ -10,6 +10,9 @@ const val virtualCurrencyForOrderByCurrency = "gold"
 
 const val itemForCart = "airplane"
 
+const val itemWithDiscount = "premium_access"
+const val discountLimit = 6
+
 const val gameSku = "simgame"
 const val gameKey = "key1"
 
