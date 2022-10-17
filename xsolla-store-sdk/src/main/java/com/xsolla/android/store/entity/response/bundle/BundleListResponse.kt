@@ -3,6 +3,7 @@ package com.xsolla.android.store.entity.response.bundle
 import com.google.gson.annotations.SerializedName
 import com.xsolla.android.store.entity.response.common.Group
 import com.xsolla.android.store.entity.response.common.Price
+import com.xsolla.android.store.entity.response.common.Promotion
 import com.xsolla.android.store.entity.response.common.VirtualPrice
 
 data class BundleListResponse(val items: List<BundleItem> = emptyList())
@@ -25,7 +26,8 @@ data class BundleItem(
     val totalContentPrice: Price? = null,
     @SerializedName("virtual_prices")
     val virtualPrices: List<VirtualPrice> = emptyList(),
-    val content: List<BundleContent> = emptyList()
+    val content: List<BundleContent> = emptyList(),
+    val promotions: List<Promotion> = emptyList()
 )
 
 data class BundleContent(
