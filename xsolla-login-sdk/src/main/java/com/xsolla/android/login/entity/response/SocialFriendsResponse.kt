@@ -1,28 +1,44 @@
 package com.xsolla.android.login.entity.response
 
-import com.google.gson.annotations.SerializedName
 import com.xsolla.android.login.social.SocialNetwork
+import com.xsolla.android.login.social.fromLibSocialNetwork
 
 data class SocialFriendsResponse(
-    @SerializedName("data")
     val friendsList: List<SocialFriend>,
     val limit: Int,
     val offset: Int,
     val platform: SocialNetwork?,
-    @SerializedName("total_count")
     val totalCount: Int,
-    @SerializedName("with_xl_uid")
     val withXlUid: Boolean
 )
+
+internal fun fromLibSocialFriendsResponse(libResponse: com.xsolla.lib_login.entity.response.SocialFriendsResponse) =
+    SocialFriendsResponse(
+        friendsList = libResponse.friendsList.map {
+            fromLibSocialFriend(it)
+        },
+        limit = libResponse.limit,
+        offset = libResponse.offset,
+        platform = fromLibSocialNetwork(libResponse.platform),
+        totalCount = libResponse.totalCount,
+        withXlUid = libResponse.withXlUid ?: false
+    )
 
 data class SocialFriend(
     val avatar: String?,
     val name: String,
     val platform: SocialNetwork?,
-    @SerializedName("user_id")
     val socialNetworkUserId: String,
-    @SerializedName("xl_uid")
     val xsollaUserId: String?,
-    @SerializedName("tag")
     val tag: String?
 )
+
+internal fun fromLibSocialFriend(libSocialFriend: com.xsolla.lib_login.entity.response.SocialFriend) =
+    SocialFriend(
+        avatar = libSocialFriend.avatar,
+        name = libSocialFriend.name,
+        platform = fromLibSocialNetwork(libSocialFriend.platform),
+        socialNetworkUserId = libSocialFriend.socialNetworkUserId,
+        xsollaUserId = libSocialFriend.xsollaUserId,
+        tag = libSocialFriend.tag
+    )

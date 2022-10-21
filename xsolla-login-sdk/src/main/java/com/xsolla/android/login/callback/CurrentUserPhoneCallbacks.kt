@@ -2,12 +2,12 @@ package com.xsolla.android.login.callback
 
 import com.xsolla.android.login.entity.response.PhoneResponse
 
-interface GetCurrentUserPhoneCallback {
+interface GetCurrentUserPhoneCallback : BaseCallback {
     fun onSuccess(data: PhoneResponse)
-    fun onError(throwable: Throwable?, errorMessage: String?)
+    override fun onError(throwable: Throwable?, errorMessage: String?)
 }
 
-interface UpdateCurrentUserPhoneCallback {
+interface UpdateCurrentUserPhoneCallback: BaseCallback {
     fun onSuccess()
-    fun onError(throwable: Throwable?, errorMessage: String?)
+    override fun onError(throwable: Throwable?, errorMessage: String?)
 }
