@@ -1,6 +1,6 @@
 package com.xsolla.android.login.callback
 
-interface ResetPasswordCallback {
+interface ResetPasswordCallback: BaseCallback {
     fun onSuccess()
-    fun onError(throwable: Throwable?, errorMessage: String?)
+    override fun onError(throwable: Throwable?, errorMessage: String?)
 }

@@ -24,22 +24,22 @@ stages:
   - build_doc
   - deploy
   - linking
-
-generate android keystore:
-  tags:
-    - devops
-  stage: generate_keystore
-  script:
-    - echo $STORE_FILE | base64 -di > xsolla.keystore
-    - echo "keystorePath=../xsolla.keystore" > signing.properties
-    - echo "keystorePassword=$STORE_PASSWORD" >> signing.properties
-    - echo "keyAlias=$KEY_ALIAS" >> signing.properties
-    - echo "keyPassword=$KEY_PASSWORD" >> signing.properties
-  artifacts:
-    paths:
-      - xsolla.keystore
-      - signing.properties
-    expire_in: 2 hours
+#
+#generate android keystore:
+#  tags:
+#    - devops
+#  stage: generate_keystore
+#  script:
+#    - echo $STORE_FILE | base64 -di > xsolla.keystore
+#    - echo "keystorePath=../xsolla.keystore" > signing.properties
+#    - echo "keystorePassword=$STORE_PASSWORD" >> signing.properties
+#    - echo "keyAlias=$KEY_ALIAS" >> signing.properties
+#    - echo "keyPassword=$KEY_PASSWORD" >> signing.properties
+#  artifacts:
+#    paths:
+#      - xsolla.keystore
+#      - signing.properties
+#    expire_in: 2 hours
 
 generate maven keystore:
   tags:
@@ -65,11 +65,23 @@ build:
     - devops
   stage: build
   script:
+    - echo $STORE_FILE | base64 -di > xsolla.keystore
+    - echo "keystorePath=../xsolla.keystore" > signing.properties
+    - echo "keystorePassword=$STORE_PASSWORD" >> signing.properties
+    - echo "keyAlias=$KEY_ALIAS" >> signing.properties
+    - echo "keyPassword=$KEY_PASSWORD" >> signing.properties
     - ./gradlew assembleRelease
+    - mkdir -p artifacts
+    - touch ./artifacts/info.txt
+    - echo "Build date          $(date)"                >> ./artifacts/info.txt
+    - echo "Git tag             ${CI_COMMIT_REF_NAME}"  >> ./artifacts/info.txt
+    - echo "Git commit          ${CI_COMMIT_SHA}"       >> ./artifacts/info.txt
+    - echo "Gitlab pipeline     ${CI_PIPELINE_ID}"      >> ./artifacts/info.txt
+    - mv app/build/outputs/apk/release/app-release.apk ./artifacts/SampleApp-Default.apk
   artifacts:
-    expire_in: 2 hours
+    expire_in: 24 hours
     paths:
-      - app/build/outputs/
+      - artifacts
   cache:
     key: ${CI_PROJECT_ID}
     paths:
@@ -100,31 +112,32 @@ lint:
     paths:
       - .gradle/*
 
-#dependency check:
-#  tags:
-#    - devops
-#  stage: lint
-#  script:
-#    - echo $OWASP_SUPPRESS >> owasp-suppress.xml
-#    - ./gradlew dependencyCheckAnalyze
-#  artifacts:
-#    expire_in: 24 hours
-#    paths:
-#      - app/build/reports/
-#      - app-core/build/reports
-#      - xsolla-googleplay-sdk/build/reports/
-#      - xsolla-inventory-sdk/build/reports/
-#      - xsolla-login-sdk/build/reports/
-#      - xsolla-login-sdk-facebook/build/reports/
-#      - xsolla-login-sdk-google/build/reports/
-#      - xsolla-login-sdk-qq/build/reports/
-#      - xsolla-login-sdk-wechat/build/reports/
-#      - xsolla-payments-sdk/build/reports/
-#      - xsolla-store-sdk/build/reports/
-#  cache:
-#    key: ${CI_PROJECT_ID}
-#    paths:
-#      - .gradle/*
+dependency check:
+  allow_failure: true
+  tags:
+    - devops
+  stage: lint
+  script:
+    - echo $OWASP_SUPPRESS >> owasp-suppress.xml
+    - ./gradlew dependencyCheckAnalyze
+  artifacts:
+    expire_in: 24 hours
+    paths:
+      - app/build/reports/
+      - app-core/build/reports
+      - xsolla-googleplay-sdk/build/reports/
+      - xsolla-inventory-sdk/build/reports/
+      - xsolla-login-sdk/build/reports/
+      - xsolla-login-sdk-facebook/build/reports/
+      - xsolla-login-sdk-google/build/reports/
+      - xsolla-login-sdk-qq/build/reports/
+      - xsolla-login-sdk-wechat/build/reports/
+      - xsolla-payments-sdk/build/reports/
+      - xsolla-store-sdk/build/reports/
+  cache:
+    key: ${CI_PROJECT_ID}
+    paths:
+      - .gradle/*
 
 Inventory Test:
   tags:
@@ -183,23 +196,23 @@ Store Test:
     paths:
       - .gradle/*
 
-generateReleaseApp:
-  tags:
-    - devops
-  stage: publish
-  before_script:
-    - mkdir -p artifacts
-    - touch ./artifacts/info.txt
-    - echo "Build date          $(date)"                >> ./artifacts/info.txt
-    - echo "Git tag             ${CI_COMMIT_REF_NAME}"  >> ./artifacts/info.txt
-    - echo "Git commit          ${CI_COMMIT_SHA}"       >> ./artifacts/info.txt
-    - echo "Gitlab pipeline     ${CI_PIPELINE_ID}"      >> ./artifacts/info.txt
-  script:
-    - mv app/build/outputs/apk/release/app-release.apk ./artifacts/SampleApp-Default.apk
-  artifacts:
-    expire_in: 24 hours
-    paths:
-      - artifacts
+#generateReleaseApp:
+#  tags:
+#    - devops
+#  stage: publish
+#  before_script:
+#    - mkdir -p artifacts
+#    - touch ./artifacts/info.txt
+#    - echo "Build date          $(date)"                >> ./artifacts/info.txt
+#    - echo "Git tag             ${CI_COMMIT_REF_NAME}"  >> ./artifacts/info.txt
+#    - echo "Git commit          ${CI_COMMIT_SHA}"       >> ./artifacts/info.txt
+#    - echo "Gitlab pipeline     ${CI_PIPELINE_ID}"      >> ./artifacts/info.txt
+#  script:
+#    - mv app/build/outputs/apk/release/app-release.apk ./artifacts/SampleApp-Default.apk
+#  artifacts:
+#    expire_in: 24 hours
+#    paths:
+#      - artifacts
 
 publishLogin:
   tags:

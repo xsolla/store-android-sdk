@@ -2,7 +2,7 @@ package com.xsolla.android.login.callback
 
 import com.xsolla.android.login.entity.response.LinkEmailPasswordResponse
 
-interface LinkEmailPasswordCallback {
+interface LinkEmailPasswordCallback: BaseCallback {
     fun onSuccess(data: LinkEmailPasswordResponse)
-    fun onError(throwable: Throwable?, errorMessage: String?)
+    override fun onError(throwable: Throwable?, errorMessage: String?)
 }

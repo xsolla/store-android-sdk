@@ -1,11 +1,11 @@
 package com.xsolla.android.login.callback
 
-interface StartSocialCallback {
+interface StartSocialCallback: BaseCallback {
     fun onAuthStarted()
-    fun onError(throwable: Throwable?, errorMessage: String?)
+    override fun onError(throwable: Throwable?, errorMessage: String?)
 }
 
-interface StartSocialLinkingCallback {
+interface StartSocialLinkingCallback: BaseCallback {
     fun onLinkingStarted()
-    fun onError(throwable: Throwable?, errorMessage: String?)
+    override fun onError(throwable: Throwable?, errorMessage: String?)
 }

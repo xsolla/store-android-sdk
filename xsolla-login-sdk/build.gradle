@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'org.jetbrains.dokka'
     id "org.cyclonedx.bom" version "1.4.0"
+    id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlin_version" // for :lib-login-api code
 }
 
 android {
@@ -39,29 +40,42 @@ android {
             includeAndroidResources = true
         }
     }
+
+    // for :lib-login-api code
+    sourceSets {
+        main.java.srcDirs += '../lib-login-api/src/main/java'
+    }
 }
 
 dependencies {
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:$androidx_appcompat_version"
     implementation "androidx.core:core-ktx:$androidx_core_ktx"
     implementation "androidx.browser:browser:$androidx_browser"
+    implementation "com.google.code.gson:gson:2.9.1" // for JWT parser only
 
     testImplementation "junit:junit:$junit_version"
     testImplementation "org.robolectric:robolectric:$robolectric_version"
     testImplementation "androidx.test:core:$androidx_test_core"
     testImplementation 'com.facebook.android:facebook-login:14.0.0'
-    testImplementation 'com.google.android.gms:play-services-auth:20.2.0'
+    testImplementation 'com.google.android.gms:play-services-auth:20.3.0'
     testImplementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.19'
     testImplementation fileTree(dir: 'libs', include: ['*.jar'])
 
     compileOnly 'com.facebook.android:facebook-login:14.0.0'
-    compileOnly 'com.google.android.gms:play-services-auth:20.2.0'
+    compileOnly 'com.google.android.gms:play-services-auth:20.3.0'
     compileOnly 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.19'
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
+
+//    implementation project(":lib-login-api")
+    // for :lib-login-api code
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-okhttp:$ktor_version")
+//    implementation("io.ktor:ktor-client-logging:$ktor_version")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
 }
 
 dokkaHtmlPartial {

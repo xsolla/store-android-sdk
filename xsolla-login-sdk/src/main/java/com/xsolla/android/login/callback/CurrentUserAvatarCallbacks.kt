@@ -2,12 +2,12 @@ package com.xsolla.android.login.callback
 
 import com.xsolla.android.login.entity.response.PictureResponse
 
-interface DeleteCurrentUserAvatarCallback {
+interface DeleteCurrentUserAvatarCallback: BaseCallback {
     fun onSuccess()
-    fun onError(throwable: Throwable?, errorMessage: String?)
+    override fun onError(throwable: Throwable?, errorMessage: String?)
 }
 
-interface UploadCurrentUserAvatarCallback {
+interface UploadCurrentUserAvatarCallback: BaseCallback {
     fun onSuccess(data: PictureResponse)
-    fun onError(throwable: Throwable?, errorMessage: String?)
+    override fun onError(throwable: Throwable?, errorMessage: String?)
 }

@@ -1,21 +1,21 @@
 package com.xsolla.android.login.entity.response
 
-import com.google.gson.annotations.SerializedName
 import com.xsolla.android.login.social.SocialNetwork
+import com.xsolla.android.login.social.fromLibSocialNetwork
 
 data class LinkedSocialNetworkResponse(
-    @SerializedName("full_name")
     val fullName: String?,
-
-    @SerializedName("nickname")
     val nickname: String?,
-
-    @SerializedName("picture")
     val picture: String?,
-
-    @SerializedName("provider")
     val socialNetwork: SocialNetwork?,
-
-    @SerializedName("social_id")
     val socialId: String
 )
+
+internal fun fromLibLinkedSocialNetworkResponse(response: com.xsolla.lib_login.entity.response.LinkedSocialNetworkResponse) =
+    LinkedSocialNetworkResponse(
+        fullName = response.fullName,
+        nickname = response.nickname,
+        picture = response.picture,
+        socialNetwork = fromLibSocialNetwork(response.socialNetwork),
+        socialId = response.socialId
+    )
