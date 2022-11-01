@@ -13,15 +13,15 @@ buildscript {
     ext.sample_app_version_code = 28
 
     ext.sdk_min = 21
-    ext.sdk_target = 31
-    ext.sdk_compile = 31
+    ext.sdk_target = 33
+    ext.sdk_compile = 33
 
     ext.kotlin_version = '1.7.0'
     ext.retrofit_version = '2.9.0'
     ext.ktor_version = '2.1.0'
 
     ext.junit_version = '4.13.2'
-    ext.robolectric_version = '4.8.1'
+    ext.robolectric_version = '4.9'
     ext.androidx_test_core = '1.4.0'
 
     ext.androidx_appcompat_version = '1.4.2'
