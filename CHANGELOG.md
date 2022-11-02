@@ -1,5 +1,32 @@
 # Changelog
 
+## [5.0.1] - Login SDK - 2022-11-03
+### Changed
+- Migrated network layer from Retrofit to Ktor Client
+- Updated Target and Compile SDK to 33 (Android 13)
+- Updated WeChat SDK and removed Jcenter repository requirement
+
+## [2.2.0] - Store SDK - 2022-11-03
+### Changed
+- Updated Target and Compile SDK to 33 (Android 13)
+### Added
+- Promotions related fields for catalog responses
+
+## [2.0.2] - Inventory SDK - 2022-11-03
+### Changed
+- Updated Target and Compile SDK to 33 (Android 13)
+
+## [1.0.4] - Payments SDK - 2022-11-03
+### Changed
+- Updated Target and Compile SDK to 33 (Android 13)
+
+## [2.2.0] - Demo Apps - 2022-11-03
+### Added
+- Device ID auth
+### Changed
+- Updated Target and Compile SDK to 33 (Android 13)
+
+
 ## [5.0.0] - Login SDK - 2022-09-06
 ### Added
 - Consumer ProGuard rules
