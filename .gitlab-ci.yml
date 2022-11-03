@@ -21,7 +21,6 @@ stages:
   - test
   - report_upload
   - publish
-  - build_doc
   - deploy
   - linking
 #
@@ -277,9 +276,7 @@ publishPayments:
 build doc:
   tags:
     - devops
-  stage: build_doc
-  only:
-    - /^v.*/
+  stage: build
   script:
     - ./gradlew dokkaHtmlMultiModule
     - git clone https://$GITHUB_ACCESS_TOKEN@github.com/xsolla/sdk-reference-parser-android.git
@@ -325,11 +322,11 @@ current doc:
 
 stop doc:
   extends:      .stop doc
+  only:
+    - /^v.*/
   environment:
     name: doc/$CI_COMMIT_REF_SLUG
     action: stop
-  only:
-    - /^v.*/
   dependencies: []
 
 Login-dep-track:
