@@ -22,7 +22,7 @@
 
 ## [2.2.0] - Demo Apps - 2022-11-03
 ### Added
-- Device ID auth
+- Device ID login
 ### Changed
 - Updated Target and Compile SDK to 33 (Android 13)
 
