@@ -300,6 +300,8 @@ build doc:
 deploy doc:
   stage: deploy
   extends:      .deploy doc
+  only:
+    - /^v.*/
   dependencies:
     - build doc
   environment:
@@ -320,6 +322,8 @@ current doc:
 
 stop doc:
   extends:      .stop doc
+  only:
+    - /^v.*/
   environment:
     name: doc/$CI_COMMIT_REF_SLUG
     action: stop
