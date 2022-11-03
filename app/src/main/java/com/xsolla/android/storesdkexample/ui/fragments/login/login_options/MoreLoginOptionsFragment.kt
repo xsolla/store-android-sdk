@@ -5,6 +5,8 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.appcore.databinding.FragmentMoreLogInOptionsBinding
+import com.xsolla.android.login.XLogin
+import com.xsolla.android.login.callback.AuthViaDeviceIdCallback
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.StoreActivity
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
@@ -64,6 +66,24 @@ class MoreLoginOptionsFragment : BaseFragment() {
                     }
                 }
             }
+        }
+        binding.bnLoginWithDeviceId.setOnClickListener {
+            binding.loader.isVisible = true
+            XLogin.authenticateViaDeviceId(object : AuthViaDeviceIdCallback {
+                override fun onSuccess() {
+                    binding.loader.isVisible = false
+                    val intent = Intent(requireActivity(), StoreActivity::class.java)
+                    startActivity(intent)
+                    activity?.finish()
+                }
+
+                override fun onError(throwable: Throwable?, errorMessage: String?) {
+                    binding.loader.isVisible = false
+                    showSnack(
+                        errorMessage ?: throwable?.message ?: throwable?.javaClass?.name ?: "Error"
+                    )
+                }
+            })
         }
     }
 }

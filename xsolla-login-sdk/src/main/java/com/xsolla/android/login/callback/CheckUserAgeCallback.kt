@@ -1,6 +1,6 @@
 package com.xsolla.android.login.callback
 
-interface CheckUserAgeCallback {
+interface CheckUserAgeCallback: BaseCallback {
     fun onSuccess(accepted: Boolean)
-    fun onError(throwable: Throwable?, errorMessage: String?)
+    override fun onError(throwable: Throwable?, errorMessage: String?)
 }

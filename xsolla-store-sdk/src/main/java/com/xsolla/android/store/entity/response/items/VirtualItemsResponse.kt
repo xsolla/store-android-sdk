@@ -2,10 +2,7 @@ package com.xsolla.android.store.entity.response.items
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.xsolla.android.store.entity.response.common.Group
-import com.xsolla.android.store.entity.response.common.InventoryOption
-import com.xsolla.android.store.entity.response.common.Price
-import com.xsolla.android.store.entity.response.common.VirtualPrice
+import com.xsolla.android.store.entity.response.common.*
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 
@@ -29,6 +26,7 @@ data class VirtualItemsResponse(val items: List<Item> = emptyList()) {
         @SerializedName("inventory_options")
         val inventoryOption: InventoryOption? = null,
         @SerializedName("virtual_item_type")
-        val virtualItemType: String? = null
+        val virtualItemType: String? = null,
+        val promotions: List<Promotion> = emptyList()
     ) : Parcelable
 }

@@ -160,7 +160,7 @@ class LoginFragment : BaseFragment(), LoginBottomSheet.SocialClickListener {
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {
-                showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
+                showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
                 binding.loginButton.isEnabled = true
                 binding.moreLoginOptionsButton.isEnabled = true
             }

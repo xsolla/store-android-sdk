@@ -9,25 +9,23 @@ import android.os.Build
 import android.provider.Settings
 import androidx.annotation.IntRange
 import androidx.fragment.app.Fragment
-import com.xsolla.android.login.api.LoginApi
 import com.xsolla.android.login.callback.*
 import com.xsolla.android.login.entity.common.UserAttribute
-import com.xsolla.android.login.entity.request.*
+import com.xsolla.android.login.entity.common.mapAttributePermission
+import com.xsolla.android.login.entity.request.UpdateUserFriendsRequestAction
+import com.xsolla.android.login.entity.request.UserFriendsRequestSortBy
+import com.xsolla.android.login.entity.request.UserFriendsRequestSortOrder
+import com.xsolla.android.login.entity.request.UserFriendsRequestType
 import com.xsolla.android.login.entity.response.*
 import com.xsolla.android.login.social.FriendsPlatform
 import com.xsolla.android.login.social.LoginSocial
 import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.login.token.TokenUtils
 import com.xsolla.android.login.unity.UnityProxyActivity
-import com.xsolla.android.login.util.EngineUtils
-import com.xsolla.android.login.util.Utils
-import okhttp3.*
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.xsolla.android.login.util.*
+import com.xsolla.lib_login.XLoginApi
+import com.xsolla.lib_login.entity.request.*
+import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.util.*
 
@@ -40,14 +38,12 @@ class XLogin private constructor(
     private val callbackUrl: String,
     private val oauthClientId: Int,
     private val tokenUtils: TokenUtils,
-    private val loginApi: LoginApi,
     socialConfig: SocialConfig?
 ) {
 
     init {
         loginSocial.init(
             context.applicationContext,
-            loginApi,
             projectId,
             callbackUrl,
             tokenUtils,
@@ -74,8 +70,6 @@ class XLogin private constructor(
     }
 
     companion object {
-        private const val LOGIN_HOST = "https://login.xsolla.com"
-
         @SuppressLint("StaticFieldLeak")
         private var instance: XLogin? = null
         private val loginSocial = LoginSocial
@@ -104,36 +98,6 @@ class XLogin private constructor(
          */
         @JvmStatic
         fun init(context: Context, loginConfig: LoginConfig) {
-            val interceptor = Interceptor { chain ->
-                val originalRequest = chain.request()
-                val builder = originalRequest.newBuilder()
-                    .addHeader("X-ENGINE", "ANDROID")
-                    .addHeader("X-ENGINE-V", Build.VERSION.RELEASE)
-                    .addHeader("X-SDK", "LOGIN")
-                    .addHeader("X-SDK-V", BuildConfig.VERSION_NAME)
-                    .addHeader("X-GAMEENGINE-SPEC", EngineUtils.engineSpec)
-                    .url(
-                        originalRequest.url().newBuilder()
-                            .addQueryParameter("engine", "android")
-                            .addQueryParameter("engine_v", Build.VERSION.RELEASE)
-                            .addQueryParameter("sdk", "login")
-                            .addQueryParameter("sdk_v", BuildConfig.VERSION_NAME)
-                            .build()
-                    )
-                val newRequest = builder.build()
-                chain.proceed(newRequest)
-            }
-
-            val httpClient = OkHttpClient().newBuilder()
-            httpClient.addInterceptor(interceptor)
-
-            val retrofit = Retrofit.Builder()
-                .baseUrl(LOGIN_HOST)
-                .client(httpClient.build())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-
-            val loginApi = retrofit.create(LoginApi::class.java)
             val tokenUtils = TokenUtils(context)
 
             val callbackUrl = Uri.Builder()
@@ -142,7 +106,25 @@ class XLogin private constructor(
                 .build()
                 .toString()
 
-            Utils.init(loginApi, loginConfig.oauthClientId, callbackUrl)
+            Utils.init(loginConfig.oauthClientId, callbackUrl, tokenUtils)
+
+            val headers = mutableMapOf(
+                "X-ENGINE" to "ANDROID",
+                "X-ENGINE-V" to Build.VERSION.RELEASE,
+                "X-SDK" to "LOGIN",
+                "X-SDK-V" to BuildConfig.VERSION_NAME,
+            )
+            val params = mutableMapOf(
+                "engine" to "android",
+                "engine_v" to Build.VERSION.RELEASE,
+                "sdk" to "login",
+                "sdk_v" to BuildConfig.VERSION_NAME
+            )
+            if (EngineUtils.engineSpec.isNotEmpty()) {
+                headers["X-GAMEENGINE-SPEC"] = EngineUtils.engineSpec
+                params["gameengine_spec"] = EngineUtils.engineSpec
+            }
+            XLoginApi.init(headers, params)
 
             instance = XLogin(
                 context,
@@ -150,7 +132,6 @@ class XLogin private constructor(
                 callbackUrl,
                 loginConfig.oauthClientId,
                 tokenUtils,
-                loginApi,
                 loginConfig.socialConfig
             )
         }
@@ -180,37 +161,29 @@ class XLogin private constructor(
             password: String,
             callback: AuthCallback
         ) {
-            val oauthAuthUserBody = OauthAuthUserBody(username, password)
-            getInstance().loginApi
-                .oauthLogin(getInstance().oauthClientId, "offline", oauthAuthUserBody)
-                .enqueue(object : Callback<OauthAuthResponse?> {
-                    override fun onResponse(
-                        call: Call<OauthAuthResponse?>,
-                        response: Response<OauthAuthResponse?>
-                    ) {
-                        if (response.isSuccessful) {
-                            val oauthAuthResponse = response.body()
-                            if (oauthAuthResponse != null) {
-                                val accessToken = oauthAuthResponse.accessToken
-                                val refreshToken = oauthAuthResponse.refreshToken
-                                val expiresIn = oauthAuthResponse.expiresIn
-                                getInstance().tokenUtils.oauthAccessToken = accessToken
-                                getInstance().tokenUtils.oauthRefreshToken = refreshToken
-                                getInstance().tokenUtils.oauthExpireTimeUnixSec =
-                                    System.currentTimeMillis() / 1000 + expiresIn
-                                callback.onSuccess()
-                            } else {
-                                callback.onError(null, "Empty response")
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.login(
+                            clientId = getInstance().oauthClientId,
+                            scope = "offline",
+                            body = PasswordAuthBody(username, password)
+                        )
+                        val accessToken = res.accessToken
+                        val refreshToken = res.refreshToken
+                        val expiresIn = res.expiresIn
+                        getInstance().tokenUtils.oauthAccessToken = accessToken
+                        getInstance().tokenUtils.oauthRefreshToken = refreshToken
+                        getInstance().tokenUtils.oauthExpireTimeUnixSec =
+                            System.currentTimeMillis() / 1000 + expiresIn
+                        runCallback {
+                            callback.onSuccess()
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<OauthAuthResponse?>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         /**
@@ -230,36 +203,27 @@ class XLogin private constructor(
             sendLink: Boolean = false,
             linkUrl: String? = null
         ) {
-            val retrofitCallback: Callback<StartPasswordlessAuthResponse> =
-                object : Callback<StartPasswordlessAuthResponse> {
-                    override fun onResponse(
-                        call: Call<StartPasswordlessAuthResponse>,
-                        response: Response<StartPasswordlessAuthResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            val body = response.body()
-                            if (body != null) {
-                                callback.onAuthStarted(body)
-                            } else {
-                                callback.onError(null, "Empty response")
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.startAuthByPhone(
+                            responseType = "code",
+                            clientId = getInstance().oauthClientId,
+                            scope = "offline",
+                            state = UUID.randomUUID().toString(),
+                            redirectUri = getInstance().callbackUrl,
+                            body = StartAuthByPhoneBody(linkUrl, phoneNumber, sendLink)
+                        )
+                        runCallback {
+                            callback.onAuthStarted(
+                                StartPasswordlessAuthResponse(res.operationId)
+                            )
                         }
-                    }
-
-                    override fun onFailure(
-                        call: Call<StartPasswordlessAuthResponse>,
-                        t: Throwable
-                    ) {
-                        callback.onError(t, null)
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
                 }
-            val body = StartAuthByPhoneBody(linkUrl, phoneNumber, sendLink)
-            getInstance().loginApi.oauthStartAuthByPhone(
-                "code", getInstance().oauthClientId, "offline",
-                UUID.randomUUID().toString(), getInstance().callbackUrl, body
-            ).enqueue(retrofitCallback)
+            }
         }
 
         /**
@@ -279,44 +243,31 @@ class XLogin private constructor(
             operationId: String,
             callback: CompletePasswordlessAuthCallback
         ) {
-            val body = CompleteAuthByPhoneBody(code, operationId, phoneNumber)
-            getInstance().loginApi.oauthCompleteAuthByPhone(getInstance().oauthClientId, body)
-                .enqueue(object : Callback<OauthGetCodeResponse?> {
-                    override fun onResponse(
-                        call: Call<OauthGetCodeResponse?>,
-                        response: Response<OauthGetCodeResponse?>
-                    ) {
-                        if (response.isSuccessful) {
-                            val url = response.body()?.loginUrl
-                            if (url == null) {
-                                callback.onError(null, "Empty url")
-                                return
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.completeAuthByPhone(
+                            clientId = getInstance().oauthClientId,
+                            body = CompleteAuthByPhoneBody(
+                                code, operationId, phoneNumber
+                            )
+                        )
+                        val oauthCode = TokenUtils.getCodeFromUrl(res.loginUrl)
+                        if (oauthCode == null) {
+                            runCallback {
+                                callback.onError(null, "Code not found in url")
                             }
-                            val oauthCode = TokenUtils.getCodeFromUrl(url)
-                            if (oauthCode == null) {
-                                callback.onError(null, "Code not found url")
-                                return
-                            }
-                            Utils.getOauthTokensFromCode(oauthCode) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
-                                if (throwable == null && errorMessage == null) {
-                                    getInstance().tokenUtils.oauthAccessToken = accessToken
-                                    getInstance().tokenUtils.oauthRefreshToken = refreshToken
-                                    getInstance().tokenUtils.oauthExpireTimeUnixSec =
-                                        System.currentTimeMillis() / 1000 + expiresIn!!
-                                    callback.onSuccess()
-                                } else {
-                                    callback.onError(throwable, errorMessage)
-                                }
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+                            return@runBlocking
                         }
+                        Utils.saveTokensByCode(oauthCode)
+                        runCallback {
+                            callback.onSuccess()
+                        }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<OauthGetCodeResponse?>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         /**
@@ -337,40 +288,27 @@ class XLogin private constructor(
             sendLink: Boolean = false,
             linkUrl: String? = null
         ) {
-            val retrofitCallback: Callback<StartPasswordlessAuthResponse> =
-                object : Callback<StartPasswordlessAuthResponse> {
-                    override fun onResponse(
-                        call: Call<StartPasswordlessAuthResponse>,
-                        response: Response<StartPasswordlessAuthResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            val body = response.body()
-                            if (body != null) {
-                                callback.onAuthStarted(body)
-                            } else {
-                                callback.onError(null, "Empty response")
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.startAuthByEmail(
+                            responseType = "code",
+                            clientId = getInstance().oauthClientId,
+                            scope = "offline",
+                            state = UUID.randomUUID().toString(),
+                            redirectUri = getInstance().callbackUrl,
+                            body = StartAuthByEmailBody(linkUrl, email, sendLink)
+                        )
+                        runCallback {
+                            callback.onAuthStarted(
+                                StartPasswordlessAuthResponse(res.operationId)
+                            )
                         }
-                    }
-
-                    override fun onFailure(
-                        call: Call<StartPasswordlessAuthResponse>,
-                        t: Throwable
-                    ) {
-                        callback.onError(t, null)
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
                 }
-            val body = StartAuthByEmailBody(linkUrl, email, sendLink)
-            getInstance().loginApi.oauthStartAuthByEmail(
-                "code",
-                getInstance().oauthClientId,
-                "offline",
-                UUID.randomUUID().toString(),
-                getInstance().callbackUrl,
-                body
-            ).enqueue(retrofitCallback)
+            }
         }
 
         /**
@@ -391,44 +329,31 @@ class XLogin private constructor(
             operationId: String,
             callback: CompletePasswordlessAuthCallback
         ) {
-            val body = CompleteAuthByEmailBody(code, operationId, email)
-            getInstance().loginApi.oauthCompleteAuthByEmail(getInstance().oauthClientId, body)
-                .enqueue(object : Callback<OauthGetCodeResponse?> {
-                    override fun onResponse(
-                        call: Call<OauthGetCodeResponse?>,
-                        response: Response<OauthGetCodeResponse?>
-                    ) {
-                        if (response.isSuccessful) {
-                            val url = response.body()?.loginUrl
-                            if (url == null) {
-                                callback.onError(null, "Empty url")
-                                return
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.completeAuthByEmail(
+                            clientId = getInstance().oauthClientId,
+                            body = CompleteAuthByEmailBody(
+                                code, operationId, email
+                            )
+                        )
+                        val oauthCode = TokenUtils.getCodeFromUrl(res.loginUrl)
+                        if (oauthCode == null) {
+                            runCallback {
+                                callback.onError(null, "Code not found in url")
                             }
-                            val oauthCode = TokenUtils.getCodeFromUrl(url)
-                            if (oauthCode == null) {
-                                callback.onError(null, "Code not found url")
-                                return
-                            }
-                            Utils.getOauthTokensFromCode(oauthCode) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
-                                if (throwable == null && errorMessage == null) {
-                                    getInstance().tokenUtils.oauthAccessToken = accessToken
-                                    getInstance().tokenUtils.oauthRefreshToken = refreshToken
-                                    getInstance().tokenUtils.oauthExpireTimeUnixSec =
-                                        System.currentTimeMillis() / 1000 + expiresIn!!
-                                    callback.onSuccess()
-                                } else {
-                                    callback.onError(throwable, errorMessage)
-                                }
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+                            return@runBlocking
                         }
+                        Utils.saveTokensByCode(oauthCode)
+                        runCallback {
+                            callback.onSuccess()
+                        }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<OauthGetCodeResponse?>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
 
@@ -455,57 +380,41 @@ class XLogin private constructor(
         fun authenticateViaDeviceId(
             callback: AuthViaDeviceIdCallback
         ) {
-            val deviceNameString = Build.MANUFACTURER + " " + Build.MODEL
-            val body = AuthViaDeviceIdBody(
-                deviceNameString, Settings.Secure.getString(
-                    getInstance().context.contentResolver, Settings.Secure.ANDROID_ID
-                )
-            )
-            getInstance().loginApi.oauthAuthViaDeviceId(
-                deviceType = "android",
-                client = getInstance().oauthClientId,
-                responseType = "code",
-                redirectUri = getInstance().callbackUrl,
-                state = UUID.randomUUID().toString(),
-                scope = "offline",
-                body
-            )
-                .enqueue(object : Callback<OauthGetCodeResponse?> {
-                    override fun onResponse(
-                        call: Call<OauthGetCodeResponse?>,
-                        response: Response<OauthGetCodeResponse?>
-                    ) {
-                        if (response.isSuccessful) {
-                            val url = response.body()?.loginUrl
-                            if (url == null) {
-                                callback.onError(null, "Empty url")
-                                return
+            runIo {
+                runBlocking {
+                    val body = AuthViaDeviceIdBody(
+                        device = Build.MANUFACTURER + " " + Build.MODEL,
+                        deviceId = Settings.Secure.getString(
+                            getInstance().context.contentResolver,
+                            Settings.Secure.ANDROID_ID
+                        )
+                    )
+                    try {
+                        val res = XLoginApi.loginApi.authViaDeviceId(
+                            deviceType = "android",
+                            clientId = getInstance().oauthClientId,
+                            responseType = "code",
+                            redirectUri = getInstance().callbackUrl,
+                            state = UUID.randomUUID().toString(),
+                            scope = "offline",
+                            body
+                        )
+                        val oauthCode = TokenUtils.getCodeFromUrl(res.loginUrl)
+                        if (oauthCode == null) {
+                            runCallback {
+                                callback.onError(null, "Code not found in url")
                             }
-                            val code = TokenUtils.getCodeFromUrl(url)
-                            if (code == null) {
-                                callback.onError(null, "Code not found url")
-                                return
-                            }
-                            Utils.getOauthTokensFromCode(code) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
-                                if (throwable == null && errorMessage == null) {
-                                    getInstance().tokenUtils.oauthAccessToken = accessToken
-                                    getInstance().tokenUtils.oauthRefreshToken = refreshToken
-                                    getInstance().tokenUtils.oauthExpireTimeUnixSec =
-                                        System.currentTimeMillis() / 1000 + expiresIn!!
-                                    callback.onSuccess()
-                                } else {
-                                    callback.onError(throwable, errorMessage)
-                                }
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+                            return@runBlocking
                         }
+                        Utils.saveTokensByCode(oauthCode)
+                        runCallback {
+                            callback.onSuccess()
+                        }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<OauthGetCodeResponse?>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
 
@@ -533,37 +442,34 @@ class XLogin private constructor(
             promoEmailAgreement: Int? = null,
             locale: String? = null
         ) {
-            val retrofitCallback: Callback<Void> = object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        callback.onSuccess()
-                    } else {
-                        callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    val body = RegisterUserBody(
+                        username = username,
+                        email = email,
+                        password = password,
+                        acceptConsent = acceptConsent,
+                        promoEmailAgreement = promoEmailAgreement,
+                        fields = null
+                    )
+                    try {
+                        XLoginApi.loginApi.registerUser(
+                            responseType = "code",
+                            clientId = getInstance().oauthClientId,
+                            scope = "offline",
+                            state = UUID.randomUUID().toString(),
+                            redirectUri = getInstance().callbackUrl,
+                            locale = locale,
+                            body = body,
+                        )
+                        runCallback {
+                            callback.onSuccess()
+                        }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
                 }
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    callback.onError(t, null)
-                }
             }
-            val oauthRegisterUserBody = OauthRegisterUserBody(
-                username = username,
-                email = email,
-                password = password,
-                acceptConsent = acceptConsent,
-                promoEmailAgreement = promoEmailAgreement
-            )
-            getInstance().loginApi
-                .oauthRegisterUser(
-                    "code",
-                    getInstance().oauthClientId,
-                    "offline",
-                    UUID.randomUUID().toString(),
-                    getInstance().callbackUrl,
-                    locale,
-                    oauthRegisterUserBody,
-                )
-                .enqueue(retrofitCallback)
         }
 
         /**
@@ -580,23 +486,21 @@ class XLogin private constructor(
             sessions: String,
             callback: OauthLogoutCallback
         ) {
-            val retrofitCallback: Callback<Void> = object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        callback.onSuccess()
-                    } else {
-                        callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        XLoginApi.loginApi.logout(
+                            authHeader = "Bearer $token",
+                            sessions
+                        )
+                        runCallback {
+                            callback.onSuccess()
+                        }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
                 }
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    callback.onError(t, null)
-                }
             }
-            getInstance().loginApi.oauthLogout(
-                "Bearer $token",
-                sessions
-            ).enqueue(retrofitCallback)
         }
 
         //----------     Emails     ----------
@@ -617,26 +521,25 @@ class XLogin private constructor(
             callback: ResendAccountConfirmationEmailCallback,
             locale: String? = null
         ) {
-            val body = ResendAccountConfirmationEmailBody(username)
-            getInstance().loginApi.oauthResendAccountConfirmationEmail(
-                getInstance().oauthClientId,
-                getInstance().callbackUrl,
-                UUID.randomUUID().toString(),
-                locale,
-                body
-            ).enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        callback.onSuccess()
-                    } else {
-                        callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    val body = ResendAccountConfirmationEmailBody(username)
+                    try {
+                        XLoginApi.loginApi.resendAccountConfirmationEmail(
+                            clientId = getInstance().oauthClientId,
+                            redirectUri = getInstance().callbackUrl,
+                            state = UUID.randomUUID().toString(),
+                            locale = locale,
+                            body = body
+                        )
+                        runCallback {
+                            callback.onSuccess()
+                        }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
                 }
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    callback.onError(t, null)
-                }
-            })
+            }
         }
 
         //----------     Password     ----------
@@ -657,31 +560,28 @@ class XLogin private constructor(
         @JvmStatic
         @JvmOverloads
         fun resetPassword(
-            username: String?,
+            username: String,
             callback: ResetPasswordCallback,
             locale: String? = null
         ) {
-            val resetPasswordBody = ResetPasswordBody(username!!)
-            getInstance().loginApi
-                .resetPassword(
-                    getInstance().projectId,
-                    getInstance().callbackUrl,
-                    locale,
-                    resetPasswordBody
-                )
-                .enqueue(object : Callback<Void?> {
-                    override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
-                        if (response.isSuccessful) {
+            runIo {
+                runBlocking {
+                    val body = ResetPasswordBody(username)
+                    try {
+                        XLoginApi.loginApi.resetPassword(
+                            projectId = getInstance().projectId,
+                            loginUrl = getInstance().callbackUrl,
+                            locale = locale,
+                            body = body
+                        )
+                        runCallback {
                             callback.onSuccess()
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<Void?>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         //----------     Linking Accounts     ----------
@@ -700,32 +600,20 @@ class XLogin private constructor(
          */
         @JvmStatic
         fun createCodeForLinkingAccount(callback: CreateCodeForLinkingAccountCallback) {
-            getInstance().loginApi
-                .createCodeForLinkingAccounts("Bearer $token")
-                .enqueue(object : Callback<CreateCodeForLinkingAccountResponse> {
-                    override fun onResponse(
-                        call: Call<CreateCodeForLinkingAccountResponse>,
-                        response: Response<CreateCodeForLinkingAccountResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            val data = response.body()
-                            if (data != null) {
-                                callback.onSuccess(data.code)
-                            } else {
-                                callback.onError(null, "Empty response")
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.createCodeForAccountsLinking(
+                            authHeader = "Bearer $token"
+                        )
+                        runCallback {
+                            callback.onSuccess(res.code)
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(
-                        call: Call<CreateCodeForLinkingAccountResponse>,
-                        t: Throwable
-                    ) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         //----------     Attributes     ----------
@@ -755,41 +643,39 @@ class XLogin private constructor(
             getReadOnlyAttributes: Boolean,
             callback: GetUsersAttributesCallback
         ) {
-            val nonNullKeys: List<String> = keys ?: listOf()
-            val call: Call<List<UserAttribute>> = if (getReadOnlyAttributes) {
-                getInstance().loginApi
-                    .getUsersReadOnlyAttributesFromClient(
-                        "Bearer $token",
-                        GetUsersAttributesFromClientRequest(nonNullKeys, publisherProjectId, userId)
-                    )
-            } else {
-                getInstance().loginApi
-                    .getUsersAttributesFromClient(
-                        "Bearer $token",
-                        GetUsersAttributesFromClientRequest(nonNullKeys, publisherProjectId, userId)
-                    )
-            }
-            call.enqueue(object : Callback<List<UserAttribute>> {
-                override fun onResponse(
-                    call: Call<List<UserAttribute>>,
-                    response: Response<List<UserAttribute>>
-                ) {
-                    if (response.isSuccessful) {
-                        val attributes = response.body()
-                        if (attributes != null) {
-                            callback.onSuccess(attributes)
+            val body = GetAttributesBody(
+                keys = keys ?: listOf(),
+                publisherProjectId = publisherProjectId,
+                userId = userId
+            )
+            runIo {
+                runBlocking {
+                    try {
+                        val res = if (getReadOnlyAttributes) {
+                            XLoginApi.loginApi.getReadOnlyAttributes(
+                                authHeader = "Bearer $token",
+                                body = body
+                            )
                         } else {
-                            callback.onError(null, "Empty response")
+                            XLoginApi.loginApi.getNormalAttributes(
+                                authHeader = "Bearer $token",
+                                body = body
+                            )
                         }
-                    } else {
-                        callback.onError(null, getErrorMessage(response.errorBody()))
+                        runCallback {
+                            callback.onSuccess(res.map {
+                                UserAttribute(
+                                    it.key,
+                                    mapAttributePermission(it.permission),
+                                    it.value
+                                )
+                            })
+                        }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
                 }
-
-                override fun onFailure(call: Call<List<UserAttribute>>, t: Throwable) {
-                    callback.onError(t, null)
-                }
-            })
+            }
         }
 
         /**
@@ -808,31 +694,34 @@ class XLogin private constructor(
             removingKeys: List<String>?,
             callback: UpdateUsersAttributesCallback
         ) {
-            val nonNullAttributes = attributes ?: listOf()
-            val nonNullRemovingKeys = removingKeys ?: listOf()
-
-            getInstance().loginApi
-                .updateUsersAttributesFromClient(
-                    "Bearer $token",
-                    UpdateUsersAttributesFromClientRequest(
-                        nonNullAttributes,
-                        publisherProjectId,
-                        nonNullRemovingKeys
-                    )
+            val nonNullAttributes = (attributes ?: listOf()).map {
+                com.xsolla.lib_login.entity.common.UserAttribute(
+                    key = it.key,
+                    permission = mapAttributePermission(it.permission),
+                    value = it.value
                 )
-                .enqueue(object : Callback<Void> {
-                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        if (response.isSuccessful) {
+            }
+            val nonNullRemovingKeys = removingKeys ?: listOf()
+            val body = UpdateAttributesBody(
+                nonNullAttributes,
+                publisherProjectId,
+                nonNullRemovingKeys
+            )
+            runIo {
+                runBlocking {
+                    try {
+                        XLoginApi.loginApi.updateAttributes(
+                            authHeader = "Bearer $token",
+                            body = body
+                        )
+                        runCallback {
                             callback.onSuccess()
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         //----------    User Account     ----------
@@ -849,29 +738,29 @@ class XLogin private constructor(
 
         @JvmStatic
         fun getUsersDevices(callback: GetUsersDevicesCallback) {
-            getInstance().loginApi.getUsersDevices(
-                authHeader = "Bearer $token"
-            ).enqueue(object : Callback<List<UsersDevicesResponse>> {
-                override fun onResponse(
-                    call: Call<List<UsersDevicesResponse>>,
-                    response: Response<List<UsersDevicesResponse>>
-                ) {
-                    if (response.isSuccessful) {
-                        val usersDevices = response.body()
-                        if (usersDevices != null) {
-                            callback.onSuccess(usersDevices)
-                        } else {
-                            callback.onError(null, "Empty response")
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.getDevices(
+                            authHeader = "Bearer $token"
+                        )
+                        runCallback {
+                            callback.onSuccess(
+                                res.map {
+                                    UsersDevicesResponse(
+                                        device = it.device,
+                                        id = it.id,
+                                        lastUsedAt = it.lastUsedAt,
+                                        type = it.type
+                                    )
+                                }
+                            )
                         }
-                    } else {
-                        callback.onError(null, getErrorMessage(response.errorBody()))
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
                 }
-
-                override fun onFailure(call: Call<List<UsersDevicesResponse>>, t: Throwable) {
-                    callback.onError(t, null)
-                }
-            })
+            }
         }
 
 
@@ -888,31 +777,30 @@ class XLogin private constructor(
         ) {
             val deviceNameString = Build.MANUFACTURER + " " + Build.MODEL
             val body = AuthViaDeviceIdBody(
-                deviceNameString,
-                Settings.Secure.getString(
+                device = deviceNameString,
+                deviceId = Settings.Secure.getString(
                     getInstance().context.contentResolver,
                     Settings.Secure.ANDROID_ID
                 )
             )
             val deviceType = "android"
 
-            getInstance().loginApi.linkDeviceToAccount(
-                authHeader = "Bearer $token",
-                deviceType = deviceType,
-                body
-            ).enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        callback.onSuccess()
-                    } else {
-                        callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        XLoginApi.loginApi.linkDeviceToAccount(
+                            authHeader = "Bearer $token",
+                            deviceType = deviceType,
+                            body = body
+                        )
+                        runCallback {
+                            callback.onSuccess()
+                        }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
                 }
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    callback.onError(t, null)
-                }
-            })
+            }
         }
 
         /**
@@ -927,22 +815,21 @@ class XLogin private constructor(
             id: Int,
             callback: UnlinkDeviceFromAccountCallback
         ) {
-            getInstance().loginApi.unlinkDeviceFromAccount(
-                authHeader = "Bearer $token",
-                id = id
-            ).enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        callback.onSuccess()
-                    } else {
-                        callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        XLoginApi.loginApi.unlinkDeviceFromAccount(
+                            authHeader = "Bearer $token",
+                            id = id
+                        )
+                        runCallback {
+                            callback.onSuccess()
+                        }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
                 }
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    callback.onError(t, null)
-                }
-            })
+            }
         }
 
 
@@ -960,29 +847,23 @@ class XLogin private constructor(
          */
         @JvmStatic
         fun checkUserAge(birthday: String, callback: CheckUserAgeCallback) {
-            getInstance().loginApi
-                .checkUserAge(CheckUserAgeBody(getInstance().projectId, birthday))
-                .enqueue(object : Callback<CheckUserAgeResponse> {
-                    override fun onResponse(
-                        call: Call<CheckUserAgeResponse>,
-                        response: Response<CheckUserAgeResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            val data = response.body()
-                            if (data != null) {
-                                callback.onSuccess(data.accepted)
-                            } else {
-                                callback.onError(null, "Empty response")
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.checkUserAge(
+                            CheckUserAgeBody(
+                                projectId = getInstance().projectId,
+                                birthday = birthday
+                            )
+                        )
+                        runCallback {
+                            callback.onSuccess(res.accepted)
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<CheckUserAgeResponse>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         /**
@@ -993,29 +874,20 @@ class XLogin private constructor(
          */
         @JvmStatic
         fun getCurrentUserDetails(callback: GetCurrentUserDetailsCallback) {
-            getInstance().loginApi
-                .getCurrentUserDetails("Bearer $token")
-                .enqueue(object : Callback<UserDetailsResponse?> {
-                    override fun onResponse(
-                        call: Call<UserDetailsResponse?>,
-                        response: Response<UserDetailsResponse?>
-                    ) {
-                        if (response.isSuccessful) {
-                            val userDetailsResponse = response.body()
-                            if (userDetailsResponse != null) {
-                                callback.onSuccess(userDetailsResponse)
-                            } else {
-                                callback.onError(null, "Empty response")
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.getUserDetails(
+                            authHeader = "Bearer $token"
+                        )
+                        runCallback {
+                            callback.onSuccess(fromLibUserDetails(res))
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<UserDetailsResponse?>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         /**
@@ -1038,23 +910,28 @@ class XLogin private constructor(
             nickname: String?,
             callback: UpdateCurrentUserDetailsCallback
         ) {
-            val updateUserDetailsBody =
-                UpdateUserDetailsBody(birthday, firstName, gender, lastName, nickname)
-            getInstance().loginApi
-                .updateCurrentUserDetails("Bearer $token", updateUserDetailsBody)
-                .enqueue(object : Callback<Void?> {
-                    override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
-                        if (response.isSuccessful) {
+            val body = UpdateUserDetailsBody(
+                birthday = birthday,
+                firstName = firstName,
+                gender = gender,
+                lastName = lastName,
+                nickname = nickname
+            )
+            runIo {
+                runBlocking {
+                    try {
+                        XLoginApi.loginApi.updateUserDetails(
+                            authHeader = "Bearer $token",
+                            body = body
+                        )
+                        runCallback {
                             callback.onSuccess()
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<Void?>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         /**
@@ -1074,33 +951,32 @@ class XLogin private constructor(
             promoEmailAgreement: Boolean,
             callback: LinkEmailPasswordCallback
         ) {
-            val body =
-                LinkEmailPasswordBody(email, password, if (promoEmailAgreement) 1 else 0, username)
-            getInstance().loginApi.linkEmailPassword(
-                authHeader = "Bearer $token",
-                loginUrl = getInstance().callbackUrl,
-                linkEmailPasswordBody = body
-            ).enqueue(object : Callback<LinkEmailPasswordResponse> {
-                override fun onResponse(
-                    call: Call<LinkEmailPasswordResponse>,
-                    response: Response<LinkEmailPasswordResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val linkEmailPasswordResponse = response.body()
-                        if (linkEmailPasswordResponse != null) {
-                            callback.onSuccess(linkEmailPasswordResponse)
-                        } else {
-                            callback.onError(null, "Empty response")
+            val body = LinkEmailPasswordBody(
+                email = email,
+                password = password,
+                promoEmailAgreement = if (promoEmailAgreement) 1 else 0,
+                username = username
+            )
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.linkEmailPassword(
+                            authHeader = "Bearer $token",
+                            loginUrl = getInstance().callbackUrl,
+                            body = body
+                        )
+                        runCallback {
+                            callback.onSuccess(
+                                LinkEmailPasswordResponse(
+                                    emailConfirmationRequired = res.emailConfirmationRequired
+                                )
+                            )
                         }
-                    } else {
-                        callback.onError(null, getErrorMessage(response.errorBody()))
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
                 }
-
-                override fun onFailure(call: Call<LinkEmailPasswordResponse>, t: Throwable) {
-                    callback.onError(t, null)
-                }
-            })
+            }
         }
 
         /**
@@ -1111,28 +987,22 @@ class XLogin private constructor(
          */
         @JvmStatic
         fun getCurrentUserPhone(callback: GetCurrentUserPhoneCallback) {
-            getInstance().loginApi
-                .getUserPhone("Bearer $token")
-                .enqueue(object : Callback<PhoneResponse> {
-                    override fun onResponse(
-                        call: Call<PhoneResponse>,
-                        response: Response<PhoneResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            if (response.body() == null) {
-                                callback.onSuccess(PhoneResponse(null))
-                            } else {
-                                callback.onSuccess(response.body()!!)
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.getUserPhone(
+                            authHeader = "Bearer $token"
+                        )
+                        runCallback {
+                            callback.onSuccess(
+                                PhoneResponse(res.phone)
+                            )
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<PhoneResponse>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         /**
@@ -1144,22 +1014,24 @@ class XLogin private constructor(
          */
         @JvmStatic
         fun updateCurrentUserPhone(phone: String?, callback: UpdateCurrentUserPhoneCallback) {
-            val updateUserPhoneBody = UpdateUserPhoneBody(phone!!)
-            getInstance().loginApi
-                .updateUserPhone("Bearer $token", updateUserPhoneBody)
-                .enqueue(object : Callback<Void> {
-                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        if (response.isSuccessful) {
+            val body = UpdateUserPhoneBody(
+                phoneNumber = phone!! // TODO update nullability
+            )
+            runIo {
+                runBlocking {
+                    try {
+                        XLoginApi.loginApi.updateUserPhone(
+                            authHeader = "Bearer $token",
+                            body = body
+                        )
+                        runCallback {
                             callback.onSuccess()
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         /**
@@ -1171,21 +1043,21 @@ class XLogin private constructor(
          */
         @JvmStatic
         fun deleteCurrentUserPhone(phone: String, callback: DeleteCurrentUserPhoneCallback) {
-            getInstance().loginApi
-                .deleteUserPhone("Bearer $token", phone)
-                .enqueue(object : Callback<Void> {
-                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        if (response.isSuccessful) {
+            runIo {
+                runBlocking {
+                    try {
+                        XLoginApi.loginApi.deleteUserPhone(
+                            authHeader = "Bearer $token",
+                            phoneNumber = phone
+                        )
+                        runCallback {
                             callback.onSuccess()
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         /**
@@ -1196,21 +1068,20 @@ class XLogin private constructor(
          */
         @JvmStatic
         fun deleteCurrentUserAvatar(callback: DeleteCurrentUserAvatarCallback) {
-            getInstance().loginApi
-                .deleteUserPicture("Bearer $token")
-                .enqueue(object : Callback<Void?> {
-                    override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
-                        if (response.isSuccessful) {
+            runIo {
+                runBlocking {
+                    try {
+                        XLoginApi.loginApi.deleteUserPicture(
+                            authHeader = "Bearer $token"
+                        )
+                        runCallback {
                             callback.onSuccess()
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<Void?>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         /**
@@ -1222,33 +1093,23 @@ class XLogin private constructor(
          */
         @JvmStatic
         fun uploadCurrentUserAvatar(file: File, callback: UploadCurrentUserAvatarCallback) {
-            val part = MultipartBody.Part.createFormData(
-                "picture",
-                file.name,
-                RequestBody.create(MediaType.parse("image/*"), file)
-            )
-            getInstance().loginApi
-                .uploadUserPicture("Bearer $token", part)
-                .enqueue(object : Callback<PictureResponse> {
-                    override fun onResponse(
-                        call: Call<PictureResponse>,
-                        response: Response<PictureResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            if (response.body() == null) {
-                                callback.onError(null, "Empty response")
-                            } else {
-                                callback.onSuccess(response.body()!!)
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.uploadUserPicture(
+                            authHeader = "Bearer $token",
+                            picture = file
+                        )
+                        runCallback {
+                            callback.onSuccess(
+                                PictureResponse(res.picture)
+                            )
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<PictureResponse>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
 
@@ -1277,36 +1138,25 @@ class XLogin private constructor(
             callback: GetCurrentUserFriendsCallback,
             @IntRange(from = 1, to = 50) limit: Int = 20,
         ) {
-            getInstance().loginApi
-                .getUserFriends(
-                    "Bearer $token",
-                    afterUrl,
-                    limit,
-                    type.name.lowercase(),
-                    sortBy.name.lowercase(),
-                    sortOrder.name.lowercase()
-                )
-                .enqueue(object : Callback<UserFriendsResponse> {
-                    override fun onResponse(
-                        call: Call<UserFriendsResponse>,
-                        response: Response<UserFriendsResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            val userFriendsResponse = response.body()
-                            if (userFriendsResponse != null) {
-                                callback.onSuccess(userFriendsResponse)
-                            } else {
-                                callback.onError(null, "Empty response")
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.getUserFriends(
+                            authHeader = "Bearer $token",
+                            after = afterUrl,
+                            limit = limit,
+                            requestType =type.name.lowercase(),
+                            sortBy = sortBy.name.lowercase(),
+                            sortOrder = sortOrder.name.lowercase()
+                        )
+                        runCallback {
+                            callback.onSuccess(fromLibUserFriendsResponse(res))
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<UserFriendsResponse>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         /**
@@ -1323,26 +1173,26 @@ class XLogin private constructor(
             action: UpdateUserFriendsRequestAction,
             callback: UpdateCurrentUserFriendsCallback
         ) {
-            val updateUserFriendsRequest =
+            val body =
                 UpdateUserFriendsRequest(
                     action.name.lowercase(),
                     friendXsollaUserId
                 )
-            getInstance().loginApi
-                .updateFriends("Bearer $token", updateUserFriendsRequest)
-                .enqueue(object : Callback<Void> {
-                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        if (response.isSuccessful) {
+            runIo {
+                runBlocking {
+                    try {
+                        XLoginApi.loginApi.updateFriends(
+                            authHeader = "Bearer $token",
+                            body = body
+                        )
+                        runCallback {
                             callback.onSuccess()
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         /**
@@ -1364,35 +1214,24 @@ class XLogin private constructor(
             offset: Int = 0,
             @IntRange(from = 1, to = 500) limit: Int = 500,
         ) {
-            getInstance().loginApi
-                .getSocialFriends(
-                    "Bearer $token",
-                    platform?.name?.lowercase(),
-                    offset,
-                    limit,
-                    fromGameOnly
-                )
-                .enqueue(object : Callback<SocialFriendsResponse?> {
-                    override fun onResponse(
-                        call: Call<SocialFriendsResponse?>,
-                        response: Response<SocialFriendsResponse?>
-                    ) {
-                        if (response.isSuccessful) {
-                            val socialFriendsResponse = response.body()
-                            if (socialFriendsResponse != null) {
-                                callback.onSuccess(socialFriendsResponse)
-                            } else {
-                                callback.onError(null, "Empty response")
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.getSocialFriends(
+                            authHeader = "Bearer $token",
+                            platform = platform?.name?.lowercase(),
+                            offset = offset,
+                            limit = limit,
+                            fromGameOnly = fromGameOnly
+                        )
+                        runCallback {
+                            callback.onSuccess(fromLibSocialFriendsResponse(res))
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<SocialFriendsResponse?>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         /**
@@ -1404,25 +1243,25 @@ class XLogin private constructor(
          * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-friends/update-social-account-friends/)
          */
         @JvmStatic
-        fun updateSocialFriends(platform: FriendsPlatform?, callback: UpdateSocialFriendsCallback) {
-            getInstance().loginApi
-                .updateSocialFriends(
-                    "Bearer $token",
-                    platform?.name?.lowercase()
-                )
-                .enqueue(object : Callback<Void> {
-                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        if (response.isSuccessful) {
+        fun updateSocialFriends(
+            platform: FriendsPlatform?,
+            callback: UpdateSocialFriendsCallback
+        ) {
+            runIo {
+                runBlocking {
+                    try {
+                        XLoginApi.loginApi.updateSocialFriends(
+                            authHeader = "Bearer $token",
+                            platform = platform?.name?.lowercase()
+                        )
+                        runCallback {
                             callback.onSuccess()
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         /**
@@ -1443,32 +1282,23 @@ class XLogin private constructor(
             offset: Int = 0,
             @IntRange(from = 1, to = 100) limit: Int = 100
         ) {
-            getInstance().loginApi
-                .searchUsersByNickname("Bearer $token", nickname!!, offset, limit)
-                .enqueue(object : Callback<SearchUsersByNicknameResponse?> {
-                    override fun onResponse(
-                        call: Call<SearchUsersByNicknameResponse?>,
-                        response: Response<SearchUsersByNicknameResponse?>
-                    ) {
-                        if (response.isSuccessful) {
-                            val searchUsersByNicknameResponse = response.body()
-                            if (searchUsersByNicknameResponse != null) {
-                                callback.onSuccess(searchUsersByNicknameResponse)
-                            } else {
-                                callback.onError(null, "Empty response")
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.searchUsersByNickname(
+                            authHeader = "Bearer $token",
+                            nickname = nickname!!, // TODO check api
+                            offset = offset,
+                            limit = limit
+                        )
+                        runCallback {
+                            callback.onSuccess(fromLibSearch(res))
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(
-                        call: Call<SearchUsersByNicknameResponse?>,
-                        t: Throwable
-                    ) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         /**
@@ -1480,29 +1310,21 @@ class XLogin private constructor(
          */
         @JvmStatic
         fun getUserPublicInfo(userId: String, callback: GetUserPublicInfoCallback) {
-            getInstance().loginApi
-                .getUserPublicInfo("Bearer $token", userId)
-                .enqueue(object : Callback<UserPublicInfoResponse> {
-                    override fun onResponse(
-                        call: Call<UserPublicInfoResponse>,
-                        response: Response<UserPublicInfoResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            val userPublicInfoResponse = response.body()
-                            if (userPublicInfoResponse != null) {
-                                callback.onSuccess(userPublicInfoResponse)
-                            } else {
-                                callback.onError(null, "Empty response")
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.getUserPublicInfo(
+                            authHeader = "Bearer $token",
+                            userId = userId
+                        )
+                        runCallback {
+                            callback.onSuccess(fromLibUserPublicInfoResponse(res))
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<UserPublicInfoResponse>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
 
@@ -1523,31 +1345,21 @@ class XLogin private constructor(
 
         @JvmStatic
         fun getLinksForSocialAuth(locale: String, callback: GetLinksForSocialAuthCallback) {
-            getInstance().loginApi.getLinksForSocialAuth(
-                "Bearer $token",
-                locale
-            ).enqueue(object : Callback<LinksForSocialAuthResponse> {
-                override fun onResponse(
-                    call: Call<LinksForSocialAuthResponse>,
-                    response: Response<LinksForSocialAuthResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val linksResponse = response.body()
-                        if (linksResponse != null) {
-                            callback.onSuccess(linksResponse)
-                        } else {
-                            callback.onError(null, "Empty response")
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.getLinksForSocialAuth(
+                            authHeader = "Bearer $token",
+                            locale = locale
+                        )
+                        runCallback {
+                            callback.onSuccess(fromLibLinksForSocialAuthResponse(res))
                         }
-                    } else {
-                        callback.onError(null, getErrorMessage(response.errorBody()))
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
                 }
-
-                override fun onFailure(call: Call<LinksForSocialAuthResponse>, t: Throwable) {
-                    callback.onError(t, null)
-                }
-
-            })
+            }
         }
 
         /**
@@ -1558,32 +1370,22 @@ class XLogin private constructor(
          */
         @JvmStatic
         fun getLinkedSocialNetworks(callback: LinkedSocialNetworksCallback) {
-            getInstance().loginApi
-                .getLinkedSocialNetworks("Bearer $token")
-                .enqueue(object : Callback<List<LinkedSocialNetworkResponse>> {
-                    override fun onResponse(
-                        call: Call<List<LinkedSocialNetworkResponse>>,
-                        response: Response<List<LinkedSocialNetworkResponse>>
-                    ) {
-                        if (response.isSuccessful) {
-                            val linkedSocialNetworkResponses = response.body()
-                            if (linkedSocialNetworkResponses != null) {
-                                callback.onSuccess(linkedSocialNetworkResponses)
-                            } else {
-                                callback.onError(null, "Empty response")
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.getLinkedSocialNetworks(
+                            authHeader = "Bearer $token"
+                        )
+                        runCallback {
+                            callback.onSuccess(res.map {
+                                fromLibLinkedSocialNetworkResponse(it)
+                            })
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(
-                        call: Call<List<LinkedSocialNetworkResponse>>,
-                        t: Throwable
-                    ) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
         /**
@@ -1594,41 +1396,30 @@ class XLogin private constructor(
          */
         @JvmStatic
         fun refreshToken(callback: RefreshTokenCallback) {
-            getInstance().loginApi
-                .oauthRefreshToken(
-                    getInstance().tokenUtils.oauthRefreshToken!!,
-                    "refresh_token",
-                    getInstance().oauthClientId,
-                    getInstance().callbackUrl
-                )
-                .enqueue(object : Callback<OauthAuthResponse?> {
-                    override fun onResponse(
-                        call: Call<OauthAuthResponse?>,
-                        response: Response<OauthAuthResponse?>
-                    ) {
-                        if (response.isSuccessful) {
-                            val oauthAuthResponse = response.body()
-                            if (oauthAuthResponse != null) {
-                                val accessToken = oauthAuthResponse.accessToken
-                                val refreshToken = oauthAuthResponse.refreshToken
-                                val expiresIn = oauthAuthResponse.expiresIn
-                                getInstance().tokenUtils.oauthAccessToken = accessToken
-                                getInstance().tokenUtils.oauthRefreshToken = refreshToken
-                                getInstance().tokenUtils.oauthExpireTimeUnixSec =
-                                    System.currentTimeMillis() / 1000 + expiresIn
-                                callback.onSuccess()
-                            } else {
-                                callback.onError(null, "Empty response")
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.refreshToken(
+                            refreshToken = getInstance().tokenUtils.oauthRefreshToken!!,
+                            grantType = "refresh_token",
+                            clientId = getInstance().oauthClientId,
+                            redirectUri = getInstance().callbackUrl
+                        )
+                        val accessToken = res.accessToken
+                        val refreshToken = res.refreshToken
+                        val expiresIn = res.expiresIn
+                        getInstance().tokenUtils.oauthAccessToken = accessToken
+                        getInstance().tokenUtils.oauthRefreshToken = refreshToken
+                        getInstance().tokenUtils.oauthExpireTimeUnixSec =
+                            System.currentTimeMillis() / 1000 + expiresIn
+                        runCallback {
+                            callback.onSuccess()
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<OauthAuthResponse?>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
 
@@ -1710,24 +1501,21 @@ class XLogin private constructor(
             socialNetwork: SocialNetwork,
             callback: UnlinkSocialNetworkCallback
         ) {
-            getInstance().loginApi
-                .unlinkSocialNetwork(
-                    "Bearer $token",
-                    socialNetwork.providerName
-                )
-                .enqueue(object : Callback<Void> {
-                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        if (response.isSuccessful) {
+            runIo {
+                runBlocking {
+                    try {
+                        XLoginApi.loginApi.unlinkSocialNetwork(
+                            authHeader = "Bearer $token",
+                            providerName = socialNetwork.providerName
+                        )
+                        runCallback {
                             callback.onSuccess()
-                        } else {
-                            callback.onFailure(null, getErrorMessage(response.errorBody()))
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                        callback.onFailure(t, null)
-                    }
-                })
+                }
+            }
         }
 
         /**
@@ -1806,29 +1594,20 @@ class XLogin private constructor(
          */
         @JvmStatic
         fun getCurrentUserEmail(callback: GetCurrentUserEmailCallback) {
-            getInstance().loginApi
-                .getCurrentUserEmail("Bearer $token")
-                .enqueue(object : Callback<EmailResponse> {
-                    override fun onResponse(
-                        call: Call<EmailResponse>,
-                        response: Response<EmailResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            val data = response.body()
-                            if (data != null) {
-                                callback.onSuccess(data.email)
-                            } else {
-                                callback.onError(null, "Empty response")
-                            }
-                        } else {
-                            callback.onError(null, getErrorMessage(response.errorBody()))
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.getUserEmail(
+                            authHeader = "Bearer $token"
+                        )
+                        runCallback {
+                            callback.onSuccess(res.email)
                         }
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
-
-                    override fun onFailure(call: Call<EmailResponse>, t: Throwable) {
-                        callback.onError(t, null)
-                    }
-                })
+                }
+            }
         }
 
 
@@ -1846,28 +1625,22 @@ class XLogin private constructor(
             operationId: String,
             callback: GetOtcCodeCallback
         ) {
-            getInstance().loginApi.getOtcCode(
-                getInstance().projectId,
-                login,
-                operationId
-            ).enqueue(object : Callback<OtcResponse> {
-                override fun onResponse(call: Call<OtcResponse>, response: Response<OtcResponse>) {
-                    if (response.isSuccessful) {
-                        val data = response.body()
-                        if (data != null) {
-                            callback.onSuccess(data)
-                        } else {
-                            callback.onError(null, "Empty response")
+            runIo {
+                runBlocking {
+                    try {
+                        val res = XLoginApi.loginApi.getOtcCode(
+                            projectId = getInstance().projectId,
+                            login = login,
+                            operationId = operationId
+                        )
+                        runCallback {
+                            callback.onSuccess(OtcResponse(res.code))
                         }
-                    } else {
-                        callback.onError(null, getErrorMessage(response.errorBody()))
+                    } catch (e: Exception) {
+                        handleException(e, callback)
                     }
                 }
-
-                override fun onFailure(call: Call<OtcResponse>, t: Throwable) {
-                    callback.onError(t, null)
-                }
-            })
+            }
         }
 
         @JvmStatic
@@ -1879,14 +1652,5 @@ class XLogin private constructor(
             return getInstance().tokenUtils.oauthRefreshToken != null
         }
 
-        private fun getErrorMessage(errorBody: ResponseBody?): String {
-            try {
-                val errorObject = JSONObject(errorBody!!.string())
-                return errorObject.getJSONObject("error").getString("description")
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            return "Unknown Error"
-        }
     }
 }
