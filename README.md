@@ -7,7 +7,7 @@ Xsolla SDK for Android is a ready-to-use library for applications and games that
 
 The SDK includes the following libraries:
 
-* [Login](https://github.com/xsolla/store-android-sdk/tree/master/xsolla-login-sdk) —  allows authenticating users and managing the friend system
+* [Login](https://github.com/xsolla/store-android-sdk/tree/master/xsolla-login-sdk) —  allows authenticating users and manage user attributes
 * [Store](https://github.com/xsolla/store-android-sdk/tree/master/xsolla-store-sdk) — allows managing your in-game store
 * [Inventory](https://github.com/xsolla/store-android-sdk/tree/master/xsolla-inventory-sdk) — allows managing player inventory
 * [Payments](https://github.com/xsolla/store-android-sdk/tree/master/xsolla-payments-sdk) — allows using payment UI

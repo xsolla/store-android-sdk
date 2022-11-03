@@ -1,10 +1,7 @@
 package com.xsolla.android.store.entity.response.items
 
 import com.google.gson.annotations.SerializedName
-import com.xsolla.android.store.entity.response.common.Group
-import com.xsolla.android.store.entity.response.common.InventoryOption
-import com.xsolla.android.store.entity.response.common.Price
-import com.xsolla.android.store.entity.response.common.VirtualPrice
+import com.xsolla.android.store.entity.response.common.*
 
 data class VirtualCurrencyResponse(val items: List<Item> = emptyList()) {
     data class Item(
@@ -22,6 +19,7 @@ data class VirtualCurrencyResponse(val items: List<Item> = emptyList()) {
         @SerializedName("virtual_prices")
         val virtualPrices: List<VirtualPrice> = emptyList(),
         @SerializedName("inventory_option")
-        val inventoryOption: InventoryOption?  = null
+        val inventoryOption: InventoryOption? = null,
+        val promotions: List<Promotion> = emptyList()
     )
 }

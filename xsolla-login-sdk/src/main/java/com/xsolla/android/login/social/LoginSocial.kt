@@ -26,16 +26,7 @@ import com.tencent.tauth.IUiListener
 import com.tencent.tauth.Tencent
 import com.tencent.tauth.UiError
 import com.xsolla.android.login.XLogin
-import com.xsolla.android.login.api.LoginApi
-import com.xsolla.android.login.callback.FinishSocialCallback
-import com.xsolla.android.login.callback.FinishSocialLinkingCallback
-import com.xsolla.android.login.callback.StartSocialCallback
-import com.xsolla.android.login.callback.StartSocialLinkingCallback
-import com.xsolla.android.login.entity.request.AuthUserSocialWithCodeBody
-import com.xsolla.android.login.entity.request.OauthGetCodeBySocialTokenBody
-import com.xsolla.android.login.entity.response.OauthGetCodeResponse
-import com.xsolla.android.login.entity.response.OauthLinkForSocialAuthResponse
-import com.xsolla.android.login.entity.response.UrlToLinkSocialNetworkResponse
+import com.xsolla.android.login.callback.*
 import com.xsolla.android.login.jwt.JWT
 import com.xsolla.android.login.token.TokenUtils
 import com.xsolla.android.login.ui.ActivityAuth
@@ -44,10 +35,15 @@ import com.xsolla.android.login.ui.ActivityAuthBrowserProxy
 import com.xsolla.android.login.ui.ActivityAuthWebView
 import com.xsolla.android.login.ui.ActivityWechatProxy
 import com.xsolla.android.login.util.Utils
+import com.xsolla.android.login.util.handleException
+import com.xsolla.android.login.util.runCallback
+import com.xsolla.android.login.util.runIo
+import com.xsolla.lib_login.XLoginApi
+import com.xsolla.lib_login.entity.request.AuthBySocialTokenBody
+import com.xsolla.lib_login.entity.request.GetCodeBySocialCodeBody
+import com.xsolla.lib_login.util.LoginApiException
+import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.*
 
 internal object LoginSocial {
@@ -62,7 +58,6 @@ internal object LoginSocial {
 
     private const val magicString = "oauth2:https://www.googleapis.com/auth/plus.login"
 
-    private lateinit var loginApi: LoginApi
     private lateinit var projectId: String
     private lateinit var callbackUrl: String
     private lateinit var tokenUtils: TokenUtils
@@ -93,14 +88,12 @@ internal object LoginSocial {
 
     fun init(
         context: Context,
-        loginApi: LoginApi,
         projectId: String,
         callbackUrl: String,
         tokenUtils: TokenUtils,
         oauthClientId: Int,
         socialConfig: XLogin.SocialConfig?
     ) {
-        this.loginApi = loginApi
         this.projectId = projectId
         this.callbackUrl = callbackUrl
         this.tokenUtils = tokenUtils
@@ -261,15 +254,22 @@ internal object LoginSocial {
             val (status, _, code, error) = fromResultIntent(activityResultData)
             when (status) {
                 ActivityAuth.Status.SUCCESS -> {
-                    Utils.getOauthTokensFromCode(code!!) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
-                        if (throwable == null && errorMessage == null) {
-                            tokenUtils.oauthAccessToken = accessToken
-                            tokenUtils.oauthRefreshToken = refreshToken
-                            tokenUtils.oauthExpireTimeUnixSec =
-                                System.currentTimeMillis() / 1000 + expiresIn!!
-                            callback.onAuthSuccess()
-                        } else {
-                            callback.onAuthError(throwable, errorMessage)
+                    runIo {
+                        runBlocking {
+                            try {
+                                Utils.saveTokensByCode(code!!)
+                                runCallback {
+                                    callback.onAuthSuccess()
+                                }
+                            } catch (e: Exception) {
+                                runCallback {
+                                    if (e is LoginApiException) {
+                                        callback.onAuthError(e.cause, e.error.description)
+                                    } else {
+                                        callback.onAuthError(e, null)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -293,14 +293,17 @@ internal object LoginSocial {
                     val code = (wechatResult as SendAuth.Resp).code
                     getLoginTokenFromSocialCode(
                         SocialNetwork.WECHAT,
-                        code
-                    ) { t, error ->
-                        if (t == null && error == null) {
-                            callback.onAuthSuccess()
-                        } else {
-                            callback.onAuthError(t, error)
+                        code,
+                        object : BaseCallback {
+                            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                                if (throwable == null && errorMessage == null) {
+                                    callback.onAuthSuccess()
+                                } else {
+                                    callback.onAuthError(throwable, errorMessage)
+                                }
+                            }
                         }
-                    }
+                    )
                 }
                 BaseResp.ErrCode.ERR_USER_CANCEL -> {
                     callback.onAuthCancelled()
@@ -464,25 +467,19 @@ internal object LoginSocial {
         socialNetwork: SocialNetwork,
         callback: StartSocialCallback
     ) {
-        loginApi.oauthGetLinkForSocialAuth(
-            socialNetwork.providerName,
-            oauthClientId,
-            UUID.randomUUID().toString(),
-            callbackUrl,
-            "code",
-            "offline"
-        )
-            .enqueue(object : Callback<OauthLinkForSocialAuthResponse> {
-                override fun onResponse(
-                    call: Call<OauthLinkForSocialAuthResponse>,
-                    response: Response<OauthLinkForSocialAuthResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val url = response.body()?.url
-                        if (url == null) {
-                            callback.onError(null, "Empty response")
-                            return
-                        }
+        runIo {
+            runBlocking {
+                try {
+                    val res = XLoginApi.loginApi.getLinkForSocialAuth(
+                        providerName = socialNetwork.providerName,
+                        clientId = oauthClientId,
+                        state = UUID.randomUUID().toString(),
+                        redirectUri = callbackUrl,
+                        responseType = "code",
+                        scope = "offline"
+                    )
+                    val url = res.url
+                    runCallback {
                         openBrowserActivity(
                             isLinking = false,
                             url,
@@ -491,18 +488,12 @@ internal object LoginSocial {
                             fragment
                         )
                         callback.onAuthStarted()
-                    } else {
-                        callback.onError(null, Utils.getErrorMessage(response.errorBody()))
                     }
+                } catch (e: Exception) {
+                    handleException(e, callback)
                 }
-
-                override fun onFailure(
-                    call: Call<OauthLinkForSocialAuthResponse>,
-                    t: Throwable
-                ) {
-                    callback.onError(t, null)
-                }
-            })
+            }
+        }
     }
 
     private fun openBrowserActivity(
@@ -543,109 +534,85 @@ internal object LoginSocial {
         socialToken: String,
         callback: (Throwable?, String?) -> Unit
     ) {
-        val providerName =
-            if (socialNetwork == SocialNetwork.QQ) "qq_mobile" else socialNetwork.providerName
-        val oauthGetCodeBySocialTokenBody = OauthGetCodeBySocialTokenBody(socialToken, null)
-        loginApi.oauthGetCodeBySocialToken(
-            providerName,
-            oauthClientId,
-            UUID.randomUUID().toString(),
-            callbackUrl,
-            "code",
-            "offline",
-            oauthGetCodeBySocialTokenBody
-        )
-            .enqueue(object : Callback<OauthGetCodeResponse> {
-                override fun onResponse(
-                    call: Call<OauthGetCodeResponse>,
-                    response: Response<OauthGetCodeResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val url = response.body()?.loginUrl
-                        if (url == null) {
-                            callback.invoke(null, "Empty url")
-                            return
+        runIo {
+            runBlocking {
+                val providerName =
+                    if (socialNetwork == SocialNetwork.QQ) "qq_mobile" else socialNetwork.providerName
+                val body = AuthBySocialTokenBody(
+                    accessToken = socialToken,
+                    accessTokenSecret = null,
+                    openId = null
+                )
+                try {
+                    val res = XLoginApi.loginApi.authBySocialToken(
+                        providerName = providerName,
+                        clientId = oauthClientId,
+                        state = UUID.randomUUID().toString(),
+                        redirectUri = callbackUrl,
+                        responseType = "code",
+                        scope = "offline",
+                        body
+                    )
+                    val oauthCode = TokenUtils.getCodeFromUrl(res.loginUrl)
+                    if (oauthCode == null) {
+                        runCallback {
+                            callback.invoke(null, "Code not found in url")
                         }
-                        val code = TokenUtils.getCodeFromUrl(url)
-                        if (code == null) {
-                            callback.invoke(null, "Code not found url")
-                            return
+                        return@runBlocking
+                    }
+                    Utils.saveTokensByCode(oauthCode)
+                    runCallback {
+                        callback.invoke(null, null)
+                    }
+                } catch (e: Exception) {
+                    runCallback {
+                        if (e is LoginApiException) {
+                            callback.invoke(e.cause, e.error.description)
+                        } else {
+                            callback.invoke(e, null)
                         }
-                        Utils.getOauthTokensFromCode(code) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
-                            if (throwable == null && errorMessage == null) {
-                                tokenUtils.oauthAccessToken = accessToken
-                                tokenUtils.oauthRefreshToken = refreshToken
-                                tokenUtils.oauthExpireTimeUnixSec =
-                                    System.currentTimeMillis() / 1000 + expiresIn!!
-                            }
-                            callback.invoke(throwable, errorMessage)
-                        }
-                    } else {
-                        callback.invoke(null, Utils.getErrorMessage(response.errorBody()))
                     }
                 }
-
-                override fun onFailure(
-                    call: Call<OauthGetCodeResponse>,
-                    t: Throwable
-                ) {
-                    callback.invoke(t, null)
-                }
-            })
+            }
+        }
     }
 
     private fun getLoginTokenFromSocialCode(
         socialNetwork: SocialNetwork,
         socialCode: String,
-        callback: (Throwable?, String?) -> Unit
+        callback: BaseCallback
     ) {
-        val authUserSocialWithCodeBody = AuthUserSocialWithCodeBody(socialCode)
-        loginApi.oauthGetCodeBySocialCode(
-            socialNetwork.providerName,
-            oauthClientId,
-            UUID.randomUUID().toString(),
-            callbackUrl,
-            "code",
-            "offline",
-            authUserSocialWithCodeBody
-        )
-            .enqueue(object : Callback<OauthGetCodeResponse> {
-                override fun onResponse(
-                    call: Call<OauthGetCodeResponse>,
-                    response: Response<OauthGetCodeResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val url = response.body()?.loginUrl
-                        if (url == null) {
-                            callback.invoke(null, "Empty url")
-                            return
+        runIo {
+            runBlocking {
+                val body = GetCodeBySocialCodeBody(
+                    code = socialCode
+                )
+                try {
+                    val res = XLoginApi.loginApi.getCodeBySocialCode(
+                        providerName = socialNetwork.providerName,
+                        clientId = oauthClientId,
+                        state = UUID.randomUUID().toString(),
+                        redirectUri = callbackUrl,
+                        responseType = "code",
+                        scope = "offline",
+                        body
+                    )
+                    val code = TokenUtils.getCodeFromUrl(res.loginUrl)
+                    if (code == null) {
+                        runCallback {
+                            callback.onError(null, "Code not found in url")
                         }
-                        val code = TokenUtils.getCodeFromUrl(url)
-                        if (code == null) {
-                            callback.invoke(null, "Code not found url")
-                            return
-                        }
-                        Utils.getOauthTokensFromCode(code) { throwable, errorMessage, accessToken, refreshToken, expiresIn ->
-                            if (throwable == null && errorMessage == null) {
-                                tokenUtils.oauthAccessToken = accessToken
-                                tokenUtils.oauthRefreshToken = refreshToken
-                                tokenUtils.oauthExpireTimeUnixSec =
-                                    System.currentTimeMillis() / 1000 + expiresIn!!
-                            }
-                            callback.invoke(throwable, errorMessage)
-                        }
-                    } else {
-                        callback.invoke(null, Utils.getErrorMessage(response.errorBody()))
+                        return@runBlocking
                     }
+                    Utils.saveTokensByCode(code)
+                    runCallback {
+                        callback.onError(null, null)
+                    }
+                } catch (e: Exception) {
+                    handleException(e, callback)
                 }
-
-                override fun onFailure(
-                    call: Call<OauthGetCodeResponse>,
-                    t: Throwable
-                ) {
-                    callback.invoke(t, null)
-                }
-            })
+            }
+        }
     }
 
     fun startLinking(
@@ -654,32 +621,25 @@ internal object LoginSocial {
         socialNetwork: SocialNetwork,
         callback: StartSocialLinkingCallback?
     ) {
-        loginApi.getUrlToLinkSocialNetworkToAccount(
-            "Bearer ${XLogin.token}",
-            socialNetwork.providerName,
-            callbackUrl
-        ).enqueue(object : Callback<UrlToLinkSocialNetworkResponse> {
-            override fun onResponse(
-                call: Call<UrlToLinkSocialNetworkResponse>,
-                response: Response<UrlToLinkSocialNetworkResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val url = response.body()?.url
-                    if (url == null) {
-                        callback?.onError(null, "Empty response")
-                        return
+        runIo {
+            runBlocking {
+                try {
+                    val res = XLoginApi.loginApi.getUrlToLinkSocialNetworkToAccount(
+                        authHeader = "Bearer ${XLogin.token}",
+                        providerName = socialNetwork.providerName,
+                        loginUrl = callbackUrl
+                    )
+                    runCallback {
+                        openBrowserActivity(isLinking = true, res.url, socialNetwork, activity, fragment)
+                        callback?.onLinkingStarted()
                     }
-                    openBrowserActivity(isLinking = true, url, socialNetwork, activity, fragment)
-                    callback?.onLinkingStarted()
-                } else {
-                    callback?.onError(null, Utils.getErrorMessage(response.errorBody()))
+                } catch (e: Exception) {
+                    if (callback != null) {
+                        handleException(e, callback)
+                    }
                 }
             }
-
-            override fun onFailure(call: Call<UrlToLinkSocialNetworkResponse>, t: Throwable) {
-                callback?.onError(t, null)
-            }
-        })
+        }
     }
 
     fun finishSocialLinking(

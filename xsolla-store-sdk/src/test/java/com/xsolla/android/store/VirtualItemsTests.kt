@@ -43,6 +43,29 @@ class VirtualItemsTests {
     }
 
     @Test
+    fun getVirtualItems_checkDiscountSuccess() {
+        var error = false
+        var item: VirtualItemsResponse.Item? = null
+        val latch = CountDownLatch(1)
+        XStore.getVirtualItems(object : GetVirtualItemsCallback {
+            override fun onSuccess(response: VirtualItemsResponse) {
+                item = response.items.find { it.sku == itemWithDiscount }
+                latch.countDown()
+            }
+
+            override fun onError(throwable: Throwable?, errorMessage: String?) {
+                error = true
+                latch.countDown()
+            }
+        })
+        latch.await()
+        Assert.assertFalse(error)
+        Assert.assertNotNull(item)
+        Assert.assertNotEquals(0, item!!.promotions.size)
+        Assert.assertEquals(discountLimit, item!!.promotions[0].limits.perUser.total)
+    }
+
+    @Test
     fun getVirtualItemsShort_Success() {
         var error = false
         var found = true

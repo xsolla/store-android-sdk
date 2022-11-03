@@ -1,25 +1,34 @@
 package com.xsolla.android.login.entity.response
 
-import com.google.gson.annotations.SerializedName
-
 data class SearchUsersByNicknameResponse(
         val offset: Int,
-        @SerializedName("total_count")
         val totalCount: Int,
         val users: List<UserFromSearch>
 )
 
+internal fun fromLibSearch(libResponse: com.xsolla.lib_login.entity.response.SearchUsersByNicknameResponse) =
+        SearchUsersByNicknameResponse(
+                offset = libResponse.offset,
+                totalCount = libResponse.totalCount,
+                users = libResponse.users.map {
+                        UserFromSearch(
+                                avatar = it.avatar,
+                                isCurrentUser = it.isCurrentUser,
+                                lastLoginTime = it.lastLoginTime,
+                                nickname = it.nickname,
+                                registeredTime = it.registeredTime,
+                                xsollaUserId = it.xsollaUserId,
+                                tag = it.tag
+                        )
+                }
+        )
+
 data class UserFromSearch(
         val avatar: String?,
-        @SerializedName("is_me")
         val isCurrentUser: Boolean,
-        @SerializedName("last_login")
         val lastLoginTime: String,
         val nickname: String,
-        @SerializedName("registered")
         val registeredTime: String,
-        @SerializedName("user_id")
         val xsollaUserId: String,
-        @SerializedName("tag")
         val tag: String?
 )

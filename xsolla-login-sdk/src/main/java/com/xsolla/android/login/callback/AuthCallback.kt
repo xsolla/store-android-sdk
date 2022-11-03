@@ -1,11 +1,11 @@
 package com.xsolla.android.login.callback
 
-interface AuthCallback {
+interface AuthCallback : BaseCallback {
     fun onSuccess()
-    fun onError(throwable: Throwable?, errorMessage: String?)
+    override fun onError(throwable: Throwable?, errorMessage: String?)
 }
 
-interface AuthViaDeviceIdCallback {
+interface AuthViaDeviceIdCallback: BaseCallback {
     fun onSuccess()
-    fun onError(throwable: Throwable?, errorMessage: String?)
+    override fun onError(throwable: Throwable?, errorMessage: String?)
 }

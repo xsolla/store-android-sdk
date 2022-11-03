@@ -46,8 +46,6 @@ Main features:
 * password reset
 * user account
 * user attributes management
-* friend system
-
 
 ## Integration
 

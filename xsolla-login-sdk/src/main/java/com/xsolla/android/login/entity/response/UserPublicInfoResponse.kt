@@ -1,16 +1,20 @@
 package com.xsolla.android.login.entity.response
 
-import com.google.gson.annotations.SerializedName
-
 data class UserPublicInfoResponse(
     val avatar: String?,
-    @SerializedName("last_login")
     val lastLoginTime: String,
     val nickname: String?,
-    @SerializedName("registered")
     val registeredTime: String,
-    @SerializedName("user_id")
     val xsollaUserId: String,
-    @SerializedName("tag")
     val tag:String?
 )
+
+internal fun fromLibUserPublicInfoResponse(response: com.xsolla.lib_login.entity.response.UserPublicInfoResponse) =
+    UserPublicInfoResponse(
+        avatar = response.avatar,
+        lastLoginTime = response.lastLoginTime,
+        nickname = response.nickname,
+        registeredTime = response.registeredTime,
+        xsollaUserId = response.xsollaUserId,
+        tag = response.tag
+    )

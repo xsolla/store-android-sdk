@@ -1,7 +1,5 @@
 package com.xsolla.android.login.entity.common
 
-import com.google.gson.annotations.SerializedName
-
 data class UserAttribute(
     val key: String,
     val permission: UserAttributePermission,
@@ -9,8 +7,18 @@ data class UserAttribute(
 )
 
 enum class UserAttributePermission {
-    @SerializedName("public")
     PUBLIC,
-    @SerializedName("private")
     PRIVATE
 }
+
+internal fun mapAttributePermission(permission: com.xsolla.lib_login.entity.common.UserAttributePermission) =
+    when (permission) {
+        com.xsolla.lib_login.entity.common.UserAttributePermission.PUBLIC -> UserAttributePermission.PUBLIC
+        com.xsolla.lib_login.entity.common.UserAttributePermission.PRIVATE -> UserAttributePermission.PRIVATE
+    }
+
+internal fun mapAttributePermission(permission: UserAttributePermission) =
+    when(permission) {
+        UserAttributePermission.PUBLIC -> com.xsolla.lib_login.entity.common.UserAttributePermission.PUBLIC
+        UserAttributePermission.PRIVATE -> com.xsolla.lib_login.entity.common.UserAttributePermission.PRIVATE
+    }

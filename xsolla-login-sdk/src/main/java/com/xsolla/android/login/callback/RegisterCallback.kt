@@ -1,6 +1,6 @@
 package com.xsolla.android.login.callback
 
-interface RegisterCallback {
+interface RegisterCallback: BaseCallback {
     fun onSuccess()
-    fun onError(throwable: Throwable?, errorMessage: String?)
+    override fun onError(throwable: Throwable?, errorMessage: String?)
 }
