@@ -1347,7 +1347,7 @@ class XStore private constructor(
         @JvmOverloads
         fun getItemsBySpecifiedGroup(
             callback: GetVirtualItemsByGroupCallback,
-            externalId: String = "all",
+            externalId: String = "all",  // TODO check default value
             limit: Int = 50,
             offset: Int = 0,
             locale: String? = null,

@@ -28,7 +28,7 @@ class InventoryTests {
         val latch = CountDownLatch(1)
         XInventory.getInventory(object : GetInventoryCallback {
             override fun onSuccess(data: InventoryResponse) {
-                success = data.items.size == 1 && data.items[0].sku == itemInInventory
+                success = data.items.isNotEmpty() && data.items.find { it.sku == itemInInventory } != null
                 latch.countDown()
             }
 
