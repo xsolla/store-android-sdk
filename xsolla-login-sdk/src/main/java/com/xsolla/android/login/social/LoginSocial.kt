@@ -34,10 +34,8 @@ import com.xsolla.android.login.ui.ActivityAuth.Result.Companion.fromResultInten
 import com.xsolla.android.login.ui.ActivityAuthBrowserProxy
 import com.xsolla.android.login.ui.ActivityAuthWebView
 import com.xsolla.android.login.ui.ActivityWechatProxy
+import com.xsolla.android.login.util.*
 import com.xsolla.android.login.util.Utils
-import com.xsolla.android.login.util.handleException
-import com.xsolla.android.login.util.runCallback
-import com.xsolla.android.login.util.runIo
 import com.xsolla.lib_login.XLoginApi
 import com.xsolla.lib_login.entity.request.AuthBySocialTokenBody
 import com.xsolla.lib_login.entity.request.GetCodeBySocialCodeBody
@@ -76,15 +74,9 @@ internal object LoginSocial {
     private var googleServerId: String? = null
     private var qqAppId: String? = null
 
-    @JvmStatic
-    var wechatAppId: String? = null
-
     private var googleAvailable = false
 
     private var finishSocialCallback: FinishSocialCallback? = null
-
-    @JvmStatic
-    var wechatResult: BaseResp? = null
 
     fun init(
         context: Context,
@@ -109,7 +101,7 @@ internal object LoginSocial {
                 initGoogle()
             }
             if (!socialConfig.wechatAppId.isNullOrBlank()) {
-                this.wechatAppId = socialConfig.wechatAppId
+                WechatUtils.wechatAppId = socialConfig.wechatAppId
                 initWechat(context)
             }
             if (!socialConfig.qqAppId.isNullOrBlank()) {
@@ -182,8 +174,8 @@ internal object LoginSocial {
     private fun initWechat(context: Context) {
         try {
             Class.forName("com.tencent.mm.opensdk.openapi.WXAPIFactory")
-            iwxapi = WXAPIFactory.createWXAPI(context, wechatAppId, false)
-            iwxapi.registerApp(wechatAppId)
+            iwxapi = WXAPIFactory.createWXAPI(context, WechatUtils.wechatAppId, false)
+            iwxapi.registerApp(WechatUtils.wechatAppId)
         } catch (e: ClassNotFoundException) {
             // WeChat SDK isn't bundled, use webview instead
         }
@@ -288,9 +280,9 @@ internal object LoginSocial {
             return
         }
         if (socialNetwork == SocialNetwork.WECHAT && ::iwxapi.isInitialized) {
-            when (wechatResult?.errCode) {
+            when (WechatUtils.wechatResult?.errCode) {
                 BaseResp.ErrCode.ERR_OK -> {
-                    val code = (wechatResult as SendAuth.Resp).code
+                    val code = (WechatUtils.wechatResult as SendAuth.Resp).code
                     getLoginTokenFromSocialCode(
                         SocialNetwork.WECHAT,
                         code,
@@ -309,10 +301,10 @@ internal object LoginSocial {
                     callback.onAuthCancelled()
                 }
                 BaseResp.ErrCode.ERR_AUTH_DENIED -> {
-                    callback.onAuthError(null, wechatResult?.errStr ?: "ERR_AUTH_DENIED")
+                    callback.onAuthError(null, WechatUtils.wechatResult?.errStr ?: "ERR_AUTH_DENIED")
                 }
             }
-            wechatResult = null
+            WechatUtils.wechatResult = null
             return
         }
         if (socialNetwork == SocialNetwork.QQ && ::tencent.isInitialized && activityResultRequestCode == Constants.REQUEST_LOGIN) {
@@ -444,7 +436,7 @@ internal object LoginSocial {
                 } else {
                     Intent(fragment!!.activity, ActivityWechatProxy::class.java)
                 }
-                intent.putExtra(ActivityWechatProxy.EXTRA_WECHAT_ID, wechatAppId)
+                intent.putExtra(ActivityWechatProxy.EXTRA_WECHAT_ID, WechatUtils.wechatAppId)
                 activity?.startActivityForResult(intent, RC_AUTH_WECHAT)
                 fragment?.startActivityForResult(intent, RC_AUTH_WECHAT)
                 callback.invoke(true)
