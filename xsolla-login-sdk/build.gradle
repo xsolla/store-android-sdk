@@ -59,12 +59,12 @@ dependencies {
     testImplementation "androidx.test:core:$androidx_test_core"
     testImplementation 'com.facebook.android:facebook-login:14.0.0'
     testImplementation 'com.google.android.gms:play-services-auth:20.3.0'
-    testImplementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.23'
+    testImplementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0'
     testImplementation fileTree(dir: 'libs', include: ['*.jar'])
 
     compileOnly 'com.facebook.android:facebook-login:14.0.0'
     compileOnly 'com.google.android.gms:play-services-auth:20.3.0'
-    compileOnly 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.23'
+    compileOnly 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0'
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
 
 //    implementation project(":lib-login-api")
