@@ -21,3 +21,6 @@ const val promoItem = "gift"
 const val promoDiscount = "10.00"
 
 const val itemForAddingToCart = "airplane"
+
+const val validCoupon = "xsWoLGJoMk"
+const val couponItemSku = "gift"

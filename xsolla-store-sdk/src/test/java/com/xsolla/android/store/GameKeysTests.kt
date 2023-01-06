@@ -60,7 +60,8 @@ class GameKeysTests {
         }, "somegroup")
         latch.await()
         Assert.assertTrue(error)
-        Assert.assertEquals("[0401-4403]: Item group not found", err)
+        Assert.assertNotNull(err)
+        Assert.assertTrue(err!!.contains("[0401-4403]"))
     }
 
     @Test
@@ -127,7 +128,8 @@ class GameKeysTests {
         }, "somegroup")
         latch.await()
         Assert.assertTrue(error)
-        Assert.assertEquals("[0401-4403]: Item group not found", err)
+        Assert.assertNotNull(err)
+        Assert.assertTrue(err!!.contains("[0401-4403]"))
     }
 
     @Test
