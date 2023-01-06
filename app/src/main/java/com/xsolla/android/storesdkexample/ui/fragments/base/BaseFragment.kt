@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import com.xsolla.android.googleplay.StoreUtils
 import com.xsolla.android.storesdkexample.R
 
 abstract class BaseFragment : Fragment() {
