@@ -1,5 +1,11 @@
 # Changelog
 
+## [5.1.0] - Login SDK - 2023-01-06
+### Changed
+- Updated WeChat SDK
+- Fixed WeChat native authentication
+
+
 ## [5.0.1] - Login SDK - 2022-11-03
 ### Changed
 - Migrated network layer from Retrofit to Ktor Client
