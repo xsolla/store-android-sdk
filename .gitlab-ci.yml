@@ -277,7 +277,7 @@ build doc:
   stage: build
   script:
     - ./gradlew dokkaHtmlMultiModule
-    - git clone https://$GITHUB_ACCESS_TOKEN@github.com/xsolla/sdk-reference-parser-android.git
+    - git clone --branch add-google-analytics https://$GITHUB_ACCESS_TOKEN@github.com/xsolla/sdk-reference-parser-android.git
     - mkdir -p sdk-reference-parser-android/src/htmlMultiModule
     - mkdir -p sdk-reference-parser-android/dist
     - mv -v build/dokka/htmlMultiModule/* sdk-reference-parser-android/src/htmlMultiModule
