@@ -16,6 +16,7 @@ tasks.register('setupTestVariables') {
         def merchantId = readVariable('TEST_STORE_MERCHANT_ID')
         def projectId = readVariable('TEST_STORE_PROJECT_ID')
         def apiKey = readVariable('TEST_STORE_API_KEY')
+        def userId = readVariable("TEST_LOGIN_USER_ID")
 
         def connection = new URL("https://api.xsolla.com/merchant/v2/merchants/${merchantId}/token").openConnection()
         def message = "{\"settings\":{\"project_id\":${projectId}},\"user\":{\"id\":{\"value\":\"user123\"}}}"
@@ -33,6 +34,7 @@ package com.xsolla.android.store
 
 const val projectId = ${projectId}
 const val userToken = "${accessToken}"
+const val userId = "${userId}"
 """
         File file = new File("xsolla-store-sdk/src/test/java/com/xsolla/android/store/SecureTestParams.kt")
         file.write fileContent

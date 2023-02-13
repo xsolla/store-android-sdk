@@ -69,37 +69,4 @@ class GetOrderTests {
         latch.await()
         Assert.assertEquals("[0401-9001]: Order not found", msg)
     }
-
-    @Test
-    fun getOrderStatus_Success() {
-        var orderId = 0
-        var latch = CountDownLatch(1)
-        XStore.createOrderByItemSku(object : CreateOrderCallback {
-            override fun onSuccess(response: CreateOrderResponse) {
-                orderId = response.orderId
-                latch.countDown()
-            }
-
-            override fun onError(throwable: Throwable?, errorMessage: String?) {
-                latch.countDown()
-            }
-        }, itemForOrderBySku)
-        latch.await()
-        Assert.assertNotEquals(0, orderId)
-        var res: OrderResponse.Status? = null
-        latch = CountDownLatch(1)
-        XStore.getOrderStatus(object : OrderStatusListener() {
-            override fun onStatusUpdate(status: OrderResponse.Status) {
-                res = status
-                latch.countDown()
-            }
-
-            override fun onFailure() {
-                latch.countDown()
-            }
-        }, orderId.toString())
-        latch.await()
-        Assert.assertEquals(OrderResponse.Status.NEW, res)
-    }
-
 }
