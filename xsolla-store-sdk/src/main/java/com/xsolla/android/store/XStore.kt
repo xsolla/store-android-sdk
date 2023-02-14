@@ -689,13 +689,11 @@ class XStore private constructor(
         @JvmStatic
         fun getOrderStatus(
             listener: OrderStatusListener,
-            orderId: String,
-            userId: String
+            orderId: String
         ) {
             getInstance().ordersTracker.addToTracking(
                 listener,
                 orderId,
-                userId,
                 getInstance().accessToken,
                 getInstance().projectId
             )

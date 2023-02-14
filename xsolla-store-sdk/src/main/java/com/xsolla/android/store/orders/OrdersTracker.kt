@@ -28,7 +28,6 @@ internal class OrdersTracker(
     fun addToTracking(
         listener: OrderStatusListener,
         orderId: String,
-        userId: String,
         accessToken: String,
         projectId: Int
     ) {
@@ -70,7 +69,7 @@ internal class OrdersTracker(
         }
 
         val centrifugeOptions = Options()
-        val centrifugeData = CentrifugeConnectionData(userId, accessToken, projectId)
+        val centrifugeData = CentrifugeConnectionData(accessToken, projectId)
         centrifugeOptions.data = Gson().toJson(centrifugeData).toByteArray()
 
         centrifugoClient = Client(CENTRIFUGO_ENDPOINT, centrifugeOptions, centrifugeListener)
@@ -134,8 +133,6 @@ internal class OrdersTracker(
     }
 
     private data class CentrifugeConnectionData(
-        @SerializedName("user_external_id")
-        val UserId: String,
         @SerializedName("auth")
         val Token: String,
         @SerializedName("project_id")
