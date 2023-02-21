@@ -71,6 +71,7 @@ internal object LoginSocial {
     private lateinit var qqListener: IUiListener
 
     private var facebookAppId: String? = null
+    private var facebookClientToken: String? = null
     private var googleServerId: String? = null
     private var qqAppId: String? = null
 
@@ -92,8 +93,9 @@ internal object LoginSocial {
         this.oauthClientId = oauthClientId
 
         if (socialConfig != null) {
-            if (!socialConfig.facebookAppId.isNullOrBlank()) {
+            if (!socialConfig.facebookAppId.isNullOrBlank() && !socialConfig.facebookClientToken.isNullOrBlank()) {
                 this.facebookAppId = socialConfig.facebookAppId
+                this.facebookClientToken = socialConfig.facebookClientToken
                 initFacebook(context)
             }
             if (!socialConfig.googleServerId.isNullOrBlank()) {
@@ -114,6 +116,7 @@ internal object LoginSocial {
     private fun initFacebook(context: Context) {
         try {
             FacebookSdk.setApplicationId(facebookAppId!!)
+            FacebookSdk.setClientToken(facebookClientToken!!)
             FacebookSdk.sdkInitialize(context)
             fbCallbackManager = CallbackManager.Factory.create()
             fbCallback = object : FacebookCallback<LoginResult> {
