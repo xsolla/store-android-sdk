@@ -54,6 +54,7 @@ class XLogin private constructor(
 
     data class SocialConfig @JvmOverloads constructor(
         val facebookAppId: String? = null,
+        val facebookClientToken: String? = null,
         val googleServerId: String? = null,
         val wechatAppId: String? = null,
         val qqAppId: String? = null
