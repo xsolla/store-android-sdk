@@ -1,5 +1,20 @@
 # Changelog
 
+## [6.0.0] - Login SDK - 2023-02-23
+### Changed
+- Fixed Facebook native authentication
+- Fixed a bug with update user details request
+
+## [2.3.0] - Store SDK - 2023-02-23
+### Changed
+- Updated order status tracking mechanism
+- Integrated Centrifuge SDK
+
+## [2.2.2] - Demo Apps - 2023-02-23
+### Changed
+- Removed birthday field from account screen
+
+
 ## [5.1.0] - Login SDK - 2023-01-06
 ### Changed
 - Updated WeChat SDK
