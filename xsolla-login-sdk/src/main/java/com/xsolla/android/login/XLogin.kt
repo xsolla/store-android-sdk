@@ -904,7 +904,6 @@ class XLogin private constructor(
          */
         @JvmStatic
         fun updateCurrentUserDetails(
-            birthday: String?,
             firstName: String?,
             gender: String?,
             lastName: String?,
@@ -912,7 +911,6 @@ class XLogin private constructor(
             callback: UpdateCurrentUserDetailsCallback
         ) {
             val body = UpdateUserDetailsBody(
-                birthday = birthday,
                 firstName = firstName,
                 gender = gender,
                 lastName = lastName,

@@ -41,7 +41,6 @@ class VmProfile(private val resources: Resources) : ViewModel() {
                     nickname = data.nickname ?: "",
                     firstName = data.firstName ?: "",
                     lastName = data.lastName ?: "",
-                    birthday = data.birthday ?: "",
                     phone = data.phone ?: "",
                     gender = Gender.getBy(data.gender),
                     avatar = data.picture ?: ""
@@ -64,8 +63,7 @@ class VmProfile(private val resources: Resources) : ViewModel() {
             Gender.PreferNotToAnswer -> "prefer not to answer"
             null -> ""
         }
-        val birthday = newState.birthday
-        XLogin.updateCurrentUserDetails(birthday, newState.firstName, gender, newState.lastName, newState.nickname, object : UpdateCurrentUserDetailsCallback {
+        XLogin.updateCurrentUserDetails(newState.firstName, gender, newState.lastName, newState.nickname, object : UpdateCurrentUserDetailsCallback {
             override fun onSuccess() {
                 message.value = resources.getString(R.string.profile_fields_were_changed)
                 _state.value = newState.copy(phone = state.value!!.phone)
@@ -139,7 +137,6 @@ data class UserDetailsUi(
     val nickname: String = "",
     val firstName: String = "",
     val lastName: String = "",
-    val birthday: String = "",
     val phone: String = "",
     val gender: Gender? = null,
     val avatar: String? = null
@@ -168,12 +165,6 @@ enum class FieldsForChanging {
         override fun updateStateForChanging(value: String, state: MutableLiveData<UserDetailsUi>) {
             val nonNullState = state.value ?: return
             state.value = nonNullState.copy(lastName = value)
-        }
-    },
-    BIRTHDAY {
-        override fun updateStateForChanging(value: String, state: MutableLiveData<UserDetailsUi>) {
-            val nonNullState = state.value ?: return
-            state.value = nonNullState.copy(birthday = value)
         }
     },
     GENDER {

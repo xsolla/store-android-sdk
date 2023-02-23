@@ -13,8 +13,6 @@ internal data class CheckUserAgeBody(
 
 @Serializable
 internal data class UpdateUserDetailsBody(
-    @SerialName("birthday")
-    val birthday: String?,
     @SerialName("first_name")
     val firstName: String?,
     @SerialName("gender")

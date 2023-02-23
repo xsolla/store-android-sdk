@@ -1,11 +1,7 @@
 package com.xsolla.android.storesdkexample.ui.fragments.profile
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.DatePicker
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
@@ -13,16 +9,11 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
-import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.appcore.databinding.FragmentProfileBinding
+import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
-import com.xsolla.android.storesdkexample.ui.vm.FieldsForChanging
-import com.xsolla.android.storesdkexample.ui.vm.Gender
-import com.xsolla.android.storesdkexample.ui.vm.UserDetailsUi
-import com.xsolla.android.storesdkexample.ui.vm.ValidateFieldResult
-import com.xsolla.android.storesdkexample.ui.vm.VmProfile
+import com.xsolla.android.storesdkexample.ui.vm.*
 import com.xsolla.android.storesdkexample.ui.vm.base.ViewModelFactory
-import java.util.Calendar
 
 class ProfileFragment : BaseFragment() {
     private val binding: FragmentProfileBinding by viewBinding()
@@ -77,10 +68,6 @@ class ProfileFragment : BaseFragment() {
             binding.firstnameInput.setText(userData.firstName)
             binding.lastnameInput.setText(userData.lastName)
 
-            // Birthday
-            binding.birthdayInput.setText(userData.birthday)
-            if (userData.birthday.isNotBlank()) binding.birthdayLayout.isEnabled = false
-
             // Gender
             // https://stackoverflow.com/questions/28184543/android-autocompletetextview-not-showing-after-settext-is-called
             binding.genderInput.setText(userData.gender?.name, false)
@@ -108,7 +95,6 @@ class ProfileFragment : BaseFragment() {
             findNavController().navigate(ProfileFragmentDirections.actionNavProfileToFragmentChooseAvatar(id, viewModel.state.value?.avatar))
         }
 
-        configureBirthday()
         configureFields()
     }
 
@@ -124,9 +110,6 @@ class ProfileFragment : BaseFragment() {
         }
         binding.lastnameInput.addTextChangedListener {
             textChangedListener(FieldsForChanging.LAST_NAME, it?.toString())
-        }
-        binding.birthdayInput.addTextChangedListener {
-            textChangedListener(FieldsForChanging.BIRTHDAY, it?.toString())
         }
         binding.genderInput.addTextChangedListener {
             textChangedListener(FieldsForChanging.GENDER, it?.toString())
@@ -207,38 +190,6 @@ class ProfileFragment : BaseFragment() {
 
     private fun clearValidations() {
         fieldsWithPossibleError.forEach { it.isErrorEnabled = false }
-    }
-
-    // Not DatePickerDialog from Android SDK due to colors problems
-    private fun configureBirthday() {
-        binding.birthdayInput.setOnClickListener {
-            val pickerDialog = LayoutInflater.from(context).inflate(R.layout.item_datepicker, binding.root, false)
-            val picker = pickerDialog.findViewById<DatePicker>(R.id.datePicker)
-
-            picker.init(1990, 0, 1, null)
-            picker.minDate = Calendar.getInstance().apply { set(1950, 0, 1) }.timeInMillis
-            picker.maxDate = System.currentTimeMillis()
-
-            val alertDialog = AlertDialog.Builder(requireContext())
-                .setView(pickerDialog)
-                .setCancelable(true)
-                .create()
-
-            pickerDialog.findViewById<Button>(R.id.okButton).setOnClickListener {
-                val month = if (picker.month + 1 < 10) "0${picker.month + 1}" else "${picker.month + 1}"
-                val day = if (picker.dayOfMonth < 10) "0${picker.dayOfMonth}" else "${picker.dayOfMonth}"
-                val result = "${picker.year}-$month-$day"
-                binding.birthdayInput.setText(result)
-                alertDialog.dismiss()
-            }
-            pickerDialog.findViewById<Button>(R.id.clearButton).setOnClickListener {
-                binding.birthdayInput.setText("")
-                alertDialog.dismiss()
-            }
-            pickerDialog.findViewById<Button>(R.id.cancelButton).setOnClickListener { alertDialog.dismiss() }
-
-            alertDialog.show()
-        }
     }
 
     private fun configureGender() {
