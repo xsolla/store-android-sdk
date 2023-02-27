@@ -3,7 +3,8 @@
 ## [6.0.0] - Login SDK - 2023-02-23
 ### Changed
 - Fixed Facebook native authentication
-- Fixed a bug with "Update user details" request
+- Fixed a bug when updating user details in the Sample App
+- Updated `updateCurrentUserDetails` method. Removed the `birthday` parameter.
 
 ## [2.3.0] - Store SDK - 2023-02-23
 ### Changed
