@@ -3,7 +3,7 @@
 ## [6.0.0] - Login SDK - 2023-02-23
 ### Changed
 - Fixed Facebook native authentication
-- Fixed a bug with update user details request
+- Fixed a bug with "Update user details" request
 
 ## [2.3.0] - Store SDK - 2023-02-23
 ### Changed
@@ -51,7 +51,7 @@
 ## [5.0.0] - Login SDK - 2022-09-06
 ### Added
 - Consumer ProGuard rules
-- locale argument for methods triggering email sending
+- Locale argument for methods triggering email sending
 ### Changed
 - Social authentication error parsing fixed
 ### Removed
