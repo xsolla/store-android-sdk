@@ -45,6 +45,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "io.github.centrifugal:centrifuge-java:0.2.5"
 
     testImplementation "junit:junit:$junit_version"
     testImplementation "org.robolectric:robolectric:$robolectric_version"

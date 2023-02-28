@@ -54,6 +54,7 @@ class XLogin private constructor(
 
     data class SocialConfig @JvmOverloads constructor(
         val facebookAppId: String? = null,
+        val facebookClientToken: String? = null,
         val googleServerId: String? = null,
         val wechatAppId: String? = null,
         val qqAppId: String? = null
@@ -903,7 +904,6 @@ class XLogin private constructor(
          */
         @JvmStatic
         fun updateCurrentUserDetails(
-            birthday: String?,
             firstName: String?,
             gender: String?,
             lastName: String?,
@@ -911,7 +911,6 @@ class XLogin private constructor(
             callback: UpdateCurrentUserDetailsCallback
         ) {
             val body = UpdateUserDetailsBody(
-                birthday = birthday,
                 firstName = firstName,
                 gender = gender,
                 lastName = lastName,

@@ -1,5 +1,21 @@
 # Changelog
 
+## [6.0.0] - Login SDK - 2023-02-23
+### Changed
+- Fixed Facebook native authentication
+- Fixed a bug when updating user details in the Sample App
+- Updated `updateCurrentUserDetails` method. Removed the `birthday` parameter.
+
+## [2.3.0] - Store SDK - 2023-02-23
+### Changed
+- Updated order status tracking mechanism
+- Integrated Centrifuge SDK
+
+## [2.2.2] - Demo Apps - 2023-02-23
+### Changed
+- Removed birthday field from account screen
+
+
 ## [5.1.0] - Login SDK - 2023-01-06
 ### Changed
 - Updated WeChat SDK
@@ -36,7 +52,7 @@
 ## [5.0.0] - Login SDK - 2022-09-06
 ### Added
 - Consumer ProGuard rules
-- locale argument for methods triggering email sending
+- Locale argument for methods triggering email sending
 ### Changed
 - Social authentication error parsing fixed
 ### Removed
