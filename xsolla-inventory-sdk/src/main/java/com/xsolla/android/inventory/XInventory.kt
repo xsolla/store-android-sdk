@@ -74,13 +74,12 @@ class XInventory private constructor(
         }
 
         /**
-         * Gets the current user’s inventory.
-         *
+         * Returns a list of virtual items from the user’s inventory according to pagination settings. For each virtual item, complete data is returned.
          *
          * @param callback Status callback.
          * @param limit Limit for the number of elements on the page in the range from 1 to 50.
          * @param offset Number of the element from which the list is generated (the count starts from 0).
-         * @see [Inventory API Reference](https://developers.xsolla.com/commerce-api/player-inventory/client/get-user-inventory)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/player-inventory/display-inventory/).
          */
         @JvmStatic
         @JvmOverloads
@@ -93,10 +92,10 @@ class XInventory private constructor(
         }
 
         /**
-         * Gets the current user’s virtual balance.
+         * Returns the current user’s balance of virtual currency. For each virtual currency, complete data is returned.
          *
          * @param callback Status callback.
-         * @see [Inventory API Reference](https://developers.xsolla.com/commerce-api/player-inventory/client/get-user-virtual-balance)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/player-inventory/display-inventory/).
          */
         @JvmStatic
         fun getVirtualBalance(
@@ -106,10 +105,10 @@ class XInventory private constructor(
         }
 
         /**
-         * Gets the current list of user’s time limited items.
+         * Returns a list of time-limited items from the user’s inventory. For each item, complete data is returned.
          *
          * @param callback Status callback.
-         * @see [Inventory API Reference](https://developers.xsolla.com/commerce-api/player-inventory/client/get-user-subscriptions)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/player-inventory/display-inventory/).
          */
         @JvmStatic
         fun getTimeLimitedItems(
@@ -120,13 +119,13 @@ class XInventory private constructor(
 
 
         /**
-         * Consumes an item from the current user’s inventory.
+         * Consumes an inventory item. Use for only for consumable virtual items.
          *
          * @param sku        Item SKU.
          * @param quantity   Item quantity. If an item is uncountable, should be null.
          * @param instanceId Instance item ID. If an item is countable, should be null.
          * @param callback   Status callback.
-         * @see [Inventory API Reference](https://developers.xsolla.com/commerce-api/player-inventory/client/consume-item)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/player-inventory/consume-item/).
          */
         @JvmStatic
         fun consumeItem(
