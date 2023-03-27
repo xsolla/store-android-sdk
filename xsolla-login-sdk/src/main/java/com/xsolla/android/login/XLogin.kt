@@ -94,8 +94,8 @@ class XLogin private constructor(
         /**
          * Initialize SDK
          *
-         * @param context      application context
-         * @param loginConfig  config for initializing. Use LoginConfig.OauthBuilder
+         * @param context      Application context.
+         * @param loginConfig  Config for initializing. Use `LoginConfig.OauthBuilder`.
          */
         @JvmStatic
         fun init(context: Context, loginConfig: LoginConfig) {
@@ -145,16 +145,16 @@ class XLogin private constructor(
         // OAuth2.0
 
         /**
-         * Authenticates users via username and password.
+         * Authenticates the user by the username/email and password specified via the authentication interface.
          *
-         * @param username User's username.
-         * @param password User's email.
+         * @param username Username or email address.
+         * @param password Password.
          * @param callback Status callback.
          * Can have the following values:
-         * 1 -> to deactivate the existing values and activate a new one.
-         * 0 -> to keep the existing values activated.
+         * - `1` to deactivate the existing values and activate a new one.
+         * - `0` to keep the existing values activated.
          *
-         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/jwt-auth-by-username-and-password)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/authentication/classic-auth/).
          */
         @JvmStatic
         fun login(
@@ -188,14 +188,14 @@ class XLogin private constructor(
         }
 
         /**
-         * Starts authentication by the user phone number and sends a verification code to their phone number.
+         * Starts user authentication and sends an SMS with a one-time code and a link to the specified phone number (if login via magic link is configured for the Login project).
          *
-         * @param phoneNumber User’s phone number.
+         * @param phoneNumber User phone number.
          * @param callback Status callback.
          * @param sendLink Whether to send a link for authentication.
          * @param linkUrl URL to redirect the user, required if `sendLink` is `true`.
          *
-         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-start-auth-by-phone-number)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/authentication/passwordless-auth/).
          */
         @JvmStatic
         fun startAuthByMobilePhone(
@@ -228,14 +228,14 @@ class XLogin private constructor(
         }
 
         /**
-         * Completes authentication by the user’s phone number and a confirmation code.
+         * Completes authentication after the user enters a one-time code or follows a link received by SMS.
          *
-         * @param phoneNumber User’s phone number.
+         * @param phoneNumber User phone number.
          * @param code Confirmation code sent to the user via SMS.
          * @param operationId ID of the confirmation code.
          * @param callback Status callback.
          *
-         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-complete-auth-by-phone-number)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/authentication/passwordless-auth/).
          */
         @JvmStatic
         fun completeAuthByMobilePhone(
@@ -272,15 +272,14 @@ class XLogin private constructor(
         }
 
         /**
-         * Starts authentication by the user’s email address and sends a confirmation code to their email address.
-
+         * Starts user authentication and sends an email with a one-time code and a link to the specified email address (if login via magic link is configured for the Login project).
          *
-         * @param email User’s email.
+         * @param email User email address.
          * @param callback Status callback.
          * @param sendLink Whether to send a link for authentication.
          * @param linkUrl URL to redirect the user, required if `sendLink` is `true`.
          *
-         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/auth/oauth-20/oauth-20-start-auth-by-email)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/authentication/passwordless-auth/).
          */
         @JvmStatic
         fun startAuthByEmail(
@@ -313,15 +312,14 @@ class XLogin private constructor(
         }
 
         /**
-         * Completes authentication by the user’s email address and a confirmation code.
-
+         * Completes authentication after the user enters a one-time code or follows a link received in an email.
          *
-         * @param email User’s email.
-         * @param code Confirmation code sent to the user via SMS.
+         * @param email User email address.
+         * @param code Confirmation code.
          * @param operationId ID of the confirmation code.
          * @param callback Status callback.
          *
-         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/auth/oauth-20/oauth-20-complete-auth-by-email)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/authentication/passwordless-auth/).
          */
         @JvmStatic
         fun completeAuthByEmail(
@@ -369,12 +367,11 @@ class XLogin private constructor(
         }
 
         /**
-         * Authenticates a user via a particular device ID.
-         * To enable authentication, contact your Account Manager.
+         * Authenticates the user via a particular device ID.
          *
          * @param callback Status callback.
          *
-         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/auth/oauth-20/oauth-20-auth-via-device-id)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/authentication/auth-via-device-id/).
          */
         @SuppressLint("HardwareIds")
         @JvmStatic
@@ -420,17 +417,18 @@ class XLogin private constructor(
 
 
         /**
-         * Register a new user
+         * Creates a new user account in the application and sends a sign-up confirmation email to the specified email address. To complete registration, the user must follow the link from the email.
          *
-         * @param username New user's username
-         * @param email New user's email
-         * @param password New user's password
-         * @param callback Status callback
+         * @param username Username.
+         * @param email User email.
+         * @param password Password.
+         * @param callback Status callback.
          * @param acceptConsent Whether the user gave consent to processing of their personal data.
-         * @param promoEmailAgreement User consent to receive the newsletter.
-         * @param locale Language of the email sent after this call in the <language code>_<country code> format where language code is language code in the ISO 639-1 format, country code is country/region code in the ISO 3166-1 alpha-2 format.
+         * @param promoEmailAgreement Whether the user gave consent to receive the newsletters.
+         * @param locale Defines localization of the email the user receives.
+         * The following languages are supported: Arabic (`ar_AE`), Bulgarian (`bg_BG`), Czech (`cz_CZ`), German (`de_DE`), Spanish (`es_ES`), French (`fr_FR`), Hebrew (`he_IL`), Italian (`it_IT`), Japanese (`ja_JP`), Korean (`ko_KR`), Polish (`pl_PL`), Portuguese (`pt_BR`), Romanian (`ro_RO`), Russian (`ru_RU`), Thai (`th_TH`), Turkish (`tr_TR`), Vietnamese (`vi_VN`), Chinese Simplified (`zh_CN`), Chinese Traditional (`zh_TW`), English (`en_XX`, default).
          *
-         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/oauth-20-register-a-new-user)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/authentication/classic-auth/).
          */
         @JvmStatic
         @JvmOverloads
@@ -478,9 +476,8 @@ class XLogin private constructor(
          *
          * @param sessions Shows how the user is logged out and how the user session is deleted.
          * The parameter has the following values:
-         * `sso` is used for deleting only the SSO user session.
-         * `all` is used for deleting the SSO user session and invalidating all access and refresh tokens.
-         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/auth/oauth-20/log-user-out/)
+         * - `sso` is used for deleting only the SSO user session.
+         * - `all` is used for deleting the SSO user session and invalidating all access and refresh tokens.
          */
         @JvmStatic
         fun oauthLogout(
@@ -511,9 +508,10 @@ class XLogin private constructor(
          *
          * @param username Username or user email address.
          * @param callback Status callback.
-         * @param locale Language of the email sent after this call in the <language code>_<country code> format where language code is language code in the ISO 639-1 format, country code is country/region code in the ISO 3166-1 alpha-2 format.
+         * @param locale Defines localization of the email the user receives.
+         * The following languages are supported: Arabic (`ar_AE`), Bulgarian (`bg_BG`), Czech (`cz_CZ`), German (`de_DE`), Spanish (`es_ES`), French (`fr_FR`), Hebrew (`he_IL`), Italian (`it_IT`), Japanese (`ja_JP`), Korean (`ko_KR`), Polish (`pl_PL`), Portuguese (`pt_BR`), Romanian (`ro_RO`), Russian (`ru_RU`), Thai (`th_TH`), Turkish (`tr_TR`), Vietnamese (`vi_VN`), Chinese Simplified (`zh_CN`), Chinese Traditional (`zh_TW`), English (`en_XX`, default).
          *
-         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/emails/oauth-20/oauth-20-resend-account-confirmation-email)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/authentication/classic-auth/).
          */
         @JvmStatic
         @JvmOverloads
@@ -550,13 +548,14 @@ class XLogin private constructor(
         // Resetting
 
         /**
-         * Reset user's password
+         * Resets the user’s current password and sends an email to change the password to the email address specified during sign-up.
          *
-         * @param username user's username
-         * @param callback status callback
-         * @param locale Language of the email sent after this call in the <language code>_<country code> format where language code is language code in the ISO 639-1 format, country code is country/region code in the ISO 3166-1 alpha-2 format.
+         * @param username Username or email.
+         * @param callback Status callback.
+         * @param locale Defines localization of the email the user receives.
+         * The following languages are supported: Arabic (`ar_AE`), Bulgarian (`bg_BG`), Czech (`cz_CZ`), German (`de_DE`), Spanish (`es_ES`), French (`fr_FR`), Hebrew (`he_IL`), Italian (`it_IT`), Japanese (`ja_JP`), Korean (`ko_KR`), Polish (`pl_PL`), Portuguese (`pt_BR`), Romanian (`ro_RO`), Russian (`ru_RU`), Thai (`th_TH`), Turkish (`tr_TR`), Vietnamese (`vi_VN`), Chinese Simplified (`zh_CN`), Chinese Traditional (`zh_TW`), English (`en_XX`, default).
          *
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/methods/general/reset-password)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/authentication/classic-auth/).
          */
         @JvmStatic
         @JvmOverloads
@@ -596,8 +595,8 @@ class XLogin private constructor(
          * Creates the code for linking the platform account to the existing main account
          * when the user logs in to the game via a gaming console.
          *
-         * @param callback         status callback
-         *  @see [Login API Reference](https://developers.xsolla.com/login-api/linking-account/linking/create-code-for-linking-accounts)
+         * @param callback         Status callback.
+         *  @see [More about the use cases](https://developers.xsolla.com/sdk/android/user-account-and-attributes/account-linking/#sdk_account_linking_platform_account).
          */
         @JvmStatic
         fun createCodeForLinkingAccount(callback: CreateCodeForLinkingAccountCallback) {
@@ -625,16 +624,14 @@ class XLogin private constructor(
         // Client
 
         /**
-         * Gets a list of particular user’s attributes. Returns only **client** attributes.
+         * Returns a list of particular user’s attributes with their values and descriptions. Returns only user-editable attributes.
          *
-         * @param keys                      List of attributes’ keys which you want to get. If you do not specify them, it returns all user’s attributes.
+         * @param keys                      List of attributes’ keys which you want to get. If not specified, the method returns all user’s attributes.
          * @param publisherProjectId        Project ID from Publisher Account which you want to get attributes for. If you do not specify it, it returns attributes without the value of this parameter.
-         * @param userId                    User ID which attributes you want to get. Returns only attributes with the `public` value of the `permission` parameter. If you do not specify it or put your user ID there, it returns only your attributes with any value for the `permission` parameter.
-         * @param getReadOnlyAttributes     true for getting read only attributes, false for editable attributes
-         * @param callback                  callback with operation response
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/attributes/client/get-users-read-only-attributes-from-client)
-         *
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/attributes/client/get-users-attributes-from-client)
+         * @param userId                    Identifier of a user whose public attributes should be requested. If not specified, the method returns attributes for the current user.
+         * @param getReadOnlyAttributes     `true` for getting read only attributes, `false` for user-editable attributes.
+         * @param callback                  Callback with operation response
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/user-account-and-attributes/user-attributes/).
          */
         @JvmStatic
         fun getUsersAttributesFromClient(
@@ -680,13 +677,13 @@ class XLogin private constructor(
         }
 
         /**
-         * Updates and creates particular user’s attributes.
+         * Updates the values of user attributes with the specified IDs. The method can be used to create and remove attributes. Changes are made on the user data storage side (server side).
          *
          * @param attributes                List of attributes of the specified game. To add attribute which does not exist, set this attribute to the `key` parameter. To update `value` of the attribute, specify its `key` parameter and set the new `value`. You can change several attributes at a time.
          * @param publisherProjectId        Project ID from Publisher Account which you want to update the value of specified attributes for. If you do not specify it, it updates attributes that are general to all games only.
-         * @param removingKeys              List of attributes which you want to delete. If you specify the same attribute in `attributes` parameter, it will not be deleted.
-         * @param callback                  callback that indicates the success or failure of an action
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/attributes/client/update-users-attributes-from-client)
+         * @param removingKeys              List of attributes which you want to remove. If you specify the same attribute in `attributes` parameter, it will not be deleted.
+         * @param callback                  Callback that indicates the success or failure of an action.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/user-account-and-attributes/user-attributes/).
          */
         @JvmStatic
         fun updateUsersAttributesFromClient(
@@ -732,9 +729,9 @@ class XLogin private constructor(
         // Devices
 
         /**
-         * Gets a list of user’s devices.
+         * Returns a list of devices linked to the current user account.
          *
-         * @see (https://developers.xsolla.com/login-api/user-account/managed-by-client/devices/get-users-devices/)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/authentication/auth-via-device-id/).
          */
 
         @JvmStatic
@@ -766,10 +763,10 @@ class XLogin private constructor(
 
 
         /**
-         * Links the specified device to the user account. To enable authentication via device ID and linking, contact your Account Manager.
+         * Links the specified device to the current user account.
          *
-         * @param callback      status callback
-         * @see (https://developers.xsolla.com/login-api/user-account/managed-by-client/devices/link-device-to-account/)
+         * @param callback      Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/authentication/auth-via-device-id/).
          */
         @SuppressLint("HardwareIds")
         @JvmStatic
@@ -805,10 +802,10 @@ class XLogin private constructor(
         }
 
         /**
-         * Unlinks the specified device from the user account. To enable authentication via device ID and unlinking, contact your Account Manager.
+         * Unlinks the specified device from the current user account.
          *
-         * @param id device Id you want to unlink. it is NOT THE SAME as the device_id param from AuthViaDeviceId
-         * @see (https://developers.xsolla.com/login-api/user-account/managed-by-client/devices/unlink-device-from-account/)
+         * @param id Platform specific unique device ID.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/authentication/auth-via-device-id/).
          */
 
         @JvmStatic
@@ -842,9 +839,9 @@ class XLogin private constructor(
          * Checks user’s age for a particular region. The age requirements depend on the region.
          * Service determines the user’s location by the IP address.
          *
-         * @param birthday         user's birth date in the 'YYYY-MM-DD' format
-         * @param callback         status callback
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/check-users-age)
+         * @param birthday         User's birth date in the `YYYY-MM-DD` format.
+         * @param callback         Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/user-account-and-attributes/user-account/).
          */
         @JvmStatic
         fun checkUserAge(birthday: String, callback: CheckUserAgeCallback) {
@@ -868,10 +865,10 @@ class XLogin private constructor(
         }
 
         /**
-         * Gets details of the authenticated user.
+         * Returns user details.
          *
          * @param callback    Callback with data.
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/get-user-details)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/user-account-and-attributes/user-account/).
          */
         @JvmStatic
         fun getCurrentUserDetails(callback: GetCurrentUserDetailsCallback) {
@@ -892,15 +889,15 @@ class XLogin private constructor(
         }
 
         /**
-         * Updates the details of the authenticated user
+         * Updates the specified user’s information. Changes are made on the user data storage side.
          *
-         * @param birthday    birthday in the format "yyyy-MM-dd"
-         * @param firstName   first name
-         * @param gender      gender ("m" or "f")
-         * @param lastName    last name
-         * @param nickname    nickname
-         * @param callback    status callback
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/update-user-details)
+         * @param birthday    User birth date in format `YYYY-MM-DD`. Can be changed only once.
+         * @param firstName   User first name. Pass empty string to remove the current first name.
+         * @param gender      User gender. Can be `f` - for female, `m` - for male, `other`, or `prefer not to answer`.
+         * @param lastName    User last name. Pass empty string to remove the current last name.
+         * @param nickname    User nickname. Pass empty string to remove the current nickname.
+         * @param callback    Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/user-account-and-attributes/user-account/).
          */
         @JvmStatic
         fun updateCurrentUserDetails(
@@ -934,13 +931,13 @@ class XLogin private constructor(
         }
 
         /**
-         * Adds the username/email and password authentication to the existing user account. This call is used if the account is created via device ID or phone number.
+         * Adds a username, email address, and password, that can be used for authentication, to the current account.
          *
-         * @param email users email
-         * @param password users password
-         * @param username username of current user
-         * @param callback      status callback
-         * @see (https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/add-username-email-auth-to-account/)
+         * @param email User email.
+         * @param password User password.
+         * @param username Username of current user
+         * @param callback      Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/authentication/auth-via-device-id/).
          */
         @JvmStatic
         fun linkEmailPassword(
@@ -979,10 +976,10 @@ class XLogin private constructor(
         }
 
         /**
-         * Gets the phone number of the authenticated user
+         * Returns user phone number that is used for two-factor authentication.
          *
-         * @param callback    callback with data
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/get-user-phone-number)
+         * @param callback    Callback with data.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/user-account-and-attributes/user-account/).
          */
         @JvmStatic
         fun getCurrentUserPhone(callback: GetCurrentUserPhoneCallback) {
@@ -1005,11 +1002,11 @@ class XLogin private constructor(
         }
 
         /**
-         * Updates the phone number of the authenticated user
+         * Changes the user’s phone number that is used for two-factor authentication. Changes are made on the user data storage side (server-side).
          *
-         * @param phone       new phone value
-         * @param callback    status callback
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/update-user-phone-number)
+         * @param phone       New user phone number.
+         * @param callback    Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/user-account-and-attributes/user-account/).
          */
         @JvmStatic
         fun updateCurrentUserPhone(phone: String?, callback: UpdateCurrentUserPhoneCallback) {
@@ -1034,11 +1031,11 @@ class XLogin private constructor(
         }
 
         /**
-         * Deletes the phone number of the authenticated user
+         * Deletes the user’s phone number that is used for two-factor authentication. Changes are made on the user data storage side (server side).
          *
-         * @param phone       current user's phone
-         * @param callback    status callback
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/delete-user-phone-number)
+         * @param phone       User phone number for removal.
+         * @param callback    Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/user-account-and-attributes/user-account/).
          */
         @JvmStatic
         fun deleteCurrentUserPhone(phone: String, callback: DeleteCurrentUserPhoneCallback) {
@@ -1060,10 +1057,10 @@ class XLogin private constructor(
         }
 
         /**
-         * Deletes avatar of the authenticated user
+         * Deletes the user’s avatar. Changes are made on the user data storage side (server side).
          *
-         * @param callback    status callback
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/delete-user-picture)
+         * @param callback    Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/user-account-and-attributes/user-account/).
          */
         @JvmStatic
         fun deleteCurrentUserAvatar(callback: DeleteCurrentUserAvatarCallback) {
@@ -1084,11 +1081,11 @@ class XLogin private constructor(
         }
 
         /**
-         * Uploads avatar for the authenticated user
+         * Changes the user’s avatar. Changes are made on the user data storage side (server side).
          *
-         * @param file        file that stores the avatar for uploading
-         * @param callback    callback with url of new avatar
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/upload-user-picture)
+         * @param file        New user profile picture.
+         * @param callback    Callback with url of new avatar.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/user-account-and-attributes/user-account/).
          */
         @JvmStatic
         fun uploadCurrentUserAvatar(file: File, callback: UploadCurrentUserAvatarCallback) {
@@ -1117,15 +1114,14 @@ class XLogin private constructor(
         // User Friends
 
         /**
-         * Get user's friends
+         * Returns user friends data.
          *
-         * @param afterUrl                  parameter that is used for API pagination
-         * @param limit                     maximum number of users that are returned at a time
-         * @param type                      friends type
-         * @param sortBy                    condition for sorting the users
-         * @param sortOrder                 condition for sorting the list of the users
-         * @param callback                  callback with friends' relationships and pagination params
-         * @see [Login API Reference](https://developers.xsolla.com/api/login/operation/get-users-friends/)
+         * @param afterUrl                  Parameter that is used for API pagination.
+         * @param limit                     Maximum number of friends that can be received at a time.
+         * @param type                      Friends type.
+         * @param sortBy                    Condition for sorting users (by name/by update).
+         * @param sortOrder                 Condition for sorting users (ascending/descending).
+         * @param callback                  Callback with friends' relationships and pagination params.
          */
         @JvmStatic
         @JvmOverloads
@@ -1159,12 +1155,11 @@ class XLogin private constructor(
         }
 
         /**
-         * Update the friend list of the authenticated user
+         * Modifies relationships with the specified user.
          *
-         * @param friendXsollaUserId        id of the user to change relationship with
-         * @param action                    type of the action
-         * @param callback                  callback that indicates the success of failure of an action
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-friends/update-users-friends)
+         * @param friendXsollaUserId        Identifier of a user to change relationships with.
+         * @param action                    Type of action to be applied to a specified friend.
+         * @param callback                  Callback that indicates the success of failure of an action.
          */
         @JvmStatic
         fun updateCurrentUserFriend(
@@ -1195,14 +1190,13 @@ class XLogin private constructor(
         }
 
         /**
-         * Gets a list of user’s friends from a social provider.
+         * Returns user friends data from a social provider.
          *
-         * @param platform           chosen social provider. If you do not specify it, the method gets friends from all social providers
-         * @param offset             number of the elements from which the list is generated
-         * @param limit              maximum number of friends that are returned at a time
-         * @param fromGameOnly       shows whether the social friends are from your game
-         * @param callback           callback with social friends
-         * @see [Login API Reference](https://developers.xsolla.com/api/login/operation/get-social-account-friends/)
+         * @param platform           Name of social provider. If empty, friends from all available social providers will be fetched.
+         * @param offset             Number of the element from which the list is generated.
+         * @param limit              Maximum number of friends that can be received at a time.
+         * @param fromGameOnly       Whether social friends are from this game.
+         * @param callback           Callback with social friends.
          */
         @JvmStatic
         @JvmOverloads
@@ -1237,9 +1231,8 @@ class XLogin private constructor(
          * Begins processing to update a list of user’s friends from a social provider.
          * Please note that there may be a delay in data processing because of the Xsolla Login server or provider server high loads.
          *
-         * @param platform        chosen social provider. If you do not specify it, the method updates friends in all social providers
-         * @param callback        callback that indicates the success of failure of an action
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-friends/update-social-account-friends/)
+         * @param platform        Name of the chosen social provider. If not specified, the method gets friends from all social providers.
+         * @param callback        Callback that indicates the success of failure of an action.
          */
         @JvmStatic
         fun updateSocialFriends(
@@ -1267,11 +1260,10 @@ class XLogin private constructor(
          * Searches users by nickname and gets a list of them. Search is performed by substring if it is in the beginning of the string.
          * The current user can call this method only one time per second.
          *
-         * @param nickname           user nickname
-         * @param offset             number of the elements from which the list is generated
-         * @param limit              maximum number of users that are returned at a time
-         * @param callback           callback with users
-         * @see [Login API Reference](https://developers.xsolla.com/api/login/operation/search-users-by-nickname/)
+         * @param nickname           User nickname used as search criteria.
+         * @param offset             Number of elements from which the list is generated.
+         * @param limit              Maximum number of users that can be received at a time.
+         * @param callback           Callback with users.
          */
         @JvmStatic
         @JvmOverloads
@@ -1301,11 +1293,10 @@ class XLogin private constructor(
         }
 
         /**
-         * Gets the user information from their public profile by user ID.
+         * Returns specified user public profile information.
          *
-         * @param userId user ID
-         * @param callback callback that contains public user info
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-friends/get-user-public-profile/)
+         * @param userId User identifier of public profile information to be received.
+         * @param callback Callback that contains public user info.
          */
         @JvmStatic
         fun getUserPublicInfo(userId: String, callback: GetUserPublicInfoCallback) {
@@ -1332,14 +1323,13 @@ class XLogin private constructor(
         // Social Networks
 
         /**
-         * Gets links for authentication via the social networks enabled in your Login project > General settings > Social Networks section of Publisher Account.
+         * Returns list of links for social authentication enabled in Publisher Account.
          * The links are valid for 10 minutes.
          * You can get the link by this method and add it to your button for authentication via the social network.
          *
-         * @param locale region in the <language code>_<country code> format
-         * The list of the links will be sorted from most to least used social networks, according to the variable value.
-         * @param callback callback that contains public user info
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/social-networks/get-links-for-social-auth/)
+         * @param locale Region. The list of the links will be sorted from most to least used social networks, according to the variable value.
+         * Can be the following: Arabic (`ar_AE`), Bulgarian (`bg_BG`), Czech (`cz_CZ`), German (`de_DE`), Spanish (`es_ES`), French (`fr_FR`), Hebrew (`he_IL`), Italian (`it_IT`), Japanese (`ja_JP`), Korean (`ko_KR`), Polish (`pl_PL`), Portuguese (`pt_BR`), Romanian (`ro_RO`), Russian (`ru_RU`), Thai (`th_TH`), Turkish (`tr_TR`), Vietnamese (`vi_VN`), Chinese Simplified (`zh_CN`), Chinese Traditional (`zh_TW`), English (`en_XX`, default).
+         * @param callback Callback that contains public user info.
          */
 
         @JvmStatic
@@ -1362,10 +1352,9 @@ class XLogin private constructor(
         }
 
         /**
-         * Gets a list of the social networks linked to the user account.
+         * Returns the list of linked social networks.
          *
-         * @param callback           callback with social networks linked to the user account
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/social-networks/get-linked-networks)
+         * @param callback           Callback with social networks linked to the user account
          */
         @JvmStatic
         fun getLinkedSocialNetworks(callback: LinkedSocialNetworksCallback) {
@@ -1388,10 +1377,9 @@ class XLogin private constructor(
         }
 
         /**
-         * Refresh OAuth 2.0 access token
+         * Refreshes OAuth 2.0 access token
          *
-         * @param callback status callback
-         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/login-api/methods/oauth-20/generate-jwt)
+         * @param callback Status callback
          */
         @JvmStatic
         fun refreshToken(callback: RefreshTokenCallback) {
@@ -1423,13 +1411,14 @@ class XLogin private constructor(
 
 
         /**
-         * Start authentication via a social network
+         * Starts authentication via a social network
          *
-         * @param fragment      current fragment
-         * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
-         * @param callback      status callback
+         * @param fragment      Current fragment.
+         * @param socialNetwork Name of a social network. Provider must be connected to Login in Publisher Account.
+         * Can be `amazon`, `apple`, `baidu`, `battlenet`, `discord`, `facebook`, `github`, `google`, `kakao`, `linkedin`, `mailru`, `microsoft`, `msn`, `naver`, `ok`, `paypal`, `psn`, `qq`, `reddit`, `steam`, `twitch`, `twitter`, `vimeo`, `vk`, `wechat`, `weibo`, `yahoo`, `yandex`, `youtube`, or `xbox`.
+         * @param callback      Status callback.
          *
-         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/api/login/operation/oauth-20-get-link-for-social-auth/)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/authentication/social-auth/).
          */
         @JvmStatic
         fun startSocialAuth(
@@ -1441,13 +1430,14 @@ class XLogin private constructor(
         }
 
         /**
-         * Start authentication via a social network
+         * Starts authentication via a social network
          *
-         * @param activity      current activity
-         * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
-         * @param callback      status callback
+         * @param activity      Current activity.
+         * @param socialNetwork Name of a social network. Provider must be connected to Login in Publisher Account.
+         * Can be `amazon`, `apple`, `baidu`, `battlenet`, `discord`, `facebook`, `github`, `google`, `kakao`, `linkedin`, `mailru`, `microsoft`, `msn`, `naver`, `ok`, `paypal`, `psn`, `qq`, `reddit`, `steam`, `twitch`, `twitter`, `vimeo`, `vk`, `wechat`, `weibo`, `yahoo`, `yandex`, `youtube`, or `xbox`.
+         * @param callback      Status callback.
          *
-         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/api/login/operation/oauth-20-get-link-for-social-auth/)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/authentication/social-auth/).
          */
         @JvmStatic
         fun startSocialAuth(
@@ -1459,16 +1449,17 @@ class XLogin private constructor(
         }
 
         /**
-         * Finish authentication via a social network
+         * Finishes authentication via a social network
          *
-         * @param activity                  current activity
-         * @param socialNetwork             social network to authenticate with, must be connected to Login in Publisher Account
-         * @param activityResultRequestCode request code from onActivityResult
-         * @param activityResultCode        result code from onActivityResult
-         * @param activityResultData        data from onActivityResult
-         * @param callback                  status callback
+         * @param activity                  Current activity.
+         * @param socialNetwork             Name of a social network. Provider must be connected to Login in Publisher Account.
+         * Can be `amazon`, `apple`, `baidu`, `battlenet`, `discord`, `facebook`, `github`, `google`, `kakao`, `linkedin`, `mailru`, `microsoft`, `msn`, `naver`, `ok`, `paypal`, `psn`, `qq`, `reddit`, `steam`, `twitch`, `twitter`, `vimeo`, `vk`, `wechat`, `weibo`, `yahoo`, `yandex`, `youtube`, or `xbox`.
+         * @param activityResultRequestCode Request code from `onActivityResult`.
+         * @param activityResultCode        Result code from `onActivityResult`.
+         * @param activityResultData        Data from `onActivityResult`.
+         * @param callback                  Status callback.
          *
-         * @see [OAuth 2.0 Login API Reference](https://developers.xsolla.com/api/login/operation/oauth-20-get-link-for-social-auth/)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/authentication/social-auth/).
          */
         @JvmStatic
         fun finishSocialAuth(
@@ -1492,8 +1483,9 @@ class XLogin private constructor(
         /**
          * Unlinks social network from current user account.
          *
-         * @param socialNetwork  social network for decoupling
-         * @param callback       callback that indicates the success of failure of an action
+         * @param socialNetwork  Name of a social network. Provider must be connected to Login in Publisher Account.
+         * Can be `amazon`, `apple`, `baidu`, `battlenet`, `discord`, `facebook`, `github`, `google`, `instagram`, `kakao`, `linkedin`, `mailru`, `microsoft`, `msn`, `naver`, `ok`, `paradox`, `paypal`, `psn`, `qq`, `reddit`, `steam`, `twitch`, `twitter`, `vimeo`, `vk`, `wechat`, `weibo`, `yahoo`, `yandex`, `youtube`, `xbox`, `playstation`.
+         * @param callback       Callback that indicates the success of failure of an action.
          */
         @JvmStatic
         fun unlinkSocialNetwork(
@@ -1518,12 +1510,13 @@ class XLogin private constructor(
         }
 
         /**
-         * Starts linking the social network to current user account
+         * Links a social network that can be used for authentication to the current account.
          *
-         * @param activity      current activity
-         * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
-         * @param callback      status callback
-         * @see [Login API Reference](https://developers.xsolla.com/api/login/operation/get-url-to-link-social-network-to-account/)
+         * @param activity      Current activity.
+         * @param socialNetwork Name of a social network. Provider must be connected to Login in Publisher Account.
+         * Can be `amazon`, `apple`, `baidu`, `battlenet`, `discord`, `facebook`, `github`, `google`, `instagram`, `kakao`, `linkedin`, `mailru`, `microsoft`, `msn`, `naver`, `ok`, `paradox`, `paypal`, `psn`, `qq`, `reddit`, `steam`, `twitch`, `twitter`, `vimeo`, `vk`, `wechat`, `weibo`, `yahoo`, `yandex`, `youtube`, `xbox`, `playstation`.
+         * @param callback      Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/user-account-and-attributes/account-linking/#sdk_account_linking_additional_account).
          */
         @JvmStatic
         fun startSocialLinking(
@@ -1535,12 +1528,13 @@ class XLogin private constructor(
         }
 
         /**
-         * Starts linking the social network to current user account
+         * Links a social network that can be used for authentication to the current account.
          *
-         * @param fragment      current fragment
-         * @param socialNetwork social network to authenticate with, must be connected to Login in Publisher Account
-         * @param callback      status callback
-         * @see [Login API Reference](https://developers.xsolla.com/api/login/operation/get-url-to-link-social-network-to-account/)
+         * @param fragment      Current fragment.
+         * @param socialNetwork Name of a social network. Provider must be connected to Login in Publisher Account.
+         * Can be `amazon`, `apple`, `baidu`, `battlenet`, `discord`, `facebook`, `github`, `google`, `instagram`, `kakao`, `linkedin`, `mailru`, `microsoft`, `msn`, `naver`, `ok`, `paradox`, `paypal`, `psn`, `qq`, `reddit`, `steam`, `twitch`, `twitter`, `vimeo`, `vk`, `wechat`, `weibo`, `yahoo`, `yandex`, `youtube`, `xbox`, `playstation`.
+         * @param callback      Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/user-account-and-attributes/account-linking/#sdk_account_linking_additional_account).
          */
         @JvmStatic
         fun startSocialLinking(
@@ -1562,13 +1556,12 @@ class XLogin private constructor(
         }
 
         /**
-         * Finishes linking the social network to current user account
+         * Finishes linking the social network to current user account.
          *
-         * @param activityResultRequestCode request code from onActivityResult
-         * @param activityResultCode        result code from onActivityResult
-         * @param activityResultData        data from onActivityResult
-         * @param callback                  status callback
-         * @see [Login API Reference](https://developers.xsolla.com/api/login/operation/get-url-to-link-social-network-to-account/)
+         * @param activityResultRequestCode Request code from `onActivityResult`.
+         * @param activityResultCode        Result code from `onActivityResult`.
+         * @param activityResultData        Data from `onActivityResult`.
+         * @param callback                  Status callback.
          */
         @JvmStatic
         fun finishSocialLinking(
@@ -1586,10 +1579,10 @@ class XLogin private constructor(
         }
 
         /**
-         * Gets the email of the authenticated user.
+         * Returns the email of the authenticated user.
          *
          * @param callback    Callback with data.
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/user-account/managed-by-client/user-profile/get-user-email)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/user-account-and-attributes/user-account/).
          */
         @JvmStatic
         fun getCurrentUserEmail(callback: GetCurrentUserEmailCallback) {
@@ -1613,10 +1606,9 @@ class XLogin private constructor(
         /**
          * Waits until the user follows the link provided via email/SMS and returns the code.
          *
-         * @param login The login identifier of the user. The login identifier can be either the email or the phone number
+         * @param login The login identifier of the user. The login identifier can be either the email or the phone number.
          * @param operationId Id of  the confirmation code.
          * @param callback    Callback with data.
-         * @see [Login API Reference](https://developers.xsolla.com/login-api/auth/confirmation/get-confirmation-code)
          */
         @JvmStatic
         fun getOtcCode(

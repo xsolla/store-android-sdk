@@ -125,14 +125,15 @@ class XStore private constructor(
         // Client
 
         /**
-         * Returns a user’s cart by ID.
+         * Returns a list of items from the cart with the specified ID. For each item, complete data is returned.
          *
          * @param cartId Cart ID.
-         * @param currency The currency used to display prices (USD by default). Three-letter currency code per ISO 4217.
-         * @param locale Response language. Two-letter lowercase language code per ISO-639-1
+         * @param currency The currency in which prices are displayed (USD by default). Three-letter currency code per [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+         * @param locale Response language.
+         * The following languages are supported: Arabic (`ar`), Bulgarian (`bg`), Czech (`cs`), German (`de`), Spanish (`es`), French (`fr`), Hebrew (`he`), Italian (`it`), Japanese (`ja`), Korean (`ko`), Polish (`pl`), Portuguese (`pt`), Romanian (`ro`), Russian (`ru`), Thai (`th`), Turkish (`tr`), Vietnamese (`vi`), Chinese Simplified (`cn`), Chinese Traditional (`tw`), English (`en`, default).
          * @param callback Status callback.
          *
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/get-cart-by-id/)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/item-purchase/cart-purchase/).
          */
         @JvmStatic
         @JvmOverloads
@@ -167,12 +168,13 @@ class XStore private constructor(
         }
 
         /**
-         * Gets a current user’s cart.
+         * Returns a list of items from the cart of the current user. For each item, complete data is returned.
          *
-         * @param currency The currency used to display prices (USD by default). Three-letter currency code per ISO 4217.
-         * @param locale Response language. Two-letter lowercase language code per ISO-639-1.
+         * @param currency The currency in which prices are displayed (USD by default). Three-letter currency code per [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+         * @param locale Response language.
+         * The following languages are supported: Arabic (`ar`), Bulgarian (`bg`), Czech (`cs`), German (`de`), Spanish (`es`), French (`fr`), Hebrew (`he`), Italian (`it`), Japanese (`ja`), Korean (`ko`), Polish (`pl`), Portuguese (`pt`), Romanian (`ro`), Russian (`ru`), Thai (`th`), Turkish (`tr`), Vietnamese (`vi`), Chinese Simplified (`cn`), Chinese Traditional (`tw`), English (`en`, default).
          * @param callback Status callback.
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/get-user-cart/)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/item-purchase/cart-purchase/).
          */
         @JvmStatic
         @JvmOverloads
@@ -206,11 +208,11 @@ class XStore private constructor(
         }
 
         /**
-         * Deletes all cart line items.
+         * 	Removes all items from the cart with the specified ID.
          *
          * @param cartId Cart ID
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/cart-clear-by-id)
+         * @param callback Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/item-purchase/cart-purchase/).
          */
         @JvmStatic
         fun clearCartById(
@@ -234,10 +236,10 @@ class XStore private constructor(
         }
 
         /**
-         * Deletes all current user's cart line items.
+         * Updates the quantity of a previously added item in the cart with the specified ID. If there is no item with the specified SKU in the cart, it will be added.
          *
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/cart-clear/)
+         * @param callback Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/item-purchase/cart-purchase/).
          */
         @JvmStatic
         fun clearCurrentCart(
@@ -260,12 +262,11 @@ class XStore private constructor(
         }
 
         /**
-         * Fills the cart with items.
-         * If the cart already has an item, the existing item will be replaced by the given value.
+         * Fills the cart with the specified ID with items. If there is already an item with the same SKU in the cart, the existing item position will be replaced by the passed value.
          *
-         * @param items    list of items
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/cart-fill/)
+         * @param items    Item list for filling the cart. If there is already an item with the same SKU in the cart, the existing item position will be replaced by the passed value.
+         * @param callback Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/item-purchase/cart-purchase/).
          */
         @JvmStatic
         fun fillCurrentCartWithItems(
@@ -299,13 +300,12 @@ class XStore private constructor(
         }
 
         /**
-         * Fills the specific cart with items.
-         * If the cart already has an item, the existing item will be replaced by the given value.
+         * Fills the current user cart with items. If there is already an item with the same SKU in the cart, the existing item position will be replaced by the passed value.
          *
          * @param cartId   Cart ID.
-         * @param items    List of items.
+         * @param items    Item list for filling the cart. If there is already an item with the same SKU in the cart, the existing item position will be replaced by the passed value.
          * @param callback Status callback.
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/cart-fill/)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/item-purchase/cart-purchase/).
          */
         @JvmStatic
         fun fillCartByIdWithItems(
@@ -340,13 +340,13 @@ class XStore private constructor(
         }
 
         /**
-         * Update an existing item or create the one in the cart via cart ID
+         * Updates the quantity of a previously added item in the cart with the specified ID. If there is no item with the specified SKU in the cart, it will be added.
          *
-         * @param cartId   cart ID
-         * @param itemSku  item SKU
-         * @param quantity item quantity
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/put-item-by-cart-id/)
+         * @param cartId   Cart ID.
+         * @param itemSku  Desired item SKU.
+         * @param quantity Number of items in the cart.
+         * @param callback Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/item-purchase/cart-purchase/).
          */
         @JvmStatic
         fun updateItemFromCartByCartId(
@@ -378,12 +378,12 @@ class XStore private constructor(
         }
 
         /**
-         * Delete item from the cart via cart ID
+         * Removes the item from the cart with the specified ID.
          *
-         * @param cartId   cart ID
-         * @param itemSku  item SKU
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/delete-item-by-cart-id/)
+         * @param cartId   Cart ID.
+         * @param itemSku  Desired item SKU.
+         * @param callback Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/item-purchase/cart-purchase/).
          */
         @JvmStatic
         fun deleteItemFromCartByCartId(
@@ -412,12 +412,12 @@ class XStore private constructor(
         }
 
         /**
-         * Update an existing item or create the one in the current cart
+         * Updates the quantity of a previously added item in the current user cart. If there is no item with the specified SKU in the cart, it will be added.
          *
-         * @param itemSku  item SKU
-         * @param quantity item quantity
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/put-item/)
+         * @param itemSku  Desired item SKU.
+         * @param quantity Number of items in the cart.
+         * @param callback Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/item-purchase/cart-purchase/).
          */
         @JvmStatic
         fun updateItemFromCurrentCart(
@@ -443,11 +443,11 @@ class XStore private constructor(
         }
 
         /**
-         * Delete item from the cart.
+         * Removes the item from the current user cart.
          *
-         * @param itemSku  item SKU
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/cart-client-side/delete-item/)
+         * @param itemSku  Desired item SKU.
+         * @param callback Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/item-purchase/cart-purchase/).
          */
         @JvmStatic
         fun deleteItemFromCurrentCart(
@@ -475,12 +475,12 @@ class XStore private constructor(
         // Payment
 
         /**
-         * Create an order with all items from a particular cart
+         * Creates an order with items from the cart with the specified ID. Returns the payment token and order ID.
          *
-         * @param cartId   cart ID
-         * @param options  payment options
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/payment/create-order-by-cart-id/)
+         * @param cartId   Cart ID.
+         * @param options  Payment options.
+         * @param callback Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/item-purchase/cart-purchase/).
          */
         @JvmStatic
         @JvmOverloads
@@ -515,11 +515,11 @@ class XStore private constructor(
         }
 
         /**
-         * Create an order with all items from a current user's cart
+         * 	Creates an order with items from the cart of the current user. Returns the payment token and order ID.
          *
-         * @param options  payment options
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/payment/create-order/)
+         * @param options  Payment options.
+         * @param callback Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/item-purchase/cart-purchase/).
          */
         @JvmStatic
         @JvmOverloads
@@ -555,11 +555,11 @@ class XStore private constructor(
         /**
          * Create an order with a specified item
          *
-         * @param itemSku  item SKU
-         * @param options  payment options
-         * @param quantity item quantity
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/payment/create-order-with-item/)
+         * @param itemSku  Desired item SKU.
+         * @param options  Payment options.
+         * @param quantity Шtem quantity.
+         * @param callback Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/item-purchase/one-click-purchase/).
          */
         @JvmStatic
         @JvmOverloads
@@ -597,11 +597,10 @@ class XStore private constructor(
         /**
          * Creates a new payment token.
          *
-         * @param purchase  Object of the PurchaseObject.kt type.
+         * @param purchase  Object of the `PurchaseObject.kt` type.
          * @param settings  Custom project settings.
          * @param customParameters Your custom parameters represented as a valid JSON set of key-value pairs.
          * @param callback Status callback.
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/payment/create-payment)
          */
         @JvmStatic
         @JvmOverloads
@@ -645,9 +644,8 @@ class XStore private constructor(
         /**
          * Get a specified order
          *
-         * @param orderId  order ID
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/order/get-order/)
+         * @param orderId  Order ID.
+         * @param callback Status callback.
          */
         @JvmStatic
         fun getOrder(
@@ -748,8 +746,8 @@ class XStore private constructor(
         /**
          * Gets a games list from the specified group for building a catalog.
          *
-         * @param externalId Group external ID
-         * @param callback  Status callback.
+         * @param externalId Group external ID.
+         * @param callback Status callback.
          * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-games-group)
          */
         @JvmStatic
@@ -792,7 +790,7 @@ class XStore private constructor(
         /**
          * Gets a game for the catalog.
          *
-         * @param itemSku Item SKU.
+         * @param itemSku Desired game SKU.
          * @param callback Status callback.
          * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-game-by-sku)
          */
@@ -834,7 +832,7 @@ class XStore private constructor(
         /**
          * Gets a game key for the catalog.
          *
-         * @param itemSku Item SKU.
+         * @param itemSku Desired game SKU.
          * @param callback Status callback.
          * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-game-key-by-sku)
          */
@@ -1004,7 +1002,7 @@ class XStore private constructor(
          * Grants entitlement by a provided game code.
          *
          *
-         * @param callback status callback
+         * @param callback Status callback.
          * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/order/get-order/)
          */
         @JvmStatic
@@ -1041,14 +1039,15 @@ class XStore private constructor(
 
 
         /**
-         * Get a virtual items list for building a catalog
+         * Returns a list of virtual items according to pagination settings. The list includes items for which display in the store is enabled in the settings. For each virtual item, complete data is returned.
          *
-         * @param limit Limit for number of elements on the page (in 1..50)
-         * @param offset Number of element from which list is generated (count starts from 0)
-         * @param locale Response language. Two-letter lowercase language code per ISO-639-1
-         * @param additionalFields The list of additional fields. Available fields: "media_list", "order", "long_description"
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/virtual-items-currency/catalog/get-virtual-items/)
+         * @param limit Limit for number of elements on the page (in 1..50).
+         * @param offset Number of element from which list is generated (count starts from 0).
+         * @param locale Response language.
+         * The following languages are supported: Arabic (`ar`), Bulgarian (`bg`), Czech (`cs`), German (`de`), Spanish (`es`), French (`fr`), Hebrew (`he`), Italian (`it`), Japanese (`ja`), Korean (`ko`), Polish (`pl`), Portuguese (`pt`), Romanian (`ro`), Russian (`ru`), Thai (`th`), Turkish (`tr`), Vietnamese (`vi`), Chinese Simplified (`cn`), Chinese Traditional (`tw`), English (`en`, default).
+         * @param additionalFields The list of additional fields. Available fields: `media_list`, `order`, `long_description`.
+         * @param callback Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/catalog/catalog-display/).
          */
         @JvmStatic
         @JvmOverloads
@@ -1092,11 +1091,12 @@ class XStore private constructor(
         }
 
         /**
-         * Gets a list of all virtual items for searching on the client-side
+         * Returns a full list of virtual items. The list includes items for which display in the store is enabled in the settings. For each virtual item, the SKU, name, description, and data about the groups it belongs to are returned.
          *
-         * @param locale Response language. Two-letter lowercase language code per ISO-639-1.
+         * @param locale Response language.
+         * The following languages are supported: Arabic (`ar`), Bulgarian (`bg`), Czech (`cs`), German (`de`), Spanish (`es`), French (`fr`), Hebrew (`he`), Italian (`it`), Japanese (`ja`), Korean (`ko`), Polish (`pl`), Portuguese (`pt`), Romanian (`ro`), Russian (`ru`), Thai (`th`), Turkish (`tr`), Vietnamese (`vi`), Chinese Simplified (`cn`), Chinese Traditional (`tw`), English (`en`, default).
          * @param callback Status callback.
-         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/virtual-items-currency/catalog/get-all-virtual-items/)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/catalog/catalog-display/).
          */
         @JvmStatic
         @JvmOverloads
@@ -1132,14 +1132,15 @@ class XStore private constructor(
         }
 
         /**
-         * Get a virtual currency list for building a catalog
+         * Returns a list of virtual currencies according to pagination settings.
          *
-         * @param callback status callback
-         * @param limit Limit for number of elements on the page (in 1..50)
-         * @param offset Number of element from which list is generated (count starts from 0)
-         * @param locale Response language. Two-letter lowercase language code per ISO-639-1
-         * @param additionalFields The list of additional fields. Available fields: "media_list", "order", "long_description"
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/virtual-items-currency/catalog/get-virtual-currency/)
+         * @param callback Status callback.
+         * @param limit Limit for number of elements on the page (in 1..50).
+         * @param offset Number of element from which list is generated (count starts from 0).
+         * @param locale Response language.
+         * The following languages are supported: Arabic (`ar`), Bulgarian (`bg`), Czech (`cs`), German (`de`), Spanish (`es`), French (`fr`), Hebrew (`he`), Italian (`it`), Japanese (`ja`), Korean (`ko`), Polish (`pl`), Portuguese (`pt`), Romanian (`ro`), Russian (`ru`), Thai (`th`), Turkish (`tr`), Vietnamese (`vi`), Chinese Simplified (`cn`), Chinese Traditional (`tw`), English (`en`, default).
+         * @param additionalFields The list of additional fields. Available fields: `media_list`, `order`, `long_description`.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/catalog/catalog-display/).
          */
         @JvmStatic
         @JvmOverloads
@@ -1183,7 +1184,7 @@ class XStore private constructor(
         }
 
         /**
-         * Get a virtual currency packages list for building a catalog
+         * Returns a list of virtual currency packages according to pagination settings. The list includes packages for which display in the store is enabled in the settings.
          *
          * @param limit Limit for number of elements on the page (in 1..50)
          * @param offset Number of element from which list is generated (count starts from 0)
@@ -1191,7 +1192,7 @@ class XStore private constructor(
          * @param additionalFields The list of additional fields. Available fields: "media_list", "order", "long_description"
          * @param callback status callback
          *
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/virtual-items-currency/catalog/get-virtual-currency-package/)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/catalog/catalog-display/).
          */
         @JvmStatic
         @JvmOverloads
@@ -1238,15 +1239,16 @@ class XStore private constructor(
         }
 
         /**
-         * Get an items list from the specified group for building a catalog
+         * Returns a list of items for the specified group according to pagination settings. The list includes items for which display in the store is enabled in the settings. In the settings of the group, the display in the store must be enabled.
          *
-         * @param externalId Group external ID
-         * @param limit Limit for number of elements on the page (in 1..50)
-         * @param offset Number of element from which list is generated (count starts from 0)
-         * @param locale Response language. Two-letter lowercase language code per ISO-639-1
-         * @param additionalFields The list of additional fields. Available fields: "media_list", "order", "long_description"
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/virtual-items-currency/catalog/get-virtual-items-group/)
+         * @param externalId Group external ID.
+         * @param limit Limit for number of elements on the page (in 1..50).
+         * @param offset Number of element from which list is generated (count starts from 0).
+         * @param locale Response language.
+         * The following languages are supported: Arabic (`ar`), Bulgarian (`bg`), Czech (`cs`), German (`de`), Spanish (`es`), French (`fr`), Hebrew (`he`), Italian (`it`), Japanese (`ja`), Korean (`ko`), Polish (`pl`), Portuguese (`pt`), Romanian (`ro`), Russian (`ru`), Thai (`th`), Turkish (`tr`), Vietnamese (`vi`), Chinese Simplified (`cn`), Chinese Traditional (`tw`), English (`en`, default).
+         * @param additionalFields The list of additional fields. Available fields: `media_list`, `order`, `long_description`.
+         * @param callback Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/catalog/catalog-display/).
          */
         @JvmStatic
         @JvmOverloads
@@ -1292,10 +1294,10 @@ class XStore private constructor(
         }
 
         /**
-         * Get an items groups list for building a catalog
+         * Returns a full list of virtual item groups. The list includes groups for which display in the store is enabled in the settings.
          *
-         * @param callback status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/virtual-items-currency/catalog/get-item-groups/)
+         * @param callback Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/catalog/catalog-display/).
          */
         @JvmStatic
         fun getItemsGroups(callback: GetItemsGroupsCallback) {
@@ -1328,12 +1330,12 @@ class XStore private constructor(
         // Virtual Payment
 
         /**
-         * Purchase an item using virtual currency
+         * Creates an order with a specified item. The created order will get a `new` order status.
          *
-         * @param itemSku            item SKU
-         * @param virtualCurrencySku virtual currency SKU
-         * @param callback           status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/virtual-items-currency/virtual-payment/create-order-with-item-for-virtual-currency/)
+         * @param itemSku            Desired item SKU.
+         * @param virtualCurrencySku SKU of virtual currency to buy virtual items with.
+         * @param callback           Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/item-purchase/purchase-for-vc/).
          */
         @JvmStatic
         @JvmOverloads
@@ -1384,16 +1386,17 @@ class XStore private constructor(
         // Catalog
 
         /**
-         * Gets a list of bundles for building a catalog
+         * Returns a list of bundles according to pagination settings. The list includes bundles for which display in the store is enabled in the settings.
          *
          * **Note**. Now all projects have the limitation to the number of items that you can get in the response.
          * The default and maximum value is 50 items per response. To manage the limitation, use limit offset fields.
          *
-         * @param limit Limit for number of elements on the page (in 1..50)
-         * @param offset Number of element from which list is generated (count starts from 0)
-         * @param locale Response language. Two-letter lowercase language code per ISO-639-1
-         * @param callback              status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/bundles/catalog/get-bundle-list/)
+         * @param limit Limit for number of elements on the page (in 1..50).
+         * @param offset Number of element from which list is generated (count starts from 0).
+         * @param locale Response language.
+         * The following languages are supported: Arabic (`ar`), Bulgarian (`bg`), Czech (`cs`), German (`de`), Spanish (`es`), French (`fr`), Hebrew (`he`), Italian (`it`), Japanese (`ja`), Korean (`ko`), Polish (`pl`), Portuguese (`pt`), Romanian (`ro`), Russian (`ru`), Thai (`th`), Turkish (`tr`), Vietnamese (`vi`), Chinese Simplified (`cn`), Chinese Traditional (`tw`), English (`en`, default).
+         * @param callback              Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/catalog/catalog-display/#unreal_engine_sdk_how_to_bundles).
          */
         @JvmStatic
         @JvmOverloads
@@ -1433,11 +1436,11 @@ class XStore private constructor(
         }
 
         /**
-         * Gets a specified bundle
+         * Returns information about the contents of the specified bundle. In the bundle settings, display in the store must be enabled.
          *
-         * @param bundleSku             bundle SKU
-         * @param callback              status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/bundles/catalog/get-bundle/)
+         * @param bundleSku             Bundle SKU.
+         * @param callback              Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/catalog/catalog-display/#unreal_engine_sdk_how_to_bundles).
          */
         @JvmStatic
         fun getBundle(
@@ -1476,12 +1479,15 @@ class XStore private constructor(
 
 
         /**
-         * Redeems a coupon code. The user gets a bonus after a coupon is redeemed.
+         * Redeems the coupon code and delivers a reward to the user in one of the following ways:
+         * - to their inventory (virtual items, virtual currency packages, or bundles)
+         * - via email (game keys)
+         * - to the entitlement system (game keys)
          *
-         * @param couponCode            unique coupon code. Contains letters and numbers
-         * @param selectedUnitItems     the reward that is selected by a user. Object key is an SKU of a unit, and value is an SKU of one of the items in a unit.
-         * @param callback              callback with received items
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/promotions/coupons/redeem-coupon/)
+         * @param couponCode            Unique case sensitive code. Contains letters and numbers.
+         * @param selectedUnitItems     The reward that is selected by a user. Object key is an SKU of a unit, and value is an SKU of one of the items in a unit.
+         * @param callback              Callback with received items.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/promo/coupons).
          */
         @JvmStatic
         @JvmOverloads
@@ -1517,12 +1523,12 @@ class XStore private constructor(
         }
 
         /**
-         * Gets coupons rewards by its code. Can be used to allow users to choose one of many items as a bonus.
+         * Returns a list of items that can be credited to the user when the coupon is redeemed. Can be used to let users choose one of many items as a bonus. The usual case is choosing a DRM if the coupon contains a game as a bonus.
          * The usual case is choosing a DRM if the coupon contains a game as a bonus (type=unit).
          *
-         * @param couponCode            unique coupon code. Contains letters and numbers
-         * @param callback              status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/promotions/coupons/redeem-coupon/)
+         * @param couponCode            Unique case sensitive code. Contains letters and numbers.
+         * @param callback              Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/promo/coupons).
          */
         @JvmStatic
         fun getCouponRewardsByCode(
@@ -1558,14 +1564,13 @@ class XStore private constructor(
         // Promo Codes
 
         /**
-         * Redeems a promo code.
-         * After redeeming a promo code, the user will get free items and/or the price of cart will be decreased.
+         * Redeems a promo code. After activating the promo code, the user gets free items and/or the price of the cart is reduced.
          *
-         * @param promocode            unique code of promocode. Contains letters and numbers
-         * @param cartId               cart id. Default value is "current"
-         * @param selectedUnitItems    the reward that is selected by a user. Object key is an SKU of a unit, and value is an SKU of one of the items in a unit
-         * @param callback             status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/promotions/promo-codes/redeem-promo-code/)
+         * @param promocode            Unique case sensitive code. Contains letters and numbers.
+         * @param cartId               Cart ID. Default value is `current`.
+         * @param selectedUnitItems    The reward that is selected by a user. Object key is an SKU of a unit, and value is an SKU of one of the items in a unit.
+         * @param callback             Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/promo/promo-codes/).
          */
         @JvmStatic
         @JvmOverloads
@@ -1603,12 +1608,11 @@ class XStore private constructor(
         }
 
         /**
-         * Removes a promo code from a cart.
-         * After the promo code is removed, the total price of all items in the cart will be recalculated without bonuses and discounts provided by a promo code.
+         * Removes a promo code from a cart. After the promo code is removed, the total price of all items in the cart will be recalculated without bonuses and discounts provided by a promo code.
          *
-         * @param cartId   Cart id. Default value is "current".
+         * @param cartId   Cart ID. Default value is `current`.
          * @param callback Status callback.
-         * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/promotions/promo-codes/remove-cart-promo-code)
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/promo/promo-codes/).
          */
         @JvmStatic
         @JvmOverloads
@@ -1643,12 +1647,12 @@ class XStore private constructor(
         }
 
         /**
-         * Gets promo code rewards by its code. Can be used to allow users to choose one of many items as a bonus.
+         * Returns a list of items that can be credited to the user when the promo code is activated. Allows users to choose from several available items.
          * The usual case is choosing a DRM if the promo code contains a game as a bonus (type=unit).
          *
-         * @param promocode            unique code of promocode. Contains letters and numbers
-         * @param callback             status callback
-         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/promotions/promo-codes/get-promo-code-rewards-by-code/)
+         * @param promocode            Unique case sensitive code. Contains letters and numbers.
+         * @param callback             Status callback.
+         * @see [More about the use cases](https://developers.xsolla.com/sdk/android/promo/promo-codes/#sdk_promo_codes).
          */
         fun getPromocodeRewardsByCode(
             callback: GetPromocodeRewardByCodeCallback,
