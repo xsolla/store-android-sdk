@@ -563,55 +563,37 @@ class XStore private constructor(
         @JvmOverloads
         fun createOrderWithFreeCart(
             callback: CreateOrderCallback,
-            cartId: String
+            cartId: String? = null
         ) {
-            if(cartId == null) {
+            var endpoint = if (cartId == null)
                 getInstance().storeApi.createOrderFromCurrentFreeCart(getInstance().projectId)
-                    .enqueue(object : Callback<CreateOrderResponse> {
-                        override fun onResponse(
-                            call: Call<CreateOrderResponse>,
-                            response: Response<CreateOrderResponse>
-                        ) {
-                            if (response.isSuccessful) {
-                                val createOrderResponse = response.body()
-                                if (createOrderResponse != null) {
-                                    callback.onSuccess(createOrderResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
-                            } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
-                            }
-                        }
+            else
+                getInstance().storeApi.createOrderFromFreeCartById(
+                    getInstance().projectId,
+                    cartId.toString()
+                )
 
-                        override fun onFailure(call: Call<CreateOrderResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
-            } else {
-                getInstance().storeApi.createOrderFromFreeCartById(getInstance().projectId, cartId)
-                    .enqueue(object : Callback<CreateOrderResponse> {
-                        override fun onResponse(
-                            call: Call<CreateOrderResponse>,
-                            response: Response<CreateOrderResponse>
-                        ) {
-                            if (response.isSuccessful) {
-                                val createOrderResponse = response.body()
-                                if (createOrderResponse != null) {
-                                    callback.onSuccess(createOrderResponse)
-                                } else {
-                                    callback.onError(null, "Empty response")
-                                }
+            endpoint.enqueue(object : Callback<CreateOrderResponse> {
+                    override fun onResponse(
+                        call: Call<CreateOrderResponse>,
+                        response: Response<CreateOrderResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val createOrderResponse = response.body()
+                            if (createOrderResponse != null) {
+                                callback.onSuccess(createOrderResponse)
                             } else {
-                                callback.onError(null, getErrorMessage(response.errorBody()))
+                                callback.onError(null, "Empty response")
                             }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
                         }
+                    }
 
-                        override fun onFailure(call: Call<CreateOrderResponse>, t: Throwable) {
-                            callback.onError(t, null)
-                        }
-                    })
-            }
+                    override fun onFailure(call: Call<CreateOrderResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
         }
 
         /**
