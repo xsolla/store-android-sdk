@@ -553,6 +553,50 @@ class XStore private constructor(
         }
 
         /**
+         * Create order with free cart
+         *
+         * @param cartId   cart ID
+         * @param callback status callback
+         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/payment/create-order/ https://developers.xsolla.com/commerce-api/cart-payment/payment/create-free-order-by-cart-id/)
+         */
+        @JvmStatic
+        @JvmOverloads
+        fun createOrderWithFreeCart(
+            callback: CreateOrderCallback,
+            cartId: String? = null
+        ) {
+            var endpoint = if (cartId == null)
+                getInstance().storeApi.createOrderFromCurrentFreeCart(getInstance().projectId)
+            else
+                getInstance().storeApi.createOrderFromFreeCartById(
+                    getInstance().projectId,
+                    cartId.toString()
+                )
+
+            endpoint.enqueue(object : Callback<CreateOrderResponse> {
+                    override fun onResponse(
+                        call: Call<CreateOrderResponse>,
+                        response: Response<CreateOrderResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val createOrderResponse = response.body()
+                            if (createOrderResponse != null) {
+                                callback.onSuccess(createOrderResponse)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<CreateOrderResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
          * Create an order with a specified item
          *
          * @param itemSku  Desired item SKU.
@@ -571,6 +615,47 @@ class XStore private constructor(
         ) {
             val body = CreateSkuOrderRequestBody(quantity, options)
             getInstance().storeApi.createOrderByItemSku(getInstance().projectId, itemSku, body)
+                .enqueue(object : Callback<CreateOrderResponse> {
+                    override fun onResponse(
+                        call: Call<CreateOrderResponse>,
+                        response: Response<CreateOrderResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val createOrderResponse = response.body()
+                            if (createOrderResponse != null) {
+                                callback.onSuccess(createOrderResponse)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onError(null, getErrorMessage(response.errorBody()))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<CreateOrderResponse>, t: Throwable) {
+                        callback.onError(t, null)
+                    }
+                })
+        }
+
+        /**
+         * Create an order with a specified free item
+         *
+         * @param itemSku  item SKU
+         * @param quantity item quantity
+         * @param callback status callback
+         * @see [Store API Reference](https://developers.xsolla.com/commerce-api/cart-payment/payment/create-free-order-with-item/)
+         */
+
+        @JvmStatic
+        @JvmOverloads
+        fun createOrderWithSpecifiedFreeItem(
+            callback: CreateOrderCallback,
+            itemSku: String,
+            quantity: Long = 1
+        ) {
+            val body = CreateSkuOrderRequestBody(quantity, null)
+            getInstance().storeApi.createOrderWithSpecifiedFreeItem(getInstance().projectId, itemSku, body)
                 .enqueue(object : Callback<CreateOrderResponse> {
                     override fun onResponse(
                         call: Call<CreateOrderResponse>,

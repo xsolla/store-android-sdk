@@ -116,8 +116,29 @@ internal interface StoreApi {
         @Body body: CreateCartOrderRequestBody
     ): Call<CreateOrderResponse>
 
+
+    @POST("api/v2/project/{project_id}/free/cart/{cart_id}")
+    fun createOrderFromFreeCartById(
+        @Path("project_id") projectId: Int,
+        @Path("cart_id") cartId: String
+    ): Call<CreateOrderResponse>
+
+
+    @POST("api/v2/project/{project_id}/free/cart/")
+    fun createOrderFromCurrentFreeCart(
+        @Path("project_id") projectId: Int
+    ): Call<CreateOrderResponse>
+
     @POST("api/v2/project/{project_id}/payment/item/{item_sku}")
     fun createOrderByItemSku(
+        @Path("project_id") projectId: Int,
+        @Path("item_sku") itemSku: String,
+        @Body body: CreateSkuOrderRequestBody
+    ): Call<CreateOrderResponse>
+
+
+    @POST("api/v2/project/{project_id}/free/item/{item_sku}")
+    fun createOrderWithSpecifiedFreeItem(
         @Path("project_id") projectId: Int,
         @Path("item_sku") itemSku: String,
         @Body body: CreateSkuOrderRequestBody
