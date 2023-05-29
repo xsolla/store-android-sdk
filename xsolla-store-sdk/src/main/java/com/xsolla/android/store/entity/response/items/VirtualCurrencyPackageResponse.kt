@@ -24,7 +24,8 @@ data class VirtualCurrencyPackageResponse(val items: List<Item> = emptyList()) {
         @SerializedName("virtual_prices")
         val virtualPrices: List<VirtualPrice> = emptyList(),
         val content: List<Content> = emptyList(),
-        val promotions: List<Promotion> = emptyList()
+        val promotions: List<Promotion> = emptyList(),
+        val limits: ItemLimits? = null
     ) : Parcelable
 }
 

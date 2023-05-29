@@ -5,6 +5,7 @@ import com.xsolla.android.store.entity.response.common.Group
 import com.xsolla.android.store.entity.response.common.Price
 import com.xsolla.android.store.entity.response.common.Promotion
 import com.xsolla.android.store.entity.response.common.VirtualPrice
+import com.xsolla.android.store.entity.response.common.ItemLimits
 
 data class BundleListResponse(val items: List<BundleItem> = emptyList())
 
@@ -27,7 +28,8 @@ data class BundleItem(
     @SerializedName("virtual_prices")
     val virtualPrices: List<VirtualPrice> = emptyList(),
     val content: List<BundleContent> = emptyList(),
-    val promotions: List<Promotion> = emptyList()
+    val promotions: List<Promotion> = emptyList(),
+    val limits: ItemLimits? = null
 )
 
 data class BundleContent(
