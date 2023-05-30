@@ -21,7 +21,9 @@ data class PaymentProjectSettings(
     @SerializedName("return_url")
     val returnUrl: String? = null,
     @SerializedName("redirect_policy")
-    val redirectPolicy: SettingsRedirectPolicy? = null
+    val redirectPolicy: SettingsRedirectPolicy? = null,
+    @SerializedName("external_id")
+    val externalId: String? = null
 )
 
 data class SettingsRedirectPolicy(
