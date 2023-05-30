@@ -20,6 +20,7 @@ data class VirtualCurrencyResponse(val items: List<Item> = emptyList()) {
         val virtualPrices: List<VirtualPrice> = emptyList(),
         @SerializedName("inventory_option")
         val inventoryOption: InventoryOption? = null,
-        val promotions: List<Promotion> = emptyList()
+        val promotions: List<Promotion> = emptyList(),
+        val limits: ItemLimits? = null
     )
 }
