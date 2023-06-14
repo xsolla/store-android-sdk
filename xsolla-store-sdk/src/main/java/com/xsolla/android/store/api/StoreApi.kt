@@ -17,6 +17,7 @@ import com.xsolla.android.store.entity.response.gamekeys.*
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse
 import com.xsolla.android.store.entity.response.items.*
 import com.xsolla.android.store.entity.response.order.OrderResponse
+import com.xsolla.android.store.entity.response.payment.CreateFreeOrderResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse
 import com.xsolla.android.store.entity.response.payment.CreatePaymentTokenResponse
@@ -121,13 +122,13 @@ internal interface StoreApi {
     fun createOrderFromFreeCartById(
         @Path("project_id") projectId: Int,
         @Path("cart_id") cartId: String
-    ): Call<CreateOrderResponse>
+    ): Call<CreateFreeOrderResponse>
 
 
     @POST("api/v2/project/{project_id}/free/cart/")
     fun createOrderFromCurrentFreeCart(
         @Path("project_id") projectId: Int
-    ): Call<CreateOrderResponse>
+    ): Call<CreateFreeOrderResponse>
 
     @POST("api/v2/project/{project_id}/payment/item/{item_sku}")
     fun createOrderByItemSku(
@@ -142,7 +143,7 @@ internal interface StoreApi {
         @Path("project_id") projectId: Int,
         @Path("item_sku") itemSku: String,
         @Body body: CreateSkuOrderRequestBody
-    ): Call<CreateOrderResponse>
+    ): Call<CreateFreeOrderResponse>
 
     @POST("api/v2/project/{project_id}/payment")
     fun createPaymentToken(

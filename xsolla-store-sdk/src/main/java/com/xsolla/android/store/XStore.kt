@@ -21,6 +21,7 @@ import com.xsolla.android.store.entity.response.gamekeys.*
 import com.xsolla.android.store.entity.response.gropus.ItemsGroupsResponse
 import com.xsolla.android.store.entity.response.items.*
 import com.xsolla.android.store.entity.response.order.OrderResponse
+import com.xsolla.android.store.entity.response.payment.CreateFreeOrderResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderByVirtualCurrencyResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse
 import com.xsolla.android.store.entity.response.payment.CreatePaymentTokenResponse
@@ -562,7 +563,7 @@ class XStore private constructor(
         @JvmStatic
         @JvmOverloads
         fun createOrderWithFreeCart(
-            callback: CreateOrderCallback,
+            callback: CreateFreeOrderCallback,
             cartId: String? = null
         ) {
             var endpoint = if (cartId == null)
@@ -573,15 +574,15 @@ class XStore private constructor(
                     cartId.toString()
                 )
 
-            endpoint.enqueue(object : Callback<CreateOrderResponse> {
+            endpoint.enqueue(object : Callback<CreateFreeOrderResponse> {
                     override fun onResponse(
-                        call: Call<CreateOrderResponse>,
-                        response: Response<CreateOrderResponse>
+                        call: Call<CreateFreeOrderResponse>,
+                        response: Response<CreateFreeOrderResponse>
                     ) {
                         if (response.isSuccessful) {
-                            val createOrderResponse = response.body()
-                            if (createOrderResponse != null) {
-                                callback.onSuccess(createOrderResponse)
+                            val cartResponse = response.body()
+                            if (cartResponse != null) {
+                                callback.onSuccess(cartResponse)
                             } else {
                                 callback.onError(null, "Empty response")
                             }
@@ -590,7 +591,7 @@ class XStore private constructor(
                         }
                     }
 
-                    override fun onFailure(call: Call<CreateOrderResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<CreateFreeOrderResponse>, t: Throwable) {
                         callback.onError(t, null)
                     }
                 })
@@ -650,21 +651,21 @@ class XStore private constructor(
         @JvmStatic
         @JvmOverloads
         fun createOrderWithSpecifiedFreeItem(
-            callback: CreateOrderCallback,
+            callback: CreateFreeOrderCallback,
             itemSku: String,
             quantity: Long = 1
         ) {
             val body = CreateSkuOrderRequestBody(quantity, null)
             getInstance().storeApi.createOrderWithSpecifiedFreeItem(getInstance().projectId, itemSku, body)
-                .enqueue(object : Callback<CreateOrderResponse> {
+                .enqueue(object : Callback<CreateFreeOrderResponse> {
                     override fun onResponse(
-                        call: Call<CreateOrderResponse>,
-                        response: Response<CreateOrderResponse>
+                        call: Call<CreateFreeOrderResponse>,
+                        response: Response<CreateFreeOrderResponse>
                     ) {
                         if (response.isSuccessful) {
-                            val createOrderResponse = response.body()
-                            if (createOrderResponse != null) {
-                                callback.onSuccess(createOrderResponse)
+                            val createResponse = response.body()
+                            if (createResponse != null) {
+                                callback.onSuccess(createResponse)
                             } else {
                                 callback.onError(null, "Empty response")
                             }
@@ -673,7 +674,7 @@ class XStore private constructor(
                         }
                     }
 
-                    override fun onFailure(call: Call<CreateOrderResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<CreateFreeOrderResponse>, t: Throwable) {
                         callback.onError(t, null)
                     }
                 })

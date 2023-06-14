@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xsolla.android.appcore.databinding.ItemViNoPriceBinding
 import com.xsolla.android.store.XStore
-import com.xsolla.android.store.callbacks.CreateOrderCallback
+import com.xsolla.android.store.callbacks.CreateFreeOrderCallback
 import com.xsolla.android.store.entity.response.common.ExpirationPeriod
-import com.xsolla.android.store.entity.response.payment.CreateOrderResponse
+import com.xsolla.android.store.entity.response.payment.CreateFreeOrderResponse
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
 import com.xsolla.android.storesdkexample.ui.fragments.store.ViFragmentDirections
@@ -86,8 +86,8 @@ class ViNoPriceViewHolder(
     private fun initBuyButton(item: VirtualItemUiEntity) {
         binding.buyForFreeButton.setOnClickListener { v ->
             v.isEnabled = false
-            XStore.createOrderWithSpecifiedFreeItem(object : CreateOrderCallback {
-                override fun onSuccess(response: CreateOrderResponse) {
+            XStore.createOrderWithSpecifiedFreeItem(object : CreateFreeOrderCallback {
+                override fun onSuccess(response: CreateFreeOrderResponse) {
                     purchaseListener.showMessage("Purchased free item")
                     v.isEnabled = true
                 }
