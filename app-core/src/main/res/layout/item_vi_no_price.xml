@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Xsolla.CatalogItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_sale_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/itemIcon"
+        app:layout_constraintEnd_toEndOf="@+id/itemIcon"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/itemIcon"
+        app:layout_constraintTop_toTopOf="@+id/itemIcon"
+        app:layout_constraintVertical_bias="1.0">
+
+        <TextView
+            android:id="@+id/itemSaleDiscount"
+            style="?attr/textAppearanceButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="39dp"
+            android:layout_marginTop="62dp"
+            android:background="@color/cart_badge_color"
+            android:textColor="@color/white_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="-25%" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/itemIcon"
+        android:layout_width="@dimen/catalog_item_icon_width"
+        android:layout_height="@dimen/catalog_item_icon_height"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/itemVirtualPriceIcon"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars[0]" />
+
+
+    <TextView
+        android:id="@+id/itemName"
+        style="@style/Widget.Xsolla.CatalogItem.Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/itemVirtualPriceIcon"
+        app:layout_constraintEnd_toStartOf="@+id/buyForFreeButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/item_sale_label"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="Some item" />
+
+    <TextView
+        android:id="@+id/itemAdditionalInfo"
+        style="@style/Widget.Xsolla.CatalogItem.AdditionalInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/preview"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/item_sale_label"
+        app:layout_constraintTop_toBottomOf="@+id/itemVirtualPriceIcon"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="10 days" />
+
+    <Button
+        android:id="@+id/preview"
+        style="@style/Widget.Xsolla.CatalogItem.AddToCartButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:autoText="false"
+        android:background="@color/black_color"
+        android:backgroundTint="@color/black_color"
+        android:backgroundTintMode="src_atop"
+        android:text="@string/preview"
+        android:textColor="@color/light_state_gray_color"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buyForFreeButton"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/buyForFreeButton"
+        style="@style/Widget.Xsolla.CatalogItem.AddToCartButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:icon="@drawable/ic_buy_button_icon"
+        app:layout_constraintBottom_toTopOf="@+id/preview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:rippleColor="@color/white_color" />
+
+    <TextView
+        android:id="@+id/purchasedPlaceholder"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/purchased_placeholder"
+        android:textColor="@color/light_state_gray_color"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/itemAdditionalInfo"
+        app:layout_constraintTop_toBottomOf="@+id/buyForFreeButton"
+        tools:visibility="gone" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

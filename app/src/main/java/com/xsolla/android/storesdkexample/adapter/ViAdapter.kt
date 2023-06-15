@@ -7,6 +7,7 @@ import com.xsolla.android.appcore.ui.vm.VmPurchase
 import com.xsolla.android.googleplay.StoreUtils
 import com.xsolla.android.storesdkexample.App
 import com.xsolla.android.storesdkexample.adapter.holder.ViGooglePlayViewHolder
+import com.xsolla.android.storesdkexample.adapter.holder.ViNoPriceViewHolder
 import com.xsolla.android.storesdkexample.adapter.holder.ViRealPriceViewHolder
 import com.xsolla.android.storesdkexample.adapter.holder.ViVirtualPriceViewHolder
 import com.xsolla.android.storesdkexample.listener.PurchaseListener
@@ -26,12 +27,16 @@ class ViAdapter(
         private const val REAL_PRICE = 0
         private const val VIRTUAL_PRICE = 1
         private const val GOOGLE_PLAY = 2
+        private const val FREE_ITEM = 3
     }
 
     override fun getItemViewType(position: Int): Int {
         val item = items[position]
         if (item.virtualPrices.isNotEmpty()) {
             return VIRTUAL_PRICE
+        }
+        if (item.isFree) {
+            return FREE_ITEM
         }
         if (StoreUtils.isAppInstalledFromGooglePlay(App.applicationContext())) {
             return GOOGLE_PLAY
@@ -44,6 +49,7 @@ class ViAdapter(
         return when (viewType) {
             GOOGLE_PLAY -> ViGooglePlayViewHolder(inflater, parent, vmGooglePay)
             REAL_PRICE -> ViRealPriceViewHolder(inflater, parent, vmPurchase, purchaseListener)
+            FREE_ITEM -> ViNoPriceViewHolder(inflater, parent, purchaseListener)
             else -> ViVirtualPriceViewHolder(inflater, parent, vmBalance, purchaseListener)
         }
     }
@@ -53,6 +59,7 @@ class ViAdapter(
         when (holder.itemViewType) {
             GOOGLE_PLAY -> (holder as ViGooglePlayViewHolder).bind(item)
             REAL_PRICE -> (holder as ViRealPriceViewHolder).bind(item)
+            FREE_ITEM -> (holder as ViNoPriceViewHolder).bind(item)
             VIRTUAL_PRICE -> (holder as ViVirtualPriceViewHolder).bind(item)
         }
     }
