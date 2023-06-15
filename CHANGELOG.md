@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.4.0] - Store SDK - 2023-06-19
+### Changed
+- Added `ItemLimits` data to store items responses
+- Added Ability to pass `externalId` data to purchase order requests
+- Added methods to purchase free items
+
+## [1.0.5] - Payments SDK - 2023-06-19
+### Changed
+- Fixed false positive payment result detection when payment was declined from merchant side
+
+## [2.2.3] - Demo Apps - 2023-06-19
+### Changed
+- Added free items support in demo
+
+## [6.0.1] - Login SDK - 2023-06-19
+- Improved and actualized comments
+
+## [2.0.3] - Inventory SDK - 2023-06-19
+- Improved and actualized comments
+
+
 ## [6.0.0] - Login SDK - 2023-02-23
 ### Changed
 - Fixed Facebook native authentication
@@ -14,7 +35,6 @@
 ## [2.2.2] - Demo Apps - 2023-02-23
 ### Changed
 - Removed birthday field from account screen
-
 
 ## [5.1.0] - Login SDK - 2023-01-06
 ### Changed
