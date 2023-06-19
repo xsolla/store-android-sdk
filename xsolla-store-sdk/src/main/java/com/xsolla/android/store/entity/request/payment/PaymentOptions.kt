@@ -38,7 +38,7 @@ data class SettingsRedirectPolicy(
 
 data class UiProjectSetting(
     val size: String? = null,
-    val theme: String? = "ps4-default-dark",
+    val theme: String? = "default_dark",
     val version: String? = null,
     val desktop: DesktopSettings? = null,
     val mobile: MobileSettings? = null,
