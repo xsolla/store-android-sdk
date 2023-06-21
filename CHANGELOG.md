@@ -3,7 +3,7 @@
 ## [2.4.0] - Store SDK - 2023-06-19
 ### Changed
 - Added `ItemLimits` data to store items responses
-- Added Ability to pass `externalId` data to purchase order requests
+- Added ability to pass `externalId` data to purchase order requests
 - Added methods to purchase free items
 
 ## [1.0.5] - Payments SDK - 2023-06-19
@@ -15,17 +15,18 @@
 - Added free items support in demo
 
 ## [6.0.1] - Login SDK - 2023-06-19
-- Improved and actualized comments
+- Improved and actualized method annotations
 
 ## [2.0.3] - Inventory SDK - 2023-06-19
-- Improved and actualized comments
-
+- Improved and actualized method annotations
 
 ## [6.0.0] - Login SDK - 2023-02-23
 ### Changed
-- Fixed Facebook native authentication
-- Fixed a bug when updating user details in the Sample App
 - Updated `updateCurrentUserDetails` method. Removed the `birthday` parameter.
+
+### Fixed
+- Facebook native authentication
+- Updating user details in the Sample App
 
 ## [2.3.0] - Store SDK - 2023-02-23
 ### Changed
@@ -34,7 +35,7 @@
 
 ## [2.2.2] - Demo Apps - 2023-02-23
 ### Changed
-- Removed birthday field from account screen
+- Removed Birthday field from Account screen
 
 ## [5.1.0] - Login SDK - 2023-01-06
 ### Changed
