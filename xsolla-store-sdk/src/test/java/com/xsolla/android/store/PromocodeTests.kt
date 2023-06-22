@@ -64,7 +64,7 @@ class PromocodeTests {
         }, badPromocode)
         latch.await()
         Assert.assertTrue(error)
-        Assert.assertEquals("[0401-9807]: Enter a valid coupon code.", msg)
+        Assert.assertEquals("[0401-9807]: Enter a valid promo code.", msg)
     }
 
     @Test
@@ -86,7 +86,7 @@ class PromocodeTests {
         }, badPromocode)
         latch.await()
         Assert.assertTrue(error)
-        Assert.assertEquals("[0401-9807]: Enter a valid coupon code.", msg)
+        Assert.assertEquals("[0401-9807]: Enter a valid promo code.", msg)
     }
 
     @Test

@@ -21,7 +21,9 @@ data class PaymentProjectSettings(
     @SerializedName("return_url")
     val returnUrl: String? = null,
     @SerializedName("redirect_policy")
-    val redirectPolicy: SettingsRedirectPolicy? = null
+    val redirectPolicy: SettingsRedirectPolicy? = null,
+    @SerializedName("external_id")
+    val externalId: String? = null
 )
 
 data class SettingsRedirectPolicy(
@@ -36,7 +38,7 @@ data class SettingsRedirectPolicy(
 
 data class UiProjectSetting(
     val size: String? = null,
-    val theme: String? = "ps4-default-dark",
+    val theme: String? = "default_dark",
     val version: String? = null,
     val desktop: DesktopSettings? = null,
     val mobile: MobileSettings? = null,
