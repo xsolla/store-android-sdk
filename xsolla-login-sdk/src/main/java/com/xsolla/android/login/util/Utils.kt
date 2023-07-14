@@ -1,5 +1,6 @@
 package com.xsolla.android.login.util
 
+import com.xsolla.android.login.jwt.JWT
 import com.xsolla.android.login.token.TokenUtils
 import com.xsolla.lib_login.XLoginApi
 
@@ -30,4 +31,10 @@ internal object Utils {
             System.currentTimeMillis() / 1000 + res.expiresIn
     }
 
+    public fun saveToken(
+        token: String
+    ) {
+        tokenUtils.oauthAccessToken = token
+        tokenUtils.oauthExpireTimeUnixSec = JWT(token).expiresAt.time / 1000;
+    }
 }

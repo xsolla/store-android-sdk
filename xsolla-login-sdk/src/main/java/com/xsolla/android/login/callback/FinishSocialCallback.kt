@@ -11,3 +11,9 @@ interface FinishSocialLinkingCallback {
     fun onLinkingCancelled()
     fun onLinkingError(throwable: Throwable?, errorMessage: String?)
 }
+
+interface FinishXsollaWidgetAuthCallback {
+    fun onAuthSuccess()
+    fun onAuthCancelled()
+    fun onAuthError(throwable: Throwable?, errorMessage: String?)
+}

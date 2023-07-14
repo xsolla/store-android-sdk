@@ -48,6 +48,7 @@ internal object LoginSocial {
 
     private const val RC_LINKING_WEBVIEW = 39999
     private const val RC_AUTH_WEBVIEW = 31000
+    private const val RC_XSOLLA_WIDGET_AUTH_WEBVIEW = 32000
 
     private const val RC_AUTH_GOOGLE = 31001
     private const val RC_AUTH_GOOGLE_REQUEST_PERMISSION = 31002
@@ -239,7 +240,7 @@ internal object LoginSocial {
 
     fun finishSocialAuth(
         activity: Activity,
-        socialNetwork: SocialNetwork,
+        socialNetwork: SocialNetwork?,
         activityResultRequestCode: Int,
         activityResultCode: Int,
         activityResultData: Intent?,
@@ -273,7 +274,8 @@ internal object LoginSocial {
             }
             return
         }
-        if (socialNetwork == SocialNetwork.FACEBOOK && ::fbCallbackManager.isInitialized) {
+
+        if (socialNetwork != null && socialNetwork!! == SocialNetwork.FACEBOOK && ::fbCallbackManager.isInitialized) {
             finishSocialCallback = callback
             fbCallbackManager.onActivityResult(
                 activityResultRequestCode,
@@ -282,7 +284,8 @@ internal object LoginSocial {
             )
             return
         }
-        if (socialNetwork == SocialNetwork.WECHAT && ::iwxapi.isInitialized) {
+
+        if (socialNetwork != null && socialNetwork!! == SocialNetwork.WECHAT && ::iwxapi.isInitialized) {
             when (WechatUtils.wechatResult?.errCode) {
                 BaseResp.ErrCode.ERR_OK -> {
                     val code = (WechatUtils.wechatResult as SendAuth.Resp).code
@@ -310,7 +313,7 @@ internal object LoginSocial {
             WechatUtils.wechatResult = null
             return
         }
-        if (socialNetwork == SocialNetwork.QQ && ::tencent.isInitialized && activityResultRequestCode == Constants.REQUEST_LOGIN) {
+        if (socialNetwork != null && socialNetwork!! == SocialNetwork.QQ && ::tencent.isInitialized && activityResultRequestCode == Constants.REQUEST_LOGIN) {
             finishSocialCallback = callback
             Tencent.onActivityResultData(
                 activityResultRequestCode,
@@ -320,7 +323,7 @@ internal object LoginSocial {
             )
             return
         }
-        if (activityResultRequestCode == RC_AUTH_GOOGLE && socialNetwork == SocialNetwork.GOOGLE) {
+        if (socialNetwork != null && activityResultRequestCode == RC_AUTH_GOOGLE && socialNetwork!! == SocialNetwork.GOOGLE) {
             getGoogleAuthToken(activity, activityResultData, callback)
             return
         }
@@ -476,7 +479,7 @@ internal object LoginSocial {
                     val url = res.url
                     runCallback {
                         openBrowserActivity(
-                            isLinking = false,
+                            RC_AUTH_WEBVIEW,
                             url,
                             socialNetwork,
                             activity,
@@ -492,9 +495,9 @@ internal object LoginSocial {
     }
 
     private fun openBrowserActivity(
-        isLinking: Boolean,
+        requestCode: Int,
         url: String,
-        socialNetwork: SocialNetwork,
+        socialNetwork: SocialNetwork?,
         activity: Activity?,
         fragment: Fragment?
     ) {
@@ -514,13 +517,15 @@ internal object LoginSocial {
         with(intent) {
             putExtra(ActivityAuth.ARG_AUTH_URL, url)
             putExtra(ActivityAuth.ARG_CALLBACK_URL, callbackUrl)
-            putExtra(ActivityAuth.ARG_IS_LINKING, isLinking)
-            putExtra(ActivityAuth.ARG_SOCIAL_NETWORK, socialNetwork)
+            putExtra(ActivityAuth.ARG_IS_LINKING, requestCode == RC_LINKING_WEBVIEW)
+            if(socialNetwork != null) {
+                putExtra(ActivityAuth.ARG_SOCIAL_NETWORK, socialNetwork!!)
+            }
         }
         if (activity != null) {
-            activity.startActivityForResult(intent, if (isLinking) RC_LINKING_WEBVIEW else RC_AUTH_WEBVIEW)
+            activity.startActivityForResult(intent, requestCode)
         } else {
-            fragment!!.startActivityForResult(intent, if (isLinking) RC_LINKING_WEBVIEW else RC_AUTH_WEBVIEW)
+            fragment!!.startActivityForResult(intent, requestCode)
         }
     }
 
@@ -625,7 +630,7 @@ internal object LoginSocial {
                         loginUrl = callbackUrl
                     )
                     runCallback {
-                        openBrowserActivity(isLinking = true, res.url, socialNetwork, activity, fragment)
+                        openBrowserActivity(RC_LINKING_WEBVIEW, res.url, socialNetwork, activity, fragment)
                         callback?.onLinkingStarted()
                     }
                 } catch (e: Exception) {
@@ -649,6 +654,46 @@ internal object LoginSocial {
                 ActivityAuth.Status.SUCCESS -> callback?.onLinkingSuccess()
                 ActivityAuth.Status.CANCELLED -> callback?.onLinkingCancelled()
                 ActivityAuth.Status.ERROR -> callback?.onLinkingError(null, error!!)
+            }
+        }
+    }
+
+    fun startXsollaWidgetAuth(
+        activity: Activity?,
+        fragment: Fragment?,
+        url: String,
+        callback: StartXsollaWidgetAuthCallback?
+    ) {
+        runIo {
+            runBlocking {
+                try {
+                    openBrowserActivity(RC_XSOLLA_WIDGET_AUTH_WEBVIEW, url, null, activity, fragment)
+                    callback?.onAuthStarted()
+                } catch (e: Exception) {
+                    if (callback != null) {
+                        handleException(e, callback)
+                    }
+                }
+            }
+        }
+    }
+
+    fun finishXsollaWidgetAuth(
+        activity: Activity,
+        activityResultRequestCode: Int,
+        activityResultCode: Int,
+        activityResultData: Intent?,
+        callback: FinishXsollaWidgetAuthCallback?
+    ) {
+        if (activityResultRequestCode == RC_XSOLLA_WIDGET_AUTH_WEBVIEW) {
+            val (status, token, _, error) = fromResultIntent(activityResultData)
+            when (status) {
+                ActivityAuth.Status.SUCCESS -> {
+                    Utils.saveToken(token!!)
+                    callback?.onAuthSuccess()
+                }
+                ActivityAuth.Status.CANCELLED -> callback?.onAuthCancelled()
+                ActivityAuth.Status.ERROR -> callback?.onAuthError(null, error!!)
             }
         }
     }
