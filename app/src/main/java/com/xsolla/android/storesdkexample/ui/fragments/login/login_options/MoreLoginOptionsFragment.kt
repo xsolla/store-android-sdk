@@ -88,7 +88,6 @@ class MoreLoginOptionsFragment : BaseFragment() {
         }
 
         binding.bnLoginWithXsollaWidget.setOnClickListener {
-            binding.loader.isVisible = true
             XLogin.startAuthWithXsollaWidget(
                 this,
                 object : StartXsollaWidgetAuthCallback {
@@ -97,7 +96,6 @@ class MoreLoginOptionsFragment : BaseFragment() {
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
-                        binding.loader.isVisible = false
                         showSnack(
                             errorMessage ?: throwable?.message ?: throwable?.javaClass?.name ?: "Error"
                         )
