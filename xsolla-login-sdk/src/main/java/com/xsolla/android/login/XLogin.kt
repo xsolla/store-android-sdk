@@ -21,10 +21,12 @@ import com.xsolla.android.login.social.FriendsPlatform
 import com.xsolla.android.login.social.LoginSocial
 import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.login.token.TokenUtils
+import com.xsolla.android.login.ui.*
 import com.xsolla.android.login.unity.UnityProxyActivity
 import com.xsolla.android.login.util.*
 import com.xsolla.lib_login.XLoginApi
 import com.xsolla.lib_login.entity.request.*
+import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.util.*
@@ -1449,6 +1451,36 @@ class XLogin private constructor(
         }
 
         /**
+         * Starts authentication via xsolla widget
+         *
+         * @param activity      Current activity.
+         * @param callback      Status callback.
+         *
+         */
+        @JvmStatic
+        fun startAuthWithXsollaWidget(
+            activity: Activity?,
+            callback: StartXsollaWidgetAuthCallback?
+        ) {
+            loginSocial.startXsollaWidgetAuth(activity, null, getXsollaWidgetUrl(), callback!!)
+        }
+
+        /**
+         * Starts authentication via xsolla widget
+         *
+         * @param fragment      Current fragment.
+         * @param callback      Status callback.
+         *
+         */
+        @JvmStatic
+        fun startAuthWithXsollaWidget(
+            fragment: Fragment?,
+            callback: StartXsollaWidgetAuthCallback?
+        ) {
+            loginSocial.startXsollaWidgetAuth(null, fragment, getXsollaWidgetUrl(), callback!!)
+        }
+
+        /**
          * Finishes authentication via a social network
          *
          * @param activity                  Current activity.
@@ -1472,7 +1504,34 @@ class XLogin private constructor(
         ) {
             loginSocial.finishSocialAuth(
                 activity!!,
-                socialNetwork!!,
+                socialNetwork,
+                activityResultRequestCode,
+                activityResultCode,
+                activityResultData,
+                callback!!
+            )
+        }
+
+        /**
+         * Finishes authentication via xsolla widget
+         *
+         * @param activity                  Current activity.
+         * @param activityResultRequestCode Request code from `onActivityResult`.
+         * @param activityResultCode        Result code from `onActivityResult`.
+         * @param activityResultData        Data from `onActivityResult`.
+         * @param callback                  Status callback.
+         *
+         */
+        @JvmStatic
+        fun finishAuthWithXsollaWidget(
+            activity: Activity?,
+            activityResultRequestCode: Int,
+            activityResultCode: Int,
+            activityResultData: Intent?,
+            callback: FinishXsollaWidgetAuthCallback?
+        ) {
+            loginSocial.finishXsollaWidgetAuth(
+                activity!!,
                 activityResultRequestCode,
                 activityResultCode,
                 activityResultData,
@@ -1641,6 +1700,11 @@ class XLogin private constructor(
         @JvmStatic
         fun canRefreshToken(): Boolean {
             return getInstance().tokenUtils.oauthRefreshToken != null
+        }
+
+        @JvmStatic
+        fun getXsollaWidgetUrl(): String {
+            return "https://login-widget.xsolla.com/latest/?projectId=" + getInstance().projectId + "&login_url=" + getInstance().callbackUrl
         }
 
     }

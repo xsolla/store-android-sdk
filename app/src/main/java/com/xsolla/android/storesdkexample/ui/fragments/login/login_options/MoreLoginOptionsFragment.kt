@@ -6,7 +6,8 @@ import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xsolla.android.appcore.databinding.FragmentMoreLogInOptionsBinding
 import com.xsolla.android.login.XLogin
-import com.xsolla.android.login.callback.AuthViaDeviceIdCallback
+import com.xsolla.android.login.callback.*
+import com.xsolla.android.login.social.SocialNetwork
 import com.xsolla.android.storesdkexample.R
 import com.xsolla.android.storesdkexample.StoreActivity
 import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
@@ -84,6 +85,50 @@ class MoreLoginOptionsFragment : BaseFragment() {
                     )
                 }
             })
+        }
+
+        binding.bnLoginWithXsollaWidget.setOnClickListener {
+            XLogin.startAuthWithXsollaWidget(
+                this,
+                object : StartXsollaWidgetAuthCallback {
+                    override fun onAuthStarted() {
+                        // auth successfully started
+                    }
+
+                    override fun onError(throwable: Throwable?, errorMessage: String?) {
+                        showSnack(
+                            errorMessage ?: throwable?.message ?: throwable?.javaClass?.name ?: "Error"
+                        )
+                    }
+                }
+            )
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        XLogin.finishAuthWithXsollaWidget(
+            requireActivity(),
+            requestCode,
+            resultCode,
+            data,
+            finishWithXsollaWidgetAuthCallback
+        )
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private val finishWithXsollaWidgetAuthCallback: FinishXsollaWidgetAuthCallback = object : FinishXsollaWidgetAuthCallback {
+        override fun onAuthSuccess() {
+            val intent = Intent(requireActivity(), StoreActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
+        }
+
+        override fun onAuthCancelled() {
+            showSnack("Auth cancelled")
+        }
+
+        override fun onAuthError(throwable: Throwable?, errorMessage: String?) {
+            showSnack(errorMessage?: throwable?.javaClass?.name ?: throwable?.localizedMessage ?: "Error")
         }
     }
 }
