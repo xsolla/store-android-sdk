@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.5.0] - Store SDK - 2023-07-24
+### Added
+- `startAuthWithXsollaWidget` and `finishAuthWithXsollaWidget` SDK methods. Allows to open Login widget in the internal browser
+
 ## [2.4.0] - Store SDK - 2023-06-19
 ### Changed
 - Added `ItemLimits` data to store items responses
