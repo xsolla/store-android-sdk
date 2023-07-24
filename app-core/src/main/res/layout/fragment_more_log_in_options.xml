@@ -57,6 +57,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bn_login_with_phone" />
 
+        <Button
+            android:id="@+id/bn_login_with_xsolla_widget"
+            style="@style/Widget.Xsolla.ActionButton.Small.Secondary"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:text="Log in with xsolla widget"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bn_passworldless_auth" />
+
         <ImageButton
             android:id="@+id/ib_close_fragment"
             android:layout_width="wrap_content"
@@ -138,7 +152,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bn_passworldless_auth"
+            app:layout_constraintTop_toBottomOf="@+id/bn_login_with_xsolla_widget"
             app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
