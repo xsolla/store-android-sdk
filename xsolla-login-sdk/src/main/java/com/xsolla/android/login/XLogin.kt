@@ -94,6 +94,34 @@ class XLogin private constructor(
             get() = getInstance().tokenUtils.oauthAccessToken
 
         /**
+         * Get refresh token
+         *
+         * @return refreshToken
+         */
+        @JvmStatic
+        val refreshToken: String?
+            get() = getInstance().tokenUtils.oauthRefreshToken
+
+        /**
+         * Get token expire time
+         *
+         * @return tokenExpireTime
+         */
+        @JvmStatic
+        val tokenExpireTime: Long?
+            get() = getInstance().tokenUtils.oauthExpireTimeUnixSec
+
+        /**
+         * set authentication data
+         */
+        @JvmStatic
+        fun setTokenData(token: String, refreshToken: String, expireTime: Long) {
+            getInstance().tokenUtils.oauthRefreshToken = token
+            getInstance().tokenUtils.oauthAccessToken = refreshToken
+            getInstance().tokenUtils.oauthExpireTimeUnixSec = expireTime
+        }
+
+        /**
          * Initialize SDK
          *
          * @param context      Application context.
