@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.5.1] - Login SDK - 2023-07-28
+### Added
+- `refreshToken`, `tokenExpireTime` and `setTokenData` SDK methods.
+
 ## [2.5.0] - Store SDK - 2023-07-24
 ### Added
 - `startAuthWithXsollaWidget` and `finishAuthWithXsollaWidget` SDK methods. They allow to open the Login widget in the internal browser
