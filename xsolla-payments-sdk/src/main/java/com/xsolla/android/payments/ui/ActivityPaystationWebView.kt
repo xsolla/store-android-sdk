@@ -64,11 +64,18 @@ internal class ActivityPaystationWebView : ActivityPaystation() {
                     && uri.host == redirectHost
                 ) {
                     val invoiceId = uri.getQueryParameter("invoice_id")
+                    var statusParam = uri.getQueryParameter("status")
+
+                    var status = XPayments.Status.UNKNOWN;
+                    if (statusParam != null && statusParam == "done") {
+                        status = XPayments.Status.COMPLETED
+                    }
+
                     //hide error message
                     webView.visibility = View.INVISIBLE
                     finishWithResult(
                         Activity.RESULT_OK,
-                        XPayments.Result(XPayments.Status.COMPLETED, invoiceId)
+                        XPayments.Result(status, invoiceId)
                     )
                 }
                 super.doUpdateVisitedHistory(view, url, isReload)
