@@ -1,6 +1,10 @@
 # Changelog
 
-## [2.5.1] - Login SDK - 2023-07-28
+## [1.0.6] - Payments SDK - 2023-08-07
+### Changed
+- Fixed false positive payment result detection when payment was declined from merchant side
+
+## [6.0.3] - Login SDK - 2023-07-28
 ### Added
 - `refreshToken`, `tokenExpireTime` and `setTokenData` SDK methods.
 
