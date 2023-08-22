@@ -5,7 +5,7 @@ buildscript {
     ext.payments_sdk_version_name = '1.0.6'
     ext.store_sdk_version_name = '2.5.2'
     ext.inventory_sdk_version_name = '2.0.3'
-    ext.login_sdk_version_name = '6.0.3'
+    ext.login_sdk_version_name = '6.0.4'
 
     ext.googleplay_sdk_version_name = "0.0.1"
 
