@@ -113,12 +113,16 @@ class XLogin private constructor(
 
         /**
          * set authentication data
+         *
+         * @param token         User JWT for the client project.
+         * @param refreshToken  Refresh token for updating the token
+         * @param expiresIn     Token expiration period in seconds.
          */
         @JvmStatic
-        fun setTokenData(token: String, refreshToken: String, expireTime: Long) {
-            getInstance().tokenUtils.oauthRefreshToken = token
-            getInstance().tokenUtils.oauthAccessToken = refreshToken
-            getInstance().tokenUtils.oauthExpireTimeUnixSec = expireTime
+        fun setTokenData(token: String, refreshToken: String, expiresIn: Long) {
+            getInstance().tokenUtils.oauthAccessToken = token
+            getInstance().tokenUtils.oauthRefreshToken = refreshToken
+            getInstance().tokenUtils.oauthExpireTimeUnixSec = System.currentTimeMillis() / 1000 + expiresIn
         }
 
         /**
