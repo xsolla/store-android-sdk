@@ -1,5 +1,9 @@
 # Changelog
 
+## [6.0.4] - Login SDK - 2023-08-22
+### Changed
+-  Fixed `setTokenData` parameters
+
 ## [1.0.6] - Payments SDK - 2023-08-07
 ### Changed
 - Fixed false positive payment result detection when payment was declined from merchant side
