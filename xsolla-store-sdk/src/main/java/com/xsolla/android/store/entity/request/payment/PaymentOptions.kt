@@ -38,7 +38,7 @@ data class SettingsRedirectPolicy(
 
 data class UiProjectSetting(
     val size: String? = null,
-    val theme: String? = "default_dark",
+    val theme: String? = "63295aab2e47fab76f7708e3",
     val version: String? = null,
     val desktop: DesktopSettings? = null,
     val mobile: MobileSettings? = null,
