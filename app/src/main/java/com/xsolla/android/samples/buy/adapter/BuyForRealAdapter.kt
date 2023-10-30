@@ -1,5 +1,6 @@
 package com.xsolla.android.samples.buy.adapter
 
+import android.app.Application
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,9 @@ import com.xsolla.android.samples.buy.BuyForRealActivity
 import com.xsolla.android.samples.buy.adapter.holder.BuyViewHolder
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.callbacks.CreateOrderCallback
+import com.xsolla.android.store.entity.request.payment.PaymentOptions
+import com.xsolla.android.store.entity.request.payment.PaymentProjectSettings
+import com.xsolla.android.store.entity.request.payment.SettingsRedirectPolicy
 import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse
 import com.xsolla.android.storesdkexample.BuildConfig
@@ -39,6 +43,21 @@ class BuyForRealAdapter(private val parentActivity: BuyForRealActivity, private 
         holder.itemPrice.text = priceText
 
         holder.itemButton.setOnClickListener {
+
+            val paymentOptions = PaymentOptions(
+                isSandbox = true,
+                settings = PaymentProjectSettings(
+                    returnUrl = "app://xpayment.com.xsolla.android.storesdkexample",
+                    redirectPolicy = SettingsRedirectPolicy(
+                        redirectConditions = "successful",
+                        delay = 0,
+                        statusForManualRedirection = "none",
+                        redirectButtonCaption = "Back to the Game"
+                    )
+                )
+            )
+
+
             XStore.createOrderByItemSku(object : CreateOrderCallback {
                 override fun onSuccess(response: CreateOrderResponse) {
                     val token = response.token
@@ -53,7 +72,7 @@ class BuyForRealAdapter(private val parentActivity: BuyForRealActivity, private 
                     val message = errorMessage ?: throwable?.javaClass?.name ?: "Error"
                     Snackbar.make(holder.view, message, Snackbar.LENGTH_LONG).show()
                 }
-            }, item.sku!!)
+            }, item.sku!!, paymentOptions)
         }
     }
 
