@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="4dp">
+
+    <EditText
+        android:id="@+id/username_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:minHeight="50dp"
+        android:hint="email or username"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/resend_email_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/username_input"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"
+        android:text="Resend confirmation email" />
+
+</RelativeLayout>
