@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="42dp"
         android:hint="username"
+        android:minHeight="50dp"
         android:inputType="textPersonName" />
 
     <EditText
@@ -18,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/username_input"
         android:layout_marginTop="48dp"
+        android:minHeight="50dp"
         android:hint="password"
         android:inputType="textPassword" />
 
