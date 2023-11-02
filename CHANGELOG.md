@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.2.6] - Demo Apps - 2023-11-01
+### Added
+- Samples
+
+## [2.5.3] - Store SDK - 2023-11-01
+### Changed
+- Names of default Pay Station themes are replaced by the theme ID
+
 ## [6.0.4] - Login SDK - 2023-08-22
 ### Changed
 -  Fixed `setTokenData` parameters

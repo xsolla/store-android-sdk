@@ -68,6 +68,7 @@ class AuthByPhoneNumberTests {
     }
 
     @Test
+    @Ignore("for manual testing (needs correct sms code and phone number substitution)")
     fun completeAuthByMobilePhoneOauth_Fail() {
         initSdkOauth()
         initLoggedOut()

@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
+        android:minHeight="50dp"
         android:hint="username"
         android:inputType="textPersonName" />
 
@@ -18,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/username_input"
         android:layout_marginTop="48dp"
+        android:minHeight="50dp"
         android:hint="email"
         android:inputType="textEmailAddress" />
 
@@ -27,6 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/email_input"
         android:layout_marginTop="48dp"
+        android:minHeight="50dp"
         android:hint="password"
         android:inputType="textPassword" />
 
