@@ -1127,7 +1127,7 @@ class XStore private constructor(
         /**
          * Returns a list of virtual items according to pagination settings. The list includes items for which display in the store is enabled in the settings. For each virtual item, complete data is returned.
          *
-         * @param limit Limit for number of elements on the page (in 1..50).
+         * @param limit Limit for the number of elements on the page in the range from 1 to 50.
          * @param offset Number of element from which list is generated (count starts from 0).
          * @param locale Response language.
          * The following languages are supported: Arabic (`ar`), Bulgarian (`bg`), Czech (`cs`), German (`de`), Spanish (`es`), French (`fr`), Hebrew (`he`), Italian (`it`), Japanese (`ja`), Korean (`ko`), Polish (`pl`), Portuguese (`pt`), Romanian (`ro`), Russian (`ru`), Thai (`th`), Turkish (`tr`), Vietnamese (`vi`), Chinese Simplified (`cn`), Chinese Traditional (`tw`), English (`en`, default).
@@ -1221,7 +1221,7 @@ class XStore private constructor(
          * Returns a list of virtual currencies according to pagination settings.
          *
          * @param callback Status callback.
-         * @param limit Limit for number of elements on the page (in 1..50).
+         * @param limit Limit for the number of elements on the page in the range from 1 to 50.
          * @param offset Number of element from which list is generated (count starts from 0).
          * @param locale Response language.
          * The following languages are supported: Arabic (`ar`), Bulgarian (`bg`), Czech (`cs`), German (`de`), Spanish (`es`), French (`fr`), Hebrew (`he`), Italian (`it`), Japanese (`ja`), Korean (`ko`), Polish (`pl`), Portuguese (`pt`), Romanian (`ro`), Russian (`ru`), Thai (`th`), Turkish (`tr`), Vietnamese (`vi`), Chinese Simplified (`cn`), Chinese Traditional (`tw`), English (`en`, default).
@@ -1272,7 +1272,7 @@ class XStore private constructor(
         /**
          * Returns a list of virtual currency packages according to pagination settings. The list includes packages for which display in the store is enabled in the settings.
          *
-         * @param limit Limit for number of elements on the page (in 1..50)
+         * @param limit Limit for the number of elements on the page in the range from 1 to 50.
          * @param offset Number of element from which list is generated (count starts from 0)
          * @param locale Response language. Two-letter lowercase language code per ISO-639-1
          * @param additionalFields The list of additional fields. Available fields: "media_list", "order", "long_description"
@@ -1328,7 +1328,7 @@ class XStore private constructor(
          * Returns a list of items for the specified group according to pagination settings. The list includes items for which display in the store is enabled in the settings. In the settings of the group, the display in the store must be enabled.
          *
          * @param externalId Group external ID.
-         * @param limit Limit for number of elements on the page (in 1..50).
+         * @param limit Limit for the number of elements on the page in the range from 1 to 50.
          * @param offset Number of element from which list is generated (count starts from 0).
          * @param locale Response language.
          * The following languages are supported: Arabic (`ar`), Bulgarian (`bg`), Czech (`cs`), German (`de`), Spanish (`es`), French (`fr`), Hebrew (`he`), Italian (`it`), Japanese (`ja`), Korean (`ko`), Polish (`pl`), Portuguese (`pt`), Romanian (`ro`), Russian (`ru`), Thai (`th`), Turkish (`tr`), Vietnamese (`vi`), Chinese Simplified (`cn`), Chinese Traditional (`tw`), English (`en`, default).
@@ -1477,7 +1477,7 @@ class XStore private constructor(
          * **Note**. Now all projects have the limitation to the number of items that you can get in the response.
          * The default and maximum value is 50 items per response. To manage the limitation, use limit offset fields.
          *
-         * @param limit Limit for number of elements on the page (in 1..50).
+         * @param limit Limit for the number of elements on the page in the range from 1 to 50.
          * @param offset Number of element from which list is generated (count starts from 0).
          * @param locale Response language.
          * The following languages are supported: Arabic (`ar`), Bulgarian (`bg`), Czech (`cs`), German (`de`), Spanish (`es`), French (`fr`), Hebrew (`he`), Italian (`it`), Japanese (`ja`), Korean (`ko`), Polish (`pl`), Portuguese (`pt`), Romanian (`ro`), Russian (`ru`), Thai (`th`), Turkish (`tr`), Vietnamese (`vi`), Chinese Simplified (`cn`), Chinese Traditional (`tw`), English (`en`, default).
