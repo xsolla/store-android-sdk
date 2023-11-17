@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.0] - Payments SDK - 2023-11-17
+### Added
+- Custom Tabs support for the Huawei browser
+
 ## [2.2.6] - Demo Apps - 2023-11-01
 ### Added
 - Samples
