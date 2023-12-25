@@ -71,15 +71,18 @@ internal class ActivityPaystationWebView : ActivityPaystation() {
                 if (urlLower.startsWith(redirectScheme))
                     return false
 
-                if (urlLower.startsWith("alipays")) {
+                if (urlLower.startsWith("alipays") || urlLower.startsWith("market")) {
                     try {
                         val browserIntent = Intent()
                             .setAction(Intent.ACTION_VIEW)
                             .addCategory(Intent.CATEGORY_BROWSABLE)
                             .setData(Uri.parse(url))
-                        webView.context.startActivity(browserIntent)
-                        return true
+                        if(browserIntent != null) {
+                            webView.context.startActivity(browserIntent)
+                            return true
+                        }
                     } catch (e: Exception) {
+                        e.printStackTrace()
                         return false
                     }
                 }
@@ -124,7 +127,7 @@ internal class ActivityPaystationWebView : ActivityPaystation() {
             if(ActivityCompat.checkSelfPermission(webView.context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_PERMISSION_CODE)
             } else {
-                downloadFile();
+                downloadFile()
             }
         }
     }
