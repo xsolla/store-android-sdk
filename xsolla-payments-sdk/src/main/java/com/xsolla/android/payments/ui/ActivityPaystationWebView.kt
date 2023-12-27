@@ -1,15 +1,22 @@
 package com.xsolla.android.payments.ui
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.DownloadManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
+import android.webkit.URLUtil
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.core.app.ActivityCompat
 import com.xsolla.android.payments.R
 import com.xsolla.android.payments.XPayments
+import java.lang.Exception
 
 internal class ActivityPaystationWebView : ActivityPaystation() {
 
@@ -18,6 +25,15 @@ internal class ActivityPaystationWebView : ActivityPaystation() {
 
     private lateinit var redirectScheme: String
     private lateinit var redirectHost: String
+
+    private lateinit var downloadUrl: String
+    private lateinit var downloadUserAgent: String
+    private lateinit var downloadContentDisposition: String
+    private lateinit var downloadMimeType: String
+
+    companion object {
+        private const val WRITE_EXTERNAL_STORAGE_PERMISSION_CODE = 100
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,12 +61,32 @@ internal class ActivityPaystationWebView : ActivityPaystation() {
     @SuppressLint("SetJavaScriptEnabled")
     private fun configureWebView() {
         webView.settings.javaScriptEnabled = true
+        webView.settings.domStorageEnabled = true
+        webView.settings.allowFileAccess = true
+        webView.settings.loadsImagesAutomatically = true
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(webView: WebView, url: String): Boolean {
                 val urlLower = url.lowercase()
 
                 if (urlLower.startsWith(redirectScheme))
                     return false
+
+                if (urlLower.startsWith("alipays") || urlLower.startsWith("market")) {
+                    try {
+                        val browserIntent = Intent()
+                            .setAction(Intent.ACTION_VIEW)
+                            .addCategory(Intent.CATEGORY_BROWSABLE)
+                            .setData(Uri.parse(url))
+                        if(browserIntent != null) {
+                            webView.context.startActivity(browserIntent)
+                            return true
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        return false
+                    }
+                }
+
 
                 if (!(urlLower.startsWith("https:") || urlLower.startsWith("http:")))
                     return true
@@ -82,6 +118,28 @@ internal class ActivityPaystationWebView : ActivityPaystation() {
             }
 
         }
+        webView.setDownloadListener { url, userAgent, contentDisposition, mimeType, _ ->
+
+            downloadUrl = url
+            downloadUserAgent = userAgent
+            downloadContentDisposition = contentDisposition
+            downloadMimeType = mimeType
+            if(ActivityCompat.checkSelfPermission(webView.context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_PERMISSION_CODE)
+            } else {
+                downloadFile()
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == WRITE_EXTERNAL_STORAGE_PERMISSION_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // Permission has been granted, proceed with your logic
+            downloadFile()
+        } else {
+            // Permission has been denied or request was cancelled
+        }
     }
 
     private fun finishWithResult(resultCode: Int, resultData: XPayments.Result) {
@@ -89,6 +147,19 @@ internal class ActivityPaystationWebView : ActivityPaystation() {
         intent.putExtra(RESULT, resultData)
         setResult(resultCode, intent)
         finish()
+    }
+
+    private fun downloadFile() {
+        val request = DownloadManager.Request(Uri.parse(downloadUrl))
+        request.setMimeType(downloadMimeType)
+        request.addRequestHeader("User-Agent", downloadUserAgent)
+        request.setTitle(URLUtil.guessFileName(downloadUrl, downloadContentDisposition, downloadMimeType))
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+        request.setDestinationInExternalPublicDir(
+            Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(downloadUrl, downloadContentDisposition, downloadMimeType)
+        )
+        val dm = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+        dm.enqueue(request)
     }
 
 }
