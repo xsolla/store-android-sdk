@@ -9,8 +9,8 @@ buildscript {
 
     ext.googleplay_sdk_version_name = "0.0.1"
 
-    ext.sample_app_version_name = '2.2.6'
-    ext.sample_app_version_code = 35
+    ext.sample_app_version_name = '2.2.7'
+    ext.sample_app_version_code = 36
 
     ext.sdk_min = 21
     ext.sdk_target = 33

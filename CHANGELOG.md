@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.7] - Demo Apps - 2023-12-27
+### Added
+- Support of Alipay redirections and APK download in demo
+
 ## [1.2.0] - Payments SDK - 2023-12-27
 ### Added
 - Support of Alipay redirections and APK download in WebView
