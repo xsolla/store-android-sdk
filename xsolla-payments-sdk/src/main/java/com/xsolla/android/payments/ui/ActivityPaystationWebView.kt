@@ -127,7 +127,7 @@ internal class ActivityPaystationWebView : ActivityPaystation() {
             downloadUserAgent = userAgent
             downloadContentDisposition = contentDisposition
             downloadMimeType = mimeType
-            if(ActivityCompat.checkSelfPermission(webView.context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if(Build.VERSION.SDK_INT < 33 && ActivityCompat.checkSelfPermission(webView.context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_PERMISSION_CODE)
             } else {
                 downloadFile()
@@ -158,7 +158,7 @@ internal class ActivityPaystationWebView : ActivityPaystation() {
         request.setMimeType(downloadMimeType)
         request.addRequestHeader("User-Agent", downloadUserAgent)
         request.setTitle(URLUtil.guessFileName(downloadUrl, downloadContentDisposition, downloadMimeType))
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         request.setDestinationInExternalPublicDir(
             Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(downloadUrl, downloadContentDisposition, downloadMimeType)
         )
