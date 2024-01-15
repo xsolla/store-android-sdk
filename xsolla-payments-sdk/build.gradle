@@ -41,6 +41,8 @@ dependencies {
     implementation "androidx.core:core-ktx:$androidx_core_ktx"
 
     implementation "androidx.browser:browser:$androidx_browser"
+
+    api 'com.google.android.material:material:1.6.1'
 }
 
 dokkaHtmlPartial {
