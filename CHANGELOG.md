@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.3.0] - Payments SDK - 2024-01-16
+### Added
+- Support of all redirections in WebView
+### Changed
+- Fixed bug with storage permissions for Android 13 (API level 33)
+
 ## [2.2.7] - Demo Apps - 2023-12-27
 ### Added
 - Support of Alipay redirections and APK download in demo
