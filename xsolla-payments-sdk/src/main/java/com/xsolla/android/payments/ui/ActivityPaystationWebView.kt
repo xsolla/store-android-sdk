@@ -17,7 +17,6 @@ import android.webkit.URLUtil
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.app.ActivityCompat
-import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.payments.R
 import com.xsolla.android.payments.XPayments
 import java.net.URISyntaxException
@@ -86,7 +85,6 @@ internal class ActivityPaystationWebView : ActivityPaystation() {
                         Log.e("WebView", "Invalid URL format$url", e)
                     } catch (e: ActivityNotFoundException) {
                         Log.e("WebView", "No activity found to handle URL: $url", e)
-                        showSnack("No activity found to handle URL: $url")
                     }
                     return true
                 }
@@ -142,7 +140,6 @@ internal class ActivityPaystationWebView : ActivityPaystation() {
             downloadFile()
         } else {
             // Permission has been denied or request was cancelled
-            showSnack("Request was cancelled")
         }
     }
 
@@ -165,10 +162,4 @@ internal class ActivityPaystationWebView : ActivityPaystation() {
         val dm = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         dm.enqueue(request)
     }
-
-    private fun showSnack(message: String) {
-        val rootView: View = findViewById(android.R.id.content)
-        Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show()
-    }
-
 }
