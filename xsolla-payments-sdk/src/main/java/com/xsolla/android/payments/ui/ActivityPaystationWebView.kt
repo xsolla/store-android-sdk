@@ -4,11 +4,14 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DownloadManager
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.View
 import android.webkit.URLUtil
 import android.webkit.WebView
@@ -16,7 +19,8 @@ import android.webkit.WebViewClient
 import androidx.core.app.ActivityCompat
 import com.xsolla.android.payments.R
 import com.xsolla.android.payments.XPayments
-import java.lang.Exception
+import java.net.URISyntaxException
+
 
 internal class ActivityPaystationWebView : ActivityPaystation() {
 
@@ -71,22 +75,19 @@ internal class ActivityPaystationWebView : ActivityPaystation() {
                 if (urlLower.startsWith(redirectScheme))
                     return false
 
-                if (urlLower.startsWith("alipays") || urlLower.startsWith("market")) {
+                if (!urlLower.startsWith("http")) {
                     try {
-                        val browserIntent = Intent()
-                            .setAction(Intent.ACTION_VIEW)
-                            .addCategory(Intent.CATEGORY_BROWSABLE)
-                            .setData(Uri.parse(url))
-                        if(browserIntent != null) {
-                            webView.context.startActivity(browserIntent)
-                            return true
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        return false
+                        val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+                        intent.addCategory("android.intent.category.BROWSABLE")
+                        intent.setComponent(null)
+                        webView.context.startActivity(intent)
+                    } catch (e: URISyntaxException) {
+                        Log.e("WebView", "Invalid URL format$url", e)
+                    } catch (e: ActivityNotFoundException) {
+                        Log.e("WebView", "No activity found to handle URL: $url", e)
                     }
+                    return true
                 }
-
 
                 if (!(urlLower.startsWith("https:") || urlLower.startsWith("http:")))
                     return true
@@ -124,7 +125,7 @@ internal class ActivityPaystationWebView : ActivityPaystation() {
             downloadUserAgent = userAgent
             downloadContentDisposition = contentDisposition
             downloadMimeType = mimeType
-            if(ActivityCompat.checkSelfPermission(webView.context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if(Build.VERSION.SDK_INT < 33 && ActivityCompat.checkSelfPermission(webView.context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_PERMISSION_CODE)
             } else {
                 downloadFile()
@@ -154,12 +155,11 @@ internal class ActivityPaystationWebView : ActivityPaystation() {
         request.setMimeType(downloadMimeType)
         request.addRequestHeader("User-Agent", downloadUserAgent)
         request.setTitle(URLUtil.guessFileName(downloadUrl, downloadContentDisposition, downloadMimeType))
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         request.setDestinationInExternalPublicDir(
             Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(downloadUrl, downloadContentDisposition, downloadMimeType)
         )
         val dm = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         dm.enqueue(request)
     }
-
 }
