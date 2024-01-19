@@ -40,7 +40,7 @@ class App : Application() {
             .setProjectId(DemoCredentialsManager.loginId)
             .setOauthClientId(DemoCredentialsManager.oauthClientId)
             .setSocialConfig(socialConfig)
-            .setHost(DemoCredentialsManager.host)
+            .setApiHost(DemoCredentialsManager.apiHost)
             .build()
         XLogin.init(this, loginConfig)
     }

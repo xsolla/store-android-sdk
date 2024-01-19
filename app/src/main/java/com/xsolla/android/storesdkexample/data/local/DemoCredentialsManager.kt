@@ -36,10 +36,10 @@ object DemoCredentialsManager {
             putString("webshopUrl", value.trimEnd('/'))
         }
 
-    var host: String
-        get() = preferences.getString("host", BuildConfig.HOST)!!
+    var apiHost: String
+        get() = preferences.getString("apiHost", BuildConfig.LOGIN_API_HOST)!!
         set(value) = preferences.edit {
-            putString("host", value)
+            putString("apiHost", value)
         }
 
     fun resetToDefaults() {
@@ -47,7 +47,7 @@ object DemoCredentialsManager {
         loginId = BuildConfig.LOGIN_ID
         projectId = BuildConfig.PROJECT_ID
         webshopUrl = BuildConfig.WEBSHOP_URL
-        host = BuildConfig.HOST
+        apiHost = BuildConfig.LOGIN_API_HOST
     }
 
 }
