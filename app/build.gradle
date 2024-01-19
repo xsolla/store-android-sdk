@@ -41,6 +41,7 @@ android {
         buildConfigField 'int', 'OAUTH_CLIENT_ID', '57' // Replace to your project's OAuth2 Client ID
         buildConfigField 'String', 'GOOGLE_CREDENTIAL', "\"${System.env.GOOGLE_SERVER_ID}\""
         buildConfigField 'String', 'WEBSHOP_URL', '"https://sitebuilder.xsolla.com/game/sdk-web-store"'
+        buildConfigField 'String', 'HOST', '"login.xsolla.com"'
         buildConfigField 'boolean', 'IS_SANDBOX', 'true'
 
         buildConfigField "String", "VERSION_NAME", "\"$versionName\""

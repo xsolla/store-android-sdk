@@ -36,11 +36,18 @@ object DemoCredentialsManager {
             putString("webshopUrl", value.trimEnd('/'))
         }
 
+    var host: String
+        get() = preferences.getString("host", BuildConfig.HOST)!!
+        set(value) = preferences.edit {
+            putString("host", value)
+        }
+
     fun resetToDefaults() {
         oauthClientId = BuildConfig.OAUTH_CLIENT_ID
         loginId = BuildConfig.LOGIN_ID
         projectId = BuildConfig.PROJECT_ID
         webshopUrl = BuildConfig.WEBSHOP_URL
+        host = BuildConfig.HOST
     }
 
 }

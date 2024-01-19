@@ -3,6 +3,7 @@ package com.xsolla.android.login
 class LoginConfig private constructor(
     internal val projectId: String,
     internal val oauthClientId: Int,
+    internal val host: String,
     internal val socialConfig: XLogin.SocialConfig? = null,
     internal val redirectScheme: String?,
     internal val redirectHost: String?
@@ -10,6 +11,7 @@ class LoginConfig private constructor(
     class OauthBuilder {
         private var projectId: String? = null
         private var oauthClientId: Int? = null
+        private var host: String? = null
         private var socialConfig: XLogin.SocialConfig? = null
 
         private var redirectScheme: String? = null
@@ -40,6 +42,11 @@ class LoginConfig private constructor(
             return this
         }
 
+        fun setHost(host: String): OauthBuilder {
+            this.host = host.lowercase()
+            return this
+        }
+
         fun build(): LoginConfig {
             if (projectId == null) {
                 throw IllegalStateException("Project ID is required for initialization Xsolla Login")
@@ -48,9 +55,14 @@ class LoginConfig private constructor(
                 throw IllegalStateException("OAuth client ID is required for initialization Xsolla Login with OAuth")
             }
 
+            if (host == null) {
+                host = "login.xsolla.com"
+            }
+
             return LoginConfig(
                 projectId!!,
                 oauthClientId!!,
+                host!!,
                 socialConfig,
                 redirectScheme,
                 redirectHost

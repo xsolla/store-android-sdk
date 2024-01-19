@@ -159,7 +159,7 @@ class XLogin private constructor(
                 headers["X-GAMEENGINE-SPEC"] = EngineUtils.engineSpec
                 params["gameengine_spec"] = EngineUtils.engineSpec
             }
-            XLoginApi.init(headers, params)
+            XLoginApi.init(headers, params, loginConfig.host)
 
             instance = XLogin(
                 context,
