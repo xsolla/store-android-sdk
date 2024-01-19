@@ -17,10 +17,12 @@ internal object XLoginApi {
 
     private lateinit var customHeaders: Map<String, String>
     private lateinit var customParams: Map<String, String>
+    private lateinit var apiHost: String
 
-    fun init(headers: Map<String, String>, params: Map<String, String>) {
+    fun init(headers: Map<String, String>, params: Map<String, String>, apiHost: String) {
         this.customHeaders = headers
         this.customParams = params
+        this.apiHost = apiHost
     }
 
     @OptIn(ExperimentalSerializationApi::class) // For explicitNulls
@@ -37,7 +39,7 @@ internal object XLoginApi {
         defaultRequest {
             url {
                 protocol = URLProtocol.HTTPS
-                host = "login.xsolla.com"
+                host = apiHost
                 path("api/")
                 for ((name, value) in customParams) {
                     parameters.append(name, value)

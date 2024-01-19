@@ -1,4 +1,11 @@
 # Changelog
+## [6.0.5] - Login SDK - 2024-01-19
+### Added
+-  apiHost parameter for LoginConfig
+
+## [2.2.9] - Demo Apps - 2024-01-19
+### Added
+- LOGIN_API_HOST config parameter in demo
 
 ## [1.3.0] - Payments SDK - 2024-01-16
 ### Added
