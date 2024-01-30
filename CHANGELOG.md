@@ -1,4 +1,8 @@
 # Changelog
+## [6.0.6] - Login SDK - 2024-01-30
+### Changed
+-  - ‘startAuthWithXsollaWidget’ SDK method. Added the ‘locale’ parameter
+
 ## [6.0.5] - Login SDK - 2024-01-19
 ### Added
 -  apiHost parameter for LoginConfig
