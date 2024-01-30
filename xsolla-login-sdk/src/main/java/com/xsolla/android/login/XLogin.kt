@@ -1487,14 +1487,17 @@ class XLogin private constructor(
          *
          * @param activity      Current activity.
          * @param callback      Status callback.
+         * @param locale        Login widget UI language.
+         * Supported languages: Arabic (ar_AE), Bulgarian (bg_BG), Czech (cz_CZ), Filipino (fil-PH), English (en_XX), German (de_DE), Spanish (es_ES), French (fr_FR), Hebrew (he_IL), Indonesian (id-ID), Italian (it_IT), Japanese (ja_JP), Khmer (km-KH), Korean (ko_KR), Lao language ( lo-LA), Myanmar (my-MM), NepaliPolish (ne-NP), (pl_PL), Portuguese (pt_BR), Romanian (ro_RO), Russian (ru_RU), Thai (th_TH), Turkish (tr_TR), Vietnamese (vi_VN), Chinese Simplified (zh_CN), Chinese Traditional (zh_TW).
          *
          */
         @JvmStatic
         fun startAuthWithXsollaWidget(
             activity: Activity?,
-            callback: StartXsollaWidgetAuthCallback?
+            callback: StartXsollaWidgetAuthCallback?,
+            locale: String? = null
         ) {
-            loginSocial.startXsollaWidgetAuth(activity, null, getXsollaWidgetUrl(), callback!!)
+            loginSocial.startXsollaWidgetAuth(activity, null, getXsollaWidgetUrl(locale), callback)
         }
 
         /**
@@ -1502,14 +1505,17 @@ class XLogin private constructor(
          *
          * @param fragment      Current fragment.
          * @param callback      Status callback.
+         * @param locale        Login widget UI language.
+         * Supported languages: Arabic (ar_AE), Bulgarian (bg_BG), Czech (cz_CZ), Filipino (fil-PH), English (en_XX), German (de_DE), Spanish (es_ES), French (fr_FR), Hebrew (he_IL), Indonesian (id-ID), Italian (it_IT), Japanese (ja_JP), Khmer (km-KH), Korean (ko_KR), Lao language ( lo-LA), Myanmar (my-MM), NepaliPolish (ne-NP), (pl_PL), Portuguese (pt_BR), Romanian (ro_RO), Russian (ru_RU), Thai (th_TH), Turkish (tr_TR), Vietnamese (vi_VN), Chinese Simplified (zh_CN), Chinese Traditional (zh_TW).
          *
          */
         @JvmStatic
         fun startAuthWithXsollaWidget(
             fragment: Fragment?,
-            callback: StartXsollaWidgetAuthCallback?
+            callback: StartXsollaWidgetAuthCallback?,
+            locale: String? = null
         ) {
-            loginSocial.startXsollaWidgetAuth(null, fragment, getXsollaWidgetUrl(), callback!!)
+            loginSocial.startXsollaWidgetAuth(null, fragment, getXsollaWidgetUrl(locale), callback)
         }
 
         /**
@@ -1735,8 +1741,14 @@ class XLogin private constructor(
         }
 
         @JvmStatic
-        fun getXsollaWidgetUrl(): String {
-            return "https://login-widget.xsolla.com/latest/?projectId=" + getInstance().projectId + "&login_url=" + getInstance().callbackUrl
+        fun getXsollaWidgetUrl(locale: String?): String {
+
+            var stringLocaleParameter = ""
+            if(locale != null && locale!!.isNotEmpty())
+            {
+                stringLocaleParameter = "&locale=" + locale!!
+            }
+            return "https://login-widget.xsolla.com/latest/?projectId=" + getInstance().projectId + "&login_url=" + getInstance().callbackUrl + stringLocaleParameter
         }
 
     }
