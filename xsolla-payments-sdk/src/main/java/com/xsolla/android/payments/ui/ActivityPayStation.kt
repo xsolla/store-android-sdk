@@ -88,10 +88,12 @@ internal class ActivityPayStation : AppCompatActivity() {
             }
             needStartBrowser = false
         } else {
-            finishWithResult(
-                Activity.RESULT_CANCELED,
-                XPayments.Result(XPayments.Status.CANCELLED, null)
-            )
+            if (!useWebView) {
+                finishWithResult(
+                    Activity.RESULT_CANCELED,
+                    XPayments.Result(XPayments.Status.CANCELLED, null)
+                )
+            }
         }
     }
 
