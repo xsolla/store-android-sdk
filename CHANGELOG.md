@@ -1,11 +1,15 @@
 # Changelog
+## [1.3.1] - Payments SDK - 2024-02-09
+### Fixed
+- Redirection to the application after payment using some payment methods
+
 ## [6.0.6] - Login SDK - 2024-01-30
 ### Changed
--  - ‘startAuthWithXsollaWidget’ SDK method. Added the ‘locale’ parameter
+- ‘startAuthWithXsollaWidget’ SDK method. Added the ‘locale’ parameter
 
 ## [6.0.5] - Login SDK - 2024-01-19
 ### Added
--  apiHost parameter for LoginConfig
+- ApiHost parameter for LoginConfig
 
 ## [2.2.9] - Demo Apps - 2024-01-19
 ### Added
