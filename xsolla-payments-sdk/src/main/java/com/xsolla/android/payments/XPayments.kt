@@ -5,12 +5,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Parcelable
-import android.util.Log
 import androidx.core.os.bundleOf
 import com.xsolla.android.payments.data.AccessToken
-import com.xsolla.android.payments.ui.ActivityPaystation
-import com.xsolla.android.payments.ui.ActivityPaystationBrowserProxy
-import com.xsolla.android.payments.ui.ActivityPaystationWebView
+import com.xsolla.android.payments.ui.ActivityPayStation
 import com.xsolla.android.payments.util.EngineUtils
 import kotlinx.parcelize.Parcelize
 import java.lang.StringBuilder
@@ -70,34 +67,24 @@ class XPayments {
         fun setRedirectUriHost(redirectHost: String) =
             apply { this.redirectHost = redirectHost.lowercase() }
 
+
         /**
          * Build the intent
          */
         fun build(): Intent {
             val url = generateUrl()
             val intent = Intent()
-            intent.setClass(context, getActivityClass())
+            intent.setClass(context, ActivityPayStation::class.java)
             intent.putExtras(
                 bundleOf(
-                    ActivityPaystation.ARG_URL to url,
-                    ActivityPaystation.ARG_REDIRECT_SCHEME to redirectScheme,
-                    ActivityPaystation.ARG_REDIRECT_HOST to redirectHost
+                    ActivityPayStation.ARG_URL to url,
+                    ActivityPayStation.ARG_REDIRECT_SCHEME to redirectScheme,
+                    ActivityPayStation.ARG_REDIRECT_HOST to redirectHost,
+                    ActivityPayStation.ARG_USE_WEBVIEW to useWebview,
                 )
             )
             return intent
         }
-
-        private fun getActivityClass() =
-            if (useWebview) {
-                ActivityPaystationWebView::class.java
-            } else {
-                if (ActivityPaystationBrowserProxy.checkAvailability(context)) {
-                    ActivityPaystationBrowserProxy::class.java
-                } else {
-                    Log.d(XPayments::class.java.simpleName, "Browser is not available")
-                    ActivityPaystationWebView::class.java
-                }
-            }
 
         private fun generateUrl(): String {
             accessToken?.let {
@@ -141,7 +128,7 @@ class XPayments {
              */
             @JvmStatic
             fun fromResultIntent(intent: Intent?): Result =
-                intent?.getParcelableExtra(ActivityPaystation.RESULT)
+                intent?.getParcelableExtra(ActivityPayStation.RESULT)
                     ?: Result(Status.UNKNOWN, null)
         }
     }
