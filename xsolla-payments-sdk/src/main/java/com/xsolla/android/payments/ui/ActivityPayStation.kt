@@ -16,50 +16,106 @@ import android.view.View
 import android.webkit.URLUtil
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.xsolla.android.payments.R
 import com.xsolla.android.payments.XPayments
+import com.xsolla.android.payments.ui.utils.BrowserUtils
 import java.net.URISyntaxException
 
+internal class ActivityPayStation : AppCompatActivity() {
+    companion object {
+        const val ARG_URL = "url"
+        const val ARG_REDIRECT_SCHEME = "redirect_scheme"
+        const val ARG_REDIRECT_HOST = "redirect_host"
+        const val ARG_USE_WEBVIEW = "use_webview"
 
-internal class ActivityPaystationWebView : ActivityPaystation() {
+        const val RESULT = "result"
+
+        private const val WRITE_EXTERNAL_STORAGE_PERMISSION_CODE = 100
+    }
 
     private lateinit var url: String
     private lateinit var webView: WebView
 
     private lateinit var redirectScheme: String
     private lateinit var redirectHost: String
+    private var useWebView: Boolean = false
+    private var needStartBrowser = false
 
     private lateinit var downloadUrl: String
     private lateinit var downloadUserAgent: String
     private lateinit var downloadContentDisposition: String
     private lateinit var downloadMimeType: String
 
-    companion object {
-        private const val WRITE_EXTERNAL_STORAGE_PERMISSION_CODE = 100
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.xsolla_payments_activity_paystation)
-        webView = findViewById(R.id.webview)
-        url = intent.getStringExtra(ARG_URL)!!
+        val url = intent.getStringExtra(ARG_URL)
+        if (url == null) {
+            finish()
+            return
+        }
+
+        if (savedInstanceState == null) {
+            needStartBrowser = true
+            this.url = url
+        }
+
         redirectScheme = intent.getStringExtra(ARG_REDIRECT_SCHEME)!!
         redirectHost = intent.getStringExtra(ARG_REDIRECT_HOST)!!
+        useWebView = intent.getBooleanExtra(ARG_USE_WEBVIEW, false)
 
-        configureWebView()
-        webView.loadUrl(url)
+        val browserAvailable = BrowserUtils.isPlainBrowserAvailable(this)
+                || BrowserUtils.isCustomTabsBrowserAvailable(this)
+        useWebView = useWebView || !browserAvailable
     }
 
-    override fun onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack()
+    override fun onResume() {
+        super.onResume()
+        if (isFinishing) return
+        if (needStartBrowser) {
+            if(useWebView) {
+                setContentView(R.layout.xsolla_payments_activity_paystation)
+                webView = findViewById(R.id.webview)
+                configureWebView()
+                webView.loadUrl(url)
+            } else {
+                if (BrowserUtils.isCustomTabsBrowserAvailable(this)) {
+                    BrowserUtils.launchCustomTabsBrowser(this, url)
+                } else {
+                    BrowserUtils.launchPlainBrowser(this, url)
+                }
+            }
+            needStartBrowser = false
         } else {
-            finishWithResult(
-                Activity.RESULT_CANCELED,
-                XPayments.Result(XPayments.Status.CANCELLED, null)
-            )
+            if (!useWebView) {
+                finishWithResult(
+                    Activity.RESULT_CANCELED,
+                    XPayments.Result(XPayments.Status.CANCELLED, null)
+                )
+            }
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        val uri = intent?.data
+        if (uri == null) {
+            finish()
+            return
+        }
+        val invoiceId = uri.getQueryParameter("invoice_id")
+        var statusParam = uri.getQueryParameter("status")
+
+        var status = XPayments.Status.UNKNOWN
+        if (statusParam != null && statusParam == "done") {
+            status = XPayments.Status.COMPLETED
+        }
+
+        finishWithResult(
+            Activity.RESULT_OK,
+            XPayments.Result(status, invoiceId)
+        )
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -103,7 +159,7 @@ internal class ActivityPaystationWebView : ActivityPaystation() {
                     val invoiceId = uri.getQueryParameter("invoice_id")
                     var statusParam = uri.getQueryParameter("status")
 
-                    var status = XPayments.Status.UNKNOWN;
+                    var status = XPayments.Status.UNKNOWN
                     if (statusParam != null && statusParam == "done") {
                         status = XPayments.Status.COMPLETED
                     }
@@ -126,20 +182,12 @@ internal class ActivityPaystationWebView : ActivityPaystation() {
             downloadContentDisposition = contentDisposition
             downloadMimeType = mimeType
             if(Build.VERSION.SDK_INT < 33 && ActivityCompat.checkSelfPermission(webView.context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_PERMISSION_CODE)
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    WRITE_EXTERNAL_STORAGE_PERMISSION_CODE
+                )
             } else {
                 downloadFile()
             }
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == WRITE_EXTERNAL_STORAGE_PERMISSION_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // Permission has been granted, proceed with your logic
-            downloadFile()
-        } else {
-            // Permission has been denied or request was cancelled
         }
     }
 
