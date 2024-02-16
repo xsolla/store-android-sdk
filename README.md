@@ -22,6 +22,25 @@ You can integrate all of these libraries or specific libraries that meet your ne
 * Android OS 5.0 or higher
 * Internet connection
 
+## Install library
+
+The library are available in Maven Central. 
+* [Login library](https://search.maven.org/artifact/com.xsolla.android/login)
+* [Store library](https://search.maven.org/artifact/com.xsolla.android/store)
+* [Inventory library](https://search.maven.org/artifact/com.xsolla.android/inventory)
+* [Payments library](https://search.maven.org/artifact/com.xsolla.android/payments)
+
+To install the necessary library:
+
+1. Start Android Studio.
+2. Open `build.gradle` file of your application.
+3. Add the following line to the dependencies section, where `<version_number>` is the required version of the library. Example for Store library:
+
+```
+implementation 'com.xsolla.android:store:<version_number>'
+```
+
+Follow the [documentation](https://developers.xsolla.com/sdk/android/) to initialize library and configure project on Xsolla side.
 
 ## Legal info
 
