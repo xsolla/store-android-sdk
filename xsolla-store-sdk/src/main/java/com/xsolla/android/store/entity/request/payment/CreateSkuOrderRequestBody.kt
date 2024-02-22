@@ -4,8 +4,8 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 
 internal class CreateSkuOrderRequestBody private constructor(
-    val currency: String,
-    val locale: String,
+    val currency: String? = null,
+    val locale: String? = null,
     val sandbox: Boolean,
     val quantity: Long,
     val settings: PaymentProjectSettings?,
@@ -13,8 +13,8 @@ internal class CreateSkuOrderRequestBody private constructor(
     val customParameters: JsonObject?
 ) {
     constructor(quantity: Long, options: PaymentOptions?) : this(
-        options?.currency ?: "USD",
-        options?.locale ?: "en",
+        options?.currency,
+        options?.locale,
         options?.isSandbox ?: true,
         quantity,
         options?.settings,
