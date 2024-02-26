@@ -50,9 +50,9 @@ data class UiProjectSetting(
 )
 
 data class MobileSettings(
-    val mode: String,
+    val mode: String? = null,
     val header: UiMobileProjectSettingHeader,
-    val footer: UiDesktopProjectSettingFooter,
+    val footer: UiDesktopProjectSettingFooter? = null,
 )
 
 data class UiDesktopProjectSettingFooter(
