@@ -12,8 +12,8 @@ import com.xsolla.android.login.R
 
 internal object BrowserUtils {
 
-    private val allowedPlainBrowsers = listOf("com.android.chrome")
-    private val allowedCustomTabsBrowsers = listOf("com.android.chrome")
+    private val allowedPlainBrowsers = listOf("com.android.chrome", "com.huawei.browser", "com.sec.android.app.sbrowser")
+    private val allowedCustomTabsBrowsers = listOf("com.android.chrome", "com.huawei.browser", "com.sec.android.app.sbrowser")
 
     private fun getAvailablePlainBrowsers(context: Context): List<String> {
         val browserIntent = Intent()
