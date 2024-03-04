@@ -6,7 +6,7 @@ import com.xsolla.android.inventory.callback.ConsumeItemCallback
 import com.xsolla.android.inventory.callback.GetInventoryCallback
 import com.xsolla.android.inventory.callback.GetTimeLimitedItemsCallback
 import com.xsolla.android.inventory.callback.GetVirtualBalanceCallback
-import com.xsolla.android.inventory.util.EngineUtils
+import com.xsolla.android.inventory.util.AnalyticsUtils
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -34,22 +34,32 @@ class XInventory private constructor(
 
             val interceptor = Interceptor { chain ->
                 val originalRequest = chain.request()
-                val builder = originalRequest.newBuilder()
+
+                val requestBuilder = originalRequest.newBuilder()
                     .addHeader("Authorization", "Bearer $token")
                     .addHeader("X-ENGINE", "ANDROID")
                     .addHeader("X-ENGINE-V", Build.VERSION.RELEASE)
-                    .addHeader("X-SDK", "STORE")
-                    .addHeader("X-SDK-V", BuildConfig.VERSION_NAME)
-                    .addHeader("X-GAMEENGINE-SPEC", EngineUtils.engineSpec)
-                    .url(
-                        originalRequest.url().newBuilder()
-                            .addQueryParameter("engine", "android")
-                            .addQueryParameter("engine_v", Build.VERSION.RELEASE)
-                            .addQueryParameter("sdk", "store")
-                            .addQueryParameter("sdk_v", BuildConfig.VERSION_NAME)
-                            .build()
-                    )
-                val newRequest = builder.build()
+                    .addHeader("X-SDK", AnalyticsUtils.sdk.uppercase())
+                    .addHeader("X-SDK-V", AnalyticsUtils.sdkVersion.uppercase())
+
+                val urlBuilder = originalRequest.url().newBuilder()
+                    .addQueryParameter("engine", "android")
+                    .addQueryParameter("engine_v", Build.VERSION.RELEASE)
+                    .addQueryParameter("sdk", AnalyticsUtils.sdk)
+                    .addQueryParameter("sdk_v", AnalyticsUtils.sdkVersion)
+
+                if (AnalyticsUtils.gameEngine.isNotBlank()) {
+                    requestBuilder.addHeader("X-GAME-ENGINE", AnalyticsUtils.gameEngine.uppercase())
+                    urlBuilder.addQueryParameter("game_engine", AnalyticsUtils.gameEngine)
+                }
+
+                if (AnalyticsUtils.gameEngineVersion.isNotBlank()){
+                    requestBuilder.addHeader("X-GAME-ENGINE-V", AnalyticsUtils.gameEngineVersion.uppercase())
+                    urlBuilder.addQueryParameter("game_engine_v", AnalyticsUtils.gameEngineVersion)
+                }
+
+                requestBuilder.url(urlBuilder.build())
+                val newRequest = requestBuilder.build()
                 chain.proceed(newRequest)
             }
 
