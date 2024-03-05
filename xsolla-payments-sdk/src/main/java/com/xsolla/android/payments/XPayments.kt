@@ -5,12 +5,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Parcelable
+import android.util.Log
 import androidx.core.os.bundleOf
 import com.xsolla.android.payments.data.AccessToken
 import com.xsolla.android.payments.ui.ActivityPayStation
-import com.xsolla.android.payments.util.EngineUtils
+import com.xsolla.android.payments.util.AnalyticsUtils
 import kotlinx.parcelize.Parcelize
-import java.lang.StringBuilder
 
 /**
  * Entry point for Xsolla Payments SDK
@@ -88,34 +88,33 @@ class XPayments {
 
         private fun generateUrl(): String {
             accessToken?.let {
-                return Uri.Builder()
+                val uriBuilder = Uri.Builder()
                     .scheme("https")
                     .authority(getServer())
                     .appendPath("paystation3")
-                    .appendPath("")
                     .appendQueryParameter("access_token", it.token)
-                    .appendQueryParameter("sdk", getSdkSpec())
-                    .build()
-                    .toString()
+
+                appendAnalytics(uriBuilder)
+                return uriBuilder.build().toString()
             }
             throw IllegalArgumentException("access token isn't specified")
         }
 
         private fun getServer() = if (isSandbox) SERVER_SANDBOX else SERVER_PROD
 
-        private fun getSdkSpec(): String {
-            val sb = StringBuilder()
-            sb.append("android_${Build.VERSION.RELEASE}")
-            sb.append("_")
-            sb.append("payments_${BuildConfig.VERSION_NAME}")
-            if (EngineUtils.engineSpec.isNotBlank()) {
-                sb.append("_")
-                sb.append(EngineUtils.engineSpec)
-            }
-            return sb.toString()
+        private fun appendAnalytics(builder: Uri.Builder){
+            builder.appendQueryParameter("engine", "android")
+            builder.appendQueryParameter("engine_v", Build.VERSION.RELEASE)
+            builder.appendQueryParameter("sdk", AnalyticsUtils.sdk)
+            builder.appendQueryParameter("sdk_v", AnalyticsUtils.sdkVersion)
+
+            if (AnalyticsUtils.gameEngine.isNotBlank())
+                builder.appendQueryParameter("game_engine", AnalyticsUtils.gameEngine)
+
+            if (AnalyticsUtils.gameEngineVersion.isNotBlank())
+                builder.appendQueryParameter("game_engine_v", AnalyticsUtils.gameEngineVersion)
         }
     }
-
 
     /**
      * Pay Station result
