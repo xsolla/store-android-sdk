@@ -3,11 +3,14 @@ package com.xsolla.android.appcore.ui.vm
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.xsolla.android.appcore.SingleLiveEvent
+import com.xsolla.android.payments.ui.utils.BrowserUtils
 import com.xsolla.android.store.XStore
 import com.xsolla.android.store.callbacks.CreateOrderCallback
+import com.xsolla.android.store.entity.request.payment.MobileSettings
 import com.xsolla.android.store.entity.request.payment.PaymentOptions
 import com.xsolla.android.store.entity.request.payment.PaymentProjectSettings
 import com.xsolla.android.store.entity.request.payment.SettingsRedirectPolicy
+import com.xsolla.android.store.entity.request.payment.UiMobileProjectSettingHeader
 import com.xsolla.android.store.entity.request.payment.UiProjectSetting
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse
 
@@ -17,9 +20,11 @@ class VmPurchase(app: Application) : AndroidViewModel(app) {
     val startPurchaseError = SingleLiveEvent<String>()
 
     fun startPurchase(isSandbox: Boolean, sku: String, quantity: Int, callback: () -> Unit) {
+        val isDisplayCloseButton = !BrowserUtils.isCustomTabsBrowserAvailable(getApplication())
         val paymentOptions = PaymentOptions(
             isSandbox = isSandbox,
             settings = PaymentProjectSettings(
+                ui = UiProjectSetting(mobile = MobileSettings(header = UiMobileProjectSettingHeader(closeButton = isDisplayCloseButton))),
                 returnUrl = "app://xpayment.${getApplication<Application>().packageName}",
                 redirectPolicy = SettingsRedirectPolicy(
                     redirectConditions = "any",

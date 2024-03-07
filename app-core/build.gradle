@@ -54,4 +54,5 @@ dependencies {
     api 'com.github.kirich1409:viewbindingpropertydelegate:1.4.7'
 
     implementation project(":xsolla-store-sdk")
+    implementation project(':xsolla-payments-sdk')
 }

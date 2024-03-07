@@ -146,19 +146,26 @@ class XLogin private constructor(
             val headers = mutableMapOf(
                 "X-ENGINE" to "ANDROID",
                 "X-ENGINE-V" to Build.VERSION.RELEASE,
-                "X-SDK" to "LOGIN",
-                "X-SDK-V" to BuildConfig.VERSION_NAME,
+                "X-SDK" to AnalyticsUtils.sdk.uppercase(),
+                "X-SDK-V" to AnalyticsUtils.sdkVersion.uppercase()
             )
             val params = mutableMapOf(
                 "engine" to "android",
                 "engine_v" to Build.VERSION.RELEASE,
-                "sdk" to "login",
-                "sdk_v" to BuildConfig.VERSION_NAME
+                "sdk" to AnalyticsUtils.sdk,
+                "sdk_v" to AnalyticsUtils.sdkVersion
             )
-            if (EngineUtils.engineSpec.isNotEmpty()) {
-                headers["X-GAMEENGINE-SPEC"] = EngineUtils.engineSpec
-                params["gameengine_spec"] = EngineUtils.engineSpec
+
+            if (AnalyticsUtils.gameEngine.isNotBlank()){
+                headers["X-GAME-ENGINE"] = AnalyticsUtils.gameEngine.uppercase()
+                params["game_engine"] = AnalyticsUtils.gameEngine
             }
+
+            if (AnalyticsUtils.gameEngineVersion.isNotBlank()){
+                headers["X-GAME-ENGINE-V"] = AnalyticsUtils.gameEngineVersion.uppercase()
+                params["game_engine_v"] = AnalyticsUtils.gameEngineVersion
+            }
+
             XLoginApi.init(headers, params, loginConfig.apiHost)
 
             instance = XLogin(

@@ -159,6 +159,6 @@
 
     <string name="payment_completed">Payment completed</string>
     <string name="payment_cancelled">Payment cancelled</string>
-    <string name="payment_unknown">Payment error</string>
+    <string name="payment_unknown">Payment cancelled</string>
 
 </resources>
