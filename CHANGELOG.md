@@ -1,4 +1,31 @@
 # Changelog
+## [2.2.10] - Demo Apps - 2024-03-06
+### Added
+- closeButton parameter for payment token request. This parameter depends on whether the default browser supports Custom Tabs or not
+
+## [2.5.4] - Store SDK - 2024-03-06
+### Changed
+- Updated the parameters of all queries for analytics on the Xsolla side
+- By default, the locale is determined by the user's IP
+
+## [2.0.4] - Inventory SDK - 2024-03-06
+### Changed
+- Updated the parameters of all queries for analytics on the Xsolla side
+
+## [6.0.7] - Login SDK - 2024-03-06
+### Added
+- Custom Tabs support for the Huawei browser and Samsung Internet browser
+
+### Changed
+- Updated the parameters of all queries for analytics on the Xsolla side
+
+## [1.3.2] - Payments SDK - 2024-03-06
+### Added
+- Custom Tabs support for the Samsung Internet browser
+
+### Changed
+- Updated the parameters of all queries for analytics on the Xsolla side
+
 ## [1.3.1] - Payments SDK - 2024-02-09
 ### Fixed
 - Redirection to the application after payment using some payment methods
