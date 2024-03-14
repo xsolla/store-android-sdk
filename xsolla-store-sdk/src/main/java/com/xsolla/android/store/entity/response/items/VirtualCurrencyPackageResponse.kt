@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import com.xsolla.android.store.entity.response.common.*
 import kotlinx.parcelize.Parcelize
 
-data class VirtualCurrencyPackageResponse(val items: List<Item> = emptyList()) {
+data class VirtualCurrencyPackageResponse(@SerializedName("has_more") val hasMore: Boolean = false, val items: List<Item> = emptyList()) {
     @Parcelize
     data class Item(
         val sku: String? = null,
