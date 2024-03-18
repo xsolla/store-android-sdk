@@ -36,6 +36,7 @@ import com.xsolla.android.googleplay.inventory.InventoryAdmin
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.RefreshTokenCallback
+import com.xsolla.android.login.jwt.JWT
 import com.xsolla.android.payments.XPayments
 import com.xsolla.android.payments.data.AccessToken
 import com.xsolla.android.store.XStore
@@ -72,7 +73,10 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
         super.onCreate(savedInstanceState)
 
-        if (XLogin.isTokenExpired()) {
+        val jwtExpiresTime = JWT(XLogin.token).expiresAt.time / 1000
+        val currentTime = System.currentTimeMillis() / 1000
+
+        if (jwtExpiresTime <= currentTime) {
             if (!XLogin.canRefreshToken()) {
                 startLogin()
             }
@@ -103,7 +107,10 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
     override fun onResume() {
         super.onResume()
-        if (XLogin.isTokenExpired()) {
+        val jwtExpiresTime = JWT(XLogin.token).expiresAt.time / 1000
+        val currentTime = System.currentTimeMillis() / 1000
+
+        if (jwtExpiresTime <= currentTime) {
             if (XLogin.canRefreshToken()) {
                 binding.lock.visibility = View.VISIBLE
                 XLogin.refreshToken(object : RefreshTokenCallback {
