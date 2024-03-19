@@ -73,7 +73,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
         super.onCreate(savedInstanceState)
 
-        val jwtExpiresTime = JWT(XLogin.token).expiresAt.time / 1000
+        val jwtExpiresTime = if(XLogin.token != null) JWT(XLogin.token).expiresAt.time / 1000 else 0
         val currentTime = System.currentTimeMillis() / 1000
 
         if (jwtExpiresTime <= currentTime) {
@@ -107,7 +107,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
     override fun onResume() {
         super.onResume()
-        val jwtExpiresTime = JWT(XLogin.token).expiresAt.time / 1000
+        val jwtExpiresTime = if(XLogin.token != null) JWT(XLogin.token).expiresAt.time / 1000 else 0
         val currentTime = System.currentTimeMillis() / 1000
 
         if (jwtExpiresTime <= currentTime) {
