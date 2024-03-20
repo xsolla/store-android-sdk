@@ -5,8 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Parcelable
-import android.util.Log
 import androidx.core.os.bundleOf
+import com.xsolla.android.payments.caching.PayStationCache
 import com.xsolla.android.payments.data.AccessToken
 import com.xsolla.android.payments.ui.ActivityPayStation
 import com.xsolla.android.payments.util.AnalyticsUtils
@@ -34,6 +34,7 @@ class XPayments {
         private var accessToken: AccessToken? = null
         private var isSandbox: Boolean = true
         private var useWebview: Boolean = false
+        private var payStationVersion: PayStationVersion = PayStationVersion.V4
 
         private var redirectScheme: String = "app" // the same is set at AndroidManifest.xml
         private var redirectHost: String =
@@ -69,12 +70,22 @@ class XPayments {
 
 
         /**
+         * Set pay station version
+         */
+        fun setPayStationVersion(version: PayStationVersion) =
+            apply { this.payStationVersion = version }
+
+        private fun getPayStationVersion() = when (payStationVersion) {
+            PayStationVersion.V3 -> "paystation3"
+            PayStationVersion.V4 -> "paystation4"
+        }
+
+        /**
          * Build the intent
          */
         fun build(): Intent {
             val url = generateUrl()
-            val intent = Intent()
-            intent.setClass(context, ActivityPayStation::class.java)
+            var intent = PayStationCache.getInstance(context).getCachedIntent()
             intent.putExtras(
                 bundleOf(
                     ActivityPayStation.ARG_URL to url,
@@ -91,7 +102,7 @@ class XPayments {
                 val uriBuilder = Uri.Builder()
                     .scheme("https")
                     .authority(getServer())
-                    .appendPath("paystation3")
+                    .appendPath(getPayStationVersion())
                     .appendQueryParameter("access_token", it.token)
 
                 appendAnalytics(uriBuilder)
@@ -146,6 +157,14 @@ class XPayments {
          */
         CANCELLED,
         UNKNOWN
+    }
+
+    /**
+     * Pay Station version
+     */
+    enum class PayStationVersion {
+        V3,
+        V4
     }
 
 }

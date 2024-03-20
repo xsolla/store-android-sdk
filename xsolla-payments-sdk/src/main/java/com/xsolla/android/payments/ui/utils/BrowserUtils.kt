@@ -9,6 +9,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION
 import androidx.core.content.ContextCompat
 import com.xsolla.android.payments.R
+import com.xsolla.android.payments.caching.PayStationCache
 
 object BrowserUtils {
 
@@ -26,7 +27,7 @@ object BrowserUtils {
         }
     }
 
-    private fun getAvailableCustomTabsBrowsers(context: Context): List<String> {
+    fun getAvailableCustomTabsBrowsers(context: Context): List<String> {
         val browserIntent = Intent()
             .setAction(Intent.ACTION_VIEW)
             .addCategory(Intent.CATEGORY_BROWSABLE)
@@ -66,14 +67,13 @@ object BrowserUtils {
             )
             .build()
 
-        val intent = CustomTabsIntent.Builder()
+        val customTabsIntent = CustomTabsIntent.Builder(PayStationCache.getInstance(context).getCachedSession())
             .setDefaultColorSchemeParams(colorSchemeParams)
             .setShowTitle(true)
             .setUrlBarHidingEnabled(true)
             .build()
-        intent.intent.`package` = getAvailableCustomTabsBrowsers(context).first()
-
-        intent.launchUrl(context, Uri.parse(url))
+        customTabsIntent.intent.setPackage(getAvailableCustomTabsBrowsers(context).first())
+        customTabsIntent.launchUrl(context, Uri.parse(url))
     }
 
     fun launchPlainBrowser(activity: Activity, url: String) {
