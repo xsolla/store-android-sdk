@@ -42,6 +42,7 @@ import com.xsolla.android.payments.data.AccessToken
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.data.local.DemoCredentialsManager
 import com.xsolla.android.storesdkexample.googleplay.GooglePlayPurchaseHandler
+import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmGooglePlay
 import com.xsolla.android.storesdkexample.ui.vm.VmProfile
@@ -120,8 +121,15 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
                         XInventory.init(DemoCredentialsManager.projectId, XLogin.token!!)
                         vmBalance.updateVirtualBalance()
                         setDrawerData()
-
                         binding.root.closeDrawers()
+
+                        supportFragmentManager.fragments.forEach { fragment ->
+                            fragment.childFragmentManager.fragments.forEach { childFragment ->
+                                if(childFragment is BaseFragment) {
+                                    childFragment.initUI()
+                                }
+                            }
+                        }
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
