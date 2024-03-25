@@ -126,7 +126,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
                         supportFragmentManager.fragments.forEach { fragment ->
                             fragment.childFragmentManager.fragments.forEach { childFragment ->
                                 if(childFragment is BaseFragment) {
-                                    childFragment.initUI()
+                                    childFragment.activateUI()
                                 }
                             }
                         }
@@ -147,6 +147,13 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
             setDrawerData()
             binding.root.closeDrawers()
+            supportFragmentManager.fragments.forEach { fragment ->
+                fragment.childFragmentManager.fragments.forEach { childFragment ->
+                    if(childFragment is BaseFragment) {
+                        childFragment.activateUI()
+                    }
+                }
+            }
         }
 
         findViewById<Toolbar>(R.id.mainToolbar).title = ""
