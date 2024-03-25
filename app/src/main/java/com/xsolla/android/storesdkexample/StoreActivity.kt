@@ -3,6 +3,8 @@ package com.xsolla.android.storesdkexample
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -113,27 +115,22 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
         if (jwtExpiresTime <= currentTime) {
             if (XLogin.canRefreshToken()) {
-                binding.lock.visibility = View.VISIBLE
+                setButtonsEnablity(false)
+
                 XLogin.refreshToken(object : RefreshTokenCallback {
                     override fun onSuccess() {
-                        binding.lock.visibility = View.GONE
+                        setButtonsEnablity(true)
                         XStore.init(DemoCredentialsManager.projectId, XLogin.token!!)
                         XInventory.init(DemoCredentialsManager.projectId, XLogin.token!!)
                         vmBalance.updateVirtualBalance()
                         setDrawerData()
                         binding.root.closeDrawers()
 
-                        supportFragmentManager.fragments.forEach { fragment ->
-                            fragment.childFragmentManager.fragments.forEach { childFragment ->
-                                if(childFragment is BaseFragment) {
-                                    childFragment.activateUI()
-                                }
-                            }
-                        }
+                        callActivateUI()
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
-                        binding.lock.visibility = View.GONE
+                        setButtonsEnablity(true)
                         startLogin()
                     }
                 })
@@ -147,13 +144,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
             setDrawerData()
             binding.root.closeDrawers()
-            supportFragmentManager.fragments.forEach { fragment ->
-                fragment.childFragmentManager.fragments.forEach { childFragment ->
-                    if(childFragment is BaseFragment) {
-                        childFragment.activateUI()
-                    }
-                }
-            }
+            callActivateUI()
         }
 
         findViewById<Toolbar>(R.id.mainToolbar).title = ""
@@ -237,6 +228,9 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
         findViewById<View>(R.id.itemVirtualItems).setOnClickListener {
             navController.navigate(R.id.nav_vi)
             binding.root.closeDrawers()
+            Handler(Looper.getMainLooper()).postDelayed({
+                callActivateUI()
+            }, 100)
         }
         findViewById<View>(R.id.itemVirtualCurrency).setOnClickListener {
             navController.navigate(R.id.nav_vc)
@@ -347,6 +341,28 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
             .encodedQuery("token=${XLogin.token}&remember_me=false")
             .build()
             .openInBrowser(this)
+    }
+
+    private fun setButtonsEnablity(isEnabled: Boolean) {
+        findViewById<View>(R.id.itemAccount).isEnabled = isEnabled
+        findViewById<View>(R.id.itemInventory).isEnabled = isEnabled
+        findViewById<View>(R.id.itemAttributes).isEnabled = isEnabled
+        findViewById<View>(R.id.itemFriends).isEnabled = isEnabled
+        findViewById<View>(R.id.itemVirtualItems).isEnabled = isEnabled
+        findViewById<View>(R.id.itemVirtualCurrency).isEnabled = isEnabled
+        findViewById<View>(R.id.itemCoupon).isEnabled = isEnabled
+        findViewById<View>(R.id.itemWebStore).isEnabled = isEnabled
+        findViewById<View>(R.id.itemLogout).isEnabled = isEnabled
+    }
+
+    private fun callActivateUI() {
+        supportFragmentManager.fragments.forEach { fragment ->
+            fragment.childFragmentManager.fragments.forEach { childFragment ->
+                if(childFragment is BaseFragment) {
+                    childFragment.activateUI()
+                }
+            }
+        }
     }
 
 }
