@@ -75,10 +75,6 @@ class XPayments {
         fun setPayStationVersion(version: PayStationVersion) =
             apply { this.payStationVersion = version }
 
-        private fun getPayStationVersion() = when (payStationVersion) {
-            PayStationVersion.V3 -> "paystation3"
-            PayStationVersion.V4 -> "paystation4"
-        }
 
         /**
          * Build the intent
@@ -102,8 +98,8 @@ class XPayments {
                 val uriBuilder = Uri.Builder()
                     .scheme("https")
                     .authority(getServer())
-                    .appendPath(getPayStationVersion())
-                    .appendQueryParameter("access_token", it.token)
+                    .appendPath(getPayStationVersionPath())
+                    .appendQueryParameter(getTokenQueryParameterName(), it.token)
 
                 appendAnalytics(uriBuilder)
                 return uriBuilder.build().toString()
@@ -124,6 +120,16 @@ class XPayments {
 
             if (AnalyticsUtils.gameEngineVersion.isNotBlank())
                 builder.appendQueryParameter("game_engine_v", AnalyticsUtils.gameEngineVersion)
+        }
+
+        private fun getPayStationVersionPath() = when (payStationVersion) {
+            PayStationVersion.V3 -> "paystation3"
+            PayStationVersion.V4 -> "paystation4"
+        }
+
+        private fun getTokenQueryParameterName() = when (payStationVersion) {
+            PayStationVersion.V3 -> "access_token"
+            PayStationVersion.V4 -> "token"
         }
     }
 

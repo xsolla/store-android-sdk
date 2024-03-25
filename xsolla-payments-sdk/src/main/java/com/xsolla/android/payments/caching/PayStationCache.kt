@@ -16,6 +16,7 @@ import com.xsolla.android.payments.XPayments
 import com.xsolla.android.payments.ui.ActivityPayStation
 import com.xsolla.android.payments.ui.utils.BrowserUtils
 import com.xsolla.android.payments.ui.utils.CustomTabsHelper
+import java.util.Locale
 
 
 class PayStationCache(val context: Context) {
@@ -26,12 +27,15 @@ class PayStationCache(val context: Context) {
 
     fun init() {
         XPayments.createIntentBuilder(context)
-
+        var locale = Locale.getDefault().language
+        if(locale.isEmpty()) locale = "en"
         if(BrowserUtils.isCustomTabsBrowserAvailable(context)) {
-            customTabHelper = CustomTabsHelper(context)
+            val payStation3WarmUpUrl = "https://secure.xsolla.com/paystation3/$locale/cache-warmup"
+            val payStation4WarmUpUrl = "https://secure.xsolla.com/paystation4/$locale/cache-warmup"
+            customTabHelper = CustomTabsHelper(context, payStation3WarmUpUrl, payStation4WarmUpUrl)
             customTabHelper.bindCustomTabsService()
         } else {
-            preloadUrl("https://secure.xsolla.com/paystation3/ru/cache-warmup")
+            preloadUrl("https://secure.xsolla.com/paystation4/$locale/cache-warmup")
         }
     }
 
