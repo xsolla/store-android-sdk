@@ -3,6 +3,8 @@ package com.xsolla.android.storesdkexample
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -36,11 +38,13 @@ import com.xsolla.android.googleplay.inventory.InventoryAdmin
 import com.xsolla.android.inventory.XInventory
 import com.xsolla.android.login.XLogin
 import com.xsolla.android.login.callback.RefreshTokenCallback
+import com.xsolla.android.login.jwt.JWT
 import com.xsolla.android.payments.XPayments
 import com.xsolla.android.payments.data.AccessToken
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.data.local.DemoCredentialsManager
 import com.xsolla.android.storesdkexample.googleplay.GooglePlayPurchaseHandler
+import com.xsolla.android.storesdkexample.ui.fragments.base.BaseFragment
 import com.xsolla.android.storesdkexample.ui.vm.VmBalance
 import com.xsolla.android.storesdkexample.ui.vm.VmGooglePlay
 import com.xsolla.android.storesdkexample.ui.vm.VmProfile
@@ -72,7 +76,10 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
         super.onCreate(savedInstanceState)
 
-        if (XLogin.isTokenExpired()) {
+        val jwtExpiresTime = if(XLogin.token != null) JWT(XLogin.token).expiresAt.time / 1000 else 0
+        val currentTime = System.currentTimeMillis() / 1000
+
+        if (jwtExpiresTime <= currentTime) {
             if (!XLogin.canRefreshToken()) {
                 startLogin()
             }
@@ -103,22 +110,27 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
     override fun onResume() {
         super.onResume()
-        if (XLogin.isTokenExpired()) {
+        val jwtExpiresTime = if(XLogin.token != null) JWT(XLogin.token).expiresAt.time / 1000 else 0
+        val currentTime = System.currentTimeMillis() / 1000
+
+        if (jwtExpiresTime <= currentTime) {
             if (XLogin.canRefreshToken()) {
-                binding.lock.visibility = View.VISIBLE
+                setButtonsEnablity(false)
+
                 XLogin.refreshToken(object : RefreshTokenCallback {
                     override fun onSuccess() {
-                        binding.lock.visibility = View.GONE
+                        setButtonsEnablity(true)
                         XStore.init(DemoCredentialsManager.projectId, XLogin.token!!)
                         XInventory.init(DemoCredentialsManager.projectId, XLogin.token!!)
                         vmBalance.updateVirtualBalance()
                         setDrawerData()
-
                         binding.root.closeDrawers()
+
+                        callActivateUI()
                     }
 
                     override fun onError(throwable: Throwable?, errorMessage: String?) {
-                        binding.lock.visibility = View.GONE
+                        setButtonsEnablity(true)
                         startLogin()
                     }
                 })
@@ -132,6 +144,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
             setDrawerData()
             binding.root.closeDrawers()
+            callActivateUI()
         }
 
         findViewById<Toolbar>(R.id.mainToolbar).title = ""
@@ -215,6 +228,9 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
         findViewById<View>(R.id.itemVirtualItems).setOnClickListener {
             navController.navigate(R.id.nav_vi)
             binding.root.closeDrawers()
+            Handler(Looper.getMainLooper()).postDelayed({
+                callActivateUI()
+            }, 100)
         }
         findViewById<View>(R.id.itemVirtualCurrency).setOnClickListener {
             navController.navigate(R.id.nav_vc)
@@ -325,6 +341,28 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
             .encodedQuery("token=${XLogin.token}&remember_me=false")
             .build()
             .openInBrowser(this)
+    }
+
+    private fun setButtonsEnablity(isEnabled: Boolean) {
+        findViewById<View>(R.id.itemAccount).isEnabled = isEnabled
+        findViewById<View>(R.id.itemInventory).isEnabled = isEnabled
+        findViewById<View>(R.id.itemAttributes).isEnabled = isEnabled
+        findViewById<View>(R.id.itemFriends).isEnabled = isEnabled
+        findViewById<View>(R.id.itemVirtualItems).isEnabled = isEnabled
+        findViewById<View>(R.id.itemVirtualCurrency).isEnabled = isEnabled
+        findViewById<View>(R.id.itemCoupon).isEnabled = isEnabled
+        findViewById<View>(R.id.itemWebStore).isEnabled = isEnabled
+        findViewById<View>(R.id.itemLogout).isEnabled = isEnabled
+    }
+
+    private fun callActivateUI() {
+        supportFragmentManager.fragments.forEach { fragment ->
+            fragment.childFragmentManager.fragments.forEach { childFragment ->
+                if(childFragment is BaseFragment) {
+                    childFragment.activateUI()
+                }
+            }
+        }
     }
 
 }

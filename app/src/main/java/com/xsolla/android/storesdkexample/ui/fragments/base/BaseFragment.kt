@@ -21,6 +21,8 @@ abstract class BaseFragment : Fragment() {
 
     abstract fun initUI()
 
+    open fun activateUI() {}
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(getLayout(), container, false)
         return rootView
