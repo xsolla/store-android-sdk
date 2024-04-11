@@ -1,4 +1,17 @@
 # Changelog
+## [2.2.11] - Demo Apps - 2024-04-11
+### Fixed
+- Token refresh on application startup
+
+## [2.5.5] - Store SDK - 2024-04-11
+### Changed
+- Store library methods. The ‘has_more‘ parameter added in response
+
+## [1.3.3] - Payments SDK - 2024-04-11
+### Added
+- ‘payStationVersion‘ parameter in XPayments.IntentBuilder
+- Support of payments via Google Pay in WebView
+
 ## [2.2.10] - Demo Apps - 2024-03-06
 ### Added
 - closeButton parameter for payment token request. This parameter depends on whether the default browser supports Custom Tabs or not
