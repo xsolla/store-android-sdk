@@ -215,6 +215,7 @@ internal class ActivityPayStation : AppCompatActivity() {
         childWebView.settings.setSupportZoom(true)
         childWebView.settings.builtInZoomControls = true
         childWebView.settings.setSupportMultipleWindows(true)
+        childWebView.settings.loadsImagesAutomatically = true
         childWebView.settings.javaScriptCanOpenWindowsAutomatically = true
         childWebView.webChromeClient = object : WebChromeClient() {
             override fun onCloseWindow(window: WebView?) {
@@ -225,8 +226,25 @@ internal class ActivityPayStation : AppCompatActivity() {
         }
         childWebView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                view.loadUrl(url)
-                return true
+                val urlLower = url.lowercase()
+
+                if (!urlLower.startsWith("http")) {
+                    try {
+                        val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+                        intent.addCategory("android.intent.category.BROWSABLE")
+                        intent.setComponent(null)
+                        childWebView.context.startActivity(intent)
+                    } catch (e: URISyntaxException) {
+                        Log.e("WebView", "Invalid URL format$url", e)
+                    } catch (e: ActivityNotFoundException) {
+                        Log.e("WebView", "No activity found to handle URL: $url", e)
+                    }
+                    return true
+                } else
+                {
+                    view.loadUrl(url)
+                    return true
+                }
             }
         }
     }
