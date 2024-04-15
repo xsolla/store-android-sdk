@@ -11,10 +11,13 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Message
 import android.util.Log
 import android.view.View
 import android.webkit.URLUtil
+import android.webkit.WebChromeClient
 import android.webkit.WebView
+import android.webkit.WebView.WebViewTransport
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -37,6 +40,7 @@ internal class ActivityPayStation : AppCompatActivity() {
 
     private lateinit var url: String
     private lateinit var webView: WebView
+    private lateinit var childWebView: WebView
 
     private lateinit var redirectScheme: String
     private lateinit var redirectHost: String
@@ -77,6 +81,7 @@ internal class ActivityPayStation : AppCompatActivity() {
             if(useWebView) {
                 setContentView(R.layout.xsolla_payments_activity_paystation)
                 webView = findViewById(R.id.webview)
+                childWebView = findViewById(R.id.childWebView)
                 configureWebView()
                 webView.loadUrl(url)
             } else {
@@ -124,6 +129,21 @@ internal class ActivityPayStation : AppCompatActivity() {
         webView.settings.domStorageEnabled = true
         webView.settings.allowFileAccess = true
         webView.settings.loadsImagesAutomatically = true
+        webView.settings.setSupportMultipleWindows(true)
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onCreateWindow(
+                view: WebView?,
+                isDialog: Boolean,
+                isUserGesture: Boolean,
+                resultMsg: Message?
+            ): Boolean {
+                childWebView.visibility = View.VISIBLE
+                val transport = resultMsg!!.obj as WebViewTransport
+                transport.webView = childWebView
+                resultMsg.sendToTarget()
+                return true
+            }
+        }
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(webView: WebView, url: String): Boolean {
                 val urlLower = url.lowercase()
@@ -187,6 +207,44 @@ internal class ActivityPayStation : AppCompatActivity() {
                 )
             } else {
                 downloadFile()
+            }
+        }
+
+        // child wevView
+        childWebView.settings.javaScriptEnabled = true
+        childWebView.settings.setSupportZoom(true)
+        childWebView.settings.builtInZoomControls = true
+        childWebView.settings.setSupportMultipleWindows(true)
+        childWebView.settings.loadsImagesAutomatically = true
+        childWebView.settings.javaScriptCanOpenWindowsAutomatically = true
+        childWebView.webChromeClient = object : WebChromeClient() {
+            override fun onCloseWindow(window: WebView?) {
+                if (window != null) {
+                    window.visibility = View.GONE
+                }
+            }
+        }
+        childWebView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                val urlLower = url.lowercase()
+
+                if (!urlLower.startsWith("http")) {
+                    try {
+                        val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+                        intent.addCategory("android.intent.category.BROWSABLE")
+                        intent.setComponent(null)
+                        childWebView.context.startActivity(intent)
+                    } catch (e: URISyntaxException) {
+                        Log.e("WebView", "Invalid URL format$url", e)
+                    } catch (e: ActivityNotFoundException) {
+                        Log.e("WebView", "No activity found to handle URL: $url", e)
+                    }
+                    return true
+                } else
+                {
+                    view.loadUrl(url)
+                    return true
+                }
             }
         }
     }

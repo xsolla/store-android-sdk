@@ -3,7 +3,7 @@ package com.xsolla.android.store.entity.response.items
 import com.google.gson.annotations.SerializedName
 import com.xsolla.android.store.entity.response.common.*
 
-data class VirtualCurrencyResponse(val items: List<Item> = emptyList()) {
+data class VirtualCurrencyResponse(@SerializedName("has_more") val hasMore: Boolean = false, val items: List<Item> = emptyList()) {
     data class Item(
         val sku: String? = null,
         val name: String? = null,
