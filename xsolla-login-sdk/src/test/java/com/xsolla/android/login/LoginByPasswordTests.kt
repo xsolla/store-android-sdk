@@ -71,6 +71,7 @@ class LoginByPasswordTests {
         Assert.assertNull(XLogin.token)
     }
 
+    @Ignore("for manual testing")
     @Test
     fun resetPassword_Success() {
         initSdkOauth()
