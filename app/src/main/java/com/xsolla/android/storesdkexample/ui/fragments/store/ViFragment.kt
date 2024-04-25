@@ -37,6 +37,10 @@ class ViFragment : BaseFragment() {
     override fun getLayout() = R.layout.fragment_vi
 
     override fun initUI() {
+
+    }
+
+    override fun activateUI() {
         getInventory()
     }
 

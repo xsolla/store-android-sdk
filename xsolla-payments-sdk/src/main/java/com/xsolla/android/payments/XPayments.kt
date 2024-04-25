@@ -70,9 +70,9 @@ class XPayments {
 
 
         /**
-         * Set pay station version
+         * Set a Pay Station version
          */
-        fun setPayStationVersion(version: PayStationVersion) =
+        fun payStationVersion(version: PayStationVersion) =
             apply { this.payStationVersion = version }
 
 

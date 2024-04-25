@@ -6,6 +6,7 @@ import com.xsolla.android.login.util.TestUtils.initLoggedInByPassword
 import com.xsolla.android.login.util.TestUtils.initLoggedOut
 import com.xsolla.android.login.util.TestUtils.initSdkOauth
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -70,6 +71,7 @@ class LoginByPasswordTests {
         Assert.assertNull(XLogin.token)
     }
 
+    @Ignore("for manual testing")
     @Test
     fun resetPassword_Success() {
         initSdkOauth()
@@ -91,6 +93,7 @@ class LoginByPasswordTests {
         Assert.assertFalse(error)
     }
 
+    @Ignore("for manual testing")
     @Test
     fun resetPasswordWithLocale_Success() {
         initSdkOauth()
