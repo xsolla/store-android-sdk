@@ -5,9 +5,20 @@ import com.google.gson.annotations.SerializedName
 import com.xsolla.android.store.entity.response.common.*
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
+import java.util.Locale
 
-data class VirtualItemsResponse(@SerializedName("has_more") val hasMore: Boolean = false, val items: List<Item> = emptyList()) {
+data class VirtualItemsResponse(
+    /**
+     * An optional locale deduced and returned by the backend.
+     *
+     * Non-null only if the query parameter `with_geo=1` was added to the request.
+     */
+    @Transient val geoLocale: Locale? = null,
 
+    @SerializedName("has_more") val hasMore: Boolean = false,
+
+    val items: List<Item> = emptyList()
+) {
     @Parcelize
     data class Item(
         val sku: String? = null,

@@ -36,6 +36,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.Locale
 
 class XStore private constructor(
     private val projectId: Int,
@@ -1143,6 +1144,9 @@ class XStore private constructor(
          * The following languages are supported: Arabic (`ar`), Bulgarian (`bg`), Czech (`cs`), German (`de`), Spanish (`es`), French (`fr`), Hebrew (`he`), Italian (`it`), Japanese (`ja`), Korean (`ko`), Polish (`pl`), Portuguese (`pt`), Romanian (`ro`), Russian (`ru`), Thai (`th`), Turkish (`tr`), Vietnamese (`vi`), Chinese Simplified (`cn`), Chinese Traditional (`tw`), English (`en`, default).
          * @param additionalFields The list of additional fields. Available fields: `media_list`, `order`, `long_description`.
          * @param callback Status callback.
+         * @param requestGeoLocale If `TRUE` then requests the backend to send the deduced locale
+         *   back with the response as [VirtualItemsResponse.geoLocale] based on user's current IP.
+         *   **IMPORTANT:** Setting [country] argument will override the returned locale.
          * @see [More about the use cases](https://developers.xsolla.com/sdk/android/catalog/catalog-display/).
          */
         @JvmStatic
@@ -1153,16 +1157,19 @@ class XStore private constructor(
             offset: Int = 0,
             locale: String? = null,
             additionalFields: List<String>? = listOf(),
-            country: String? = null
+            country: String? = null,
+            requestGeoLocale: Boolean? = null
         ) {
-            getInstance().storeApi.getVirtualItems(
-                getInstance().projectId,
-                limit,
-                offset,
-                locale,
-                additionalFields,
-                country
-            )
+            getInstance().storeApi
+                .getVirtualItems(
+                    getInstance().projectId,
+                    limit,
+                    offset,
+                    locale,
+                    additionalFields,
+                    country,
+                    withGeo = requestGeoLocale
+                )
                 .enqueue(object : Callback<VirtualItemsResponse> {
                     override fun onResponse(
                         call: Call<VirtualItemsResponse>,
@@ -1171,7 +1178,32 @@ class XStore private constructor(
                         if (response.isSuccessful) {
                             val virtualItemsResponse = response.body()
                             if (virtualItemsResponse != null) {
-                                callback.onSuccess(virtualItemsResponse)
+                                val geoLocale = requestGeoLocale?.takeIf { it }?.let {
+                                    val headers = response.headers()
+
+                                    // Retrieve language and country ISO codes.
+                                    val localeCode = headers["X-User-Locale-Code"]
+                                    val countryCode = headers["X-User-Country-Code"]
+
+                                    // If both ISO codes are present, only then attempt to parse those into a `Locale`.
+                                    if (!localeCode.isNullOrEmpty() && !countryCode.isNullOrEmpty()) {
+                                        try {
+                                            Locale(localeCode, countryCode)
+                                        } catch (_: NullPointerException) {
+                                            // We just ignore the locale altogether as it's not essential
+                                            // to the `VirtualItemsResponse`'s validity. Moreover, null
+                                            // pointer exception might only happen IF the code above is
+                                            // broken for some obscure reason, which shouldn't ever happen.
+                                            null
+                                        }
+                                    } else {
+                                        null
+                                    }
+                                }
+
+                                callback.onSuccess(
+                                    virtualItemsResponse.copy(geoLocale = geoLocale)
+                                )
                             } else {
                                 callback.onError(null, "Empty response")
                             }
