@@ -15,4 +15,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#1C1C1E"/>
+        <ProgressBar
+            android:indeterminateTint="#B2B2B4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
 </FrameLayout>

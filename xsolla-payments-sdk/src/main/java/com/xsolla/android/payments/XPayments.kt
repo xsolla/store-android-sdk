@@ -5,8 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Parcelable
-import android.util.Log
 import androidx.core.os.bundleOf
+import com.xsolla.android.payments.caching.PayStationCache
 import com.xsolla.android.payments.data.AccessToken
 import com.xsolla.android.payments.ui.ActivityPayStation
 import com.xsolla.android.payments.util.AnalyticsUtils
@@ -81,8 +81,7 @@ class XPayments {
          */
         fun build(): Intent {
             val url = generateUrl()
-            val intent = Intent()
-            intent.setClass(context, ActivityPayStation::class.java)
+            var intent = PayStationCache.getInstance(context).getCachedIntent()
             intent.putExtras(
                 bundleOf(
                     ActivityPayStation.ARG_URL to url,
@@ -173,4 +172,5 @@ class XPayments {
         V3,
         V4
     }
+
 }
