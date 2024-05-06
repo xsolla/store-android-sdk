@@ -19,6 +19,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebView.WebViewTransport
 import android.webkit.WebViewClient
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.xsolla.android.payments.R
@@ -41,6 +42,7 @@ internal class ActivityPayStation : AppCompatActivity() {
     private lateinit var url: String
     private lateinit var webView: WebView
     private lateinit var childWebView: WebView
+    private lateinit var loader: FrameLayout
 
     private lateinit var redirectScheme: String
     private lateinit var redirectHost: String
@@ -82,6 +84,7 @@ internal class ActivityPayStation : AppCompatActivity() {
                 setContentView(R.layout.xsolla_payments_activity_paystation)
                 webView = findViewById(R.id.webview)
                 childWebView = findViewById(R.id.childWebView)
+                loader = findViewById(R.id.loader)
                 configureWebView()
                 webView.loadUrl(url)
             } else {
@@ -193,7 +196,10 @@ internal class ActivityPayStation : AppCompatActivity() {
                 }
                 super.doUpdateVisitedHistory(view, url, isReload)
             }
-
+            override fun onPageFinished(view: WebView?, url: String?) {
+                loader.visibility = View.GONE
+                super.onPageFinished(view, url)
+            }
         }
         webView.setDownloadListener { url, userAgent, contentDisposition, mimeType, _ ->
 

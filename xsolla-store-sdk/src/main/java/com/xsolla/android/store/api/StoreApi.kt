@@ -255,7 +255,8 @@ internal interface StoreApi {
         @Query("offset") offset: Int,
         @Query("locale") locale: String?,
         @Query("additional_fields") additionalFields: List<String>?,
-        @Query("country") country: String?
+        @Query("country") country: String?,
+        @Query("with_geo") withGeo: Boolean?
     ): Call<VirtualItemsResponse>
 
     @GET("/api/v2/project/{project_id}/items/virtual_items/all")

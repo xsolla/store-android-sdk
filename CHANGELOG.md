@@ -1,4 +1,12 @@
 # Changelog
+## [2.5.6] - Store SDK - 2024-05-06
+### Changed
+- `getVirtualItems` SDK method. Added the `requestGeoLocale` parameter. If `true`, the response returns the locale in the `geoLocale` parameter.
+
+## [1.3.4] - Payments SDK - 2024-05-06
+### Added
+- Pay Station preloader. Allows faster content display in WebView and Custom Tabs.
+
 ## [2.2.11] - Demo Apps - 2024-04-11
 ### Fixed
 - Token refresh on application startup
