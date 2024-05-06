@@ -1144,9 +1144,8 @@ class XStore private constructor(
          * The following languages are supported: Arabic (`ar`), Bulgarian (`bg`), Czech (`cs`), German (`de`), Spanish (`es`), French (`fr`), Hebrew (`he`), Italian (`it`), Japanese (`ja`), Korean (`ko`), Polish (`pl`), Portuguese (`pt`), Romanian (`ro`), Russian (`ru`), Thai (`th`), Turkish (`tr`), Vietnamese (`vi`), Chinese Simplified (`cn`), Chinese Traditional (`tw`), English (`en`, default).
          * @param additionalFields The list of additional fields. Available fields: `media_list`, `order`, `long_description`.
          * @param callback Status callback.
-         * @param requestGeoLocale If `TRUE` then requests the backend to send the deduced locale
-         *   back with the response as [VirtualItemsResponse.geoLocale] based on user's current IP.
-         *   **IMPORTANT:** Setting [country] argument will override the returned locale.
+         * @param requestGeoLocale If `true`, requests the locale based on user's current IP. The backend returns the locale as [VirtualItemsResponse.geoLocale].
+         *   **IMPORTANT:** Setting [country] argument overrides the returned locale.
          * @see [More about the use cases](https://developers.xsolla.com/sdk/android/catalog/catalog-display/).
          */
         @JvmStatic
