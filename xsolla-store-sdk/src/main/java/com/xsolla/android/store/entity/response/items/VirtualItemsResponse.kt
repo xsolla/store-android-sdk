@@ -9,9 +9,9 @@ import java.util.Locale
 
 data class VirtualItemsResponse(
     /**
-     * An optional locale deduced and returned by the backend.
+     * An optional locale returned by the backend based on user's current IP.
      *
-     * Non-null only if the query parameter `with_geo=1` was added to the request.
+     * Non-null only if request contains the `requestGeoLocale=true` query parameter.
      */
     @Transient val geoLocale: Locale? = null,
 
