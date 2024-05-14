@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="xsolla_payments_Theme" parent="Theme.AppCompat.Light.NoActionBar" >
-        <item name="colorPrimaryDark">@color/xsolla_payments_statusbar</item>
+    <style name="xsolla_payments_Theme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#322B4A</item>
+        <item name="android:navigationBarColor">#1C1633</item>
+        <item name="android:statusBarColor">#1C1633</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:screenOrientation">portrait</item>
+        <item name="android:configChanges">screenSize</item>
     </style>
 </resources>
