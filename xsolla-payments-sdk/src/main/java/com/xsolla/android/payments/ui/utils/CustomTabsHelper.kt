@@ -7,22 +7,25 @@ import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsServiceConnection
 import androidx.browser.customtabs.CustomTabsSession
 
-class CustomTabsHelper(private val context: Context, private val payStation3WarmUpUrl: String, private val payStation4WarmUpUrl: String) {
+class CustomTabsHelper(
+    private val context: Context,
+    private val payStation3WarmUpUrl: String,
+    private val payStation4WarmUpUrl: String,
+    private val onCustomTabsSessionCreated: (customTabsSession: CustomTabsSession) -> Unit
+) {
 
     private var customTabsSession: CustomTabsSession? = null
     private var mClient: CustomTabsClient? = null
 
     private var connection: CustomTabsServiceConnection? = object : CustomTabsServiceConnection() {
         override fun onCustomTabsServiceConnected(name: ComponentName, client: CustomTabsClient) {
-            if (client != null) {
-                mClient = client
-                client.warmup(0)
-                customTabsSession = client.newSession(null)
-                customTabsSession!!.mayLaunchUrl(Uri.parse(payStation3WarmUpUrl), null, null)
-                customTabsSession!!.mayLaunchUrl(Uri.parse(payStation4WarmUpUrl), null, null)
-
-            }
-       }
+            mClient = client
+            client.warmup(0)
+            customTabsSession = client.newSession(null)
+            customTabsSession!!.mayLaunchUrl(Uri.parse(payStation3WarmUpUrl), null, null)
+            customTabsSession!!.mayLaunchUrl(Uri.parse(payStation4WarmUpUrl), null, null)
+            onCustomTabsSessionCreated(customTabsSession!!)
+        }
 
         override fun onServiceDisconnected(name: ComponentName) {
             mClient = null
@@ -31,8 +34,8 @@ class CustomTabsHelper(private val context: Context, private val payStation3Warm
     }
 
     fun bindCustomTabsService() {
-
         if (mClient != null) return
+
         val availableBrowsers = BrowserUtils.getAvailableCustomTabsBrowsers(context)
 
         if(availableBrowsers.isEmpty()) return

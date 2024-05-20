@@ -43,6 +43,9 @@ dependencies {
     implementation "androidx.browser:browser:$androidx_browser"
 
     implementation "androidx.startup:startup-runtime:1.1.1"
+
+    // Needed for `TrustedWebActivity`.
+	implementation 'com.google.androidbrowserhelper:androidbrowserhelper:2.5.0'
 }
 
 dokkaHtmlPartial {
