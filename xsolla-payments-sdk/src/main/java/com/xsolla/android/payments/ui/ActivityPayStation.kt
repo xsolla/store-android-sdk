@@ -117,16 +117,12 @@ internal class ActivityPayStation : AppCompatActivity() {
         redirectScheme = intent.getStringExtra(ARG_REDIRECT_SCHEME)!!
         redirectHost = intent.getStringExtra(ARG_REDIRECT_HOST)!!
 
-        fun isBrowserAvailable() : Boolean =
-            BrowserUtils.isPlainBrowserAvailable(this)
-            || BrowserUtils.isCustomTabsBrowserAvailable(this)
-
         type = intent.getStringExtra(ARG_ACTIVITY_TYPE)
             ?.let { s -> ActivityType.valueOf(s.uppercase()) }
-            // If activity types wasn't specified directly, fallback
+            // If activity type wasn't specified directly, fallback
             // to the "deprecated" method, i.e. via [ARG_USE_WEBVIEW]
             // intent parameter.
-            ?: if (isBrowserAvailable()) ActivityType.CUSTOM_TABS else ActivityType.WEB_VIEW
+            ?: if (BrowserUtils.isCustomTabsBrowserAvailable(this)) ActivityType.CUSTOM_TABS else ActivityType.WEB_VIEW
 
         orientationLock = intent.getStringExtra(ARG_ACTIVITY_ORIENTATION_LOCK)
             ?.let { s -> ActivityOrientationLock.valueOf(s.uppercase()) }
