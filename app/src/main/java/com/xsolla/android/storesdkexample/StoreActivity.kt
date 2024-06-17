@@ -41,6 +41,7 @@ import com.xsolla.android.login.callback.RefreshTokenCallback
 import com.xsolla.android.login.jwt.JWT
 import com.xsolla.android.payments.XPayments
 import com.xsolla.android.payments.data.AccessToken
+import com.xsolla.android.payments.ui.ActivityType
 import com.xsolla.android.store.XStore
 import com.xsolla.android.storesdkexample.data.local.DemoCredentialsManager
 import com.xsolla.android.storesdkexample.googleplay.GooglePlayPurchaseHandler
@@ -100,6 +101,7 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
             val intent = XPayments.createIntentBuilder(this)
                 .accessToken(AccessToken(token))
                 .isSandbox(BuildConfig.IS_SANDBOX)
+                .setActivityType(ActivityType.TRUSTED_WEB_ACTIVITY)
                 .build()
             startActivityForResult(intent, RC_PAYSTATION)
         }

@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.xsolla.android.payments.XPayments
 import com.xsolla.android.payments.data.AccessToken
+import com.xsolla.android.payments.ui.ActivityType
 import com.xsolla.android.payments.ui.utils.BrowserUtils
 import com.xsolla.android.samples.buy.BuyForRealActivity
 import com.xsolla.android.samples.buy.adapter.holder.BuyViewHolder
@@ -72,6 +73,7 @@ class BuyForRealAdapter(private val parentActivity: BuyForRealActivity, private 
                     val intent = XPayments.createIntentBuilder(parentActivity)
                         .accessToken(AccessToken(token))
                         .isSandbox(BuildConfig.IS_SANDBOX)
+                        .setActivityType(ActivityType.TRUSTED_WEB_ACTIVITY)
                         .build()
                     parentActivity.startActivityForResult(intent, 1)
                 }
