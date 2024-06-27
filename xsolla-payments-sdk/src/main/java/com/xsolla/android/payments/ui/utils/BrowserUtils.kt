@@ -4,10 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.text.TextUtils
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION
 import androidx.core.content.ContextCompat
+import com.google.androidbrowserhelper.trusted.ChromeLegacyUtils
 import com.xsolla.android.payments.R
 import com.xsolla.android.payments.caching.PayStationCache
 
@@ -16,24 +18,29 @@ object BrowserUtils {
     private val allowedPlainBrowsers = listOf("com.android.chrome", "com.huawei.browser", "com.sec.android.app.sbrowser")
     private val allowedCustomTabsBrowsers = listOf("com.android.chrome", "com.huawei.browser", "com.sec.android.app.sbrowser")
 
-    private fun getAvailablePlainBrowsers(context: Context): List<String> {
+    /**
+     * Returns a list of package names of ALL currently installed browsers on the device.
+     */
+    private fun getAllInstalledBrowserPackageNames(context: Context): List<String> {
         val browserIntent = Intent()
             .setAction(Intent.ACTION_VIEW)
             .setData(Uri.parse("https://"))
-        val activities = context.packageManager.queryIntentActivities(browserIntent, 0)
-        val installedBrowsers = activities.map { it.activityInfo.packageName }
+        val packageManager = context.packageManager
+        val activities = packageManager.queryIntentActivities(browserIntent, 0)
+        return activities
+            .map { it.activityInfo.packageName }
+            .filter { !TextUtils.isEmpty(it) }
+    }
+
+    private fun getAvailablePlainBrowsers(context: Context): List<String> {
+        val installedBrowsers = getAllInstalledBrowserPackageNames(context)
         return allowedPlainBrowsers.filter { allowedBrowser ->
             installedBrowsers.contains(allowedBrowser)
         }
     }
 
     fun getAvailableCustomTabsBrowsers(context: Context): List<String> {
-        val browserIntent = Intent()
-            .setAction(Intent.ACTION_VIEW)
-            .addCategory(Intent.CATEGORY_BROWSABLE)
-            .setData(Uri.parse("https://"))
-        val activities = context.packageManager.queryIntentActivities(browserIntent, 0)
-        val installedBrowsers = activities.map { it.activityInfo.packageName }
+        val installedBrowsers = getAllInstalledBrowserPackageNames(context)
         val allowedBrowsers = allowedCustomTabsBrowsers.filter { allowedBrowser ->
             installedBrowsers.contains(allowedBrowser)
         }
@@ -50,6 +57,17 @@ object BrowserUtils {
 
     fun isPlainBrowserAvailable(context: Context) =
         getAvailablePlainBrowsers(context).isNotEmpty()
+
+    /**
+     * Returns `True` if [TrustedWebActivity] is supported on the device.
+     */
+    fun isTrustedWebActivityAvailable(context: Context) : Boolean {
+        val packageNames = getAllInstalledBrowserPackageNames(context)
+        val packageManager = context.packageManager
+        return packageNames.any {
+            ChromeLegacyUtils.supportsTrustedWebActivities(packageManager, it)
+        }
+    }
 
     fun launchCustomTabsBrowser(context: Context, url: String) {
         val colorSchemeParams = CustomTabColorSchemeParams.Builder()

@@ -22,6 +22,7 @@ import com.xsolla.android.store.entity.response.items.VirtualItemsResponse
 import com.xsolla.android.store.entity.response.payment.CreateOrderResponse
 import com.xsolla.android.storesdkexample.BuildConfig
 import com.xsolla.android.storesdkexample.R
+import com.xsolla.android.appcore.utils.MiscUtils
 
 
 class BuyForRealAdapter(private val parentActivity: BuyForRealActivity, private val items: List<VirtualItemsResponse.Item>) :
@@ -72,6 +73,7 @@ class BuyForRealAdapter(private val parentActivity: BuyForRealActivity, private 
                     val intent = XPayments.createIntentBuilder(parentActivity)
                         .accessToken(AccessToken(token))
                         .isSandbox(BuildConfig.IS_SANDBOX)
+                        .setActivityType(MiscUtils.deduceXPaymentsActivityType(parentActivity))
                         .build()
                     parentActivity.startActivityForResult(intent, 1)
                 }

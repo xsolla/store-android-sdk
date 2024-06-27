@@ -39,6 +39,16 @@
             <meta-data  android:name="com.xsolla.android.payments.caching.PayStationCacheInitializer"
                 android:value="androidx.startup" />
         </provider>
+        <!-- Used by TrustedWebActivity to pull the background icon from an image file asset. -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.androidx-fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/xsolla_payments_twa_filepaths" />
+        </provider>
     </application>
-
 </manifest>
