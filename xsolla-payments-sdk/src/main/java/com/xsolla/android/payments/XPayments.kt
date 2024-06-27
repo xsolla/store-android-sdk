@@ -8,7 +8,10 @@ import android.os.Parcelable
 import androidx.core.os.bundleOf
 import com.xsolla.android.payments.caching.PayStationCache
 import com.xsolla.android.payments.data.AccessToken
+import com.xsolla.android.payments.ui.ActivityOrientationLock
 import com.xsolla.android.payments.ui.ActivityPayStation
+import com.xsolla.android.payments.ui.ActivityType
+import com.xsolla.android.payments.ui.utils.TrustedWebActivityImageRef
 import com.xsolla.android.payments.util.AnalyticsUtils
 import kotlinx.parcelize.Parcelize
 
@@ -33,12 +36,17 @@ class XPayments {
 
         private var accessToken: AccessToken? = null
         private var isSandbox: Boolean = true
-        private var useWebview: Boolean = false
+
         private var payStationVersion: PayStationVersion = PayStationVersion.V4
 
         private var redirectScheme: String = "app" // the same is set at AndroidManifest.xml
         private var redirectHost: String =
             "xpayment.${context.packageName}" // the same is set at AndroidManifest.xml
+
+        private var activityType: ActivityType? = null
+        private var activityOrientationLock: ActivityOrientationLock? = null
+
+        private var trustedWebActivityImageRef: TrustedWebActivityImageRef? = null
 
         /**
          * Set a Pay Station access token
@@ -53,8 +61,10 @@ class XPayments {
         /**
          * Set use webview instead of a browser
          */
-        @Deprecated("WebView usage is not recommended")
-        fun useWebview(useWebview: Boolean) = apply { this.useWebview = useWebview }
+        @Deprecated("WebView usage is not recommended. Also, use `setActivityType()` instead.")
+        fun useWebview(useWebview: Boolean) = apply {
+            setActivityType(ActivityType.WEB_VIEW)
+        }
 
         /**
          * Set the redirect uri scheme
@@ -68,29 +78,68 @@ class XPayments {
         fun setRedirectUriHost(redirectHost: String) =
             apply { this.redirectHost = redirectHost.lowercase() }
 
-
         /**
          * Set a Pay Station version
          */
         fun payStationVersion(version: PayStationVersion) =
             apply { this.payStationVersion = version }
 
+        /**
+         * Sets what sort of activity is used to present the PayStation content in.
+         *
+         * See [ActivityType] for additional information on benefits and limitations.
+         */
+        fun setActivityType(activityType: ActivityType?) =
+            apply { this.activityType = activityType }
+
+        /**
+         * Sets the activity orientation lock if supported by the specified [ActivityType].
+         *
+         * Feature availability depends on the [ActivityType] selected (via [setActivityType]).
+         */
+        fun setActivityOrientationLock(activityOrientationLock: ActivityOrientationLock?) =
+            apply { this.activityOrientationLock = activityOrientationLock }
+
+        /**
+         * Sets trusted web activity's background image via a [TrustedWebActivityImageRef].
+         *
+         * If `null` then the default background that comes with the SDK will be used instead.
+         *
+         * To disable the background image altogether, pass [TrustedWebActivityImageRef.getEmpty]
+         * as argument.
+         */
+        fun setTrustedWebActivityImage(ref: TrustedWebActivityImageRef?) =
+            apply { this.trustedWebActivityImageRef = ref }
 
         /**
          * Build the intent
          */
         fun build(): Intent {
             val url = generateUrl()
-            var intent = PayStationCache.getInstance(context).getCachedIntent()
-            intent.putExtras(
-                bundleOf(
-                    ActivityPayStation.ARG_URL to url,
-                    ActivityPayStation.ARG_REDIRECT_SCHEME to redirectScheme,
-                    ActivityPayStation.ARG_REDIRECT_HOST to redirectHost,
-                    ActivityPayStation.ARG_USE_WEBVIEW to useWebview,
-                )
+            val bundle = bundleOf(
+                ActivityPayStation.ARG_URL to url,
+                ActivityPayStation.ARG_REDIRECT_SCHEME to redirectScheme,
+                ActivityPayStation.ARG_REDIRECT_HOST to redirectHost,
             )
-            return intent
+
+            activityType?.let { activityType -> bundle.putString(
+                ActivityPayStation.ARG_ACTIVITY_TYPE, activityType.toString()
+            )}
+
+            activityOrientationLock?.let { activityOrientationLock -> bundle.putString(
+                ActivityPayStation.ARG_ACTIVITY_ORIENTATION_LOCK,
+                activityOrientationLock.toString()
+            )}
+
+            accessToken?.getBackgroundColor()?.let { color -> bundle.putInt(
+                ActivityPayStation.ARG_TRUSTED_WEB_ACTIVITY_BACKGROUND_COLOR, color
+            )}
+
+            trustedWebActivityImageRef?.let { ref -> bundle.putParcelable(
+                ActivityPayStation.ARG_TRUSTED_WEB_ACTIVITY_IMAGE_REF, ref
+            )}
+
+            return PayStationCache.getInstance(context).getCachedIntent().putExtras(bundle)
         }
 
         private fun generateUrl(): String {

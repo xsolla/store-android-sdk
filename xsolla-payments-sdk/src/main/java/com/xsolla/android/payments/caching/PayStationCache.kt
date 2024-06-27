@@ -16,6 +16,7 @@ import com.xsolla.android.payments.XPayments
 import com.xsolla.android.payments.ui.ActivityPayStation
 import com.xsolla.android.payments.ui.utils.BrowserUtils
 import com.xsolla.android.payments.ui.utils.CustomTabsHelper
+import com.xsolla.android.payments.ui.utils.TrustedWebActivity
 import java.util.Locale
 
 
@@ -32,7 +33,12 @@ class PayStationCache(val context: Context) {
         if(BrowserUtils.isCustomTabsBrowserAvailable(context)) {
             val payStation3WarmUpUrl = "https://secure.xsolla.com/paystation3/$locale/cache-warmup"
             val payStation4WarmUpUrl = "https://secure.xsolla.com/paystation4/$locale/cache-warmup"
-            customTabHelper = CustomTabsHelper(context, payStation3WarmUpUrl, payStation4WarmUpUrl)
+            customTabHelper = CustomTabsHelper(
+                context,
+                payStation3WarmUpUrl,
+                payStation4WarmUpUrl,
+                TrustedWebActivity::notifyOnCustomTabsSessionCreated
+            )
             customTabHelper.bindCustomTabsService()
         } else {
             preloadUrl("https://secure.xsolla.com/paystation4/$locale/cache-warmup")
@@ -49,7 +55,7 @@ class PayStationCache(val context: Context) {
     }
 
     fun getCachedSession(): CustomTabsSession? {
-        return  customTabHelper.getSession()
+        return customTabHelper.getSession()
     }
 
     private fun preloadUrl(url: String) {
@@ -130,7 +136,7 @@ class PayStationCache(val context: Context) {
         private var instance: PayStationCache? = null
 
         fun getInstance(context: Context): PayStationCache {
-            if(instance == null) {
+            if (instance == null) {
                 instance = PayStationCache(context)
             }
             return instance!!
