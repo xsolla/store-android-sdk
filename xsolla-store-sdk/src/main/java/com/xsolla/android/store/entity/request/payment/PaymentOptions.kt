@@ -46,7 +46,9 @@ data class UiProjectSetting(
     val licenseUrl: String? = null,
     val mode: String? = null,
     @SerializedName("user_account")
-    val userAccount: UserAccountDetails? = null
+    val userAccount: UserAccountDetails? = null,
+    @SerializedName("gp_quick_payment_button")
+    val gpQuickPaymentButton: Boolean? = true
 )
 
 data class MobileSettings(
@@ -62,7 +64,9 @@ data class UiDesktopProjectSettingFooter(
 
 data class UiMobileProjectSettingHeader(
     @SerializedName("close_button")
-    val closeButton: Boolean
+    val closeButton: Boolean,
+    @SerializedName("close_button_icon")
+    val closeButtonIcon: String? = null
 )
 
 data class DesktopSettings(
@@ -81,6 +85,8 @@ data class UiDesktopProjectSettingHeader(
     val type: String,
     @SerializedName("close_button")
     val closeButton: Boolean,
+    @SerializedName("close_button_icon")
+    val closeButtonIcon: String? = null
 )
 
 class CustomParameters private constructor(private val parameters: Map<String, Value>) {
