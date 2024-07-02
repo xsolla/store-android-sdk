@@ -20,11 +20,13 @@ class CustomTabsHelper(
     private var connection: CustomTabsServiceConnection? = object : CustomTabsServiceConnection() {
         override fun onCustomTabsServiceConnected(name: ComponentName, client: CustomTabsClient) {
             mClient = client
-            client.warmup(0)
-            customTabsSession = client.newSession(null)
-            customTabsSession!!.mayLaunchUrl(Uri.parse(payStation3WarmUpUrl), null, null)
-            customTabsSession!!.mayLaunchUrl(Uri.parse(payStation4WarmUpUrl), null, null)
-            onCustomTabsSessionCreated(customTabsSession!!)
+            if(client != null) {
+                client.warmup(0)
+                customTabsSession = client.newSession(null)
+                customTabsSession!!.mayLaunchUrl(Uri.parse(payStation3WarmUpUrl), null, null)
+                customTabsSession!!.mayLaunchUrl(Uri.parse(payStation4WarmUpUrl), null, null)
+                onCustomTabsSessionCreated(customTabsSession!!)
+            }
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
