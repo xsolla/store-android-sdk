@@ -21,11 +21,14 @@ import androidx.browser.customtabs.TrustedWebUtils
 import androidx.browser.trusted.TrustedWebActivityIntentBuilder
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.scale
 import com.google.androidbrowserhelper.trusted.Utils
 import com.google.androidbrowserhelper.trusted.splashscreens.SplashScreenStrategy
 import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
+import kotlin.math.ceil
 
 /**
  * A behavior for [TrustedWebActivity]'s splash screen functionality that controls
@@ -60,14 +63,26 @@ internal class TrustedWebActivitySplashScreenStrategy(
             private fun forDrawable(drawable: Drawable): Image? {
                 try {
                     val wrappedDrawable = DrawableCompat.wrap(drawable)
-                    val bitmap = Bitmap.createBitmap(
-                        wrappedDrawable.intrinsicWidth,
-                        wrappedDrawable.intrinsicHeight,
-                        Bitmap.Config.ARGB_8888
-                    )
-                    val canvas = Canvas(bitmap)
-                    wrappedDrawable.setBounds(0, 0, canvas.width, canvas.height)
-                    wrappedDrawable.draw(canvas)
+
+                    val MAX_WIDTH = 1024
+                    val MAX_HEIGHT = 1024
+
+                    var width = wrappedDrawable.intrinsicWidth
+                    var height = wrappedDrawable.intrinsicHeight
+                    val aspect = height.takeIf { it > 0 }?.let { width / it.toFloat() } ?: 1.0f
+
+                    if (width > MAX_WIDTH) {
+                        width = MAX_WIDTH
+                        height = (width / aspect).toInt()
+                        Log.d(TAG, "Splash screen drawable is too wide, limiting to $MAX_WIDTH")
+                    } else if (height > MAX_HEIGHT) {
+                        height = MAX_HEIGHT
+                        width = (height * aspect).toInt()
+                        Log.d(TAG, "Splash screen drawable is too tall, limiting to $MAX_HEIGHT")
+                    }
+
+                    val bitmap = wrappedDrawable.toBitmap(width, height)
+
                     return Image(bitmap)
                 } catch (e: Exception) {
                     Log.e(TAG, "Failed to create an image for a drawable", e)
