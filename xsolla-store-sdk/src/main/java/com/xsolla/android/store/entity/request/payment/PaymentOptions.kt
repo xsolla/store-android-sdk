@@ -24,7 +24,9 @@ data class PaymentProjectSettings(
     val redirectPolicy: SettingsRedirectPolicy? = null,
     @SerializedName("external_id")
     val externalId: String? = null
-)
+){
+    private val sdk: SdkData = SdkData()
+}
 
 data class SettingsRedirectPolicy(
     @SerializedName("redirect_conditions")
@@ -87,6 +89,10 @@ data class UiDesktopProjectSettingHeader(
     val closeButton: Boolean,
     @SerializedName("close_button_icon")
     val closeButtonIcon: String? = null
+)
+
+data class SdkData(
+    val platform: String = "android"
 )
 
 class CustomParameters private constructor(private val parameters: Map<String, Value>) {
