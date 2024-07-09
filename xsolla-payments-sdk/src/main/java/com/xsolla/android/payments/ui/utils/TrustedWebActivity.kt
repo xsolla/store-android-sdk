@@ -40,7 +40,7 @@ object TrustedWebActivity {
      */
     data class SplashScreen(
         val imageRef: TrustedWebActivityImageRef?,
-        val imageScaleType: ImageView.ScaleType = ImageView.ScaleType.CENTER,
+        val imageScaleType: ImageView.ScaleType = ImageView.ScaleType.FIT_CENTER,
         @ColorInt val backgroundColor: Int? = null,
         val fadeOutTimeInMillis: Int = 300
     )
