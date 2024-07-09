@@ -25,7 +25,7 @@ data class PaymentProjectSettings(
     @SerializedName("external_id")
     val externalId: String? = null
 ){
-    private val sdk: SdkData = SdkData()
+    private val sdk: SDKTokenSettings = SDKTokenSettings()
 }
 
 data class SettingsRedirectPolicy(
@@ -91,7 +91,7 @@ data class UiDesktopProjectSettingHeader(
     val closeButtonIcon: String? = null
 )
 
-data class SdkData(
+data class SDKTokenSettings(
     val platform: String = "android"
 )
 
