@@ -13,7 +13,9 @@ class CustomTabsHelper(
     private val payStation4WarmUpUrl: String,
     private val onCustomTabsSessionCreated: (customTabsSession: CustomTabsSession) -> Unit
 ) {
-
+    companion object {
+        var IS_SUCCESSFULLY_INITIALIZED: Boolean = true
+    }
     private var customTabsSession: CustomTabsSession? = null
     private var mClient: CustomTabsClient? = null
 
@@ -27,11 +29,13 @@ class CustomTabsHelper(
                 customTabsSession!!.mayLaunchUrl(Uri.parse(payStation4WarmUpUrl), null, null)
                 onCustomTabsSessionCreated(customTabsSession!!)
             }
+            IS_SUCCESSFULLY_INITIALIZED = mClient != null
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
             mClient = null
             customTabsSession = null
+            IS_SUCCESSFULLY_INITIALIZED = false
         }
     }
 
