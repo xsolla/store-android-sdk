@@ -53,7 +53,7 @@ object BrowserUtils {
     }
 
     fun isCustomTabsBrowserAvailable(context: Context) =
-        getAvailableCustomTabsBrowsers(context).isNotEmpty()
+        getAvailableCustomTabsBrowsers(context).isNotEmpty() && CustomTabsHelper.IS_SUCCESSFULLY_INITIALIZED
 
     fun isPlainBrowserAvailable(context: Context) =
         getAvailablePlainBrowsers(context).isNotEmpty()
@@ -64,7 +64,7 @@ object BrowserUtils {
     fun isTrustedWebActivityAvailable(context: Context) : Boolean {
         val packageNames = getAllInstalledBrowserPackageNames(context)
         val packageManager = context.packageManager
-        return packageNames.any {
+        return isCustomTabsBrowserAvailable(context) && packageNames.any {
             ChromeLegacyUtils.supportsTrustedWebActivities(packageManager, it)
         }
     }
