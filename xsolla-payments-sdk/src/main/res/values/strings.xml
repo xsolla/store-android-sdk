@@ -1,3 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- A file provider suffix used by `TrustedWebActivity` to form a fully-fledged provider string. -->
+    <string name="xsolla_payments_fileprovider_authority">.androidx-fileprovider</string>
 </resources>

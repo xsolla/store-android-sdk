@@ -57,15 +57,19 @@ internal class ActivityAuthWebView : ActivityAuth() {
     @SuppressLint("SetJavaScriptEnabled")
     private fun configureWebView() {
         webView.settings.javaScriptEnabled = true
-        when (intent.getSerializableExtra(ARG_SOCIAL_NETWORK) as SocialNetwork) {
-            SocialNetwork.GOOGLE -> {
-                webView.settings.userAgentString = USER_AGENT_GOOGLE
+        val socialNetwork = intent.getSerializableExtra(ARG_SOCIAL_NETWORK)
+        socialNetwork?.let {
+            when (socialNetwork as SocialNetwork) {
+                SocialNetwork.GOOGLE -> {
+                    webView.settings.userAgentString = USER_AGENT_GOOGLE
+                }
+                SocialNetwork.QQ -> {
+                    webView.settings.userAgentString = USER_AGENT_QQ
+                }
+                else -> {}
             }
-            SocialNetwork.QQ -> {
-                webView.settings.userAgentString = USER_AGENT_QQ
-            }
-            else -> {}
         }
+
         if (!webView.isInEditMode) {
             webView.settings.builtInZoomControls = true
             webView.settings.setSupportZoom(true)

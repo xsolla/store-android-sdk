@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:gravity="fill">
+        <shape android:shape="rectangle">
+            <solid android:color="#00000000" />
+            <size android:width="1000px" android:height="1200px"/>
+        </shape>
+    </item>
+    <item android:gravity="left|right|top|bottom" android:drawable="@drawable/xsolla_payments_trusted_web_activity_icon"
+        android:left="160px"
+        android:top="192px"
+        android:right="160px"
+        android:bottom="192px" />
+</layer-list>

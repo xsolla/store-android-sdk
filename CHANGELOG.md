@@ -1,4 +1,25 @@
 # Changelog
+## [2.5.7] - Store SDK - 2024-07-11
+### Changed
+- Payments requests (`UiProjectSetting` class). Added following parameters:
+    - `gpQuickPaymentButton` — defines the way the Google Pay payment method is displayed. If true, the button for quick payment via Google Pay is displayed at the top of the payment UI. If `true`, Google Pay is displayed in the list of payment methods according to the PayRank algorithm. `true` by default.
+    - `closeButtonIcon` — defines the icon of the **Close** button in the payment UI. Can be `arrow` or `cross`. `cross` by default. 
+  
+## [1.4.0] - Payments SDK - 2024-07-11  
+### Added  
+- Support of Trusted Web activity as the way to display Pay Station. Learn more: https://developer.chrome.com/docs/android/trusted-web-activity/ 
+
+### Fixed  
+- Null pointer exception in `onCustomTabsServiceConnected` method of `CustomTabsHelper` class  
+  
+## [6.0.8] - Login SDK - 2024-07-11  
+### Fixed  
+- Crash while authorizing via Xsolla Widget in WebView
+
+## [2.2.12] - Demo Apps - 2024-07-11
+### Added
+- Trusted Web activity as the default way to display Pay Station
+
 ## [2.5.6] - Store SDK - 2024-05-06
 ### Changed
 - `getVirtualItems` SDK method. Added the `requestGeoLocale` parameter. If `true`, the response returns the locale in the `geoLocale` parameter.

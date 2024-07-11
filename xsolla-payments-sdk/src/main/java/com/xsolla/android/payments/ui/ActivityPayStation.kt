@@ -20,23 +20,67 @@ import android.webkit.WebView
 import android.webkit.WebView.WebViewTransport
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.trusted.ScreenOrientation
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.xsolla.android.payments.R
 import com.xsolla.android.payments.XPayments
 import com.xsolla.android.payments.ui.utils.BrowserUtils
+import com.xsolla.android.payments.ui.utils.TrustedWebActivity
+import com.xsolla.android.payments.ui.utils.TrustedWebActivityImageRef
 import java.net.URISyntaxException
 
 internal class ActivityPayStation : AppCompatActivity() {
+
     companion object {
         const val ARG_URL = "url"
         const val ARG_REDIRECT_SCHEME = "redirect_scheme"
         const val ARG_REDIRECT_HOST = "redirect_host"
-        const val ARG_USE_WEBVIEW = "use_webview"
+
+        /**
+         * An intent parameter used to specify activity [ActivityType].
+         *
+         * Type: [String].
+         */
+        const val ARG_ACTIVITY_TYPE = "activity_type"
+
+        /**
+         * An intent parameter used to specify the screen orientation to lock into,
+         * while displaying a trusted web activity.
+         *
+         * Uses [ActivityOrientationLock] for its values.
+         *
+         * Type: [String]
+         */
+        const val ARG_ACTIVITY_ORIENTATION_LOCK = "activity_orientation_lock"
+
+        /**
+         * An intent parameter used to specify the color of the trusted web activity in case
+         * current activity [type] is set to [ActivityType.TRUSTED_WEB_ACTIVITY].
+         *
+         * Type: [Int] ([androidx.annotation.ColorInt])
+         */
+        const val ARG_TRUSTED_WEB_ACTIVITY_BACKGROUND_COLOR = "trusted_web_activity_background_color"
+
+        /**
+         * An intent parameter used to provide information about the trusted
+         * web activity's image.
+         *
+         * Type: A parcelable ([TrustedWebActivityImageRef]).
+         */
+        const val ARG_TRUSTED_WEB_ACTIVITY_IMAGE_REF = "trusted_web_activity_image_ref"
 
         const val RESULT = "result"
 
         private const val WRITE_EXTERNAL_STORAGE_PERMISSION_CODE = 100
+
+        /**
+         * Amount of time it takes for the trusted web activity's
+         * splash screen to fade-out into the actual PayStation content.
+         */
+        private const val TRUSTED_WEB_ACTIVITY_FADE_OUT_TIME_IN_MILLIS = 250
     }
 
     private lateinit var url: String
@@ -46,7 +90,10 @@ internal class ActivityPayStation : AppCompatActivity() {
 
     private lateinit var redirectScheme: String
     private lateinit var redirectHost: String
-    private var useWebView: Boolean = false
+    private lateinit var type: ActivityType
+    private var orientationLock: ActivityOrientationLock? = null
+    private var trustedWebActivityBackgroundColor: Int? = null
+    private var trustedWebActivityImageRef: TrustedWebActivityImageRef? = null
     private var needStartBrowser = false
 
     private lateinit var downloadUrl: String
@@ -69,18 +116,33 @@ internal class ActivityPayStation : AppCompatActivity() {
 
         redirectScheme = intent.getStringExtra(ARG_REDIRECT_SCHEME)!!
         redirectHost = intent.getStringExtra(ARG_REDIRECT_HOST)!!
-        useWebView = intent.getBooleanExtra(ARG_USE_WEBVIEW, false)
 
-        val browserAvailable = BrowserUtils.isPlainBrowserAvailable(this)
-                || BrowserUtils.isCustomTabsBrowserAvailable(this)
-        useWebView = useWebView || !browserAvailable
+        type = intent.getStringExtra(ARG_ACTIVITY_TYPE)
+            ?.let { s -> ActivityType.valueOf(s.uppercase()) }
+            // If activity type wasn't specified directly, fallback
+            // to the "deprecated" method, i.e. via [ARG_USE_WEBVIEW]
+            // intent parameter.
+            ?: if (BrowserUtils.isCustomTabsBrowserAvailable(this)) ActivityType.CUSTOM_TABS else ActivityType.WEB_VIEW
+
+        orientationLock = intent.getStringExtra(ARG_ACTIVITY_ORIENTATION_LOCK)
+            ?.let { s -> ActivityOrientationLock.valueOf(s.uppercase()) }
+
+        trustedWebActivityBackgroundColor = intent
+            .takeIf { intent ->
+                intent.hasExtra(ARG_TRUSTED_WEB_ACTIVITY_BACKGROUND_COLOR)
+            }
+            ?.getIntExtra(ARG_TRUSTED_WEB_ACTIVITY_BACKGROUND_COLOR, ContextCompat.getColor(
+                this, R.color.xsolla_payments_twa_background
+            ))
+
+        trustedWebActivityImageRef = intent.getParcelableExtra(ARG_TRUSTED_WEB_ACTIVITY_IMAGE_REF)
     }
 
     override fun onResume() {
         super.onResume()
         if (isFinishing) return
         if (needStartBrowser) {
-            if(useWebView) {
+            if(isWebView()) {
                 setContentView(R.layout.xsolla_payments_activity_paystation)
                 webView = findViewById(R.id.webview)
                 childWebView = findViewById(R.id.childWebView)
@@ -89,14 +151,32 @@ internal class ActivityPayStation : AppCompatActivity() {
                 webView.loadUrl(url)
             } else {
                 if (BrowserUtils.isCustomTabsBrowserAvailable(this)) {
-                    BrowserUtils.launchCustomTabsBrowser(this, url)
+                    if (isTrustedWebActivity()) {
+                        TrustedWebActivity.launch(TrustedWebActivity.Request(
+                            context = this, url = url,
+                            splashScreen = TrustedWebActivity.SplashScreen(
+                                imageRef = trustedWebActivityImageRef,
+                                imageScaleType = ImageView.ScaleType.FIT_CENTER,
+                                fadeOutTimeInMillis = TRUSTED_WEB_ACTIVITY_FADE_OUT_TIME_IN_MILLIS,
+                                backgroundColor = trustedWebActivityBackgroundColor
+                            ),
+                            screenOrientation = orientationLock?.let {
+                                screenOrientationLock -> when (screenOrientationLock) {
+                                    ActivityOrientationLock.PORTRAIT -> ScreenOrientation.PORTRAIT
+                                    ActivityOrientationLock.LANDSCAPE -> ScreenOrientation.LANDSCAPE
+                                }
+                            }
+                        ))
+                    } else {
+                        BrowserUtils.launchCustomTabsBrowser(this, url)
+                    }
                 } else {
                     BrowserUtils.launchPlainBrowser(this, url)
                 }
             }
             needStartBrowser = false
         } else {
-            if (!useWebView) {
+            if (!isWebView()) {
                 finishWithResult(
                     Activity.RESULT_CANCELED,
                     XPayments.Result(XPayments.Status.CANCELLED, null)
@@ -113,7 +193,7 @@ internal class ActivityPayStation : AppCompatActivity() {
             return
         }
         val invoiceId = uri.getQueryParameter("invoice_id")
-        var statusParam = uri.getQueryParameter("status")
+        val statusParam = uri.getQueryParameter("status")
 
         var status = XPayments.Status.UNKNOWN
         if (statusParam != null && statusParam == "done") {
@@ -148,6 +228,7 @@ internal class ActivityPayStation : AppCompatActivity() {
             }
         }
         webView.webViewClient = object : WebViewClient() {
+            @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(webView: WebView, url: String): Boolean {
                 val urlLower = url.lowercase()
 
@@ -180,7 +261,7 @@ internal class ActivityPayStation : AppCompatActivity() {
                     && uri.host == redirectHost
                 ) {
                     val invoiceId = uri.getQueryParameter("invoice_id")
-                    var statusParam = uri.getQueryParameter("status")
+                    val statusParam = uri.getQueryParameter("status")
 
                     var status = XPayments.Status.UNKNOWN
                     if (statusParam != null && statusParam == "done") {
@@ -231,6 +312,7 @@ internal class ActivityPayStation : AppCompatActivity() {
             }
         }
         childWebView.webViewClient = object : WebViewClient() {
+            @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 val urlLower = url.lowercase()
 
@@ -273,5 +355,20 @@ internal class ActivityPayStation : AppCompatActivity() {
         )
         val dm = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         dm.enqueue(request)
+    }
+
+    private fun isWebView() : Boolean = type == ActivityType.WEB_VIEW
+    private fun isTrustedWebActivity() : Boolean = type == ActivityType.TRUSTED_WEB_ACTIVITY
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        TrustedWebActivity.notifyOnDestroy()
+    }
+
+    override fun onEnterAnimationComplete() {
+        super.onEnterAnimationComplete()
+
+        TrustedWebActivity.notifyOnEnterAnimationComplete()
     }
 }
