@@ -66,7 +66,7 @@ data class UiMobileProjectSettingHeader(
     @SerializedName("close_button")
     val closeButton: Boolean,
     @SerializedName("close_button_icon")
-    val closeButtonIcon: String? = null
+    val closeButtonIcon: String? = "cross"
 )
 
 data class DesktopSettings(
@@ -86,7 +86,7 @@ data class UiDesktopProjectSettingHeader(
     @SerializedName("close_button")
     val closeButton: Boolean,
     @SerializedName("close_button_icon")
-    val closeButtonIcon: String? = null
+    val closeButtonIcon: String? = "cross"
 )
 
 class CustomParameters private constructor(private val parameters: Map<String, Value>) {
