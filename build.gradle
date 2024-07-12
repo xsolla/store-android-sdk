@@ -3,7 +3,7 @@
 buildscript {
 
     ext.payments_sdk_version_name = '1.4.0'
-    ext.store_sdk_version_name = '2.5.7'
+    ext.store_sdk_version_name = '2.5.8'
     ext.inventory_sdk_version_name = '2.0.4'
     ext.login_sdk_version_name = '6.0.8'
 
