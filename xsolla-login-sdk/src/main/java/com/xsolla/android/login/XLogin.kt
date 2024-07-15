@@ -1749,13 +1749,18 @@ class XLogin private constructor(
 
         @JvmStatic
         fun getXsollaWidgetUrl(locale: String?): String {
-
-            var stringLocaleParameter = ""
+            var resultUrl = ""
+            resultUrl += "https://login-widget.xsolla.com/latest/?projectId=" + getInstance().projectId
+            resultUrl += "&client_id=" + getInstance().oauthClientId
+            resultUrl += "&response_type=code"
+            resultUrl += "&state=" + UUID.randomUUID().toString()
+            resultUrl += "&redirect_uri=" + getInstance().callbackUrl
+            resultUrl += "&scope=offline"
             if(locale != null && locale!!.isNotEmpty())
             {
-                stringLocaleParameter = "&locale=" + locale!!
+                resultUrl = "&locale=" + locale!!
             }
-            return "https://login-widget.xsolla.com/latest/?projectId=" + getInstance().projectId + "&login_url=" + getInstance().callbackUrl + stringLocaleParameter
+            return resultUrl
         }
 
     }

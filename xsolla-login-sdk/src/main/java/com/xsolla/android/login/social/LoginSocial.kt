@@ -686,11 +686,27 @@ internal object LoginSocial {
         callback: FinishXsollaWidgetAuthCallback?
     ) {
         if (activityResultRequestCode == RC_XSOLLA_WIDGET_AUTH_WEBVIEW) {
-            val (status, token, _, error) = fromResultIntent(activityResultData)
+            val (status, _, code, error) = fromResultIntent(activityResultData)
             when (status) {
                 ActivityAuth.Status.SUCCESS -> {
-                    Utils.saveToken(token!!)
-                    callback?.onAuthSuccess()
+                    runIo {
+                        runBlocking {
+                            try {
+                                Utils.saveTokensByCode(code!!)
+                                runCallback {
+                                    callback?.onAuthSuccess()
+                                }
+                            } catch (e: Exception) {
+                                runCallback {
+                                    if (e is LoginApiException) {
+                                        callback?.onAuthError(e.cause, e.error.description)
+                                    } else {
+                                        callback?.onAuthError(e, null)
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
                 ActivityAuth.Status.CANCELLED -> callback?.onAuthCancelled()
                 ActivityAuth.Status.ERROR -> callback?.onAuthError(null, error!!)
