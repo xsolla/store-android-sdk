@@ -246,6 +246,11 @@ internal object LoginSocial {
         activityResultData: Intent?,
         callback: FinishSocialCallback
     ) {
+        val listOfApprovedRequestCodes = listOf(RC_AUTH_WEBVIEW, RC_AUTH_WECHAT, RC_AUTH_GOOGLE)
+        if (!listOfApprovedRequestCodes.contains(activityResultRequestCode)) {
+            return
+        }
+
         if (activityResultRequestCode == RC_AUTH_WEBVIEW) {
             val (status, _, code, error) = fromResultIntent(activityResultData)
             when (status) {
