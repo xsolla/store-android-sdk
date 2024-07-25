@@ -1,4 +1,13 @@
 # Changelog
+## [2.5.9] - Store SDK - 2024-07-25
+### Changed
+- `PaymentOptions` data. 
+    - Added `country` parameter, that defines the Pay Station language and list of payments methods
+
+## [6.0.9] - Login SDK - 2024-07-25 
+### Changed
+- Authentication with Xsolla widget now supports OAuth2 and access token refresh logic.
+
 ## [2.5.7] - Store SDK - 2024-07-11
 ### Changed
 - Payments requests (`UiProjectSetting` class). Added following parameters:
