@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class PaymentOptions(
     val currency: String? = null,
     val locale: String? = null,
+    val country: String? = null,
     @SerializedName("is_sandbox")
     val isSandbox: Boolean = true,
     val settings: PaymentProjectSettings? = PaymentProjectSettings(),
