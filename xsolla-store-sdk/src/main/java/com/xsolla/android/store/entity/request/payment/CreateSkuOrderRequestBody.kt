@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName
 internal class CreateSkuOrderRequestBody private constructor(
     val currency: String? = null,
     val locale: String? = null,
+    val country: String? = null,
     val sandbox: Boolean,
     val quantity: Long,
     val settings: PaymentProjectSettings?,
@@ -15,6 +16,7 @@ internal class CreateSkuOrderRequestBody private constructor(
     constructor(quantity: Long, options: PaymentOptions?) : this(
         options?.currency,
         options?.locale,
+        options?.country,
         options?.isSandbox ?: true,
         quantity,
         options?.settings,
