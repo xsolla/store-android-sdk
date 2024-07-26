@@ -1,3 +1,6 @@
+> [!TIP]
+> Integrate [Xsolla Mobile SDK](https://developers.xsolla.com/sdk/mobile/) to enable In-App Payments across mobile platforms within and outside of stores in a platform-compliant way, powered by Pay Station with over 700 payment methods.
+
 The [Sample App](https://github.com/xsolla/store-android-sdk/tree/master/app) represents one of the possible implementations of the login system, inventory, and in-game store based on Xsolla products ([Login](https://developers.xsolla.com/doc/login/), [In-Game Store](https://developers.xsolla.com/doc/in-game-store/), and [Pay Station](https://developers.xsolla.com/doc/pay-station/)).
 
 You can use the demo project in two ways:
