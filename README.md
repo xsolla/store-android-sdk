@@ -1,9 +1,8 @@
+> [!TIP]
+> Integrate [Xsolla Mobile SDK](https://developers.xsolla.com/sdk/mobile/) to enable In-App Payments across mobile platforms within and outside of stores in a platform-compliant way, powered by Pay Station with over 700 payment methods.
+
 # Enterprise-level Xsolla SDK for Android
 
-Interested in new ways to extend the reach of payment options while staying compliant with platform requirements? Learn more about [Xsolla Mobile SDK](https://developers.xsolla.com/sdk/mobile/) that brings the power of Xsolla Pay Station onto mobile stores!
-\
-\
-\
 Xsolla SDK for Android is a ready-to-use library for applications and games that allows you to easily embed [Xsolla services](https://developers.xsolla.com/#get_started).
 
 ![android sdk image](https://i.imgur.com/NshUN8S.png "android sdk image")

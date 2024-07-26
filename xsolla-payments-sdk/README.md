@@ -1,3 +1,6 @@
+> [!TIP]
+> Integrate [Xsolla Mobile SDK](https://developers.xsolla.com/sdk/mobile/) to enable In-App Payments across mobile platforms within and outside of stores in a platform-compliant way, powered by Pay Station with over 700 payment methods.
+
 The Payments library is used to integrate applications based on Android with [Xsolla Pay Station](https://developers.xsolla.com/doc/pay-station/).
 
 Main features:

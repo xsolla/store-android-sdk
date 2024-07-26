@@ -1,3 +1,6 @@
+> [!TIP]
+> Integrate [Xsolla Mobile SDK](https://developers.xsolla.com/sdk/mobile/) to enable In-App Payments across mobile platforms within and outside of stores in a platform-compliant way, powered by Pay Station with over 700 payment methods.
+
 To get started with the basic SDK features, try sample scripts. Samples cover the following user scenarios:
 * Login via username/email and password
 * Social login

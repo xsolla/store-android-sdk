@@ -1,3 +1,6 @@
+> [!TIP]
+> Integrate [Xsolla Mobile SDK](https://developers.xsolla.com/sdk/mobile/) to enable In-App Payments across mobile platforms within and outside of stores in a platform-compliant way, powered by Pay Station with over 700 payment methods.
+
 The Inventory library is used to integrate applications based on Android with [In-Game Store](https://developers.xsolla.com/doc/in-game-store/features/player-inventory/) for managing:
 
 * user inventory
