@@ -5,31 +5,108 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Parcelable
+import android.util.Log
 import androidx.core.os.bundleOf
+import com.xsolla.android.payments.api.PaymentsApi
 import com.xsolla.android.payments.caching.PayStationCache
+import com.xsolla.android.payments.callbacks.PayStationClosedCallback
+import com.xsolla.android.payments.callbacks.StatusReceivedCallback
 import com.xsolla.android.payments.data.AccessToken
+import com.xsolla.android.payments.tracker.StatusTracker
 import com.xsolla.android.payments.ui.ActivityOrientationLock
 import com.xsolla.android.payments.ui.ActivityPayStation
 import com.xsolla.android.payments.ui.ActivityType
 import com.xsolla.android.payments.ui.utils.TrustedWebActivityImageRef
 import com.xsolla.android.payments.util.AnalyticsUtils
 import kotlinx.parcelize.Parcelize
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * Entry point for Xsolla Payments SDK
  */
-class XPayments {
+class XPayments private constructor(private val statusTracker: StatusTracker) {
+
+    private var paymentInfoByToken =  mutableMapOf<String, PaymentInfo>()
 
     companion object {
+        private const val TAG: String = "XPayments"
+        private var instance: XPayments? = null
+        private fun getInstance(isSandbox: Boolean? = null): XPayments {
+            if (instance == null) {
+                val httpClient = OkHttpClient().newBuilder()
+
+                val isSandboxLocal = isSandbox?:false
+                val baseUrl = "https://" + if (isSandboxLocal) SERVER_SANDBOX else SERVER_PROD
+
+                val retrofit = Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .client(httpClient.build())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+
+                val paymentsApi = retrofit.create(PaymentsApi::class.java)
+                val statusTracker = StatusTracker(paymentsApi)
+                instance = XPayments(statusTracker)
+            }
+            return instance!!
+        }
         internal const val SERVER_PROD = "secure.xsolla.com"
         internal const val SERVER_SANDBOX = "sandbox-secure.xsolla.com"
-
         /**
          * Create builder for the Pay Station intent
          */
         @JvmStatic
         fun createIntentBuilder(context: Context) = IntentBuilder(context)
 
+        /**
+         * Payment activity closed
+         */
+        @JvmStatic
+        internal fun payStationWasClosed(
+            accessToken: String,
+            isManually: Boolean
+        ) {
+            if(!getInstance().paymentInfoByToken.containsKey(accessToken)) {
+                Log.d(TAG, "Can't find token in callbacks map")
+                return
+            }
+
+            val callbacksObj = getInstance().paymentInfoByToken[accessToken]
+
+            callbacksObj?.let { obj ->
+                obj.payStationClosedCallback?.onSuccess(isManually)
+                obj.statusReceivedCallback?.let { callback ->
+                    if(obj.startTrackingImmediately) {
+                        getInstance().statusTracker?.restartTracking(accessToken, 3)
+                    } else {
+                        getStatus(accessToken, obj.isSandbox, callback, 3)
+                    }
+                }
+            }
+
+            getInstance().paymentInfoByToken.remove(accessToken)
+        }
+
+        //TEXTREVIEW
+        /**
+         * Subscribes to order status updates.
+         *
+         * @param token  Xsolla payments token.
+         * @param isSandbox  IsSandbox.
+         * @param callback Status callback.
+         * @see [Payments API Reference](https://developers.xsolla.com/)
+         */
+        @JvmStatic
+        fun getStatus(
+            token: String,
+            isSandbox: Boolean,
+            callback: StatusReceivedCallback,
+            requestsCount: Int = StatusTracker.MAX_REQUESTS_COUNT
+        ) {
+            getInstance(isSandbox).statusTracker.addToTracking(callback, token, requestsCount)
+        }
     }
 
     class IntentBuilder(private val context: Context) {
@@ -47,6 +124,10 @@ class XPayments {
         private var activityOrientationLock: ActivityOrientationLock? = null
 
         private var trustedWebActivityImageRef: TrustedWebActivityImageRef? = null
+
+        private var payStationClosedCallback: PayStationClosedCallback? = null
+        private var statusReceivedCallback: StatusReceivedCallback? = null
+        private var startTrackingImmediately: Boolean? = true
 
         /**
          * Set a Pay Station access token
@@ -112,6 +193,24 @@ class XPayments {
             apply { this.trustedWebActivityImageRef = ref }
 
         /**
+         * PayStationClosedCallback
+         */
+        fun setPayStationClosedCallback(callback: PayStationClosedCallback?) =
+            apply { this.payStationClosedCallback = callback }
+
+        /**
+         * StatusReceivedCallback
+         */
+        fun setStatusReceivedCallback(callback: StatusReceivedCallback?) =
+            apply { this.statusReceivedCallback = callback }
+
+        /**
+         * startTrackingImmediately Starts order tracking on pay station opening. Otherwise tracking will start on pay station closing. Works only if statusReceivedCallback isn't null.
+         */
+        fun setStartTrackingImmediately(value: Boolean?) =
+            apply { this.startTrackingImmediately = value }
+
+        /**
          * Build the intent
          */
         fun build(): Intent {
@@ -119,8 +218,11 @@ class XPayments {
             val bundle = bundleOf(
                 ActivityPayStation.ARG_URL to url,
                 ActivityPayStation.ARG_REDIRECT_SCHEME to redirectScheme,
-                ActivityPayStation.ARG_REDIRECT_HOST to redirectHost,
+                ActivityPayStation.ARG_REDIRECT_HOST to redirectHost
             )
+            accessToken?.let { token ->
+                bundle.putString(ActivityPayStation.ARG_PAYMENT_TOKEN, token.token)
+            }
 
             activityType?.let { activityType -> bundle.putString(
                 ActivityPayStation.ARG_ACTIVITY_TYPE, activityType.toString()
@@ -138,6 +240,21 @@ class XPayments {
             trustedWebActivityImageRef?.let { ref -> bundle.putParcelable(
                 ActivityPayStation.ARG_TRUSTED_WEB_ACTIVITY_IMAGE_REF, ref
             )}
+
+            accessToken?.let { aToken ->
+                statusReceivedCallback?.let { callback ->
+                    if (startTrackingImmediately == true) {
+                        getStatus(aToken.token, isSandbox, callback, 999)
+                    }
+                }
+                if(statusReceivedCallback != null || payStationClosedCallback != null) {
+                    if(getInstance(isSandbox).paymentInfoByToken.containsKey(aToken.token)) {
+                        Log.d(TAG, "Pay Station with this token has already opened")
+                    } else {
+                        getInstance(isSandbox).paymentInfoByToken[aToken.token] = PaymentInfo(payStationClosedCallback, statusReceivedCallback, startTrackingImmediately!!, isSandbox)
+                    }
+                }
+            }
 
             return PayStationCache.getInstance(context).getCachedIntent().putExtras(bundle)
         }
@@ -221,5 +338,11 @@ class XPayments {
         V3,
         V4
     }
+
+    internal data class PaymentInfo(
+        val payStationClosedCallback: PayStationClosedCallback?,
+        val statusReceivedCallback: StatusReceivedCallback?,
+        val startTrackingImmediately: Boolean,
+        val isSandbox: Boolean)
 
 }

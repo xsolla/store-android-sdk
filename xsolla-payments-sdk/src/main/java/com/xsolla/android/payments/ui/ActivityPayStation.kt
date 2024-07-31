@@ -38,6 +38,7 @@ internal class ActivityPayStation : AppCompatActivity() {
         const val ARG_URL = "url"
         const val ARG_REDIRECT_SCHEME = "redirect_scheme"
         const val ARG_REDIRECT_HOST = "redirect_host"
+        const val ARG_PAYMENT_TOKEN = "payment_token"
 
         /**
          * An intent parameter used to specify activity [ActivityType].
@@ -90,6 +91,7 @@ internal class ActivityPayStation : AppCompatActivity() {
 
     private lateinit var redirectScheme: String
     private lateinit var redirectHost: String
+    private var paymentToken: String? = null
     private lateinit var type: ActivityType
     private var orientationLock: ActivityOrientationLock? = null
     private var trustedWebActivityBackgroundColor: Int? = null
@@ -116,6 +118,10 @@ internal class ActivityPayStation : AppCompatActivity() {
 
         redirectScheme = intent.getStringExtra(ARG_REDIRECT_SCHEME)!!
         redirectHost = intent.getStringExtra(ARG_REDIRECT_HOST)!!
+        paymentToken = null
+        intent.getStringExtra(ARG_PAYMENT_TOKEN)?.let { token ->
+            paymentToken = token
+        }
 
         type = intent.getStringExtra(ARG_ACTIVITY_TYPE)
             ?.let { s -> ActivityType.valueOf(s.uppercase()) }
@@ -179,7 +185,8 @@ internal class ActivityPayStation : AppCompatActivity() {
             if (!isWebView()) {
                 finishWithResult(
                     Activity.RESULT_CANCELED,
-                    XPayments.Result(XPayments.Status.CANCELLED, null)
+                    XPayments.Result(XPayments.Status.CANCELLED, null),
+                    true
                 )
             }
         }
@@ -202,7 +209,8 @@ internal class ActivityPayStation : AppCompatActivity() {
 
         finishWithResult(
             Activity.RESULT_OK,
-            XPayments.Result(status, invoiceId)
+            XPayments.Result(status, invoiceId),
+            status != XPayments.Status.COMPLETED
         )
     }
 
@@ -272,7 +280,8 @@ internal class ActivityPayStation : AppCompatActivity() {
                     webView.visibility = View.INVISIBLE
                     finishWithResult(
                         Activity.RESULT_OK,
-                        XPayments.Result(status, invoiceId)
+                        XPayments.Result(status, invoiceId),
+                        status != XPayments.Status.COMPLETED
                     )
                 }
                 super.doUpdateVisitedHistory(view, url, isReload)
@@ -337,10 +346,13 @@ internal class ActivityPayStation : AppCompatActivity() {
         }
     }
 
-    private fun finishWithResult(resultCode: Int, resultData: XPayments.Result) {
+    private fun finishWithResult(resultCode: Int, resultData: XPayments.Result, isManually: Boolean) {
         val intent = Intent()
         intent.putExtra(RESULT, resultData)
         setResult(resultCode, intent)
+        paymentToken?.let { token ->
+            XPayments.payStationWasClosed(token, isManually)
+        }
         finish()
     }
 
@@ -364,6 +376,17 @@ internal class ActivityPayStation : AppCompatActivity() {
         super.onDestroy()
 
         TrustedWebActivity.notifyOnDestroy()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if(isWebView()) {
+            finishWithResult(
+                Activity.RESULT_CANCELED,
+                XPayments.Result(XPayments.Status.CANCELLED, null),
+                true
+            )
+        }
     }
 
     override fun onEnterAnimationComplete() {
