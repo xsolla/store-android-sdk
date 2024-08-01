@@ -60,9 +60,6 @@ class XPayments private constructor(private val statusTracker: StatusTracker) {
         @JvmStatic
         fun createIntentBuilder(context: Context) = IntentBuilder(context)
 
-        /**
-         * Payment activity closed
-         */
         @JvmStatic
         internal fun payStationWasClosed(
             accessToken: String,
@@ -89,14 +86,15 @@ class XPayments private constructor(private val statusTracker: StatusTracker) {
             getInstance().paymentInfoByToken.remove(accessToken)
         }
 
-        //TEXTREVIEW
         /**
-         * Subscribes to order status updates.
+         * Subscribes to order status updates. After subscription, а periodic order status poll is used —
+         * a simple HTTP request that receives the order status. The delay between requests is 3 seconds.
          *
          * @param token  Xsolla payments token.
-         * @param isSandbox  IsSandbox.
+         * @param isSandbox  Whether the order is processed in sandbox mode.
          * @param callback Status callback.
-         * @see [Payments API Reference](https://developers.xsolla.com/)
+         * @param requestsCount Number of times the order status was requested.
+         *
          */
         @JvmStatic
         fun getStatus(
@@ -193,19 +191,20 @@ class XPayments private constructor(private val statusTracker: StatusTracker) {
             apply { this.trustedWebActivityImageRef = ref }
 
         /**
-         * PayStationClosedCallback
+         * Sets the function to call after Pay Station closes.
          */
         fun setPayStationClosedCallback(callback: PayStationClosedCallback?) =
             apply { this.payStationClosedCallback = callback }
 
         /**
-         * StatusReceivedCallback
+         * Sets the function to call after order status received.
          */
         fun setStatusReceivedCallback(callback: StatusReceivedCallback?) =
             apply { this.statusReceivedCallback = callback }
 
         /**
-         * startTrackingImmediately Starts order tracking on pay station opening. Otherwise tracking will start on pay station closing. Works only if statusReceivedCallback isn't null.
+         * Sets the start of tracking orders to the opening of the Pay Station event.
+         * Otherwise, tracking will begin when Pay Station closes. Works only if `statusReceivedCallback` is not `null`.
          */
         fun setStartTrackingImmediately(value: Boolean?) =
             apply { this.startTrackingImmediately = value }

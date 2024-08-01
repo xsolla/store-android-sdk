@@ -9,6 +9,7 @@ import com.xsolla.android.store.entity.response.order.OrderResponse
 import com.xsolla.android.store.entity.response.order.WsOrderResponse
 import io.github.centrifugal.centrifuge.*
 import io.github.centrifugal.centrifuge.EventListener
+import okhttp3.internal.wait
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -97,7 +98,6 @@ internal class OrdersTracker(
     ) {
         val delayTimer = Timer()
         lateinit var singleRunTask: Runnable
-
         singleRunTask = Runnable {
             storeApi.getOrder(projectId, orderId)
                 .enqueue(object : Callback<OrderResponse> {
