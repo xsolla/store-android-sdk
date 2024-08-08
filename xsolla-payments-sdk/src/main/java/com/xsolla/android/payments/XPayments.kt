@@ -12,7 +12,9 @@ import com.xsolla.android.payments.caching.PayStationCache
 import com.xsolla.android.payments.callbacks.PayStationClosedCallback
 import com.xsolla.android.payments.callbacks.StatusReceivedCallback
 import com.xsolla.android.payments.data.AccessToken
+import com.xsolla.android.payments.entity.response.InvoicesDataResponse
 import com.xsolla.android.payments.tracker.StatusTracker
+import com.xsolla.android.payments.tracker.TrackingCompletedCallback
 import com.xsolla.android.payments.ui.ActivityOrientationLock
 import com.xsolla.android.payments.ui.ActivityPayStation
 import com.xsolla.android.payments.ui.ActivityType
@@ -76,7 +78,9 @@ class XPayments private constructor(private val statusTracker: StatusTracker) {
                 obj.payStationClosedCallback?.onSuccess(isManually)
                 obj.statusReceivedCallback?.let { callback ->
                     if(obj.startTrackingImmediately) {
-                        getInstance().statusTracker?.restartTracking(accessToken, 3)
+                        if(!obj.isStatusReceived) {
+                            getInstance().statusTracker?.restartTracking(accessToken, 3)
+                        }
                     } else {
                         getStatus(accessToken, obj.isSandbox, callback, 3)
                     }
@@ -103,7 +107,13 @@ class XPayments private constructor(private val statusTracker: StatusTracker) {
             callback: StatusReceivedCallback,
             requestsCount: Int = StatusTracker.MAX_REQUESTS_COUNT
         ) {
-            getInstance(isSandbox).statusTracker.addToTracking(callback, token, requestsCount)
+            getInstance(isSandbox).statusTracker.addToTracking(object : StatusReceivedCallback {
+                override fun onSuccess(data: InvoicesDataResponse) {
+                    callback.onSuccess(data)
+                    getInstance(isSandbox).paymentInfoByToken[token]?.isStatusReceived = true
+                }
+
+            }, token, requestsCount)
         }
     }
 
@@ -342,6 +352,7 @@ class XPayments private constructor(private val statusTracker: StatusTracker) {
         val payStationClosedCallback: PayStationClosedCallback?,
         val statusReceivedCallback: StatusReceivedCallback?,
         val startTrackingImmediately: Boolean,
-        val isSandbox: Boolean)
+        val isSandbox: Boolean,
+        var isStatusReceived: Boolean = false)
 
 }
