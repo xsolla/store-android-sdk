@@ -24,10 +24,10 @@ data class PaymentProjectSettings(
     @SerializedName("redirect_policy")
     val redirectPolicy: SettingsRedirectPolicy? = null,
     @SerializedName("external_id")
-    val externalId: String? = null
-){
-    private val sdk: SDKTokenSettings = SDKTokenSettings()
-}
+    val externalId: String? = null,
+    @SerializedName("sdk")
+    val sdk: SDKTokenSettings? = SDKTokenSettings()
+)
 
 data class SettingsRedirectPolicy(
     @SerializedName("redirect_conditions")
@@ -93,8 +93,11 @@ data class UiDesktopProjectSettingHeader(
 )
 
 data class SDKTokenSettings(
-    val platform: String = "android"
-)
+    @SerializedName("external_transaction_token")
+    val externalTransactionToken: String? = null
+) {
+    private val platform: String = "android"
+}
 
 class CustomParameters private constructor(private val parameters: Map<String, Value>) {
     class Builder {
