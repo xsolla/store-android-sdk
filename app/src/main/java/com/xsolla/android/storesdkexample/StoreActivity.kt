@@ -189,6 +189,14 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.root.closeDrawers()
+            if (destination.id == R.id.nav_vi) {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    callActivateUI()
+                }, 100)
+            }
+        }
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_vi,
@@ -213,38 +221,27 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
         findViewById<View>(R.id.itemAccount).setOnClickListener {
             navController.navigate(R.id.nav_profile)
-            binding.root.closeDrawers()
         }
         findViewById<View>(R.id.itemInventory).setOnClickListener {
             navController.navigate(R.id.nav_inventory)
-            binding.root.closeDrawers()
         }
         findViewById<View>(R.id.itemAttributes).setOnClickListener {
             navController.navigate(R.id.nav_attributes)
-            binding.root.closeDrawers()
         }
         findViewById<View>(R.id.itemFriends).setOnClickListener {
             navController.navigate(R.id.nav_friends)
-            binding.root.closeDrawers()
         }
         findViewById<View>(R.id.itemVirtualItems).setOnClickListener {
             navController.navigate(R.id.nav_vi)
-            binding.root.closeDrawers()
-            Handler(Looper.getMainLooper()).postDelayed({
-                callActivateUI()
-            }, 100)
         }
         findViewById<View>(R.id.itemVirtualCurrency).setOnClickListener {
             navController.navigate(R.id.nav_vc)
-            binding.root.closeDrawers()
         }
         findViewById<View>(R.id.itemCoupon).setOnClickListener {
             navController.navigate(R.id.nav_redeem_coupon)
-            binding.root.closeDrawers()
         }
         findViewById<View>(R.id.itemWebStore).setOnClickListener {
             openWebStore()
-            binding.root.closeDrawers()
         }
         findViewById<View>(R.id.itemWebStore).isVisible =
             !StoreUtils.isAppInstalledFromGooglePlay(this)
