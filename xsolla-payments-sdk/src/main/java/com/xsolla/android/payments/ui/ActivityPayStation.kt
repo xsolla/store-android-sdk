@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DownloadManager
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -81,6 +82,10 @@ internal class ActivityPayStation : AppCompatActivity() {
          * splash screen to fade-out into the actual PayStation content.
          */
         private const val TRUSTED_WEB_ACTIVITY_FADE_OUT_TIME_IN_MILLIS = 250
+
+        fun checkAvailability(context: Context) =
+            BrowserUtils.isPlainBrowserAvailable(context)
+                    || BrowserUtils.isCustomTabsBrowserAvailable(context)
     }
 
     private lateinit var url: String
@@ -123,6 +128,11 @@ internal class ActivityPayStation : AppCompatActivity() {
             // to the "deprecated" method, i.e. via [ARG_USE_WEBVIEW]
             // intent parameter.
             ?: if (BrowserUtils.isCustomTabsBrowserAvailable(this)) ActivityType.CUSTOM_TABS else ActivityType.WEB_VIEW
+
+
+        if(!checkAvailability(this)) {
+            type = ActivityType.WEB_VIEW
+        }
 
         orientationLock = intent.getStringExtra(ARG_ACTIVITY_ORIENTATION_LOCK)
             ?.let { s -> ActivityOrientationLock.valueOf(s.uppercase()) }
