@@ -25,9 +25,10 @@ data class PaymentProjectSettings(
     val redirectPolicy: SettingsRedirectPolicy? = null,
     @SerializedName("external_id")
     val externalId: String? = null,
-    @SerializedName("sdk")
-    val sdk: SDKTokenSettings? = SDKTokenSettings()
-)
+
+) {
+    internal val sdk: SDKTokenSettings? = SDKTokenSettings()
+}
 
 data class SettingsRedirectPolicy(
     @SerializedName("redirect_conditions")
@@ -92,9 +93,9 @@ data class UiDesktopProjectSettingHeader(
     val closeButtonIcon: String? = "cross"
 )
 
-data class SDKTokenSettings(
+internal data class SDKTokenSettings(
     @SerializedName("external_transaction_token")
-    val externalTransactionToken: String? = null
+    var externalTransactionToken: String? = null
 ) {
     private val platform: String = "android"
 }
