@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 data class InvoicesDataResponse(
     @SerializedName("invoices_data")
     val invoicesData: List<InvoiceData> = emptyList(),
-    val api: Api
 ) {
     @Serializable
     data class InvoiceData(
@@ -18,18 +17,8 @@ data class InvoicesDataResponse(
         val orderId: Long ? = null
     )
 
-    data class InvoicesErrorResponse(
-        val errors: List<Error> = emptyList(),
-        val api: Api
-    )
-
     data class Error(
         val message: String,
-    )
-
-    @Serializable
-    data class Api(
-        val ver: String
     )
 
     @Serializable
