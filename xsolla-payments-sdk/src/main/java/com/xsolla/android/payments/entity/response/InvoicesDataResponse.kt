@@ -68,7 +68,7 @@ data class InvoicesDataResponse(
         PARTIALLY_REFUNDED;
 
         fun isFinishedStatus(): Boolean {
-            return  listOf(DONE, CANCELED, ERROR, DENIED, LOST).contains(this)
+            return  listOf(DONE, ERROR, DENIED, LOST).contains(this)
         }
     }
 }
