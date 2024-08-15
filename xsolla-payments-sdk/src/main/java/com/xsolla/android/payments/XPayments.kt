@@ -81,7 +81,7 @@ class XPayments private constructor(private val statusTracker: StatusTracker) {
                             getInstance().statusTracker?.restartTracking(accessToken, 3)
                         }
                     } else {
-                        getStatus(accessToken, obj.isSandbox, callback, 3)
+                        addToTracking(accessToken, obj.isSandbox, callback, 3)
                     }
                 }
             }
@@ -89,18 +89,8 @@ class XPayments private constructor(private val statusTracker: StatusTracker) {
             getInstance().paymentInfoByToken.remove(accessToken)
         }
 
-        /**
-         * Subscribes to order status updates. After subscription, а periodic order status poll is used —
-         * a simple HTTP request that receives the order status. The delay between requests is 3 seconds.
-         *
-         * @param token  Xsolla payments token.
-         * @param isSandbox  Whether the order is processed in sandbox mode.
-         * @param callback Status callback.
-         * @param requestsCount Number of times the order status was requested.
-         *
-         */
         @JvmStatic
-        fun getStatus(
+        private fun addToTracking(
             token: String,
             isSandbox: Boolean,
             callback: StatusReceivedCallback,
@@ -258,7 +248,7 @@ class XPayments private constructor(private val statusTracker: StatusTracker) {
             accessToken?.let { aToken ->
                 statusReceivedCallback?.let { callback ->
                     if (startTrackingImmediately == true) {
-                        getStatus(aToken.token, isSandbox, callback, StatusTracker.MAX_REQUESTS_COUNT)
+                        addToTracking(aToken.token, isSandbox, callback, StatusTracker.MAX_REQUESTS_COUNT)
                     }
                 }
                 if(statusReceivedCallback != null || payStationClosedCallback != null) {
