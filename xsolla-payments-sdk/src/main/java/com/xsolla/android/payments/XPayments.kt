@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.core.os.bundleOf
 import com.xsolla.android.payments.api.PaymentsApi
 import com.xsolla.android.payments.caching.PayStationCache
+import com.xsolla.android.payments.callbacks.GetStatusCallback
 import com.xsolla.android.payments.callbacks.PayStationClosedCallback
 import com.xsolla.android.payments.callbacks.StatusReceivedCallback
 import com.xsolla.android.payments.data.AccessToken
@@ -21,13 +22,16 @@ import com.xsolla.android.payments.ui.utils.TrustedWebActivityImageRef
 import com.xsolla.android.payments.util.AnalyticsUtils
 import kotlinx.parcelize.Parcelize
 import okhttp3.OkHttpClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * Entry point for Xsolla Payments SDK
  */
-class XPayments private constructor(private val statusTracker: StatusTracker) {
+class XPayments private constructor(private val statusTracker: StatusTracker, internal val paymentsApi: PaymentsApi) {
 
     private var paymentInfoByToken =  mutableMapOf<String, PaymentInfo>()
 
@@ -48,8 +52,8 @@ class XPayments private constructor(private val statusTracker: StatusTracker) {
                     .build()
 
                 val paymentsApi = retrofit.create(PaymentsApi::class.java)
-                val statusTracker = StatusTracker(paymentsApi)
-                instance = XPayments(statusTracker)
+                val statusTracker = StatusTracker(isSandboxLocal)
+                instance = XPayments(statusTracker, paymentsApi)
             }
             return instance!!
         }
@@ -60,6 +64,38 @@ class XPayments private constructor(private val statusTracker: StatusTracker) {
          */
         @JvmStatic
         fun createIntentBuilder(context: Context) = IntentBuilder(context)
+
+
+
+        @JvmStatic
+        fun getStatus(
+            token: String,
+            isSandbox: Boolean,
+            callback: GetStatusCallback
+        ) {
+            getInstance(isSandbox).paymentsApi.getStatus(token)
+                .enqueue(object : Callback<InvoicesDataResponse> {
+                    override fun onResponse(
+                        call: Call<InvoicesDataResponse>,
+                        response: Response<InvoicesDataResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val responseBody = response.body()
+                            if (responseBody != null) {
+                                callback.onSuccess(responseBody)
+                            } else {
+                                callback.onError(null, "Empty response")
+                            }
+                        } else {
+                            callback.onNoDataFound()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<InvoicesDataResponse>, t: Throwable) {
+                        callback.onError(null, t.message)
+                    }
+                })
+        }
 
         @JvmStatic
         internal fun payStationWasClosed(

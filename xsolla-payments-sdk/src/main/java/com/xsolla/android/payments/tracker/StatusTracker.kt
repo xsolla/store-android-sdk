@@ -1,12 +1,11 @@
 package com.xsolla.android.payments.tracker
 
 import android.util.Log
-import com.xsolla.android.payments.api.PaymentsApi
 import com.xsolla.android.payments.callbacks.StatusReceivedCallback
 import com.xsolla.android.payments.entity.response.InvoicesDataResponse
 
 
-internal class StatusTracker(private val paymentsApi: PaymentsApi) {
+internal class StatusTracker(private val isSandbox: Boolean) {
 
     companion object {
         private const val TAG: String = "StatusTracker"
@@ -26,7 +25,7 @@ internal class StatusTracker(private val paymentsApi: PaymentsApi) {
             Log.d(TAG, "This payment token has already added to the tracker")
             return
         }
-        listeners[token] = InvoiceStatusListener(paymentsApi, token, object : TrackingCallback{
+        listeners[token] = InvoiceStatusListener(token, isSandbox, object : TrackingCallback{
             override fun onUniqueStatusReceived(data: InvoicesDataResponse, isFinishedStatus: Boolean) {
                 Log.d(TAG, "TrackingCallback. onUniqueStatusReceived")
                 callback.onSuccess(data)
