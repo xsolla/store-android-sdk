@@ -26,15 +26,17 @@ internal class StatusTracker(private val paymentsApi: PaymentsApi) {
             Log.d(TAG, "This payment token has already added to the tracker")
             return
         }
-        listeners[token] = InvoiceStatusListener(paymentsApi, token, object : TrackingCompletedCallback{
-            override fun onFinishedStatusReceived(data: InvoicesDataResponse) {
-                Log.d(TAG, "TrackingCompletedCallback. onSuccess")
-                listeners.remove(token)
+        listeners[token] = InvoiceStatusListener(paymentsApi, token, object : TrackingCallback{
+            override fun onUniqueStatusReceived(data: InvoicesDataResponse, isFinishedStatus: Boolean) {
+                Log.d(TAG, "TrackingCallback. onUniqueStatusReceived")
                 callback.onSuccess(data)
+                if(isFinishedStatus) {
+                    listeners.remove(token)
+                }
             }
 
             override fun onRunOutOfRequests() {
-                Log.d(TAG, "TrackingCompletedCallback. onRunOutOfRequests")
+                Log.d(TAG, "TrackingCallback. onRunOutOfRequests")
                 listeners.remove(token)
             }
 

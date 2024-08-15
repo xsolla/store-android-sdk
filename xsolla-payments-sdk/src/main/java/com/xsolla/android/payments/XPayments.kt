@@ -14,7 +14,6 @@ import com.xsolla.android.payments.callbacks.StatusReceivedCallback
 import com.xsolla.android.payments.data.AccessToken
 import com.xsolla.android.payments.entity.response.InvoicesDataResponse
 import com.xsolla.android.payments.tracker.StatusTracker
-import com.xsolla.android.payments.tracker.TrackingCompletedCallback
 import com.xsolla.android.payments.ui.ActivityOrientationLock
 import com.xsolla.android.payments.ui.ActivityPayStation
 import com.xsolla.android.payments.ui.ActivityType

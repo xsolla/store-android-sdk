@@ -11,17 +11,18 @@ import retrofit2.Response
 import java.util.Timer
 import java.util.TimerTask
 
-internal interface TrackingCompletedCallback {
-    fun onFinishedStatusReceived(data: InvoicesDataResponse)
+internal interface TrackingCallback {
+    fun onUniqueStatusReceived(data: InvoicesDataResponse, isFinishedStatus: Boolean)
     fun onRunOutOfRequests()
 }
 
-internal class InvoiceStatusListener(val paymentsApi: PaymentsApi, val token: String, val callback: TrackingCompletedCallback) {
+internal class InvoiceStatusListener(val paymentsApi: PaymentsApi, val token: String, val callback: TrackingCallback) {
 
     companion object {
         private const val TAG: String = "InvoiceStatusListener"
     }
 
+    private var uniqueReceivedStatuses: MutableList<InvoicesDataResponse.Status?> = mutableListOf()
     var isRequestInProgress: Boolean = false
     var delayTimer: Timer? = null
     var remainRequestsCount: Int = MAX_REQUESTS_COUNT
@@ -39,11 +40,14 @@ internal class InvoiceStatusListener(val paymentsApi: PaymentsApi, val token: St
                         val responseBody = response.body()
                         Log.d(TAG, "Response body = $responseBody")
                         if(responseBody != null) {
-                            val finishedInvoiceData = responseBody.invoicesData.find { invoiceData ->  invoiceData.status?.isFinishedStatus()?:false }
-                            Log.d(TAG, "Finished invoice data = $finishedInvoiceData")
-                            if(finishedInvoiceData != null) {
-                                callback.onFinishedStatusReceived(responseBody)
-                            } else {
+                            val finishedInvoiceData = responseBody.invoicesData.find { invoiceData -> invoiceData.status?.isFinishedStatus()?: false }
+                            val uniqueInvoiceData = responseBody.invoicesData.find { invoiceData -> !uniqueReceivedStatuses.contains(invoiceData.status) }
+                            Log.d(TAG, "Finished invoice data = $finishedInvoiceData. Unique invoice data = $uniqueInvoiceData")
+                            if(uniqueInvoiceData != null) {
+                                callback.onUniqueStatusReceived(responseBody, finishedInvoiceData != null)
+                                uniqueReceivedStatuses.add(uniqueInvoiceData.status)
+                            }
+                            if(finishedInvoiceData == null) {
                                 updateAndRestart()
                             }
                         } else {
