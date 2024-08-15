@@ -220,6 +220,12 @@ class XPayments private constructor(private val statusTracker: StatusTracker) {
             apply { this.startTrackingImmediately = value }
 
         /**
+         * in seconds
+         */
+        fun setShortPollingTimeout(timeout: Long) =
+            apply { StatusTracker.SHORT_POLLING_TIMEOUT = timeout * 1000L }
+
+        /**
          * Build the intent
          */
         fun build(): Intent {
@@ -253,7 +259,7 @@ class XPayments private constructor(private val statusTracker: StatusTracker) {
             accessToken?.let { aToken ->
                 statusReceivedCallback?.let { callback ->
                     if (startTrackingImmediately == true) {
-                        getStatus(aToken.token, isSandbox, callback, 999)
+                        getStatus(aToken.token, isSandbox, callback, StatusTracker.MAX_REQUESTS_COUNT)
                     }
                 }
                 if(statusReceivedCallback != null || payStationClosedCallback != null) {

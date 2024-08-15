@@ -10,8 +10,8 @@ internal class StatusTracker(private val paymentsApi: PaymentsApi) {
 
     companion object {
         private const val TAG: String = "StatusTracker"
-        internal const val SHORT_POLLING_TIMEOUT = 3 * 1000L // 3 sec
-        const val MAX_REQUESTS_COUNT = 9999
+        internal var SHORT_POLLING_TIMEOUT = 3 * 1000L // 3 sec
+        internal const val MAX_REQUESTS_COUNT = 9999
     }
 
     private var listeners = mutableMapOf<String, InvoiceStatusListener>()
