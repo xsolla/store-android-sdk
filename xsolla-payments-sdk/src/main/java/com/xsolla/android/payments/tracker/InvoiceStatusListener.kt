@@ -27,21 +27,19 @@ internal class InvoiceStatusListener(val token: String, private val isSandbox: B
         isRequestInProgress = true
         Log.d(TAG, "Runnable. token = $token")
         XPayments.getStatus(token, isSandbox, object: GetStatusCallback {
-            override fun onSuccess(data: InvoicesDataResponse) {
-                val finishedInvoiceData = data.invoicesData.find { invoiceData -> invoiceData.status?.isFinishedStatus()?: false }
-                val uniqueInvoiceData = data.invoicesData.find { invoiceData -> !uniqueReceivedStatuses.contains(invoiceData.status) }
-                Log.d(TAG, "Finished invoice data = $finishedInvoiceData. Unique invoice data = $uniqueInvoiceData")
-                if(uniqueInvoiceData != null) {
-                    callback.onUniqueStatusReceived(data, finishedInvoiceData != null)
-                    uniqueReceivedStatuses.add(uniqueInvoiceData.status)
-                }
-                if(finishedInvoiceData == null) {
-                    updateAndRestart()
-                }
-            }
-
-            override fun onNoDataFound() {
-                updateAndRestart()
+            override fun onSuccess(data: InvoicesDataResponse?) {
+                data?.let {
+                    val finishedInvoiceData = data.invoicesData.find { invoiceData -> invoiceData.status?.isFinishedStatus()?: false }
+                    val uniqueInvoiceData = data.invoicesData.find { invoiceData -> !uniqueReceivedStatuses.contains(invoiceData.status) }
+                    Log.d(TAG, "Finished invoice data = $finishedInvoiceData. Unique invoice data = $uniqueInvoiceData")
+                    if(uniqueInvoiceData != null) {
+                        callback.onUniqueStatusReceived(data, finishedInvoiceData != null)
+                        uniqueReceivedStatuses.add(uniqueInvoiceData.status)
+                    }
+                    if(finishedInvoiceData == null) {
+                        updateAndRestart()
+                    }
+                } ?: updateAndRestart()
             }
 
             override fun onError(throwable: Throwable?, errorMessage: String?) {

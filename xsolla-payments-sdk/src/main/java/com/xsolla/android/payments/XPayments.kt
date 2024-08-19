@@ -93,7 +93,7 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
                                 callback.onError(null, "Empty response")
                             }
                         } else {
-                            callback.onNoDataFound()
+                            callback.onSuccess(null)
                         }
                     }
 
