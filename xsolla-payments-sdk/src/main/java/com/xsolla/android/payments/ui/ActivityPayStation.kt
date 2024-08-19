@@ -267,8 +267,8 @@ internal class ActivityPayStation : AppCompatActivity() {
 
             override fun doUpdateVisitedHistory(view: WebView, url: String, isReload: Boolean) {
                 val uri = Uri.parse(url)
-                if (uri.scheme == redirectScheme
-                    && uri.host == redirectHost
+                if (uri.scheme.equals(redirectScheme, true)
+                    && uri.host.equals(redirectHost, true)
                 ) {
                     val invoiceId = uri.getQueryParameter("invoice_id")
                     val statusParam = uri.getQueryParameter("status")
