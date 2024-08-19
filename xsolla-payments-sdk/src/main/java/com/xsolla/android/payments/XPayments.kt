@@ -119,7 +119,7 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
                 obj.payStationClosedCallback?.onSuccess(isManually)
                 obj.statusReceivedCallback?.let { callback ->
                     if(obj.startTrackingImmediately) {
-                        if(!obj.isStatusReceived) {
+                        if(!obj.isFinishedStatusReceived) {
                             getInstance().statusTracker?.restartTracking(accessToken, 3)
                         }
                     } else {
@@ -141,7 +141,9 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
             getInstance(isSandbox).statusTracker.addToTracking(object : StatusReceivedCallback {
                 override fun onSuccess(data: InvoicesDataResponse) {
                     callback.onSuccess(data)
-                    getInstance(isSandbox).paymentInfoByToken[token]?.isStatusReceived = true
+                    if(data.isWithFinishedStatus()) {
+                        getInstance(isSandbox).paymentInfoByToken[token]?.isFinishedStatusReceived = true
+                    }
                 }
 
             }, token, requestsCount)
@@ -390,6 +392,6 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
         val statusReceivedCallback: StatusReceivedCallback?,
         val startTrackingImmediately: Boolean,
         val isSandbox: Boolean,
-        var isStatusReceived: Boolean = false)
+        var isFinishedStatusReceived: Boolean = false)
 
 }

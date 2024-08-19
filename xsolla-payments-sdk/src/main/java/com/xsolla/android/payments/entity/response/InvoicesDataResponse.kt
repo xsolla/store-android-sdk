@@ -21,6 +21,10 @@ data class InvoicesDataResponse(
         val message: String,
     )
 
+    fun isWithFinishedStatus(): Boolean {
+        return invoicesData.find { it.status?.isFinishedStatus() == true } != null
+    }
+
     @Serializable
     enum class Status {
         @SerializedName("1")
