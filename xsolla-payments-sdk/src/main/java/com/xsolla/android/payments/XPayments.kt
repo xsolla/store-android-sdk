@@ -65,8 +65,14 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
         @JvmStatic
         fun createIntentBuilder(context: Context) = IntentBuilder(context)
 
-
-
+        /**
+         * Returns invoice data for specified order.
+         *
+         * @param token  Xsolla payments token.
+         * @param isSandbox  Whether the order is processed in sandbox mode.
+         * @param callback Status callback.
+         *
+         */
         @JvmStatic
         fun getStatus(
             token: String,
