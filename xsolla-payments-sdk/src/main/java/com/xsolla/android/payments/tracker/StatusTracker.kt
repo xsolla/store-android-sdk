@@ -25,11 +25,22 @@ internal class StatusTracker(private val isSandbox: Boolean) {
             Log.d(TAG, "This payment token has already added to the tracker")
             return
         }
+
+        listeners.forEach { (token, listener) ->
+            listener.delayTimer.let {
+                listener.remainRequestsCount = 0
+                listener.delayTimer?.cancel()
+                listener.delayTimer = null
+            }
+            Log.d(TAG, "Listener with token $token  was removed from tracking listeners")
+        }
+        listeners.clear()
+
         listeners[token] = InvoiceStatusListener(token, isSandbox, object : TrackingCallback{
             override fun onUniqueStatusReceived(data: InvoicesDataResponse, isFinishedStatus: Boolean) {
                 Log.d(TAG, "TrackingCallback. onUniqueStatusReceived")
                 callback.onSuccess(data)
-                if(isFinishedStatus) {
+                if(isFinishedStatus && listeners.containsKey(token)) {
                     listeners.remove(token)
                 }
             }
