@@ -118,12 +118,8 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
             callbacksObj?.let { obj ->
                 obj.payStationClosedCallback?.onSuccess(isManually)
                 obj.statusReceivedCallback?.let { callback ->
-                    if(obj.startTrackingImmediately) {
-                        if(!obj.isFinishedStatusReceived) {
-                            getInstance().statusTracker?.restartTracking(accessToken, 3)
-                        }
-                    } else {
-                        addToTracking(accessToken, obj.isSandbox, callback, 3)
+                    if(!obj.isFinishedStatusReceived) {
+                        getInstance().statusTracker?.restartTracking(accessToken, 3)
                     }
                 }
             }
@@ -168,7 +164,6 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
 
         private var payStationClosedCallback: PayStationClosedCallback? = null
         private var statusReceivedCallback: StatusReceivedCallback? = null
-        private var startTrackingImmediately: Boolean? = true
 
         /**
          * Set a Pay Station access token
@@ -246,13 +241,6 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
             apply { this.statusReceivedCallback = callback }
 
         /**
-         * Sets the start of tracking orders to the opening of the Pay Station event.
-         * Otherwise, tracking will begin when Pay Station closes. Works only if `statusReceivedCallback` is not `null`.
-         */
-        fun setStartTrackingImmediately(value: Boolean?) =
-            apply { this.startTrackingImmediately = value }
-
-        /**
          * in seconds
          */
         fun setShortPollingTimeout(timeout: Long) =
@@ -291,15 +279,13 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
 
             accessToken?.let { aToken ->
                 statusReceivedCallback?.let { callback ->
-                    if (startTrackingImmediately == true) {
-                        addToTracking(aToken.token, isSandbox, callback, StatusTracker.MAX_REQUESTS_COUNT)
-                    }
+                    addToTracking(aToken.token, isSandbox, callback, StatusTracker.MAX_REQUESTS_COUNT)
                 }
                 if(statusReceivedCallback != null || payStationClosedCallback != null) {
                     if(getInstance(isSandbox).paymentInfoByToken.containsKey(aToken.token)) {
                         Log.d(TAG, "Pay Station with this token has already opened")
                     } else {
-                        getInstance(isSandbox).paymentInfoByToken[aToken.token] = PaymentInfo(payStationClosedCallback, statusReceivedCallback, startTrackingImmediately!!, isSandbox)
+                        getInstance(isSandbox).paymentInfoByToken[aToken.token] = PaymentInfo(payStationClosedCallback, statusReceivedCallback, isSandbox)
                     }
                 }
             }
@@ -390,7 +376,6 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
     internal data class PaymentInfo(
         val payStationClosedCallback: PayStationClosedCallback?,
         val statusReceivedCallback: StatusReceivedCallback?,
-        val startTrackingImmediately: Boolean,
         val isSandbox: Boolean,
         var isFinishedStatusReceived: Boolean = false)
 
