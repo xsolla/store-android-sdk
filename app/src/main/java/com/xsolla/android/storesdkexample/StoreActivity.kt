@@ -109,7 +109,6 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
                 .setActivityType(MiscUtils.deduceXPaymentsActivityType(this))
                 .setPayStationClosedCallback(object : PayStationClosedCallback {
                     override fun onSuccess(isManually: Boolean) {
-                        showSnack("PayStationClosedCallback. isManually = $isManually")
                         Log.d(TAG, "PayStationClosedCallback is fired. isManually = $isManually")
                     }
                 })
