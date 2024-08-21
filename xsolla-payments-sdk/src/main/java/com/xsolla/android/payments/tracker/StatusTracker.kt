@@ -38,7 +38,6 @@ internal class StatusTracker(private val isSandbox: Boolean) {
 
         listeners[token] = InvoiceStatusListener(token, isSandbox, object : TrackingCallback{
             override fun onUniqueStatusReceived(data: InvoicesDataResponse, isFinishedStatus: Boolean) {
-                Log.d(TAG, "TrackingCallback. onUniqueStatusReceived")
                 callback.onSuccess(data)
                 if(isFinishedStatus && listeners.containsKey(token)) {
                     listeners.remove(token)
@@ -59,8 +58,6 @@ internal class StatusTracker(private val isSandbox: Boolean) {
         token: String,
         requestsCount: Int
     ) {
-        Log.d(TAG, "restartTracking. token = $token requestsCount = $requestsCount")
-
         if(!listeners.containsKey(token)) {
             Log.d(TAG, "Can't restart tracking with token = $token Probably finished status has already received and StatusReceivedCallback is fired.")
             return
