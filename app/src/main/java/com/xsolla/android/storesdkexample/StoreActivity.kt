@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -50,10 +51,14 @@ import com.xsolla.android.storesdkexample.ui.vm.VmGooglePlay
 import com.xsolla.android.storesdkexample.ui.vm.VmProfile
 import com.xsolla.android.storesdkexample.ui.vm.base.ViewModelFactory
 import com.xsolla.android.appcore.utils.MiscUtils
+import com.xsolla.android.payments.callbacks.PayStationClosedCallback
+import com.xsolla.android.payments.callbacks.StatusReceivedCallback
+import com.xsolla.android.payments.entity.response.InvoicesDataResponse
 
 class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
     companion object {
+        private const val TAG: String = "StoreActivity"
         private const val RC_PAYSTATION = 1
     }
 
@@ -102,6 +107,16 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
                 .accessToken(AccessToken(token))
                 .isSandbox(BuildConfig.IS_SANDBOX)
                 .setActivityType(MiscUtils.deduceXPaymentsActivityType(this))
+                .setPayStationClosedCallback(object : PayStationClosedCallback {
+                    override fun onSuccess(isManually: Boolean) {
+                        Log.d(TAG, "PayStationClosedCallback is fired. isManually = $isManually")
+                    }
+                })
+                .setStatusReceivedCallback(object : StatusReceivedCallback {
+                    override fun onSuccess(data: InvoicesDataResponse) {
+                        Log.d(TAG, "StatusReceivedCallback is fired. Result data = $data")
+                    }
+                })
                 .build()
             startActivityForResult(intent, RC_PAYSTATION)
         }
@@ -152,18 +167,6 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
         findViewById<Toolbar>(R.id.mainToolbar).title = ""
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_PAYSTATION) {
-            val (status, _) = XPayments.Result.fromResultIntent(data)
-            when (status) {
-                XPayments.Status.COMPLETED -> showSnack(getString(R.string.payment_completed))
-                XPayments.Status.CANCELLED -> showSnack(getString(R.string.payment_cancelled))
-                XPayments.Status.UNKNOWN -> showSnack(getString(R.string.payment_unknown))
-            }
-        }
-    }
-
     private fun initVirtualBalance() {
         val balanceContainer: LinearLayout = findViewById(R.id.balanceContainer)
         vmBalance.virtualBalance.observe(this) { virtualBalanceList ->
@@ -189,6 +192,14 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.root.closeDrawers()
+            if (destination.id == R.id.nav_vi) {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    callActivateUI()
+                }, 100)
+            }
+        }
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_vi,
@@ -213,38 +224,27 @@ class StoreActivity : AppCompatActivity(R.layout.activity_store) {
 
         findViewById<View>(R.id.itemAccount).setOnClickListener {
             navController.navigate(R.id.nav_profile)
-            binding.root.closeDrawers()
         }
         findViewById<View>(R.id.itemInventory).setOnClickListener {
             navController.navigate(R.id.nav_inventory)
-            binding.root.closeDrawers()
         }
         findViewById<View>(R.id.itemAttributes).setOnClickListener {
             navController.navigate(R.id.nav_attributes)
-            binding.root.closeDrawers()
         }
         findViewById<View>(R.id.itemFriends).setOnClickListener {
             navController.navigate(R.id.nav_friends)
-            binding.root.closeDrawers()
         }
         findViewById<View>(R.id.itemVirtualItems).setOnClickListener {
             navController.navigate(R.id.nav_vi)
-            binding.root.closeDrawers()
-            Handler(Looper.getMainLooper()).postDelayed({
-                callActivateUI()
-            }, 100)
         }
         findViewById<View>(R.id.itemVirtualCurrency).setOnClickListener {
             navController.navigate(R.id.nav_vc)
-            binding.root.closeDrawers()
         }
         findViewById<View>(R.id.itemCoupon).setOnClickListener {
             navController.navigate(R.id.nav_redeem_coupon)
-            binding.root.closeDrawers()
         }
         findViewById<View>(R.id.itemWebStore).setOnClickListener {
             openWebStore()
-            binding.root.closeDrawers()
         }
         findViewById<View>(R.id.itemWebStore).isVisible =
             !StoreUtils.isAppInstalledFromGooglePlay(this)

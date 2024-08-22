@@ -1,4 +1,25 @@
 # Changelog
+## [2.5.10] - Store SDK - 2024-08-21  
+### Changed  
+- `createOrderFromCartById`, `createOrderFromCurrentCart`, and `createOrderByItemSku` SDK methods.  Added an optional parameter `externalTransactionToken`.  
+  
+## [1.4.1] - Payments SDK - 2024-08-21 
+### Changed  
+- `XPayments.IntentBuilder` class. Added new callbacks:  
+    - `payStationClosedCallback` —  handles the closure of the payment UI. It includes the `isManually` parameter, which specifies whether the UI was closed manually or automatically.  
+    - `statusReceivedCallback` — handles changes in payment status. It receives the `InvoicesDataResponse` object, which contains an array of invoices. If any invoice has a status of `DONE`, it implies a successful purchase.  
+
+### Added  
+- `getStatus` SDK method. Returns invoice data for a specified order.  
+  
+### Fixed  
+- Fixed a crash that occurs when `activityType` is set to Custom Tabs, but they are not supported by the user’s device.  
+- Redirects for Web Views are now case-insensitive.  
+  
+## [2.2.13] - Demo Apps - 2024-08-21  
+### Fixed  
+- Fixed an issue where the catalog was empty after closing the bundle preview.
+
 ## [2.5.9] - Store SDK - 2024-07-25
 ### Changed
 - `PaymentOptions` data. 

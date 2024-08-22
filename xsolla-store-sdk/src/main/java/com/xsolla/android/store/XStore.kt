@@ -499,8 +499,11 @@ class XStore private constructor(
         fun createOrderFromCartById(
             callback: CreateOrderCallback,
             cartId: String,
-            options: PaymentOptions? = PaymentOptions()
+            options: PaymentOptions? = PaymentOptions(),
+            externalTransactionToken: String? = null
         ) {
+            options?.settings?.sdk?.externalTransactionToken = externalTransactionToken
+
             val body = CreateCartOrderRequestBody(options)
             getInstance().storeApi.createOrderFromCartById(getInstance().projectId, cartId, body)
                 .enqueue(object : Callback<CreateOrderResponse> {
@@ -537,8 +540,11 @@ class XStore private constructor(
         @JvmOverloads
         fun createOrderFromCurrentCart(
             callback: CreateOrderCallback,
-            options: PaymentOptions? = PaymentOptions()
+            options: PaymentOptions? = PaymentOptions(),
+            externalTransactionToken: String? = null
         ) {
+            options?.settings?.sdk?.externalTransactionToken = externalTransactionToken
+
             val body = CreateCartOrderRequestBody(options)
             getInstance().storeApi.createOrderFromCurrentCart(getInstance().projectId, body)
                 .enqueue(object : Callback<CreateOrderResponse> {
@@ -623,8 +629,11 @@ class XStore private constructor(
             callback: CreateOrderCallback,
             itemSku: String,
             options: PaymentOptions? = PaymentOptions(),
-            quantity: Long = 1
+            quantity: Long = 1,
+            externalTransactionToken: String? = null
         ) {
+            options?.settings?.sdk?.externalTransactionToken = externalTransactionToken
+
             val body = CreateSkuOrderRequestBody(quantity, options)
             getInstance().storeApi.createOrderByItemSku(getInstance().projectId, itemSku, body)
                 .enqueue(object : Callback<CreateOrderResponse> {
