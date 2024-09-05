@@ -411,22 +411,32 @@ class XLogin private constructor(
          * Authenticates the user via a particular device ID.
          *
          * @param callback Status callback.
+         * @param deviceId Platform specific unique device ID (optional). If not passed, the 'Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)' platform parameter is used.
          *
          * @see [More about the use cases](https://developers.xsolla.com/sdk/android/authentication/auth-via-device-id/).
          */
         @SuppressLint("HardwareIds")
         @JvmStatic
         fun authenticateViaDeviceId(
-            callback: AuthViaDeviceIdCallback
+            callback: AuthViaDeviceIdCallback,
+            deviceId: String? = null
         ) {
             runIo {
                 runBlocking {
-                    val body = AuthViaDeviceIdBody(
-                        device = Build.MANUFACTURER + " " + Build.MODEL,
-                        deviceId = Settings.Secure.getString(
+                    var resultDeviceId: String = if(deviceId == null) {
+                        Settings.Secure.getString(
                             getInstance().context.contentResolver,
                             Settings.Secure.ANDROID_ID
                         )
+                    } else {
+                        deviceId!!
+                    }
+
+                    resultDeviceId = getSafeDeviceId(resultDeviceId)
+
+                    val body = AuthViaDeviceIdBody(
+                        device = Build.MANUFACTURER + " " + Build.MODEL,
+                        deviceId = resultDeviceId
                     )
                     try {
                         val res = XLoginApi.loginApi.authViaDeviceId(
@@ -1589,7 +1599,7 @@ class XLogin private constructor(
          *
          * @param socialNetwork  Name of a social network. Provider must be connected to Login in Publisher Account.
          * Can be `amazon`, `apple`, `baidu`, `battlenet`, `discord`, `facebook`, `github`, `google`, `instagram`, `kakao`, `linkedin`, `mailru`, `microsoft`, `msn`, `naver`, `ok`, `paradox`, `paypal`, `psn`, `qq`, `reddit`, `steam`, `twitch`, `twitter`, `vimeo`, `vk`, `wechat`, `weibo`, `yahoo`, `yandex`, `youtube`, `xbox`, `playstation`.
-         * @param callback       Callback that indicates the success of failure of an action.
+         * @param callback  Callback that indicates the success of failure of an action.
          */
         @JvmStatic
         fun unlinkSocialNetwork(
@@ -1763,5 +1773,20 @@ class XLogin private constructor(
             return resultUrl
         }
 
+        @JvmStatic
+        fun getSafeDeviceId(deviceId: String): String {
+
+            var resultDeviceId = deviceId
+            val minDeviceIdLength = 16
+            val maxDeviceIdLength = 36
+
+            if(deviceId.length < minDeviceIdLength) {
+                resultDeviceId = deviceId.padStart(minDeviceIdLength,'0')
+            } else if(deviceId.length > maxDeviceIdLength) {
+                resultDeviceId = deviceId.substring(0, maxDeviceIdLength)
+            }
+
+            return resultDeviceId
+        }
     }
 }
