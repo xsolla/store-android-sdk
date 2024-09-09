@@ -77,15 +77,12 @@ internal class ActivityAuthWebView : ActivityAuth() {
         webView.webViewClient = object : WebViewClient() {
             @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(webView: WebView, url: String): Boolean {
-                webView.loadUrl(url)
-                return true
-            }
-
-            override fun doUpdateVisitedHistory(view: WebView, url: String, isReload: Boolean) {
                 if (url.startsWith(callbackUrl)) {
                     handleCallbackUrlRedirect(Uri.parse(url))
+                    return true
                 }
-                super.doUpdateVisitedHistory(view, url, isReload)
+                webView.loadUrl(url)
+                return true
             }
         }
     }
