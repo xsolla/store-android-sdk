@@ -5,12 +5,12 @@ buildscript {
     ext.payments_sdk_version_name = '1.4.1'
     ext.store_sdk_version_name = '2.5.10'
     ext.inventory_sdk_version_name = '2.0.4'
-    ext.login_sdk_version_name = '6.0.9'
+    ext.login_sdk_version_name = '6.0.10'
 
     ext.googleplay_sdk_version_name = "0.0.1"
 
-    ext.sample_app_version_name = '2.2.13'
-    ext.sample_app_version_code = 42
+    ext.sample_app_version_name = '2.2.14'
+    ext.sample_app_version_code = 43
 
     ext.sdk_min = 21
     ext.sdk_target = 33

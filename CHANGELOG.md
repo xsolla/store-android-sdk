@@ -1,4 +1,15 @@
 # Changelog
+## [6.0.10] - Login SDK - 2024-09-11 
+### Changed
+- `authenticateViaDeviceId` SDK method. Added `deviceId` optional parameter.
+
+### Fixed
+- Fixed an issue where the login via `startSocialAuth` or `startAuthWithXsollaWidget` methods displays an error in webView.
+
+## [2.2.14] - Demo Apps - 2024-09-11  
+### Fixed  
+- Fixed inappropriate error message after registration.
+
 ## [2.5.10] - Store SDK - 2024-08-21  
 ### Changed  
 - `createOrderFromCartById`, `createOrderFromCurrentCart`, and `createOrderByItemSku` SDK methods.  Added an optional parameter `externalTransactionToken`.  
