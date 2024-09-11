@@ -4,11 +4,11 @@
 - `authenticateViaDeviceId` SDK method. Added `deviceId` optional parameter.
 
 ### Fixed
-- Fixed an issue where the login via `startSocialAuth` or `startAuthWithXsollaWidget` methods displays an error in webView.
+- Fixed an issue when the login via `startSocialAuth` or `startAuthWithXsollaWidget` methods displayed an error in WebView.
 
 ## [2.2.14] - Demo Apps - 2024-09-11  
 ### Fixed  
-- Fixed inappropriate error message after registration.
+- Fixed an inaccurate error message after registration.
 
 ## [2.5.10] - Store SDK - 2024-08-21  
 ### Changed  
