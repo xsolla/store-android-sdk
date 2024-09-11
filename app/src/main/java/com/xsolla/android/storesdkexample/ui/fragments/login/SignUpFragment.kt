@@ -44,7 +44,7 @@ class SignUpFragment : BaseFragment() {
                 }
 
                 override fun onError(throwable: Throwable?, errorMessage: String?) {
-                    showSnack(throwable?.javaClass?.name ?: errorMessage ?: "Error")
+                    showSnack(errorMessage ?: throwable?.javaClass?.name ?: "Error")
                     v.isEnabled = true
                 }
             })
