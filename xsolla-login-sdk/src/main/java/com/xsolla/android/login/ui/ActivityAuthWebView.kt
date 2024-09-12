@@ -57,6 +57,7 @@ internal class ActivityAuthWebView : ActivityAuth() {
     @SuppressLint("SetJavaScriptEnabled")
     private fun configureWebView() {
         webView.settings.javaScriptEnabled = true
+        webView.settings.domStorageEnabled = true
         val socialNetwork = intent.getSerializableExtra(ARG_SOCIAL_NETWORK)
         socialNetwork?.let {
             when (socialNetwork as SocialNetwork) {
