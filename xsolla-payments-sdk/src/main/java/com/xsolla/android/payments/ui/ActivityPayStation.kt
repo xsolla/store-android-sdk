@@ -84,9 +84,6 @@ internal class ActivityPayStation : AppCompatActivity() {
          */
         private const val TRUSTED_WEB_ACTIVITY_FADE_OUT_TIME_IN_MILLIS = 250
 
-        fun checkAvailability(context: Context) =
-            BrowserUtils.isPlainBrowserAvailable(context)
-                    || BrowserUtils.isCustomTabsBrowserAvailable(context)
     }
 
     private lateinit var url: String
@@ -128,17 +125,9 @@ internal class ActivityPayStation : AppCompatActivity() {
             paymentToken = token
         }
 
-        type = intent.getStringExtra(ARG_ACTIVITY_TYPE)
-            ?.let { s -> ActivityType.valueOf(s.uppercase()) }
-            // If activity type wasn't specified directly, fallback
-            // to the "deprecated" method, i.e. via [ARG_USE_WEBVIEW]
-            // intent parameter.
-            ?: if (BrowserUtils.isCustomTabsBrowserAvailable(this)) ActivityType.CUSTOM_TABS else ActivityType.WEB_VIEW
+        val receivedActivityType: ActivityType? = intent.getStringExtra(ARG_ACTIVITY_TYPE)?.let{ s -> ActivityType.valueOf(s.uppercase()) } ?: null
 
-
-        if(!checkAvailability(this)) {
-            type = ActivityType.WEB_VIEW
-        }
+        type = BrowserUtils.determineActivityType(this, receivedActivityType)
 
         orientationLock = intent.getStringExtra(ARG_ACTIVITY_ORIENTATION_LOCK)
             ?.let { s -> ActivityOrientationLock.valueOf(s.uppercase()) }

@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import com.google.androidbrowserhelper.trusted.ChromeLegacyUtils
 import com.xsolla.android.payments.R
 import com.xsolla.android.payments.caching.PayStationCache
+import com.xsolla.android.payments.ui.ActivityType
 
 object BrowserUtils {
 
@@ -101,5 +102,20 @@ object BrowserUtils {
             .setPackage(getAvailablePlainBrowsers(activity).first())
         activity.startActivity(intent)
     }
+
+    fun determineActivityType(context: Context, preferredType: ActivityType?) : ActivityType {
+        var determinedType: ActivityType = preferredType?.let { value ->
+            value
+        } ?: if(isCustomTabsBrowserAvailable(context)) ActivityType.CUSTOM_TABS else ActivityType.WEB_VIEW
+
+        if(!checkAvailability(context)) {
+            determinedType = ActivityType.WEB_VIEW
+        }
+        return determinedType
+    }
+
+    fun checkAvailability(context: Context) =
+        isPlainBrowserAvailable(context)
+                || isCustomTabsBrowserAvailable(context)
 
 }

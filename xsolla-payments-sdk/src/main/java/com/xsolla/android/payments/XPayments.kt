@@ -18,6 +18,7 @@ import com.xsolla.android.payments.tracker.StatusTracker
 import com.xsolla.android.payments.ui.ActivityOrientationLock
 import com.xsolla.android.payments.ui.ActivityPayStation
 import com.xsolla.android.payments.ui.ActivityType
+import com.xsolla.android.payments.ui.utils.BrowserUtils
 import com.xsolla.android.payments.ui.utils.TrustedWebActivityImageRef
 import com.xsolla.android.payments.util.AnalyticsUtils
 import kotlinx.parcelize.Parcelize
@@ -250,12 +251,16 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
          * Build the intent
          */
         fun build(): Intent {
-            val url = generateUrl()
+            val url = generateUrl(context)
             val bundle = bundleOf(
                 ActivityPayStation.ARG_URL to url,
                 ActivityPayStation.ARG_REDIRECT_SCHEME to redirectScheme,
                 ActivityPayStation.ARG_REDIRECT_HOST to redirectHost
             )
+
+            Log.d(TAG, "generated PayStation url: $url")
+            Log.d(TAG, "received redirect host: $redirectHost and redirect scheme: $redirectScheme")
+
             accessToken?.let { token ->
                 bundle.putString(ActivityPayStation.ARG_PAYMENT_TOKEN, token.token)
             }
@@ -293,15 +298,24 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
             return PayStationCache.getInstance(context).getCachedIntent().putExtras(bundle)
         }
 
-        private fun generateUrl(): String {
+        private fun generateUrl(context: Context): String {
+
+            val browserType = when (BrowserUtils.determineActivityType(context, activityType)) {
+                ActivityType.WEB_VIEW -> "web_view"
+                ActivityType.CUSTOM_TABS -> "custom_tabs"
+                ActivityType.TRUSTED_WEB_ACTIVITY -> "trusted_web_activity"
+            }
+
             accessToken?.let {
                 val uriBuilder = Uri.Builder()
                     .scheme("https")
                     .authority(getServer())
                     .appendPath(getPayStationVersionPath())
                     .appendQueryParameter(getTokenQueryParameterName(), it.token)
+                    .appendQueryParameter("browser_type", browserType)
 
                 appendAnalytics(uriBuilder)
+
                 return uriBuilder.build().toString()
             }
             throw IllegalArgumentException("access token isn't specified")
