@@ -94,7 +94,7 @@ internal class ActivityPayStation : AppCompatActivity() {
     private lateinit var redirectScheme: String
     private lateinit var redirectHost: String
     private var paymentToken: String? = null
-    private lateinit var type: ActivityType
+    private lateinit var activityType: ActivityType
     private var orientationLock: ActivityOrientationLock? = null
     private var trustedWebActivityBackgroundColor: Int? = null
     private var trustedWebActivityImageRef: TrustedWebActivityImageRef? = null
@@ -127,7 +127,7 @@ internal class ActivityPayStation : AppCompatActivity() {
 
         val receivedActivityType: ActivityType? = intent.getStringExtra(ARG_ACTIVITY_TYPE)?.let{ s -> ActivityType.valueOf(s.uppercase()) } ?: null
 
-        type = BrowserUtils.deduceActivityType(this, receivedActivityType)
+        activityType = BrowserUtils.deduceActivityType(this, receivedActivityType)
 
         orientationLock = intent.getStringExtra(ARG_ACTIVITY_ORIENTATION_LOCK)
             ?.let { s -> ActivityOrientationLock.valueOf(s.uppercase()) }
@@ -368,8 +368,8 @@ internal class ActivityPayStation : AppCompatActivity() {
         dm.enqueue(request)
     }
 
-    private fun isWebView() : Boolean = type == ActivityType.WEB_VIEW
-    private fun isTrustedWebActivity() : Boolean = type == ActivityType.TRUSTED_WEB_ACTIVITY
+    private fun isWebView() : Boolean = activityType == ActivityType.WEB_VIEW
+    private fun isTrustedWebActivity() : Boolean = activityType == ActivityType.TRUSTED_WEB_ACTIVITY
 
     override fun onDestroy() {
         super.onDestroy()
