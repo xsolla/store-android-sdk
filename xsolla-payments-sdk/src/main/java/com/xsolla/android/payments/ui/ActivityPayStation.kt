@@ -127,7 +127,7 @@ internal class ActivityPayStation : AppCompatActivity() {
 
         val receivedActivityType: ActivityType? = intent.getStringExtra(ARG_ACTIVITY_TYPE)?.let{ s -> ActivityType.valueOf(s.uppercase()) } ?: null
 
-        type = BrowserUtils.determineActivityType(this, receivedActivityType)
+        type = BrowserUtils.deduceActivityType(this, receivedActivityType)
 
         orientationLock = intent.getStringExtra(ARG_ACTIVITY_ORIENTATION_LOCK)
             ?.let { s -> ActivityOrientationLock.valueOf(s.uppercase()) }

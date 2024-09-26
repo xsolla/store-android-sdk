@@ -103,19 +103,13 @@ object BrowserUtils {
         activity.startActivity(intent)
     }
 
-    fun determineActivityType(context: Context, preferredType: ActivityType?) : ActivityType {
-        var determinedType: ActivityType = preferredType?.let { value ->
-            value
-        } ?: if(isCustomTabsBrowserAvailable(context)) ActivityType.CUSTOM_TABS else ActivityType.WEB_VIEW
+    fun deduceActivityType(context: Context, preferredType: ActivityType?) : ActivityType {
+        var determinedType = preferredType ?: ActivityType.CUSTOM_TABS
 
-        if(!checkAvailability(context)) {
-            determinedType = ActivityType.WEB_VIEW
-        }
-        return determinedType
+        if (determinedType == ActivityType.TRUSTED_WEB_ACTIVITY && isTrustedWebActivityAvailable(context)) return ActivityType.TRUSTED_WEB_ACTIVITY
+        if (determinedType == ActivityType.CUSTOM_TABS && isCustomTabsBrowserAvailable(context)) return ActivityType.CUSTOM_TABS
+
+        return ActivityType.WEB_VIEW
     }
-
-    fun checkAvailability(context: Context) =
-        isPlainBrowserAvailable(context)
-                || isCustomTabsBrowserAvailable(context)
 
 }
