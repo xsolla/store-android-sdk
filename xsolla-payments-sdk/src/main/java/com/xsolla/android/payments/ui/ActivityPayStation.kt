@@ -84,9 +84,6 @@ internal class ActivityPayStation : AppCompatActivity() {
          */
         private const val TRUSTED_WEB_ACTIVITY_FADE_OUT_TIME_IN_MILLIS = 250
 
-        fun checkAvailability(context: Context) =
-            BrowserUtils.isPlainBrowserAvailable(context)
-                    || BrowserUtils.isCustomTabsBrowserAvailable(context)
     }
 
     private lateinit var url: String
@@ -97,7 +94,7 @@ internal class ActivityPayStation : AppCompatActivity() {
     private lateinit var redirectScheme: String
     private lateinit var redirectHost: String
     private var paymentToken: String? = null
-    private lateinit var type: ActivityType
+    private lateinit var activityType: ActivityType
     private var orientationLock: ActivityOrientationLock? = null
     private var trustedWebActivityBackgroundColor: Int? = null
     private var trustedWebActivityImageRef: TrustedWebActivityImageRef? = null
@@ -128,17 +125,9 @@ internal class ActivityPayStation : AppCompatActivity() {
             paymentToken = token
         }
 
-        type = intent.getStringExtra(ARG_ACTIVITY_TYPE)
-            ?.let { s -> ActivityType.valueOf(s.uppercase()) }
-            // If activity type wasn't specified directly, fallback
-            // to the "deprecated" method, i.e. via [ARG_USE_WEBVIEW]
-            // intent parameter.
-            ?: if (BrowserUtils.isCustomTabsBrowserAvailable(this)) ActivityType.CUSTOM_TABS else ActivityType.WEB_VIEW
+        val receivedActivityType: ActivityType? = intent.getStringExtra(ARG_ACTIVITY_TYPE)?.let{ s -> ActivityType.valueOf(s.uppercase()) } ?: null
 
-
-        if(!checkAvailability(this)) {
-            type = ActivityType.WEB_VIEW
-        }
+        activityType = BrowserUtils.deduceActivityType(this, receivedActivityType)
 
         orientationLock = intent.getStringExtra(ARG_ACTIVITY_ORIENTATION_LOCK)
             ?.let { s -> ActivityOrientationLock.valueOf(s.uppercase()) }
@@ -379,8 +368,8 @@ internal class ActivityPayStation : AppCompatActivity() {
         dm.enqueue(request)
     }
 
-    private fun isWebView() : Boolean = type == ActivityType.WEB_VIEW
-    private fun isTrustedWebActivity() : Boolean = type == ActivityType.TRUSTED_WEB_ACTIVITY
+    private fun isWebView() : Boolean = activityType == ActivityType.WEB_VIEW
+    private fun isTrustedWebActivity() : Boolean = activityType == ActivityType.TRUSTED_WEB_ACTIVITY
 
     override fun onDestroy() {
         super.onDestroy()

@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import com.google.androidbrowserhelper.trusted.ChromeLegacyUtils
 import com.xsolla.android.payments.R
 import com.xsolla.android.payments.caching.PayStationCache
+import com.xsolla.android.payments.ui.ActivityType
 
 object BrowserUtils {
 
@@ -100,6 +101,15 @@ object BrowserUtils {
             .setData(Uri.parse(url))
             .setPackage(getAvailablePlainBrowsers(activity).first())
         activity.startActivity(intent)
+    }
+
+    fun deduceActivityType(context: Context, preferredType: ActivityType?) : ActivityType {
+        var determinedType = preferredType ?: ActivityType.CUSTOM_TABS
+
+        if (determinedType == ActivityType.TRUSTED_WEB_ACTIVITY && isTrustedWebActivityAvailable(context)) return ActivityType.TRUSTED_WEB_ACTIVITY
+        if (determinedType == ActivityType.CUSTOM_TABS && isCustomTabsBrowserAvailable(context)) return ActivityType.CUSTOM_TABS
+
+        return ActivityType.WEB_VIEW
     }
 
 }
