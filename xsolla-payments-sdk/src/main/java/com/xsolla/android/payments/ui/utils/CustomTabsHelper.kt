@@ -3,6 +3,8 @@ package com.xsolla.android.payments.ui.utils
 import android.content.ComponentName
 import android.content.Context
 import android.net.Uri
+import android.util.Log
+import androidx.annotation.MainThread
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsServiceConnection
 import androidx.browser.customtabs.CustomTabsSession
@@ -14,58 +16,102 @@ class CustomTabsHelper(
     private val onCustomTabsSessionCreated: (customTabsSession: CustomTabsSession) -> Unit
 ) {
     companion object {
-        var IS_SUCCESSFULLY_INITIALIZED: Boolean = true
+        private val LOG_TAG: String = CustomTabsHelper::class.java.simpleName
     }
-    private var customTabsSession: CustomTabsSession? = null
-    private var mClient: CustomTabsClient? = null
 
-    private var connection: CustomTabsServiceConnection? = object : CustomTabsServiceConnection() {
+    private var mClient: CustomTabsClient? = null
+    private var mCustomTabsSession: CustomTabsSession? = null
+    private var mBindingInProgress: Boolean = false
+
+    private var mConnection: CustomTabsServiceConnection = object : CustomTabsServiceConnection() {
         override fun onCustomTabsServiceConnected(name: ComponentName, client: CustomTabsClient) {
-            mClient = client
-            if(client != null) {
-                client.warmup(0)
-                customTabsSession = client.newSession(null)
-                customTabsSession!!.mayLaunchUrl(Uri.parse(payStation3WarmUpUrl), null, null)
-                customTabsSession!!.mayLaunchUrl(Uri.parse(payStation4WarmUpUrl), null, null)
-                onCustomTabsSessionCreated(customTabsSession!!)
+            Log.d(LOG_TAG, "onCustomTabsServiceConnected: '$name'")
+
+            AsyncUtils.runOnMainThread {
+                if (mBindingInProgress) {
+                    mBindingInProgress = false
+
+                    mClient = client
+                    mClient!!.warmup(0)
+
+                    ensureCustomTabsSession()
+                }
             }
-            IS_SUCCESSFULLY_INITIALIZED = mClient != null
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
-            mClient = null
-            customTabsSession = null
-            IS_SUCCESSFULLY_INITIALIZED = false
+            Log.d(LOG_TAG, "onServiceDisconnected: '$name'")
+
+            AsyncUtils.runOnMainThread {
+                mClient = null
+                mCustomTabsSession = null
+                mBindingInProgress = false
+            }
         }
     }
 
+    @MainThread
     fun bindCustomTabsService() {
-        if (mClient != null) return
+        if (!mBindingInProgress && mClient == null) {
+            val browserPackageName = BrowserUtils.getCustomTabsBrowserPackageName(context)
+            if (browserPackageName != null) {
+                Log.d(
+                    LOG_TAG,
+                    "Attempting to bind to custom tabs service using the '$browserPackageName' browser."
+                )
 
-        val availableBrowsers = BrowserUtils.getAvailableCustomTabsBrowsers(context)
+                mCustomTabsSession = null
+                mBindingInProgress = true
 
-        if(availableBrowsers.isEmpty()) return
-
-        val packageName = BrowserUtils.getAvailableCustomTabsBrowsers(context).first()
-
-        CustomTabsClient.bindCustomTabsService(context, packageName, connection!!)
-    }
-
-    fun unbindCustomTabsService() {
-        connection ?: return
-        context.unbindService(connection!!)
-        mClient = null
-        customTabsSession = null
-        connection = null
-    }
-
-    fun getSession(): CustomTabsSession? {
-        if (mClient == null) {
-            customTabsSession = null
-        } else if (customTabsSession == null) {
-            customTabsSession = mClient!!.newSession(null)
+                CustomTabsClient.bindCustomTabsService(context, browserPackageName, mConnection)
+            } else {
+                Log.w(
+                    LOG_TAG,
+                    "No suitable browser could be found to start the custom tabs service binding process."
+                )
+            }
         }
-        return customTabsSession
     }
 
+    @MainThread
+    fun unbindCustomTabsService() {
+        if (mBindingInProgress) {
+            mClient = null
+            mCustomTabsSession = null
+            mBindingInProgress = false
+        } else if (mClient != null) {
+            context.unbindService(mConnection)
+        }
+    }
+
+    @MainThread
+    fun getSession(): CustomTabsSession? = ensureCustomTabsSession()
+
+    /**
+     * Attempts to create a new [CustomTabsSession] if [mClient] is not `null` and [mCustomTabsSession]
+     * is `null`, otherwise returns current [mCustomTabsSession] value.
+     */
+    @MainThread
+    private fun ensureCustomTabsSession() : CustomTabsSession? {
+        if (mClient != null && mCustomTabsSession == null) {
+            mCustomTabsSession = mClient!!.newSession(null)
+            if (mCustomTabsSession != null) {
+                mCustomTabsSession!!.mayLaunchUrl(
+                    Uri.parse(payStation3WarmUpUrl),
+                    null,
+                    null
+                )
+
+                mCustomTabsSession!!.mayLaunchUrl(
+                    Uri.parse(payStation4WarmUpUrl),
+                    null,
+                    null
+                )
+
+                onCustomTabsSessionCreated(mCustomTabsSession!!)
+            }
+        }
+
+        return mCustomTabsSession
+    }
 }

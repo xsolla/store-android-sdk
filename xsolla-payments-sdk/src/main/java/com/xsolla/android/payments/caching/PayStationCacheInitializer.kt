@@ -5,7 +5,7 @@ import androidx.startup.Initializer
 
 class PayStationCacheInitializer: Initializer<PayStationCache> {
     override fun create(context: Context): PayStationCache {
-        return PayStationCache.getInstance(context).apply { init() }
+        return PayStationCache.getInstance(context)
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> {
