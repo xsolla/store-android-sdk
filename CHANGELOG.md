@@ -1,4 +1,15 @@
 # Changelog
+## [6.0.11] - Login SDK - 2024-10-01 
+### Fixed
+- User registration via Xsolla Login Widget in WebView
+
+## [1.4.2] - Payments SDK - 2024-10-01 
+### Changed  
+- `appendAnalytics(builder: Uri.Builder)` function. Added `browser_type` query parameter to URI that opens payment UI. Parameter is added for analytics purpose
+
+### Fixed
+- Custom Tabs related crash for specific devices
+
 ## [6.0.10] - Login SDK - 2024-09-11 
 ### Changed
 - `authenticateViaDeviceId` SDK method. Added `deviceId` optional parameter.
