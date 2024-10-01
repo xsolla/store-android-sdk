@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import com.google.androidbrowserhelper.trusted.ChromeLegacyUtils
 import com.xsolla.android.payments.R
 import com.xsolla.android.payments.caching.PayStationCache
+import com.xsolla.android.payments.ui.ActivityType
 
 object BrowserUtils {
 
@@ -52,8 +53,20 @@ object BrowserUtils {
         }
     }
 
+    /**
+     * Checks whether the system has a custom tabs compatible browser installed and
+     * a `CustomTabsSession` has been initialized.
+     */
     fun isCustomTabsBrowserAvailable(context: Context) =
-        getAvailableCustomTabsBrowsers(context).isNotEmpty() && CustomTabsHelper.IS_SUCCESSFULLY_INITIALIZED
+        getCustomTabsBrowserPackageName(context) != null &&
+        PayStationCache.getInstance(context).getCachedSession() != null
+
+    /**
+     * Returns the package name of a browser that supports custom tabs or
+     * `null` if there's none available.
+     */
+    fun getCustomTabsBrowserPackageName(context: Context) : String? =
+        getAvailableCustomTabsBrowsers(context).firstOrNull { !TextUtils.isEmpty(it) }
 
     fun isPlainBrowserAvailable(context: Context) =
         getAvailablePlainBrowsers(context).isNotEmpty()
@@ -100,6 +113,15 @@ object BrowserUtils {
             .setData(Uri.parse(url))
             .setPackage(getAvailablePlainBrowsers(activity).first())
         activity.startActivity(intent)
+    }
+
+    fun deduceActivityType(context: Context, preferredType: ActivityType?) : ActivityType {
+        var determinedType = preferredType ?: ActivityType.CUSTOM_TABS
+
+        if (determinedType == ActivityType.TRUSTED_WEB_ACTIVITY && isTrustedWebActivityAvailable(context)) return ActivityType.TRUSTED_WEB_ACTIVITY
+        if (determinedType == ActivityType.CUSTOM_TABS && isCustomTabsBrowserAvailable(context)) return ActivityType.CUSTOM_TABS
+
+        return ActivityType.WEB_VIEW
     }
 
 }

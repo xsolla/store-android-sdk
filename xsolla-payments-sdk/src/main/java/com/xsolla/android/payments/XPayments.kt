@@ -18,6 +18,7 @@ import com.xsolla.android.payments.tracker.StatusTracker
 import com.xsolla.android.payments.ui.ActivityOrientationLock
 import com.xsolla.android.payments.ui.ActivityPayStation
 import com.xsolla.android.payments.ui.ActivityType
+import com.xsolla.android.payments.ui.utils.BrowserUtils
 import com.xsolla.android.payments.ui.utils.TrustedWebActivityImageRef
 import com.xsolla.android.payments.util.AnalyticsUtils
 import kotlinx.parcelize.Parcelize
@@ -256,6 +257,10 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
                 ActivityPayStation.ARG_REDIRECT_SCHEME to redirectScheme,
                 ActivityPayStation.ARG_REDIRECT_HOST to redirectHost
             )
+
+            Log.d(TAG, "generated PayStation url: $url")
+            Log.d(TAG, "received redirect host: $redirectHost and redirect scheme: $redirectScheme")
+
             accessToken?.let { token ->
                 bundle.putString(ActivityPayStation.ARG_PAYMENT_TOKEN, token.token)
             }
@@ -294,6 +299,7 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
         }
 
         private fun generateUrl(): String {
+
             accessToken?.let {
                 val uriBuilder = Uri.Builder()
                     .scheme("https")
@@ -302,6 +308,7 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
                     .appendQueryParameter(getTokenQueryParameterName(), it.token)
 
                 appendAnalytics(uriBuilder)
+
                 return uriBuilder.build().toString()
             }
             throw IllegalArgumentException("access token isn't specified")
@@ -310,10 +317,18 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
         private fun getServer() = if (isSandbox) SERVER_SANDBOX else SERVER_PROD
 
         private fun appendAnalytics(builder: Uri.Builder){
+
+            val browserType = when (BrowserUtils.deduceActivityType(context, activityType)) {
+                ActivityType.WEB_VIEW -> "web_view"
+                ActivityType.CUSTOM_TABS -> "custom_tabs"
+                ActivityType.TRUSTED_WEB_ACTIVITY -> "trusted_web_activity"
+            }
+
             builder.appendQueryParameter("engine", "android")
             builder.appendQueryParameter("engine_v", Build.VERSION.RELEASE)
             builder.appendQueryParameter("sdk", AnalyticsUtils.sdk)
             builder.appendQueryParameter("sdk_v", AnalyticsUtils.sdkVersion)
+            builder.appendQueryParameter("browser_type", browserType)
 
             if (AnalyticsUtils.gameEngine.isNotBlank())
                 builder.appendQueryParameter("game_engine", AnalyticsUtils.gameEngine)
