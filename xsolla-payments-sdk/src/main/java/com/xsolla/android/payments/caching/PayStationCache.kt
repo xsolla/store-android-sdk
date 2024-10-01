@@ -10,6 +10,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
+import androidx.annotation.MainThread
 import androidx.annotation.RequiresApi
 import androidx.browser.customtabs.CustomTabsSession
 import com.xsolla.android.payments.XPayments
@@ -30,7 +31,7 @@ class PayStationCache(val context: Context) {
         XPayments.createIntentBuilder(context)
         var locale = Locale.getDefault().language
         if(locale.isEmpty()) locale = "en"
-        if(BrowserUtils.isCustomTabsBrowserAvailable(context)) {
+        if(BrowserUtils.getCustomTabsBrowserPackageName(context) != null) {
             val payStation3WarmUpUrl = "https://secure.xsolla.com/paystation3/$locale/cache-warmup"
             val payStation4WarmUpUrl = "https://secure.xsolla.com/paystation4/$locale/cache-warmup"
             customTabHelper = CustomTabsHelper(
@@ -135,9 +136,10 @@ class PayStationCache(val context: Context) {
     companion object {
         private var instance: PayStationCache? = null
 
+        @MainThread
         fun getInstance(context: Context): PayStationCache {
             if (instance == null) {
-                instance = PayStationCache(context)
+                instance = PayStationCache(context.applicationContext).apply { init() }
             }
             return instance!!
         }

@@ -53,8 +53,20 @@ object BrowserUtils {
         }
     }
 
+    /**
+     * Checks whether the system has a custom tabs compatible browser installed and
+     * a `CustomTabsSession` has been initialized.
+     */
     fun isCustomTabsBrowserAvailable(context: Context) =
-        getAvailableCustomTabsBrowsers(context).isNotEmpty() && CustomTabsHelper.IS_SUCCESSFULLY_INITIALIZED
+        getCustomTabsBrowserPackageName(context) != null &&
+        PayStationCache.getInstance(context).getCachedSession() != null
+
+    /**
+     * Returns the package name of a browser that supports custom tabs or
+     * `null` if there's none available.
+     */
+    fun getCustomTabsBrowserPackageName(context: Context) : String? =
+        getAvailableCustomTabsBrowsers(context).firstOrNull { !TextUtils.isEmpty(it) }
 
     fun isPlainBrowserAvailable(context: Context) =
         getAvailablePlainBrowsers(context).isNotEmpty()
