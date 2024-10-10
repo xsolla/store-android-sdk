@@ -103,7 +103,7 @@ class PayStationCache(val context: Context) {
                     if (!detail.didCrash()) {
                         Log.d(TAG, "System killed the WebView rendering process to reclaim memory. Recreating...")
                         if (view != null) {
-                            val webViewContainer = view.parent as ViewGroup
+                            val webViewContainer = view.parent as? ViewGroup
                             if (webViewContainer != null && webViewContainer.childCount > 0) {
                                 webViewContainer.removeView(view)
                             }
