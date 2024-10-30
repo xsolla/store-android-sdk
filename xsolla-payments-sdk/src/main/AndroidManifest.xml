@@ -41,7 +41,7 @@
         </provider>
         <!-- Used by TrustedWebActivity to pull the background icon from an image file asset. -->
         <provider
-            android:name="androidx.core.content.FileProvider"
+            android:name="com.xsolla.android.payments.content.XsollaPaymentsFileProvider"
             android:authorities="${applicationId}.androidx-fileprovider"
             android:grantUriPermissions="true"
             android:exported="false"
