@@ -15,8 +15,8 @@ stages:
   - generate_keystore
   - build
   - lint
-  - test
   - security scan
+  - test
   - report_upload
   - publish
   - deploy
