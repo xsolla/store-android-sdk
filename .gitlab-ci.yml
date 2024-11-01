@@ -3,8 +3,8 @@ include:
     ref:     'master'
     file:    'gitlab-ci-template.yml'
   - project: 'security/security-tools'
-    ref: 'v1'
-    file: 'gitlab-ci.yml'
+    ref: 'v2'
+    file: 'adapter/security-tools-store-android-sdk.yml'
 
 variables:
   SAST_EXPERIMENTAL_FEATURES: "true"
@@ -326,51 +326,3 @@ stop doc:
     name: doc/$CI_COMMIT_REF_SLUG
     action: stop
   dependencies: []
-
-Login-dep-track:
-  variables:
-    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_LOGIN_PROJECT_ID
-  extends:
-    - .sca-gen
-  rules:
-    - changes:
-        - xsolla-login-sdk/build.gradle
-  script:
-    - ./gradlew :xsolla-login-sdk:cyclonedxBom
-    - mv xsolla-login-sdk/build/reports/bom.xml bom.xml
-
-Inventory-dep-track:
-  variables:
-    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_INVENTORY_PROJECT_ID
-  extends:
-    - .sca-gen
-  rules:
-    - changes:
-        - xsolla-inventory-sdk/build.gradle
-  script:
-    - ./gradlew :xsolla-inventory-sdk:cyclonedxBom
-    - mv xsolla-inventory-sdk/build/reports/bom.xml bom.xml
-
-Payments-dep-track:
-  variables:
-    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_PAYMENTS_PROJECT_ID
-  extends:
-    - .sca-gen
-  rules:
-    - changes:
-        - xsolla-payments-sdk/build.gradle
-  script:
-    - ./gradlew :xsolla-payments-sdk:cyclonedxBom
-    - mv xsolla-payments-sdk/build/reports/bom.xml bom.xml
-
-Store-dep-track:
-  variables:
-    DEPENDENCYTRACK_PROJECT_UID: $DEPENDENCYTRACK_STORE_PROJECT_ID
-  extends:
-    - .sca-gen
-  rules:
-    - changes:
-        - xsolla-store-sdk/build.gradle
-  script:
-    - ./gradlew :xsolla-store-sdk:cyclonedxBom
-    - mv xsolla-store-sdk/build/reports/bom.xml bom.xml
