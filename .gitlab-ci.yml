@@ -4,7 +4,7 @@ include:
     file:    'gitlab-ci-template.yml'
   - project: 'security/security-tools'
     ref: 'v2'
-    file: 'adapter/security-tools-store-android-sdk.yml'
+    file: 'adapter/sdk/security-tools-store-android-sdk.yml'
 
 variables:
   SAST_EXPERIMENTAL_FEATURES: "true"
