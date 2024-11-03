@@ -1,4 +1,11 @@
 # Changelog
+## [1.4.3] - Payments SDK - 2024-11-03 
+### Added  
+- Custom `FileProvider` class to aoid conflicts with other plugins
+
+### Fixed
+- Crush during execution of `OnRenderProcessGone()`
+
 ## [6.0.11] - Login SDK - 2024-10-01 
 ### Fixed
 - User registration via Xsolla Login Widget in WebView
