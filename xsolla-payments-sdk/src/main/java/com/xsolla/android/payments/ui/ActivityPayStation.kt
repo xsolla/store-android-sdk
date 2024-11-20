@@ -74,6 +74,14 @@ internal class ActivityPayStation : AppCompatActivity() {
          */
         const val ARG_TRUSTED_WEB_ACTIVITY_IMAGE_REF = "trusted_web_activity_image_ref"
 
+        /**
+         * An intent parameter used to determine whether the PayStation should be opened in
+         * an external (system) browser.
+         *
+         * Type: [Boolean]
+         */
+        const val ARG_FORCE_SYSTEM_BROWSER = "force_system_browser"
+
         const val RESULT = "result"
 
         private const val WRITE_EXTERNAL_STORAGE_PERMISSION_CODE = 100
@@ -83,7 +91,6 @@ internal class ActivityPayStation : AppCompatActivity() {
          * splash screen to fade-out into the actual PayStation content.
          */
         private const val TRUSTED_WEB_ACTIVITY_FADE_OUT_TIME_IN_MILLIS = 250
-
     }
 
     private lateinit var url: String
@@ -98,6 +105,7 @@ internal class ActivityPayStation : AppCompatActivity() {
     private var orientationLock: ActivityOrientationLock? = null
     private var trustedWebActivityBackgroundColor: Int? = null
     private var trustedWebActivityImageRef: TrustedWebActivityImageRef? = null
+    private var forceSystemBrowser: Boolean = false
     private var needStartBrowser = false
 
     private lateinit var downloadUrl: String
@@ -141,53 +149,51 @@ internal class ActivityPayStation : AppCompatActivity() {
             ))
 
         trustedWebActivityImageRef = intent.getParcelableExtra(ARG_TRUSTED_WEB_ACTIVITY_IMAGE_REF)
+
+        forceSystemBrowser = intent.getBooleanExtra(ARG_FORCE_SYSTEM_BROWSER, false)
     }
 
     override fun onResume() {
         super.onResume()
         if (isFinishing) return
         if (needStartBrowser) {
-            if(isWebView()) {
+            if (forceSystemBrowser) {
+                BrowserUtils.launchPlainBrowser(this, url)
+            } else if (isWebView()) {
                 setContentView(R.layout.xsolla_payments_activity_paystation)
                 webView = findViewById(R.id.webview)
                 childWebView = findViewById(R.id.childWebView)
                 loader = findViewById(R.id.loader)
                 configureWebView()
                 webView.loadUrl(url)
-            } else {
-                if (BrowserUtils.isCustomTabsBrowserAvailable(this)) {
-                    if (isTrustedWebActivity()) {
-                        TrustedWebActivity.launch(TrustedWebActivity.Request(
-                            context = this, url = url,
-                            splashScreen = TrustedWebActivity.SplashScreen(
-                                imageRef = trustedWebActivityImageRef,
-                                imageScaleType = ImageView.ScaleType.FIT_CENTER,
-                                fadeOutTimeInMillis = TRUSTED_WEB_ACTIVITY_FADE_OUT_TIME_IN_MILLIS,
-                                backgroundColor = trustedWebActivityBackgroundColor
-                            ),
-                            screenOrientation = orientationLock?.let {
-                                screenOrientationLock -> when (screenOrientationLock) {
-                                    ActivityOrientationLock.PORTRAIT -> ScreenOrientation.PORTRAIT
-                                    ActivityOrientationLock.LANDSCAPE -> ScreenOrientation.LANDSCAPE
-                                }
-                            }
-                        ))
-                    } else {
-                        BrowserUtils.launchCustomTabsBrowser(this, url)
+            } else if (!BrowserUtils.isCustomTabsBrowserAvailable(this)) {
+                BrowserUtils.launchPlainBrowser(this, url)
+            } else if (isTrustedWebActivity()) {
+                TrustedWebActivity.launch(TrustedWebActivity.Request(
+                    context = this, url = url,
+                    splashScreen = TrustedWebActivity.SplashScreen(
+                        imageRef = trustedWebActivityImageRef,
+                        imageScaleType = ImageView.ScaleType.FIT_CENTER,
+                        fadeOutTimeInMillis = TRUSTED_WEB_ACTIVITY_FADE_OUT_TIME_IN_MILLIS,
+                        backgroundColor = trustedWebActivityBackgroundColor
+                    ),
+                    screenOrientation = orientationLock?.let {
+                        screenOrientationLock -> when (screenOrientationLock) {
+                            ActivityOrientationLock.PORTRAIT -> ScreenOrientation.PORTRAIT
+                            ActivityOrientationLock.LANDSCAPE -> ScreenOrientation.LANDSCAPE
+                        }
                     }
-                } else {
-                    BrowserUtils.launchPlainBrowser(this, url)
-                }
+                ))
+            } else {
+                BrowserUtils.launchCustomTabsBrowser(this, url)
             }
             needStartBrowser = false
-        } else {
-            if (!isWebView()) {
-                finishWithResult(
-                    Activity.RESULT_CANCELED,
-                    XPayments.Result(XPayments.Status.CANCELLED, null),
-                    true
-                )
-            }
+        } else if (!isWebView()) {
+            finishWithResult(
+                Activity.RESULT_CANCELED,
+                XPayments.Result(XPayments.Status.CANCELLED, null),
+                true
+            )
         }
     }
 
@@ -393,4 +399,5 @@ internal class ActivityPayStation : AppCompatActivity() {
 
         TrustedWebActivity.notifyOnEnterAnimationComplete()
     }
+
 }
