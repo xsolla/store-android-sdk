@@ -100,7 +100,7 @@ internal object LoginSocial {
                 this.facebookClientToken = socialConfig.facebookClientToken
                 initFacebook(context)
             }
-            if (!socialConfig.googleServerId.isNullOrBlank()) {
+            if (!socialConfig.googleServerId.isNullOrBlank() && socialConfig.googleServerId != "null") {
                 this.googleServerId = socialConfig.googleServerId
                 initGoogle()
             }
@@ -396,7 +396,9 @@ internal object LoginSocial {
             if (e.statusCode == CommonStatusCodes.CANCELED) {
                 callback.onAuthCancelled()
             } else {
-                callback.onAuthError(e, e.status.statusMessage)
+                startSocialCallback?.let { callback ->
+                    tryWebviewBasedSocialAuth(activity, null, SocialNetwork.GOOGLE, callback)
+                }
             }
         }
     }
@@ -445,8 +447,9 @@ internal object LoginSocial {
                     }
                 }
                 .addOnFailureListener {
-                    callback.invoke(false)
-                    it.printStackTrace()
+                    startSocialCallback?.let { callback ->
+                        tryWebviewBasedSocialAuth(activity, null, SocialNetwork.GOOGLE, callback)
+                    }
                 }
             return
         }
