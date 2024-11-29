@@ -236,9 +236,8 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
         fun setTrustedWebActivityImage(ref: TrustedWebActivityImageRef?) =
             apply { this.trustedWebActivityImageRef = ref }
 
-        //TEXTREVIEW
         /**
-         * Forces an external (system) browser to be used for opening the PayStation.
+         * Forces the use of an external (system) browser to open Pay Station.
          *
          * Overrides current activity type.
          */
