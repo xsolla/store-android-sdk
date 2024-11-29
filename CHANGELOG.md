@@ -1,4 +1,16 @@
 # Changelog
+## [1.4.4] - Payments SDK - 2024-11-29
+### Added
+  - `setForceSystemBrowser` method. Allows forcing the use of the device's system browser for purchases.
+
+## [6.0.12] - Login SDK - 2024-11-29
+## Changed
+  - Added fallback logic for Google native authentication. Redirects users to web-based authentication if the native method fails
+
+## [2.5.11] - Store SDK - 2024-11-29
+## Changed
+  - Minor internal updates.
+
 ## [1.4.3] - Payments SDK - 2024-11-03 
 ### Added  
 - Custom `FileProvider` class to avoid conflicts with other plugins

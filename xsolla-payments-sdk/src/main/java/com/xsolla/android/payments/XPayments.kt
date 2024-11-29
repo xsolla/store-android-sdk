@@ -179,7 +179,7 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
         fun isSandbox(isSandbox: Boolean) = apply { this.isSandbox = isSandbox }
 
         /**
-         * Set use webview instead of a browser
+         * Set use WebView instead of a browser
          */
         @Deprecated("WebView usage is not recommended. Also, use `setActivityType()` instead.",
             ReplaceWith(
@@ -236,6 +236,7 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
         fun setTrustedWebActivityImage(ref: TrustedWebActivityImageRef?) =
             apply { this.trustedWebActivityImageRef = ref }
 
+        //TEXTREVIEW
         /**
          * Forces an external (system) browser to be used for opening the PayStation.
          *
