@@ -163,6 +163,8 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
 
         private var trustedWebActivityImageRef: TrustedWebActivityImageRef? = null
 
+        private var forceSystemBrowser: Boolean = false
+
         private var payStationClosedCallback: PayStationClosedCallback? = null
         private var statusReceivedCallback: StatusReceivedCallback? = null
 
@@ -177,9 +179,14 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
         fun isSandbox(isSandbox: Boolean) = apply { this.isSandbox = isSandbox }
 
         /**
-         * Set use webview instead of a browser
+         * Set use WebView instead of a browser
          */
-        @Deprecated("WebView usage is not recommended. Also, use `setActivityType()` instead.")
+        @Deprecated("WebView usage is not recommended. Also, use `setActivityType()` instead.",
+            ReplaceWith(
+                "setActivityType(ActivityType.WEB_VIEW)",
+                "com.xsolla.android.payments.ui.ActivityType"
+            )
+        )
         fun useWebview(useWebview: Boolean) = apply {
             setActivityType(ActivityType.WEB_VIEW)
         }
@@ -228,6 +235,14 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
          */
         fun setTrustedWebActivityImage(ref: TrustedWebActivityImageRef?) =
             apply { this.trustedWebActivityImageRef = ref }
+
+        /**
+         * Forces the use of an external (system) browser to open Pay Station.
+         *
+         * Overrides current activity type.
+         */
+        fun setForceSystemBrowser(force: Boolean) =
+            apply { forceSystemBrowser = force }
 
         /**
          * Sets the function to call after Pay Station closes.
@@ -282,6 +297,11 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
                 ActivityPayStation.ARG_TRUSTED_WEB_ACTIVITY_IMAGE_REF, ref
             )}
 
+            bundle.putBoolean(
+                ActivityPayStation.ARG_FORCE_SYSTEM_BROWSER,
+                forceSystemBrowser
+            )
+
             accessToken?.let { aToken ->
                 statusReceivedCallback?.let { callback ->
                     addToTracking(aToken.token, isSandbox, callback, StatusTracker.MAX_REQUESTS_COUNT)
@@ -318,11 +338,13 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
 
         private fun appendAnalytics(builder: Uri.Builder){
 
-            val browserType = when (BrowserUtils.deduceActivityType(context, activityType)) {
-                ActivityType.WEB_VIEW -> "web_view"
-                ActivityType.CUSTOM_TABS -> "custom_tabs"
-                ActivityType.TRUSTED_WEB_ACTIVITY -> "trusted_web_activity"
-            }
+            val browserType =
+                if (forceSystemBrowser) "system"
+                else when (BrowserUtils.deduceActivityType(context, activityType)) {
+                    ActivityType.WEB_VIEW -> "web_view"
+                    ActivityType.CUSTOM_TABS -> "custom_tabs"
+                    ActivityType.TRUSTED_WEB_ACTIVITY -> "trusted_web_activity"
+                }
 
             builder.appendQueryParameter("engine", "android")
             builder.appendQueryParameter("engine_v", Build.VERSION.RELEASE)

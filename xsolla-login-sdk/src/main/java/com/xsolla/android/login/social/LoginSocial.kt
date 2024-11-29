@@ -78,6 +78,7 @@ internal object LoginSocial {
 
     private var googleAvailable = false
 
+    private var startSocialCallback: StartSocialCallback? = null
     private var finishSocialCallback: FinishSocialCallback? = null
 
     fun init(
@@ -99,7 +100,7 @@ internal object LoginSocial {
                 this.facebookClientToken = socialConfig.facebookClientToken
                 initFacebook(context)
             }
-            if (!socialConfig.googleServerId.isNullOrBlank()) {
+            if (!socialConfig.googleServerId.isNullOrBlank() && socialConfig.googleServerId != "null") {
                 this.googleServerId = socialConfig.googleServerId
                 initGoogle()
             }
@@ -229,6 +230,7 @@ internal object LoginSocial {
         socialNetwork: SocialNetwork,
         callback: StartSocialCallback
     ) {
+        startSocialCallback = callback
         tryNativeSocialAuth(activity, fragment, socialNetwork) { nativeResult ->
             if (nativeResult) {
                 callback.onAuthStarted()
@@ -355,38 +357,48 @@ internal object LoginSocial {
                 callback.onAuthError(null, "idToken is null")
             } else {
                 val email = JWT(idToken).getClaim("email").asString()
-                Thread(Runnable {
-                    val oauthToken = try {
-                        GoogleAuthUtil.getToken(activity, email, magicString)
-                    } catch (e: UserRecoverableAuthException) {
-                        googleCredentialFromIntent = activityResultData
-                        activity.startActivityForResult(e.intent, RC_AUTH_GOOGLE_REQUEST_PERMISSION)
-                        return@Runnable
-                    } catch (e: Exception) {
-                        Handler(Looper.getMainLooper()).post {
-                            callback.onAuthError(e, e.localizedMessage)
-                        }
-                        return@Runnable
+                if(email.isEmpty())
+                {
+                    startSocialCallback?.let { callback ->
+                        tryWebviewBasedSocialAuth(activity, null, SocialNetwork.GOOGLE, callback)
                     }
-                    finishSocialCallback = callback
-                    getLoginTokenFromSocial(
-                        SocialNetwork.GOOGLE,
-                        oauthToken
-                    ) { t, error ->
-                        if (t == null && error == null) {
-                            finishSocialCallback?.onAuthSuccess()
-                        } else {
-                            finishSocialCallback?.onAuthError(t, error)
+                } else
+                {
+                    Thread(Runnable {
+                        val oauthToken = try {
+                            GoogleAuthUtil.getToken(activity, email, magicString)
+                        } catch (e: UserRecoverableAuthException) {
+                            googleCredentialFromIntent = activityResultData
+                            activity.startActivityForResult(e.intent, RC_AUTH_GOOGLE_REQUEST_PERMISSION)
+                            return@Runnable
+                        } catch (e: Exception) {
+                            Handler(Looper.getMainLooper()).post {
+                                callback.onAuthError(e, e.localizedMessage)
+                            }
+                            return@Runnable
                         }
-                        finishSocialCallback = null
-                    }
-                }).start()
+                        finishSocialCallback = callback
+                        getLoginTokenFromSocial(
+                            SocialNetwork.GOOGLE,
+                            oauthToken
+                        ) { t, error ->
+                            if (t == null && error == null) {
+                                finishSocialCallback?.onAuthSuccess()
+                            } else {
+                                finishSocialCallback?.onAuthError(t, error)
+                            }
+                            finishSocialCallback = null
+                        }
+                    }).start()
+                }
             }
         } catch (e: ApiException) {
             if (e.statusCode == CommonStatusCodes.CANCELED) {
                 callback.onAuthCancelled()
             } else {
-                callback.onAuthError(e, null)
+                startSocialCallback?.let { callback ->
+                    tryWebviewBasedSocialAuth(activity, null, SocialNetwork.GOOGLE, callback)
+                }
             }
         }
     }
@@ -435,8 +447,9 @@ internal object LoginSocial {
                     }
                 }
                 .addOnFailureListener {
-                    callback.invoke(false)
-                    it.printStackTrace()
+                    startSocialCallback?.let { callback ->
+                        tryWebviewBasedSocialAuth(activity, null, SocialNetwork.GOOGLE, callback)
+                    }
                 }
             return
         }
