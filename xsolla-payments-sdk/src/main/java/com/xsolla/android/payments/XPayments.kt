@@ -129,6 +129,7 @@ class XPayments private constructor(private val statusTracker: StatusTracker, in
         }
 
         @JvmStatic
+        @JvmOverloads
         private fun addToTracking(
             token: String,
             isSandbox: Boolean,
