@@ -1638,7 +1638,6 @@ class XLogin private constructor(
          * @see [More about the use cases](https://developers.xsolla.com/sdk/android/user-account-and-attributes/account-linking/#sdk_account_linking_additional_account).
          */
         @JvmStatic
-        @JvmOverloads
         fun startSocialLinking(
             socialNetwork: SocialNetwork,
             activity: Activity? = null,
@@ -1657,7 +1656,6 @@ class XLogin private constructor(
          * @see [More about the use cases](https://developers.xsolla.com/sdk/android/user-account-and-attributes/account-linking/#sdk_account_linking_additional_account).
          */
         @JvmStatic
-        @JvmOverloads
         fun startSocialLinking(
             socialNetwork: SocialNetwork,
             fragment: Fragment? = null,
