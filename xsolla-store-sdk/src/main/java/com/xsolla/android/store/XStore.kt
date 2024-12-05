@@ -816,6 +816,7 @@ class XStore private constructor(
          * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-games-list)
          */
         @JvmStatic
+        @JvmOverloads
         fun getGamesList(
             callback:GetGamesListCallback,
             limit: Int = 50,
@@ -857,6 +858,7 @@ class XStore private constructor(
          * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-games-group)
          */
         @JvmStatic
+        @JvmOverloads
         fun getGamesListByGroup(
             callback:GetGamesListByGroupCallback,
             externalId: String,
@@ -901,6 +903,7 @@ class XStore private constructor(
          * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-game-by-sku)
          */
         @JvmStatic
+        @JvmOverloads
         fun getGameForCatalog(
             callback:GetGameForCatalogCallback,
             itemSku: String,
@@ -943,6 +946,7 @@ class XStore private constructor(
          * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-game-key-by-sku)
          */
         @JvmStatic
+        @JvmOverloads
         fun getGameKeyForCatalog(
             callback:GetGameKeyForCatalogCallback,
             itemSku: String,
@@ -984,6 +988,7 @@ class XStore private constructor(
          * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/catalog/get-game-keys-group)
          */
         @JvmStatic
+        @JvmOverloads
         fun getGameKeysListByGroup(
             callback:GetGameKeysListByGroupCallback,
             externalId: String,
@@ -1067,6 +1072,7 @@ class XStore private constructor(
          * @see [Store API Reference](https://developers.xsolla.com/in-game-store-buy-button-api/game-keys/entitlement/get-user-games)
          */
         @JvmStatic
+        @JvmOverloads
         fun getListOfOwnedGames(
             callback:GetListOfOwnedGamesCallback,
             limit: Int = 50,
