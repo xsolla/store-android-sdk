@@ -51,6 +51,7 @@ internal object LoginSocial {
     private const val RC_XSOLLA_WIDGET_AUTH_WEBVIEW = 32000
 
     private const val RC_AUTH_GOOGLE = 31001
+    private const val RC_AUTH_FACEBOOK = 64206
     private const val RC_AUTH_GOOGLE_REQUEST_PERMISSION = 31002
 
     private const val RC_AUTH_WECHAT = 31003
@@ -95,7 +96,7 @@ internal object LoginSocial {
         this.oauthClientId = oauthClientId
 
         if (socialConfig != null) {
-            if (!socialConfig.facebookAppId.isNullOrBlank() && !socialConfig.facebookClientToken.isNullOrBlank()) {
+            if (!socialConfig.facebookAppId.isNullOrBlank() && socialConfig.facebookAppId != "null" && !socialConfig.facebookClientToken.isNullOrBlank() && socialConfig.facebookClientToken != "null") {
                 this.facebookAppId = socialConfig.facebookAppId
                 this.facebookClientToken = socialConfig.facebookClientToken
                 initFacebook(context)
@@ -248,7 +249,7 @@ internal object LoginSocial {
         activityResultData: Intent?,
         callback: FinishSocialCallback
     ) {
-        val listOfApprovedRequestCodes = listOf(RC_AUTH_WEBVIEW, RC_AUTH_WECHAT, RC_AUTH_GOOGLE)
+        val listOfApprovedRequestCodes = listOf(RC_AUTH_WEBVIEW, RC_AUTH_WECHAT, RC_AUTH_GOOGLE, RC_AUTH_FACEBOOK)
         if (!listOfApprovedRequestCodes.contains(activityResultRequestCode)) {
             return
         }
@@ -282,7 +283,7 @@ internal object LoginSocial {
             return
         }
 
-        if (socialNetwork != null && socialNetwork!! == SocialNetwork.FACEBOOK && ::fbCallbackManager.isInitialized) {
+        if (socialNetwork != null && activityResultRequestCode == RC_AUTH_FACEBOOK && socialNetwork!! == SocialNetwork.FACEBOOK && ::fbCallbackManager.isInitialized) {
             finishSocialCallback = callback
             fbCallbackManager.onActivityResult(
                 activityResultRequestCode,
