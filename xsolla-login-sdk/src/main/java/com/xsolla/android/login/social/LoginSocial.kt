@@ -9,6 +9,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import com.facebook.*
+import com.facebook.login.LoginBehavior
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.GoogleAuthUtil
@@ -78,6 +79,7 @@ internal object LoginSocial {
     private var qqAppId: String? = null
 
     private var googleAvailable = false
+    private var socialAuthFragment : Fragment? = null
 
     private var startSocialCallback: StartSocialCallback? = null
     private var finishSocialCallback: FinishSocialCallback? = null
@@ -139,27 +141,15 @@ internal object LoginSocial {
                 }
 
                 override fun onCancel() {
-                    if (AccessToken.isCurrentAccessTokenActive()) {
-                        getLoginTokenFromSocial(
-                            SocialNetwork.FACEBOOK,
-                            AccessToken.getCurrentAccessToken()!!.token
-                        ) { t, error ->
-                            if (t == null && error == null) {
-                                finishSocialCallback?.onAuthSuccess()
-                            } else {
-                                finishSocialCallback?.onAuthError(t, error)
-                            }
-                            finishSocialCallback = null
-                        }
-                    } else {
-                        finishSocialCallback?.onAuthCancelled()
-                        finishSocialCallback = null
+                    startSocialCallback?.let { callback ->
+                        tryWebviewBasedSocialAuth(null, socialAuthFragment, SocialNetwork.FACEBOOK, callback)
                     }
                 }
 
                 override fun onError(error: FacebookException) {
-                    finishSocialCallback?.onAuthError(error, null)
-                    finishSocialCallback = null
+                    startSocialCallback?.let { callback ->
+                        tryWebviewBasedSocialAuth(null, socialAuthFragment, SocialNetwork.FACEBOOK, callback)
+                    }
                 }
             }
             LoginManager.getInstance().registerCallback(fbCallbackManager, fbCallback)
@@ -232,6 +222,7 @@ internal object LoginSocial {
         callback: StartSocialCallback
     ) {
         startSocialCallback = callback
+        socialAuthFragment = fragment
         tryNativeSocialAuth(activity, fragment, socialNetwork) { nativeResult ->
             if (nativeResult) {
                 callback.onAuthStarted()
@@ -411,6 +402,7 @@ internal object LoginSocial {
         callback: (Boolean) -> Unit
     ) {
         if (socialNetwork == SocialNetwork.FACEBOOK && ::fbCallbackManager.isInitialized) {
+            LoginManager.getInstance().setLoginBehavior(LoginBehavior.NATIVE_ONLY)
             if (activity != null) {
                 LoginManager.getInstance().logIn(activity, ArrayList())
             } else {
