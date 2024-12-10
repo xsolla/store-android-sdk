@@ -33,6 +33,8 @@ class App : Application() {
 
     fun initLogin() {
         val socialConfig = XLogin.SocialConfig(
+            facebookAppId = BuildConfig.FACEBOOK_APP_ID,
+            facebookClientToken = BuildConfig.FACEBOOK_CLIENT_TOKEN,
             googleServerId = BuildConfig.GOOGLE_CREDENTIAL
         )
 

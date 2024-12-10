@@ -9,6 +9,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import com.facebook.*
+import com.facebook.login.LoginBehavior
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.GoogleAuthUtil
@@ -51,6 +52,7 @@ internal object LoginSocial {
     private const val RC_XSOLLA_WIDGET_AUTH_WEBVIEW = 32000
 
     private const val RC_AUTH_GOOGLE = 31001
+    private const val RC_AUTH_FACEBOOK = 64206
     private const val RC_AUTH_GOOGLE_REQUEST_PERMISSION = 31002
 
     private const val RC_AUTH_WECHAT = 31003
@@ -77,6 +79,7 @@ internal object LoginSocial {
     private var qqAppId: String? = null
 
     private var googleAvailable = false
+    private var socialAuthFragment : Fragment? = null
 
     private var startSocialCallback: StartSocialCallback? = null
     private var finishSocialCallback: FinishSocialCallback? = null
@@ -95,7 +98,7 @@ internal object LoginSocial {
         this.oauthClientId = oauthClientId
 
         if (socialConfig != null) {
-            if (!socialConfig.facebookAppId.isNullOrBlank() && !socialConfig.facebookClientToken.isNullOrBlank()) {
+            if (!socialConfig.facebookAppId.isNullOrBlank() && socialConfig.facebookAppId != "null" && !socialConfig.facebookClientToken.isNullOrBlank() && socialConfig.facebookClientToken != "null") {
                 this.facebookAppId = socialConfig.facebookAppId
                 this.facebookClientToken = socialConfig.facebookClientToken
                 initFacebook(context)
@@ -138,27 +141,15 @@ internal object LoginSocial {
                 }
 
                 override fun onCancel() {
-                    if (AccessToken.isCurrentAccessTokenActive()) {
-                        getLoginTokenFromSocial(
-                            SocialNetwork.FACEBOOK,
-                            AccessToken.getCurrentAccessToken()!!.token
-                        ) { t, error ->
-                            if (t == null && error == null) {
-                                finishSocialCallback?.onAuthSuccess()
-                            } else {
-                                finishSocialCallback?.onAuthError(t, error)
-                            }
-                            finishSocialCallback = null
-                        }
-                    } else {
-                        finishSocialCallback?.onAuthCancelled()
-                        finishSocialCallback = null
+                    startSocialCallback?.let { callback ->
+                        tryWebviewBasedSocialAuth(null, socialAuthFragment, SocialNetwork.FACEBOOK, callback)
                     }
                 }
 
                 override fun onError(error: FacebookException) {
-                    finishSocialCallback?.onAuthError(error, null)
-                    finishSocialCallback = null
+                    startSocialCallback?.let { callback ->
+                        tryWebviewBasedSocialAuth(null, socialAuthFragment, SocialNetwork.FACEBOOK, callback)
+                    }
                 }
             }
             LoginManager.getInstance().registerCallback(fbCallbackManager, fbCallback)
@@ -231,6 +222,7 @@ internal object LoginSocial {
         callback: StartSocialCallback
     ) {
         startSocialCallback = callback
+        socialAuthFragment = fragment
         tryNativeSocialAuth(activity, fragment, socialNetwork) { nativeResult ->
             if (nativeResult) {
                 callback.onAuthStarted()
@@ -248,7 +240,7 @@ internal object LoginSocial {
         activityResultData: Intent?,
         callback: FinishSocialCallback
     ) {
-        val listOfApprovedRequestCodes = listOf(RC_AUTH_WEBVIEW, RC_AUTH_WECHAT, RC_AUTH_GOOGLE)
+        val listOfApprovedRequestCodes = listOf(RC_AUTH_WEBVIEW, RC_AUTH_WECHAT, RC_AUTH_GOOGLE, RC_AUTH_FACEBOOK)
         if (!listOfApprovedRequestCodes.contains(activityResultRequestCode)) {
             return
         }
@@ -282,7 +274,7 @@ internal object LoginSocial {
             return
         }
 
-        if (socialNetwork != null && socialNetwork!! == SocialNetwork.FACEBOOK && ::fbCallbackManager.isInitialized) {
+        if (socialNetwork != null && activityResultRequestCode == RC_AUTH_FACEBOOK && socialNetwork!! == SocialNetwork.FACEBOOK && ::fbCallbackManager.isInitialized) {
             finishSocialCallback = callback
             fbCallbackManager.onActivityResult(
                 activityResultRequestCode,
@@ -410,6 +402,7 @@ internal object LoginSocial {
         callback: (Boolean) -> Unit
     ) {
         if (socialNetwork == SocialNetwork.FACEBOOK && ::fbCallbackManager.isInitialized) {
+            LoginManager.getInstance().setLoginBehavior(LoginBehavior.NATIVE_ONLY)
             if (activity != null) {
                 LoginManager.getInstance().logIn(activity, ArrayList())
             } else {

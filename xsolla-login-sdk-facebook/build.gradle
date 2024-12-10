@@ -30,7 +30,7 @@ android {
 }
 
 dependencies {
-    api 'com.facebook.android:facebook-login:14.0.0'
+    api 'com.facebook.android:facebook-login:17.0.2'
 }
 
 ext {
