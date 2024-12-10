@@ -1,4 +1,8 @@
 # Changelog
+## [6.0.13] - Login SDK - 2024-12-10
+### Fixed
+- Facebook native authentication
+
 ## [1.4.4] - Payments SDK - 2024-11-29
 ### Added
   - `setForceSystemBrowser` method. Allows forcing the use of the device's system browser for purchases.
