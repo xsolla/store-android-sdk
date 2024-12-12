@@ -1,5 +1,5 @@
 # Changelog
-## [6.0.13] - Login SDK - 2024-12-10
+## [6.0.14] - Login SDK - 2024-12-12
 ### Fixed
 - Facebook native authentication
 
