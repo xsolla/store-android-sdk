@@ -79,6 +79,7 @@ internal object LoginSocial {
     private var qqAppId: String? = null
 
     private var googleAvailable = false
+    private var socialAuthActivity : Activity? = null
     private var socialAuthFragment : Fragment? = null
 
     private var startSocialCallback: StartSocialCallback? = null
@@ -142,13 +143,13 @@ internal object LoginSocial {
 
                 override fun onCancel() {
                     startSocialCallback?.let { callback ->
-                        tryWebviewBasedSocialAuth(null, socialAuthFragment, SocialNetwork.FACEBOOK, callback)
+                        tryWebviewBasedSocialAuth(socialAuthActivity, socialAuthFragment, SocialNetwork.FACEBOOK, callback)
                     }
                 }
 
                 override fun onError(error: FacebookException) {
                     startSocialCallback?.let { callback ->
-                        tryWebviewBasedSocialAuth(null, socialAuthFragment, SocialNetwork.FACEBOOK, callback)
+                        tryWebviewBasedSocialAuth(socialAuthActivity, socialAuthFragment, SocialNetwork.FACEBOOK, callback)
                     }
                 }
             }
@@ -222,6 +223,7 @@ internal object LoginSocial {
         callback: StartSocialCallback
     ) {
         startSocialCallback = callback
+        socialAuthActivity = activity
         socialAuthFragment = fragment
         tryNativeSocialAuth(activity, fragment, socialNetwork) { nativeResult ->
             if (nativeResult) {
